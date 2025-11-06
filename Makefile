@@ -1,3 +1,4 @@
+# Makefile (root) — uv-only Python workflow
 # Use uv for ALL Python-related actions. No direct python/pip.
 
 SHELL := /bin/bash
@@ -11,7 +12,7 @@ PY_VERSION ?= 3.11
 bootstrap: venv deps devdeps
 	@echo "Bootstrap complete."
 
-## Create/refresh project venv with the requested interpreter
+## Create/refresh project venv
 venv:
 	$(UV) venv --python $(PY_VERSION)
 	@$(UV) run python -c "import sys; print('Python', sys.version)"
@@ -21,27 +22,27 @@ venv:
 deps:
 	$(UV) pip install -e .
 
-## Install dev-only tooling (linters, tests)
+## Install dev-only tooling
 devdeps:
 	$(UV) pip install -e .[dev]
 
-## Code style
+## Code quality
 fmt:
 	$(UV) run black .
 
 lint:
 	$(UV) run ruff check .
 
-## Tests (none yet; placeholder)
+## Tests (placeholder until implemented)
 test:
 	$(UV) run pytest -q || true
 
-## Placeholders for later phases (wired up as scripts)
+## Phase placeholders (wired in later phases)
 fetch-core:
-	@echo "Phase 2: implement scripts to fetch PD sources into data/raw/core"
+	@echo "Phase 2: implement fetch for PD/permissive sources into data/raw/core"
 
 fetch-plus:
-	@echo "Phase 3: implement scripts to fetch CC-BY-SA sources into data/raw/plus"
+	@echo "Phase 3: implement fetch for CC-BY-SA sources into data/raw/plus"
 
 build-core:
 	@echo "Phase 5+: implement core ingest/build pipeline"
@@ -49,13 +50,15 @@ build-core:
 build-plus:
 	@echo "Phase 6+: implement plus ingest/build pipeline"
 
-## Guardrails stub (wired in Phase 1)
+## Guardrails (wired in Phase 1)
 check-limits:
 	@echo "Phase 1: implement sys/limits.sh and hook here"
 
 ## Cleaning
 clean:
 	rm -rf build dist .pytest_cache .ruff_cache
+	find . -name '__pycache__' -type d -prune -exec rm -rf '{}' +
+	find . -name '*.egg-info' -type d -prune -exec rm -rf '{}' +
 
 distclean: clean
 	rm -rf .venv
