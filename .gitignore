@@ -1,3 +1,13 @@
+.venv/
+
+*.pyc
+/.ruff_cache/
+/.pytest_cache/
+
+/data/raw/
+/data/intermediate/
+/data/artifacts/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
