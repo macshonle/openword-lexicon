@@ -63,11 +63,11 @@ fetch-plus:
 	@echo "✓ PLUS sources fetched to data/raw/plus"
 
 ## Phase 3½: Post-process fetched sources (e.g., Wiktionary dump → JSONL)
-fetch-post-process-core:
+fetch-post-process-core: deps
 	@echo "→ Post-processing CORE distribution sources..."
 	@echo "   No additional post-processing required for core sources."
 
-fetch-post-process-plus:
+fetch-post-process-plus: deps
 	@echo "→ Post-processing PLUS distribution sources (wiktextract)..."
 	@if [ ! -f "$(WIKTIONARY_DUMP)" ]; then \
 		echo "✗ Missing $(WIKTIONARY_DUMP). Run 'make fetch-plus' first."; \
