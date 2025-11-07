@@ -9,6 +9,8 @@
 /data/raw/
 /data/intermediate/
 /data/artifacts/
+/data/build/
+/data/filtered/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

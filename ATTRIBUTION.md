@@ -1,85 +1,76 @@
-# ATTRIBUTION
-
-This file lists **TASL** (Title, Author, Source, License) attributions for inputs used to build the Openword Lexicon datasets.
-
-- **Code license:** Apache-2.0
-- **Data licenses:**
-  - **core:** CC0 1.0 (preferred) or CC BY 4.0 — choose one at release time and reflect it in `data/core/LICENSE`
-  - **plus:** CC BY-SA 4.0 — required when including SA sources (e.g., Wiktionary, certain frequency lists)
-
-The build produces two distributions. Keep this file in the repository and include it in all release archives. Regenerate as sources change.
+# Openword Lexicon — Attribution
+Generated: 2025-11-07 03:22:35 UTC
 
 ---
 
-## CORE INPUTS (PD/permissive only)
+## Overview
 
-### ENABLE — Enhanced North American Benchmark LExicon
-**Title:** ENABLE word list  
-**Author:** Alan Beale; contributors (public domain release)  
-**Source:** Public domain distribution mirrors (document in build manifest)  
-**License:** Public Domain (CC0-compatible)  
-**Notes:** A public-domain alternative to proprietary Scrabble lists; no restrictions on use.
+This lexicon is built from multiple open sources. Each source has its own license and attribution requirements, which are detailed below.
 
-### EOWL — English Open Word List (derived from UKACD)
-**Title:** English Open Word List (EOWL)  
-**Author:** Ken Loge; derived from UK Advanced Cryptics Dictionary (UKACD) by J. Ross Beresford; contributions by Alan Beale  
-**Source:** EOWL distribution (document in build manifest)  
-**License:** Unrestricted use with inclusion of the **UKACD notice** below  
-**Required notice (verbatim):**
-> The UK Advanced Cryptics Dictionary (UKACD) is © J Ross Beresford 1993–1999. Permission is granted to use this list for any purpose provided this notice is retained. No warranty is given.
+## Distribution Licenses
 
-### Optional PD sources (only if used)
-**Title:** Moby word lists (various)  
-**Author:** Grady Ward  
-**Source:** Moby Project mirrors  
-**License:** Public Domain  
-**Notes:** Include only subsets confirmed PD; document exact files in the manifest.
+- **Core Distribution**: CC BY 4.0 (most permissive sources only)
+- **Plus Distribution**: CC BY-SA 4.0 (includes additional CC BY-SA sources)
 
 ---
 
-## PLUS INPUTS (additional SA sources and enrichments)
+## Source Attributions
 
-### Wiktionary (English)
-**Title:** Wiktionary (English) — pages-articles dump (specific date in manifest)  
-**Author:** Wiktionary contributors  
-**Source:** dumps.wikimedia.org (exact dump URL in manifest)  
-**License:** CC BY-SA 4.0  
-**Required attribution:** “This dataset includes material from Wiktionary (https://www.wiktionary.org/), available under the Creative Commons Attribution-ShareAlike License (CC BY-SA 4.0). See individual page histories for authorship.”
+### ENABLE
 
-### WordNet (Princeton)
-**Title:** Princeton WordNet (version noted in manifest)  
-**Author:** Princeton University  
-**Source:** wordnet.princeton.edu (exact package in manifest)  
-**License:** WordNet license (free to use and redistribute with attribution)  
-**Recommended citation:** “Miller, G. A. (1995). WordNet: A Lexical Database for English. *Communications of the ACM*, 38(11), 39–41.”  
-**Trademark:** WordNet® is a registered trademark of Princeton University.
+**Title:** Enhanced North American Benchmark LExicon
 
-### Frequency data (choose one; document precisely in manifest)
-- **OpenSubtitles word frequency (InvokeIT or equivalent)**  
-  **License:** CC BY-SA 4.0  
-  **Attribution:** Include project name, URL, and license link.
-- **Wikipedia-derived frequency lists**  
-  **License:** CC BY-SA 4.0  
-  **Attribution:** “This dataset includes material derived from Wikipedia (https://www.wikipedia.org/), available under CC BY-SA 4.0.”
-- **Other frequency sources**  
-  **License:** Ensure compatibility; include exact TASL block here.
+**Author/Contributors:** Alan Beale et al.
+
+**Source URL:** https://raw.githubusercontent.com/dolph/dictionary/master/enable1.txt
+
+**License:** [Public Domain](https://creativecommons.org/publicdomain/zero/1.0/)
+
+**Notes:** Public domain word list for word games and NLP applications
+
+*Downloaded: 2025-11-07T02:12:12Z*
+
+*SHA256: `3f16130220645692ed49c7134e24a18504c2ca55b3c012f7290e3e77c63b1a89`*
 
 ---
 
-## GENERATED FILES AND PROVENANCE
+### EOWL
 
-- The build emits `data/LICENSE` for each distribution:
-  - `data/core/LICENSE` → CC0 1.0 (or CC BY 4.0 if chosen)
-  - `data/plus/LICENSE` → CC BY-SA 4.0
-- The build emits `ATTRIBUTION.md` (this file) and a machine-readable `MANIFEST.json` listing:
-  - Input files (paths/URLs), versions or dump dates
-  - SHA-256 checksums
-  - License identifiers for each input
-- When distributing **plus** artifacts, ensure **ShareAlike**: downstream modifications must be licensed under **CC BY-SA 4.0** with proper attribution.
+**Title:** English Open Word List
 
-## HOW TO UPDATE THIS FILE
+**Author/Contributors:** Ken Loge (derived from UK Advanced Cryptics Dictionary by J. Ross Beresford)
 
-1. Add/remove input sources in the build.  
-2. Update TASL entries here (or auto-generate from `SOURCE.json` files).  
-3. Re-run the attribution generator during the release process.  
-4. Verify that all downstream artifacts include this file and the appropriate `data/LICENSE`.
+**Source URL:** https://github.com/kloge/The-English-Open-Word-List.git
+
+**License:** [UKACD License](https://github.com/kloge/The-English-Open-Word-List/blob/master/README.md)
+
+**Notes:** Words up to 10 letters, no proper nouns, no hyphens, diacritics removed
+
+*Downloaded: 2025-11-07T02:12:27Z*
+
+*SHA256: `d9a74f713f21486092a3c37799ae0a6b7c40f32e33e87a6085b53322bacf3933`*
+
+---
+
+### FrequencyWords
+
+**Title:** OpenSubtitles 2018 English Word Frequency List
+
+**Author/Contributors:** Hermit Dave (compiled from OpenSubtitles.org data)
+
+**Source URL:** https://github.com/hermitdave/FrequencyWords.git
+
+**License:** [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+
+**Attribution Statement:**
+
+> Word frequency data compiled from OpenSubtitles.org (https://www.opensubtitles.org/). Licensed under CC BY-SA 4.0.
+
+**Notes:** Each line contains: word<space>frequency. Based on movie/TV subtitles corpus.
+
+*Downloaded: 2025-11-07T02:21:47Z*
+
+*SHA256: `5351ff405b1126ef555791dd4d9798a48e3e9a501a9fc481a9da957752cfb458`*
+
+---
+

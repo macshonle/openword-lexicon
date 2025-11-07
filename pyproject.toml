@@ -14,7 +14,8 @@ dependencies = [
   "click>=8.1",
   "orjson>=3.9",
   "wiktextract>=0.7",
-  "nltk>=3.8"
+  "nltk>=3.8",
+  "marisa-trie>=1.0"
 ]
 
 [project.optional-dependencies]
