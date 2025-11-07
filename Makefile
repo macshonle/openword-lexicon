@@ -9,7 +9,7 @@ WIKTIONARY_DUMP := data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2
 WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
 
 .PHONY: bootstrap venv deps fmt lint test clean scrub \
-        fetch-core fetch-plus fetch-post-process-core fetch-post-process-plus \
+        fetch fetch-core fetch-plus fetch-post-process-plus \
         build-core build-plus package check-limits
 
 # Bootstrap local dev environment (idempotent)
@@ -41,6 +41,8 @@ test:
 check-limits:
 	@bash scripts/sys/limits.sh check
 
+fetch: fetch-core fetch-plus fetch-post-process-plus
+
 # Fetch core sources (PD/permissive only)
 fetch-core:
 	@bash scripts/fetch/fetch_enable.sh
@@ -62,8 +64,9 @@ fetch-post-process-plus: deps
 	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
 	$(UV) run wiktwords "$(WIKTIONARY_DUMP)" \
 		--out "$(WIKTIONARY_JSON)" \
-		--language English \
-		--language Translingual \
+		--dump-file-language-code en \
+		--language-code en \
+		--language-code MUL \
 		--all
 
 build-core:
@@ -78,8 +81,8 @@ build-core:
 build-plus:
 	$(UV) run python src/openword/core_ingest.py
 	@if [ ! -f "$(WIKTIONARY_JSON)" ]; then \
-		echo "↻ $(WIKTIONARY_JSON) not found – running fetch-post-process-plus..."; \
-		$(MAKE) fetch-post-process-plus; \
+		echo "✗ Missing $(WIKTIONARY_JSON). Run 'make fetch-post-process-plus' after producing a Wiktextract JSON."; \
+		exit 1; \
 	fi
 	$(UV) run python src/openword/wikt_ingest.py
 	$(UV) run python src/openword/wordnet_enrich.py
