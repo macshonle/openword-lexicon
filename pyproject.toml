@@ -12,7 +12,9 @@ license = "Apache-2.0"
 
 dependencies = [
   "click>=8.1",
-  "orjson>=3.9"
+  "orjson>=3.9",
+  "wiktextract>=0.7",
+  "nltk>=3.8"
 ]
 
 [project.optional-dependencies]
