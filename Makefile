@@ -10,7 +10,7 @@ WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
 
 .PHONY: bootstrap venv deps fmt lint test clean scrub \
         fetch fetch-core fetch-plus fetch-post-process-plus \
-        build-core build-plus package check-limits start-server
+        build-core build-plus export-wordlist package check-limits start-server
 
 # Bootstrap local dev environment (idempotent)
 bootstrap: venv deps
@@ -77,6 +77,7 @@ build-core:
 	$(UV) run python src/openword/policy.py
 	$(UV) run python src/openword/attribution.py
 	$(UV) run python src/openword/trie_build.py
+	$(UV) run python src/openword/export_wordlist.py
 
 build-plus:
 	$(UV) run python src/openword/core_ingest.py
@@ -91,6 +92,11 @@ build-plus:
 	$(UV) run python src/openword/policy.py
 	$(UV) run python src/openword/attribution.py
 	$(UV) run python src/openword/trie_build.py
+	$(UV) run python src/openword/export_wordlist.py
+
+# Export trie to plain text wordlist for browser viewer
+export-wordlist:
+	$(UV) run python src/openword/export_wordlist.py
 
 package:
 	$(UV) run python src/openword/manifest.py
@@ -119,7 +125,7 @@ start-server:
 	fi
 	@if [ ! -f "data/build/core/wordlist.txt" ]; then \
 		echo "✗ wordlist.txt not found. Run 'make build-core' first."; \
-		echo "  Or run: uv run python src/openword/export_wordlist.py"; \
+		echo "  Or run: make export-wordlist"; \
 		exit 1; \
 	fi
 	@cd viewer && pnpm install && pnpm start
