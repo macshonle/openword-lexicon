@@ -1,0 +1,12 @@
+{
+  "name": "openword-lexicon-viewer",
+  "version": "0.1.0",
+  "description": "Interactive trie viewer for Openword Lexicon",
+  "scripts": {
+    "start": "http-server . -p 8080 -o --cors"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "private": true
+}

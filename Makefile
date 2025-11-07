@@ -10,7 +10,7 @@ WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
 
 .PHONY: bootstrap venv deps fmt lint test clean scrub \
         fetch fetch-core fetch-plus fetch-post-process-plus \
-        build-core build-plus package check-limits
+        build-core build-plus package check-limits start-server
 
 # Bootstrap local dev environment (idempotent)
 bootstrap: venv deps
@@ -109,3 +109,17 @@ scrub: clean
 		MANIFEST.json \
 		data/LICENSE \
 		data/.limits-log.json
+
+# Start local development server for trie viewer
+start-server:
+	@echo "→ Starting local server for trie viewer..."
+	@if ! command -v pnpm &> /dev/null; then \
+		echo "✗ pnpm not found. Install with: npm install -g pnpm"; \
+		exit 1; \
+	fi
+	@if [ ! -f "data/build/core/wordlist.txt" ]; then \
+		echo "✗ wordlist.txt not found. Run 'make build-core' first."; \
+		echo "  Or run: uv run python src/openword/export_wordlist.py"; \
+		exit 1; \
+	fi
+	@cd viewer && pnpm install && pnpm start
