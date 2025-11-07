@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://openword.org/schemas/entry.schema.json",
+  "title": "Openword Lexicon Entry",
+  "description": "Normalized lexicon entry with labels, provenance, and enrichment metadata",
+  "type": "object",
+  "required": ["word", "sources"],
+  "additionalProperties": false,
+  "properties": {
+    "word": {
+      "type": "string",
+      "description": "The word or phrase in Unicode NFKC normalized form",
+      "minLength": 1
+    },
+    "pos": {
+      "type": "array",
+      "description": "Part-of-speech tags (may be empty if unknown)",
+      "items": {
+        "type": "string",
+        "enum": [
+          "noun",
+          "verb",
+          "adjective",
+          "adverb",
+          "pronoun",
+          "preposition",
+          "conjunction",
+          "interjection",
+          "determiner",
+          "particle",
+          "auxiliary"
+        ]
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "labels": {
+      "type": "object",
+      "description": "Controlled vocabulary labels for usage, region, temporal, and domain classification",
+      "additionalProperties": false,
+      "properties": {
+        "register": {
+          "type": "array",
+          "description": "Sociolinguistic register (formality, vulgarity, etc.)",
+          "items": {
+            "type": "string",
+            "enum": [
+              "formal",
+              "informal",
+              "colloquial",
+              "slang",
+              "vulgar",
+              "offensive",
+              "derogatory",
+              "euphemistic",
+              "humorous",
+              "literary"
+            ]
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "region": {
+          "type": "array",
+          "description": "Regional/dialectal usage (e.g., en-GB, en-US)",
+          "items": {
+            "type": "string",
+            "pattern": "^en-[A-Z]{2}$"
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "temporal": {
+          "type": "array",
+          "description": "Temporal usage status",
+          "items": {
+            "type": "string",
+            "enum": [
+              "archaic",
+              "obsolete",
+              "dated",
+              "historical",
+              "modern"
+            ]
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "domain": {
+          "type": "array",
+          "description": "Subject domain or specialized field",
+          "items": {
+            "type": "string",
+            "enum": [
+              "medical",
+              "legal",
+              "technical",
+              "scientific",
+              "military",
+              "nautical",
+              "botanical",
+              "zoological",
+              "computing",
+              "mathematics",
+              "music",
+              "art",
+              "religion",
+              "culinary",
+              "sports",
+              "business",
+              "finance"
+            ]
+          },
+          "uniqueItems": true,
+          "default": []
+        }
+      },
+      "default": {}
+    },
+    "is_phrase": {
+      "type": "boolean",
+      "description": "True if this entry is a multi-word phrase (e.g., 'give up')",
+      "default": false
+    },
+    "lemma": {
+      "type": ["string", "null"],
+      "description": "Base form if this is an inflection (e.g., 'run' for 'running')",
+      "default": null
+    },
+    "concreteness": {
+      "type": "string",
+      "description": "Concreteness classification from WordNet (nouns only)",
+      "enum": ["concrete", "abstract", "mixed"]
+    },
+    "frequency_tier": {
+      "type": "string",
+      "description": "Coarse frequency ranking bucket",
+      "enum": [
+        "top10",
+        "top100",
+        "top1k",
+        "top10k",
+        "top100k",
+        "rare"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "description": "Provenance: list of source identifiers contributing to this entry",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z_]+$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}

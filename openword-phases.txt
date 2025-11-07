@@ -1,0 +1,163 @@
+Here is some text from a starter guide. Take a look around the repo and let's get the project setup in alignment with the code in the repo. Here's that starter text up to and including "Phase 0". I'm not sure if anything more needs to be done, but just for background:
+
+Openword Lexicon — Phases & Instructions (Plain Text)
+
+Project Shape (high-level)
+--------------------------
+- Distributions:
+  - core  — ultra‑permissive sources only (data: CC0 or CC BY 4.0)
+  - plus  — enhanced coverage/labels incl. CC‑BY‑SA inputs (data: CC BY‑SA 4.0)
+- Code license: Apache‑2.0
+- Constraints: total downloads ≤ 100 GB, peak RAM per step ≤ 2 GB
+- Build approach: uv-first Python; Makefile orchestrates; streaming pipelines; reproducible artifacts.
+
+Repository Layout (top-level)
+-----------------------------
+```
+openword-lexicon/
+  Makefile
+  pyproject.toml
+  README.md
+  LICENSE               (Apache-2.0 for code)
+  data/
+    LICENSE             (filled per-dist at release time)
+  code/
+    openword/
+      __init__.py
+      cli/
+  scripts/
+  docs/
+  .gitignore
+```
+Makefile lives at repo root.
+
+Quickstart (local)
+------------------
+```
+brew install uv
+make bootstrap
+make fetch-core && make build-core
+make fetch-plus  && make build-plus
+# Example query (after CLI exists)
+uv run owlex search --pattern '^..a..$' --len 5 --family-friendly --rank-max top10k
+```
+
+Key Artifacts
+-------------
+- core.trie / plus.trie + *.meta.db (sidecar metadata store)
+- entries_merged.jsonl (intermediate, per distribution)
+- ATTRIBUTION.md, data/LICENSE (per distribution)
+- MANIFEST.json (inputs, hashes, versions)
+- Release archives: *-core-<ver>.tar.zst / *-plus-<ver>.tar.zst
+
+Makefile Targets (expected)
+---------------------------
+```
+bootstrap  venv  deps  devdeps  fmt  lint  test  clean  distclean
+fetch-core  fetch-plus  build-core  build-plus  check-limits
+```
+
+
+PHASE 0 — Repo scaffolding & uv workflow
+- Goal: working skeleton; uv-only Python; Makefile at repo root.
+- Actions: create dirs; write pyproject; .gitignore; Makefile.
+- Output/Check:
+  - `make bootstrap` succeeds; prints Python version from .venv.
+  - Editable install works: `uv run python -c "import openword"`.
+<--- First Copy END
+
+Hmm, it seems like phase 1 makes more sense to test if it is added in with phase 2 and phase 3... Pasting here, and I'm not sure what the instructions mean by "halts if caps exceeded"-- what halts, the make command? Also, is there enough information to figure out what the data sources are?
+
+PHASE 1 — Guardrails (disk & RAM)
+- Goal: enforce 100 GB download cap; 2 GB peak RSS per step.
+- Actions: `scripts/sys/limits.sh` logs bytes + peak RSS (`/usr/bin/time`), Make `check-limits` fails on breach.
+- Output/Check: `make check-limits` prints totals; halts if caps exceeded.
+
+PHASE 2 — Source fetch (core)
+- Goal: PD/permissive lists fetched with provenance.
+- Actions: scripts to fetch ENABLE/EOWL (+ optional PD lists) → data/raw/core; create SOURCE.json (URL, license, sha256); normalized .txt.
+- Output/Check: `make fetch-core` produces files; `wc -l` on merged core list > 0; sha256 present.
+
+PHASE 3 — Source fetch (plus)
+- Goal: CC‑BY‑SA inputs + WordNet fetched with provenance.
+- Actions: fetch Wiktionary dump (English), WordNet, frequency list(s) → data/raw/plus; SOURCE.json per input.
+- Output/Check: `make fetch-plus` produces files; totals within caps.
+
+<--- Second Copy END
+OK! We're ready to hit the next phases. I'm including several of them at once to help your planning.
+
+PHASE 4 — Normalization spec & schema
+- Goal: one entry schema; controlled vocab for labels.
+- Actions: write `docs/schema/entry.schema.json` + `docs/labels.md`; adopt Unicode NFKC.
+- Output/Check: schema validates (`jq`), labels documented.
+
+PHASE 5 — Core ingest
+- Goal: stream-parse core lists → normalized JSONL.
+- Actions: `code/openword/core_ingest.py` creates `data/intermediate/core/core_entries.jsonl` (word, pos[], labels.register[], is_phrase=false, lemma=null, sources[]).
+- Output/Check: file exists; sample validates against schema (pos may be empty).
+
+PHASE 6 — Wiktionary extraction (plus)
+- Goal: expand entries, inflections, usage labels.
+- Actions: run Wiktextract → `data/intermediate/plus/wikt.jsonl`; map to schema via `wikt_ingest.py` → `wikt_entries.jsonl`.
+- Output/Check: examples show `region: en-GB` (colour), `register: vulgar/offensive` (asshole), `archaic` (thou), `is_phrase:true` (give up).
+
+PHASE 7 — WordNet enrichment
+- Goal: concreteness for nouns; POS backfill where confident.
+- Actions: traverse noun synsets; set `concreteness = concrete|abstract|mixed`; fill POS if unambiguous.
+- Output/Check: “castle” concrete, “freedom” abstract, “paper” mixed; enriched JSONL written.
+
+PHASE 8 — Frequency tiers
+- Goal: coarse rank buckets for every token.
+- Actions: read frequency list; compute thresholds for top10, top100, top1k, top10k, top100k; default >100k if unseen.
+- Output/Check: tier assigned; tests ensure “the” ∈ top10; common nouns in ≤ top10k.
+
+PHASE 9 — Merge & deduplicate
+- Goal: per‑distribution unified entries with label union.
+- Actions: merge streams; union labels/POS; keep sources[] provenance.
+- Output/Check: `entries_merged.jsonl` (core|plus) with unique words; counts logged.
+
+<--- Third Copy END
+
+PHASE 10 — Policy layer (family‑friendly etc.)
+- Goal: simple, auditable filters for curated views.
+- Actions: rules in `policy.py` (exclude vulgar/offensive/etc.); optional `docs/policy_overrides.yaml`.
+- Output/Check: smoke file `family_friendly_5.txt` produced via CLI or script; spot checks pass.
+
+PHASE 11 — Attribution
+- Goal: TASL consolidated; per‑dist LICENSE files.
+- Actions: `attribution.py` aggregates SOURCE.json → `ATTRIBUTION.md`; emit `data/core/LICENSE` (CC0 or CC BY) and `data/plus/LICENSE` (CC BY‑SA).
+- Output/Check: files generated; license matrix matches inputs.
+
+PHASE 12 — Trie build (PATRICIA/DAWG)
+- Goal: compact lookup structure with metadata sidecar.
+- Actions: sort keys; build trie via marisa‑trie/DAWG; store id→entry in LMDB/SQLite.
+- Output/Check: `core.trie`/`plus.trie` + `*.meta.db` exist; memory profile < 2 GB peak.
+<--- Fourth Copy END
+
+
+PHASE 13 — Pattern search CLI
+- Goal: fast pattern & filter queries over local artifacts.
+- Actions: `owlex` tool: pattern `? * [abc]`, filters: len/pos/region/frequency/family-friendly/is-phrase.
+- Output/Check: demo searches return expected counts; examples documented.
+
+PHASE 14 — Test suite
+- Goal: CI-enforced correctness for schema, labels, trie.
+- Actions: pytest: region (color/colour), register (offensive excluded), archaic (thou), phrases (kick the bucket), concreteness (castle/freedom/paper), membership.
+- Output/Check: `make test` green locally and in CI.
+
+<--- 5th Copy END
+
+PHASE 15 — CI/CD & reproducibility
+- Goal: predictable builds and verification on PRs/nightly.
+- Actions: GH Actions for lint+tests; shallow build; artifact `MANIFEST.json` with hashes.
+- Output/Check: badges green; manifest exists and diffable.
+
+PHASE 16 — Packaging & releases
+- Goal: versioned archives for core and plus.
+- Actions: package trie+meta+LICENSE+ATTRIBUTION; semantic version tag; checksums.
+- Output/Check: tarballs under data/artifacts/releases/; unpack+lookup works.
+
+PHASE 17 — Documentation
+- Goal: clear, minimal docs for users and contributors.
+- Actions: README quickstart; USAGE.md (CLI); SCHEMA.md; DATASETS.md; DESIGN.md (short); benchmarks.
+- Output/Check: a newcomer can fetch/build/query in minutes using only docs.

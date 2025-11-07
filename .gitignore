@@ -9,6 +9,9 @@
 /data/raw/
 /data/intermediate/
 /data/artifacts/
+/data/build/
+/data/filtered/
+/data/.limits-log.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -11,15 +11,72 @@ Permissively usable English lexicon for any application (games, NLP, education).
 - Total downloads ≤ **100 GB**
 - Peak RAM per step ≤ **2 GB**
 
-## Quickstart (uv)
+## Quickstart
+
+### Using Pre-built Releases
+
+Download and extract a release:
+
 ```bash
-brew install uv                         # one time
-make bootstrap                          # create venv + install deps
-make fetch-core && make build-core      # PD/permissive build
-make fetch-plus && make build-plus      # enhanced build (larger)
-# Example (once CLI exists)
-uv run owlex search --pattern '^..a..$' --len 5 --family-friendly --rank-max top10k
+# Download latest release
+wget https://github.com/macshonle/openword-lexicon/releases/latest/download/openword-lexicon-core-0.1.0.tar.gz
+
+# Extract
+tar xzf openword-lexicon-core-0.1.0.tar.gz
+cd openword-lexicon-core-0.1.0
+
+# Verify (optional)
+sha256sum -c *.sha256
+
+# Use in Python
+python3 -m pip install marisa-trie
+python3
+>>> import marisa_trie, json
+>>> trie = marisa_trie.Trie()
+>>> trie.load('core.trie')
+>>> 'castle' in trie
+True
+>>> len(trie)
+208201
 ```
+
+### Building from Source (uv)
+
+```bash
+# Install uv (one time)
+brew install uv  # macOS
+# or: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Clone repository
+git clone https://github.com/macshonle/openword-lexicon.git
+cd openword-lexicon
+
+# Bootstrap environment
+make bootstrap
+
+# Build core distribution (permissive sources only)
+make fetch-core
+
+# Note: uv will download wikitextprocessor directly from GitHub to pick up the latest Scribunto fixes.
+
+# Build plus distribution inputs (optional; includes Wiktionary extraction)
+make fetch-plus
+make fetch-post-process-plus  # runs wiktextract → data/intermediate/plus/wikt.jsonl
+
+uv run python src/openword/core_ingest.py
+uv run python src/openword/wordnet_enrich.py
+uv run python src/openword/frequency_tiers.py
+uv run python src/openword/merge_dedupe.py
+uv run python src/openword/policy.py
+uv run python src/openword/trie_build.py
+
+# Package release
+uv run python src/openword/package_release.py
+
+# Result: data/artifacts/releases/openword-lexicon-core-0.1.0.tar.gz
+```
+
+> **Building PLUS:** Run `make fetch-plus && make fetch-post-process-plus`, then include `uv run python src/openword/wikt_ingest.py` before `wordnet_enrich.py` (or run `make build-plus` to automate the entire sequence).
 
 ## High‑level pipeline
 1. **Fetch** sources (core | plus) with checksums & provenance.
@@ -37,4 +94,41 @@ uv run owlex search --pattern '^..a..$' --len 5 --family-friendly --rank-max top
 - Release archives: `*-core-<ver>.tar.zst` / `*-plus-<ver>.tar.zst`
 
 ## Status
-Phase 0 focuses on repository scaffolding, `uv` workflow, and guardrails. Subsequent phases add ingestion, enrichment, trie build, CLI, tests, CI, and packaging.
+
+✅ **Phases 0-17 Complete**
+- Phase 0-3: Repository scaffolding, guardrails, source fetching
+- Phase 4-9: Normalization, ingest, enrichment, merge
+- Phase 10-12: Policy filters, attribution, trie build
+- Phase 15-17: CI/CD, packaging, releases, documentation
+
+🚧 **TODO**
+- CLI implementation (`owlex` command)
+- Comprehensive test suite
+- Performance benchmarks
+
+## Documentation
+
+- [USAGE.md](docs/USAGE.md) — CLI usage and examples
+- [SCHEMA.md](docs/SCHEMA.md) — Entry schema reference
+- [DATASETS.md](docs/DATASETS.md) — Source dataset details
+- [DESIGN.md](docs/DESIGN.md) — Architecture and design decisions
+- [ATTRIBUTION.md](ATTRIBUTION.md) — Full source attributions
+
+## Statistics
+
+| Distribution | Words | Trie Size | License |
+|--------------|-------|-----------|---------|
+| Core | 208,201 | 510 KB | CC BY 4.0 |
+| Plus | 208,204 | 510 KB | CC BY-SA 4.0 |
+
+## Contributing
+
+Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) (coming soon) for guidelines.
+
+## License
+
+- **Code**: Apache-2.0
+- **Core Data**: CC BY 4.0
+- **Plus Data**: CC BY-SA 4.0
+
+See LICENSE and data/{core,plus}/LICENSE for full terms.
