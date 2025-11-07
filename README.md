@@ -56,6 +56,11 @@ make bootstrap
 
 # Build core distribution (permissive sources only)
 make fetch-core
+
+# Build plus distribution inputs (optional; includes Wiktionary extraction)
+make fetch-plus
+make fetch-post-process-plus  # runs wiktextract → data/intermediate/plus/wikt.jsonl
+
 uv run python src/openword/core_ingest.py
 uv run python src/openword/wordnet_enrich.py
 uv run python src/openword/frequency_tiers.py
@@ -68,6 +73,8 @@ uv run python src/openword/package_release.py
 
 # Result: data/artifacts/releases/openword-lexicon-core-0.1.0.tar.gz
 ```
+
+> **Building PLUS:** Run `make fetch-plus && make fetch-post-process-plus`, then include `uv run python src/openword/wikt_ingest.py` before `wordnet_enrich.py` (or run `make build-plus` to automate the entire sequence).
 
 ## High‑level pipeline
 1. **Fetch** sources (core | plus) with checksums & provenance.
