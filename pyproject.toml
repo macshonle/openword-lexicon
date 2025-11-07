@@ -13,7 +13,8 @@ license = "Apache-2.0"
 dependencies = [
   "click>=8.1",
   "orjson>=3.9",
-  "wiktextract>=0.7",
+  "wiktextract @ git+https://github.com/tatuylonen/wiktextract@16fc7bfa5498fcf9503ddee2662baaeaf26d307d",
+  "wikitextprocessor @ git+https://github.com/tatuylonen/wikitextprocessor@2de17fa0b6cd5609d6457d114d39969779463434",
   "nltk>=3.8",
   "marisa-trie>=1.0"
 ]

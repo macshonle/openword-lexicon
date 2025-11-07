@@ -57,6 +57,8 @@ make bootstrap
 # Build core distribution (permissive sources only)
 make fetch-core
 
+# Note: uv will download wikitextprocessor directly from GitHub to pick up the latest Scribunto fixes.
+
 # Build plus distribution inputs (optional; includes Wiktionary extraction)
 make fetch-plus
 make fetch-post-process-plus  # runs wiktextract → data/intermediate/plus/wikt.jsonl
