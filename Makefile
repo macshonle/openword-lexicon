@@ -37,22 +37,33 @@ lint:
 test:
 	$(UV) run pytest -q || true
 
-## Phase placeholders (wired in later phases)
+## Phase 1: Guardrails
+check-limits:
+	@bash scripts/sys/limits.sh check
+
+## Phase 2: Fetch core sources (PD/permissive only)
 fetch-core:
-	@echo "Phase 2: implement fetch for PD/permissive sources into data/raw/core"
+	@echo "→ Fetching CORE distribution sources..."
+	@bash scripts/fetch/fetch_enable.sh
+	@bash scripts/fetch/fetch_eowl.sh
+	@bash scripts/sys/limits.sh update
+	@echo "✓ CORE sources fetched to data/raw/core"
 
+## Phase 3: Fetch plus sources (CC-BY-SA enrichments)
 fetch-plus:
-	@echo "Phase 3: implement fetch for CC-BY-SA sources into data/raw/plus"
+	@echo "→ Fetching PLUS distribution sources..."
+	@bash scripts/fetch/fetch_wiktionary.sh
+	@bash scripts/fetch/fetch_wordnet.sh
+	@bash scripts/fetch/fetch_frequency.sh
+	@bash scripts/sys/limits.sh update
+	@echo "✓ PLUS sources fetched to data/raw/plus"
 
+## Future phases (build pipelines)
 build-core:
 	@echo "Phase 5+: implement core ingest/build pipeline"
 
 build-plus:
 	@echo "Phase 6+: implement plus ingest/build pipeline"
-
-## Guardrails (wired in Phase 1)
-check-limits:
-	@echo "Phase 1: implement sys/limits.sh and hook here"
 
 ## Cleaning
 clean:
