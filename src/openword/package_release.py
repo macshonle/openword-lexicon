@@ -30,6 +30,7 @@ from pathlib import Path
 from typing import List
 
 import orjson
+import tomllib
 
 
 logging.basicConfig(
@@ -40,7 +41,16 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-VERSION = "0.1.0"  # Semantic version
+def load_version() -> str:
+    """Read project version from pyproject.toml so releases stay in sync."""
+    project_root = Path(__file__).parent.parent.parent
+    pyproject_path = project_root / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        data = tomllib.load(f)
+    return data["project"]["version"]
+
+
+VERSION = load_version()
 
 
 def create_readme(distribution: str) -> str:
@@ -74,8 +84,9 @@ trie.load('{distribution}.trie')
 if 'castle' in trie:
     print("Found!")
 
-# Get word index
-idx = trie[{distribution!r}][0]  # First match
+# Pick a word and fetch its metadata
+word = 'castle'
+idx = trie[word][0]  # First match
 
 # Load metadata
 with open('{distribution}.meta.json', 'r') as f:
