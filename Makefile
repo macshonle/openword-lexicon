@@ -6,7 +6,7 @@ UV ?= uv
 PY_VERSION ?= 3.11
 
 .PHONY: bootstrap venv deps devdeps fmt lint test clean distclean \
-        fetch-core fetch-plus build-core build-plus check-limits
+        fetch-core fetch-plus build-core build-plus package check-limits
 
 ## Bootstrap local dev environment (idempotent)
 bootstrap: venv deps devdeps
@@ -58,12 +58,36 @@ fetch-plus:
 	@bash scripts/sys/limits.sh update
 	@echo "✓ PLUS sources fetched to data/raw/plus"
 
-## Future phases (build pipelines)
+## Build pipelines (Phases 5-12)
 build-core:
-	@echo "Phase 5+: implement core ingest/build pipeline"
+	@echo "→ Building CORE distribution..."
+	$(UV) run python src/openword/core_ingest.py
+	$(UV) run python src/openword/wordnet_enrich.py
+	$(UV) run python src/openword/frequency_tiers.py
+	$(UV) run python src/openword/merge_dedupe.py
+	$(UV) run python src/openword/policy.py
+	$(UV) run python src/openword/attribution.py
+	$(UV) run python src/openword/trie_build.py
+	@echo "✓ CORE build complete: data/build/core/"
 
 build-plus:
-	@echo "Phase 6+: implement plus ingest/build pipeline"
+	@echo "→ Building PLUS distribution..."
+	$(UV) run python src/openword/core_ingest.py
+	$(UV) run python src/openword/wikt_ingest.py
+	$(UV) run python src/openword/wordnet_enrich.py
+	$(UV) run python src/openword/frequency_tiers.py
+	$(UV) run python src/openword/merge_dedupe.py
+	$(UV) run python src/openword/policy.py
+	$(UV) run python src/openword/attribution.py
+	$(UV) run python src/openword/trie_build.py
+	@echo "✓ PLUS build complete: data/build/plus/"
+
+## Package releases (Phase 16)
+package:
+	@echo "→ Packaging releases..."
+	$(UV) run python src/openword/manifest.py
+	$(UV) run python src/openword/package_release.py
+	@echo "✓ Release packages: data/artifacts/releases/"
 
 ## Cleaning
 clean:

@@ -86,12 +86,11 @@ uv run python src/openword/package_release.py
 
 ## Status
 
-✅ **Phases 0-16 Complete**
+✅ **Phases 0-17 Complete**
 - Phase 0-3: Repository scaffolding, guardrails, source fetching
 - Phase 4-9: Normalization, ingest, enrichment, merge
 - Phase 10-12: Policy filters, attribution, trie build
-- Phase 15-16: CI/CD, packaging, releases
-- Phase 17: Documentation (in progress)
+- Phase 15-17: CI/CD, packaging, releases, documentation
 
 🚧 **TODO**
 - CLI implementation (`owlex` command)
