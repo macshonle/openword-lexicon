@@ -1,0 +1,87 @@
+name: Nightly Build
+
+on:
+  schedule:
+    # Run at 2 AM UTC every day
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  full-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        enable-cache: true
+
+    - name: Set up Python
+      run: uv python install 3.11
+
+    - name: Bootstrap
+      run: |
+        uv venv
+        uv pip install -e .
+
+    - name: Fetch all sources
+      run: |
+        bash scripts/fetch/fetch_enable.sh
+        bash scripts/fetch/fetch_eowl.sh
+        bash scripts/fetch/fetch_frequency.sh
+        # Skip Wiktionary dump (too large for CI)
+        echo "Skipping Wiktionary full dump for CI"
+
+    - name: Check limits
+      run: bash scripts/sys/limits.sh check
+
+    - name: Run full pipeline
+      run: |
+        # Core ingest
+        uv run python src/openword/core_ingest.py
+
+        # Enrichment
+        uv run python src/openword/wordnet_enrich.py
+
+        # Frequency tiers
+        uv run python src/openword/frequency_tiers.py
+
+        # Merge
+        uv run python src/openword/merge_dedupe.py
+
+        # Policy filter
+        uv run python src/openword/policy.py
+
+        # Attribution
+        uv run python src/openword/attribution.py
+
+        # Trie build
+        uv run python src/openword/trie_build.py
+
+    - name: Generate manifest
+      run: uv run python src/openword/manifest.py
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: |
+          data/build/
+          MANIFEST.json
+        retention-days: 7
+
+    - name: Report statistics
+      run: |
+        echo "=== Build Statistics ==="
+        if [ -f data/intermediate/core/entries_merged.jsonl ]; then
+          echo "Core entries: $(wc -l < data/intermediate/core/entries_merged.jsonl)"
+        fi
+        if [ -f data/build/core/core.trie ]; then
+          echo "Core trie size: $(du -h data/build/core/core.trie | cut -f1)"
+        fi
+        if [ -f MANIFEST.json ]; then
+          echo "Manifest generated successfully"
+        fi
