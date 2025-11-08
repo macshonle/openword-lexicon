@@ -12,7 +12,8 @@ WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
         fetch fetch-core fetch-plus fetch-post-process-plus \
         build-core build-plus export-wordlist export-wordlist-filtered-w3 export-wordlist-filtered-w4 \
         export-wordlist-filtered-c50 export-wordlist-filtered-w3c50 build-binary package check-limits start-server \
-        reports report-raw report-pipeline report-trie report-metadata report-compare
+        reports report-raw report-pipeline report-trie report-metadata report-compare \
+        game-words analyze-game-metadata
 
 # Bootstrap local dev environment (idempotent)
 bootstrap: venv deps
@@ -196,3 +197,17 @@ report-metadata:
 
 report-compare:
 	$(UV) run python tools/compare_distributions.py
+
+# ===========================
+# Game Word Filtering
+# ===========================
+
+# Filter words suitable for games (20 Questions, etc.)
+game-words:
+	$(UV) run python tools/filter_game_words.py --distribution core
+	$(UV) run python tools/filter_game_words.py --distribution plus
+
+# Analyze metadata coverage for game filtering
+analyze-game-metadata:
+	$(UV) run python tools/analyze_game_metadata.py core
+	$(UV) run python tools/analyze_game_metadata.py plus
