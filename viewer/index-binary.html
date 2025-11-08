@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Openword Lexicon - Interactive Trie Viewer (Binary)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .loading {
+            color: #ff9800;
+        }
+
+        .ready {
+            color: #4caf50;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        #userInput {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #userInput:focus {
+            border-color: #2196F3;
+        }
+
+        .display-section {
+            min-height: 150px;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .typed-text {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: monospace;
+            line-height: 1.2;
+        }
+
+        .valid-prefix {
+            color: #4caf50;
+        }
+
+        .invalid-suffix {
+            color: #f44336;
+        }
+
+        .annotation {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 18px;
+            color: #2196F3;
+            font-weight: normal;
+        }
+
+        .next-letters {
+            margin-top: 15px;
+        }
+
+        .next-letters h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .letter-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 3px;
+            background: #2196F3;
+            color: white;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .neighbors {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .neighbors h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .neighbor-word {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 3px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #333;
+        }
+
+        .random-words {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .random-words h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .word-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .word-item {
+            padding: 10px 15px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        button:hover {
+            background: #1976D2;
+        }
+
+        .stats {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #1565c0;
+        }
+
+        .stats strong {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Openword Lexicon - Interactive Trie Viewer</h1>
+        <div class="status loading" id="status">Loading binary trie...</div>
+    </header>
+
+    <div class="container">
+        <div class="input-section">
+            <input type="text" id="userInput" placeholder="Type to explore the trie..." disabled>
+        </div>
+
+        <div class="display-section">
+            <div class="typed-text" id="displayText"></div>
+            <div id="feedback"></div>
+        </div>
+
+        <div class="stats" id="stats"></div>
+    </div>
+
+    <div class="random-words">
+        <button id="refreshBtn" disabled>Refresh Random Words</button>
+        <h2>Random Words</h2>
+        <div class="word-list" id="randomWords"></div>
+    </div>
+
+    <script type="module">
+        import { BinaryTrie } from './src/binary-trie.js';
+
+        const statusEl = document.getElementById('status');
+        const userInput = document.getElementById('userInput');
+        const displayText = document.getElementById('displayText');
+        const feedback = document.getElementById('feedback');
+        const statsEl = document.getElementById('stats');
+        const randomWordsEl = document.getElementById('randomWords');
+        const refreshBtn = document.getElementById('refreshBtn');
+
+        let trie = new BinaryTrie();
+        let isLoading = true;
+
+        // Load binary trie
+        async function loadBinaryTrie() {
+            try {
+                statusEl.textContent = 'Downloading binary trie...';
+
+                const response = await fetch('/data/core.trie.bin');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const arrayBuffer = await response.arrayBuffer();
+
+                statusEl.textContent = 'Parsing binary trie...';
+                await trie.load(arrayBuffer);
+
+                const stats = trie.getStats();
+
+                statusEl.className = 'status ready';
+                statusEl.textContent = `✓ Ready! Loaded ${stats.wordCount.toLocaleString()} words (${(stats.sizeBytes / 1024).toFixed(1)} KB, ${stats.bytesPerWord} bytes/word, ${stats.nodeCount.toLocaleString()} nodes)`;
+
+                statsEl.innerHTML = `
+                    <strong>Trie Statistics:</strong><br>
+                    Words: ${stats.wordCount.toLocaleString()} |
+                    Nodes: ${stats.nodeCount.toLocaleString()} |
+                    Size: ${(stats.sizeBytes / 1024).toFixed(1)} KB |
+                    Compression: ${stats.bytesPerWord} bytes/word
+                `;
+
+                isLoading = false;
+                userInput.disabled = false;
+                refreshBtn.disabled = false;
+                userInput.focus();
+
+                // Load initial random words
+                displayRandomWords();
+
+            } catch (error) {
+                statusEl.className = 'status';
+                statusEl.style.color = '#f44336';
+                statusEl.textContent = `✗ Error loading trie: ${error.message}`;
+                console.error('Load error:', error);
+            }
+        }
+
+        // Display random words
+        function displayRandomWords() {
+            randomWordsEl.innerHTML = '';
+
+            for (let i = 0; i < 10; i++) {
+                const word = trie.getRandomWord();
+                const div = document.createElement('div');
+                div.className = 'word-item';
+                div.textContent = word;
+                randomWordsEl.appendChild(div);
+            }
+        }
+
+        // Handle user input
+        userInput.addEventListener('input', (e) => {
+            if (isLoading) return;
+
+            const text = e.target.value;
+
+            if (!text) {
+                displayText.textContent = '';
+                feedback.innerHTML = '';
+                return;
+            }
+
+            // Find longest valid prefix
+            const validPrefix = trie.findLongestValidPrefix(text);
+            const invalidSuffix = text.substring(validPrefix.length);
+
+            // Build display with color coding
+            let html = '';
+            if (validPrefix) {
+                html += `<span class="valid-prefix">${validPrefix}</span>`;
+            }
+            if (invalidSuffix) {
+                html += `<span class="invalid-suffix">${invalidSuffix}</span>`;
+            }
+
+            // Add annotation if it's a complete word
+            if (validPrefix === text && trie.has(text)) {
+                html += `<span class="annotation">✓ complete word</span>`;
+            }
+
+            displayText.innerHTML = html;
+
+            // Build feedback
+            let feedbackHtml = '';
+
+            if (validPrefix === text) {
+                // Valid prefix - show next possible letters
+                const nextChars = trie.getNextChars(text);
+                if (nextChars.length > 0) {
+                    feedbackHtml += '<div class="next-letters">';
+                    feedbackHtml += '<h3>Next possible letters:</h3>';
+                    for (const char of nextChars) {
+                        feedbackHtml += `<span class="letter-badge">${char}</span>`;
+                    }
+                    feedbackHtml += '</div>';
+                }
+            } else {
+                // Invalid suffix - show predecessor/successor
+                const pred = trie.getPredecessor(text);
+                const succ = trie.getSuccessor(text);
+
+                if (pred || succ) {
+                    feedbackHtml += '<div class="neighbors">';
+                    feedbackHtml += '<h3>Nearest words:</h3>';
+                    if (pred) {
+                        feedbackHtml += `<span class="neighbor-word">← ${pred}</span>`;
+                    }
+                    if (succ) {
+                        feedbackHtml += `<span class="neighbor-word">${succ} →</span>`;
+                    }
+                    feedbackHtml += '</div>';
+                }
+            }
+
+            feedback.innerHTML = feedbackHtml;
+        });
+
+        // Refresh random words
+        refreshBtn.addEventListener('click', displayRandomWords);
+
+        // Load trie on page load
+        loadBinaryTrie();
+    </script>
+</body>
+</html>

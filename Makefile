@@ -10,7 +10,7 @@ WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
 
 .PHONY: bootstrap venv deps fmt lint test clean clean-viewer scrub \
         fetch fetch-core fetch-plus fetch-post-process-plus \
-        build-core build-plus export-wordlist package check-limits start-server \
+        build-core build-plus export-wordlist build-binary package check-limits start-server \
         reports report-raw report-pipeline report-trie report-metadata report-compare
 
 # Bootstrap local dev environment (idempotent)
@@ -99,6 +99,23 @@ build-plus:
 export-wordlist:
 	$(UV) run python src/openword/export_wordlist.py
 
+# Build compact binary trie for browser (requires wordlist.txt)
+build-binary:
+	@echo "→ Building binary trie for browser..."
+	@if ! command -v pnpm &> /dev/null; then \
+		echo "✗ pnpm not found. Install with: npm install -g pnpm"; \
+		exit 1; \
+	fi
+	@if [ ! -f "data/build/core/wordlist.txt" ]; then \
+		echo "✗ wordlist.txt not found. Run 'make export-wordlist' first."; \
+		exit 1; \
+	fi
+	@if [ ! -d "viewer/node_modules" ]; then \
+		echo "→ Installing viewer dependencies..."; \
+		cd viewer && pnpm install; \
+	fi
+	@cd viewer && pnpm run build-trie
+
 package:
 	$(UV) run python src/openword/manifest.py
 	$(UV) run python src/openword/package_release.py
@@ -109,7 +126,7 @@ clean:
 	find . -name '*.egg-info' -type d -prune -exec rm -rf '{}' +
 
 clean-viewer:
-	rm -rf viewer/node_modules viewer/pnpm-lock.yaml
+	rm -rf viewer/node_modules viewer/pnpm-lock.yaml viewer/data viewer/dist
 
 scrub: clean
 	rm -rf .venv \

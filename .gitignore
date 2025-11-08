@@ -225,3 +225,5 @@ __marimo__/
 node_modules/
 pnpm-lock.yaml
 .pnpm-store/
+viewer/data/
+viewer/dist/
