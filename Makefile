@@ -9,11 +9,12 @@ WIKTIONARY_DUMP := data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2
 WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
 
 .PHONY: bootstrap venv deps fmt lint test clean clean-viewer scrub \
-        fetch fetch-core fetch-plus fetch-post-process-plus \
+        fetch fetch-core fetch-plus fetch-post-process-plus fetch-simple \
         build-core build-plus export-wordlist export-wordlist-filtered-w3 export-wordlist-filtered-w4 \
         export-wordlist-filtered-c50 export-wordlist-filtered-w3c50 build-binary package check-limits start-server \
         reports report-raw report-pipeline report-trie report-metadata report-compare \
-        game-words analyze-game-metadata
+        game-words analyze-game-metadata \
+        audit-wiktionary report-labels analyze-local
 
 # Bootstrap local dev environment (idempotent)
 bootstrap: venv deps
@@ -211,3 +212,75 @@ game-words:
 analyze-game-metadata:
 	$(UV) run python tools/analyze_game_metadata.py core
 	$(UV) run python tools/analyze_game_metadata.py plus
+
+# ===========================
+# Local Analysis (run locally with full Wiktionary dump)
+# ===========================
+
+# Fast Wiktionary extraction using simple streaming parser (alternative to wiktextract)
+fetch-simple: deps
+	@if [ ! -f "$(WIKTIONARY_DUMP)" ]; then \
+		echo "✗ Missing $(WIKTIONARY_DUMP). Run 'make fetch-plus' first."; \
+		exit 1; \
+	fi
+	@echo "→ Extracting Wiktionary with simple streaming parser..."
+	@echo "  (10-30 minutes for full dump, progress shown every 5k entries)"
+	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
+	$(UV) run python tools/prototypes/wiktionary_simple_parser.py \
+		"$(WIKTIONARY_DUMP)" \
+		"$(WIKTIONARY_JSON)"
+	@echo "✓ Extraction complete: $(WIKTIONARY_JSON)"
+
+# Audit Wiktionary extraction approach (validates simple parser on 10k sample)
+audit-wiktionary: deps
+	@if [ ! -f "$(WIKTIONARY_DUMP)" ]; then \
+		echo "✗ Missing $(WIKTIONARY_DUMP). Run 'make fetch-plus' first."; \
+		exit 1; \
+	fi
+	@echo "→ Auditing Wiktionary extraction approach..."
+	@echo "  (sampling 10,000 pages to validate approach)"
+	$(UV) run python tools/audit_wiktionary_extraction.py \
+		"$(WIKTIONARY_DUMP)" \
+		--sample-size 10000
+	@echo ""
+	@echo "✓ Audit complete. Review reports:"
+	@echo "  reports/wiktionary_audit.md"
+	@echo "  reports/wiktionary_samples.json"
+	@echo ""
+	@echo "Commit these reports to version control for review."
+
+# Generate label statistics from extracted Wiktionary data
+report-labels: deps
+	@if [ ! -f "$(WIKTIONARY_JSON)" ]; then \
+		echo "✗ Missing $(WIKTIONARY_JSON). Run 'make fetch-simple' first."; \
+		exit 1; \
+	fi
+	@echo "→ Generating label statistics report..."
+	$(UV) run python tools/report_label_statistics.py "$(WIKTIONARY_JSON)"
+	@echo ""
+	@echo "✓ Statistics complete. Review reports:"
+	@echo "  reports/label_statistics.md"
+	@echo "  reports/label_examples.json"
+	@echo ""
+	@echo "Commit these reports to version control for review."
+
+# Run full local analysis workflow (audit + extract + statistics)
+analyze-local: audit-wiktionary fetch-simple report-labels
+	@echo ""
+	@echo "=========================================="
+	@echo "✓ Local analysis complete!"
+	@echo "=========================================="
+	@echo ""
+	@echo "Generated reports (commit to version control):"
+	@echo "  reports/wiktionary_audit.md"
+	@echo "  reports/wiktionary_samples.json"
+	@echo "  reports/label_statistics.md"
+	@echo "  reports/label_examples.json"
+	@echo ""
+	@echo "Next steps:"
+	@echo "  1. Review reports: less reports/wiktionary_audit.md"
+	@echo "  2. Commit reports: git add reports/*.md reports/*.json && git commit"
+	@echo "  3. Build distribution: make build-plus"
+	@echo "  4. Test filters: uv run python tools/filter_words.py --use-case wordle"
+	@echo ""
+	@echo "See docs/LOCAL_ANALYSIS.md for detailed workflow."
