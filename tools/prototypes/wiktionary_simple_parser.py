@@ -24,6 +24,23 @@ POS_HEADER = re.compile(r'^===+\s*(.+?)\s*===+\s*$', re.MULTILINE)
 CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
 CATEGORY = re.compile(r'\[\[Category:English\s+([^\]]+)\]\]', re.IGNORECASE)
 
+# Regional label patterns
+REGION_LABELS = {
+    'british': 'en-GB',
+    'uk': 'en-GB',
+    'us': 'en-US',
+    'american': 'en-US',
+    'canadian': 'en-CA',
+    'australia': 'en-AU',
+    'australian': 'en-AU',
+    'new zealand': 'en-NZ',
+    'ireland': 'en-IE',
+    'irish': 'en-IE',
+    'south africa': 'en-ZA',
+    'india': 'en-IN',
+    'indian': 'en-IN',
+}
+
 # POS mapping (MediaWiki header → our schema)
 POS_MAP = {
     'noun': 'noun',
@@ -73,6 +90,7 @@ def extract_labels(text: str) -> Dict[str, List[str]]:
         'register': set(),
         'temporal': set(),
         'domain': set(),
+        'region': set(),
     }
 
     # Extract from {{lb|en|...}} templates
@@ -88,6 +106,9 @@ def extract_labels(text: str) -> Dict[str, List[str]]:
                 labels['temporal'].add(label)
             elif label in DOMAIN_LABELS:
                 labels['domain'].add(label)
+            # Check regional labels
+            elif label in REGION_LABELS:
+                labels['region'].add(REGION_LABELS[label])
 
     # Extract from categories
     for match in CATEGORY.finditer(text):
@@ -106,6 +127,12 @@ def extract_labels(text: str) -> Dict[str, List[str]]:
             labels['temporal'].add('obsolete')
         if 'archaic' in cat:
             labels['temporal'].add('archaic')
+
+        # Check regional in categories
+        for region_key, region_code in REGION_LABELS.items():
+            if region_key in cat:
+                labels['region'].add(region_code)
+                break
 
     # Convert sets to sorted lists
     return {k: sorted(v) for k, v in labels.items() if v}
@@ -224,11 +251,13 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None):
             # Clear element to free memory
             elem.clear()
 
-            # Progress
-            if entries_processed % 10000 == 0:
+            # Progress with explicit flush for real-time output
+            if entries_processed % 5000 == 0:
                 print(f"  Processed: {entries_processed:,} | "
                       f"Written: {entries_written:,} | "
                       f"Skipped: {entries_skipped:,}")
+                sys.stdout.flush()
+                out.flush()  # Flush output file buffer
 
             # Check limit
             if limit and entries_written >= limit:
