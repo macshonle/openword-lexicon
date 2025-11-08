@@ -17,44 +17,253 @@ This report shows random samples from the original downloaded datasets.
 ## Wiktionary Dataset
 
 **Location:** `data/intermediate/plus/wikt.jsonl`  
-**Total entries:** 31
+**Total entries:** 1,474,398
 
 **Sample entries:**
 
-1. `icebox`
+1. `held cheap`
 ```json
 {
-  "word": "icebox",
+  "senses": [
+    {
+      "links": [
+        [
+          "hold cheap",
+          "hold cheap#English"
+        ]
+      ],
+      "glosses": [
+        "simple past and past participle of hold cheap"
+      ],
+      "tags": [
+        "form-of",
+        "participle",
+        "past"
+      ],
+      "form_of": [
+        {
+          "word": "hold cheap"
+        }
+      ],
+      "categories": [
+        "English entries with incorrect language header",
+        "English non-lemma forms",
+        "English verb forms",
+        "Pages with 1 entry",
+        "Pages with entries"
+      ]
+    }
+  ],
+  "pos": "verb",
+  "head_templates": [
+    {
+      "name": "head",
+      "args": {
+        "1": "en",
+        "2": "verb form"
+      },
+      "expansion": "held cheap"
+    }
+  ],
+  "word": "held cheap",
   "lang": "English",
-  "pos": "noun",
-  "tags": [
-    "dated"
-  ]
+  "lang_code": "en"
 }
 ```
 
-2. `thou`
+2. `quantifiability`
 ```json
 {
-  "word": "thou",
+  "senses": [
+    {
+      "categories": [
+        "English uncountable nouns"
+      ],
+      "links": [
+        [
+          "quantifiable",
+          "quantifiable"
+        ]
+      ],
+      "raw_glosses": [
+        "(uncountable) The condition of being quantifiable"
+      ],
+      "glosses": [
+        "The condition of being quantifiable"
+      ],
+      "tags": [
+        "uncountable"
+      ]
+    },
+    {
+      "categories": [
+        "English countable nouns"
+      ],
+      "raw_glosses": [
+        "(countable) The degree to which something is quantifiable"
+      ],
+      "glosses": [
+        "The degree to which something is quantifiable"
+      ],
+      "tags": [
+        "countable"
+      ]
+    }
+  ],
+  "pos": "noun",
+  "head_templates": [
+    {
+      "name": "en-noun",
+      "args": {
+        "1": "~"
+      },
+      "expansion": "quantifiability (countable and uncountable, plural quantifiabilities)"
+    }
+  ],
+  "categories": [
+    "English countable nouns",
+    "English entries with incorrect language header",
+    "English lemmas",
+    "English links with redundant alt parameters",
+    "English nouns",
+    "English terms suffixed with -ability",
+    "English uncountable nouns",
+    "Pages with 1 entry",
+    "Pages with entries"
+  ],
+  "forms": [
+    {
+      "form": "quantifiabilities",
+      "tags": [
+        "plural"
+      ]
+    }
+  ],
+  "etymology_text": "From quantify + -ability.",
+  "etymology_templates": [
+    {
+      "name": "suffix",
+      "args": {
+        "1": "en",
+        "2": "quantify",
+        "3": "ability"
+      },
+      "expansion": "quantify + -ability"
+    }
+  ],
+  "word": "quantifiability",
   "lang": "English",
-  "pos": "pronoun",
-  "tags": [
-    "archaic"
-  ]
+  "lang_code": "en"
 }
 ```
 
-3. `colour`
+3. `entre`
 ```json
 {
-  "word": "colour",
+  "senses": [
+    {
+      "examples": [
+        {
+          "text": "And whosoever doth not suffer corruption to entre, by the five gates unto his soule, is rekoned amongest ...",
+          "ref": "1566, John Martiall, \u201cA Replie to M. Calfhills Blasphemous Answer Made Against the Treatise of the Crosse\u201d, in D.M. Rogers, editor, English recusant literature, 1558-1640, volume 203, page 125:",
+          "type": "quote",
+          "bold_text_offsets": [
+            [
+              44,
+              49
+            ]
+          ]
+        },
+        {
+          "text": "Thus warlikely accoutred she rode immediately to Blois, where Forces and Provisions lay for the Relief of Orleans, with which she and the Marshal and Admiral of France entred.",
+          "ref": "1722, Isaac Kimber, The History of England, page 470:",
+          "type": "quote",
+          "bold_text_offsets": [
+            [
+              168,
+              174
+            ]
+          ]
+        }
+      ],
+      "links": [
+        [
+          "enter",
+          "enter#English"
+        ]
+      ],
+      "categories": [
+        "English archaic forms",
+        "English entries with incorrect language header",
+        "English lemmas",
+        "English terms with quotations",
+        "English verbs",
+        "Pages with 21 entries",
+        "Pages with entries",
+        "Quotation templates to be cleaned",
+        "Rhymes:English/\u025bnt\u0259(\u0279)",
+        "Rhymes:English/\u025bnt\u0259(\u0279)/2 syllables"
+      ],
+      "glosses": [
+        "Archaic spelling of enter."
+      ],
+      "tags": [
+        "alt-of",
+        "archaic"
+      ],
+      "alt_of": [
+        {
+          "word": "enter"
+        }
+      ]
+    }
+  ],
+  "pos": "verb",
+  "head_templates": [
+    {
+      "name": "en-verb",
+      "args": {},
+      "expansion": "entre (third-person singular simple present entres, present participle entring, simple past and past participle entred)"
+    }
+  ],
+  "forms": [
+    {
+      "form": "entres",
+      "tags": [
+        "present",
+        "singular",
+        "third-person"
+      ]
+    },
+    {
+      "form": "entring",
+      "tags": [
+        "participle",
+        "present"
+      ]
+    },
+    {
+      "form": "entred",
+      "tags": [
+        "participle",
+        "past"
+      ]
+    },
+    {
+      "form": "entred",
+      "tags": [
+        "past"
+      ]
+    }
+  ],
+  "sounds": [
+    {
+      "rhymes": "-\u025bnt\u0259(\u0279)"
+    }
+  ],
+  "word": "entre",
   "lang": "English",
-  "pos": "noun",
-  "tags": [
-    "British",
-    "UK"
-  ]
+  "lang_code": "en"
 }
 ```
 

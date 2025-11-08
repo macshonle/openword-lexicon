@@ -6,7 +6,7 @@ This report analyzes the metadata sidecar in detail.
 
 ---
 
-**Total entries:** 208,204
+**Total entries:** 1,306,870
 
 ---
 
@@ -14,20 +14,20 @@ This report analyzes the metadata sidecar in detail.
 
 | Tier | Count | Percentage |
 |------|------:|-----------:|
-| rare | 174,956 | 84.0% |
-| top10 | 6 | 0.0% |
-| top100 | 86 | 0.0% |
-| top100k | 24,654 | 11.8% |
-| top10k | 7,642 | 3.7% |
-| top1k | 860 | 0.4% |
+| rare | 1,261,557 | 96.5% |
+| top10 | 10 | 0.0% |
+| top100 | 90 | 0.0% |
+| top100k | 35,419 | 2.7% |
+| top10k | 8,907 | 0.7% |
+| top1k | 887 | 0.1% |
 
 ### Sample Words by Tier
 
-**Tier rare:** `vasculum`, `concreter`, `antiradicalisms`, `imprecisely`, `gutty`  
-**Tier top10:** `it`, `you`, `and`, `that`, `the`  
-**Tier top100:** `what`, `right`, `as`, `are`, `come`  
-**Tier top100k:** `employers`, `excused`, `prescribe`, `sinks`, `apparel`  
-**Tier top10k:** `oil`, `crashed`, `scars`, `queue`, `roughly`  
+**Tier rare:** `convertance`, `antunovac`, `kicktail`, `hydrus`, `half-natural`  
+**Tier top10:** `a`, `'t`, `to`, `i`, `and`  
+**Tier top100:** `about`, `'ve`, `be`, `had`, `he`  
+**Tier top100k:** `uninhibited`, `ashram`, `gonzo`, `scheming`, `highland`  
+**Tier top10k:** `snarling`, `lean`, `activated`, `eighth`, `schedule`  
 
 
 ---
@@ -38,42 +38,26 @@ This report analyzes the metadata sidecar in detail.
 
 | Source | Words |
 |--------|------:|
-| enable | 172,821 |
-| eowl | 128,981 |
-| wikt | 29 |
+| wikt | 1,297,968 |
+| enable | 172,823 |
+| eowl | 128,983 |
 
 ### Source Combinations
 
 | Sources | Words |
 |---------|------:|
-| enable, eowl | 93,582 |
-| enable | 79,217 |
-| eowl | 35,376 |
-| enable, eowl, wikt | 21 |
-| wikt | 5 |
-| eowl, wikt | 2 |
-| enable, wikt | 1 |
+| wikt | 1,098,669 |
+| enable, eowl, wikt | 92,899 |
+| enable, wikt | 74,274 |
+| eowl, wikt | 32,126 |
+| enable | 4,944 |
+| eowl | 3,252 |
+| enable, eowl | 706 |
 
 
 ---
 
 ## Label Distribution
-
-### Register Labels
-
-| Register | Words |
-|----------|------:|
-| informal | 3 |
-| literary | 1 |
-| colloquial | 1 |
-| slang | 1 |
-
-### Domain Labels
-
-| Domain | Words |
-|--------|------:|
-| medical | 1 |
-| legal | 1 |
 
 
 ---
@@ -81,30 +65,4 @@ This report analyzes the metadata sidecar in detail.
 ## Sample Rich Entries
 
 These entries have extensive metadata (multiple sources, labels, glosses, etc.)
-
-### `subpoena` (richness: 5)
-
-```json
-{
-  "word": "subpoena",
-  "pos": [
-    "noun",
-    "verb"
-  ],
-  "labels": {
-    "domain": [
-      "legal"
-    ]
-  },
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt"
-  ],
-  "concreteness": "abstract",
-  "frequency_tier": "top100k"
-}
-```
 

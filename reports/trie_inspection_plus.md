@@ -10,18 +10,18 @@ This report analyzes the final MARISA trie structure and metadata.
 
 **Trie file:** `data/build/plus/plus.trie`  
 **Metadata file:** `data/build/plus/plus.meta.json`  
-**Total words:** 208,204  
-**Trie size:** 521,872 bytes (509.6 KB)  
-**Metadata size:** 28,502,112 bytes (27834.1 KB)  
-**Bytes per word (trie):** 2.51  
-**Min word length:** 2  
-**Max word length:** 28  
-**Avg word length:** 8.91  
+**Total words:** 1,306,870  
+**Trie size:** 3,901,072 bytes (3809.6 KB)  
+**Metadata size:** 170,874,949 bytes (166870.1 KB)  
+**Bytes per word (trie):** 2.99  
+**Min word length:** 1  
+**Max word length:** 115  
+**Avg word length:** 10.88  
 
 ## Word Length Extremes
 
-**Shortest words:** `st`, `sh`, `so`, `si`, `ch`  
-**Longest words:** `ethylenediaminetetraacetates`, `electroencephalographically`, `ethylenediaminetetraacetate`, `phosphatidylethanolamines`, `immunoelectrophoretically`  
+**Shortest words:** `s`, `c`, `p`, `m`, `b`  
+**Longest words:** `when you're up to your neck in alligators, it's hard to remember that your initial objective was to drain the swamp`, `it is easier for a camel to go through the eye of a needle than for a rich man to enter into the kingdom of god`, `when i see a bird that walks like a duck and swims like a duck and quacks like a duck, i call that bird a duck`, `bababadalgharaghtakamminarronnkonnbronntonnerronntuonnthunntrovarrhounawnskawntoohoohoordenenthurnuk`, `give a man a fish and you feed him for a day; teach a man to fish and you feed him for a lifetime`  
 
 ---
 
@@ -29,99 +29,99 @@ This report analyzes the final MARISA trie structure and metadata.
 
 ### Random Word Lookups
 
-**`upaithric`**  
+**`cuckservative`**  
 - In trie: True  
 - Frequency tier: rare  
-- Sources: eowl  
+- Sources: wikt  
 
-**`coaxal`**  
+**`sequevars`**  
 - In trie: True  
 - Frequency tier: rare  
-- Sources: enable  
+- Sources: wikt  
 
-**`stylizer`**  
+**`adds in quadrature`**  
 - In trie: True  
 - Frequency tier: rare  
-- Sources: enable  
+- Sources: wikt  
 
-**`waitresses`**  
+**`buick`**  
 - In trie: True  
 - Frequency tier: top100k  
-- Sources: enable, eowl  
+- Sources: wikt  
 
-**`aerodromes`**  
+**`bedabbling`**  
 - In trie: True  
 - Frequency tier: rare  
-- Sources: enable, eowl  
+- Sources: enable, eowl, wikt  
 
-**`armozeen`**  
+**`poleyns`**  
 - In trie: True  
 - Frequency tier: rare  
-- Sources: eowl  
+- Sources: enable, eowl, wikt  
 
-**`pliotron`**  
+**`craniopharyngiomas`**  
 - In trie: True  
 - Frequency tier: rare  
-- Sources: enable  
+- Sources: wikt  
 
-**`chota`**  
+**`unhead`**  
 - In trie: True  
 - Frequency tier: rare  
-- Sources: eowl  
+- Sources: eowl, wikt  
 
-**`niece`**  
-- In trie: True  
-- Frequency tier: top10k  
-- Sources: enable, eowl  
-
-**`counterstrikes`**  
+**`catamnesis`**  
 - In trie: True  
 - Frequency tier: rare  
-- Sources: enable  
+- Sources: wikt  
+
+**`kechuan`**  
+- In trie: True  
+- Frequency tier: rare  
+- Sources: wikt  
 
 
 ### Prefix Search Tests
 
 **Prefix: `pre`**  
-- Matches: 1,876  
-- Sample: `pre`, `prese`, `present`, `presentable`, `presentableness`  
+- Matches: 8,744  
+- Sample: `pre`, `pres`, `press`, `pressure`, `pressure cabin`  
 
 **Prefix: `un`**  
-- Matches: 5,360  
-- Sample: `un`, `unde`, `under`, `understand`, `understandabilities`  
+- Matches: 27,763  
+- Sample: `un`, `und`, `unde`, `under`, `unders`  
 
 **Prefix: `anti`**  
-- Matches: 817  
-- Sample: `anti`, `antic`, `anticonservation`, `anticonservationist`, `anticonservationists`  
+- Matches: 6,372  
+- Sample: `anti`, `antic`, `antico`, `anticonservation`, `anticonservationist`  
 
 **Prefix: `pro`**  
-- Matches: 1,652  
-- Sample: `pro`, `proto`, `protoplasm`, `protoplasmic`, `protoplasms`  
+- Matches: 8,080  
+- Sample: `pro`, `prot`, `proto`, `proto-`, `proto-malay`  
 
 **Prefix: `sub`**  
-- Matches: 1,233  
-- Sample: `sub`, `subs`, `substantial`, `substantialities`, `substantiality`  
+- Matches: 6,322  
+- Sample: `sub`, `subs`, `subst`, `substant`, `substantivise`  
 
 
 ### Successor/Predecessor Tests
 
-**`garrotes`**  
-- Predecessor: `garroted`  
-- Successor: `garroting`  
+**`georgemas`**  
+- Predecessor: `georgelos`  
+- Successor: `georgopoulos`  
 
-**`wallop`**  
-- Predecessor: `wall`  
-- Successor: `walloper`  
+**`shoots the messenger`**  
+- Predecessor: `shoots the bull`  
+- Successor: `shoots the messenger boy`  
 
-**`firebomb`**  
-- Predecessor: `firebases`  
-- Successor: `firebombed`  
+**`saurolophids`**  
+- Predecessor: `saurolophid`  
+- Successor: `saurolophine`  
 
-**`sklating`**  
-- Predecessor: `sklates`  
-- Successor: `sklent`  
+**`chaprasi`**  
+- Predecessor: `chaprassy`  
+- Successor: `chaprasis`  
 
-**`hallans`**  
-- Predecessor: `hallan`  
-- Successor: `hallel`  
+**`baudelaireian`**  
+- Predecessor: `baudelairean`  
+- Successor: `baudelairian`  
 
