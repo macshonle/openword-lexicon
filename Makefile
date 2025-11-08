@@ -10,7 +10,8 @@ WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
 
 .PHONY: bootstrap venv deps fmt lint test clean clean-viewer scrub \
         fetch fetch-core fetch-plus fetch-post-process-plus \
-        build-core build-plus export-wordlist build-binary package check-limits start-server \
+        build-core build-plus export-wordlist export-wordlist-filtered-w3 export-wordlist-filtered-w4 \
+        export-wordlist-filtered-c50 export-wordlist-filtered-w3c50 build-binary package check-limits start-server \
         reports report-raw report-pipeline report-trie report-metadata report-compare
 
 # Bootstrap local dev environment (idempotent)
@@ -98,6 +99,19 @@ build-plus:
 # Export trie to plain text wordlist for browser viewer
 export-wordlist:
 	$(UV) run python src/openword/export_wordlist.py
+
+# Export with filters (plus distribution)
+export-wordlist-filtered-w3:
+	$(UV) run python src/openword/export_wordlist_filtered.py --distribution plus --max-words 3
+
+export-wordlist-filtered-w4:
+	$(UV) run python src/openword/export_wordlist_filtered.py --distribution plus --max-words 4
+
+export-wordlist-filtered-c50:
+	$(UV) run python src/openword/export_wordlist_filtered.py --distribution plus --max-chars 50
+
+export-wordlist-filtered-w3c50:
+	$(UV) run python src/openword/export_wordlist_filtered.py --distribution plus --max-words 3 --max-chars 50
 
 # Build compact binary trie for browser (requires wordlist.txt)
 build-binary:
