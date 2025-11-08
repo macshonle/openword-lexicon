@@ -10,7 +10,8 @@ WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
 
 .PHONY: bootstrap venv deps fmt lint test clean clean-viewer scrub \
         fetch fetch-core fetch-plus fetch-post-process-plus \
-        build-core build-plus export-wordlist package check-limits start-server
+        build-core build-plus export-wordlist package check-limits start-server \
+        reports report-raw report-pipeline report-trie report-metadata report-compare
 
 # Bootstrap local dev environment (idempotent)
 bootstrap: venv deps
@@ -137,3 +138,30 @@ start-server:
 	fi
 	@echo "→ Starting server from project root on http://localhost:8080/viewer/"
 	@cd viewer && npx http-server .. -p 8080 -o /viewer/ --cors
+
+# ===========================
+# Inspection & Reporting
+# ===========================
+
+# Generate all inspection reports
+reports:
+	$(UV) run python tools/generate_reports.py
+
+# Generate specific reports
+report-raw:
+	$(UV) run python tools/inspect_raw.py
+
+report-pipeline:
+	$(UV) run python tools/inspect_pipeline.py core
+	$(UV) run python tools/inspect_pipeline.py plus
+
+report-trie:
+	$(UV) run python tools/inspect_trie.py core
+	$(UV) run python tools/inspect_trie.py plus
+
+report-metadata:
+	$(UV) run python tools/inspect_metadata.py core
+	$(UV) run python tools/inspect_metadata.py plus
+
+report-compare:
+	$(UV) run python tools/compare_distributions.py
