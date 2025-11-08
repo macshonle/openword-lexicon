@@ -8,7 +8,7 @@ PY_VERSION ?= 3.11
 WIKTIONARY_DUMP := data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2
 WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
 
-.PHONY: bootstrap venv deps fmt lint test clean scrub \
+.PHONY: bootstrap venv deps fmt lint test clean clean-viewer scrub \
         fetch fetch-core fetch-plus fetch-post-process-plus \
         build-core build-plus export-wordlist package check-limits start-server
 
@@ -107,6 +107,9 @@ clean:
 	find . -name '__pycache__' -type d -prune -exec rm -rf '{}' +
 	find . -name '*.egg-info' -type d -prune -exec rm -rf '{}' +
 
+clean-viewer:
+	rm -rf viewer/node_modules viewer/pnpm-lock.yaml
+
 scrub: clean
 	rm -rf .venv \
 		data/intermediate data/filtered data/build data/core data/plus \
@@ -128,4 +131,9 @@ start-server:
 		echo "  Or run: make export-wordlist"; \
 		exit 1; \
 	fi
-	@cd viewer && pnpm install && pnpm start
+	@if [ ! -d "viewer/node_modules" ]; then \
+		echo "→ Installing viewer dependencies..."; \
+		cd viewer && pnpm install; \
+	fi
+	@echo "→ Starting server from project root on http://localhost:8080/viewer/"
+	@cd viewer && npx http-server .. -p 8080 -o /viewer/ --cors
