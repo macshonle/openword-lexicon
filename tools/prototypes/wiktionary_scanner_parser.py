@@ -1,0 +1,447 @@
+#!/usr/bin/env python3
+"""
+wiktionary_scanner_parser.py - Lightweight scanner-based Wiktionary parser
+
+Uses simple string scanning to find <page> boundaries instead of full XML
+parsing. Much faster than ET.iterparse() for predictable MediaWiki format.
+
+No XML validation, no DOM building, no namespace overhead - just fast
+extraction of the data we need.
+
+Usage:
+    python wiktionary_scanner_parser.py INPUT.xml.bz2 OUTPUT.jsonl [--limit N]
+"""
+
+import bz2
+import json
+import re
+import sys
+import time
+from pathlib import Path
+from typing import Dict, List, Set, Optional
+
+
+class BZ2StreamReader:
+    """Streaming BZ2 decompressor with progress feedback."""
+
+    def __init__(self, filepath: Path, chunk_size: int = 256 * 1024):
+        self.filepath = filepath
+        self.chunk_size = chunk_size
+        self.file = open(filepath, 'rb')
+        self.decompressor = bz2.BZ2Decompressor()
+        self.buffer = b''
+        self.total_compressed = 0
+        self.total_decompressed = 0
+        self.last_progress = 0
+        self.start_time = time.time()
+
+    def read(self, size: int = -1) -> bytes:
+        """Read decompressed data."""
+        if size == -1:
+            while not self.decompressor.eof:
+                self._decompress_chunk()
+            result = self.buffer
+            self.buffer = b''
+            return result
+
+        while len(self.buffer) < size and not self.decompressor.eof:
+            self._decompress_chunk()
+
+        result = self.buffer[:size]
+        self.buffer = self.buffer[size:]
+        return result
+
+    def _decompress_chunk(self):
+        """Decompress one chunk and update progress."""
+        if self.decompressor.eof:
+            return
+
+        compressed = self.file.read(self.chunk_size)
+        if not compressed:
+            return
+
+        self.total_compressed += len(compressed)
+        decompressed = self.decompressor.decompress(compressed)
+        self.buffer += decompressed
+        self.total_decompressed += len(decompressed)
+
+        if self.total_decompressed - self.last_progress >= 50 * 1024 * 1024:
+            elapsed = time.time() - self.start_time
+            rate_mb = (self.total_decompressed / (1024 * 1024)) / elapsed if elapsed > 0 else 0
+            elapsed_min = int(elapsed / 60)
+            elapsed_sec = int(elapsed % 60)
+            print(f"  Decompressing: {self.total_decompressed / (1024*1024):.0f} MB "
+                  f"({rate_mb:.1f} MB/s, {elapsed_min}m {elapsed_sec}s elapsed)",
+                  end='\r', flush=True)
+            self.last_progress = self.total_decompressed
+
+    def finish_progress(self):
+        """Print newline to commit final progress line."""
+        if self.total_decompressed > 0:
+            elapsed = time.time() - self.start_time
+            elapsed_min = int(elapsed / 60)
+            elapsed_sec = int(elapsed % 60)
+            print(f"  Decompression complete: {self.total_decompressed / (1024*1024):.0f} MB "
+                  f"in {elapsed_min}m {elapsed_sec}s")
+            sys.stdout.flush()
+
+    def close(self):
+        self.file.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return False
+
+
+# Regex patterns for extraction
+ENGLISH_SECTION = re.compile(r'==\s*English\s*==', re.IGNORECASE)
+POS_HEADER = re.compile(r'^===+\s*(.+?)\s*===+\s*$', re.MULTILINE)
+CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
+CATEGORY = re.compile(r'\[\[Category:English\s+([^\]]+)\]\]', re.IGNORECASE)
+
+# Simple extraction patterns (no full XML parsing)
+TITLE_PATTERN = re.compile(r'<title>([^<]+)</title>')
+TEXT_PATTERN = re.compile(r'<text[^>]*>(.+?)</text>', re.DOTALL)
+
+# Regional label patterns
+REGION_LABELS = {
+    'british': 'en-GB',
+    'uk': 'en-GB',
+    'us': 'en-US',
+    'american': 'en-US',
+    'canadian': 'en-CA',
+    'australia': 'en-AU',
+    'australian': 'en-AU',
+    'new zealand': 'en-NZ',
+    'ireland': 'en-IE',
+    'irish': 'en-IE',
+    'south africa': 'en-ZA',
+    'india': 'en-IN',
+    'indian': 'en-IN',
+}
+
+# POS mapping
+POS_MAP = {
+    'noun': 'noun',
+    'proper noun': 'noun',
+    'verb': 'verb',
+    'adjective': 'adjective',
+    'adverb': 'adverb',
+    'pronoun': 'pronoun',
+    'preposition': 'preposition',
+    'conjunction': 'conjunction',
+    'interjection': 'interjection',
+    'determiner': 'determiner',
+    'particle': 'particle',
+    'auxiliary': 'auxiliary',
+    'contraction': 'verb',
+}
+
+# Label classifications
+REGISTER_LABELS = {
+    'informal', 'colloquial', 'slang', 'vulgar', 'offensive',
+    'derogatory', 'formal', 'euphemistic', 'humorous', 'literary'
+}
+
+TEMPORAL_LABELS = {
+    'archaic', 'obsolete', 'dated', 'historical', 'rare'
+}
+
+DOMAIN_LABELS = {
+    'computing', 'mathematics', 'medicine', 'biology', 'chemistry',
+    'physics', 'law', 'military', 'nautical', 'aviation', 'sports'
+}
+
+
+def extract_pos_tags(text: str) -> List[str]:
+    """Extract POS tags from section headers."""
+    pos_tags = []
+    for match in POS_HEADER.finditer(text):
+        header = match.group(1).lower().strip()
+        if header in POS_MAP:
+            pos_tags.append(POS_MAP[header])
+    return sorted(set(pos_tags))
+
+
+def extract_labels(text: str) -> Dict[str, List[str]]:
+    """Extract context labels from templates and categorize them."""
+    labels = {
+        'register': set(),
+        'temporal': set(),
+        'domain': set(),
+        'region': set(),
+    }
+
+    # Extract from {{lb|en|...}} templates
+    for match in CONTEXT_LABEL.finditer(text):
+        label_text = match.group(1)
+        for label in label_text.split('|'):
+            label = label.strip().lower()
+
+            if label in REGISTER_LABELS:
+                labels['register'].add(label)
+            elif label in TEMPORAL_LABELS:
+                labels['temporal'].add(label)
+            elif label in DOMAIN_LABELS:
+                labels['domain'].add(label)
+            elif label in REGION_LABELS:
+                labels['region'].add(REGION_LABELS[label])
+
+    # Extract from categories
+    for match in CATEGORY.finditer(text):
+        cat = match.group(1).lower()
+
+        if 'informal' in cat or 'colloquial' in cat:
+            labels['register'].add('informal')
+        if 'slang' in cat:
+            labels['register'].add('slang')
+        if 'vulgar' in cat:
+            labels['register'].add('vulgar')
+        if 'offensive' in cat or 'derogatory' in cat:
+            labels['register'].add('offensive')
+        if 'obsolete' in cat:
+            labels['temporal'].add('obsolete')
+        if 'archaic' in cat:
+            labels['temporal'].add('archaic')
+
+        for region_key, region_code in REGION_LABELS.items():
+            if region_key in cat:
+                labels['region'].add(region_code)
+                break
+
+    return {k: sorted(v) for k, v in labels.items() if v}
+
+
+def extract_page_content(page_xml: str) -> Optional[tuple]:
+    """
+    Extract title and text from page XML using simple regex.
+    Returns (title, text) or None if not found.
+    """
+    # Extract title
+    title_match = TITLE_PATTERN.search(page_xml)
+    if not title_match:
+        return None
+    title = title_match.group(1)
+
+    # Skip special pages
+    if ':' in title:
+        return None
+
+    # Extract text
+    text_match = TEXT_PATTERN.search(page_xml)
+    if not text_match:
+        return None
+    text = text_match.group(1)
+
+    # Check for English section
+    if not ENGLISH_SECTION.search(text):
+        return None
+
+    return (title, text)
+
+
+def parse_entry(title: str, text: str) -> Optional[Dict]:
+    """Parse a single Wiktionary page."""
+    word = title.lower().strip()
+
+    # Skip if non-ASCII letters (except apostrophes, hyphens, spaces)
+    if not all(c.isalnum() or c in " '-" for c in word):
+        return None
+
+    pos_tags = extract_pos_tags(text)
+    if not pos_tags:
+        return None
+
+    labels = extract_labels(text)
+    is_phrase = ' ' in word
+
+    return {
+        'word': word,
+        'pos': pos_tags,
+        'labels': labels,
+        'is_phrase': is_phrase,
+        'sources': ['wikt'],
+    }
+
+
+def scan_pages(file_obj, chunk_size: int = 1024 * 1024):
+    """
+    Scan for <page> boundaries and yield complete page XML.
+
+    This is much faster than ET.iterparse() because:
+    - No XML DOM building
+    - No namespace handling
+    - No validation
+    - Simple string scanning
+    """
+    buffer = ""
+    page_start_marker = "<page>"
+    page_end_marker = "</page>"
+
+    while True:
+        # Read chunk
+        chunk = file_obj.read(chunk_size)
+        if not chunk:
+            break
+
+        # Decode to string
+        try:
+            buffer += chunk.decode('utf-8')
+        except UnicodeDecodeError:
+            buffer += chunk.decode('utf-8', errors='ignore')
+
+        # Find complete pages in buffer
+        while True:
+            start = buffer.find(page_start_marker)
+            if start == -1:
+                # No page start found, keep last bit in case it's partial
+                buffer = buffer[-len(page_start_marker):]
+                break
+
+            end = buffer.find(page_end_marker, start)
+            if end == -1:
+                # Page incomplete, keep from start
+                buffer = buffer[start:]
+                break
+
+            # Extract complete page (include closing tag)
+            end += len(page_end_marker)
+            page_xml = buffer[start:end]
+            buffer = buffer[end:]
+
+            yield page_xml
+
+
+def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None):
+    """Parse Wiktionary XML dump using lightweight scanning."""
+
+    print(f"Parsing: {xml_path}")
+    print(f"Output: {output_path}")
+    print(f"Method: Lightweight scanner (no full XML parsing)")
+    if limit:
+        print(f"Limit: {limit:,} entries")
+    print()
+
+    print("Initializing streaming decompressor...")
+    sys.stdout.flush()
+
+    if str(xml_path).endswith('.bz2'):
+        file_obj = BZ2StreamReader(xml_path, chunk_size=256 * 1024)
+    else:
+        file_obj = open(xml_path, 'rb')
+
+    entries_processed = 0
+    entries_written = 0
+    entries_skipped = 0
+    first_page_seen = False
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    start_time = time.time()
+
+    with file_obj as f, open(output_path, 'w', encoding='utf-8') as out:
+        # Scan for pages (much faster than XML parsing)
+        for page_xml in scan_pages(f, chunk_size=1024 * 1024):
+            entries_processed += 1
+
+            if not first_page_seen:
+                first_page_seen = True
+                if isinstance(file_obj, BZ2StreamReader):
+                    file_obj.finish_progress()
+                print("✓ First page found, scanning...")
+                sys.stdout.flush()
+
+            # Extract title and text using simple regex
+            result = extract_page_content(page_xml)
+            if not result:
+                entries_skipped += 1
+                continue
+
+            title, text = result
+
+            # Parse entry
+            try:
+                entry = parse_entry(title, text)
+                if entry:
+                    out.write(json.dumps(entry, ensure_ascii=False) + '\n')
+                    entries_written += 1
+                else:
+                    entries_skipped += 1
+            except Exception as e:
+                print(f"Error parsing {title}: {e}", file=sys.stderr)
+                entries_skipped += 1
+
+            # Progress
+            if entries_processed % 1000 == 0:
+                if entries_processed % 5000 == 0:
+                    elapsed = time.time() - start_time
+                    rate = entries_processed / elapsed if elapsed > 0 else 0
+                    print(f"  Processed: {entries_processed:,} | "
+                          f"Written: {entries_written:,} | "
+                          f"Skipped: {entries_skipped:,} | "
+                          f"Rate: {rate:.0f} pages/sec")
+                    out.flush()
+                else:
+                    print(f"  Processed: {entries_processed:,} | "
+                          f"Written: {entries_written:,}...",
+                          end='\r', flush=True)
+
+            if limit and entries_written >= limit:
+                print(f"\nReached limit of {limit:,} entries")
+                break
+
+    elapsed = time.time() - start_time
+    elapsed_min = int(elapsed / 60)
+    elapsed_sec = int(elapsed % 60)
+
+    print()
+    print("=" * 60)
+    print(f"Total processed: {entries_processed:,}")
+    print(f"Total written: {entries_written:,}")
+    print(f"Total skipped: {entries_skipped:,}")
+    print(f"Success rate: {entries_written/entries_processed*100:.1f}%")
+    print(f"Time: {elapsed_min}m {elapsed_sec}s")
+    print(f"Rate: {entries_processed / elapsed:.0f} pages/sec")
+    print("=" * 60)
+
+
+def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description='Fast scanner-based Wiktionary XML parser (no full XML parsing)'
+    )
+
+    parser.add_argument(
+        'input',
+        type=Path,
+        help='Input XML file (.xml or .xml.bz2)'
+    )
+
+    parser.add_argument(
+        'output',
+        type=Path,
+        help='Output JSONL file'
+    )
+
+    parser.add_argument(
+        '--limit',
+        type=int,
+        default=None,
+        help='Limit number of entries to extract (for testing)'
+    )
+
+    args = parser.parse_args()
+
+    if not args.input.exists():
+        print(f"Error: Input file not found: {args.input}")
+        sys.exit(1)
+
+    parse_wiktionary_dump(args.input, args.output, args.limit)
+
+
+if __name__ == '__main__':
+    main()

@@ -9,7 +9,7 @@ WIKTIONARY_DUMP := data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2
 WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
 
 .PHONY: bootstrap venv deps fmt lint test clean clean-viewer scrub \
-        fetch fetch-core fetch-plus fetch-post-process-plus fetch-simple \
+        fetch fetch-core fetch-plus fetch-post-process-plus fetch-simple fetch-scanner \
         build-core build-plus export-wordlist export-wordlist-filtered-w3 export-wordlist-filtered-w4 \
         export-wordlist-filtered-c50 export-wordlist-filtered-w3c50 build-binary package check-limits start-server \
         reports report-raw report-pipeline report-trie report-metadata report-compare \
@@ -227,6 +227,21 @@ fetch-simple: deps
 	@echo "  (10-30 minutes for full dump, progress shown every 5k entries)"
 	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
 	$(UV) run python tools/prototypes/wiktionary_simple_parser.py \
+		"$(WIKTIONARY_DUMP)" \
+		"$(WIKTIONARY_JSON)"
+	@echo "✓ Extraction complete: $(WIKTIONARY_JSON)"
+
+# Fast Wiktionary extraction using lightweight scanner (even faster alternative)
+fetch-scanner: deps
+	@if [ ! -f "$(WIKTIONARY_DUMP)" ]; then \
+		echo "✗ Missing $(WIKTIONARY_DUMP). Run 'make fetch-plus' first."; \
+		exit 1; \
+	fi
+	@echo "→ Extracting Wiktionary with lightweight scanner parser..."
+	@echo "  (No full XML parsing - just string scanning for <page> boundaries)"
+	@echo "  (Expected: 5-15 minutes for full dump)"
+	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
+	$(UV) run python tools/prototypes/wiktionary_scanner_parser.py \
 		"$(WIKTIONARY_DUMP)" \
 		"$(WIKTIONARY_JSON)"
 	@echo "✓ Extraction complete: $(WIKTIONARY_JSON)"
