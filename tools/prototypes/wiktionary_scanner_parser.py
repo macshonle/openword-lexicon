@@ -293,10 +293,11 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     """Parse a single Wiktionary page."""
     word = title.lower().strip()
 
-    # Allow unicode letters (café, naïve), digits, apostrophes, hyphens, spaces
+    # Allow unicode letters (café, naïve), digits, apostrophes, hyphens, spaces,
+    # periods (i.e., e.g., A.M.), and slashes (w/)
     # Unicode categories: L* = letters, N* = numbers
     valid_word = all(
-        unicodedata.category(c)[0] in 'LN' or c in " '-"
+        unicodedata.category(c)[0] in 'LN' or c in " '-./"
         for c in word
     )
     if not valid_word:

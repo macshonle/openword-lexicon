@@ -322,48 +322,14 @@ diagnose-scanner: deps
 		echo "✗ Missing $(WIKTIONARY_DUMP). Run 'make fetch-plus' first."; \
 		exit 1; \
 	fi
-	@echo "=========================================="
-	@echo "Scanner Parser Diagnostic Mode"
-	@echo "=========================================="
-	@echo ""
-	@echo "→ Running diagnostic scan (stops after 1000 skips)..."
-	@echo "  This will show sample entries from each skip category."
-	@echo ""
 	@mkdir -p reports
-	$(UV) run python tools/prototypes/wiktionary_scanner_parser.py \
+	@echo "→ Running diagnostic scan..."
+	@$(UV) run python tools/prototypes/wiktionary_scanner_parser.py \
 		"$(WIKTIONARY_DUMP)" \
 		/tmp/scanner_diagnostic.jsonl \
 		--diagnostic 2>&1 | tee reports/scanner_diagnostic.txt
 	@echo ""
-	@echo "=========================================="
-	@echo "✓ Diagnostic complete!"
-	@echo "=========================================="
-	@echo ""
-	@echo "Report saved to: reports/scanner_diagnostic.txt"
-	@echo ""
-	@echo "NEXT STEPS:"
-	@echo ""
-	@echo "Option A - Share diagnostic output:"
-	@echo "  1. Review: less reports/scanner_diagnostic.txt"
-	@echo "  2. Share samples with Claude for analysis"
-	@echo "  3. Claude will suggest fixes (add special page prefixes, etc.)"
-	@echo ""
-	@echo "Option B - Make changes and commit:"
-	@echo "  1. Edit: tools/prototypes/wiktionary_scanner_parser.py"
-	@echo "  2. Add discovered special page prefixes to SPECIAL_PAGE_PREFIXES"
-	@echo "  3. Fix any bugs identified in diagnostic samples"
-	@echo "  4. Run: make scanner-commit"
-	@echo "  5. Run: make scanner-push"
-	@echo ""
-	@echo "Option C - Iterate (recommended):"
-	@echo "  1. make diagnose-scanner  # See what's skipped"
-	@echo "  2. Edit scanner_parser.py  # Fix issues"
-	@echo "  3. make diagnose-scanner  # Verify fixes"
-	@echo "  4. Repeat until fixed point (no samples)"
-	@echo "  5. make scanner-commit && make scanner-push"
-	@echo ""
-	@echo "GOAL: Reach fixed point where all sample lists are empty!"
-	@echo ""
+	@echo "✓ Report saved to: reports/scanner_diagnostic.txt"
 
 # Commit scanner parser changes with diagnostic report
 scanner-commit:
