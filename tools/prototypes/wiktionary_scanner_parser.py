@@ -100,12 +100,15 @@ class BZ2StreamReader:
 # Regex patterns for extraction
 ENGLISH_SECTION = re.compile(r'==\s*English\s*==', re.IGNORECASE)
 POS_HEADER = re.compile(r'^===+\s*(.+?)\s*===+\s*$', re.MULTILINE)
+# Fallback: extract POS from {{head|en|POS}} templates when section headers missing
+HEAD_TEMPLATE = re.compile(r'\{\{(?:head|en-head)\|en\|([^}|]+)', re.IGNORECASE)
 CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
 CATEGORY = re.compile(r'\[\[Category:English\s+([^\]]+)\]\]', re.IGNORECASE)
 
 # Simple extraction patterns (no full XML parsing)
 TITLE_PATTERN = re.compile(r'<title>([^<]+)</title>')
 TEXT_PATTERN = re.compile(r'<text[^>]*>(.+?)</text>', re.DOTALL)
+REDIRECT_PATTERN = re.compile(r'<redirect\s+title="[^"]+"')
 
 # Known special page prefixes (build this list as we discover them)
 SPECIAL_PAGE_PREFIXES = (
@@ -113,6 +116,7 @@ SPECIAL_PAGE_PREFIXES = (
     'Appendix:',
     'Help:',
     'Template:',
+    'Reconstruction:',  # Proto-language reconstructions
 )
 
 # Regional label patterns
@@ -147,8 +151,11 @@ POS_MAP = {
     'particle': 'particle',
     'auxiliary': 'auxiliary',
     'contraction': 'verb',
-    'prefix': 'affix',  # NEW: Track prefixes
-    'suffix': 'affix',  # NEW: Track suffixes
+    'prefix': 'affix',
+    'suffix': 'affix',
+    'phrase': 'phrase',      # NEW: Multi-word expressions
+    'proverb': 'phrase',     # NEW: Proverbs treated as phrases
+    'numeral': 'numeral',    # NEW: Numbers (thirteen, centillion, etc.)
 }
 
 # Label classifications
@@ -168,12 +175,29 @@ DOMAIN_LABELS = {
 
 
 def extract_pos_tags(text: str) -> List[str]:
-    """Extract POS tags from section headers."""
+    """Extract POS tags from section headers and {{head}} templates."""
     pos_tags = []
+
+    # Primary: Extract from section headers (===Noun===, etc.)
     for match in POS_HEADER.finditer(text):
         header = match.group(1).lower().strip()
         if header in POS_MAP:
             pos_tags.append(POS_MAP[header])
+
+    # Fallback: If no section headers found, try {{head|en|POS}} templates
+    if not pos_tags:
+        for match in HEAD_TEMPLATE.finditer(text):
+            pos = match.group(1).lower().strip()
+            if pos in POS_MAP:
+                pos_tags.append(POS_MAP[pos])
+            # Handle special cases
+            elif pos == 'phrase':
+                pos_tags.append('phrase')
+            elif pos == 'proverb':
+                pos_tags.append('phrase')
+            elif pos == 'numeral':
+                pos_tags.append('numeral')
+
     return sorted(set(pos_tags))
 
 
@@ -236,12 +260,17 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
     Extract title and text from page XML using simple regex.
     Returns (title, text) or None if not found.
     Special pages (known prefixes only) return ('SPECIAL_PAGE', title).
+    Redirects return None (skipped).
     """
     # Extract title
     title_match = TITLE_PATTERN.search(page_xml)
     if not title_match:
         return None
     title = title_match.group(1)
+
+    # Skip redirects (e.g., "grain of salt" → "with a grain of salt")
+    if REDIRECT_PATTERN.search(page_xml):
+        return None
 
     # Track known special pages separately
     if title.startswith(SPECIAL_PAGE_PREFIXES):
