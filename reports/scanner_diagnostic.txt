@@ -6,14 +6,15 @@ Diagnostic mode: Will stop after 1000 skips and show samples
 Initializing streaming decompressor...
   Decompression complete: 2 MB in 0m 0s
 ✓ First page found, scanning...
-  Processed: 1,000 | Written: 888...  Processed: 2,000 | Written: 1,784...  Processed: 4,000 | Written: 3,202...  Processed: 5,000 | Written: 4,048 | Special: 52 | Skipped: 900 | Rate: 2460 pages/sec
+  Processed: 1,000 | Written: 888...  Processed: 2,000 | Written: 1,784...  Processed: 4,000 | Written: 3,202...  Processed: 5,000 | Written: 4,048 | Special: 67 | Redirects: 13 | Skipped: 872 | Rate: 2465 pages/sec
   Decompressing: 51 MB (24.1 MB/s, 0m 2s elapsed)
 ============================================================
-Total processed: 5,385
-Total written: 4,333
-Special pages: 52
+Total processed: 5,427
+Total written: 4,347
+Special pages: 67
+Redirects: 13
 Total skipped: 1,000
-Success rate: 80.5%
+Success rate: 80.1%
 Time: 0m 2s
 Rate: 2486 pages/sec
 ============================================================
@@ -27,8 +28,8 @@ Skip reason counts (showing up to 10 samples each):
   2. parse_entry returned None (validation failed): 2 samples
   3. parse_entry threw exception: 0 samples
 
-Note: Special pages (Wiktionary:, Appendix:, Help:, Template:, Reconstruction:) are
-      counted separately and not included in diagnostic samples.
+Note: Special pages (Wiktionary:, Appendix:, Help:, Template:, Reconstruction:) and
+      redirects are counted separately, not included in diagnostic samples.
 
 ------------------------------------------------------------
 SAMPLES: No content extracted
@@ -118,28 +119,7 @@ SAMPLES: No content extracted
       <text bytes="2088" sha1="iba7rfq80lup698q831153
 
 
-5. Title: Wiktionary:Topics
-   Page preview (first 500 chars):
-   <page>
-    <title>Wiktionary:Topics</title>
-    <ns>4</ns>
-    <id>50</id>
-    <redirect title="Category:All topics" />
-    <revision>
-      <id>66135651</id>
-      <parentid>65431017</parentid>
-      <timestamp>2022-03-13T10:33:00Z</timestamp>
-      <contributor>
-        <username>Fytcha</username>
-        <id>1718343</id>
-      </contributor>
-      <comment>Redirected page to [[Category:All topics]]</comment>
-      <origin>66135651</origin>
-      <model>wikitext</model>
-      <format>text/x-wi
-
-
-6. Title: chien
+5. Title: chien
    Page preview (first 500 chars):
    <page>
     <title>chien</title>
@@ -156,7 +136,7 @@ SAMPLES: No content extracted
       <comment>AudioBot: updated label(s) for LL-Q150 (fra)-DenisdeShawi-chien.wav, LL-Q150 (fra)-DSwissK-chien.wav, LL-Q150 (fra)-GrandCelinien-chien.wav, LL-Q150 (fra)-Lepticed7-chien.wav, LL-Q150 (fra)-Loqu
 
 
-7. Title: aquila
+6. Title: aquila
    Page preview (first 500 chars):
    <page>
     <title>aquila</title>
@@ -177,7 +157,7 @@ SAMPLES: No content extracted
       <text bytes="3902" sha1="nijmvzh1qq1mz21muz3jpepbfkwebpv" xml:space="preserve">{{also
 
 
-8. Title: Vikipedio
+7. Title: Vikipedio
    Page preview (first 500 chars):
    <page>
     <title>Vikipedio</title>
@@ -199,44 +179,64 @@ SAMPLES: No content extracted
 ===Etymolo
 
 
-9. Title: grain of salt
+8. Title: abaist
    Page preview (first 500 chars):
    <page>
-    <title>grain of salt</title>
+    <title>abaist</title>
     <ns>0</ns>
-    <id>121</id>
-    <redirect title="with a grain of salt" />
+    <id>262</id>
     <revision>
-      <id>46068729</id>
-      <parentid>46068724</parentid>
-      <timestamp>2017-06-06T20:21:09Z</timestamp>
+      <id>61130724</id>
+      <parentid>59255303</parentid>
+      <timestamp>2020-11-15T15:46:59Z</timestamp>
       <contributor>
-        <username>TheDaveRoss</username>
-        <id>4492</id>
+        <username>Vox Sciurorum</username>
+        <id>3320187</id>
+      </contributor>
+      <comment>/* Verb */</comment>
+      <origin>61130724</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="219" sha1="dp4s6i3aww01w7wox0zkw2tw9gaibrx" xml:s
+
+
+9. Title: abawed
+   Page preview (first 500 chars):
+   <page>
+    <title>abawed</title>
+    <ns>0</ns>
+    <id>297</id>
+    <revision>
+      <id>82581756</id>
+      <parentid>82581704</parentid>
+      <timestamp>2024-11-06T22:33:21Z</timestamp>
+      <contributor>
+        <username>Surjection</username>
+        <id>3370302</id>
       </contributor>
       <minor />
-      <comment>Reverted edits by [[Special:Contributions/TheDaveBot|TheDaveBot]]. If you think this rollback is in error, please leave a 
+      <comment>Reverted edits by [[Special:Contributions/2600:8805:100:C300:668E:BC93:75D6:4AE7|2600:8805:100:C300:668E:BC93:75D6:4AE7]]. If you think this rollback is in error, please lea
 
 
-10. Title: Help:Images
+10. Title: abdominales
    Page preview (first 500 chars):
    <page>
-    <title>Help:Images</title>
-    <ns>12</ns>
-    <id>140</id>
-    <redirect title="Wiktionary:Images" />
+    <title>abdominales</title>
+    <ns>0</ns>
+    <id>331</id>
     <revision>
-      <id>83600050</id>
-      <parentid>64703969</parentid>
-      <timestamp>2025-01-13T23:35:46Z</timestamp>
+      <id>87101403</id>
+      <parentid>86011834</parentid>
+      <timestamp>2025-09-22T14:35:58Z</timestamp>
       <contributor>
-        <username>Juwan</username>
-        <id>3726457</id>
+        <username>FenaBot</username>
+        <id>4269631</id>
       </contributor>
-      <comment>Redirected page to [[Wiktionary:Images]]</comment>
-      <origin>83600050</origin>
+      <comment>AudioBot: updated label(s) for De-abdominales.ogg</comment>
+      <origin>87101403</origin>
       <model>wikitext</model>
-      <format>text/x-wiki</forma
+      <format>text/x-wiki</format>
+      <text bytes="843" sha1="
 
 ------------------------------------------------------------
 SAMPLES: parse_entry returned None
