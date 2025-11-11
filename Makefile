@@ -14,7 +14,7 @@ WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
         export-wordlist-filtered-c50 export-wordlist-filtered-w3c50 build-binary package check-limits start-server \
         reports report-raw report-pipeline report-trie report-metadata report-compare \
         game-words analyze-game-metadata \
-        audit-wiktionary report-labels analyze-local
+        audit-wiktionary report-labels analyze-local baseline-decompress
 
 # Bootstrap local dev environment (idempotent)
 bootstrap: venv deps
@@ -284,3 +284,14 @@ analyze-local: audit-wiktionary fetch-simple report-labels
 	@echo "  4. Test filters: uv run python tools/filter_words.py --use-case wordle"
 	@echo ""
 	@echo "See docs/LOCAL_ANALYSIS.md for detailed workflow."
+
+# Baseline decompression benchmark (no XML parsing)
+baseline-decompress: deps
+	@if [ ! -f "$(WIKTIONARY_DUMP)" ]; then \
+		echo "✗ Missing $(WIKTIONARY_DUMP). Run 'make fetch-plus' first."; \
+		exit 1; \
+	fi
+	@echo "→ Running baseline decompression benchmark..."
+	@echo "  (This shows pure decompression speed without XML parsing)"
+	@echo ""
+	$(UV) run python tools/baseline_decompress.py "$(WIKTIONARY_DUMP)"
