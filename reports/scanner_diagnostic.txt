@@ -6,16 +6,16 @@ Diagnostic mode: Will stop after 1000 skips and show samples
 Initializing streaming decompressor...
   Decompression complete: 2 MB in 0m 0s
 ✓ First page found, scanning...
-  Processed: 1,000 | Written: 888...  Processed: 2,000 | Written: 1,784...  Processed: 4,000 | Written: 3,201...  Processed: 5,000 | Written: 4,045 | Special: 52 | Skipped: 903 | Rate: 2494 pages/sec
-  Decompressing: 51 MB (24.4 MB/s, 0m 2s elapsed)
+  Processed: 1,000 | Written: 888...  Processed: 2,000 | Written: 1,784...  Processed: 4,000 | Written: 3,202...  Processed: 5,000 | Written: 4,048 | Special: 52 | Skipped: 900 | Rate: 2460 pages/sec
+  Decompressing: 51 MB (24.1 MB/s, 0m 2s elapsed)
 ============================================================
-Total processed: 5,374
-Total written: 4,322
+Total processed: 5,385
+Total written: 4,333
 Special pages: 52
 Total skipped: 1,000
-Success rate: 80.4%
+Success rate: 80.5%
 Time: 0m 2s
-Rate: 2516 pages/sec
+Rate: 2486 pages/sec
 ============================================================
 
 ============================================================
@@ -24,7 +24,7 @@ DIAGNOSTIC REPORT: Skip Reasons Breakdown
 
 Skip reason counts (showing up to 10 samples each):
   1. No content extracted (no title/text or not English): 10 samples
-  2. parse_entry returned None (validation failed): 6 samples
+  2. parse_entry returned None (validation failed): 2 samples
   3. parse_entry threw exception: 0 samples
 
 Note: Special pages (Wiktionary:, Appendix:, Help:, Template:, Reconstruction:) are
@@ -248,41 +248,7 @@ SAMPLES: parse_entry returned None
 {{no entry|en|[[Appendix:English dictionary-only terms]]}}
 
 
-2. Title: A.M.
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;am&quot;}}
-==English==
-
-===Noun===
-{{en-noun|~}}
-
-# {{initialism of|en|anno mundi}}.
-# {{initialism of|en|Master of Arts}}.
-
-===Adverb===
-{{en-adv|-}}
-
-# {{alternative form of|en|a.m.|t=before noon}}.
-
-===Anagrams===
-* {{anagrams|en|a=am|-ma-|M&amp;A|M.A.|MA|Ma|ma}}
-
-==French==
-
-===Alternative forms===
-* {{alt|fr|AM|A. M.}}
-
-===Etymology===
-From {{der|fr|la|ante meridiem}}.
-
-===Adverb===
-{{fr-adv}}
-
-# [[ante meridiem]]
-#: {{ant|fr|P.M.}}
-
-
-3. Title: ⠁
+2. Title: ⠁
    Text preview (first 500 chars):
    {{also|1|a|•|⠂|⠄}}
 {{character info}}
@@ -301,57 +267,6 @@ A character of the braille script, standardized internationally as the letter ''
 # {{lb|mul|Yugoslav Braille}} {{l|mul|a|sc=Latn}} ~ {{l|mul|а|sc=Cyrl}}
 # {{lb|mul|Russian Braille}} {{l|mul|а|sc=Cyrl|tr=a}}
 # {{lb|mul|Hebrew B
-
-
-4. Title: i.e.
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;ie&quot;}}
-==English==
-
-===Alternative forms===
-* {{alt|en|i. e.|ie}}
-
-===Etymology===
-From {{uder|en|la|i. e.}}, a [[Latinistic]] abbreviation of {{m|la|id est||that is}}.
-
-===Pronunciation===
-* {{IPA|en|/ˌaɪˈiː/|/ɪd ɛst/|a=RP,US}}
-* {{audio|en|en-us-i.e..ogg|a=US}}
-* {{rhymes|en|iː|s=2}}
-* It is sometimes verbally enunciated as {{m|en|that is}}.
-
-===Adverb===
-{{head|en|adverb}}
-
-# {{lb|en|[[initialism]]}} [[that is|That is]], [[namely]], [[in other words]], 
-
-
-5. Title: e.g.
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;eg&quot;}}
-==English==
-{{was wotd|2023|September|2}}
-
-===Etymology===
-The {{glossary|adverb}} is a terser form of {{m|en|ex. gr.}}, both {{glossary|abbreviation|abbreviating}} {{der|en|la|exemplī grātiā|t=for the sake of an example}};&lt;ref&gt;{{cite-book|author=[[w:John Traupman|John C[harles] Traupman]]|title=The New College Latin and English Dictionary|edition=3rd|location=New York, N.Y.|publisher={{w|Bantam Books}}|year=2007|isbn=978-0-553-59012-8}}.&lt;/
-
-
-6. Title: w/
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;w&quot;}}
-==English==
-
-===Preposition===
-{{en-head|prep}}
-
-# {{abbreviation of|en|with}}.
-#: {{syn|en|w|w.|wth|w&lt;sup&gt;th&lt;/sup&gt;|wt|w&lt;sup&gt;t&lt;/sup&gt;|c̄}}
-#: {{ant|en|w/o|w/out|sans}}
-#: {{cot|en|&amp;|+}}
-
-====Related terms====
-* {{l|en|w/i}}
-* {{l|en|w/r/t}}
 
 ============================================================
 GOAL: Reach fixed point (no samples in any category)
