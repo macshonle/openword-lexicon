@@ -315,7 +315,7 @@ def scan_pages(file_obj, chunk_size: int = 1024 * 1024):
             yield page_xml
 
 
-def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None):
+def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, diagnostic_mode: bool = False):
     """Parse Wiktionary XML dump using lightweight scanning."""
 
     print(f"Parsing: {xml_path}")
@@ -323,6 +323,8 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None):
     print(f"Method: Lightweight scanner (no full XML parsing)")
     if limit:
         print(f"Limit: {limit:,} entries")
+    if diagnostic_mode:
+        print(f"Diagnostic mode: Will stop after 1000 skips and show samples")
     print()
 
     print("Initializing streaming decompressor...")
@@ -337,6 +339,13 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None):
     entries_written = 0
     entries_skipped = 0
     first_page_seen = False
+
+    # Diagnostic tracking
+    skip_reasons = {
+        'no_content_extracted': [],  # extract_page_content returned None
+        'parse_entry_none': [],      # parse_entry returned None
+        'parse_entry_exception': []  # parse_entry threw exception
+    }
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -358,6 +367,18 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None):
             result = extract_page_content(page_xml)
             if not result:
                 entries_skipped += 1
+                if diagnostic_mode and len(skip_reasons['no_content_extracted']) < 10:
+                    # Extract what we can for diagnostic
+                    title_match = TITLE_PATTERN.search(page_xml)
+                    title = title_match.group(1) if title_match else "NO_TITLE"
+                    skip_reasons['no_content_extracted'].append({
+                        'title': title,
+                        'page_preview': page_xml[:500]
+                    })
+
+                # Check diagnostic stop condition
+                if diagnostic_mode and entries_skipped >= 1000:
+                    break
                 continue
 
             title, text = result
@@ -370,9 +391,27 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None):
                     entries_written += 1
                 else:
                     entries_skipped += 1
+                    if diagnostic_mode and len(skip_reasons['parse_entry_none']) < 10:
+                        skip_reasons['parse_entry_none'].append({
+                            'title': title,
+                            'text_preview': text[:500] if len(text) > 500 else text
+                        })
+
+                    # Check diagnostic stop condition
+                    if diagnostic_mode and entries_skipped >= 1000:
+                        break
             except Exception as e:
-                print(f"Error parsing {title}: {e}", file=sys.stderr)
                 entries_skipped += 1
+                if diagnostic_mode and len(skip_reasons['parse_entry_exception']) < 10:
+                    skip_reasons['parse_entry_exception'].append({
+                        'title': title,
+                        'exception': str(e),
+                        'text_preview': text[:500] if len(text) > 500 else text
+                    })
+
+                # Check diagnostic stop condition
+                if diagnostic_mode and entries_skipped >= 1000:
+                    break
 
             # Progress
             if entries_processed % 1000 == 0:
@@ -407,6 +446,77 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None):
     print(f"Rate: {entries_processed / elapsed:.0f} pages/sec")
     print("=" * 60)
 
+    # Print diagnostic information if in diagnostic mode
+    if diagnostic_mode:
+        print()
+        print("=" * 60)
+        print("DIAGNOSTIC REPORT: Skip Reasons Breakdown")
+        print("=" * 60)
+        print()
+
+        # Count skip reasons
+        total_no_content = len(skip_reasons['no_content_extracted'])
+        total_parse_none = len(skip_reasons['parse_entry_none'])
+        total_exceptions = len(skip_reasons['parse_entry_exception'])
+
+        print(f"Skip reason counts (showing up to 10 samples each):")
+        print(f"  1. No content extracted (no title/text or not English): {total_no_content} samples")
+        print(f"  2. parse_entry returned None (validation failed): {total_parse_none} samples")
+        print(f"  3. parse_entry threw exception: {total_exceptions} samples")
+        print()
+
+        # Print samples for each category
+        if skip_reasons['no_content_extracted']:
+            print("-" * 60)
+            print("SAMPLES: No content extracted")
+            print("-" * 60)
+            for i, sample in enumerate(skip_reasons['no_content_extracted'][:10], 1):
+                print(f"\n{i}. Title: {sample['title']}")
+                print(f"   Page preview (first 500 chars):")
+                print(f"   {sample['page_preview'][:500]}")
+                print()
+
+        if skip_reasons['parse_entry_none']:
+            print("-" * 60)
+            print("SAMPLES: parse_entry returned None")
+            print("-" * 60)
+            for i, sample in enumerate(skip_reasons['parse_entry_none'][:10], 1):
+                print(f"\n{i}. Title: {sample['title']}")
+                print(f"   Text preview (first 500 chars):")
+                print(f"   {sample['text_preview'][:500]}")
+                print()
+
+        if skip_reasons['parse_entry_exception']:
+            print("-" * 60)
+            print("SAMPLES: parse_entry threw exception")
+            print("-" * 60)
+            for i, sample in enumerate(skip_reasons['parse_entry_exception'][:10], 1):
+                print(f"\n{i}. Title: {sample['title']}")
+                print(f"   Exception: {sample['exception']}")
+                print(f"   Text preview (first 500 chars):")
+                print(f"   {sample['text_preview'][:500]}")
+                print()
+
+        print("=" * 60)
+        print("NEXT STEPS SUGGESTIONS")
+        print("=" * 60)
+        print()
+        print("Based on the samples above, consider:")
+        print("1. Are there common patterns in 'no_content_extracted'?")
+        print("   - Check if regex patterns need adjustment")
+        print("   - Check if title/text extraction is too strict")
+        print()
+        print("2. Are there common patterns in 'parse_entry_none'?")
+        print("   - Check if POS validation is too strict")
+        print("   - Check if character filtering is too restrictive")
+        print("   - Check if we're missing valid English entries")
+        print()
+        print("3. Are there exceptions that need handling?")
+        print("   - Add try/except for specific error cases")
+        print("   - Fix bugs in parse_entry logic")
+        print()
+        print("=" * 60)
+
 
 def main():
     import argparse
@@ -434,13 +544,19 @@ def main():
         help='Limit number of entries to extract (for testing)'
     )
 
+    parser.add_argument(
+        '--diagnostic',
+        action='store_true',
+        help='Diagnostic mode: stop after 1000 skips and show sample entries from each skip category'
+    )
+
     args = parser.parse_args()
 
     if not args.input.exists():
         print(f"Error: Input file not found: {args.input}")
         sys.exit(1)
 
-    parse_wiktionary_dump(args.input, args.output, args.limit)
+    parse_wiktionary_dump(args.input, args.output, args.limit, args.diagnostic)
 
 
 if __name__ == '__main__':
