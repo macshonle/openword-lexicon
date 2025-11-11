@@ -17,6 +17,7 @@ import json
 import re
 import sys
 import time
+import unicodedata
 from pathlib import Path
 from typing import Dict, List, Set, Optional
 
@@ -138,6 +139,8 @@ POS_MAP = {
     'particle': 'particle',
     'auxiliary': 'auxiliary',
     'contraction': 'verb',
+    'prefix': 'affix',  # NEW: Track prefixes
+    'suffix': 'affix',  # NEW: Track suffixes
 }
 
 # Label classifications
@@ -173,6 +176,7 @@ def extract_labels(text: str) -> Dict[str, List[str]]:
         'temporal': set(),
         'domain': set(),
         'region': set(),
+        'categories': set(),  # NEW: Track all categories (including prefixes/suffixes)
     }
 
     # Extract from {{lb|en|...}} templates
@@ -192,23 +196,27 @@ def extract_labels(text: str) -> Dict[str, List[str]]:
 
     # Extract from categories
     for match in CATEGORY.finditer(text):
-        cat = match.group(1).lower()
+        cat = match.group(1)  # Keep original case for categories
+        cat_lower = cat.lower()
 
-        if 'informal' in cat or 'colloquial' in cat:
+        # Store the category itself
+        labels['categories'].add(cat)
+
+        if 'informal' in cat_lower or 'colloquial' in cat_lower:
             labels['register'].add('informal')
-        if 'slang' in cat:
+        if 'slang' in cat_lower:
             labels['register'].add('slang')
-        if 'vulgar' in cat:
+        if 'vulgar' in cat_lower:
             labels['register'].add('vulgar')
-        if 'offensive' in cat or 'derogatory' in cat:
+        if 'offensive' in cat_lower or 'derogatory' in cat_lower:
             labels['register'].add('offensive')
-        if 'obsolete' in cat:
+        if 'obsolete' in cat_lower:
             labels['temporal'].add('obsolete')
-        if 'archaic' in cat:
+        if 'archaic' in cat_lower:
             labels['temporal'].add('archaic')
 
         for region_key, region_code in REGION_LABELS.items():
-            if region_key in cat:
+            if region_key in cat_lower:
                 labels['region'].add(region_code)
                 break
 
@@ -219,6 +227,7 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
     """
     Extract title and text from page XML using simple regex.
     Returns (title, text) or None if not found.
+    Special pages (Wiktionary:, Template:, etc.) return ('SPECIAL_PAGE', title).
     """
     # Extract title
     title_match = TITLE_PATTERN.search(page_xml)
@@ -226,9 +235,9 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
         return None
     title = title_match.group(1)
 
-    # Skip special pages
+    # Track special pages separately (Wiktionary:, Template:, etc.)
     if ':' in title:
-        return None
+        return ('SPECIAL_PAGE', title)
 
     # Extract text
     text_match = TEXT_PATTERN.search(page_xml)
@@ -247,8 +256,13 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     """Parse a single Wiktionary page."""
     word = title.lower().strip()
 
-    # Skip if non-ASCII letters (except apostrophes, hyphens, spaces)
-    if not all(c.isalnum() or c in " '-" for c in word):
+    # Allow unicode letters (café, naïve), digits, apostrophes, hyphens, spaces
+    # Unicode categories: L* = letters, N* = numbers
+    valid_word = all(
+        unicodedata.category(c)[0] in 'LN' or c in " '-"
+        for c in word
+    )
+    if not valid_word:
         return None
 
     pos_tags = extract_pos_tags(text)
@@ -338,10 +352,12 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     entries_processed = 0
     entries_written = 0
     entries_skipped = 0
+    special_pages_found = 0  # NEW: Track special pages separately
     first_page_seen = False
 
     # Diagnostic tracking
     skip_reasons = {
+        'special_pages': [],         # Wiktionary:, Template:, etc.
         'no_content_extracted': [],  # extract_page_content returned None
         'parse_entry_none': [],      # parse_entry returned None
         'parse_entry_exception': []  # parse_entry threw exception
@@ -379,6 +395,16 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                 # Check diagnostic stop condition
                 if diagnostic_mode and entries_skipped >= 1000:
                     break
+                continue
+
+            # Handle special pages (Wiktionary:, Template:, etc.)
+            if result[0] == 'SPECIAL_PAGE':
+                special_pages_found += 1
+                if diagnostic_mode and len(skip_reasons['special_pages']) < 10:
+                    skip_reasons['special_pages'].append({
+                        'title': result[1],
+                        'page_type': result[1].split(':')[0] if ':' in result[1] else 'Unknown'
+                    })
                 continue
 
             title, text = result
@@ -420,6 +446,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     rate = entries_processed / elapsed if elapsed > 0 else 0
                     print(f"  Processed: {entries_processed:,} | "
                           f"Written: {entries_written:,} | "
+                          f"Special: {special_pages_found:,} | "
                           f"Skipped: {entries_skipped:,} | "
                           f"Rate: {rate:.0f} pages/sec")
                     out.flush()
@@ -440,6 +467,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     print("=" * 60)
     print(f"Total processed: {entries_processed:,}")
     print(f"Total written: {entries_written:,}")
+    print(f"Special pages: {special_pages_found:,}")
     print(f"Total skipped: {entries_skipped:,}")
     print(f"Success rate: {entries_written/entries_processed*100:.1f}%")
     print(f"Time: {elapsed_min}m {elapsed_sec}s")
@@ -455,17 +483,28 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
         print()
 
         # Count skip reasons
+        total_special = len(skip_reasons['special_pages'])
         total_no_content = len(skip_reasons['no_content_extracted'])
         total_parse_none = len(skip_reasons['parse_entry_none'])
         total_exceptions = len(skip_reasons['parse_entry_exception'])
 
         print(f"Skip reason counts (showing up to 10 samples each):")
-        print(f"  1. No content extracted (no title/text or not English): {total_no_content} samples")
-        print(f"  2. parse_entry returned None (validation failed): {total_parse_none} samples")
-        print(f"  3. parse_entry threw exception: {total_exceptions} samples")
+        print(f"  1. Special pages (Wiktionary:, Template:, etc.): {total_special} samples")
+        print(f"  2. No content extracted (no title/text or not English): {total_no_content} samples")
+        print(f"  3. parse_entry returned None (validation failed): {total_parse_none} samples")
+        print(f"  4. parse_entry threw exception: {total_exceptions} samples")
         print()
 
         # Print samples for each category
+        if skip_reasons['special_pages']:
+            print("-" * 60)
+            print("SAMPLES: Special pages (Wiktionary:, Template:, etc.)")
+            print("-" * 60)
+            for i, sample in enumerate(skip_reasons['special_pages'][:10], 1):
+                print(f"\n{i}. Title: {sample['title']}")
+                print(f"   Type: {sample['page_type']}:")
+                print()
+
         if skip_reasons['no_content_extracted']:
             print("-" * 60)
             print("SAMPLES: No content extracted")
@@ -502,16 +541,19 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
         print("=" * 60)
         print()
         print("Based on the samples above, consider:")
-        print("1. Are there common patterns in 'no_content_extracted'?")
+        print("1. Special pages are now tracked separately (Wiktionary:, Template:, etc.)")
+        print("   - These are expected and no action needed")
+        print()
+        print("2. Are there common patterns in 'no_content_extracted'?")
         print("   - Check if regex patterns need adjustment")
         print("   - Check if title/text extraction is too strict")
         print()
-        print("2. Are there common patterns in 'parse_entry_none'?")
+        print("3. Are there common patterns in 'parse_entry_none'?")
+        print("   - Now allows accented characters (café, naïve)")
+        print("   - Tracks categories including prefixes/suffixes")
         print("   - Check if POS validation is too strict")
-        print("   - Check if character filtering is too restrictive")
-        print("   - Check if we're missing valid English entries")
         print()
-        print("3. Are there exceptions that need handling?")
+        print("4. Are there exceptions that need handling?")
         print("   - Add try/except for specific error cases")
         print("   - Fix bugs in parse_entry logic")
         print()
