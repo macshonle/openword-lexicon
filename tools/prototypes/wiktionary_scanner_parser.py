@@ -259,8 +259,8 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
     """
     Extract title and text from page XML using simple regex.
     Returns (title, text) or None if not found.
-    Special pages (known prefixes only) return ('SPECIAL_PAGE', title).
-    Redirects return None (skipped).
+    Special pages (known prefixes) return ('SPECIAL_PAGE', title) even if redirects.
+    Redirects return ('REDIRECT', title).
     """
     # Extract title
     title_match = TITLE_PATTERN.search(page_xml)
@@ -268,13 +268,15 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
         return None
     title = title_match.group(1)
 
-    # Skip redirects (e.g., "grain of salt" → "with a grain of salt")
-    if REDIRECT_PATTERN.search(page_xml):
-        return None
-
-    # Track known special pages separately
+    # Check for special pages FIRST (before redirects)
+    # Special page redirects count as special pages, not redirects
     if title.startswith(SPECIAL_PAGE_PREFIXES):
         return ('SPECIAL_PAGE', title)
+
+    # Check for redirects AFTER special pages
+    # This catches regular redirects like "grain of salt" → "with a grain of salt"
+    if REDIRECT_PATTERN.search(page_xml):
+        return ('REDIRECT', title)
 
     # Extract text
     text_match = TEXT_PATTERN.search(page_xml)
@@ -390,10 +392,11 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     entries_processed = 0
     entries_written = 0
     entries_skipped = 0
-    special_pages_found = 0  # NEW: Track special pages separately
+    special_pages_found = 0
+    redirects_found = 0  # Track redirects separately
     first_page_seen = False
 
-    # Diagnostic tracking (special pages not included - they're expected)
+    # Diagnostic tracking (special pages and redirects not included - they're expected)
     skip_reasons = {
         'no_content_extracted': [],  # extract_page_content returned None
         'parse_entry_none': [],      # parse_entry returned None
@@ -439,6 +442,11 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                 special_pages_found += 1
                 continue
 
+            # Handle redirects (expected, tracked separately)
+            if result[0] == 'REDIRECT':
+                redirects_found += 1
+                continue
+
             title, text = result
 
             # Parse entry
@@ -479,6 +487,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     print(f"  Processed: {entries_processed:,} | "
                           f"Written: {entries_written:,} | "
                           f"Special: {special_pages_found:,} | "
+                          f"Redirects: {redirects_found:,} | "
                           f"Skipped: {entries_skipped:,} | "
                           f"Rate: {rate:.0f} pages/sec")
                     out.flush()
@@ -500,6 +509,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     print(f"Total processed: {entries_processed:,}")
     print(f"Total written: {entries_written:,}")
     print(f"Special pages: {special_pages_found:,}")
+    print(f"Redirects: {redirects_found:,}")
     print(f"Total skipped: {entries_skipped:,}")
     print(f"Success rate: {entries_written/entries_processed*100:.1f}%")
     print(f"Time: {elapsed_min}m {elapsed_sec}s")
@@ -524,8 +534,8 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
         print(f"  2. parse_entry returned None (validation failed): {total_parse_none} samples")
         print(f"  3. parse_entry threw exception: {total_exceptions} samples")
         print()
-        print(f"Note: Special pages ({', '.join(SPECIAL_PAGE_PREFIXES)}) are")
-        print(f"      counted separately and not included in diagnostic samples.")
+        print(f"Note: Special pages ({', '.join(SPECIAL_PAGE_PREFIXES)}) and")
+        print(f"      redirects are counted separately, not included in diagnostic samples.")
         print()
 
         # Print samples for each category
