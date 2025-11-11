@@ -1,0 +1,414 @@
+Parsing: data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2
+Output: /tmp/scanner_diagnostic.jsonl
+Method: Lightweight scanner (no full XML parsing)
+Diagnostic mode: Will stop after 1000 skips and show samples
+
+Initializing streaming decompressor...
+  Decompression complete: 2 MB in 0m 0s
+✓ First page found, scanning...
+  Processed: 1,000 | Written: 885...  Processed: 2,000 | Written: 1,777...  Processed: 4,000 | Written: 3,177...  Processed: 5,000 | Written: 4,021 | Special: 66 | Skipped: 913 | Rate: 2509 pages/sec
+  Decompressing: 51 MB (24.6 MB/s, 0m 2s elapsed)
+============================================================
+Total processed: 5,360
+Total written: 4,294
+Special pages: 66
+Total skipped: 1,000
+Success rate: 80.1%
+Time: 0m 2s
+Rate: 2525 pages/sec
+============================================================
+
+============================================================
+DIAGNOSTIC REPORT: Skip Reasons Breakdown
+============================================================
+
+Skip reason counts (showing up to 10 samples each):
+  1. No content extracted (no title/text or not English): 10 samples
+  2. parse_entry returned None (validation failed): 10 samples
+  3. parse_entry threw exception: 0 samples
+
+Note: Special pages (Wiktionary:, Appendix:, Help:, Template:) are
+      counted separately and not included in diagnostic samples.
+
+------------------------------------------------------------
+SAMPLES: No content extracted
+------------------------------------------------------------
+
+1. Title: frei
+   Page preview (first 500 chars):
+   <page>
+    <title>frei</title>
+    <ns>0</ns>
+    <id>35</id>
+    <revision>
+      <id>87156134</id>
+      <parentid>86858405</parentid>
+      <timestamp>2025-09-23T16:34:43Z</timestamp>
+      <contributor>
+        <username>VGPaleontologist</username>
+        <id>3818472</id>
+      </contributor>
+      <comment>/* Derived terms */</comment>
+      <origin>87156134</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3834" sha1="2b1fyk43gu0q81r5fe3q1j5xxcud
+
+
+2. Title: woordenboek
+   Page preview (first 500 chars):
+   <page>
+    <title>woordenboek</title>
+    <ns>0</ns>
+    <id>39</id>
+    <revision>
+      <id>87672307</id>
+      <parentid>86199701</parentid>
+      <timestamp>2025-10-31T19:27:30Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87672307</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</fo
+
+
+3. Title: umsonst
+   Page preview (first 500 chars):
+   <page>
+    <title>umsonst</title>
+    <ns>0</ns>
+    <id>42</id>
+    <revision>
+      <id>86865763</id>
+      <parentid>86372059</parentid>
+      <timestamp>2025-09-22T04:15:00Z</timestamp>
+      <contributor>
+        <username>FenaBot</username>
+        <id>4269631</id>
+      </contributor>
+      <comment>AudioBot: updated label(s) for De-umsonst.ogg</comment>
+      <origin>86865763</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="893" sha1="7mdry1b5e
+
+
+4. Title: gratuit
+   Page preview (first 500 chars):
+   <page>
+    <title>gratuit</title>
+    <ns>0</ns>
+    <id>43</id>
+    <revision>
+      <id>86822313</id>
+      <parentid>86614475</parentid>
+      <timestamp>2025-09-18T16:24:07Z</timestamp>
+      <contributor>
+        <username>Rodrigo5260</username>
+        <id>3579806</id>
+      </contributor>
+      <comment>/* Romanian */It's attested</comment>
+      <origin>86822313</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2088" sha1="iba7rfq80lup698q831153
+
+
+5. Title: chien
+   Page preview (first 500 chars):
+   <page>
+    <title>chien</title>
+    <ns>0</ns>
+    <id>52</id>
+    <revision>
+      <id>86479246</id>
+      <parentid>86411797</parentid>
+      <timestamp>2025-08-28T10:20:12Z</timestamp>
+      <contributor>
+        <username>FenaBot</username>
+        <id>4269631</id>
+      </contributor>
+      <comment>AudioBot: updated label(s) for LL-Q150 (fra)-DenisdeShawi-chien.wav, LL-Q150 (fra)-DSwissK-chien.wav, LL-Q150 (fra)-GrandCelinien-chien.wav, LL-Q150 (fra)-Lepticed7-chien.wav, LL-Q150 (fra)-Loqu
+
+
+6. Title: Reconstruction:Proto-Germanic/frijaz
+   Page preview (first 500 chars):
+   <page>
+    <title>Reconstruction:Proto-Germanic/frijaz</title>
+    <ns>118</ns>
+    <id>90</id>
+    <revision>
+      <id>82752174</id>
+      <parentid>81674984</parentid>
+      <timestamp>2024-11-25T00:29:53Z</timestamp>
+      <contributor>
+        <username>Agamemenon</username>
+        <id>3579757</id>
+      </contributor>
+      <comment>/* Proto-Germanic */</comment>
+      <origin>82752174</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="802" sha1="
+
+
+7. Title: aquila
+   Page preview (first 500 chars):
+   <page>
+    <title>aquila</title>
+    <ns>0</ns>
+    <id>91</id>
+    <revision>
+      <id>85137064</id>
+      <parentid>85121119</parentid>
+      <timestamp>2025-06-16T16:28:08Z</timestamp>
+      <contributor>
+        <username>NotSoFreeky</username>
+        <id>4211444</id>
+      </contributor>
+      <minor />
+      <origin>85137064</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3902" sha1="nijmvzh1qq1mz21muz3jpepbfkwebpv" xml:space="preserve">{{also
+
+
+8. Title: Vikipedio
+   Page preview (first 500 chars):
+   <page>
+    <title>Vikipedio</title>
+    <ns>0</ns>
+    <id>102</id>
+    <revision>
+      <id>59644111</id>
+      <parentid>57909138</parentid>
+      <timestamp>2020-06-29T07:41:34Z</timestamp>
+      <contributor>
+        <username>J3133</username>
+        <id>3466327</id>
+      </contributor>
+      <origin>59644111</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="272" sha1="9saqjf7iyctixmnlqfzpbsyp46zp1w0" xml:space="preserve">==Esperanto==
+
+===Etymolo
+
+
+9. Title: grain of salt
+   Page preview (first 500 chars):
+   <page>
+    <title>grain of salt</title>
+    <ns>0</ns>
+    <id>121</id>
+    <redirect title="with a grain of salt" />
+    <revision>
+      <id>46068729</id>
+      <parentid>46068724</parentid>
+      <timestamp>2017-06-06T20:21:09Z</timestamp>
+      <contributor>
+        <username>TheDaveRoss</username>
+        <id>4492</id>
+      </contributor>
+      <minor />
+      <comment>Reverted edits by [[Special:Contributions/TheDaveBot|TheDaveBot]]. If you think this rollback is in error, please leave a 
+
+
+10. Title: abaist
+   Page preview (first 500 chars):
+   <page>
+    <title>abaist</title>
+    <ns>0</ns>
+    <id>262</id>
+    <revision>
+      <id>61130724</id>
+      <parentid>59255303</parentid>
+      <timestamp>2020-11-15T15:46:59Z</timestamp>
+      <contributor>
+        <username>Vox Sciurorum</username>
+        <id>3320187</id>
+      </contributor>
+      <comment>/* Verb */</comment>
+      <origin>61130724</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="219" sha1="dp4s6i3aww01w7wox0zkw2tw9gaibrx" xml:s
+
+------------------------------------------------------------
+SAMPLES: parse_entry returned None
+------------------------------------------------------------
+
+1. Title: abnodation
+   Text preview (first 500 chars):
+   ==English==
+{{no entry|en|[[Appendix:English dictionary-only terms]]}}
+
+
+2. Title: absque hoc
+   Text preview (first 500 chars):
+   ==English==
+
+===Etymology===
+{{learned borrowing|en|la|[[absque]] [[hoc]]|lit=without this}}.
+
+===Phrase===
+{{head|en|phrase|head=absque hoc}}
+
+# {{lb|en|legal}} The technical words of [[denial]] used in denying what has been [[alleged]].
+
+{{cln|en|coordinates|responses}}
+
+
+3. Title: your mileage may vary
+   Text preview (first 500 chars):
+   ==English==
+{{was wotd|2018|September|30}}
+
+===Etymology===
+[[File:Auto fuel gauge.jpg|thumb|The [[fuel gauge]] of an [[automobile]]]]
+
+The {{w|United States Environmental Protection Agency}} requires all new [[vehicle]]s to undergo a set of standard [[emissions test]]s which [[simulate]] city and highway driving. Part of the test measures estimated city and highway [[gas#Noun|gas]] ([[petrol]]) [[mileage]] [[estimate#Noun|estimates]]. Since no test can exactly simulate all driving [[habit]]s an
+
+
+4. Title: I love you
+   Text preview (first 500 chars):
+   ==English==
+{{phrasebook|en|Love}}
+
+===Pronunciation===
+* {{IPA|en|/aɪ ˈlʌv juː/}}
+* {{IPA|en|/aɪ ˈlʊv juː/|a=Northern England, Ireland}}
+* {{audio|en|en-us-I_love_you.ogg|a=California}}
+
+===Phrase===
+{{head|en|phrase}}
+
+# An [[affirmation]] of [[affection]] or [[deep]] [[care|caring]], especially to a [[family member]].
+#: {{ux|en|&quot;'''I love you''', Mom,&quot; said Candace.}}
+#* '''2008''', {{w|Wally Lamb}}, ''The Hour I First Believed'', Ch.3, at p.73:
+#*: '' '''I love you''', Lolly'': I 
+
+
+5. Title: ttyl
+   Text preview (first 500 chars):
+   ==English==
+
+===Phrase===
+{{head|en|phrase}}
+
+# {{lb|en|internet slang|text messaging}} {{alt case|en|TTYL||talk to you later}}.
+
+
+6. Title: RTFM
+   Text preview (first 500 chars):
+   ==English==
+{{wp}}
+[[File:Demotivational RTFM Prudentia Statue on the Brussels town hall (53522136).jpg|thumb|''RTFM'' used on a [[w:en:Motivational poster#Parodies and demotivational posters|demotivational poster]]]]
+
+===Alternative forms===
+* {{l|en|rtfm}}
+
+===Phrase===
+{{head|en|phrase}}
+
+# {{lb|en|Internet slang|vulgar}} {{initialism of|en|[[read]] [[the]] [[fucking]] [[manual]]}}.
+# {{lb|en|Internet slang|Unix|vulgar}} {{initialism of|en|read the fucking [[man page]]}}.
+
+====Usage notes====
+
+
+7. Title: noli illegitimi carborundum
+   Text preview (first 500 chars):
+   ==English==
+{{wp|illegitimi non carborundum}}
+[[File:Albert-L-Pollins-1.jpg|thumb|A gravestone using a form of the phrase as an epitaph.]]
+
+===Alternative forms===
+* {{l|en|illegitimi non carborundum}}
+* {{l|en|nolite te bastardes carborundum}}
+
+===Etymology===
+Humorous {{pseudo-loan|en|la|nocap=1}}, from {{m|la|noli||[[do]] [[not]] [[permit]]}} [singular] and {{m|la|illegitimus|illegitimi|[[bastard]]s}} [in the wrong grammatical case] and from the Latinate [[brand name]] {{m|en|Carborundum}} fo
+
+
+8. Title: the grass is always greener on the other side
+   Text preview (first 500 chars):
+   ==English==
+[[File:Cattle eating grass through barbed wire fence.jpg|right|thumb|A cow, kneeling to eat grass on the other side of a barbed wire fence.]]
+
+===Alternative forms===
+* {{l|en|the grass is always greener}}
+* {{l|en|the grass is always greener on the other side of the fence}}
+* {{l|en|the grass is always greener on the other side of the road}}
+
+===Proverb===
+{{en-head|proverb|head=~green[er:]}}
+
+# The [[circumstance]]s of [[others]] seem more [[desirable]] than one's own but [[in real
+
+
+9. Title: centillion
+   Text preview (first 500 chars):
+   ==English==
+{{wp}}
+
+===Etymology===
+From {{af|en|centi-&lt;id:hundred&gt;|-illion}}.
+
+===Pronunciation===
+* {{IPA|en|/sɛnˈtɪl.i.ən/}}
+** {{audio|en|LL-Q1860 (eng)-Vealhurl-centillion.wav|a=Southern England}}
+* {{rhymes|en|ɪljən|s=3}}
+
+===Numeral===
+{{head|en|numeral|plural|centillions}}
+
+# (''[[w:Long and short scales|short scale]]'') 10&lt;sup&gt;303&lt;/sup&gt;.
+# (''[[w:Long and short scales|long scale]]'') 10&lt;sup&gt;600&lt;/sup&gt;.
+
+====Derived terms====
+{{col|en|centillionaire}}
+
+====Re
+
+
+10. Title: thirteen
+   Text preview (first 500 chars):
+   ==English==
+{{number box|en|13}}
+{{wp}}
+
+===Etymology===
+From {{inh|en|enm|thirttene}}, variant (through metathesis) of {{m|enm|thrittene}}, from {{inh|en|ang|þrēotīene}}, from {{inh|en|gem-pro|*þritehun}}, compound of {{m|gem-pro|*þrīz|t=three}} + {{m|gem-pro|*tehun|t=teen}}. Cognate with {{cog|fy|trettjin}}, {{cog|nl|dertien}}, {{cog|de|dreizehn}}, {{cog|da|tretten}}. Equivalent to {{af|en|three|-teen}}.
+
+===Pronunciation===
+* {{q|in most cases}}
+*: {{IPA|en|/ˌθɜːˈtiːn/|a=RP}}
+*: {{IPA|en|/ˌθɝ
+
+============================================================
+GOAL: Reach fixed point (no samples in any category)
+============================================================
+
+Action items based on samples:
+
+1. 'no_content_extracted' samples:
+   - Look for unknown special page prefixes (add to SPECIAL_PAGE_PREFIXES)
+   - Check for pages with ':' that aren't English words (e.g., 'talk:', 'user:')
+   - Identify any regex pattern issues
+
+2. 'parse_entry_none' samples:
+   - Check if missing POS tags for valid entries
+   - Check for character validation issues
+   - Identify entries that should be extracted
+
+3. 'parse_entry_exception' samples:
+   - Fix code bugs causing exceptions
+   - Add error handling for edge cases
+
+Fixed point achieved when all sample lists are empty!
+============================================================
