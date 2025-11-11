@@ -6,16 +6,16 @@ Diagnostic mode: Will stop after 1000 skips and show samples
 Initializing streaming decompressor...
   Decompression complete: 2 MB in 0m 0s
 ✓ First page found, scanning...
-  Processed: 1,000 | Written: 885...  Processed: 2,000 | Written: 1,777...  Processed: 4,000 | Written: 3,177...  Processed: 5,000 | Written: 4,021 | Special: 66 | Skipped: 913 | Rate: 2509 pages/sec
-  Decompressing: 51 MB (24.6 MB/s, 0m 2s elapsed)
+  Processed: 1,000 | Written: 888...  Processed: 2,000 | Written: 1,784...  Processed: 4,000 | Written: 3,201...  Processed: 5,000 | Written: 4,045 | Special: 52 | Skipped: 903 | Rate: 2494 pages/sec
+  Decompressing: 51 MB (24.4 MB/s, 0m 2s elapsed)
 ============================================================
-Total processed: 5,360
-Total written: 4,294
-Special pages: 66
+Total processed: 5,374
+Total written: 4,322
+Special pages: 52
 Total skipped: 1,000
-Success rate: 80.1%
+Success rate: 80.4%
 Time: 0m 2s
-Rate: 2525 pages/sec
+Rate: 2516 pages/sec
 ============================================================
 
 ============================================================
@@ -24,10 +24,10 @@ DIAGNOSTIC REPORT: Skip Reasons Breakdown
 
 Skip reason counts (showing up to 10 samples each):
   1. No content extracted (no title/text or not English): 10 samples
-  2. parse_entry returned None (validation failed): 10 samples
+  2. parse_entry returned None (validation failed): 6 samples
   3. parse_entry threw exception: 0 samples
 
-Note: Special pages (Wiktionary:, Appendix:, Help:, Template:) are
+Note: Special pages (Wiktionary:, Appendix:, Help:, Template:, Reconstruction:) are
       counted separately and not included in diagnostic samples.
 
 ------------------------------------------------------------
@@ -118,7 +118,28 @@ SAMPLES: No content extracted
       <text bytes="2088" sha1="iba7rfq80lup698q831153
 
 
-5. Title: chien
+5. Title: Wiktionary:Topics
+   Page preview (first 500 chars):
+   <page>
+    <title>Wiktionary:Topics</title>
+    <ns>4</ns>
+    <id>50</id>
+    <redirect title="Category:All topics" />
+    <revision>
+      <id>66135651</id>
+      <parentid>65431017</parentid>
+      <timestamp>2022-03-13T10:33:00Z</timestamp>
+      <contributor>
+        <username>Fytcha</username>
+        <id>1718343</id>
+      </contributor>
+      <comment>Redirected page to [[Category:All topics]]</comment>
+      <origin>66135651</origin>
+      <model>wikitext</model>
+      <format>text/x-wi
+
+
+6. Title: chien
    Page preview (first 500 chars):
    <page>
     <title>chien</title>
@@ -133,27 +154,6 @@ SAMPLES: No content extracted
         <id>4269631</id>
       </contributor>
       <comment>AudioBot: updated label(s) for LL-Q150 (fra)-DenisdeShawi-chien.wav, LL-Q150 (fra)-DSwissK-chien.wav, LL-Q150 (fra)-GrandCelinien-chien.wav, LL-Q150 (fra)-Lepticed7-chien.wav, LL-Q150 (fra)-Loqu
-
-
-6. Title: Reconstruction:Proto-Germanic/frijaz
-   Page preview (first 500 chars):
-   <page>
-    <title>Reconstruction:Proto-Germanic/frijaz</title>
-    <ns>118</ns>
-    <id>90</id>
-    <revision>
-      <id>82752174</id>
-      <parentid>81674984</parentid>
-      <timestamp>2024-11-25T00:29:53Z</timestamp>
-      <contributor>
-        <username>Agamemenon</username>
-        <id>3579757</id>
-      </contributor>
-      <comment>/* Proto-Germanic */</comment>
-      <origin>82752174</origin>
-      <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text bytes="802" sha1="
 
 
 7. Title: aquila
@@ -218,25 +218,25 @@ SAMPLES: No content extracted
       <comment>Reverted edits by [[Special:Contributions/TheDaveBot|TheDaveBot]]. If you think this rollback is in error, please leave a 
 
 
-10. Title: abaist
+10. Title: Help:Images
    Page preview (first 500 chars):
    <page>
-    <title>abaist</title>
-    <ns>0</ns>
-    <id>262</id>
+    <title>Help:Images</title>
+    <ns>12</ns>
+    <id>140</id>
+    <redirect title="Wiktionary:Images" />
     <revision>
-      <id>61130724</id>
-      <parentid>59255303</parentid>
-      <timestamp>2020-11-15T15:46:59Z</timestamp>
+      <id>83600050</id>
+      <parentid>64703969</parentid>
+      <timestamp>2025-01-13T23:35:46Z</timestamp>
       <contributor>
-        <username>Vox Sciurorum</username>
-        <id>3320187</id>
+        <username>Juwan</username>
+        <id>3726457</id>
       </contributor>
-      <comment>/* Verb */</comment>
-      <origin>61130724</origin>
+      <comment>Redirected page to [[Wiktionary:Images]]</comment>
+      <origin>83600050</origin>
       <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text bytes="219" sha1="dp4s6i3aww01w7wox0zkw2tw9gaibrx" xml:s
+      <format>text/x-wiki</forma
 
 ------------------------------------------------------------
 SAMPLES: parse_entry returned None
@@ -248,147 +248,110 @@ SAMPLES: parse_entry returned None
 {{no entry|en|[[Appendix:English dictionary-only terms]]}}
 
 
-2. Title: absque hoc
+2. Title: A.M.
    Text preview (first 500 chars):
-   ==English==
+   {{also|Appendix:Variations of &quot;am&quot;}}
+==English==
 
-===Etymology===
-{{learned borrowing|en|la|[[absque]] [[hoc]]|lit=without this}}.
+===Noun===
+{{en-noun|~}}
 
-===Phrase===
-{{head|en|phrase|head=absque hoc}}
+# {{initialism of|en|anno mundi}}.
+# {{initialism of|en|Master of Arts}}.
 
-# {{lb|en|legal}} The technical words of [[denial]] used in denying what has been [[alleged]].
+===Adverb===
+{{en-adv|-}}
 
-{{cln|en|coordinates|responses}}
+# {{alternative form of|en|a.m.|t=before noon}}.
 
+===Anagrams===
+* {{anagrams|en|a=am|-ma-|M&amp;A|M.A.|MA|Ma|ma}}
 
-3. Title: your mileage may vary
-   Text preview (first 500 chars):
-   ==English==
-{{was wotd|2018|September|30}}
-
-===Etymology===
-[[File:Auto fuel gauge.jpg|thumb|The [[fuel gauge]] of an [[automobile]]]]
-
-The {{w|United States Environmental Protection Agency}} requires all new [[vehicle]]s to undergo a set of standard [[emissions test]]s which [[simulate]] city and highway driving. Part of the test measures estimated city and highway [[gas#Noun|gas]] ([[petrol]]) [[mileage]] [[estimate#Noun|estimates]]. Since no test can exactly simulate all driving [[habit]]s an
-
-
-4. Title: I love you
-   Text preview (first 500 chars):
-   ==English==
-{{phrasebook|en|Love}}
-
-===Pronunciation===
-* {{IPA|en|/aɪ ˈlʌv juː/}}
-* {{IPA|en|/aɪ ˈlʊv juː/|a=Northern England, Ireland}}
-* {{audio|en|en-us-I_love_you.ogg|a=California}}
-
-===Phrase===
-{{head|en|phrase}}
-
-# An [[affirmation]] of [[affection]] or [[deep]] [[care|caring]], especially to a [[family member]].
-#: {{ux|en|&quot;'''I love you''', Mom,&quot; said Candace.}}
-#* '''2008''', {{w|Wally Lamb}}, ''The Hour I First Believed'', Ch.3, at p.73:
-#*: '' '''I love you''', Lolly'': I 
-
-
-5. Title: ttyl
-   Text preview (first 500 chars):
-   ==English==
-
-===Phrase===
-{{head|en|phrase}}
-
-# {{lb|en|internet slang|text messaging}} {{alt case|en|TTYL||talk to you later}}.
-
-
-6. Title: RTFM
-   Text preview (first 500 chars):
-   ==English==
-{{wp}}
-[[File:Demotivational RTFM Prudentia Statue on the Brussels town hall (53522136).jpg|thumb|''RTFM'' used on a [[w:en:Motivational poster#Parodies and demotivational posters|demotivational poster]]]]
+==French==
 
 ===Alternative forms===
-* {{l|en|rtfm}}
+* {{alt|fr|AM|A. M.}}
 
-===Phrase===
-{{head|en|phrase}}
+===Etymology===
+From {{der|fr|la|ante meridiem}}.
 
-# {{lb|en|Internet slang|vulgar}} {{initialism of|en|[[read]] [[the]] [[fucking]] [[manual]]}}.
-# {{lb|en|Internet slang|Unix|vulgar}} {{initialism of|en|read the fucking [[man page]]}}.
+===Adverb===
+{{fr-adv}}
 
-====Usage notes====
+# [[ante meridiem]]
+#: {{ant|fr|P.M.}}
 
 
-7. Title: noli illegitimi carborundum
+3. Title: ⠁
    Text preview (first 500 chars):
-   ==English==
-{{wp|illegitimi non carborundum}}
-[[File:Albert-L-Pollins-1.jpg|thumb|A gravestone using a form of the phrase as an epitaph.]]
+   {{also|1|a|•|⠂|⠄}}
+{{character info}}
+==Translingual==
+A character of the braille script, standardized internationally as the letter ''a'' and the digit ''1''.
+
+===Etymology===
+{{Brai-ety}}
+
+===Letter===
+{{mul-letter|sc=Brai}}
+
+# {{lb|mul|{{w|international braille}}}} [[a]]
+;:Non-Latin transliteration
+# {{lb|mul|Greek Braille}} {{l|mul|α|sc=Grek|tr=a}}
+# {{lb|mul|Yugoslav Braille}} {{l|mul|a|sc=Latn}} ~ {{l|mul|а|sc=Cyrl}}
+# {{lb|mul|Russian Braille}} {{l|mul|а|sc=Cyrl|tr=a}}
+# {{lb|mul|Hebrew B
+
+
+4. Title: i.e.
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;ie&quot;}}
+==English==
 
 ===Alternative forms===
-* {{l|en|illegitimi non carborundum}}
-* {{l|en|nolite te bastardes carborundum}}
+* {{alt|en|i. e.|ie}}
 
 ===Etymology===
-Humorous {{pseudo-loan|en|la|nocap=1}}, from {{m|la|noli||[[do]] [[not]] [[permit]]}} [singular] and {{m|la|illegitimus|illegitimi|[[bastard]]s}} [in the wrong grammatical case] and from the Latinate [[brand name]] {{m|en|Carborundum}} fo
-
-
-8. Title: the grass is always greener on the other side
-   Text preview (first 500 chars):
-   ==English==
-[[File:Cattle eating grass through barbed wire fence.jpg|right|thumb|A cow, kneeling to eat grass on the other side of a barbed wire fence.]]
-
-===Alternative forms===
-* {{l|en|the grass is always greener}}
-* {{l|en|the grass is always greener on the other side of the fence}}
-* {{l|en|the grass is always greener on the other side of the road}}
-
-===Proverb===
-{{en-head|proverb|head=~green[er:]}}
-
-# The [[circumstance]]s of [[others]] seem more [[desirable]] than one's own but [[in real
-
-
-9. Title: centillion
-   Text preview (first 500 chars):
-   ==English==
-{{wp}}
-
-===Etymology===
-From {{af|en|centi-&lt;id:hundred&gt;|-illion}}.
+From {{uder|en|la|i. e.}}, a [[Latinistic]] abbreviation of {{m|la|id est||that is}}.
 
 ===Pronunciation===
-* {{IPA|en|/sɛnˈtɪl.i.ən/}}
-** {{audio|en|LL-Q1860 (eng)-Vealhurl-centillion.wav|a=Southern England}}
-* {{rhymes|en|ɪljən|s=3}}
+* {{IPA|en|/ˌaɪˈiː/|/ɪd ɛst/|a=RP,US}}
+* {{audio|en|en-us-i.e..ogg|a=US}}
+* {{rhymes|en|iː|s=2}}
+* It is sometimes verbally enunciated as {{m|en|that is}}.
 
-===Numeral===
-{{head|en|numeral|plural|centillions}}
+===Adverb===
+{{head|en|adverb}}
 
-# (''[[w:Long and short scales|short scale]]'') 10&lt;sup&gt;303&lt;/sup&gt;.
-# (''[[w:Long and short scales|long scale]]'') 10&lt;sup&gt;600&lt;/sup&gt;.
-
-====Derived terms====
-{{col|en|centillionaire}}
-
-====Re
+# {{lb|en|[[initialism]]}} [[that is|That is]], [[namely]], [[in other words]], 
 
 
-10. Title: thirteen
+5. Title: e.g.
    Text preview (first 500 chars):
-   ==English==
-{{number box|en|13}}
-{{wp}}
+   {{also|Appendix:Variations of &quot;eg&quot;}}
+==English==
+{{was wotd|2023|September|2}}
 
 ===Etymology===
-From {{inh|en|enm|thirttene}}, variant (through metathesis) of {{m|enm|thrittene}}, from {{inh|en|ang|þrēotīene}}, from {{inh|en|gem-pro|*þritehun}}, compound of {{m|gem-pro|*þrīz|t=three}} + {{m|gem-pro|*tehun|t=teen}}. Cognate with {{cog|fy|trettjin}}, {{cog|nl|dertien}}, {{cog|de|dreizehn}}, {{cog|da|tretten}}. Equivalent to {{af|en|three|-teen}}.
+The {{glossary|adverb}} is a terser form of {{m|en|ex. gr.}}, both {{glossary|abbreviation|abbreviating}} {{der|en|la|exemplī grātiā|t=for the sake of an example}};&lt;ref&gt;{{cite-book|author=[[w:John Traupman|John C[harles] Traupman]]|title=The New College Latin and English Dictionary|edition=3rd|location=New York, N.Y.|publisher={{w|Bantam Books}}|year=2007|isbn=978-0-553-59012-8}}.&lt;/
 
-===Pronunciation===
-* {{q|in most cases}}
-*: {{IPA|en|/ˌθɜːˈtiːn/|a=RP}}
-*: {{IPA|en|/ˌθɝ
+
+6. Title: w/
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;w&quot;}}
+==English==
+
+===Preposition===
+{{en-head|prep}}
+
+# {{abbreviation of|en|with}}.
+#: {{syn|en|w|w.|wth|w&lt;sup&gt;th&lt;/sup&gt;|wt|w&lt;sup&gt;t&lt;/sup&gt;|c̄}}
+#: {{ant|en|w/o|w/out|sans}}
+#: {{cot|en|&amp;|+}}
+
+====Related terms====
+* {{l|en|w/i}}
+* {{l|en|w/r/t}}
 
 ============================================================
 GOAL: Reach fixed point (no samples in any category)
