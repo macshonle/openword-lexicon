@@ -22,10 +22,105 @@ import bz2
 import json
 import re
 import sys
+import time
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 import xml.etree.ElementTree as ET
+
+
+class BZ2StreamReader:
+    """
+    Streaming BZ2 decompressor with progress feedback.
+
+    Wraps a .bz2 file and decompresses in fixed-size chunks,
+    providing progress updates during decompression. This avoids
+    the long silent period with bz2.open() + ET.iterparse().
+    """
+
+    def __init__(self, filepath: Path, chunk_size: int = 256 * 1024):
+        """
+        Initialize streaming reader.
+
+        Args:
+            filepath: Path to .bz2 file
+            chunk_size: Size of chunks to read (default 256 KB)
+        """
+        self.filepath = filepath
+        self.chunk_size = chunk_size
+        self.file = open(filepath, 'rb')
+        self.decompressor = bz2.BZ2Decompressor()
+        self.buffer = b''
+        self.total_compressed = 0
+        self.total_decompressed = 0
+        self.last_progress = 0
+        self.start_time = time.time()
+
+    def read(self, size: int = -1) -> bytes:
+        """
+        Read decompressed data.
+
+        Args:
+            size: Number of bytes to read (-1 for all available)
+
+        Returns:
+            Decompressed bytes
+        """
+        # If size not specified or buffer has enough, return from buffer
+        if size == -1:
+            # Read all remaining
+            while not self.decompressor.eof:
+                self._decompress_chunk()
+            result = self.buffer
+            self.buffer = b''
+            return result
+
+        # Build buffer until we have enough
+        while len(self.buffer) < size and not self.decompressor.eof:
+            self._decompress_chunk()
+
+        # Return requested amount
+        result = self.buffer[:size]
+        self.buffer = self.buffer[size:]
+        return result
+
+    def _decompress_chunk(self):
+        """Decompress one chunk and update progress."""
+        if self.decompressor.eof:
+            return
+
+        # Read compressed chunk
+        compressed = self.file.read(self.chunk_size)
+        if not compressed:
+            return
+
+        self.total_compressed += len(compressed)
+
+        # Decompress
+        decompressed = self.decompressor.decompress(compressed)
+        self.buffer += decompressed
+        self.total_decompressed += len(decompressed)
+
+        # Show progress every 10 MB decompressed
+        if self.total_decompressed - self.last_progress >= 10 * 1024 * 1024:
+            elapsed = time.time() - self.start_time
+            rate_mb = (self.total_decompressed / (1024 * 1024)) / elapsed if elapsed > 0 else 0
+            print(f"  Decompressing: {self.total_decompressed / (1024*1024):.1f} MB "
+                  f"(from {self.total_compressed / (1024*1024):.1f} MB compressed, "
+                  f"{rate_mb:.1f} MB/s)")
+            sys.stdout.flush()
+            self.last_progress = self.total_decompressed
+
+    def close(self):
+        """Close underlying file."""
+        self.file.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return False
 
 
 # Regex patterns
@@ -293,17 +388,17 @@ def audit_wiktionary_dump(xml_path: Path, sample_size: int = 10000):
     }
 
     # Determine if file is compressed
-    print("Opening file and initializing parser...")
-    print("(This initial step can take 60-90 seconds for large bz2 files)")
+    print("Opening file and initializing streaming decompressor...")
+    print("(Progress will be shown every 10 MB decompressed)")
     sys.stdout.flush()
 
     if str(xml_path).endswith('.bz2'):
-        file_obj = bz2.open(xml_path, 'rb')
+        # Use streaming decompressor with progress feedback
+        file_obj = BZ2StreamReader(xml_path, chunk_size=256 * 1024)
     else:
         file_obj = open(xml_path, 'rb')
 
-    print("✓ File opened, starting XML parsing...")
-    print("(Waiting for first <page> element - decompressing XML structure)")
+    print("✓ File opened, starting decompression and XML parsing...")
     sys.stdout.flush()
 
     # MediaWiki XML namespace
