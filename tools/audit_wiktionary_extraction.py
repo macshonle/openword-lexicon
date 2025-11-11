@@ -264,6 +264,11 @@ def audit_wiktionary_dump(xml_path: Path, sample_size: int = 10000):
     print(f"Sample size: {sample_size:,} pages")
     print()
 
+    # Check file size
+    file_size_mb = xml_path.stat().st_size / (1024 * 1024)
+    print(f"File size: {file_size_mb:.1f} MB")
+    print()
+
     # Statistics collectors
     stats = {
         'english_pages': 0,
@@ -288,10 +293,18 @@ def audit_wiktionary_dump(xml_path: Path, sample_size: int = 10000):
     }
 
     # Determine if file is compressed
+    print("Opening file and initializing parser...")
+    print("(This initial step can take 60-90 seconds for large bz2 files)")
+    sys.stdout.flush()
+
     if str(xml_path).endswith('.bz2'):
         file_obj = bz2.open(xml_path, 'rb')
     else:
         file_obj = open(xml_path, 'rb')
+
+    print("✓ File opened, starting XML parsing...")
+    print("(Waiting for first <page> element - decompressing XML structure)")
+    sys.stdout.flush()
 
     # MediaWiki XML namespace
     ns = '{http://www.mediawiki.org/xml/export-0.10/}'
@@ -304,6 +317,11 @@ def audit_wiktionary_dump(xml_path: Path, sample_size: int = 10000):
                 continue
 
             pages_processed += 1
+
+            # Show message when first page is found
+            if pages_processed == 1:
+                print("✓ First page found, parsing...")
+                sys.stdout.flush()
 
             # Extract title and text
             title_elem = elem.find(f'{ns}title')
@@ -387,9 +405,14 @@ def audit_wiktionary_dump(xml_path: Path, sample_size: int = 10000):
 
             elem.clear()
 
-            # Progress
+            # Progress (every 100 pages for faster feedback)
+            if pages_processed % 100 == 0:
+                print(f"  Processed: {pages_processed:,} pages...", end='\r')
+                sys.stdout.flush()
+
+            # More detailed progress every 1000 pages
             if pages_processed % 1000 == 0:
-                print(f"  Processed: {pages_processed:,} pages...")
+                print(f"  Processed: {pages_processed:,} pages (English: {stats['english_pages']}, Labels: {stats['english_label_pages']})")
                 sys.stdout.flush()
 
             # Check limit
