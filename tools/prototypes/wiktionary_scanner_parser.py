@@ -107,6 +107,14 @@ CATEGORY = re.compile(r'\[\[Category:English\s+([^\]]+)\]\]', re.IGNORECASE)
 TITLE_PATTERN = re.compile(r'<title>([^<]+)</title>')
 TEXT_PATTERN = re.compile(r'<text[^>]*>(.+?)</text>', re.DOTALL)
 
+# Known special page prefixes (build this list as we discover them)
+SPECIAL_PAGE_PREFIXES = (
+    'Wiktionary:',
+    'Appendix:',
+    'Help:',
+    'Template:',
+)
+
 # Regional label patterns
 REGION_LABELS = {
     'british': 'en-GB',
@@ -227,7 +235,7 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
     """
     Extract title and text from page XML using simple regex.
     Returns (title, text) or None if not found.
-    Special pages (Wiktionary:, Template:, etc.) return ('SPECIAL_PAGE', title).
+    Special pages (known prefixes only) return ('SPECIAL_PAGE', title).
     """
     # Extract title
     title_match = TITLE_PATTERN.search(page_xml)
@@ -235,8 +243,8 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
         return None
     title = title_match.group(1)
 
-    # Track special pages separately (Wiktionary:, Template:, etc.)
-    if ':' in title:
+    # Track known special pages separately
+    if title.startswith(SPECIAL_PAGE_PREFIXES):
         return ('SPECIAL_PAGE', title)
 
     # Extract text
@@ -355,9 +363,8 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     special_pages_found = 0  # NEW: Track special pages separately
     first_page_seen = False
 
-    # Diagnostic tracking
+    # Diagnostic tracking (special pages not included - they're expected)
     skip_reasons = {
-        'special_pages': [],         # Wiktionary:, Template:, etc.
         'no_content_extracted': [],  # extract_page_content returned None
         'parse_entry_none': [],      # parse_entry returned None
         'parse_entry_exception': []  # parse_entry threw exception
@@ -397,14 +404,9 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     break
                 continue
 
-            # Handle special pages (Wiktionary:, Template:, etc.)
+            # Handle special pages (known prefixes - expected, no diagnostic needed)
             if result[0] == 'SPECIAL_PAGE':
                 special_pages_found += 1
-                if diagnostic_mode and len(skip_reasons['special_pages']) < 10:
-                    skip_reasons['special_pages'].append({
-                        'title': result[1],
-                        'page_type': result[1].split(':')[0] if ':' in result[1] else 'Unknown'
-                    })
                 continue
 
             title, text = result
@@ -483,28 +485,20 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
         print()
 
         # Count skip reasons
-        total_special = len(skip_reasons['special_pages'])
         total_no_content = len(skip_reasons['no_content_extracted'])
         total_parse_none = len(skip_reasons['parse_entry_none'])
         total_exceptions = len(skip_reasons['parse_entry_exception'])
 
         print(f"Skip reason counts (showing up to 10 samples each):")
-        print(f"  1. Special pages (Wiktionary:, Template:, etc.): {total_special} samples")
-        print(f"  2. No content extracted (no title/text or not English): {total_no_content} samples")
-        print(f"  3. parse_entry returned None (validation failed): {total_parse_none} samples")
-        print(f"  4. parse_entry threw exception: {total_exceptions} samples")
+        print(f"  1. No content extracted (no title/text or not English): {total_no_content} samples")
+        print(f"  2. parse_entry returned None (validation failed): {total_parse_none} samples")
+        print(f"  3. parse_entry threw exception: {total_exceptions} samples")
+        print()
+        print(f"Note: Special pages ({', '.join(SPECIAL_PAGE_PREFIXES)}) are")
+        print(f"      counted separately and not included in diagnostic samples.")
         print()
 
         # Print samples for each category
-        if skip_reasons['special_pages']:
-            print("-" * 60)
-            print("SAMPLES: Special pages (Wiktionary:, Template:, etc.)")
-            print("-" * 60)
-            for i, sample in enumerate(skip_reasons['special_pages'][:10], 1):
-                print(f"\n{i}. Title: {sample['title']}")
-                print(f"   Type: {sample['page_type']}:")
-                print()
-
         if skip_reasons['no_content_extracted']:
             print("-" * 60)
             print("SAMPLES: No content extracted")
@@ -537,26 +531,26 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                 print()
 
         print("=" * 60)
-        print("NEXT STEPS SUGGESTIONS")
+        print("GOAL: Reach fixed point (no samples in any category)")
         print("=" * 60)
         print()
-        print("Based on the samples above, consider:")
-        print("1. Special pages are now tracked separately (Wiktionary:, Template:, etc.)")
-        print("   - These are expected and no action needed")
+        print("Action items based on samples:")
         print()
-        print("2. Are there common patterns in 'no_content_extracted'?")
-        print("   - Check if regex patterns need adjustment")
-        print("   - Check if title/text extraction is too strict")
+        print("1. 'no_content_extracted' samples:")
+        print("   - Look for unknown special page prefixes (add to SPECIAL_PAGE_PREFIXES)")
+        print("   - Check for pages with ':' that aren't English words (e.g., 'talk:', 'user:')")
+        print("   - Identify any regex pattern issues")
         print()
-        print("3. Are there common patterns in 'parse_entry_none'?")
-        print("   - Now allows accented characters (café, naïve)")
-        print("   - Tracks categories including prefixes/suffixes")
-        print("   - Check if POS validation is too strict")
+        print("2. 'parse_entry_none' samples:")
+        print("   - Check if missing POS tags for valid entries")
+        print("   - Check for character validation issues")
+        print("   - Identify entries that should be extracted")
         print()
-        print("4. Are there exceptions that need handling?")
-        print("   - Add try/except for specific error cases")
-        print("   - Fix bugs in parse_entry logic")
+        print("3. 'parse_entry_exception' samples:")
+        print("   - Fix code bugs causing exceptions")
+        print("   - Add error handling for edge cases")
         print()
+        print("Fixed point achieved when all sample lists are empty!")
         print("=" * 60)
 
 
