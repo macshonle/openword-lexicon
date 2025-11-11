@@ -99,11 +99,13 @@ class BZ2StreamReader:
 
 # Regex patterns for extraction
 ENGLISH_SECTION = re.compile(r'==\s*English\s*==', re.IGNORECASE)
+LANGUAGE_SECTION = re.compile(r'^==\s*([^=]+?)\s*==$', re.MULTILINE)
 POS_HEADER = re.compile(r'^===+\s*(.+?)\s*===+\s*$', re.MULTILINE)
 # Fallback: extract POS from {{head|en|POS}} templates when section headers missing
 HEAD_TEMPLATE = re.compile(r'\{\{(?:head|en-head)\|en\|([^}|]+)', re.IGNORECASE)
 CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
 CATEGORY = re.compile(r'\[\[Category:English\s+([^\]]+)\]\]', re.IGNORECASE)
+DICT_ONLY = re.compile(r'\{\{no entry\|en\|', re.IGNORECASE)
 
 # Simple extraction patterns (no full XML parsing)
 TITLE_PATTERN = re.compile(r'<title>([^<]+)</title>')
@@ -261,6 +263,8 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
     Returns (title, text) or None if not found.
     Special pages (known prefixes) return ('SPECIAL_PAGE', title) even if redirects.
     Redirects return ('REDIRECT', title).
+    Dictionary-only terms return ('DICT_ONLY', title, text).
+    Non-English pages return ('NON_ENGLISH', title, languages) where languages is a list.
     """
     # Extract title
     title_match = TITLE_PATTERN.search(page_xml)
@@ -285,8 +289,20 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
     text = text_match.group(1)
 
     # Check for English section
-    if not ENGLISH_SECTION.search(text):
-        return None
+    has_english = ENGLISH_SECTION.search(text)
+
+    # Check for dictionary-only terms ({{no entry|en|...)
+    if has_english and DICT_ONLY.search(text):
+        return ('DICT_ONLY', title, text)
+
+    # If no English section, extract languages present
+    if not has_english:
+        languages = []
+        for match in LANGUAGE_SECTION.finditer(text):
+            lang = match.group(1).strip()
+            if lang.lower() != 'english':
+                languages.append(lang)
+        return ('NON_ENGLISH', title, languages)
 
     return (title, text)
 
@@ -378,7 +394,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     if limit:
         print(f"Limit: {limit:,} entries")
     if diagnostic_mode:
-        print(f"Diagnostic mode: Will stop after 1000 skips and show samples")
+        print(f"Diagnostic mode: Will stop after 10,000 skips and show samples")
     print()
 
     print("Initializing streaming decompressor...")
@@ -393,10 +409,15 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     entries_written = 0
     entries_skipped = 0
     special_pages_found = 0
-    redirects_found = 0  # Track redirects separately
+    redirects_found = 0
+    dict_only_found = 0  # Track dictionary-only terms
+    non_english_found = 0  # Track non-English pages
     first_page_seen = False
 
-    # Diagnostic tracking (special pages and redirects not included - they're expected)
+    # Track languages encountered in non-English pages
+    language_counts = {}
+
+    # Diagnostic tracking (special pages, redirects, dict-only, non-English not included)
     skip_reasons = {
         'no_content_extracted': [],  # extract_page_content returned None
         'parse_entry_none': [],      # parse_entry returned None
@@ -433,7 +454,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     })
 
                 # Check diagnostic stop condition
-                if diagnostic_mode and entries_skipped >= 1000:
+                if diagnostic_mode and entries_skipped >= 10000:
                     break
                 continue
 
@@ -445,6 +466,19 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
             # Handle redirects (expected, tracked separately)
             if result[0] == 'REDIRECT':
                 redirects_found += 1
+                continue
+
+            # Handle dictionary-only terms ({{no entry|en|...)
+            if result[0] == 'DICT_ONLY':
+                dict_only_found += 1
+                continue
+
+            # Handle non-English pages (track languages)
+            if result[0] == 'NON_ENGLISH':
+                non_english_found += 1
+                _, title, languages = result
+                for lang in languages:
+                    language_counts[lang] = language_counts.get(lang, 0) + 1
                 continue
 
             title, text = result
@@ -476,7 +510,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     })
 
                 # Check diagnostic stop condition
-                if diagnostic_mode and entries_skipped >= 1000:
+                if diagnostic_mode and entries_skipped >= 10000:
                     break
 
             # Progress
@@ -488,6 +522,8 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                           f"Written: {entries_written:,} | "
                           f"Special: {special_pages_found:,} | "
                           f"Redirects: {redirects_found:,} | "
+                          f"Dict-only: {dict_only_found:,} | "
+                          f"Non-EN: {non_english_found:,} | "
                           f"Skipped: {entries_skipped:,} | "
                           f"Rate: {rate:.0f} pages/sec")
                     out.flush()
@@ -510,6 +546,8 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     print(f"Total written: {entries_written:,}")
     print(f"Special pages: {special_pages_found:,}")
     print(f"Redirects: {redirects_found:,}")
+    print(f"Dictionary-only terms: {dict_only_found:,}")
+    print(f"Non-English pages: {non_english_found:,}")
     print(f"Total skipped: {entries_skipped:,}")
     print(f"Success rate: {entries_written/entries_processed*100:.1f}%")
     print(f"Time: {elapsed_min}m {elapsed_sec}s")
@@ -534,9 +572,29 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
         print(f"  2. parse_entry returned None (validation failed): {total_parse_none} samples")
         print(f"  3. parse_entry threw exception: {total_exceptions} samples")
         print()
-        print(f"Note: Special pages ({', '.join(SPECIAL_PAGE_PREFIXES)}) and")
-        print(f"      redirects are counted separately, not included in diagnostic samples.")
+        print(f"Note: Special pages ({', '.join(SPECIAL_PAGE_PREFIXES)}), redirects,")
+        print(f"      dictionary-only terms, and non-English pages are counted separately.")
         print()
+
+        # Language statistics for non-English pages
+        if language_counts:
+            print("-" * 60)
+            print("NON-ENGLISH PAGE STATISTICS")
+            print("-" * 60)
+            print()
+            print(f"Total non-English pages: {non_english_found:,}")
+            print()
+            print("Top 20 languages by page count:")
+            sorted_langs = sorted(language_counts.items(), key=lambda x: x[1], reverse=True)
+            for i, (lang, count) in enumerate(sorted_langs[:20], 1):
+                print(f"  {i:2}. {lang:20} {count:6,} pages")
+            print()
+            if len(sorted_langs) > 20:
+                print(f"  ... and {len(sorted_langs) - 20} more languages")
+            print()
+            print(f"Total unique languages: {len(language_counts):,}")
+            print()
+
 
         # Print samples for each category
         if skip_reasons['no_content_extracted']:
