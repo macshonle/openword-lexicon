@@ -14,7 +14,8 @@ WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
         export-wordlist-filtered-c50 export-wordlist-filtered-w3c50 build-binary package check-limits start-server \
         reports report-raw report-pipeline report-trie report-metadata report-compare \
         game-words analyze-game-metadata \
-        audit-wiktionary report-labels analyze-local baseline-decompress
+        audit-wiktionary report-labels analyze-local baseline-decompress \
+        diagnose-scanner scanner-commit scanner-push
 
 # Bootstrap local dev environment (idempotent)
 bootstrap: venv deps
@@ -310,3 +311,101 @@ baseline-decompress: deps
 	@echo "  (This shows pure decompression speed without XML parsing)"
 	@echo ""
 	$(UV) run python tools/baseline_decompress.py "$(WIKTIONARY_DUMP)"
+
+# ===========================
+# Scanner Parser Diagnostics
+# ===========================
+
+# Run scanner parser in diagnostic mode to identify issues
+diagnose-scanner: deps
+	@if [ ! -f "$(WIKTIONARY_DUMP)" ]; then \
+		echo "✗ Missing $(WIKTIONARY_DUMP). Run 'make fetch-plus' first."; \
+		exit 1; \
+	fi
+	@echo "=========================================="
+	@echo "Scanner Parser Diagnostic Mode"
+	@echo "=========================================="
+	@echo ""
+	@echo "→ Running diagnostic scan (stops after 1000 skips)..."
+	@echo "  This will show sample entries from each skip category."
+	@echo ""
+	@mkdir -p reports
+	$(UV) run python tools/prototypes/wiktionary_scanner_parser.py \
+		"$(WIKTIONARY_DUMP)" \
+		/tmp/scanner_diagnostic.jsonl \
+		--diagnostic 2>&1 | tee reports/scanner_diagnostic.txt
+	@echo ""
+	@echo "=========================================="
+	@echo "✓ Diagnostic complete!"
+	@echo "=========================================="
+	@echo ""
+	@echo "Report saved to: reports/scanner_diagnostic.txt"
+	@echo ""
+	@echo "NEXT STEPS:"
+	@echo ""
+	@echo "Option A - Share diagnostic output:"
+	@echo "  1. Review: less reports/scanner_diagnostic.txt"
+	@echo "  2. Share samples with Claude for analysis"
+	@echo "  3. Claude will suggest fixes (add special page prefixes, etc.)"
+	@echo ""
+	@echo "Option B - Make changes and commit:"
+	@echo "  1. Edit: tools/prototypes/wiktionary_scanner_parser.py"
+	@echo "  2. Add discovered special page prefixes to SPECIAL_PAGE_PREFIXES"
+	@echo "  3. Fix any bugs identified in diagnostic samples"
+	@echo "  4. Run: make scanner-commit"
+	@echo "  5. Run: make scanner-push"
+	@echo ""
+	@echo "Option C - Iterate (recommended):"
+	@echo "  1. make diagnose-scanner  # See what's skipped"
+	@echo "  2. Edit scanner_parser.py  # Fix issues"
+	@echo "  3. make diagnose-scanner  # Verify fixes"
+	@echo "  4. Repeat until fixed point (no samples)"
+	@echo "  5. make scanner-commit && make scanner-push"
+	@echo ""
+	@echo "GOAL: Reach fixed point where all sample lists are empty!"
+	@echo ""
+
+# Commit scanner parser changes with diagnostic report
+scanner-commit:
+	@echo "→ Committing scanner parser changes..."
+	@if ! git diff --quiet tools/prototypes/wiktionary_scanner_parser.py; then \
+		echo ""; \
+		echo "Changes to scanner parser:"; \
+		git diff tools/prototypes/wiktionary_scanner_parser.py | head -50; \
+		echo ""; \
+		echo "Staging scanner parser and diagnostic report..."; \
+		git add tools/prototypes/wiktionary_scanner_parser.py; \
+		if [ -f reports/scanner_diagnostic.txt ]; then \
+			git add reports/scanner_diagnostic.txt; \
+		fi; \
+		echo ""; \
+		echo "Enter commit message (one line):"; \
+		read -r MSG; \
+		git commit -m "$$MSG"; \
+		echo ""; \
+		echo "✓ Changes committed"; \
+		echo ""; \
+		echo "NEXT: Run 'make scanner-push' to push to remote"; \
+	else \
+		echo "✗ No changes to scanner parser"; \
+		exit 1; \
+	fi
+
+# Push scanner parser changes to remote
+scanner-push:
+	@echo "→ Pushing scanner parser changes..."
+	@BRANCH=$$(git rev-parse --abbrev-ref HEAD); \
+	if [[ "$$BRANCH" == claude/phases-4-9-normalization-ingest-* ]]; then \
+		echo ""; \
+		echo "Pushing to branch: $$BRANCH"; \
+		git push -u origin "$$BRANCH"; \
+		echo ""; \
+		echo "✓ Changes pushed to remote"; \
+	else \
+		echo ""; \
+		echo "✗ Not on expected branch (claude/phases-4-9-normalization-ingest-*)"; \
+		echo "  Current branch: $$BRANCH"; \
+		echo ""; \
+		echo "Push manually with: git push -u origin $$BRANCH"; \
+		exit 1; \
+	fi
