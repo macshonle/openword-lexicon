@@ -95,10 +95,23 @@ class BZ2StreamReader:
         if self.total_decompressed - self.last_progress >= 50 * 1024 * 1024:
             elapsed = time.time() - self.start_time
             rate_mb = (self.total_decompressed / (1024 * 1024)) / elapsed if elapsed > 0 else 0
+            elapsed_min = int(elapsed / 60)
+            elapsed_sec = int(elapsed % 60)
+            # Use \r to overwrite same line
             print(f"  Decompressing: {self.total_decompressed / (1024*1024):.0f} MB "
-                  f"({rate_mb:.1f} MB/s)")
-            sys.stdout.flush()
+                  f"({rate_mb:.1f} MB/s, {elapsed_min}m {elapsed_sec}s elapsed)",
+                  end='\r', flush=True)
             self.last_progress = self.total_decompressed
+
+    def finish_progress(self):
+        """Print newline to commit final progress line."""
+        if self.total_decompressed > 0:
+            elapsed = time.time() - self.start_time
+            elapsed_min = int(elapsed / 60)
+            elapsed_sec = int(elapsed % 60)
+            print(f"  Decompression complete: {self.total_decompressed / (1024*1024):.0f} MB "
+                  f"in {elapsed_min}m {elapsed_sec}s")
+            sys.stdout.flush()
 
     def close(self):
         """Close underlying file."""
@@ -298,6 +311,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None):
     entries_processed = 0
     entries_written = 0
     entries_skipped = 0
+    first_page_seen = False
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -308,6 +322,12 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None):
                 continue
 
             entries_processed += 1
+
+            # Commit decompression progress when first page found
+            if not first_page_seen:
+                first_page_seen = True
+                if isinstance(file_obj, BZ2StreamReader):
+                    file_obj.finish_progress()
 
             # Extract title and text
             title_elem = elem.find(f'{ns}title')
@@ -351,12 +371,18 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None):
             elem.clear()
 
             # Progress with explicit flush for real-time output
-            if entries_processed % 5000 == 0:
-                print(f"  Processed: {entries_processed:,} | "
-                      f"Written: {entries_written:,} | "
-                      f"Skipped: {entries_skipped:,}")
-                sys.stdout.flush()
-                out.flush()  # Flush output file buffer
+            if entries_processed % 1000 == 0:
+                # Commit line every 5000 entries
+                if entries_processed % 5000 == 0:
+                    print(f"  Processed: {entries_processed:,} | "
+                          f"Written: {entries_written:,} | "
+                          f"Skipped: {entries_skipped:,}")
+                    out.flush()  # Flush output file buffer
+                else:
+                    # Update same line for intermediate progress
+                    print(f"  Processed: {entries_processed:,} | "
+                          f"Written: {entries_written:,}...",
+                          end='\r', flush=True)
 
             # Check limit
             if limit and entries_written >= limit:

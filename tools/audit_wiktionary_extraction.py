@@ -105,11 +105,24 @@ class BZ2StreamReader:
         if self.total_decompressed - self.last_progress >= 10 * 1024 * 1024:
             elapsed = time.time() - self.start_time
             rate_mb = (self.total_decompressed / (1024 * 1024)) / elapsed if elapsed > 0 else 0
+            elapsed_min = int(elapsed / 60)
+            elapsed_sec = int(elapsed % 60)
+            # Use \r to overwrite same line
             print(f"  Decompressing: {self.total_decompressed / (1024*1024):.1f} MB "
                   f"(from {self.total_compressed / (1024*1024):.1f} MB compressed, "
-                  f"{rate_mb:.1f} MB/s)")
-            sys.stdout.flush()
+                  f"{rate_mb:.1f} MB/s, {elapsed_min}m {elapsed_sec}s elapsed)",
+                  end='\r', flush=True)
             self.last_progress = self.total_decompressed
+
+    def finish_progress(self):
+        """Print newline to commit final progress line."""
+        if self.total_decompressed > 0:
+            elapsed = time.time() - self.start_time
+            elapsed_min = int(elapsed / 60)
+            elapsed_sec = int(elapsed % 60)
+            print(f"  Decompression complete: {self.total_decompressed / (1024*1024):.1f} MB "
+                  f"in {elapsed_min}m {elapsed_sec}s")
+            sys.stdout.flush()
 
     def close(self):
         """Close underlying file."""
@@ -415,6 +428,9 @@ def audit_wiktionary_dump(xml_path: Path, sample_size: int = 10000):
 
             # Show message when first page is found
             if pages_processed == 1:
+                # Commit decompression progress line
+                if isinstance(file_obj, BZ2StreamReader):
+                    file_obj.finish_progress()
                 print("✓ First page found, parsing...")
                 sys.stdout.flush()
 
@@ -502,13 +518,15 @@ def audit_wiktionary_dump(xml_path: Path, sample_size: int = 10000):
 
             # Progress (every 100 pages for faster feedback)
             if pages_processed % 100 == 0:
-                print(f"  Processed: {pages_processed:,} pages...", end='\r')
-                sys.stdout.flush()
-
-            # More detailed progress every 1000 pages
-            if pages_processed % 1000 == 0:
-                print(f"  Processed: {pages_processed:,} pages (English: {stats['english_pages']}, Labels: {stats['english_label_pages']})")
-                sys.stdout.flush()
+                # More detailed progress every 1000 pages (commit line)
+                if pages_processed % 1000 == 0:
+                    print(f"  Processed: {pages_processed:,} pages "
+                          f"(English: {stats['english_pages']}, "
+                          f"Labels: {stats['english_label_pages']})")
+                else:
+                    # Update same line for intermediate progress
+                    print(f"  Processed: {pages_processed:,} pages...",
+                          end='\r', flush=True)
 
             # Check limit
             if pages_processed >= sample_size:
