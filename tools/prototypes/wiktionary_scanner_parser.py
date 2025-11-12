@@ -20,6 +20,9 @@ import time
 import unicodedata as ud
 from pathlib import Path
 from typing import Dict, List, Set, Optional
+from rich.live import Live
+from rich.table import Table
+from rich.align import Align
 
 
 class BZ2StreamReader:
@@ -115,6 +118,7 @@ REDIRECT_PATTERN = re.compile(r'<redirect\s+title="[^"]+"')
 # Known special page prefixes (build this list as we discover them)
 SPECIAL_PAGE_PREFIXES = (
     'Wiktionary:',
+    'MediaWiki:',       # MediaWiki system messages
     'Appendix:',
     'Help:',
     'Template:',
@@ -395,6 +399,31 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     }
 
 
+# Field names for metrics table
+METRIC_FIELDS = [
+    "Processed", "Written", "Special", "Redirects",
+    "Dict-only", "Non-EN", "Non-Latin", "Skipped", "Rate"
+]
+
+
+def make_table(metrics: dict) -> Table:
+    """Create a Rich table for live progress display."""
+    t = Table(show_header=True, header_style="bold cyan", expand=True, pad_edge=False)
+    for field in METRIC_FIELDS:
+        t.add_column(field, justify="right", no_wrap=True)
+
+    # Format values
+    values = []
+    for field in METRIC_FIELDS:
+        if field == "Rate":
+            values.append(f"{metrics[field]:,.0f} pg/s")
+        else:
+            values.append(f"{metrics[field]:,}")
+
+    t.add_row(*values)
+    return t
+
+
 def scan_pages(file_obj, chunk_size: int = 1024 * 1024):
     """
     Scan for <page> boundaries and yield complete page XML.
@@ -443,7 +472,7 @@ def scan_pages(file_obj, chunk_size: int = 1024 * 1024):
             yield page_xml
 
 
-def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, diagnostic_mode: bool = False):
+def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, diagnostic_file: Optional[Path] = None):
     """Parse Wiktionary XML dump using lightweight scanning."""
 
     print(f"Parsing: {xml_path}")
@@ -451,8 +480,8 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     print(f"Method: Lightweight scanner (no full XML parsing)")
     if limit:
         print(f"Limit: {limit:,} entries")
-    if diagnostic_mode:
-        print(f"Diagnostic mode: Will stop after 10,000 skips and show samples")
+    if diagnostic_file:
+        print(f"Diagnostic mode: Will stop after 10,000 skips and write report to {diagnostic_file}")
     print()
 
     print("Initializing streaming decompressor...")
@@ -486,126 +515,142 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     start_time = time.time()
+    diagnostic_mode = diagnostic_file is not None
+
+    # Prepare metrics dictionary for Live table
+    metrics = {
+        "Processed": 0,
+        "Written": 0,
+        "Special": 0,
+        "Redirects": 0,
+        "Dict-only": 0,
+        "Non-EN": 0,
+        "Non-Latin": 0,
+        "Skipped": 0,
+        "Rate": 0
+    }
 
     with file_obj as f, open(output_path, 'w', encoding='utf-8') as out:
-        # Scan for pages (much faster than XML parsing)
-        for page_xml in scan_pages(f, chunk_size=1024 * 1024):
-            entries_processed += 1
+        # Use Rich Live table for progress display
+        with Live(Align.center(make_table(metrics)), refresh_per_second=10) as live:
+            # Scan for pages (much faster than XML parsing)
+            for page_xml in scan_pages(f, chunk_size=1024 * 1024):
+                entries_processed += 1
+                metrics["Processed"] = entries_processed
 
-            if not first_page_seen:
-                first_page_seen = True
-                if isinstance(file_obj, BZ2StreamReader):
-                    file_obj.finish_progress()
-                print("✓ First page found, scanning...")
-                sys.stdout.flush()
+                if not first_page_seen:
+                    first_page_seen = True
+                    if isinstance(file_obj, BZ2StreamReader):
+                        file_obj.finish_progress()
+                    print("\n✓ First page found, scanning...\n")
+                    sys.stdout.flush()
 
-            # Extract title and text using simple regex
-            result = extract_page_content(page_xml)
-            if not result:
-                entries_skipped += 1
-                if diagnostic_mode and len(skip_reasons['no_content_extracted']) < 10:
-                    # Extract what we can for diagnostic
-                    title_match = TITLE_PATTERN.search(page_xml)
-                    title = title_match.group(1) if title_match else "NO_TITLE"
-                    skip_reasons['no_content_extracted'].append({
-                        'title': title,
-                        'page_preview': page_xml[:500]
-                    })
-
-                # Check diagnostic stop condition
-                if diagnostic_mode and entries_skipped >= 10000:
-                    break
-                continue
-
-            # Handle special pages (known prefixes - expected, no diagnostic needed)
-            if result[0] == 'SPECIAL_PAGE':
-                special_pages_found += 1
-                continue
-
-            # Handle redirects (expected, tracked separately)
-            if result[0] == 'REDIRECT':
-                redirects_found += 1
-                continue
-
-            # Handle dictionary-only terms ({{no entry|en|...)
-            if result[0] == 'DICT_ONLY':
-                dict_only_found += 1
-                continue
-
-            # Handle non-English pages (track languages)
-            if result[0] == 'NON_ENGLISH':
-                non_english_found += 1
-                _, title, languages = result
-                for lang in languages:
-                    language_counts[lang] = language_counts.get(lang, 0) + 1
-                continue
-
-            title, text = result
-
-            # Check if word uses English-like character set (Latin script)
-            # This filters out Greek, Cyrillic, Arabic, Braille, CJK, etc.
-            if not is_englishlike(title):
-                non_englishlike_found += 1
-                continue
-
-            # Parse entry
-            try:
-                entry = parse_entry(title, text)
-                if entry:
-                    out.write(json.dumps(entry, ensure_ascii=False) + '\n')
-                    entries_written += 1
-                else:
+                # Extract title and text using simple regex
+                result = extract_page_content(page_xml)
+                if not result:
                     entries_skipped += 1
-                    if diagnostic_mode and len(skip_reasons['parse_entry_none']) < 10:
-                        skip_reasons['parse_entry_none'].append({
+                    metrics["Skipped"] = entries_skipped
+                    if diagnostic_mode and len(skip_reasons['no_content_extracted']) < 10:
+                        # Extract what we can for diagnostic
+                        title_match = TITLE_PATTERN.search(page_xml)
+                        title = title_match.group(1) if title_match else "NO_TITLE"
+                        skip_reasons['no_content_extracted'].append({
                             'title': title,
+                            'page_preview': page_xml[:500]
+                        })
+
+                    # Check diagnostic stop condition
+                    if diagnostic_mode and entries_skipped >= 10000:
+                        break
+                    continue
+
+                # Handle special pages (known prefixes - expected, no diagnostic needed)
+                if result[0] == 'SPECIAL_PAGE':
+                    special_pages_found += 1
+                    metrics["Special"] = special_pages_found
+                    continue
+
+                # Handle redirects (expected, tracked separately)
+                if result[0] == 'REDIRECT':
+                    redirects_found += 1
+                    metrics["Redirects"] = redirects_found
+                    continue
+
+                # Handle dictionary-only terms ({{no entry|en|...)
+                if result[0] == 'DICT_ONLY':
+                    dict_only_found += 1
+                    metrics["Dict-only"] = dict_only_found
+                    continue
+
+                # Handle non-English pages (track languages)
+                if result[0] == 'NON_ENGLISH':
+                    non_english_found += 1
+                    metrics["Non-EN"] = non_english_found
+                    _, title, languages = result
+                    for lang in languages:
+                        language_counts[lang] = language_counts.get(lang, 0) + 1
+                    continue
+
+                title, text = result
+
+                # Check if word uses English-like character set (Latin script)
+                # This filters out Greek, Cyrillic, Arabic, Braille, CJK, etc.
+                if not is_englishlike(title):
+                    non_englishlike_found += 1
+                    metrics["Non-Latin"] = non_englishlike_found
+                    continue
+
+                # Parse entry
+                try:
+                    entry = parse_entry(title, text)
+                    if entry:
+                        out.write(json.dumps(entry, ensure_ascii=False) + '\n')
+                        entries_written += 1
+                        metrics["Written"] = entries_written
+                    else:
+                        entries_skipped += 1
+                        metrics["Skipped"] = entries_skipped
+                        if diagnostic_mode and len(skip_reasons['parse_entry_none']) < 10:
+                            skip_reasons['parse_entry_none'].append({
+                                'title': title,
+                                'text_preview': text[:500] if len(text) > 500 else text
+                            })
+
+                        # Check diagnostic stop condition
+                        if diagnostic_mode and entries_skipped >= 1000:
+                            break
+                except Exception as e:
+                    entries_skipped += 1
+                    metrics["Skipped"] = entries_skipped
+                    if diagnostic_mode and len(skip_reasons['parse_entry_exception']) < 10:
+                        skip_reasons['parse_entry_exception'].append({
+                            'title': title,
+                            'exception': str(e),
                             'text_preview': text[:500] if len(text) > 500 else text
                         })
 
                     # Check diagnostic stop condition
-                    if diagnostic_mode and entries_skipped >= 1000:
+                    if diagnostic_mode and entries_skipped >= 10000:
                         break
-            except Exception as e:
-                entries_skipped += 1
-                if diagnostic_mode and len(skip_reasons['parse_entry_exception']) < 10:
-                    skip_reasons['parse_entry_exception'].append({
-                        'title': title,
-                        'exception': str(e),
-                        'text_preview': text[:500] if len(text) > 500 else text
-                    })
 
-                # Check diagnostic stop condition
-                if diagnostic_mode and entries_skipped >= 10000:
-                    break
-
-            # Progress
-            if entries_processed % 1000 == 0:
-                if entries_processed % 5000 == 0:
+                # Update rate and refresh Live table
+                if entries_processed % 1000 == 0:
                     elapsed = time.time() - start_time
                     rate = entries_processed / elapsed if elapsed > 0 else 0
-                    print(f"  Processed: {entries_processed:,} | "
-                          f"Written: {entries_written:,} | "
-                          f"Special: {special_pages_found:,} | "
-                          f"Redirects: {redirects_found:,} | "
-                          f"Dict-only: {dict_only_found:,} | "
-                          f"Non-EN: {non_english_found:,} | "
-                          f"Non-Latin: {non_englishlike_found:,} | "
-                          f"Skipped: {entries_skipped:,} | "
-                          f"Rate: {rate:.0f} pages/sec")
-                    out.flush()
-                else:
-                    print(f"  Processed: {entries_processed:,} | "
-                          f"Written: {entries_written:,}...",
-                          end='\r', flush=True)
+                    metrics["Rate"] = rate
+                    live.update(Align.center(make_table(metrics)))
+                    if entries_processed % 5000 == 0:
+                        out.flush()
 
-            if limit and entries_written >= limit:
-                print(f"\nReached limit of {limit:,} entries")
-                break
+                if limit and entries_written >= limit:
+                    print(f"\nReached limit of {limit:,} entries")
+                    break
 
     elapsed = time.time() - start_time
     elapsed_min = int(elapsed / 60)
     elapsed_sec = int(elapsed % 60)
 
+    # Summary to stdout
     print()
     print("=" * 60)
     print(f"Total processed: {entries_processed:,}")
@@ -621,103 +666,129 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     print(f"Rate: {entries_processed / elapsed:.0f} pages/sec")
     print("=" * 60)
 
-    # Print diagnostic information if in diagnostic mode
+    # Write diagnostic information to file if in diagnostic mode
     if diagnostic_mode:
-        print()
-        print("=" * 60)
-        print("DIAGNOSTIC REPORT: Skip Reasons Breakdown")
-        print("=" * 60)
-        print()
+        diagnostic_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(diagnostic_file, 'w', encoding='utf-8') as diag:
+            # Helper function to write to file
+            def write(text=""):
+                diag.write(text + "\n")
 
-        # Count skip reasons
-        total_no_content = len(skip_reasons['no_content_extracted'])
-        total_parse_none = len(skip_reasons['parse_entry_none'])
-        total_exceptions = len(skip_reasons['parse_entry_exception'])
+            # Write aggregate results at the top
+            write("=" * 60)
+            write("AGGREGATE RESULTS")
+            write("=" * 60)
+            write()
+            write(f"Total processed: {entries_processed:,}")
+            write(f"Total written: {entries_written:,}")
+            write(f"Special pages: {special_pages_found:,}")
+            write(f"Redirects: {redirects_found:,}")
+            write(f"Dictionary-only terms: {dict_only_found:,}")
+            write(f"Non-English pages: {non_english_found:,}")
+            write(f"Non-Latin scripts: {non_englishlike_found:,}")
+            write(f"Total skipped: {entries_skipped:,}")
+            write(f"Success rate: {entries_written/entries_processed*100:.1f}%")
+            write(f"Time: {elapsed_min}m {elapsed_sec}s")
+            write(f"Rate: {entries_processed / elapsed:.0f} pages/sec")
+            write("=" * 60)
+            write()
+            write()
 
-        print(f"Skip reason counts (showing up to 10 samples each):")
-        print(f"  1. No content extracted (no title/text or not English): {total_no_content} samples")
-        print(f"  2. parse_entry returned None (validation failed): {total_parse_none} samples")
-        print(f"  3. parse_entry threw exception: {total_exceptions} samples")
-        print()
-        print(f"Note: Special pages ({', '.join(SPECIAL_PAGE_PREFIXES)}), redirects,")
-        print(f"      dictionary-only terms, non-English pages, and non-Latin scripts are")
-        print(f"      counted separately, not included in diagnostic samples.")
-        print()
+            write("=" * 60)
+            write("DIAGNOSTIC REPORT: Skip Reasons Breakdown")
+            write("=" * 60)
+            write()
 
-        # Language statistics for non-English pages
-        if language_counts:
-            print("-" * 60)
-            print("NON-ENGLISH PAGE STATISTICS")
-            print("-" * 60)
-            print()
-            print(f"Total non-English pages: {non_english_found:,}")
-            print()
-            print("Top 20 languages by page count:")
-            sorted_langs = sorted(language_counts.items(), key=lambda x: x[1], reverse=True)
-            for i, (lang, count) in enumerate(sorted_langs[:20], 1):
-                print(f"  {i:2}. {lang:20} {count:6,} pages")
-            print()
-            if len(sorted_langs) > 20:
-                print(f"  ... and {len(sorted_langs) - 20} more languages")
-            print()
-            print(f"Total unique languages: {len(language_counts):,}")
-            print()
+            # Count skip reasons
+            total_no_content = len(skip_reasons['no_content_extracted'])
+            total_parse_none = len(skip_reasons['parse_entry_none'])
+            total_exceptions = len(skip_reasons['parse_entry_exception'])
 
+            write(f"Skip reason counts (showing up to 10 samples each):")
+            write(f"  1. No content extracted (no title/text or not English): {total_no_content} samples")
+            write(f"  2. parse_entry returned None (validation failed): {total_parse_none} samples")
+            write(f"  3. parse_entry threw exception: {total_exceptions} samples")
+            write()
+            write(f"Note: Special pages ({', '.join(SPECIAL_PAGE_PREFIXES)}), redirects,")
+            write(f"      dictionary-only terms, non-English pages, and non-Latin scripts are")
+            write(f"      counted separately, not included in diagnostic samples.")
+            write()
 
-        # Print samples for each category
-        if skip_reasons['no_content_extracted']:
-            print("-" * 60)
-            print("SAMPLES: No content extracted")
-            print("-" * 60)
-            for i, sample in enumerate(skip_reasons['no_content_extracted'][:10], 1):
-                print(f"\n{i}. Title: {sample['title']}")
-                print(f"   Page preview (first 500 chars):")
-                print(f"   {sample['page_preview'][:500]}")
-                print()
+            # Language statistics for non-English pages
+            if language_counts:
+                write("-" * 60)
+                write("NON-ENGLISH PAGE STATISTICS")
+                write("-" * 60)
+                write()
+                write(f"Total non-English pages: {non_english_found:,}")
+                write()
+                write("Top 20 languages by page count:")
+                sorted_langs = sorted(language_counts.items(), key=lambda x: x[1], reverse=True)
+                for i, (lang, count) in enumerate(sorted_langs[:20], 1):
+                    write(f"  {i:2}. {lang:20} {count:6,} pages")
+                write()
+                if len(sorted_langs) > 20:
+                    write(f"  ... and {len(sorted_langs) - 20} more languages")
+                write()
+                write(f"Total unique languages: {len(language_counts):,}")
+                write()
 
-        if skip_reasons['parse_entry_none']:
-            print("-" * 60)
-            print("SAMPLES: parse_entry returned None")
-            print("-" * 60)
-            for i, sample in enumerate(skip_reasons['parse_entry_none'][:10], 1):
-                print(f"\n{i}. Title: {sample['title']}")
-                print(f"   Text preview (first 500 chars):")
-                print(f"   {sample['text_preview'][:500]}")
-                print()
+            # Print samples for each category
+            if skip_reasons['no_content_extracted']:
+                write("-" * 60)
+                write("SAMPLES: No content extracted")
+                write("-" * 60)
+                for i, sample in enumerate(skip_reasons['no_content_extracted'][:10], 1):
+                    write(f"\n{i}. Title: {sample['title']}")
+                    write(f"   Page preview (first 500 chars):")
+                    write(f"   {sample['page_preview'][:500]}")
+                    write()
 
-        if skip_reasons['parse_entry_exception']:
-            print("-" * 60)
-            print("SAMPLES: parse_entry threw exception")
-            print("-" * 60)
-            for i, sample in enumerate(skip_reasons['parse_entry_exception'][:10], 1):
-                print(f"\n{i}. Title: {sample['title']}")
-                print(f"   Exception: {sample['exception']}")
-                print(f"   Text preview (first 500 chars):")
-                print(f"   {sample['text_preview'][:500]}")
-                print()
+            if skip_reasons['parse_entry_none']:
+                write("-" * 60)
+                write("SAMPLES: parse_entry returned None")
+                write("-" * 60)
+                for i, sample in enumerate(skip_reasons['parse_entry_none'][:10], 1):
+                    write(f"\n{i}. Title: {sample['title']}")
+                    write(f"   Text preview (first 500 chars):")
+                    write(f"   {sample['text_preview'][:500]}")
+                    write()
 
-        print("=" * 60)
-        print("GOAL: Reach fixed point (no samples in any category)")
-        print("=" * 60)
-        print()
-        print("Action items based on samples:")
-        print()
-        print("1. 'no_content_extracted' samples:")
-        print("   - Look for unknown special page prefixes (add to SPECIAL_PAGE_PREFIXES)")
-        print("   - Check for pages with ':' that aren't English words (e.g., 'talk:', 'user:')")
-        print("   - Identify any regex pattern issues")
-        print()
-        print("2. 'parse_entry_none' samples:")
-        print("   - Check if missing POS tags for valid entries")
-        print("   - Check for character validation issues")
-        print("   - Identify entries that should be extracted")
-        print()
-        print("3. 'parse_entry_exception' samples:")
-        print("   - Fix code bugs causing exceptions")
-        print("   - Add error handling for edge cases")
-        print()
-        print("Fixed point achieved when all sample lists are empty!")
-        print("=" * 60)
+            if skip_reasons['parse_entry_exception']:
+                write("-" * 60)
+                write("SAMPLES: parse_entry threw exception")
+                write("-" * 60)
+                for i, sample in enumerate(skip_reasons['parse_entry_exception'][:10], 1):
+                    write(f"\n{i}. Title: {sample['title']}")
+                    write(f"   Exception: {sample['exception']}")
+                    write(f"   Text preview (first 500 chars):")
+                    write(f"   {sample['text_preview'][:500]}")
+                    write()
+
+            write("=" * 60)
+            write("GOAL: Reach fixed point (no samples in any category)")
+            write("=" * 60)
+            write()
+            write("Action items based on samples:")
+            write()
+            write("1. 'no_content_extracted' samples:")
+            write("   - Look for unknown special page prefixes (add to SPECIAL_PAGE_PREFIXES)")
+            write("   - Check for pages with ':' that aren't English words (e.g., 'talk:', 'user:')")
+            write("   - Identify any regex pattern issues")
+            write()
+            write("2. 'parse_entry_none' samples:")
+            write("   - Check if missing POS tags for valid entries")
+            write("   - Check for character validation issues")
+            write("   - Identify entries that should be extracted")
+            write()
+            write("3. 'parse_entry_exception' samples:")
+            write("   - Fix code bugs causing exceptions")
+            write("   - Add error handling for edge cases")
+            write()
+            write("Fixed point achieved when all sample lists are empty!")
+            write("=" * 60)
+
+        print(f"\n✓ Diagnostic report written to: {diagnostic_file}")
 
 
 def main():
@@ -748,8 +819,10 @@ def main():
 
     parser.add_argument(
         '--diagnostic',
-        action='store_true',
-        help='Diagnostic mode: stop after 1000 skips and show sample entries from each skip category'
+        type=Path,
+        default=None,
+        metavar='FILE',
+        help='Diagnostic mode: stop after 10,000 skips and write report to FILE'
     )
 
     args = parser.parse_args()

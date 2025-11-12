@@ -327,6 +327,6 @@ diagnose-scanner: deps
 	@$(UV) run python tools/prototypes/wiktionary_scanner_parser.py \
 		"$(WIKTIONARY_DUMP)" \
 		/tmp/scanner_diagnostic.jsonl \
-		--diagnostic 2>&1 | tee reports/scanner_diagnostic.txt
+		--diagnostic reports/scanner_diagnostic.txt
 	@echo ""
 	@echo "✓ Report saved to: reports/scanner_diagnostic.txt"
