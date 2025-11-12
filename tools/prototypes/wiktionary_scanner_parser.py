@@ -158,9 +158,14 @@ POS_MAP = {
     'prefix': 'affix',
     'suffix': 'affix',
     'infix': 'affix',                  # Infixes like -bloody- (inserted inside words)
+    'circumfix': 'affix',              # Circumfixes like en- -en (surround the root)
+    'interfix': 'affix',               # Interfixes like -s- (connect morphemes)
     'phrase': 'phrase',                # Multi-word expressions
     'prepositional phrase': 'phrase',  # Prepositional phrases (e.g., "at least", "on hold")
     'adverbial phrase': 'phrase',      # Adverbial phrases (e.g., "on all fours")
+    'verb phrase': 'phrase',           # Verb phrases (multi-word verb expressions)
+    'verb phrase form': 'phrase',      # Inflected verb phrases
+    'idiom': 'phrase',                 # Idiomatic expressions (e.g., "maximum attack")
     'proverb': 'phrase',               # Proverbs treated as phrases
     'numeral': 'numeral',              # Numbers (thirteen, centillion, etc.)
     'symbol': 'symbol',                # Symbols (chemical elements, abbreviations, etc.)
