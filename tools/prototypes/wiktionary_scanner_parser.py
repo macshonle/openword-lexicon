@@ -98,6 +98,8 @@ POS_HEADER = re.compile(r'^===+\s*(.+?)\s*===+\s*$', re.MULTILINE)  # Already fl
 HEAD_TEMPLATE = re.compile(r'\{\{(?:head|en-head|head-lite)\|en\|([^}|]+)', re.IGNORECASE)
 # Extract POS from {{en-POS}} templates (e.g., {{en-noun}}, {{en-verb}}, {{en-prop}})
 EN_POS_TEMPLATE = re.compile(r'\{\{en-(noun|verb|adj|adv|prop|pron)\b', re.IGNORECASE)
+# Check for abbreviation templates
+ABBREVIATION_TEMPLATE = re.compile(r'\{\{(?:abbreviation of|abbrev of|initialism of)\|en\|', re.IGNORECASE)
 # Special template patterns for specific POS types
 PREP_PHRASE_TEMPLATE = re.compile(r'\{\{en-prepphr\b', re.IGNORECASE)
 CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
@@ -241,6 +243,12 @@ def extract_pos_tags(text: str) -> List[str]:
             pos_tags.append('phrase')
         elif 'Category:English prepositional phrases' in text:
             pos_tags.append('phrase')
+
+    # Final fallback: Check for stenoscript abbreviations (no POS headers)
+    # These have {{abbreviation of|en|...}} and Category:English Stenoscript abbreviations
+    if not pos_tags:
+        if ABBREVIATION_TEMPLATE.search(text) or 'Category:English Stenoscript abbreviations' in text:
+            pos_tags.append('symbol')
 
     return sorted(set(pos_tags))
 
