@@ -93,9 +93,11 @@ class BZ2StreamReader:
 # Regex patterns for extraction
 ENGLISH_SECTION = re.compile(r'==\s*English\s*==', re.IGNORECASE)
 LANGUAGE_SECTION = re.compile(r'^==\s*([^=]+?)\s*==$', re.MULTILINE)
-POS_HEADER = re.compile(r'^===+\s*(.+?)\s*===+\s*$', re.MULTILINE)
+POS_HEADER = re.compile(r'^===+\s*(.+?)\s*===+\s*$', re.MULTILINE)  # Already flexible with \s*
 # Fallback: extract POS from {{head|en|POS}} templates when section headers missing
-HEAD_TEMPLATE = re.compile(r'\{\{(?:head|en-head)\|en\|([^}|]+)', re.IGNORECASE)
+HEAD_TEMPLATE = re.compile(r'\{\{(?:head|en-head|head-lite)\|en\|([^}|]+)', re.IGNORECASE)
+# Extract POS from {{en-POS}} templates (e.g., {{en-noun}}, {{en-verb}}, {{en-prop}})
+EN_POS_TEMPLATE = re.compile(r'\{\{en-(noun|verb|adj|adv|prop|pron)\b', re.IGNORECASE)
 # Special template patterns for specific POS types
 PREP_PHRASE_TEMPLATE = re.compile(r'\{\{en-prepphr\b', re.IGNORECASE)
 CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
@@ -152,6 +154,7 @@ POS_MAP = {
     'conjunction': 'conjunction',
     'interjection': 'interjection',
     'determiner': 'determiner',
+    'article': 'article',              # Articles (a, an, the, yͤ, t3h)
     'particle': 'particle',
     'auxiliary': 'auxiliary',
     'contraction': 'verb',
@@ -169,7 +172,9 @@ POS_MAP = {
     'proverb': 'phrase',               # Proverbs treated as phrases
     'numeral': 'numeral',              # Numbers (thirteen, centillion, etc.)
     'symbol': 'symbol',                # Symbols (chemical elements, abbreviations, etc.)
+    'symbols': 'symbol',               # Plural form (from {{head-lite|en|symbols}})
     'letter': 'letter',                # Letters (ſ, þ, Þ, etc. - archaic/special Latin letters)
+    'multiple parts of speech': 'multiple',  # Entries with multiple POS (stenoscript)
 }
 
 # Label classifications
@@ -195,6 +200,8 @@ def extract_pos_tags(text: str) -> List[str]:
     # Primary: Extract from section headers (===Noun===, etc.)
     for match in POS_HEADER.finditer(text):
         header = match.group(1).lower().strip()
+        # Normalize whitespace (handle "Proper  noun" with double spaces)
+        header = ' '.join(header.split())
         if header in POS_MAP:
             pos_tags.append(POS_MAP[header])
 
@@ -211,6 +218,22 @@ def extract_pos_tags(text: str) -> List[str]:
                 pos_tags.append('phrase')
             elif pos == 'numeral':
                 pos_tags.append('numeral')
+
+    # Additional fallback: Check for {{en-POS}} templates (e.g., {{en-noun}})
+    if not pos_tags:
+        for match in EN_POS_TEMPLATE.finditer(text):
+            pos = match.group(1).lower()
+            # Map abbreviated forms
+            pos_mapping = {
+                'noun': 'noun',
+                'verb': 'verb',
+                'adj': 'adjective',
+                'adv': 'adverb',
+                'prop': 'noun',  # {{en-prop}} is for proper nouns
+                'pron': 'pronoun',
+            }
+            if pos in pos_mapping:
+                pos_tags.append(pos_mapping[pos])
 
     # Additional fallback: Check for prepositional phrase template or category
     if not pos_tags:
@@ -294,6 +317,11 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
     # Check for special pages FIRST (before redirects)
     # Special page redirects count as special pages, not redirects
     if title.startswith(SPECIAL_PAGE_PREFIXES):
+        return ('SPECIAL_PAGE', title)
+
+    # Filter translation subpages (e.g., "an/translations", "the/translations")
+    # These are meta-pages that contain only translation data, not word definitions
+    if '/translations' in title or '/Translations' in title:
         return ('SPECIAL_PAGE', title)
 
     # Check for redirects AFTER special pages
