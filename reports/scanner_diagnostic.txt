@@ -2,17 +2,17 @@
 AGGREGATE RESULTS
 ============================================================
 
-Total processed: 5,255,303
-Total written: 716,058
-Special pages: 102,792
-Redirects: 21,752
-Dictionary-only terms: 2,153
-Non-English pages: 4,409,709
-Non-Latin scripts: 2,739
-Total skipped: 100
-Success rate: 13.6%
-Time: 7m 10s
-Rate: 12221 pages/sec
+Total processed: 10,200,775
+Total written: 1,326,905
+Special pages: 238,663
+Redirects: 45,795
+Dictionary-only terms: 2,370
+Non-English pages: 8,581,048
+Non-Latin scripts: 5,938
+Total skipped: 56
+Success rate: 13.0%
+Time: 14m 6s
+Rate: 12044 pages/sec
 ============================================================
 
 
@@ -22,7 +22,7 @@ DIAGNOSTIC REPORT: Skip Reasons Breakdown
 
 Skip reason counts (showing first 10 and last 10 samples):
   1. No content extracted (no title/text or not English): 0 samples
-  2. parse_entry returned None (validation failed): 100 samples
+  2. parse_entry returned None (validation failed): 56 samples
   3. parse_entry threw exception: 0 samples
 
 Note: Special pages (Wiktionary:, MediaWiki:, Module:, Thread:, Appendix:, Help:, Template:, Reconstruction:), redirects,
@@ -33,58 +33,39 @@ Note: Special pages (Wiktionary:, MediaWiki:, Module:, Thread:, Appendix:, Help:
 NON-ENGLISH PAGE STATISTICS
 ------------------------------------------------------------
 
-Total non-English pages: 4,409,709
+Total non-English pages: 8,581,048
 
 Top 20 languages by page count:
-   1. Latin                775,213 pages
-   2. Italian              532,865 pages
-   3. Spanish              432,282 pages
-   4. Russian              322,761 pages
-   5. French               305,356 pages
-   6. Portuguese           268,112 pages
-   7. German               185,735 pages
-   8. Finnish              124,106 pages
-   9. Latvian              120,618 pages
-  10. Esperanto            110,645 pages
-  11. Chinese              102,543 pages
-  12. Swedish              91,742 pages
-  13. Catalan              90,315 pages
-  14. Galician             86,338 pages
-  15. Japanese             81,087 pages
-  16. Dutch                75,336 pages
-  17. Serbo-Croatian       52,845 pages
-  18. Translingual         49,646 pages
-  19. Hungarian            48,436 pages
-  20. Norwegian Bokmål     45,608 pages
+   1. Latin                814,477 pages
+   2. Spanish              738,422 pages
+   3. Italian              572,757 pages
+   4. Russian              424,477 pages
+   5. Portuguese           375,144 pages
+   6. French               356,900 pages
+   7. German               333,906 pages
+   8. Chinese              296,282 pages
+   9. Swedish              287,364 pages
+  10. Finnish              245,218 pages
+  11. Galician             196,366 pages
+  12. Catalan              181,225 pages
+  13. Japanese             161,998 pages
+  14. Polish               155,744 pages
+  15. Esperanto            129,836 pages
+  16. Dutch                124,547 pages
+  17. Latvian              123,513 pages
+  18. Romanian             112,882 pages
+  19. Translingual         84,151 pages
+  20. Greek                80,784 pages
 
-  ... and 4406 more languages
+  ... and 6781 more languages
 
-Total unique languages: 4,426
+Total unique languages: 6,801
 
 ------------------------------------------------------------
 SAMPLES: parse_entry returned None
 ------------------------------------------------------------
 
-1. Title: anasteemaphilia
-   Text preview (first 500 chars):
-   ==English==
-{{no entry|en}}
-
-
-2. Title: -bloody-
-   Text preview (first 500 chars):
-   {{also|bloody}}
-==English==
-
-===Infix===
-{{head|en|infix}}
-
-# {{lb|en|British|slang}} {{non-gloss|An [[intensifier]].}}
-#: {{ux|en|Abso'''bloody'''lutely!}}
-#* {{quote-journal|en|date=2010-10-17|title=Tattoos: what makes one spiritual and another Katona-esque?|author=w:Hadley Freeman|journal=w:The Guardian|url=https://www.theguardian.com/lifeandstyle/2010/oct/17/tattoos-on-women|passage=Were it not for the tattoos, honestly, they'd be able to stand on one foot for hours and truly focus and not t
-
-
-3. Title: supposed to
+1. Title: supposed to
    Text preview (first 500 chars):
    ==English==
 {{rfd|en}}
@@ -99,54 +80,7 @@ From {{m|en|supposed}} and {{m|en|to}}, with fusion of {{IPAchar|/zdt/}} to {{IP
 * {{audio|en|LL-Q1860 (eng)-Persent101-be supposed to.wav|a=US|text
 
 
-4. Title: on all fours
-   Text preview (first 500 chars):
-   {{also|on all-fours}}
-==English==
-
-===Alternative forms===
-* {{l|en|on all-fours}}
-
-===Pronunciation===
-* {{audio|en|En-au-on all fours.ogg|a=AU}}
-
-===Adverbial phrase===
-{{en-adj|-|head=[[on]] [[all]] [[four]]s}}
-
-# {{lb|en|idiomatic}} On one's [[hand]]s and [[knee]]s.
-#* {{quote-text|en|year=1897|author=w:Joseph Conrad|title=The Nigger Of The ‘Narcissus’|chapter=3
-|passage=A bulky form was seen rising aft, and began marching '''on all fours''' with the movements of some big cautious beast.}}
-#
-
-
-5. Title: prud'-homme
-   Text preview (first 500 chars):
-   ==English==
-{{no entry|en}}
-
-
-6. Title: anapnoic
-   Text preview (first 500 chars):
-   ==English==
-{{no entry|en}}
-
-
-7. Title: -o-
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;o&quot;}}&lt;!--Which covers [[o']], [[O']], and others--&gt;
-==English==
-
-===Alternative forms===
-* {{alt|en|-ö-||clarifies pronunciation|very rare}}
-
-===Etymology 1===
-{{wp|[[classical compound|combining forms]]}}
-{{etymon|en|id=connective|:bor|la:-o-&lt;id:connective&gt;}}
-Adopted from {{bor|en|la|-o-}}, originating ultimately from {{der|en|grc|-ο-}}.
-In English, the connective is found from the Middle English period in direct borrowings from Latin. Direct 
-
-
-8. Title: en- -en
+2. Title: en- -en
    Text preview (first 500 chars):
    {{also|enen|Enen|énen}}
 ==English==
@@ -166,29 +100,7 @@ In English, the connective is found from the Middle English period in direct bor
 ''Note: Not all of these words listed were etymologically constructed with the ''en-&amp;nbsp;-en'' circumfix. Those confirmed to have been so constructe
 
 
-9. Title: -fucking-
-   Text preview (first 500 chars):
-   {{also|fucking|Fucking}}
-==English==
-
-===Alternative forms===
-* {{l|en|fucking}} {{q|when the original word has a space}}
-* {{l|en|-fuckin'-}}
-* {{l|en|-fuckin-}}
-
-===Etymology===
-From {{m|en|fucking}}, from {{m|en|fuck}}.
-
-===Infix===
-{{head|en|infix}}
-
-# {{lb|en|vulgar}} {{non-gloss|An [[intensifier]].}}
-#: {{syn|en|-bloody-|-goddamn-|-motherfucking-}}
-#: {{ux|en|Holy shit! That's unbe'''fucking'''lievable!}}
-#* {{quote-av|en|title={{w|Snatch (film)|Snatch}}|medium=motion picture|year=2000|wri
-
-
-10. Title: em- -en
+3. Title: em- -en
    Text preview (first 500 chars):
    {{also|Appendix:Variations of &quot;emen&quot;}}
 ==English==
@@ -207,115 +119,252 @@ See {{m|en|en- -en}}.
 ===Anagrams===
 * {{anagrams|en|a=eemn|-neme|mene|neem}}
 
-... (80 samples omitted) ...
 
-
-91. Title: swizzer
+4. Title: a- -ing
    Text preview (first 500 chars):
-   {{also|Swizzer}}
-==English==
-{{no entry|en}}
-
-
-92. Title: -h-
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;h&quot;}}
+   {{also|aing}}
 ==English==
 
-===Interfix===
-{{head|en|infix}}
-
-# {{lb|en|rare}} {{non-gloss|Emphasises obscenities.}}
-#: {{afex|en|fuck|-h-|fuhuck|alt1=fuck!|alt3=fuhuck!}}
-#: {{afex|en|damn|-h-|dahamn|alt1=damn!|alt3=dahamn!}}
-# {{lb|en|dated|fandom slang|jocular}} {{non-gloss|Indicates a [[fannish]] context or an association with [[science fiction]] [[fandom]].}}
-#: {{afex|en|beer|-h-|bheer}}
-#: {{afex|en|boy|-h-|bhoy}}
-#: {{afex|en|god|-h-|ghod}}
-#: {{afex|en|goo
+===Etymology===
+The {{m|en|a}} is a reduced form of the preposition {{m|ang|on}}, which was used in Old English with nouns indicating actions or states (e.g. ''iċ wæs on [[huntoþ]]e'', “I was hunting”). This is the source of such words as {{m|en|asleep}} and {{m|en|alive}}, which also show reduction of ''on'' to ''a''. In the Middle English period, the preposition came to be used with the present participles of verbs as well (formed in {{m|en|-ing}}), eventually coming
 
 
-93. Title: -l-
+5. Title: -estr-
    Text preview (first 500 chars):
    ==English==
+
+===Alternative forms===
+* {{alter|en|estr-}}
+
+===Etymology===
+From {{m|en|estrogen}}.
+
+===Pronunciation===
+* {{IPA|en|/ɛ.stɹ/}}
 
 ===Interfix===
 {{head|en|interfix}}
 
-# {{lb|en|pharmaceutical drug}} {{alt form|en|-lim-}}.
+# {{lb|en|pharmaceutical drug}} {{ng|Used to form names of [[estrogen]]s}}.
+
+====Derived terms====
+{{interfixsee|en}}
+* {{l|en|-gestr-}}
+
+===Anagrams===
+* {{anagrams|en|a=erst|Rest.|'rest|rest.|REST|-ster|ERTs|rets|erst|rest|tres|RETs|TERs|SERT}}
+
+==Esperanto==
+
+===Pronunciation===
+* {{audio|eo|LL-Q143 (epo)-Lepticed7--
+
+
+6. Title: -s-
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;s&quot;}}
+==English==
+
+===Etymology===
+From {{inh|en|enm|[[-s]], [[-es]]}}, from {{inh|en|ang|-es||-'s|pos=masculine and neuter genitive singular ending}}, which survives in many old compounds. In more recent coinage, from contraction of the derived clitic {{m|en|-'s}} in compounds. For more, see {{m|en|-'s}}.
+
+===Interfix===
+{{head|en|interfix}}
+
+# {{non-gloss|Genitival interfix used to link elements in some compounds, equivalent to the possessive clitic {{m|
+
+
+7. Title: -k-
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;k&quot;}}
+==English==
+
+===Interfix===
+{{head|en|interfix}}
+
+# {{lb|en|pharmaceutical drug}} {{alt form|en|-kin-}}.
 
 ====Derived terms====
 {{interfixsee|en}}
 
-==French==
-
-===Etymology===
-{{rfe|fr}}
-
-===Interfix===
-{{head|fr|interfix}}
-
-# {{n-g|used to break up certain vowel sequences, when certain suffixes—particularly {{m|fr|-ais}}—follow certain vowels, especially '''''o'''''}}
-#: {{cot|fr|-t-}}
-#: {{uxi|fr|[[togolais|togo'''l'''ais]]|Togolese}}
-#: {{uxi|fr|[[congolais|congo'''l'''ais]]|Congolese}}
-#: {{
+====See also====
+* {{l|en|-i-}}
+* {{l|en|-o-}}
 
 
-94. Title: Uessian
+8. Title: -vir-
    Text preview (first 500 chars):
-   ==English==
-{{no entry|en}}
-
-
-95. Title: cold Charlie
-   Text preview (first 500 chars):
-   ==English==
-{{no entry|en}}
-
-
-96. Title: -iz-
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;iz&quot;}}
+   {{also|vir|Vir|VIR|vír|Vir.}}
 ==English==
 
 ===Etymology===
-From a style of cant used by African Americans in the 1970s and popularized by rapper [[w:Snoop Dogg|Snoop Dogg]]. See {{m|en|-izzle}} for more.
+From {{m|en|virus}}.
 
-===Infix===
-{{head|en|infix}}
+===Interfix===
+{{head|en|interfix}}
 
-# {{lb|en|slang|AAVE}} {{non-gloss|An [[intensifier]].}}
-#: {{afex|en|shit|-iz-|shiznit}}
-#: {{afex|en|house|-iz-|hizouse}}
-#: {{afex|en|damn|-iz-|dizamn}}
+# {{lb|en|pharmaceutical drug}} {{ng|Used to form names of [[antiviral]]s}}.
+# {{lb|en|pharmaceutical drug}} {{alt form|en|-vi-}}.
 
-====Usage notes====
-Characteristic of [[African American Vernacular English]]. Usually ins
+====Derived terms====
+{{interfixsee|en}}
+
+====Related terms====
+* {{l|en|-mab}} is the base suffix common to all monoclonal antibodies. (See that entry for full paradigm.)
+* {{l|en|-vir}}
+
+===References===
+* {{cite-book|year=2018|title=The use of ste
 
 
-97. Title: manwoman
+9. Title: -kin-
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;kin&quot;}}
+==English==
+
+===Alternative forms===
+* {{l|en|-ki-}} before the suffix [[-xi-]] or [[-zu-]]
+
+===Etymology===
+From {{m|en|interleukin}}.
+
+===Interfix===
+{{head|en|interfix}}
+
+# {{lb|en|pharmacology}} a [[monoclonal antibody]] that targets [[interleukin]]s
+
+====Derived terms====
+{{interfixsee|en}}
+
+====Related terms====
+* {{l|en|-mab}} is the base suffix common to all monoclonal antibodies. (See that entry for full paradigm.)
+
+===Anagrams===
+* {{anag
+
+
+10. Title: -ö-
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;o&quot;}}
+==English==
+
+===Etymology===
+From the old practice, which comes from French, of using the [[w:diaeresis (diacritic)|diaeresis]] accent to communicate [[w:vowel hiatus|vowel hiatus]], i.e. to clarify that a vowel is to be spoken separately rather than joined with or influenced by the sounds before it; for example, {{m|en|Chloë}} is to be read as ''CLOH-EY'', not ''CLEE'' (i.e. an ''oe'' as in {{m|en|Oedipus#Pronunciation}}); and the ''ae'' in {{m|en|a
+
+... (36 samples omitted) ...
+
+
+47. Title: people mountain people sea
    Text preview (first 500 chars):
    ==English==
-{{no entry|en}}
+
+===Etymology===
+{{calque|en|zh|人山人海}}.
+
+===Idiom===
+{{head|en|idiom}} 
+
+# {{lb|en|China}} [[crowded]] or [[jam-packed]] with people 
+#* {{quote-book|en|author1=Kelvin Bei|title=Ravens' Haiku|url=https://www.google.com.ng/books/edition/Ravens_Haiku/qyOaDgAAQBAJ?hl=en&amp;gbpv=1&amp;dq=%2522people+mountain+people+sea%2522&amp;pg=PA23&amp;printsec=frontcover|publisher=Lulu.com|date=28 February 2017|isbn=978-1-365-74651-2|page=23|text='''People mountain''' / '''people sea''' / Heads bow
 
 
-98. Title: Tchawoosh
+48. Title: better luck next time
    Text preview (first 500 chars):
    ==English==
-{{no entry|en}}
+
+===Idiom===
+{{head|en|idiom}}
+
+# Used to [[wish]] somebody [[hope]] in [[future]] [[success]] after a [[failure]].
+
+{{R:Cambridge}}
 
 
-99. Title: infoanarchism
+49. Title: maximum attack
    Text preview (first 500 chars):
    ==English==
-{{no entry|en}}
+
+===Idiom===
+{{head|en|idiom}}
+
+# {{lb|en|mainly|Finland|}} To drive as fast as possible, particularly in motor racing.
+#* {{quote-journal|en|date=Nov 19 2023|title=Maximum attack! In conversation with Markku Alén|titleurl=https://www.classicandsportscar.com/features/maximum-attack-conversation-markku-alen|journal=Classic &amp; Sports Car|accessdate=May 30 2025|passage=Just as night follows day, he would tender an unblinking death stare before uttering: “Now we go maximum attack!” An
 
 
-100. Title: Union Jacker
+50. Title: has the advantage of someone
    Text preview (first 500 chars):
    ==English==
-{{no entry|en}}
+
+===Verb phrase===
+{{head|en|verb phrase form}}
+
+# {{infl of|en|have the advantage of someone||s-verb-form}}
+
+
+51. Title: having the advantage of someone
+   Text preview (first 500 chars):
+   ==English==
+
+===Verb phrase===
+{{head|en|verb phrase form}}
+
+# {{infl of|en|have the advantage of someone||ing-form}}
+
+
+52. Title: had the advantage of someone
+   Text preview (first 500 chars):
+   ==English==
+
+===Verb phrase===
+{{head|en|verb phrase form}}
+
+# {{infl of|en|have the advantage of someone||ed-form}}
+
+
+53. Title: bgm
+   Text preview (first 500 chars):
+   ==English==
+{{en-noun|~}}
+# {{alternative case form of|en|BGM|t={{initialism of|en|background music}}.}}
+
+
+54. Title: Perovski
+   Text preview (first 500 chars):
+   ==English==
+
+===Proper  noun===
+{{en-prop}}
+
+# {{surname|en}}
+
+====Derived terms====
+{{col|en|perovskite
+}}
+
+
+55. Title: bimisogyny
+   Text preview (first 500 chars):
+   ==English==
+
+===Alternative forms===
+* {{alt|en|bi-misogyny}}
+
+===Etymology===
+From {{af|en|bi-|misogyny}}. Has been in use since at least 2014.&lt;ref&gt;{{quote-journal|en|month=February |year=2014|last=Pallotta-Chiarolli |first=Maria |title=Erasure, Exclusion by Inclusion, and the Absence of Intersectionality: Introducing Bisexuality in Education|url=https://www.researchgate.net/publication/275136513_Erasure_Exclusion_by_Inclusion_and_the_Absence_of_Intersectionality_Introducing_Bisexuality_i
+
+
+56. Title: Plume
+   Text preview (first 500 chars):
+   ==English==
+
+===Proper  noun===
+{{en-prop}}
+
+#{{surname|en}}
+
+====Derived terms====
+{{col|en|Plumian
+}}
 
 ============================================================
 GOAL: Reach fixed point (no samples in any category)
