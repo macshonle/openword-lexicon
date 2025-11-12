@@ -379,9 +379,6 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     """Parse a single Wiktionary page."""
     word = title.lower().strip()
 
-    if not is_englishlike(word):
-        return None
-
     pos_tags = extract_pos_tags(text)
     if not pos_tags:
         return None
@@ -473,12 +470,13 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     redirects_found = 0
     dict_only_found = 0  # Track dictionary-only terms
     non_english_found = 0  # Track non-English pages
+    non_englishlike_found = 0  # Non-Latin scripts (Greek, Cyrillic, Arabic, Braille, etc.)
     first_page_seen = False
 
     # Track languages encountered in non-English pages
     language_counts = {}
 
-    # Diagnostic tracking (special pages, redirects, dict-only, non-English not included)
+    # Diagnostic tracking (special pages, redirects, dict-only, non-English, non-Englishlike not included)
     skip_reasons = {
         'no_content_extracted': [],  # extract_page_content returned None
         'parse_entry_none': [],      # parse_entry returned None
@@ -544,6 +542,12 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
 
             title, text = result
 
+            # Check if word uses English-like character set (Latin script)
+            # This filters out Greek, Cyrillic, Arabic, Braille, CJK, etc.
+            if not is_englishlike(title):
+                non_englishlike_found += 1
+                continue
+
             # Parse entry
             try:
                 entry = parse_entry(title, text)
@@ -585,6 +589,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                           f"Redirects: {redirects_found:,} | "
                           f"Dict-only: {dict_only_found:,} | "
                           f"Non-EN: {non_english_found:,} | "
+                          f"Non-Latin: {non_englishlike_found:,} | "
                           f"Skipped: {entries_skipped:,} | "
                           f"Rate: {rate:.0f} pages/sec")
                     out.flush()
@@ -609,6 +614,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     print(f"Redirects: {redirects_found:,}")
     print(f"Dictionary-only terms: {dict_only_found:,}")
     print(f"Non-English pages: {non_english_found:,}")
+    print(f"Non-Latin scripts: {non_englishlike_found:,}")
     print(f"Total skipped: {entries_skipped:,}")
     print(f"Success rate: {entries_written/entries_processed*100:.1f}%")
     print(f"Time: {elapsed_min}m {elapsed_sec}s")
@@ -634,7 +640,8 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
         print(f"  3. parse_entry threw exception: {total_exceptions} samples")
         print()
         print(f"Note: Special pages ({', '.join(SPECIAL_PAGE_PREFIXES)}), redirects,")
-        print(f"      dictionary-only terms, and non-English pages are counted separately.")
+        print(f"      dictionary-only terms, non-English pages, and non-Latin scripts are")
+        print(f"      counted separately, not included in diagnostic samples.")
         print()
 
         # Language statistics for non-English pages
