@@ -100,7 +100,7 @@ HEAD_TEMPLATE = re.compile(r'\{\{(?:head|en-head)\|en\|([^}|]+)', re.IGNORECASE)
 PREP_PHRASE_TEMPLATE = re.compile(r'\{\{en-prepphr\b', re.IGNORECASE)
 CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
 CATEGORY = re.compile(r'\[\[Category:English\s+([^\]]+)\]\]', re.IGNORECASE)
-DICT_ONLY = re.compile(r'\{\{no entry\|en\|', re.IGNORECASE)
+DICT_ONLY = re.compile(r'\{\{no entry\|en', re.IGNORECASE)  # Matches both {{no entry|en}} and {{no entry|en|...}}
 
 # Simple extraction patterns (no full XML parsing)
 TITLE_PATTERN = re.compile(r'<title>([^<]+)</title>')
@@ -140,7 +140,11 @@ REGION_LABELS = {
 POS_MAP = {
     'noun': 'noun',
     'proper noun': 'noun',
+    'proper name': 'noun',             # Alternative form of proper noun
+    'propernoun': 'noun',              # Proper noun without space (typo in some entries)
     'verb': 'verb',
+    'verb form': 'verb',               # Verb inflections
+    'participle': 'verb',              # Participles treated as verb forms
     'adjective': 'adjective',
     'adverb': 'adverb',
     'pronoun': 'pronoun',
@@ -153,8 +157,10 @@ POS_MAP = {
     'contraction': 'verb',
     'prefix': 'affix',
     'suffix': 'affix',
+    'infix': 'affix',                  # Infixes like -bloody- (inserted inside words)
     'phrase': 'phrase',                # Multi-word expressions
     'prepositional phrase': 'phrase',  # Prepositional phrases (e.g., "at least", "on hold")
+    'adverbial phrase': 'phrase',      # Adverbial phrases (e.g., "on all fours")
     'proverb': 'phrase',               # Proverbs treated as phrases
     'numeral': 'numeral',              # Numbers (thirteen, centillion, etc.)
     'symbol': 'symbol',                # Symbols (chemical elements, abbreviations, etc.)
