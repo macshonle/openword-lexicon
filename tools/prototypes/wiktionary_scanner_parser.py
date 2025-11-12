@@ -22,13 +22,15 @@ from pathlib import Path
 from typing import Dict, List, Set, Optional
 from rich.live import Live
 from rich.table import Table
-from rich.align import Align
+from rich.panel import Panel
+from rich.text import Text
+from rich import box
 
 
 class BZ2StreamReader:
     """Streaming BZ2 decompressor with progress feedback."""
 
-    def __init__(self, filepath: Path, chunk_size: int = 256 * 1024):
+    def __init__(self, filepath: Path, chunk_size: int = 256 * 1024, metrics: Optional[Dict] = None):
         self.filepath = filepath
         self.chunk_size = chunk_size
         self.file = open(filepath, 'rb')
@@ -38,6 +40,7 @@ class BZ2StreamReader:
         self.total_decompressed = 0
         self.last_progress = 0
         self.start_time = time.time()
+        self.metrics = metrics  # Optional metrics dict to update
 
     def read(self, size: int = -1) -> bytes:
         """Read decompressed data."""
@@ -69,25 +72,12 @@ class BZ2StreamReader:
         self.buffer += decompressed
         self.total_decompressed += len(decompressed)
 
-        if self.total_decompressed - self.last_progress >= 50 * 1024 * 1024:
+        # Update metrics if provided
+        if self.metrics is not None:
             elapsed = time.time() - self.start_time
             rate_mb = (self.total_decompressed / (1024 * 1024)) / elapsed if elapsed > 0 else 0
-            elapsed_min = int(elapsed / 60)
-            elapsed_sec = int(elapsed % 60)
-            print(f"  Decompressing: {self.total_decompressed / (1024*1024):.0f} MB "
-                  f"({rate_mb:.1f} MB/s, {elapsed_min}m {elapsed_sec}s elapsed)",
-                  end='\r', flush=True)
-            self.last_progress = self.total_decompressed
-
-    def finish_progress(self):
-        """Print newline to commit final progress line."""
-        if self.total_decompressed > 0:
-            elapsed = time.time() - self.start_time
-            elapsed_min = int(elapsed / 60)
-            elapsed_sec = int(elapsed % 60)
-            print(f"  Decompression complete: {self.total_decompressed / (1024*1024):.0f} MB "
-                  f"in {elapsed_min}m {elapsed_sec}s")
-            sys.stdout.flush()
+            self.metrics["Decomp MB"] = int(self.total_decompressed / (1024 * 1024))
+            self.metrics["Decomp Rate"] = rate_mb
 
     def close(self):
         self.file.close()
@@ -399,29 +389,46 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     }
 
 
-# Field names for metrics table
-METRIC_FIELDS = [
-    "Processed", "Written", "Special", "Redirects",
-    "Dict-only", "Non-EN", "Non-Latin", "Skipped", "Rate"
+# Layout for status display (label, value) pairs
+PAIRS_LAYOUT = [
+    # each row contains up to three (label, key) pairs
+    [("Processed", "Processed"), ("Written", "Written"), ("Special", "Special")],
+    [("Redirects", "Redirects"), ("Dict-only", "Dict-only"), ("Non-EN", "Non-EN")],
+    [("Non-Latin", "Non-Latin"), ("Skipped", "Skipped"), ("Rate", "Rate")],
+    [("Decomp MB", "Decomp MB"), ("Decomp Rate", "Decomp Rate"), (None, None)],
 ]
 
 
-def make_table(metrics: dict) -> Table:
-    """Create a Rich table for live progress display."""
-    t = Table(show_header=True, header_style="bold cyan", expand=True, pad_edge=False)
-    for field in METRIC_FIELDS:
-        t.add_column(field, justify="right", no_wrap=True)
+def fmt(name: str, value) -> str:
+    """Format metric value based on field name."""
+    if name == "Rate":
+        return f"{value:,} pg/s"
+    elif name == "Decomp Rate":
+        return f"{value:.1f} MB/s"
+    return f"{value:,}"
 
-    # Format values
-    values = []
-    for field in METRIC_FIELDS:
-        if field == "Rate":
-            values.append(f"{metrics[field]:,.0f} pg/s")
-        else:
-            values.append(f"{metrics[field]:,}")
 
-    t.add_row(*values)
-    return t
+def make_form(metrics: dict) -> Panel:
+    """Create a Rich panel with grid layout for live progress display."""
+    grid = Table.grid(padding=(0, 4))
+    # six columns: label,value x3
+    grid.add_column(justify="left",  no_wrap=True)  # L1
+    grid.add_column(justify="right", no_wrap=True)  # V1
+    grid.add_column(justify="left",  no_wrap=True)  # L2
+    grid.add_column(justify="right", no_wrap=True)  # V2
+    grid.add_column(justify="left",  no_wrap=True)  # L3
+    grid.add_column(justify="right", no_wrap=True)  # V3
+
+    for row in PAIRS_LAYOUT:
+        cells = []
+        for label, key in row:
+            if label is None:
+                cells += ["", ""]
+            else:
+                cells += [Text(f"{label}:", style="bold dim"), Text(fmt(label, metrics[key]), style="bold")]
+        grid.add_row(*cells)
+
+    return Panel(grid, title="Status", border_style="dim", box=box.SIMPLE)
 
 
 def scan_pages(file_obj, chunk_size: int = 1024 * 1024):
@@ -484,11 +491,23 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
         print(f"Diagnostic mode: Will stop after 10,000 skips and write report to {diagnostic_file}")
     print()
 
-    print("Initializing streaming decompressor...")
-    sys.stdout.flush()
+    # Prepare metrics dictionary for Live display
+    metrics = {
+        "Processed": 0,
+        "Written": 0,
+        "Special": 0,
+        "Redirects": 0,
+        "Dict-only": 0,
+        "Non-EN": 0,
+        "Non-Latin": 0,
+        "Skipped": 0,
+        "Rate": 0,
+        "Decomp MB": 0,
+        "Decomp Rate": 0.0
+    }
 
     if str(xml_path).endswith('.bz2'):
-        file_obj = BZ2StreamReader(xml_path, chunk_size=256 * 1024)
+        file_obj = BZ2StreamReader(xml_path, chunk_size=256 * 1024, metrics=metrics)
     else:
         file_obj = open(xml_path, 'rb')
 
@@ -517,22 +536,9 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     start_time = time.time()
     diagnostic_mode = diagnostic_file is not None
 
-    # Prepare metrics dictionary for Live table
-    metrics = {
-        "Processed": 0,
-        "Written": 0,
-        "Special": 0,
-        "Redirects": 0,
-        "Dict-only": 0,
-        "Non-EN": 0,
-        "Non-Latin": 0,
-        "Skipped": 0,
-        "Rate": 0
-    }
-
     with file_obj as f, open(output_path, 'w', encoding='utf-8') as out:
-        # Use Rich Live table for progress display
-        with Live(Align.center(make_table(metrics)), refresh_per_second=10) as live:
+        # Use Rich Live display for progress
+        with Live(make_form(metrics), refresh_per_second=10) as live:
             # Scan for pages (much faster than XML parsing)
             for page_xml in scan_pages(f, chunk_size=1024 * 1024):
                 entries_processed += 1
@@ -540,10 +546,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
 
                 if not first_page_seen:
                     first_page_seen = True
-                    if isinstance(file_obj, BZ2StreamReader):
-                        file_obj.finish_progress()
-                    print("\n✓ First page found, scanning...\n")
-                    sys.stdout.flush()
+                    # No need to finish progress - it's in the Live display now
 
                 # Extract title and text using simple regex
                 result = extract_page_content(page_xml)
@@ -633,12 +636,12 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     if diagnostic_mode and entries_skipped >= 10000:
                         break
 
-                # Update rate and refresh Live table
+                # Update rate and refresh Live display
                 if entries_processed % 1000 == 0:
                     elapsed = time.time() - start_time
                     rate = entries_processed / elapsed if elapsed > 0 else 0
                     metrics["Rate"] = rate
-                    live.update(Align.center(make_table(metrics)))
+                    live.update(make_form(metrics))
                     if entries_processed % 5000 == 0:
                         out.flush()
 
