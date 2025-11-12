@@ -111,6 +111,7 @@ REDIRECT_PATTERN = re.compile(r'<redirect\s+title="[^"]+"')
 SPECIAL_PAGE_PREFIXES = (
     'Wiktionary:',
     'MediaWiki:',       # MediaWiki system messages
+    'Module:',          # Lua modules
     'Appendix:',
     'Help:',
     'Template:',
@@ -151,9 +152,11 @@ POS_MAP = {
     'contraction': 'verb',
     'prefix': 'affix',
     'suffix': 'affix',
-    'phrase': 'phrase',      # NEW: Multi-word expressions
-    'proverb': 'phrase',     # NEW: Proverbs treated as phrases
-    'numeral': 'numeral',    # NEW: Numbers (thirteen, centillion, etc.)
+    'phrase': 'phrase',                # Multi-word expressions
+    'prepositional phrase': 'phrase',  # Prepositional phrases (e.g., "at least", "on hold")
+    'proverb': 'phrase',               # Proverbs treated as phrases
+    'numeral': 'numeral',              # Numbers (thirteen, centillion, etc.)
+    'symbol': 'symbol',                # Symbols (chemical elements, abbreviations, etc.)
 }
 
 # Label classifications
@@ -404,17 +407,26 @@ PAIRS_LAYOUT = [
     [("Processed", "Processed"), ("Written", "Written"), ("Special", "Special")],
     [("Redirects", "Redirects"), ("Dict-only", "Dict-only"), ("Non-EN", "Non-EN")],
     [("Non-Latin", "Non-Latin"), ("Skipped", "Skipped"), ("Rate", "Rate")],
-    [("Decomp MB", "Decomp MB"), ("Decomp Rate", "Decomp Rate"), (None, None)],
+    [("Decomp MB", "Decomp MB"), ("Decomp Rate", "Decomp Rate"), ("Elapsed", "Elapsed")],
 ]
 
 
 def fmt(name: str, value) -> str:
     """Format metric value based on field name."""
     if name == "Rate":
-        return f"{int(value):,} pg/s"
+        return f"{int(value):>10,} pg/s"
     elif name == "Decomp Rate":
-        return f"{value:.1f} MB/s"
-    return f"{value:,}"
+        return f"{value:>10.1f} MB/s"
+    elif name == "Elapsed":
+        # value is seconds, format as mm:ss or hh:mm:ss
+        mins = int(value // 60)
+        secs = int(value % 60)
+        if mins >= 60:
+            hours = mins // 60
+            mins = mins % 60
+            return f"{hours:>6}h {mins:02}m"
+        return f"{mins:>9}m {secs:02}s"
+    return f"{value:>10,}"
 
 
 def make_form(metrics: dict) -> Panel:
@@ -497,7 +509,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     if limit:
         print(f"Limit: {limit:,} entries")
     if diagnostic_file:
-        print(f"Diagnostic mode: Will stop after 10,000 skips and write report to {diagnostic_file}")
+        print(f"Diagnostic mode: Will stop after 500 skips and write report to {diagnostic_file}")
     print()
 
     # Prepare metrics dictionary for Live display
@@ -512,7 +524,8 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
         "Skipped": 0,
         "Rate": 0,
         "Decomp MB": 0,
-        "Decomp Rate": 0.0
+        "Decomp Rate": 0.0,
+        "Elapsed": 0.0
     }
 
     if str(xml_path).endswith('.bz2'):
@@ -562,7 +575,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                 if not result:
                     entries_skipped += 1
                     metrics["Skipped"] = entries_skipped
-                    if diagnostic_mode and len(skip_reasons['no_content_extracted']) < 10:
+                    if diagnostic_mode:
                         # Extract what we can for diagnostic
                         title_match = TITLE_PATTERN.search(page_xml)
                         title = title_match.group(1) if title_match else "NO_TITLE"
@@ -572,7 +585,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                         })
 
                     # Check diagnostic stop condition
-                    if diagnostic_mode and entries_skipped >= 10000:
+                    if diagnostic_mode and entries_skipped >= 500:
                         break
                     continue
 
@@ -622,19 +635,19 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     else:
                         entries_skipped += 1
                         metrics["Skipped"] = entries_skipped
-                        if diagnostic_mode and len(skip_reasons['parse_entry_none']) < 10:
+                        if diagnostic_mode:
                             skip_reasons['parse_entry_none'].append({
                                 'title': title,
                                 'text_preview': text[:500] if len(text) > 500 else text
                             })
 
                         # Check diagnostic stop condition
-                        if diagnostic_mode and entries_skipped >= 1000:
+                        if diagnostic_mode and entries_skipped >= 500:
                             break
                 except Exception as e:
                     entries_skipped += 1
                     metrics["Skipped"] = entries_skipped
-                    if diagnostic_mode and len(skip_reasons['parse_entry_exception']) < 10:
+                    if diagnostic_mode:
                         skip_reasons['parse_entry_exception'].append({
                             'title': title,
                             'exception': str(e),
@@ -642,7 +655,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                         })
 
                     # Check diagnostic stop condition
-                    if diagnostic_mode and entries_skipped >= 10000:
+                    if diagnostic_mode and entries_skipped >= 500:
                         break
 
                 # Update rate and refresh Live display
@@ -650,6 +663,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     elapsed = time.time() - start_time
                     rate = entries_processed / elapsed if elapsed > 0 else 0
                     metrics["Rate"] = rate
+                    metrics["Elapsed"] = elapsed
                     live.update(make_form(metrics))
                     if entries_processed % 5000 == 0:
                         out.flush()
@@ -716,7 +730,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
             total_parse_none = len(skip_reasons['parse_entry_none'])
             total_exceptions = len(skip_reasons['parse_entry_exception'])
 
-            write(f"Skip reason counts (showing up to 10 samples each):")
+            write(f"Skip reason counts (showing first 10 and last 10 samples):")
             write(f"  1. No content extracted (no title/text or not English): {total_no_content} samples")
             write(f"  2. parse_entry returned None (validation failed): {total_parse_none} samples")
             write(f"  3. parse_entry threw exception: {total_exceptions} samples")
@@ -745,37 +759,53 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                 write(f"Total unique languages: {len(language_counts):,}")
                 write()
 
-            # Print samples for each category
-            if skip_reasons['no_content_extracted']:
+            # Print samples for each category (first 10 and last 10)
+            def write_samples(category_name, samples, has_exception=False):
+                """Helper to write first 10 and last 10 samples."""
+                if not samples:
+                    return
+
                 write("-" * 60)
-                write("SAMPLES: No content extracted")
+                write(f"SAMPLES: {category_name}")
                 write("-" * 60)
-                for i, sample in enumerate(skip_reasons['no_content_extracted'][:10], 1):
+
+                # Show first 10
+                first_samples = samples[:10]
+                for i, sample in enumerate(first_samples, 1):
                     write(f"\n{i}. Title: {sample['title']}")
-                    write(f"   Page preview (first 500 chars):")
-                    write(f"   {sample['page_preview'][:500]}")
+                    if has_exception:
+                        write(f"   Exception: {sample['exception']}")
+                    if 'page_preview' in sample:
+                        write(f"   Page preview (first 500 chars):")
+                        write(f"   {sample['page_preview'][:500]}")
+                    elif 'text_preview' in sample:
+                        write(f"   Text preview (first 500 chars):")
+                        write(f"   {sample['text_preview'][:500]}")
                     write()
 
-            if skip_reasons['parse_entry_none']:
-                write("-" * 60)
-                write("SAMPLES: parse_entry returned None")
-                write("-" * 60)
-                for i, sample in enumerate(skip_reasons['parse_entry_none'][:10], 1):
-                    write(f"\n{i}. Title: {sample['title']}")
-                    write(f"   Text preview (first 500 chars):")
-                    write(f"   {sample['text_preview'][:500]}")
-                    write()
+                # Show last 10 if we have more than 10 samples
+                if len(samples) > 10:
+                    if len(samples) > 20:
+                        write(f"... ({len(samples) - 20} samples omitted) ...")
+                        write()
 
-            if skip_reasons['parse_entry_exception']:
-                write("-" * 60)
-                write("SAMPLES: parse_entry threw exception")
-                write("-" * 60)
-                for i, sample in enumerate(skip_reasons['parse_entry_exception'][:10], 1):
-                    write(f"\n{i}. Title: {sample['title']}")
-                    write(f"   Exception: {sample['exception']}")
-                    write(f"   Text preview (first 500 chars):")
-                    write(f"   {sample['text_preview'][:500]}")
-                    write()
+                    last_samples = samples[-10:]
+                    start_idx = len(samples) - 10 + 1
+                    for i, sample in enumerate(last_samples, start_idx):
+                        write(f"\n{i}. Title: {sample['title']}")
+                        if has_exception:
+                            write(f"   Exception: {sample['exception']}")
+                        if 'page_preview' in sample:
+                            write(f"   Page preview (first 500 chars):")
+                            write(f"   {sample['page_preview'][:500]}")
+                        elif 'text_preview' in sample:
+                            write(f"   Text preview (first 500 chars):")
+                            write(f"   {sample['text_preview'][:500]}")
+                        write()
+
+            write_samples("No content extracted", skip_reasons['no_content_extracted'])
+            write_samples("parse_entry returned None", skip_reasons['parse_entry_none'])
+            write_samples("parse_entry threw exception", skip_reasons['parse_entry_exception'], has_exception=True)
 
             write("=" * 60)
             write("GOAL: Reach fixed point (no samples in any category)")
@@ -834,7 +864,7 @@ def main():
         type=Path,
         default=None,
         metavar='FILE',
-        help='Diagnostic mode: stop after 10,000 skips and write report to FILE'
+        help='Diagnostic mode: stop after 500 skips and write report to FILE'
     )
 
     args = parser.parse_args()
