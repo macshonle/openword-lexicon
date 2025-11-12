@@ -1,0 +1,85 @@
+============================================================
+AGGREGATE RESULTS
+============================================================
+
+Total processed: 10,200,775
+Total written: 1,326,842
+Special pages: 238,785
+Redirects: 45,793
+Dictionary-only terms: 2,370
+Non-English pages: 8,581,047
+Non-Latin scripts: 5,938
+Total skipped: 0
+Success rate: 13.0%
+Time: 14m 7s
+Rate: 12035 pages/sec
+============================================================
+
+
+============================================================
+DIAGNOSTIC REPORT: Skip Reasons Breakdown
+============================================================
+
+Skip reason counts (showing first 10 and last 10 samples):
+  1. No content extracted (no title/text or not English): 0 samples
+  2. parse_entry returned None (validation failed): 0 samples
+  3. parse_entry threw exception: 0 samples
+
+Note: Special pages (Wiktionary:, MediaWiki:, Module:, Thread:, Appendix:, Help:, Template:, Reconstruction:), redirects,
+      dictionary-only terms, non-English pages, and non-Latin scripts are
+      counted separately, not included in diagnostic samples.
+
+------------------------------------------------------------
+NON-ENGLISH PAGE STATISTICS
+------------------------------------------------------------
+
+Total non-English pages: 8,581,047
+
+Top 20 languages by page count:
+   1. Latin                814,477 pages
+   2. Spanish              738,422 pages
+   3. Italian              572,757 pages
+   4. Russian              424,477 pages
+   5. Portuguese           375,144 pages
+   6. French               356,900 pages
+   7. German               333,906 pages
+   8. Chinese              296,282 pages
+   9. Swedish              287,364 pages
+  10. Finnish              245,218 pages
+  11. Galician             196,366 pages
+  12. Catalan              181,225 pages
+  13. Japanese             161,998 pages
+  14. Polish               155,744 pages
+  15. Esperanto            129,836 pages
+  16. Dutch                124,547 pages
+  17. Latvian              123,513 pages
+  18. Romanian             112,882 pages
+  19. Translingual         84,151 pages
+  20. Greek                80,784 pages
+
+  ... and 6781 more languages
+
+Total unique languages: 6,801
+
+============================================================
+GOAL: Reach fixed point (no samples in any category)
+============================================================
+
+Action items based on samples:
+
+1. 'no_content_extracted' samples:
+   - Look for unknown special page prefixes (add to SPECIAL_PAGE_PREFIXES)
+   - Check for pages with ':' that aren't English words (e.g., 'talk:', 'user:')
+   - Identify any regex pattern issues
+
+2. 'parse_entry_none' samples:
+   - Check if missing POS tags for valid entries
+   - Check for character validation issues
+   - Identify entries that should be extracted
+
+3. 'parse_entry_exception' samples:
+   - Fix code bugs causing exceptions
+   - Add error handling for edge cases
+
+Fixed point achieved when all sample lists are empty!
+============================================================

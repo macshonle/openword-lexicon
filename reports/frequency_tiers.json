@@ -1,0 +1,32 @@
+{
+  "tier_1": {
+    "label": "Top 10",
+    "rank_boundary": 10,
+    "word_count": 10,
+    "coverage_percent": 23.24417593067924
+  },
+  "tier_2": {
+    "label": "11 to 100",
+    "rank_boundary": 100,
+    "word_count": 90,
+    "coverage_percent": 35.74144937961622
+  },
+  "tier_3": {
+    "label": "101 to 1000",
+    "rank_boundary": 1000,
+    "word_count": 900,
+    "coverage_percent": 24.838488179740732
+  },
+  "tier_4": {
+    "label": "1001 to 10000",
+    "rank_boundary": 10000,
+    "word_count": 9000,
+    "coverage_percent": 12.7047827300226
+  },
+  "tier_5": {
+    "label": "10001 to 50000",
+    "rank_boundary": 50000,
+    "word_count": 40000,
+    "coverage_percent": 3.4711037799412043
+  }
+}

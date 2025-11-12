@@ -1,0 +1,17 @@
+{
+  "name": "openword-lexicon-viewer",
+  "version": "0.1.0",
+  "description": "Interactive trie viewer for Openword Lexicon",
+  "type": "module",
+  "scripts": {
+    "build-trie": "tsx src/build-trie.ts",
+    "start": "http-server . -p 8080 -o --cors"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "http-server": "^14.1.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  },
+  "private": true
+}

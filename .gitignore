@@ -11,6 +11,7 @@
 /data/artifacts/
 /data/build/
 /data/filtered/
+/data/filtered_words/
 /data/.limits-log.json
 
 # Byte-compiled / optimized / DLL files
@@ -220,3 +221,10 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Node.js / pnpm (for viewer)
+node_modules/
+pnpm-lock.yaml
+.pnpm-store/
+viewer/data/
+viewer/dist/
