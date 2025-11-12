@@ -112,6 +112,7 @@ SPECIAL_PAGE_PREFIXES = (
     'Wiktionary:',
     'MediaWiki:',       # MediaWiki system messages
     'Module:',          # Lua modules
+    'Thread:',          # Discussion threads (e.g., Thread:User talk:)
     'Appendix:',
     'Help:',
     'Template:',
@@ -157,6 +158,7 @@ POS_MAP = {
     'proverb': 'phrase',               # Proverbs treated as phrases
     'numeral': 'numeral',              # Numbers (thirteen, centillion, etc.)
     'symbol': 'symbol',                # Symbols (chemical elements, abbreviations, etc.)
+    'letter': 'letter',                # Letters (ſ, þ, Þ, etc. - archaic/special Latin letters)
 }
 
 # Label classifications
@@ -509,7 +511,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     if limit:
         print(f"Limit: {limit:,} entries")
     if diagnostic_file:
-        print(f"Diagnostic mode: Will stop after 500 skips and write report to {diagnostic_file}")
+        print(f"Diagnostic mode: Will stop after 100 skips and write report to {diagnostic_file}")
     print()
 
     # Prepare metrics dictionary for Live display
@@ -585,7 +587,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                         })
 
                     # Check diagnostic stop condition
-                    if diagnostic_mode and entries_skipped >= 500:
+                    if diagnostic_mode and entries_skipped >= 100:
                         break
                     continue
 
@@ -642,7 +644,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                             })
 
                         # Check diagnostic stop condition
-                        if diagnostic_mode and entries_skipped >= 500:
+                        if diagnostic_mode and entries_skipped >= 100:
                             break
                 except Exception as e:
                     entries_skipped += 1
@@ -655,7 +657,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                         })
 
                     # Check diagnostic stop condition
-                    if diagnostic_mode and entries_skipped >= 500:
+                    if diagnostic_mode and entries_skipped >= 100:
                         break
 
                 # Update rate and refresh Live display
@@ -864,7 +866,7 @@ def main():
         type=Path,
         default=None,
         metavar='FILE',
-        help='Diagnostic mode: stop after 500 skips and write report to FILE'
+        help='Diagnostic mode: stop after 100 skips and write report to FILE'
     )
 
     args = parser.parse_args()
