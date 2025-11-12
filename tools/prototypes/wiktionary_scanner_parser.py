@@ -17,7 +17,7 @@ import json
 import re
 import sys
 import time
-import unicodedata
+import unicodedata as ud
 from pathlib import Path
 from typing import Dict, List, Set, Optional
 
@@ -307,18 +307,79 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
     return (title, text)
 
 
+def is_englishlike(token: str) -> bool:
+    """
+    Returns True if `token` looks like an English-language word or phrase:
+    - Uses Latin letters (with optional combining diacritics)
+    - May include ASCII spaces between parts
+    - May include hyphen (U+002D), en dash (U+2013),
+      straight apostrophe (U+0027), left single quote (U+2018),
+      right single quote (U+2019), period (U+002E),
+      and slash (U+002F)
+    - Rejects any string of only spaces, any non-ASCII whitespace,
+      and any obvious HTML-entity-like token (&, ;, <, >)
+    """
+
+    t = ud.normalize("NFC", token)
+
+    # Reject non-ASCII whitespace except ordinary space U+0020
+    if any(ch != ' ' and ud.category(ch).startswith('Z') for ch in t):
+        return False
+
+    # Reject strings that are empty or only spaces
+    if t.strip(' ') == '':
+        return False
+
+    ALLOWED_PUNCT = {"'", "’", "‘", "-", "–", ".", "/"}
+    FORBIDDEN = set("&;<>")
+
+    saw_latin_letter = False
+    prev_base_is_latin = False  # for validating combining marks
+
+    for ch in t:
+        if ch == ' ':
+            prev_base_is_latin = False
+            continue
+
+        if ch in FORBIDDEN:
+            return False
+
+        cat = ud.category(ch)
+
+        if cat.startswith('M'):
+            # combining mark must follow a Latin base
+            if not prev_base_is_latin:
+                return False
+            continue
+
+        if cat.startswith('L'):
+            # require Latin letters
+            if "LATIN" not in ud.name(ch, ""):
+                return False
+            saw_latin_letter = True
+            prev_base_is_latin = True
+            continue
+
+        if cat.startswith('N'):
+            # allow numbers
+            prev_base_is_latin = False
+            continue
+
+        if ch in ALLOWED_PUNCT:
+            prev_base_is_latin = False
+            continue
+
+        # anything else disallowed
+        return False
+
+    return saw_latin_letter
+
+
 def parse_entry(title: str, text: str) -> Optional[Dict]:
     """Parse a single Wiktionary page."""
     word = title.lower().strip()
 
-    # Allow unicode letters (café, naïve), digits, apostrophes, hyphens, spaces,
-    # periods (i.e., e.g., A.M.), and slashes (w/)
-    # Unicode categories: L* = letters, N* = numbers
-    valid_word = all(
-        unicodedata.category(c)[0] in 'LN' or c in " '-./"
-        for c in word
-    )
-    if not valid_word:
+    if not is_englishlike(word):
         return None
 
     pos_tags = extract_pos_tags(text)

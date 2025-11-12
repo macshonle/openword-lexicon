@@ -1,22 +1,45 @@
 Parsing: data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2
 Output: /tmp/scanner_diagnostic.jsonl
 Method: Lightweight scanner (no full XML parsing)
-Diagnostic mode: Will stop after 1000 skips and show samples
+Diagnostic mode: Will stop after 10,000 skips and show samples
 
 Initializing streaming decompressor...
   Decompression complete: 2 MB in 0m 0s
 ✓ First page found, scanning...
-  Processed: 1,000 | Written: 888...  Processed: 2,000 | Written: 1,784...  Processed: 4,000 | Written: 3,202...  Processed: 5,000 | Written: 4,048 | Special: 67 | Redirects: 13 | Skipped: 872 | Rate: 2465 pages/sec
-  Decompressing: 51 MB (24.1 MB/s, 0m 2s elapsed)
+  Processed: 1,000 | Written: 886...  Processed: 2,000 | Written: 1,782...  Processed: 4,000 | Written: 3,200...  Processed: 5,000 | Written: 4,046 | Special: 67 | Redirects: 13 | Dict-only: 3 | Non-EN: 870 | Skipped: 1 | Rate: 2427 pages/sec
+  Decompressing: 51 MB (23.8 MB/s, 0m 2s elapsed)  Processed: 14,000 | Written: 5,392...  Processed: 16,000 | Written: 5,454...  Decompressing: 101 MB (23.0 MB/s, 0m 4s elapsed)  Processed: 20,000 | Written: 5,638 | Special: 408 | Redirects: 18 | Dict-only: 3 | Non-EN: 13,932 | Skipped: 1 | Rate: 4442 pages/sec
+  Processed: 24,000 | Written: 5,827...  Processed: 30,000 | Written: 6,711 | Special: 439 | Redirects: 18 | Dict-only: 3 | Non-EN: 22,824 | Skipped: 5 | Rate: 5041 pages/sec
+  Processed: 31,000 | Written: 7,542...  Processed: 32,000 | Written: 8,433...  Decompressing: 152 MB (22.1 MB/s, 0m 6s elapsed)  Processed: 34,000 | Written: 9,826...  Processed: 35,000 | Written: 10,459 | Special: 524 | Redirects: 31 | Dict-only: 3 | Non-EN: 23,955 | Skipped: 28 | Rate: 4644 pages/sec
+  Processed: 36,000 | Written: 11,131...  Processed: 39,000 | Written: 12,735...  Processed: 40,000 | Written: 13,267 | Special: 587 | Redirects: 47 | Dict-only: 4 | Non-EN: 26,055 | Skipped: 40 | Rate: 4559 pages/sec
+  Processed: 41,000 | Written: 13,785...  Decompressing: 203 MB (21.9 MB/s, 0m 9s elapsed)  Processed: 43,000 | Written: 15,078...  Processed: 44,000 | Written: 15,528...  Processed: 45,000 | Written: 16,181 | Special: 638 | Redirects: 91 | Dict-only: 4 | Non-EN: 28,004 | Skipped: 82 | Rate: 4518 pages/sec
+  Processed: 48,000 | Written: 17,918...  Processed: 49,000 | Written: 18,915...  Processed: 50,000 | Written: 19,888 | Special: 663 | Redirects: 107 | Dict-only: 4 | Non-EN: 29,250 | Skipped: 88 | Rate: 4485 pages/sec
+  Processed: 51,000 | Written: 20,786...  Processed: 52,000 | Written: 21,568...  Decompressing: 253 MB (21.4 MB/s, 0m 11s elapsed)  Processed: 54,000 | Written: 22,767...  Processed: 56,000 | Written: 23,956...  Processed: 57,000 | Written: 24,577...  Processed: 62,000 | Written: 27,802...  Processed: 63,000 | Written: 28,553...  Processed: 65,000 | Written: 30,002 | Special: 756 | Redirects: 238 | Dict-only: 10 | Non-EN: 33,767 | Skipped: 227 | Rate: 4557 pages/sec
+  Decompressing: 304 MB (21.0 MB/s, 0m 14s elapsed)  Processed: 67,000 | Written: 31,144...  Processed: 68,000 | Written: 31,829...  Processed: 69,000 | Written: 32,603...  Processed: 74,000 | Written: 35,749...  Processed: 75,000 | Written: 36,313 | Special: 805 | Redirects: 398 | Dict-only: 21 | Non-EN: 37,121 | Skipped: 342 | Rate: 4677 pages/sec
+  Processed: 76,000 | Written: 36,773...  Processed: 77,000 | Written: 37,326...  Processed: 80,000 | Written: 39,095 | Special: 831 | Redirects: 471 | Dict-only: 21 | Non-EN: 39,225 | Skipped: 357 | Rate: 4748 pages/sec
+  Decompressing: 355 MB (20.4 MB/s, 0m 17s elapsed)  Processed: 85,000 | Written: 41,705 | Special: 882 | Redirects: 573 | Dict-only: 22 | Non-EN: 41,451 | Skipped: 367 | Rate: 4825 pages/sec
+  Processed: 87,000 | Written: 42,755...  Processed: 88,000 | Written: 43,480...  Processed: 89,000 | Written: 44,132...  Processed: 91,000 | Written: 45,380...  Processed: 95,000 | Written: 47,460 | Special: 945 | Redirects: 792 | Dict-only: 22 | Non-EN: 45,349 | Skipped: 432 | Rate: 4960 pages/sec
+  Processed: 97,000 | Written: 48,522...  Processed: 99,000 | Written: 49,195...  Processed: 102,000 | Written: 50,515...  Decompressing: 406 MB (19.8 MB/s, 0m 20s elapsed)  Processed: 106,000 | Written: 52,993...  Processed: 112,000 | Written: 55,481...  Processed: 119,000 | Written: 59,418...  Processed: 121,000 | Written: 60,743...  Processed: 122,000 | Written: 61,409...  Decompressing: 457 MB (19.2 MB/s, 0m 23s elapsed)  Processed: 127,000 | Written: 63,533...  Processed: 128,000 | Written: 63,921...  Processed: 130,000 | Written: 65,317 | Special: 1,264 | Redirects: 1,485 | Dict-only: 28 | Non-EN: 61,371 | Skipped: 535 | Rate: 5384 pages/sec
+  Processed: 131,000 | Written: 66,019...  Processed: 135,000 | Written: 68,526 | Special: 1,374 | Redirects: 1,542 | Dict-only: 32 | Non-EN: 62,956 | Skipped: 570 | Rate: 5428 pages/sec
+  Processed: 136,000 | Written: 69,188...  Processed: 137,000 | Written: 69,797...  Processed: 138,000 | Written: 70,346...  Processed: 139,000 | Written: 70,982...  Processed: 144,000 | Written: 73,625...  Processed: 146,000 | Written: 74,821...  Decompressing: 507 MB (18.9 MB/s, 0m 26s elapsed)  Processed: 149,000 | Written: 76,301...  Processed: 151,000 | Written: 77,199...  Processed: 152,000 | Written: 77,663...  Processed: 153,000 | Written: 78,173...  Processed: 154,000 | Written: 78,748...  Processed: 155,000 | Written: 79,406 | Special: 1,754 | Redirects: 1,797 | Dict-only: 33 | Non-EN: 71,328 | Skipped: 682 | Rate: 5595 pages/sec
+  Processed: 156,000 | Written: 80,262...  Processed: 157,000 | Written: 81,261...  Processed: 166,000 | Written: 85,228...  Processed: 168,000 | Written: 86,090...  Processed: 172,000 | Written: 87,961...  Decompressing: 559 MB (18.5 MB/s, 0m 30s elapsed)  Processed: 176,000 | Written: 89,440...  Processed: 178,000 | Written: 90,586...  Processed: 179,000 | Written: 91,357...  Processed: 182,000 | Written: 92,837...  Processed: 183,000 | Written: 93,269...  Processed: 184,000 | Written: 93,683...  Processed: 187,000 | Written: 94,892...  Processed: 190,000 | Written: 95,796 | Special: 2,200 | Redirects: 2,098 | Dict-only: 34 | Non-EN: 89,104 | Skipped: 768 | Rate: 5945 pages/sec
+  Processed: 191,000 | Written: 96,182...  Decompressing: 612 MB (18.0 MB/s, 0m 33s elapsed)  Processed: 238,000 | Written: 99,249...  Processed: 240,000 | Written: 99,652 | Special: 2,254 | Redirects: 2,134 | Dict-only: 34 | Non-EN: 135,144 | Skipped: 782 | Rate: 6837 pages/sec
+  Processed: 242,000 | Written: 100,793...  Processed: 243,000 | Written: 101,396...  Processed: 259,000 | Written: 104,289...  Processed: 263,000 | Written: 105,479...  Processed: 264,000 | Written: 105,848...  Decompressing: 663 MB (17.5 MB/s, 0m 37s elapsed)  Processed: 303,000 | Written: 106,606...  Processed: 306,000 | Written: 108,050...  Processed: 307,000 | Written: 108,504...  Processed: 308,000 | Written: 109,010...  Processed: 309,000 | Written: 109,447...  Processed: 310,000 | Written: 109,953 | Special: 2,422 | Redirects: 2,281 | Dict-only: 35 | Non-EN: 194,506 | Skipped: 803 | Rate: 7724 pages/sec
+  Processed: 312,000 | Written: 111,319...  Processed: 313,000 | Written: 112,253...  Processed: 314,000 | Written: 113,145...  Processed: 316,000 | Written: 114,192...  Processed: 318,000 | Written: 114,750...  Decompressing: 715 MB (17.2 MB/s, 0m 41s elapsed)  Processed: 324,000 | Written: 116,396...  Processed: 325,000 | Written: 116,806 | Special: 2,663 | Redirects: 2,396 | Dict-only: 36 | Non-EN: 202,227 | Skipped: 872 | Rate: 7768 pages/sec
+  Processed: 327,000 | Written: 117,718...  Processed: 329,000 | Written: 118,879...  Processed: 333,000 | Written: 120,517...  Processed: 336,000 | Written: 121,964...  Processed: 339,000 | Written: 122,968...  Processed: 340,000 | Written: 123,906 | Special: 2,858 | Redirects: 2,561 | Dict-only: 37 | Non-EN: 209,744 | Skipped: 894 | Rate: 7802 pages/sec
+  Processed: 341,000 | Written: 124,649...  Processed: 343,000 | Written: 125,301...  Processed: 346,000 | Written: 126,215...  Processed: 348,000 | Written: 127,019...  Processed: 350,000 | Written: 127,884 | Special: 3,416 | Redirects: 2,666 | Dict-only: 37 | Non-EN: 215,063 | Skipped: 934 | Rate: 7828 pages/sec
+  Processed: 351,000 | Written: 128,219...  Decompressing: 766 MB (17.0 MB/s, 0m 44s elapsed)  Processed: 354,000 | Written: 129,577...  Processed: 356,000 | Written: 130,582...  Processed: 357,000 | Written: 130,965...  Processed: 361,000 | Written: 132,387...  Processed: 364,000 | Written: 134,042...  Processed: 365,000 | Written: 134,531 | Special: 3,531 | Redirects: 2,786 | Dict-only: 38 | Non-EN: 223,142 | Skipped: 972 | Rate: 7882 pages/sec
+  Processed: 367,000 | Written: 135,698...
 ============================================================
-Total processed: 5,427
-Total written: 4,347
-Special pages: 67
-Redirects: 13
+Total processed: 368,011
+Total written: 136,244
+Special pages: 3,634
+Redirects: 2,802
+Dictionary-only terms: 40
+Non-English pages: 224,291
 Total skipped: 1,000
-Success rate: 80.1%
-Time: 0m 2s
-Rate: 2486 pages/sec
+Success rate: 37.0%
+Time: 0m 46s
+Rate: 7888 pages/sec
 ============================================================
 
 ============================================================
@@ -24,231 +47,87 @@ DIAGNOSTIC REPORT: Skip Reasons Breakdown
 ============================================================
 
 Skip reason counts (showing up to 10 samples each):
-  1. No content extracted (no title/text or not English): 10 samples
-  2. parse_entry returned None (validation failed): 2 samples
+  1. No content extracted (no title/text or not English): 2 samples
+  2. parse_entry returned None (validation failed): 10 samples
   3. parse_entry threw exception: 0 samples
 
-Note: Special pages (Wiktionary:, Appendix:, Help:, Template:, Reconstruction:) and
-      redirects are counted separately, not included in diagnostic samples.
+Note: Special pages (Wiktionary:, Appendix:, Help:, Template:, Reconstruction:), redirects,
+      dictionary-only terms, and non-English pages are counted separately.
+
+------------------------------------------------------------
+NON-ENGLISH PAGE STATISTICS
+------------------------------------------------------------
+
+Total non-English pages: 224,291
+
+Top 20 languages by page count:
+   1. Spanish              105,016 pages
+   2. Chinese              26,370 pages
+   3. Translingual         25,095 pages
+   4. Portuguese           22,512 pages
+   5. Japanese             21,484 pages
+   6. Galician             16,360 pages
+   7. Italian              12,944 pages
+   8. Korean               12,119 pages
+   9. Latin                 8,245 pages
+  10. Vietnamese            8,220 pages
+  11. Catalan               8,119 pages
+  12. Finnish               7,463 pages
+  13. German                6,436 pages
+  14. French                6,393 pages
+  15. Asturian              5,743 pages
+  16. Dutch                 4,510 pages
+  17. Serbo-Croatian        4,271 pages
+  18. Swedish               3,934 pages
+  19. Russian               3,903 pages
+  20. Mandarin              3,833 pages
+
+  ... and 2071 more languages
+
+Total unique languages: 2,091
 
 ------------------------------------------------------------
 SAMPLES: No content extracted
 ------------------------------------------------------------
 
-1. Title: frei
+1. Title: MediaWiki:Signupend
    Page preview (first 500 chars):
    <page>
-    <title>frei</title>
-    <ns>0</ns>
-    <id>35</id>
+    <title>MediaWiki:Signupend</title>
+    <ns>8</ns>
+    <id>220646</id>
     <revision>
-      <id>87156134</id>
-      <parentid>86858405</parentid>
-      <timestamp>2025-09-23T16:34:43Z</timestamp>
+      <id>24232245</id>
+      <parentid>4798895</parentid>
+      <timestamp>2013-12-17T01:53:27Z</timestamp>
       <contributor>
-        <username>VGPaleontologist</username>
-        <id>3818472</id>
+        <username>Mattflaschen</username>
+        <id>3050</id>
       </contributor>
-      <comment>/* Derived terms */</comment>
-      <origin>87156134</origin>
-      <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text bytes="3834" sha1="2b1fyk43gu0q81r5fe3q1j5xxcud
+      <comment>Disabling old interface message retained for third party users of MediaWiki. New form design is concise for ease of use. In new context, message now unnecessarily verbose or r
 
 
-2. Title: woordenboek
+2. Title: MediaWiki:Anonnotice
    Page preview (first 500 chars):
    <page>
-    <title>woordenboek</title>
-    <ns>0</ns>
-    <id>39</id>
+    <title>MediaWiki:Anonnotice</title>
+    <ns>8</ns>
+    <id>249841</id>
     <revision>
-      <id>87672307</id>
-      <parentid>86199701</parentid>
-      <timestamp>2025-10-31T19:27:30Z</timestamp>
+      <id>32898913</id>
+      <parentid>16651012</parentid>
+      <timestamp>2015-06-07T16:57:07Z</timestamp>
       <contributor>
-        <username>WingerBot</username>
-        <id>2024159</id>
+        <username>Krinkle</username>
+        <id>176026</id>
       </contributor>
-      <minor />
-      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
-      <origin>87672307</origin>
-      <model>wikitext</model>
-      <format>text/x-wiki</fo
-
-
-3. Title: umsonst
-   Page preview (first 500 chars):
-   <page>
-    <title>umsonst</title>
-    <ns>0</ns>
-    <id>42</id>
-    <revision>
-      <id>86865763</id>
-      <parentid>86372059</parentid>
-      <timestamp>2025-09-22T04:15:00Z</timestamp>
-      <contributor>
-        <username>FenaBot</username>
-        <id>4269631</id>
-      </contributor>
-      <comment>AudioBot: updated label(s) for De-umsonst.ogg</comment>
-      <origin>86865763</origin>
-      <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text bytes="893" sha1="7mdry1b5e
-
-
-4. Title: gratuit
-   Page preview (first 500 chars):
-   <page>
-    <title>gratuit</title>
-    <ns>0</ns>
-    <id>43</id>
-    <revision>
-      <id>86822313</id>
-      <parentid>86614475</parentid>
-      <timestamp>2025-09-18T16:24:07Z</timestamp>
-      <contributor>
-        <username>Rodrigo5260</username>
-        <id>3579806</id>
-      </contributor>
-      <comment>/* Romanian */It's attested</comment>
-      <origin>86822313</origin>
-      <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text bytes="2088" sha1="iba7rfq80lup698q831153
-
-
-5. Title: chien
-   Page preview (first 500 chars):
-   <page>
-    <title>chien</title>
-    <ns>0</ns>
-    <id>52</id>
-    <revision>
-      <id>86479246</id>
-      <parentid>86411797</parentid>
-      <timestamp>2025-08-28T10:20:12Z</timestamp>
-      <contributor>
-        <username>FenaBot</username>
-        <id>4269631</id>
-      </contributor>
-      <comment>AudioBot: updated label(s) for LL-Q150 (fra)-DenisdeShawi-chien.wav, LL-Q150 (fra)-DSwissK-chien.wav, LL-Q150 (fra)-GrandCelinien-chien.wav, LL-Q150 (fra)-Lepticed7-chien.wav, LL-Q150 (fra)-Loqu
-
-
-6. Title: aquila
-   Page preview (first 500 chars):
-   <page>
-    <title>aquila</title>
-    <ns>0</ns>
-    <id>91</id>
-    <revision>
-      <id>85137064</id>
-      <parentid>85121119</parentid>
-      <timestamp>2025-06-16T16:28:08Z</timestamp>
-      <contributor>
-        <username>NotSoFreeky</username>
-        <id>4211444</id>
-      </contributor>
-      <minor />
-      <origin>85137064</origin>
-      <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text bytes="3902" sha1="nijmvzh1qq1mz21muz3jpepbfkwebpv" xml:space="preserve">{{also
-
-
-7. Title: Vikipedio
-   Page preview (first 500 chars):
-   <page>
-    <title>Vikipedio</title>
-    <ns>0</ns>
-    <id>102</id>
-    <revision>
-      <id>59644111</id>
-      <parentid>57909138</parentid>
-      <timestamp>2020-06-29T07:41:34Z</timestamp>
-      <contributor>
-        <username>J3133</username>
-        <id>3466327</id>
-      </contributor>
-      <origin>59644111</origin>
-      <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text bytes="272" sha1="9saqjf7iyctixmnlqfzpbsyp46zp1w0" xml:space="preserve">==Esperanto==
-
-===Etymolo
-
-
-8. Title: abaist
-   Page preview (first 500 chars):
-   <page>
-    <title>abaist</title>
-    <ns>0</ns>
-    <id>262</id>
-    <revision>
-      <id>61130724</id>
-      <parentid>59255303</parentid>
-      <timestamp>2020-11-15T15:46:59Z</timestamp>
-      <contributor>
-        <username>Vox Sciurorum</username>
-        <id>3320187</id>
-      </contributor>
-      <comment>/* Verb */</comment>
-      <origin>61130724</origin>
-      <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text bytes="219" sha1="dp4s6i3aww01w7wox0zkw2tw9gaibrx" xml:s
-
-
-9. Title: abawed
-   Page preview (first 500 chars):
-   <page>
-    <title>abawed</title>
-    <ns>0</ns>
-    <id>297</id>
-    <revision>
-      <id>82581756</id>
-      <parentid>82581704</parentid>
-      <timestamp>2024-11-06T22:33:21Z</timestamp>
-      <contributor>
-        <username>Surjection</username>
-        <id>3370302</id>
-      </contributor>
-      <minor />
-      <comment>Reverted edits by [[Special:Contributions/2600:8805:100:C300:668E:BC93:75D6:4AE7|2600:8805:100:C300:668E:BC93:75D6:4AE7]]. If you think this rollback is in error, please lea
-
-
-10. Title: abdominales
-   Page preview (first 500 chars):
-   <page>
-    <title>abdominales</title>
-    <ns>0</ns>
-    <id>331</id>
-    <revision>
-      <id>87101403</id>
-      <parentid>86011834</parentid>
-      <timestamp>2025-09-22T14:35:58Z</timestamp>
-      <contributor>
-        <username>FenaBot</username>
-        <id>4269631</id>
-      </contributor>
-      <comment>AudioBot: updated label(s) for De-abdominales.ogg</comment>
-      <origin>87101403</origin>
-      <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text bytes="843" sha1="
+      <comment>Use empty string to disable notice instead of &lt;span&gt;. When this notice is not really empty, it will be rendered for anonymous users and create a weird [dismiss] button on
 
 ------------------------------------------------------------
 SAMPLES: parse_entry returned None
 ------------------------------------------------------------
 
-1. Title: abnodation
-   Text preview (first 500 chars):
-   ==English==
-{{no entry|en|[[Appendix:English dictionary-only terms]]}}
-
-
-2. Title: ⠁
+1. Title: ⠁
    Text preview (first 500 chars):
    {{also|1|a|•|⠂|⠄}}
 {{character info}}
@@ -267,6 +146,176 @@ A character of the braille script, standardized internationally as the letter ''
 # {{lb|mul|Yugoslav Braille}} {{l|mul|a|sc=Latn}} ~ {{l|mul|а|sc=Cyrl}}
 # {{lb|mul|Russian Braille}} {{l|mul|а|sc=Cyrl|tr=a}}
 # {{lb|mul|Hebrew B
+
+
+2. Title: on hold
+   Text preview (first 500 chars):
+   {{also|onhold}}
+==English==
+
+===Alternative forms===
+* {{l|en|on-hold}} (directly before a noun only)
+
+===Pronunciation===
+* {{audio|en|En-au-on hold.ogg|a=AU}}
+
+===Prepositional phrase===
+{{en-prepphr}}
+
+# {{lb|en|idiomatic}} [[delayed|Delayed]]; [[postponed]]; [[suspended]].
+#: {{ux|en|This project is '''on hold''' until we can get more information.}}
+#* {{quote-journal|en|date=2021 May 5|author=Paul Clifton|title=Network News: Heathrow Western Rail Access scheme ''''on hold''''|journal=RAIL|i
+
+
+3. Title: Pb
+   Text preview (first 500 chars):
+   {{also|PB|pb}}
+==Translingual==
+
+===Etymology===
+From {{der|mul|la|plumbum}}.
+
+===Symbol===
+{{mul-symbol}}
+
+# {{chemical symbol|lead}}
+
+==English==
+
+===Symbol===
+{{en-head|sym}}
+
+# {{lb|en|computing}} {{abbrev of|en|Pbit}}.
+
+===Anagrams===
+* {{anagrams|en|a=bp|Bp|bp|Bp.|BP|bp.}}
+
+
+4. Title: Tb
+   Text preview (first 500 chars):
+   {{also|tb|TB|ТВ}}
+==Translingual==
+
+===Symbol===
+{{mul-symbol}}
+
+# {{chemical symbol|terbium}}
+
+{{C|mul|Lanthanide series chemical elements}}
+
+==English==
+
+===Symbol===
+{{en-head|sym}}
+
+# {{lb|en|computing}} {{abbrev of|en|Tbit}}.
+
+===Anagrams===
+* {{anagrams|en|a=bt|BT|Bt|bt}}
+
+
+5. Title: Yb
+   Text preview (first 500 chars):
+   {{also|yb|YB}}
+==Translingual==
+
+===Symbol===
+{{mul-symbol}}
+
+# {{chemical symbol|ytterbium}}
+
+{{C|mul|Lanthanide series chemical elements}}
+
+==English==
+
+===Symbol===
+{{en-head|sym}}
+
+# {{lb|en|computing}} {{abbrev of|en|Ybit}}.
+
+===Anagrams===
+* {{anagrams|en|a=by|-by|b'y|by|by-}}
+
+
+6. Title: 0
+   Text preview (first 500 chars):
+   {{also|o|O|0.|ه|〇|⓪|Appendix:Variations of &quot;o&quot;}}
+{{character info}}
+{{character info/var|⁰|₀|０|𜳰|𝟶|🯰}}
+{{character image
+ | caption = The slashed variant of the digit is [[variation selector|forced with]] ⟨&amp;amp;#xFE00;⟩
+ | 1 = Unicode 0x0030.svg
+ | image2 = Unicode 0x2205, cv98.svg
+}}
+==Translingual==
+{{wp}}
+
+===Alternative forms===
+* {{alter|mul|0̸||[[w:Slashed zero|slashed zero]], available only as a combination of Unicode characters, {{w|variation selector}}s or through font fea
+
+
+7. Title: 1
+   Text preview (first 500 chars):
+   {{also|1̂|!1|1.|𝟏|𝟙|l|ӏ|Ӏ|ı|I||𐑑|↿|①|ا}}
+{{character info}}
+{{character info/var|¹|₁|１|𜳱|𝟷|🯱}}
+==Translingual==
+
+===Glyph origin===
+[[Image:Nepali 1.png|Nepali variation of Devanāgarī script {{m|sa||१|éka}}, the source for Latin ‘1’]]
+Tenth century “West Arabic” variation of the Nepali form of Hindu-Arabic numerals (compare Devanagari script {{m|sa|१||éka}}), possibly influenced by Roman numeral [[Ⅰ]], both ultimately from using a single stroke to represent the number one. See {{pedia|1#As a dig
+
+
+8. Title: 3
+   Text preview (first 500 chars):
+   {{also|Յ|ვ|Ȝ|ȝ|ɜ|з|З|ဒ|૩|੩|३|ℨ|᠓|꣓|&amp;#61;3|\:3|౩|צ|Ꜣ|ꜣ|③|&lt;3|&lt;/3}}
+{{character info}}
+{{character info/var|³|₃|３|𜳳|𝟹|🯳}}
+==Translingual==
+
+===Glyph origin===
+A West Arabic numeral, ultimately from Indic numerals (compare Devanagari {{m|hi|३}}), from a cursive form of three lines to represent the number three. See {{w|3#Evolution of the Arabic digit|3 § Evolution of the Arabic digit}} for more.
+
+===Symbol===
+{{head|mul|numeral symbol|prev|2|next|4}}
+
+# The cardinal number [[three]].
+#* {{
+
+
+9. Title: 2
+   Text preview (first 500 chars):
+   {{also|2̂|2.|շ|ջ|೩|ᒿ|②|uni=auto}}
+{{character info}}
+{{character info/var|²|₂|２|𜳲|𝟸|🯲}}
+==Translingual==
+{{wp|[[2 (number)|2]]}}
+
+===Glyph origin===
+A West Arabic numeral, ultimately from Indic numerals (compare Devanagari {{m|hi|२}}), from a cursive form of two lines to represent the number two. See {{w|2#Evolution_of_the_Arabic_digit|2 § Evolution}} for more.
+
+===Symbol===
+{{head|mul|numeral symbol|prev|1|next|3}}
+
+# The [[cardinal number]] [[two]].
+# A [[digit]] in the [[decimal]] system of n
+
+
+10. Title: 4
+   Text preview (first 500 chars):
+   {{also|Ꮞ|4̂|4.|Ꜭ|ꜭ|④}}
+{{character info}}
+{{character info/var|⁴|₄|４|𜳴|𝟺|🯴}}
+==Translingual==
+{{wp}}
+
+===Glyph origin===
+A West Arabic numeral, ultimately from Indic numerals (compare Devanagari {{m|hi|४}}), a cursive form of four lines (to represent the number four) arranged in the shape of a cross (resembling +). See {{w|4#Evolution of the Hindu-Arabic digit|4 § Evolution of the Hindu-Arabic digit}} for more.
+
+===Symbol===
+{{head|mul|numeral symbol|prev|3|next|5}}
+
+# The cardinal number [[four
 
 ============================================================
 GOAL: Reach fixed point (no samples in any category)
