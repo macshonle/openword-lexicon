@@ -69,6 +69,54 @@ def extract_page_content(xml_file: Path, sample_size: int = 10000) -> List[Tuple
     return pages
 
 
+def parse_syllable_count(hyphenation_content: str) -> Tuple[int, str]:
+    """
+    Parse hyphenation template content to extract syllable count.
+
+    Handles:
+    - Language codes (en|, da|, etc.)
+    - Multiple alternatives separated by ||
+    - Empty segments
+
+    Returns (syllable_count, parsed_breakdown)
+    """
+    # Split on double pipe to get alternatives
+    alternatives = hyphenation_content.split('||')
+
+    # Use first alternative for counting
+    first_alt = alternatives[0] if alternatives else hyphenation_content
+
+    # Split on single pipe
+    parts = first_alt.split('|')
+
+    # Filter out:
+    # - Language codes (2-3 letter codes at start, like "en", "en-US")
+    # - Empty segments
+    # - Parameter assignments (lang=, caption=, etc.)
+    syllables = []
+    for i, part in enumerate(parts):
+        part = part.strip()
+
+        # Skip empty
+        if not part:
+            continue
+
+        # Skip parameter assignments
+        if '=' in part:
+            continue
+
+        # Skip 2-3 letter codes at the beginning (language codes)
+        if i == 0 and len(part) <= 3 and part.isalpha():
+            continue
+
+        syllables.append(part)
+
+    # Build the parsed breakdown string
+    parsed = '|'.join(syllables)
+
+    return len(syllables), parsed
+
+
 def analyze_syllable_info(pages: List[Tuple[str, str]]) -> Dict:
     """Analyze syllable information in pages."""
     stats = {
@@ -79,6 +127,7 @@ def analyze_syllable_info(pages: List[Tuple[str, str]]) -> Dict:
         'hyphenation_examples': [],
         'ipa_examples': [],
         'hyphenation_formats': Counter(),
+        'syllable_counts': Counter(),
     }
 
     for title, text in pages:
@@ -91,15 +140,20 @@ def analyze_syllable_info(pages: List[Tuple[str, str]]) -> Dict:
             has_hyphenation = True
             stats['with_hyphenation'] += 1
 
-            # Store examples (up to 20)
-            if len(stats['hyphenation_examples']) < 20:
+            # Store examples (up to 30 to get good variety)
+            if len(stats['hyphenation_examples']) < 30:
                 for match in hyphenation_matches:
-                    stats['hyphenation_examples'].append((title, match))
+                    syllable_count, parsed = parse_syllable_count(match)
+                    stats['hyphenation_examples'].append((title, match, syllable_count, parsed))
+                    stats['syllable_counts'][syllable_count] += 1
+
                     # Count separator formats
                     if '|' in match:
                         stats['hyphenation_formats']['pipe_separated'] += 1
                     if '·' in match or '•' in match:
                         stats['hyphenation_formats']['dot_separated'] += 1
+                    if '||' in match:
+                        stats['hyphenation_formats']['with_alternatives'] += 1
 
         # Check for IPA with syllable markers
         ipa_matches = IPA_SYLLABLE.findall(text)
@@ -145,17 +199,27 @@ def generate_report(stats: Dict, output_path: Path):
 
     lines.extend([
         "",
-        "## Hyphenation Examples",
-        "",
-        "Sample words with hyphenation templates:",
+        "## Syllable Count Distribution",
         ""
     ])
 
-    for title, hyphenation in stats['hyphenation_examples'][:20]:
-        # Try to parse syllable count
-        parts = hyphenation.split('|')
-        syllable_parts = [p for p in parts if p and 'lang=' not in p.lower()]
-        lines.append(f"- **{title}**: `{hyphenation}` ({len(syllable_parts)} syllables)")
+    if stats['syllable_counts']:
+        for count in sorted(stats['syllable_counts'].keys()):
+            freq = stats['syllable_counts'][count]
+            lines.append(f"- **{count} syllables**: {freq:,} words")
+    else:
+        lines.append("No syllable counts available.")
+
+    lines.extend([
+        "",
+        "## Hyphenation Examples",
+        "",
+        "Sample words with hyphenation templates (showing raw, parsed, and syllable count):",
+        ""
+    ])
+
+    for title, hyphenation, syllable_count, parsed in stats['hyphenation_examples'][:25]:
+        lines.append(f"- **{title}**: `{hyphenation}` → `{parsed}` ({syllable_count} syllables)")
 
     lines.extend([
         "",
@@ -201,12 +265,25 @@ def generate_report(stats: Dict, output_path: Path):
         "    if not match:",
         "        return None",
         "    ",
-        "    # Parse hyphenation content",
         "    content = match.group(1)",
-        "    parts = content.split('|')",
         "    ",
-        "    # Count syllables (exclude parameters like lang=en)",
-        "    syllables = [p for p in parts if p.strip() and '=' not in p]",
+        "    # Handle alternatives (||)",
+        "    alternatives = content.split('||')",
+        "    first_alt = alternatives[0]",
+        "    ",
+        "    # Parse pipe-separated segments",
+        "    parts = first_alt.split('|')",
+        "    ",
+        "    # Filter syllables (exclude lang codes, parameters, empty)",
+        "    syllables = []",
+        "    for i, part in enumerate(parts):",
+        "        part = part.strip()",
+        "        if not part or '=' in part:",
+        "            continue",
+        "        # Skip 2-3 letter lang codes at start (en, da, en-US)",
+        "        if i == 0 and len(part) <= 3 and part.isalpha():",
+        "            continue",
+        "        syllables.append(part)",
         "    ",
         "    return len(syllables) if syllables else None",
         "```",

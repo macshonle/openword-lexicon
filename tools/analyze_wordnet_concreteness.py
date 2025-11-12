@@ -64,12 +64,17 @@ def extract_wordnet_data(archive_path: Path) -> Dict[str, List[Dict]]:
     synsets_by_category = defaultdict(list)
 
     with tarfile.open(archive_path, 'r:gz') as tar:
-        # Find the main WordNet XML file
-        xml_files = [m for m in tar.getmembers() if m.name.endswith('.xml') and 'english-wordnet' in m.name.lower()]
+        # Find XML files - try different naming patterns
+        xml_files = [m for m in tar.getmembers() if m.name.endswith('.xml')]
 
         if not xml_files:
-            print("Warning: No WordNet XML files found in archive")
+            print("Warning: No XML files found in archive")
+            print("Archive contents:")
+            for member in tar.getmembers()[:20]:
+                print(f"  - {member.name}")
             return synsets_by_category
+
+        print(f"  Found {len(xml_files)} XML file(s)")
 
         for xml_file in xml_files:
             print(f"  Processing {xml_file.name}...")
@@ -81,25 +86,58 @@ def extract_wordnet_data(archive_path: Path) -> Dict[str, List[Dict]]:
                 tree = ET.parse(f)
                 root = tree.getroot()
 
-                # Parse synsets
-                # WordNet format: <Synset id="..." lexfile="noun.animal">
-                for synset in root.findall('.//{http://globalwordnet.github.io/schemas/wn}Synset'):
+                print(f"    Root tag: {root.tag}")
+                print(f"    Root attribs: {root.attrib}")
+
+                # Try different namespace patterns
+                namespaces = {
+                    'wn': 'http://globalwordnet.github.io/schemas/wn',
+                    'dc': 'http://purl.org/dc/terms/'
+                }
+
+                # Try to find synsets with and without namespace
+                synsets = (
+                    root.findall('.//wn:Synset', namespaces) or
+                    root.findall('.//{http://globalwordnet.github.io/schemas/wn}Synset') or
+                    root.findall('.//Synset')
+                )
+
+                print(f"    Found {len(synsets)} synsets")
+
+                for synset in synsets:
                     synset_id = synset.get('id', '')
-                    lexfile = synset.get('{http://purl.org/dc/terms/}subject', '')
+
+                    # Try different attribute patterns for lexfile
+                    lexfile = (
+                        synset.get('{http://purl.org/dc/terms/}subject') or
+                        synset.get('subject') or
+                        synset.get('lexfile') or
+                        ''
+                    )
 
                     if not lexfile:
-                        continue
+                        # Try to extract from ID (format: ewn-dog-n)
+                        if '-n' in synset_id:
+                            lexfile = 'noun'
+                        elif '-v' in synset_id:
+                            lexfile = 'verb'
+                        elif '-a' in synset_id:
+                            lexfile = 'adjective'
+                        elif '-r' in synset_id:
+                            lexfile = 'adverb'
+                        else:
+                            continue
 
                     # Extract lemmas (words) in this synset
                     lemmas = []
-                    for lemma_elem in synset.findall('.//{http://globalwordnet.github.io/schemas/wn}Lemma'):
+                    for lemma_elem in synset.findall('.//wn:Lemma', namespaces) or synset.findall('.//Lemma'):
                         written_form = lemma_elem.get('writtenForm', '')
                         if written_form:
                             lemmas.append(written_form.lower())
 
                     # Extract definition
                     definition = ''
-                    for def_elem in synset.findall('.//{http://globalwordnet.github.io/schemas/wn}Definition'):
+                    for def_elem in synset.findall('.//wn:Definition', namespaces) or synset.findall('.//Definition'):
                         definition = def_elem.text or ''
                         break
 
@@ -110,10 +148,13 @@ def extract_wordnet_data(archive_path: Path) -> Dict[str, List[Dict]]:
                             'definition': definition
                         })
 
+                print(f"    Extracted {sum(len(s['lemmas']) for s in synsets_by_category.values())} total lemmas")
+
             except ET.ParseError as e:
                 print(f"  Warning: Error parsing {xml_file.name}: {e}")
                 continue
 
+    print(f"  Total categories found: {len(synsets_by_category)}")
     return synsets_by_category
 
 
@@ -170,15 +211,46 @@ def generate_report(stats: Dict, output_path: Path):
         "",
         f"- **Total synsets**: {stats['total_synsets']:,}",
         f"- **Total categories**: {stats['total_categories']}",
-        f"- **Concrete categories**: {len(stats['concrete_stats'])}",
-        f"- **Kids-suitable categories**: {len(stats['kids_stats'])}",
-        f"- **Abstract categories**: {len(stats['abstract_stats'])}",
+        f"- **Concrete categories found**: {len(stats['concrete_stats'])}",
+        f"- **Kids-suitable categories found**: {len(stats['kids_stats'])}",
+        f"- **Abstract categories found**: {len(stats['abstract_stats'])}",
         "",
+        "## Data Extraction Status",
+        ""
+    ]
+
+    if stats['total_synsets'] == 0:
+        lines.extend([
+            "⚠️ **No synsets extracted from WordNet archive.**",
+            "",
+            "This may indicate:",
+            "- The archive format differs from expected",
+            "- XML structure has changed",
+            "- Category/lexfile attributes are stored differently",
+            "",
+            "Check the console output for detailed extraction errors.",
+            ""
+        ])
+    elif stats['total_categories'] < 20:
+        lines.extend([
+            f"⚠️ **Only {stats['total_categories']} categories found.**",
+            "",
+            "Expected ~40+ lexicographer file categories.",
+            "The extraction may be incomplete or categories may not have lexfile attributes.",
+            ""
+        ])
+    else:
+        lines.extend([
+            "✓ Successfully extracted WordNet data.",
+            ""
+        ])
+
+    lines.extend([
         "## Concrete Noun Categories",
         "",
         "These categories contain physical, tangible nouns suitable for kids' games:",
         ""
-    ]
+    ])
 
     # Table header
     lines.extend([
