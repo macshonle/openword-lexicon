@@ -9,7 +9,7 @@ WIKTIONARY_DUMP := data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2
 WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
 
 .PHONY: bootstrap venv deps fmt lint test clean clean-viewer scrub \
-        fetch fetch-core fetch-plus fetch-post-process-plus fetch-simple fetch-scanner \
+        fetch fetch-core fetch-plus build-wiktionary-json \
         build-core build-plus export-wordlist export-wordlist-filtered-w3 export-wordlist-filtered-w4 \
         export-wordlist-filtered-c50 export-wordlist-filtered-w3c50 build-binary package check-limits start-server \
         reports report-raw report-pipeline report-trie report-metadata report-compare \
@@ -46,7 +46,7 @@ test:
 check-limits:
 	@bash scripts/sys/limits.sh check
 
-fetch: fetch-core fetch-plus fetch-post-process-plus
+fetch: fetch-core fetch-plus
 
 # Fetch core sources (PD/permissive only)
 fetch-core:
@@ -61,18 +61,6 @@ fetch-plus:
 	@bash scripts/fetch/fetch_frequency.sh
 	@bash scripts/sys/limits.sh update
 
-fetch-post-process-plus: deps
-	@if [ ! -f "$(WIKTIONARY_DUMP)" ]; then \
-		echo "✗ Missing $(WIKTIONARY_DUMP). Run 'make fetch-plus' first."; \
-		exit 1; \
-	fi
-	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
-	$(UV) run wiktwords "$(WIKTIONARY_DUMP)" \
-		--out "$(WIKTIONARY_JSON)" \
-		--dump-file-language-code en \
-		--language-code en \
-		--language-code MUL \
-		--all
 
 build-core:
 	$(UV) run python src/openword/core_ingest.py
@@ -84,12 +72,8 @@ build-core:
 	$(UV) run python src/openword/trie_build.py
 	$(UV) run python src/openword/export_wordlist.py
 
-build-plus:
+build-plus: fetch-plus build-wiktionary-json
 	$(UV) run python src/openword/core_ingest.py
-	@if [ ! -f "$(WIKTIONARY_JSON)" ]; then \
-		echo "✗ Missing $(WIKTIONARY_JSON). Run 'make fetch-post-process-plus' after producing a Wiktextract JSON."; \
-		exit 1; \
-	fi
 	$(UV) run python src/openword/wikt_ingest.py
 	$(UV) run python src/openword/wordnet_enrich.py
 	$(UV) run python src/openword/frequency_tiers.py
@@ -218,22 +202,8 @@ analyze-game-metadata:
 # Local Analysis (run locally with full Wiktionary dump)
 # ===========================
 
-# Fast Wiktionary extraction using simple streaming parser (alternative to wiktextract)
-fetch-simple: deps
-	@if [ ! -f "$(WIKTIONARY_DUMP)" ]; then \
-		echo "✗ Missing $(WIKTIONARY_DUMP). Run 'make fetch-plus' first."; \
-		exit 1; \
-	fi
-	@echo "→ Extracting Wiktionary with simple streaming parser..."
-	@echo "  (10-30 minutes for full dump, progress shown every 5k entries)"
-	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
-	$(UV) run python tools/prototypes/wiktionary_simple_parser.py \
-		"$(WIKTIONARY_DUMP)" \
-		"$(WIKTIONARY_JSON)"
-	@echo "✓ Extraction complete: $(WIKTIONARY_JSON)"
-
-# Fast Wiktionary extraction using lightweight scanner (even faster alternative)
-fetch-scanner: deps
+# Build Wiktionary JSONL using lightweight scanner parser
+build-wiktionary-json: deps
 	@if [ ! -f "$(WIKTIONARY_DUMP)" ]; then \
 		echo "✗ Missing $(WIKTIONARY_DUMP). Run 'make fetch-plus' first."; \
 		exit 1; \
@@ -268,7 +238,7 @@ audit-wiktionary: deps
 # Generate label statistics from extracted Wiktionary data
 report-labels: deps
 	@if [ ! -f "$(WIKTIONARY_JSON)" ]; then \
-		echo "✗ Missing $(WIKTIONARY_JSON). Run 'make fetch-simple' first."; \
+		echo "✗ Missing $(WIKTIONARY_JSON). Run 'make build-wiktionary-json' first."; \
 		exit 1; \
 	fi
 	@echo "→ Generating label statistics report..."
@@ -281,7 +251,7 @@ report-labels: deps
 	@echo "Commit these reports to version control for review."
 
 # Run full local analysis workflow (audit + extract + statistics)
-analyze-local: audit-wiktionary fetch-simple report-labels
+analyze-local: audit-wiktionary build-wiktionary-json report-labels
 	@echo ""
 	@echo "=========================================="
 	@echo "✓ Local analysis complete!"
