@@ -1,0 +1,352 @@
+#!/usr/bin/env python3
+"""
+Analyze WordNet for concrete vs abstract noun classification.
+
+Examines WordNet data to identify:
+- Nouns with concrete/physical properties
+- Supersenses/lexicographer files that indicate concreteness
+- Categories suitable for kids' word lists (animals, objects, food, etc.)
+- Sample words for each category
+
+Output: reports/wordnet_concreteness.md
+"""
+
+import sys
+import tarfile
+import xml.etree.ElementTree as ET
+from pathlib import Path
+from collections import defaultdict, Counter
+from typing import Dict, List, Set
+
+
+# Lexicographer files that typically contain concrete nouns
+CONCRETE_CATEGORIES = {
+    'noun.animal': 'Animals',
+    'noun.artifact': 'Man-made objects',
+    'noun.body': 'Body parts',
+    'noun.food': 'Food and drink',
+    'noun.object': 'Natural objects',
+    'noun.plant': 'Plants',
+    'noun.substance': 'Substances and materials',
+}
+
+# Categories particularly good for kids
+KIDS_CATEGORIES = {
+    'noun.animal': 'Animals',
+    'noun.artifact': 'Objects and toys',
+    'noun.body': 'Body parts',
+    'noun.food': 'Food',
+    'noun.plant': 'Plants and flowers',
+}
+
+# Abstract/less suitable for kids
+ABSTRACT_CATEGORIES = {
+    'noun.act': 'Actions and activities (abstract)',
+    'noun.attribute': 'Attributes and properties (abstract)',
+    'noun.cognition': 'Cognitive concepts (abstract)',
+    'noun.communication': 'Communication (abstract)',
+    'noun.event': 'Events (abstract)',
+    'noun.feeling': 'Feelings and emotions (abstract)',
+    'noun.motive': 'Goals and motives (abstract)',
+    'noun.phenomenon': 'Natural phenomena (abstract)',
+    'noun.possession': 'Possession (abstract)',
+    'noun.process': 'Processes (abstract)',
+    'noun.quantity': 'Quantities (abstract)',
+    'noun.relation': 'Relations (abstract)',
+    'noun.shape': 'Shapes (abstract)',
+    'noun.state': 'States (abstract)',
+    'noun.time': 'Time (abstract)',
+}
+
+
+def extract_wordnet_data(archive_path: Path) -> Dict[str, List[Dict]]:
+    """Extract synsets from WordNet archive."""
+    synsets_by_category = defaultdict(list)
+
+    with tarfile.open(archive_path, 'r:gz') as tar:
+        # Find the main WordNet XML file
+        xml_files = [m for m in tar.getmembers() if m.name.endswith('.xml') and 'english-wordnet' in m.name.lower()]
+
+        if not xml_files:
+            print("Warning: No WordNet XML files found in archive")
+            return synsets_by_category
+
+        for xml_file in xml_files:
+            print(f"  Processing {xml_file.name}...")
+            f = tar.extractfile(xml_file)
+            if not f:
+                continue
+
+            try:
+                tree = ET.parse(f)
+                root = tree.getroot()
+
+                # Parse synsets
+                # WordNet format: <Synset id="..." lexfile="noun.animal">
+                for synset in root.findall('.//{http://globalwordnet.github.io/schemas/wn}Synset'):
+                    synset_id = synset.get('id', '')
+                    lexfile = synset.get('{http://purl.org/dc/terms/}subject', '')
+
+                    if not lexfile:
+                        continue
+
+                    # Extract lemmas (words) in this synset
+                    lemmas = []
+                    for lemma_elem in synset.findall('.//{http://globalwordnet.github.io/schemas/wn}Lemma'):
+                        written_form = lemma_elem.get('writtenForm', '')
+                        if written_form:
+                            lemmas.append(written_form.lower())
+
+                    # Extract definition
+                    definition = ''
+                    for def_elem in synset.findall('.//{http://globalwordnet.github.io/schemas/wn}Definition'):
+                        definition = def_elem.text or ''
+                        break
+
+                    if lemmas:
+                        synsets_by_category[lexfile].append({
+                            'id': synset_id,
+                            'lemmas': lemmas,
+                            'definition': definition
+                        })
+
+            except ET.ParseError as e:
+                print(f"  Warning: Error parsing {xml_file.name}: {e}")
+                continue
+
+    return synsets_by_category
+
+
+def analyze_categories(synsets_by_category: Dict[str, List[Dict]]) -> Dict:
+    """Analyze category statistics and extract samples."""
+    stats = {
+        'total_synsets': sum(len(synsets) for synsets in synsets_by_category.values()),
+        'total_categories': len(synsets_by_category),
+        'concrete_stats': {},
+        'abstract_stats': {},
+        'kids_stats': {},
+        'all_categories': {}
+    }
+
+    # Collect all words by category
+    words_by_category = defaultdict(set)
+    for category, synsets in synsets_by_category.items():
+        for synset in synsets:
+            for lemma in synset['lemmas']:
+                words_by_category[category].add(lemma)
+
+    # Analyze each category
+    for category in sorted(synsets_by_category.keys()):
+        synsets = synsets_by_category[category]
+        words = words_by_category[category]
+
+        category_info = {
+            'name': category,
+            'synset_count': len(synsets),
+            'word_count': len(words),
+            'sample_words': sorted(words)[:30],  # First 30 words
+            'sample_synsets': synsets[:5]  # First 5 synsets with definitions
+        }
+
+        stats['all_categories'][category] = category_info
+
+        # Categorize
+        if category in CONCRETE_CATEGORIES:
+            stats['concrete_stats'][category] = category_info
+        if category in KIDS_CATEGORIES:
+            stats['kids_stats'][category] = category_info
+        if category in ABSTRACT_CATEGORIES:
+            stats['abstract_stats'][category] = category_info
+
+    return stats
+
+
+def generate_report(stats: Dict, output_path: Path):
+    """Generate markdown report."""
+    lines = [
+        "# WordNet Concreteness Analysis",
+        "",
+        "## Overview",
+        "",
+        f"- **Total synsets**: {stats['total_synsets']:,}",
+        f"- **Total categories**: {stats['total_categories']}",
+        f"- **Concrete categories**: {len(stats['concrete_stats'])}",
+        f"- **Kids-suitable categories**: {len(stats['kids_stats'])}",
+        f"- **Abstract categories**: {len(stats['abstract_stats'])}",
+        "",
+        "## Concrete Noun Categories",
+        "",
+        "These categories contain physical, tangible nouns suitable for kids' games:",
+        ""
+    ]
+
+    # Table header
+    lines.extend([
+        "| Category | Description | Synsets | Unique Words |",
+        "|----------|-------------|---------|--------------|"
+    ])
+
+    for category, label in CONCRETE_CATEGORIES.items():
+        if category in stats['concrete_stats']:
+            info = stats['concrete_stats'][category]
+            lines.append(f"| `{category}` | {label} | {info['synset_count']:,} | {info['word_count']:,} |")
+
+    lines.extend([
+        "",
+        "## Kids-Appropriate Categories",
+        "",
+        "Recommended categories for children's vocabulary:",
+        ""
+    ])
+
+    for category, label in KIDS_CATEGORIES.items():
+        if category in stats['kids_stats']:
+            info = stats['kids_stats'][category]
+            lines.extend([
+                f"### {label} (`{category}`)",
+                "",
+                f"- **Synsets**: {info['synset_count']:,}",
+                f"- **Unique words**: {info['word_count']:,}",
+                "",
+                "Sample words:",
+                "```"
+            ])
+            lines.extend(info['sample_words'][:20])
+            lines.extend([
+                "```",
+                "",
+                "Sample synsets with definitions:",
+                ""
+            ])
+            for synset in info['sample_synsets'][:3]:
+                lemmas_str = ', '.join(synset['lemmas'][:5])
+                lines.append(f"- **{lemmas_str}**: {synset['definition']}")
+            lines.append("")
+
+    lines.extend([
+        "## Abstract Categories (Exclude from Kids' Lists)",
+        "",
+        "These categories contain abstract concepts less suitable for kids:",
+        ""
+    ])
+
+    # Table header
+    lines.extend([
+        "| Category | Description | Synsets | Unique Words |",
+        "|----------|-------------|---------|--------------|"
+    ])
+
+    for category, label in ABSTRACT_CATEGORIES.items():
+        if category in stats['abstract_stats']:
+            info = stats['abstract_stats'][category]
+            lines.append(f"| `{category}` | {label} | {info['synset_count']:,} | {info['word_count']:,} |")
+
+    lines.extend([
+        "",
+        "## All Categories",
+        "",
+        "Complete list of all noun categories in WordNet:",
+        ""
+    ])
+
+    noun_categories = {k: v for k, v in stats['all_categories'].items() if k.startswith('noun.')}
+    for category in sorted(noun_categories.keys()):
+        info = noun_categories[category]
+        lines.append(f"- `{category}`: {info['synset_count']:,} synsets, {info['word_count']:,} words")
+
+    lines.extend([
+        "",
+        "## Integration Strategy",
+        "",
+        "### For Kids' Concrete Nouns List",
+        "",
+        "1. **Extract words from kids-appropriate categories**",
+        "   - noun.animal (animals)",
+        "   - noun.artifact (toys, objects)",
+        "   - noun.body (body parts)",
+        "   - noun.food (food and drink)",
+        "   - noun.plant (plants, flowers)",
+        "",
+        "2. **Combine with Wiktionary categories**",
+        "   - Use both WordNet lexicographer files AND Wiktionary categories",
+        "   - WordNet provides semantic grouping",
+        "   - Wiktionary provides additional coverage",
+        "",
+        "3. **Apply additional filters**",
+        "   - Word length: 3-10 characters",
+        "   - Frequency: Top 10,000 most common",
+        "   - Exclude vulgar/offensive",
+        "   - Exclude archaic/obsolete",
+        "",
+        "### Implementation",
+        "",
+        "**Option A: Pre-process WordNet into category lists**",
+        "```bash",
+        "# Extract concrete nouns from WordNet",
+        "make extract-wordnet-categories",
+        "# Output: data/wordlists/wordnet-concrete-nouns.txt",
+        "```",
+        "",
+        "**Option B: Enrich Wiktionary JSONL with WordNet categories**",
+        "```python",
+        "# Add WordNet lexfile to Wiktionary entries",
+        "{",
+        "  \"word\": \"cat\",",
+        "  \"pos\": [\"noun\"],",
+        "  \"wordnet_categories\": [\"noun.animal\"],  // NEW",
+        "  \"labels\": {...}",
+        "}",
+        "```",
+        "",
+        "**Recommended: Option A** (simpler, faster filtering)",
+        "",
+        "### Enhanced Kids' Nouns Filter",
+        "",
+        "```bash",
+        "# Combine Wiktionary + WordNet + Frequency",
+        "jq -r 'select(",
+        "  (.pos | contains([\"noun\"])) and",
+        "  .is_phrase == false and",
+        "  (.word | test(\"^[a-z]+$\")) and",
+        "  (.word | length >= 3 and length <= 10)",
+        ") | .word' wikt.jsonl \\",
+        "  | grep -Fx -f data/wordlists/wordnet-concrete-nouns.txt \\",
+        "  | grep -Fx -f data/wordlists/frequency-top-10k.txt \\",
+        "  | grep -vFx -f data/wordlists/vulgar-blocklist.txt \\",
+        "  > data/wordlists/kids-concrete-nouns-enhanced.txt",
+        "```",
+        ""
+    ])
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text('\n'.join(lines), encoding='utf-8')
+
+
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: analyze_wordnet_concreteness.py <wordnet_archive.tar.gz>")
+        print("Example: analyze_wordnet_concreteness.py data/raw/plus/english-wordnet-2024.tar.gz")
+        sys.exit(1)
+
+    archive_path = Path(sys.argv[1])
+    if not archive_path.exists():
+        print(f"Error: File not found: {archive_path}")
+        sys.exit(1)
+
+    print(f"→ Analyzing WordNet for concreteness categories")
+
+    synsets_by_category = extract_wordnet_data(archive_path)
+    print(f"  Found {len(synsets_by_category)} categories")
+
+    stats = analyze_categories(synsets_by_category)
+    print(f"  Total synsets: {stats['total_synsets']:,}")
+    print(f"  Concrete categories: {len(stats['concrete_stats'])}")
+    print(f"  Kids categories: {len(stats['kids_stats'])}")
+
+    output_path = Path("reports/wordnet_concreteness.md")
+    generate_report(stats, output_path)
+    print(f"✓ Report saved: {output_path}")
+
+
+if __name__ == '__main__':
+    main()

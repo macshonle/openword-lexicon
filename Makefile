@@ -15,6 +15,7 @@ WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
         reports report-raw report-pipeline report-trie report-metadata report-compare \
         game-words analyze-game-metadata \
         build-wordlists export-wordlist-game export-wordlist-vulgar-blocklist export-wordlist-kids-nouns export-wordlist-phrases \
+        analyze-enhanced-metadata report-frequency-analysis report-syllable-analysis report-wordnet-concreteness \
         audit-wiktionary report-labels analyze-local baseline-decompress \
         diagnose-scanner scanner-commit scanner-push
 
@@ -262,6 +263,60 @@ export-wordlist-phrases: build-wiktionary-json
 	@echo "✓ All phrases: $$(wc -l < data/wordlists/all-phrases.txt) entries"
 	@echo "✓ Idioms: $$(wc -l < data/wordlists/idioms.txt) entries"
 	@echo "✓ Prep phrases: $$(wc -l < data/wordlists/prepositional-phrases.txt) entries"
+
+# ===========================
+# Enhanced Metadata Analysis (Phase 3)
+# ===========================
+
+# Run all enhanced metadata analysis
+analyze-enhanced-metadata: report-frequency-analysis report-syllable-analysis report-wordnet-concreteness
+	@echo ""
+	@echo "=========================================="
+	@echo "✓ Enhanced metadata analysis complete!"
+	@echo "=========================================="
+	@echo ""
+	@echo "Generated reports (commit to version control):"
+	@echo "  reports/frequency_analysis.md"
+	@echo "  reports/frequency_tiers.json"
+	@echo "  reports/syllable_analysis.md"
+	@echo "  reports/wordnet_concreteness.md"
+	@echo ""
+	@echo "Review these reports to understand available metadata"
+	@echo "for enhanced word list filtering."
+
+# Analyze frequency data structure and tiers
+report-frequency-analysis: fetch-plus deps
+	@if [ ! -f "data/raw/plus/en_50k.txt" ]; then \
+		echo "✗ Missing frequency data. Run 'make fetch-plus' first."; \
+		exit 1; \
+	fi
+	@mkdir -p reports
+	@echo "→ Analyzing frequency data structure..."
+	$(UV) run python tools/analyze_frequency_data.py data/raw/plus/en_50k.txt
+	@echo "✓ Report saved: reports/frequency_analysis.md"
+
+# Analyze syllable data availability in Wiktionary
+report-syllable-analysis: deps
+	@if [ ! -f "$(WIKTIONARY_DUMP)" ]; then \
+		echo "✗ Missing $(WIKTIONARY_DUMP). Run 'make fetch-plus' first."; \
+		exit 1; \
+	fi
+	@mkdir -p reports
+	@echo "→ Analyzing syllable data in Wiktionary..."
+	@echo "  (sampling 10,000 pages to detect hyphenation templates)"
+	$(UV) run python tools/analyze_syllable_data.py "$(WIKTIONARY_DUMP)" 10000
+	@echo "✓ Report saved: reports/syllable_analysis.md"
+
+# Analyze WordNet for concrete/abstract noun classification
+report-wordnet-concreteness: fetch-plus deps
+	@if [ ! -f "data/raw/plus/english-wordnet-2024.tar.gz" ]; then \
+		echo "✗ Missing WordNet data. Run 'make fetch-plus' first."; \
+		exit 1; \
+	fi
+	@mkdir -p reports
+	@echo "→ Analyzing WordNet categories for concreteness..."
+	$(UV) run python tools/analyze_wordnet_concreteness.py data/raw/plus/english-wordnet-2024.tar.gz
+	@echo "✓ Report saved: reports/wordnet_concreteness.md"
 
 # ===========================
 # Local Analysis (run locally with full Wiktionary dump)
