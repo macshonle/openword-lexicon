@@ -2,17 +2,17 @@
 AGGREGATE RESULTS
 ============================================================
 
-Total processed: 1,595,689
-Total written: 312,026
-Special pages: 10,132
-Redirects: 7,434
-Dictionary-only terms: 171
-Non-English pages: 1,263,458
-Non-Latin scripts: 1,468
-Total skipped: 1,000
-Success rate: 19.6%
-Time: 2m 33s
-Rate: 10365 pages/sec
+Total processed: 10,200,775
+Total written: 1,326,207
+Special pages: 168,726
+Redirects: 53,018
+Dictionary-only terms: 2,254
+Non-English pages: 8,643,682
+Non-Latin scripts: 5,949
+Total skipped: 939
+Success rate: 13.0%
+Time: 14m 20s
+Rate: 11855 pages/sec
 ============================================================
 
 
@@ -21,7 +21,7 @@ DIAGNOSTIC REPORT: Skip Reasons Breakdown
 ============================================================
 
 Skip reason counts (showing up to 10 samples each):
-  1. No content extracted (no title/text or not English): 0 samples
+  1. No content extracted (no title/text or not English): 10 samples
   2. parse_entry returned None (validation failed): 10 samples
   3. parse_entry threw exception: 0 samples
 
@@ -33,58 +33,252 @@ Note: Special pages (Wiktionary:, MediaWiki:, Appendix:, Help:, Template:, Recon
 NON-ENGLISH PAGE STATISTICS
 ------------------------------------------------------------
 
-Total non-English pages: 1,263,458
+Total non-English pages: 8,643,682
 
 Top 20 languages by page count:
-   1. Italian              391,482 pages
-   2. Spanish              220,927 pages
-   3. French               128,812 pages
-   4. Finnish              88,397 pages
-   5. Portuguese           57,248 pages
-   6. Latin                51,852 pages
-   7. Galician             45,542 pages
-   8. Chinese              42,639 pages
-   9. Esperanto            35,877 pages
-  10. Japanese             31,949 pages
-  11. German               31,035 pages
-  12. Translingual         28,897 pages
-  13. Serbo-Croatian       25,163 pages
-  14. Dutch                24,485 pages
-  15. Hungarian            22,301 pages
-  16. Lithuanian           20,377 pages
-  17. Catalan              19,770 pages
-  18. Czech                18,083 pages
-  19. Korean               17,065 pages
-  20. Danish               16,351 pages
+   1. Latin                814,484 pages
+   2. Spanish              738,422 pages
+   3. Italian              572,757 pages
+   4. Russian              424,479 pages
+   5. Portuguese           375,144 pages
+   6. French               356,900 pages
+   7. German               333,906 pages
+   8. Chinese              296,282 pages
+   9. Swedish              287,364 pages
+  10. Finnish              245,218 pages
+  11. Galician             196,366 pages
+  12. Catalan              181,225 pages
+  13. Japanese             161,998 pages
+  14. Polish               155,744 pages
+  15. Esperanto            129,836 pages
+  16. Dutch                124,547 pages
+  17. Latvian              123,513 pages
+  18. Romanian             112,882 pages
+  19. Translingual         84,152 pages
+  20. Greek                80,784 pages
 
-  ... and 2645 more languages
+  ... and 6957 more languages
 
-Total unique languages: 2,665
+Total unique languages: 6,977
+
+------------------------------------------------------------
+SAMPLES: No content extracted
+------------------------------------------------------------
+
+1. Title: Module:User:ZxxZxxZ/IPA/documentation
+   Page preview (first 500 chars):
+   <page>
+    <title>Module:User:ZxxZxxZ/IPA/documentation</title>
+    <ns>828</ns>
+    <id>4119702</id>
+    <revision>
+      <id>37999352</id>
+      <parentid>21805866</parentid>
+      <timestamp>2016-04-13T08:35:54Z</timestamp>
+      <contributor>
+        <username>ZxxZxxZ</username>
+        <id>388143</id>
+      </contributor>
+      <comment>Blanked the page</comment>
+      <origin>37999352</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="0" sha1="phoi
+
+
+2. Title: Module:User:Anglom
+   Page preview (first 500 chars):
+   <page>
+    <title>Module:User:Anglom</title>
+    <ns>828</ns>
+    <id>4221645</id>
+    <revision>
+      <id>24567923</id>
+      <parentid>24567801</parentid>
+      <timestamp>2014-01-02T17:56:40Z</timestamp>
+      <contributor>
+        <username>Burgundaz</username>
+        <id>357056</id>
+      </contributor>
+      <comment>Blanked the page</comment>
+      <origin>24567923</origin>
+      <model>Scribunto</model>
+      <format>text/plain</format>
+      <text bytes="0" sha1="phoiac9h4m842xq45sp7s
+
+
+3. Title: Module:zh/data
+   Page preview (first 500 chars):
+   <page>
+    <title>Module:zh/data</title>
+    <ns>828</ns>
+    <id>4412493</id>
+    <revision>
+      <id>38935801</id>
+      <parentid>38933859</parentid>
+      <timestamp>2016-07-02T23:17:10Z</timestamp>
+      <contributor>
+        <username>Wyang</username>
+        <id>477179</id>
+      </contributor>
+      <comment>Blanked the page</comment>
+      <origin>38935801</origin>
+      <model>Scribunto</model>
+      <format>text/plain</format>
+      <text bytes="0" sha1="phoiac9h4m842xq45sp7s6u21etee
+
+
+4. Title: Module:zh/data/ltc-pron
+   Page preview (first 500 chars):
+   <page>
+    <title>Module:zh/data/ltc-pron</title>
+    <ns>828</ns>
+    <id>4432929</id>
+    <revision>
+      <id>38762223</id>
+      <parentid>37815735</parentid>
+      <timestamp>2016-06-15T08:24:44Z</timestamp>
+      <contributor>
+        <username>Wyang</username>
+        <id>477179</id>
+      </contributor>
+      <comment>Blanked the page</comment>
+      <origin>38762223</origin>
+      <model>Scribunto</model>
+      <format>text/plain</format>
+      <text bytes="0" sha1="phoiac9h4m842xq45sp7
+
+
+5. Title: Module:zh/data/och-pron-BS
+   Page preview (first 500 chars):
+   <page>
+    <title>Module:zh/data/och-pron-BS</title>
+    <ns>828</ns>
+    <id>4468958</id>
+    <revision>
+      <id>38762379</id>
+      <parentid>29900696</parentid>
+      <timestamp>2016-06-15T08:26:57Z</timestamp>
+      <contributor>
+        <username>Wyang</username>
+        <id>477179</id>
+      </contributor>
+      <comment>Blanked the page</comment>
+      <origin>38762379</origin>
+      <model>Scribunto</model>
+      <format>text/plain</format>
+      <text bytes="0" sha1="phoiac9h4m842xq45
+
+
+6. Title: Module:zh/data/och-pron-ZS
+   Page preview (first 500 chars):
+   <page>
+    <title>Module:zh/data/och-pron-ZS</title>
+    <ns>828</ns>
+    <id>4474093</id>
+    <revision>
+      <id>38762381</id>
+      <parentid>38535823</parentid>
+      <timestamp>2016-06-15T08:26:59Z</timestamp>
+      <contributor>
+        <username>Wyang</username>
+        <id>477179</id>
+      </contributor>
+      <comment>Blanked the page</comment>
+      <origin>38762381</origin>
+      <model>Scribunto</model>
+      <format>text/plain</format>
+      <text bytes="0" sha1="phoiac9h4m842xq45
+
+
+7. Title: Module:User:Jberkel/pt-conj/tableCreator
+   Page preview (first 500 chars):
+   <page>
+    <title>Module:User:Jberkel/pt-conj/tableCreator</title>
+    <ns>828</ns>
+    <id>4597942</id>
+    <revision>
+      <id>32142264</id>
+      <parentid>32142261</parentid>
+      <timestamp>2015-01-28T13:23:09Z</timestamp>
+      <contributor>
+        <username>Jberkel</username>
+        <id>1580588</id>
+      </contributor>
+      <comment>empty</comment>
+      <origin>32142264</origin>
+      <model>Scribunto</model>
+      <format>text/plain</format>
+      <text bytes="0" sha1="phoiac9h4m8
+
+
+8. Title: Module:User:Vitalik/inflection/data/ru-noun/testcases/m-cdef
+   Page preview (first 500 chars):
+   <page>
+    <title>Module:User:Vitalik/inflection/data/ru-noun/testcases/m-cdef</title>
+    <ns>828</ns>
+    <id>4913673</id>
+    <revision>
+      <id>33667966</id>
+      <parentid>33667903</parentid>
+      <timestamp>2015-07-26T15:54:05Z</timestamp>
+      <contributor>
+        <username>Vitalik</username>
+        <id>1128145</id>
+      </contributor>
+      <comment>deleted</comment>
+      <origin>33667966</origin>
+      <model>Scribunto</model>
+      <format>text/plain</format>
+      <text bytes
+
+
+9. Title: Module:User:Vitalik/inflection/data/ru-noun/testcases/m-cdef/documentation
+   Page preview (first 500 chars):
+   <page>
+    <title>Module:User:Vitalik/inflection/data/ru-noun/testcases/m-cdef/documentation</title>
+    <ns>828</ns>
+    <id>4913717</id>
+    <revision>
+      <id>33667969</id>
+      <parentid>33658255</parentid>
+      <timestamp>2015-07-26T15:54:16Z</timestamp>
+      <contributor>
+        <username>Vitalik</username>
+        <id>1128145</id>
+      </contributor>
+      <comment>deleted</comment>
+      <origin>33667969</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+   
+
+
+10. Title: Module:User:Vitalik/pl-noun-crash-test
+   Page preview (first 500 chars):
+   <page>
+    <title>Module:User:Vitalik/pl-noun-crash-test</title>
+    <ns>828</ns>
+    <id>4915662</id>
+    <revision>
+      <id>33667605</id>
+      <parentid>33666035</parentid>
+      <timestamp>2015-07-26T14:23:29Z</timestamp>
+      <contributor>
+        <username>Vitalik</username>
+        <id>1128145</id>
+      </contributor>
+      <comment>deleted</comment>
+      <origin>33667605</origin>
+      <model>Scribunto</model>
+      <format>text/plain</format>
+      <text bytes="0" sha1="phoiac9h4m8
 
 ------------------------------------------------------------
 SAMPLES: parse_entry returned None
 ------------------------------------------------------------
 
-1. Title: on hold
-   Text preview (first 500 chars):
-   {{also|onhold}}
-==English==
-
-===Alternative forms===
-* {{l|en|on-hold}} (directly before a noun only)
-
-===Pronunciation===
-* {{audio|en|En-au-on hold.ogg|a=AU}}
-
-===Prepositional phrase===
-{{en-prepphr}}
-
-# {{lb|en|idiomatic}} [[delayed|Delayed]]; [[postponed]]; [[suspended]].
-#: {{ux|en|This project is '''on hold''' until we can get more information.}}
-#* {{quote-journal|en|date=2021 May 5|author=Paul Clifton|title=Network News: Heathrow Western Rail Access scheme ''''on hold''''|journal=RAIL|i
-
-
-2. Title: Pb
+1. Title: Pb
    Text preview (first 500 chars):
    {{also|PB|pb}}
 ==Translingual==
@@ -108,7 +302,7 @@ From {{der|mul|la|plumbum}}.
 * {{anagrams|en|a=bp|Bp|bp|Bp.|BP|bp.}}
 
 
-3. Title: Tb
+2. Title: Tb
    Text preview (first 500 chars):
    {{also|tb|TB|ТВ}}
 ==Translingual==
@@ -131,7 +325,7 @@ From {{der|mul|la|plumbum}}.
 * {{anagrams|en|a=bt|BT|Bt|bt}}
 
 
-4. Title: Yb
+3. Title: Yb
    Text preview (first 500 chars):
    {{also|yb|YB}}
 ==Translingual==
@@ -154,89 +348,7 @@ From {{der|mul|la|plumbum}}.
 * {{anagrams|en|a=by|-by|b'y|by|by-}}
 
 
-5. Title: at dark
-   Text preview (first 500 chars):
-   ==English==
-
-===Prepositional phrase===
-{{en-prepphr}}
-
-# During [[nightfall]].
-
-====Related terms====
-* {{l|en|after dark}}
-* {{l|en|before dark}}
-
-====Translations====
-{{trans-top|during nightfall}}
-* Chinese:
-*: Mandarin: {{t-check|cmn|在黃昏|tr=zaihuang hun}}
-* Dutch: {{t|nl|[[wanneer]] [[de]] [[avond]] [[valt]]}}
-* Finnish: {{t|fi|illansuussa}}, {{t|fi|iltahämärissä}}
-* French: {{t|fr|[[pendant]] [[la]] [[tombée de la nuit]]}}
-* German: {{t|de|[[am]] [[Dunkelwerden]]}}
-* Italian: {{t|it|[[dura
-
-
-6. Title: before dark
-   Text preview (first 500 chars):
-   ==English==
-
-===Prepositional phrase===
-{{en-prepphr}}
-
-# Before [[night]] begins to fall.
-#: {{cot|en|after dark|at dark|before dawn}}
-#: {{uxi|en|I think you should finish mowing the lawn '''before dark'''.}}
-
-====Translations====
-{{trans-top|before night begins to fall}}
-* Chinese:
-*: Mandarin: {{t|cmn|在黃昏之前|tr=zài huánghūn zhīqián}}
-* Dutch: {{t|nl|[[voor]] [[donker]]}}, {{t|nl|[[voordat]] [[het]] [[donker]] [[wordt]]}}
-* Finnish: {{t|fi|[[ennen]] [[pimeä|pimeän]] [[tulo|tuloa]]}}, {{t|fi|[[
-
-
-7. Title: at least
-   Text preview (first 500 chars):
-   ==English==
-
-===Alternative forms===
-* {{alter|en|at the least}}
-* {{alter|en|at the very least}} {{q|emphatic form}}
-
-===Etymology===
-From {{inh|en|enm|at leste}}, from {{inh|en|ang|æt lǣstan}}.
-
-===Pronunciation===
-* {{audio|en|en-us-at least.ogg|a=US}}
-
-===Prepositional phrase===
-{{en-prepphr}}
-
-# {{lb|en|focus}} At a [[minimum]] or lower limit.
-#: {{ux|en|I couldn't count them all, but I think there must have been '''at least''' 500 people in attendance.}}
-# In any event; [[anyway]].
-#* {{qu
-
-
-8. Title: under one's thumb
-   Text preview (first 500 chars):
-   ==English==
-
-===Pronunciation===
-* {{audio|en|En-au-under one's thumb.ogg|a=AU}}
-
-===Prepositional phrase===
-{{en-prepphr}}
-
-# {{lb|en|idiomatic}} Completely [[control]]led by someone; at someone's [[command]].
-#: {{ux|en|She has the entire crew '''under her thumb'''. They would do anything for her.}}
-#* {{quote-text|en|year=1912|author=w:Willa Cather|title=[[w:The Bohemian Girl (short story)|The Bohemian Girl]]:
-|passage=...when you find a man '''under his wife's thumb''' you can always be sure
-
-
-9. Title: against the grain
+4. Title: against the grain
    Text preview (first 500 chars):
    ==English==
 
@@ -251,19 +363,128 @@ From {{inh|en|enm|at leste}}, from {{inh|en|ang|æt lǣstan}}.
 # {{lb|en|idiomatic}} Contrary
 
 
-10. Title: in spirit
+5. Title: like two peas in a pod
    Text preview (first 500 chars):
-   {{also|inspirit}}
-==English==
+   ==English==
+
+===Alternative forms===
+* {{l|en|like peas in a pod}}
+
+===Pronunciation===
+* {{audio|en|En-au-like two peas in a pod.ogg|a=AU}}
+* {{rhymes|en|ɒd|s=6}}
 
 ===Prepositional phrase===
-{{en-prepphr}}
+{{head|en|prepositional phrase}}
 
-# Non-[[physically]]; in one's thoughts only.
-#: {{uxi|en|I can’t make it to the party, but I’ll be there '''in spirit'''.}}
-#* {{RQ:Tennyson In Memoriam|XVII|28|For I '''in spirit''' saw thee move&lt;br&gt;⁠Thro’ circles of the bounding sky;&lt;br&gt;⁠Week after week: the days go by:&lt;br&gt;Come quick, thou bringest all I love.}}
-# In [[mood]] or manner.
-#: {{uxi|en|The newer works differ from the older ones '''in spiri
+# {{lb|en|simile|of two things}} Very [[similar]]; a couple [[made for each other]].
+
+====Translations====
+{{trans-top|very similar}}
+* Bulgarian: {{t|bg|като две капки вода}}
+* Catalan: {{t|ca|com dues gotes d'aigua}}
+* Chinese:
+*: Mandarin: {{t|cmn|[[一個]][[模子]][[刻]][[出來]]
+
+
+6. Title: on sale
+   Text preview (first 500 chars):
+   ==English==
+
+===Prepositional phrase===
+{{head|en|prepositional phrase}}
+
+# {{lb|en|British|Australia}} Available for [[purchase]].
+#* {{quote-book|en|year=1948|author=[[w:Carey McWilliams (journalist)|Carey McWilliams]]|title=North from Mexico / The Spanish-Speaking People of The United States|publisher=J. B. Lippincott Company|page=75
+|passage=In 1866 Colonel J. F. Meline noted that the rebozo&lt;!--Italic in original--&gt; had almost disappeared in Santa Fe and that hoop skirts, '''on sale'''
+
+
+7. Title: YBP
+   Text preview (first 500 chars):
+   ==English==
+
+===Alternative forms===
+* {{alt|en|yBP|ybp}}
+
+===Symbol===
+{{head|en|symbol}}
+
+# {{lb|en|archaeology|geology|paleontology}} {{initialism of|en|[[year]]s [[before]] [[present]]}}.
+#: {{syn|en|BP}}
+#* {{quote-book|en|year=2022|author=Cherl-Ho Lee|title=Korean Food and Foodways: The Root of Health Functional Food|publisher=Springer Nature|isbn=9789811900235|page=23|pageurl=https://books.google.com/books?id=nQGEEAAAQBAJ&amp;pg=PA23&amp;dq=%22YBP%22&amp;hl=&amp;cd=12&amp;source=gbs_api#v
+
+
+8. Title: on fire
+   Text preview (first 500 chars):
+   ==English==
+
+===Etymology===
+From {{inh|en|enm|on fier}}, {{m|enm|on fijre}}, {{m|enm|on fire}}, {{m|enm|on fyire}}, {{m|enm|on fyre}}.
+
+===Pronunciation===
+* {{audio|en|En-au-on fire.ogg|a=AU}}
+
+===Prepositional phrase===
+{{head|en|prepositional phrase}}
+
+# Being [[burn]]ed by [[fire]].
+#: {{syn|en|afire|aflame|alight|burning|flaming|in flames|go up in smoke|alt7=going up in smoke}}
+#: {{ux|en|If the wind picks up and the flames spread, the whole town could go '''on fire'''.}}
+# {{lb|en|idiomat
+
+
+9. Title: by default
+   Text preview (first 500 chars):
+   ==English==
+
+===Prepositional phrase===
+{{head|en|prepositional phrase}}
+
+# In [[absence]] of any [[opposing]] [[action]].
+#: {{ux|en|If we don't do something, they'll win '''by default'''.}}
+#: {{ux|en|No one could think of a better name, so we chose &quot;Strawman&quot; '''by default'''.}}
+#: {{ux|en|If he wins an election, it will only be '''by default'''.}}
+
+====Translations====
+{{trans-top|in absence of any opposing action}}
+* Catalan: {{t|ca|per omissió}}
+* Chinese:
+*: Mandarin: {{t|cmn|[[
+
+
+10. Title: þ
+   Text preview (first 500 chars):
+   {{also|Þ|Ϸ|-þ|ᚦ|ð|Appendix:Variations of &quot;th&quot;}}
+{{character info}}
+==Translingual==
+
+===Symbol===
+{{head|mul|symbol}}
+
+# {{lb|mul|[[Romic]]}} a {{w|voiceless dental fricative}} (IPA: {{IPAlink|θ}}).
+
+==English==
+
+===Pronunciation===
+* {{enPR|th}}
+* {{IPA|en|/θ/|a=RP,GenAm,CanE,AuE,NZE,ScE}}
+* {{IPA|en|/t̪/|a=InE}}
+
+===Letter===
+{{en-letter}}
+
+# {{ng|Replaces ''th'' for an {{lg|archaic}} style.}}
+
+==Gothic==
+
+===Romanization===
+{{got-rom}}
+
+# {{romanization of|got|𐌸}}
+
+==Icelandic==
+
+==
 
 ============================================================
 GOAL: Reach fixed point (no samples in any category)
