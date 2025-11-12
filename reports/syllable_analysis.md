@@ -12,32 +12,48 @@ Analyzed 10,000 Wiktionary pages for syllable information.
 
 ## Hyphenation Template Formats
 
-- **pipe_separated**: 20 occurrences
+- **pipe_separated**: 31 occurrences
+- **with_alternatives**: 1 occurrences
+
+## Syllable Count Distribution
+
+- **1 syllables**: 7 words
+- **2 syllables**: 15 words
+- **3 syllables**: 5 words
+- **4 syllables**: 1 words
+- **5 syllables**: 1 words
+- **6 syllables**: 1 words
+- **8 syllables**: 1 words
 
 ## Hyphenation Examples
 
-Sample words with hyphenation templates:
+Sample words with hyphenation templates (showing raw, parsed, and syllable count):
 
-- **dictionary**: `en|dic|tion|a|ry||dic|tion|ary` (8 syllables)
-- **thesaurus**: `en|the|saur|us` (4 syllables)
-- **encyclopedia**: `en|en|cy|clo|pe|di|a` (7 syllables)
-- **encyclopaedia**: `en|en|cy|clo|pae|dia` (6 syllables)
-- **frei**: `pt|frei` (2 syllables)
-- **cat**: `gd|cat` (2 syllables)
-- **woordenboek**: `nl|woor|den|boek` (4 syllables)
-- **gratis**: `en|grat|is` (3 syllables)
-- **gratis**: `da|gra|tis` (3 syllables)
-- **gratis**: `nl|gra|tis` (3 syllables)
-- **gratis**: `gl|gra|tis` (3 syllables)
-- **gratis**: `ms|gra|tis` (3 syllables)
-- **gratis**: `ro|gra|tis` (3 syllables)
-- **gratuit**: `fr|gra|tuit` (3 syllables)
-- **gratuit**: `ro|gra|tu|it` (4 syllables)
-- **livre**: `pt|li|vre` (3 syllables)
-- **book**: `li|book` (2 syllables)
-- **pound**: `ro|pound` (2 syllables)
-- **pond**: `nl|pond` (2 syllables)
-- **pies**: `nl|pies` (2 syllables)
+- **dictionary**: `en|dic|tion|a|ry||dic|tion|ary` → `dic|tion|a|ry` (4 syllables)
+- **thesaurus**: `en|the|saur|us` → `the|saur|us` (3 syllables)
+- **encyclopedia**: `en|en|cy|clo|pe|di|a` → `en|cy|clo|pe|di|a` (6 syllables)
+- **encyclopaedia**: `en|en|cy|clo|pae|dia` → `en|cy|clo|pae|dia` (5 syllables)
+- **frei**: `pt|frei` → `frei` (1 syllables)
+- **cat**: `gd|cat` → `cat` (1 syllables)
+- **woordenboek**: `nl|woor|den|boek` → `woor|den|boek` (3 syllables)
+- **gratis**: `en|grat|is` → `grat|is` (2 syllables)
+- **gratis**: `da|gra|tis` → `gra|tis` (2 syllables)
+- **gratis**: `nl|gra|tis` → `gra|tis` (2 syllables)
+- **gratis**: `gl|gra|tis` → `gra|tis` (2 syllables)
+- **gratis**: `ms|gra|tis` → `gra|tis` (2 syllables)
+- **gratis**: `ro|gra|tis` → `gra|tis` (2 syllables)
+- **gratuit**: `fr|gra|tuit` → `gra|tuit` (2 syllables)
+- **gratuit**: `ro|gra|tu|it` → `gra|tu|it` (3 syllables)
+- **livre**: `pt|li|vre` → `li|vre` (2 syllables)
+- **book**: `li|book` → `book` (1 syllables)
+- **pound**: `ro|pound` → `pound` (1 syllables)
+- **pond**: `nl|pond` → `pond` (1 syllables)
+- **pies**: `nl|pies` → `pies` (1 syllables)
+- **nonsense**: `en|non|sense` → `non|sense` (2 syllables)
+- **A**: `nb|A` → `A` (1 syllables)
+- **elephant**: `en|ele|phant` → `ele|phant` (2 syllables)
+- **Wiktionary:Entry layout**: `en|sym|bol` → `sym|bol` (2 syllables)
+- **Wiktionary:Entry layout**: `en|sym|bol` → `sym|bol` (2 syllables)
 
 ## IPA Syllable Examples
 
@@ -95,12 +111,25 @@ def extract_syllable_count(text: str) -> Optional[int]:
     if not match:
         return None
     
-    # Parse hyphenation content
     content = match.group(1)
-    parts = content.split('|')
     
-    # Count syllables (exclude parameters like lang=en)
-    syllables = [p for p in parts if p.strip() and '=' not in p]
+    # Handle alternatives (||)
+    alternatives = content.split('||')
+    first_alt = alternatives[0]
+    
+    # Parse pipe-separated segments
+    parts = first_alt.split('|')
+    
+    # Filter syllables (exclude lang codes, parameters, empty)
+    syllables = []
+    for i, part in enumerate(parts):
+        part = part.strip()
+        if not part or '=' in part:
+            continue
+        # Skip 2-3 letter lang codes at start (en, da, en-US)
+        if i == 0 and len(part) <= 3 and part.isalpha():
+            continue
+        syllables.append(part)
     
     return len(syllables) if syllables else None
 ```

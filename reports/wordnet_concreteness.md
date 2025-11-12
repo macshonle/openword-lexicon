@@ -4,9 +4,20 @@
 
 - **Total synsets**: 0
 - **Total categories**: 0
-- **Concrete categories**: 0
-- **Kids-suitable categories**: 0
-- **Abstract categories**: 0
+- **Concrete categories found**: 0
+- **Kids-suitable categories found**: 0
+- **Abstract categories found**: 0
+
+## Data Extraction Status
+
+⚠️ **No synsets extracted from WordNet archive.**
+
+This may indicate:
+- The archive format differs from expected
+- XML structure has changed
+- Category/lexfile attributes are stored differently
+
+Check the console output for detailed extraction errors.
 
 ## Concrete Noun Categories
 
