@@ -3,16 +3,16 @@ AGGREGATE RESULTS
 ============================================================
 
 Total processed: 10,200,775
-Total written: 1,326,207
-Special pages: 168,726
-Redirects: 53,018
+Total written: 1,326,820
+Special pages: 230,152
+Redirects: 52,884
 Dictionary-only terms: 2,254
-Non-English pages: 8,643,682
-Non-Latin scripts: 5,949
-Total skipped: 939
+Non-English pages: 8,582,467
+Non-Latin scripts: 5,939
+Total skipped: 259
 Success rate: 13.0%
-Time: 14m 20s
-Rate: 11855 pages/sec
+Time: 14m 10s
+Rate: 11994 pages/sec
 ============================================================
 
 
@@ -20,12 +20,12 @@ Rate: 11855 pages/sec
 DIAGNOSTIC REPORT: Skip Reasons Breakdown
 ============================================================
 
-Skip reason counts (showing up to 10 samples each):
-  1. No content extracted (no title/text or not English): 10 samples
-  2. parse_entry returned None (validation failed): 10 samples
+Skip reason counts (showing first 10 and last 10 samples):
+  1. No content extracted (no title/text or not English): 3 samples
+  2. parse_entry returned None (validation failed): 256 samples
   3. parse_entry threw exception: 0 samples
 
-Note: Special pages (Wiktionary:, MediaWiki:, Appendix:, Help:, Template:, Reconstruction:), redirects,
+Note: Special pages (Wiktionary:, MediaWiki:, Module:, Appendix:, Help:, Template:, Reconstruction:), redirects,
       dictionary-only terms, non-English pages, and non-Latin scripts are
       counted separately, not included in diagnostic samples.
 
@@ -33,13 +33,13 @@ Note: Special pages (Wiktionary:, MediaWiki:, Appendix:, Help:, Template:, Recon
 NON-ENGLISH PAGE STATISTICS
 ------------------------------------------------------------
 
-Total non-English pages: 8,643,682
+Total non-English pages: 8,582,467
 
 Top 20 languages by page count:
-   1. Latin                814,484 pages
+   1. Latin                814,477 pages
    2. Spanish              738,422 pages
    3. Italian              572,757 pages
-   4. Russian              424,479 pages
+   4. Russian              424,477 pages
    5. Portuguese           375,144 pages
    6. French               356,900 pages
    7. German               333,906 pages
@@ -54,415 +54,163 @@ Top 20 languages by page count:
   16. Dutch                124,547 pages
   17. Latvian              123,513 pages
   18. Romanian             112,882 pages
-  19. Translingual         84,152 pages
+  19. Translingual         84,151 pages
   20. Greek                80,784 pages
 
-  ... and 6957 more languages
+  ... and 6781 more languages
 
-Total unique languages: 6,977
+Total unique languages: 6,801
 
 ------------------------------------------------------------
 SAMPLES: No content extracted
 ------------------------------------------------------------
 
-1. Title: Module:User:ZxxZxxZ/IPA/documentation
+1. Title: Thread:User talk:CodeCat/Regex code
    Page preview (first 500 chars):
    <page>
-    <title>Module:User:ZxxZxxZ/IPA/documentation</title>
-    <ns>828</ns>
-    <id>4119702</id>
+    <title>Thread:User talk:CodeCat/Regex code</title>
+    <ns>90</ns>
+    <id>5965617</id>
     <revision>
-      <id>37999352</id>
-      <parentid>21805866</parentid>
-      <timestamp>2016-04-13T08:35:54Z</timestamp>
+      <id>41864141</id>
+      <parentid>41734080</parentid>
+      <timestamp>2016-12-13T01:09:13Z</timestamp>
       <contributor>
-        <username>ZxxZxxZ</username>
-        <id>388143</id>
+        <username>AmazingJus</username>
+        <id>3172395</id>
       </contributor>
-      <comment>Blanked the page</comment>
-      <origin>37999352</origin>
+      <comment>Again, not worth it</comment>
+      <origin>41864141</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="0" sha1="phoi
+      <text bytes="0" sha1="
 
 
-2. Title: Module:User:Anglom
+2. Title: Thread:User talk:CodeCat/Regex code/reply
    Page preview (first 500 chars):
    <page>
-    <title>Module:User:Anglom</title>
-    <ns>828</ns>
-    <id>4221645</id>
+    <title>Thread:User talk:CodeCat/Regex code/reply</title>
+    <ns>90</ns>
+    <id>5965618</id>
     <revision>
-      <id>24567923</id>
-      <parentid>24567801</parentid>
-      <timestamp>2014-01-02T17:56:40Z</timestamp>
+      <id>41864137</id>
+      <parentid>41734091</parentid>
+      <timestamp>2016-12-13T01:08:24Z</timestamp>
       <contributor>
-        <username>Burgundaz</username>
-        <id>357056</id>
+        <username>AmazingJus</username>
+        <id>3172395</id>
+      </contributor>
+      <comment>Never mind. kc_kennylau helped me with this one. Not worth being here if it's being abandoned</comment>
+      <origin>41864137</origin>
+      <model>
+
+
+3. Title: Thread:User talk:CodeCat/Template nl-IPA/reply
+   Page preview (first 500 chars):
+   <page>
+    <title>Thread:User talk:CodeCat/Template nl-IPA/reply</title>
+    <ns>90</ns>
+    <id>6000743</id>
+    <revision>
+      <id>41954253</id>
+      <parentid>41954235</parentid>
+      <timestamp>2016-12-28T12:21:17Z</timestamp>
+      <contributor>
+        <username>AmazingJus</username>
+        <id>3172395</id>
       </contributor>
       <comment>Blanked the page</comment>
-      <origin>24567923</origin>
-      <model>Scribunto</model>
-      <format>text/plain</format>
-      <text bytes="0" sha1="phoiac9h4m842xq45sp7s
-
-
-3. Title: Module:zh/data
-   Page preview (first 500 chars):
-   <page>
-    <title>Module:zh/data</title>
-    <ns>828</ns>
-    <id>4412493</id>
-    <revision>
-      <id>38935801</id>
-      <parentid>38933859</parentid>
-      <timestamp>2016-07-02T23:17:10Z</timestamp>
-      <contributor>
-        <username>Wyang</username>
-        <id>477179</id>
-      </contributor>
-      <comment>Blanked the page</comment>
-      <origin>38935801</origin>
-      <model>Scribunto</model>
-      <format>text/plain</format>
-      <text bytes="0" sha1="phoiac9h4m842xq45sp7s6u21etee
-
-
-4. Title: Module:zh/data/ltc-pron
-   Page preview (first 500 chars):
-   <page>
-    <title>Module:zh/data/ltc-pron</title>
-    <ns>828</ns>
-    <id>4432929</id>
-    <revision>
-      <id>38762223</id>
-      <parentid>37815735</parentid>
-      <timestamp>2016-06-15T08:24:44Z</timestamp>
-      <contributor>
-        <username>Wyang</username>
-        <id>477179</id>
-      </contributor>
-      <comment>Blanked the page</comment>
-      <origin>38762223</origin>
-      <model>Scribunto</model>
-      <format>text/plain</format>
-      <text bytes="0" sha1="phoiac9h4m842xq45sp7
-
-
-5. Title: Module:zh/data/och-pron-BS
-   Page preview (first 500 chars):
-   <page>
-    <title>Module:zh/data/och-pron-BS</title>
-    <ns>828</ns>
-    <id>4468958</id>
-    <revision>
-      <id>38762379</id>
-      <parentid>29900696</parentid>
-      <timestamp>2016-06-15T08:26:57Z</timestamp>
-      <contributor>
-        <username>Wyang</username>
-        <id>477179</id>
-      </contributor>
-      <comment>Blanked the page</comment>
-      <origin>38762379</origin>
-      <model>Scribunto</model>
-      <format>text/plain</format>
-      <text bytes="0" sha1="phoiac9h4m842xq45
-
-
-6. Title: Module:zh/data/och-pron-ZS
-   Page preview (first 500 chars):
-   <page>
-    <title>Module:zh/data/och-pron-ZS</title>
-    <ns>828</ns>
-    <id>4474093</id>
-    <revision>
-      <id>38762381</id>
-      <parentid>38535823</parentid>
-      <timestamp>2016-06-15T08:26:59Z</timestamp>
-      <contributor>
-        <username>Wyang</username>
-        <id>477179</id>
-      </contributor>
-      <comment>Blanked the page</comment>
-      <origin>38762381</origin>
-      <model>Scribunto</model>
-      <format>text/plain</format>
-      <text bytes="0" sha1="phoiac9h4m842xq45
-
-
-7. Title: Module:User:Jberkel/pt-conj/tableCreator
-   Page preview (first 500 chars):
-   <page>
-    <title>Module:User:Jberkel/pt-conj/tableCreator</title>
-    <ns>828</ns>
-    <id>4597942</id>
-    <revision>
-      <id>32142264</id>
-      <parentid>32142261</parentid>
-      <timestamp>2015-01-28T13:23:09Z</timestamp>
-      <contributor>
-        <username>Jberkel</username>
-        <id>1580588</id>
-      </contributor>
-      <comment>empty</comment>
-      <origin>32142264</origin>
-      <model>Scribunto</model>
-      <format>text/plain</format>
-      <text bytes="0" sha1="phoiac9h4m8
-
-
-8. Title: Module:User:Vitalik/inflection/data/ru-noun/testcases/m-cdef
-   Page preview (first 500 chars):
-   <page>
-    <title>Module:User:Vitalik/inflection/data/ru-noun/testcases/m-cdef</title>
-    <ns>828</ns>
-    <id>4913673</id>
-    <revision>
-      <id>33667966</id>
-      <parentid>33667903</parentid>
-      <timestamp>2015-07-26T15:54:05Z</timestamp>
-      <contributor>
-        <username>Vitalik</username>
-        <id>1128145</id>
-      </contributor>
-      <comment>deleted</comment>
-      <origin>33667966</origin>
-      <model>Scribunto</model>
-      <format>text/plain</format>
-      <text bytes
-
-
-9. Title: Module:User:Vitalik/inflection/data/ru-noun/testcases/m-cdef/documentation
-   Page preview (first 500 chars):
-   <page>
-    <title>Module:User:Vitalik/inflection/data/ru-noun/testcases/m-cdef/documentation</title>
-    <ns>828</ns>
-    <id>4913717</id>
-    <revision>
-      <id>33667969</id>
-      <parentid>33658255</parentid>
-      <timestamp>2015-07-26T15:54:16Z</timestamp>
-      <contributor>
-        <username>Vitalik</username>
-        <id>1128145</id>
-      </contributor>
-      <comment>deleted</comment>
-      <origin>33667969</origin>
+      <origin>41954253</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-   
-
-
-10. Title: Module:User:Vitalik/pl-noun-crash-test
-   Page preview (first 500 chars):
-   <page>
-    <title>Module:User:Vitalik/pl-noun-crash-test</title>
-    <ns>828</ns>
-    <id>4915662</id>
-    <revision>
-      <id>33667605</id>
-      <parentid>33666035</parentid>
-      <timestamp>2015-07-26T14:23:29Z</timestamp>
-      <contributor>
-        <username>Vitalik</username>
-        <id>1128145</id>
-      </contributor>
-      <comment>deleted</comment>
-      <origin>33667605</origin>
-      <model>Scribunto</model>
-      <format>text/plain</format>
-      <text bytes="0" sha1="phoiac9h4m8
+      <text bytes="0
 
 ------------------------------------------------------------
 SAMPLES: parse_entry returned None
 ------------------------------------------------------------
 
-1. Title: Pb
+1. Title: anasteemaphilia
    Text preview (first 500 chars):
-   {{also|PB|pb}}
-==Translingual==
+   ==English==
+{{no entry|en}}
+
+
+2. Title: -bloody-
+   Text preview (first 500 chars):
+   {{also|bloody}}
+==English==
+
+===Infix===
+{{head|en|infix}}
+
+# {{lb|en|British|slang}} {{non-gloss|An [[intensifier]].}}
+#: {{ux|en|Abso'''bloody'''lutely!}}
+#* {{quote-journal|en|date=2010-10-17|title=Tattoos: what makes one spiritual and another Katona-esque?|author=w:Hadley Freeman|journal=w:The Guardian|url=https://www.theguardian.com/lifeandstyle/2010/oct/17/tattoos-on-women|passage=Were it not for the tattoos, honestly, they'd be able to stand on one foot for hours and truly focus and not t
+
+
+3. Title: supposed to
+   Text preview (first 500 chars):
+   ==English==
+{{rfd|en}}
 
 ===Etymology===
-From {{der|mul|la|plumbum}}.
-
-===Symbol===
-{{mul-symbol}}
-
-# {{chemical symbol|lead}}
-
-==English==
-
-===Symbol===
-{{en-head|sym}}
-
-# {{lb|en|computing}} {{abbrev of|en|Pbit}}.
-
-===Anagrams===
-* {{anagrams|en|a=bp|Bp|bp|Bp.|BP|bp.}}
-
-
-2. Title: Tb
-   Text preview (first 500 chars):
-   {{also|tb|TB|ТВ}}
-==Translingual==
-
-===Symbol===
-{{mul-symbol}}
-
-# {{chemical symbol|terbium}}
-
-{{C|mul|Lanthanide series chemical elements}}
-
-==English==
-
-===Symbol===
-{{en-head|sym}}
-
-# {{lb|en|computing}} {{abbrev of|en|Tbit}}.
-
-===Anagrams===
-* {{anagrams|en|a=bt|BT|Bt|bt}}
-
-
-3. Title: Yb
-   Text preview (first 500 chars):
-   {{also|yb|YB}}
-==Translingual==
-
-===Symbol===
-{{mul-symbol}}
-
-# {{chemical symbol|ytterbium}}
-
-{{C|mul|Lanthanide series chemical elements}}
-
-==English==
-
-===Symbol===
-{{en-head|sym}}
-
-# {{lb|en|computing}} {{abbrev of|en|Ybit}}.
-
-===Anagrams===
-* {{anagrams|en|a=by|-by|b'y|by|by-}}
-
-
-4. Title: against the grain
-   Text preview (first 500 chars):
-   ==English==
+From {{m|en|supposed}} and {{m|en|to}}, with fusion of {{IPAchar|/zdt/}} to {{IPAchar|/s(t)t/}} by regressive assimilation. Compare the devoicing in {{m|en|used to}} and {{m|en|have to}}/{{m|en|has to}}.
 
 ===Pronunciation===
-* {{IPA|en|/əˈɡɛnst ðə ɡɹeɪn/}}
-* {{audio|en|en-au-against the grain.ogg|a=AU}}
-
-===Prepositional phrase===
-{{head|en|prepositional phrase|head=[[against]] the [[grain]]}}
-
-# {{lb|en|woodworking|of sanding or planing a piece of wood}} Preventing a smooth, level surface from being formed by raising the [[nap#fabric direction|nap]] of the wood or causing larger splinters to form ahead of the cutting [[tool]] below the cutting surface.
-# {{lb|en|idiomatic}} Contrary
+* {{IPA|en|/səˈpəʊs(t) ˌtuː/|a=RP}}
+* {{audio|en|LL-Q1860 (eng)-Vealhurl-supposed to.wav|a=Southern England}}
+* {{IPA|en|/səˈpoʊs(t) ˌtu/|a=GA}} {{qualifier|stressed}}
+* {{audio|en|LL-Q1860 (eng)-Persent101-be supposed to.wav|a=US|text
 
 
-5. Title: like two peas in a pod
+4. Title: on all fours
    Text preview (first 500 chars):
-   ==English==
+   {{also|on all-fours}}
+==English==
 
 ===Alternative forms===
-* {{l|en|like peas in a pod}}
+* {{l|en|on all-fours}}
 
 ===Pronunciation===
-* {{audio|en|En-au-like two peas in a pod.ogg|a=AU}}
-* {{rhymes|en|ɒd|s=6}}
+* {{audio|en|En-au-on all fours.ogg|a=AU}}
 
-===Prepositional phrase===
-{{head|en|prepositional phrase}}
+===Adverbial phrase===
+{{en-adj|-|head=[[on]] [[all]] [[four]]s}}
 
-# {{lb|en|simile|of two things}} Very [[similar]]; a couple [[made for each other]].
-
-====Translations====
-{{trans-top|very similar}}
-* Bulgarian: {{t|bg|като две капки вода}}
-* Catalan: {{t|ca|com dues gotes d'aigua}}
-* Chinese:
-*: Mandarin: {{t|cmn|[[一個]][[模子]][[刻]][[出來]]
+# {{lb|en|idiomatic}} On one's [[hand]]s and [[knee]]s.
+#* {{quote-text|en|year=1897|author=w:Joseph Conrad|title=The Nigger Of The ‘Narcissus’|chapter=3
+|passage=A bulky form was seen rising aft, and began marching '''on all fours''' with the movements of some big cautious beast.}}
+#
 
 
-6. Title: on sale
+5. Title: prud'-homme
    Text preview (first 500 chars):
    ==English==
-
-===Prepositional phrase===
-{{head|en|prepositional phrase}}
-
-# {{lb|en|British|Australia}} Available for [[purchase]].
-#* {{quote-book|en|year=1948|author=[[w:Carey McWilliams (journalist)|Carey McWilliams]]|title=North from Mexico / The Spanish-Speaking People of The United States|publisher=J. B. Lippincott Company|page=75
-|passage=In 1866 Colonel J. F. Meline noted that the rebozo&lt;!--Italic in original--&gt; had almost disappeared in Santa Fe and that hoop skirts, '''on sale'''
+{{no entry|en}}
 
 
-7. Title: YBP
+6. Title: Ð
    Text preview (first 500 chars):
-   ==English==
-
-===Alternative forms===
-* {{alt|en|yBP|ybp}}
-
-===Symbol===
-{{head|en|symbol}}
-
-# {{lb|en|archaeology|geology|paleontology}} {{initialism of|en|[[year]]s [[before]] [[present]]}}.
-#: {{syn|en|BP}}
-#* {{quote-book|en|year=2022|author=Cherl-Ho Lee|title=Korean Food and Foodways: The Root of Health Functional Food|publisher=Springer Nature|isbn=9789811900235|page=23|pageurl=https://books.google.com/books?id=nQGEEAAAQBAJ&amp;pg=PA23&amp;dq=%22YBP%22&amp;hl=&amp;cd=12&amp;source=gbs_api#v
-
-
-8. Title: on fire
-   Text preview (first 500 chars):
-   ==English==
-
-===Etymology===
-From {{inh|en|enm|on fier}}, {{m|enm|on fijre}}, {{m|enm|on fire}}, {{m|enm|on fyire}}, {{m|enm|on fyre}}.
-
-===Pronunciation===
-* {{audio|en|En-au-on fire.ogg|a=AU}}
-
-===Prepositional phrase===
-{{head|en|prepositional phrase}}
-
-# Being [[burn]]ed by [[fire]].
-#: {{syn|en|afire|aflame|alight|burning|flaming|in flames|go up in smoke|alt7=going up in smoke}}
-#: {{ux|en|If the wind picks up and the flames spread, the whole town could go '''on fire'''.}}
-# {{lb|en|idiomat
-
-
-9. Title: by default
-   Text preview (first 500 chars):
-   ==English==
-
-===Prepositional phrase===
-{{head|en|prepositional phrase}}
-
-# In [[absence]] of any [[opposing]] [[action]].
-#: {{ux|en|If we don't do something, they'll win '''by default'''.}}
-#: {{ux|en|No one could think of a better name, so we chose &quot;Strawman&quot; '''by default'''.}}
-#: {{ux|en|If he wins an election, it will only be '''by default'''.}}
-
-====Translations====
-{{trans-top|in absence of any opposing action}}
-* Catalan: {{t|ca|per omissió}}
-* Chinese:
-*: Mandarin: {{t|cmn|[[
-
-
-10. Title: þ
-   Text preview (first 500 chars):
-   {{also|Þ|Ϸ|-þ|ᚦ|ð|Appendix:Variations of &quot;th&quot;}}
+   {{also|ð|Đ|Ɖ|Đ.|[[File:Latin capital letter african D with hook.svg|18px|link=Unsupported titles/D with hook and tail]]|Appendix:Variations of &quot;d&quot;}}
 {{character info}}
-==Translingual==
+{{character image|Latin capital letter african D with hook.svg | caption = Capital ''ð'' may have different form, more similar to the lower case.}}
+==English==
 
-===Symbol===
-{{head|mul|symbol}}
+===Pronunciation===
+* {{enPR|''th''}}
+* {{IPA|en|/ð/|a=RP,GenAm,CanE,AuE,NZE,ScE}}
+* {{IPA|en|/d̪/|a=InE}}
 
-# {{lb|mul|[[Romic]]}} a {{w|voiceless dental fricative}} (IPA: {{IPAlink|θ}}).
+===Letter===
+{{en-letter}}
 
+# {{ng|Replaces ''Th'' fo
+
+
+7. Title: Þ
+   Text preview (first 500 chars):
+   {{also|þ|Ϸ|-þ|Appendix:Variations of &quot;th&quot;}}
+{{character info}}
 ==English==
 
 ===Pronunciation===
@@ -473,18 +221,172 @@ From {{inh|en|enm|on fier}}, {{m|enm|on fijre}}, {{m|enm|on fire}}, {{m|enm|on f
 ===Letter===
 {{en-letter}}
 
-# {{ng|Replaces ''th'' for an {{lg|archaic}} style.}}
-
-==Gothic==
-
-===Romanization===
-{{got-rom}}
-
-# {{romanization of|got|𐌸}}
+# {{ng|Replaces ''Th'' for an {{lg|archaic}} style.}}
 
 ==Icelandic==
 
-==
+===Pronunciation===
+* {{IPA|is|/θ/}}
+
+===Letter===
+{{head|is|letter|lower case|þ}}
+
+# {{Latn-def|is|letter|30}}
+
+===See also===
+{{list:Latin script letters/is}}
+
+==Old English==
+
+===Pronunciation===
+* {{ang-IPA|þ
+
+
+8. Title: anapnoic
+   Text preview (first 500 chars):
+   ==English==
+{{no entry|en}}
+
+
+9. Title: -o-
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;o&quot;}}&lt;!--Which covers [[o']], [[O']], and others--&gt;
+==English==
+
+===Alternative forms===
+* {{alt|en|-ö-||clarifies pronunciation|very rare}}
+
+===Etymology 1===
+{{wp|[[classical compound|combining forms]]}}
+{{etymon|en|id=connective|:bor|la:-o-&lt;id:connective&gt;}}
+Adopted from {{bor|en|la|-o-}}, originating ultimately from {{der|en|grc|-ο-}}.
+In English, the connective is found from the Middle English period in direct borrowings from Latin. Direct 
+
+
+10. Title: ſ
+   Text preview (first 500 chars):
+   {{also|⌠|∫|ʃ|ẛ|ꞅ|Appendix:Variations of &quot;s&quot;|uni=auto}}
+{{character info}}
+==Translingual==
+{{wp|Long s}}
+[[Image:Trausaal.jpg|thumb|200px|right|Proper use of the long [[s]] is demonstrated by the words [[Bürger]][[Saal#German|ſaal]] and [[Rats]][[Säle|ſäle]] on a German sign, but incorrect use can be seen in the third word, [[trauen#German|Trau]][[Saal#German|saal]], causing it to be parsed as ‘Traus[[Aal|aal]]’.]]
+
+===Letter===
+{{mul-letter|lower=ſ|script=Latn}}
+
+# {{lb|mul|obsolete|o
+
+... (236 samples omitted) ...
+
+
+247. Title: gone by the name of
+   Text preview (first 500 chars):
+   ==English==
+
+===Verb form===
+{{head|en|past participle}}
+
+# {{infl of|en|go by the name of||past|part}}
+
+
+248. Title: gotten the bird
+   Text preview (first 500 chars):
+   ==English==
+
+===Participle===
+{{head|en|past participle}}
+
+# {{infl of|en|get the bird||past|part}}
+
+
+249. Title: bgm
+   Text preview (first 500 chars):
+   ==English==
+{{en-noun|~}}
+# {{alternative case form of|en|BGM|t={{initialism of|en|background music}}.}}
+
+
+250. Title: Ralli
+   Text preview (first 500 chars):
+   {{also|ralli|ral·li}}
+==English==
+{{wp}}
+
+===Proper name===
+{{en-prop}}
+
+# {{surname|en}}.
+#* {{quote-journal|en|author=Anna Bahney|title=These people bought homes without ever stepping inside|magazine=w:CNN Business|url=https://www.cnn.com/2020/06/26/success/real-estate-buying-without-seeing-coronavirus|date=2020-06-26|passage=When stay-at-home orders kept Jeff and Janet '''Ralli''' from looking at a home in the neighborhood they had their eye on in Ocean County, New Jersey, they forged ahead o
+
+
+251. Title: Perovski
+   Text preview (first 500 chars):
+   ==English==
+
+===Proper  noun===
+{{en-prop}}
+
+# {{surname|en}}
+
+====Derived terms====
+{{col|en|perovskite
+}}
+
+
+252. Title: New York English
+   Text preview (first 500 chars):
+   ==English==
+{{wp}}
+
+===Propernoun===
+{{en-proper noun}}
+
+# The variety of English spoken in [[New York]].
+
+
+253. Title: swum like a fish
+   Text preview (first 500 chars):
+   ==English==
+
+===Participle===
+{{head|en|past participle}}
+
+# {{infl of|en|swim like a fish||past|part}}
+
+
+254. Title: flown like a bird
+   Text preview (first 500 chars):
+   ==English==
+
+===Participle===
+{{head|en|past participle}}
+
+# {{infl of|en|fly like a bird||past|part}}
+
+
+255. Title: bimisogyny
+   Text preview (first 500 chars):
+   ==English==
+
+===Alternative forms===
+* {{alt|en|bi-misogyny}}
+
+===Etymology===
+From {{af|en|bi-|misogyny}}. Has been in use since at least 2014.&lt;ref&gt;{{quote-journal|en|month=February |year=2014|last=Pallotta-Chiarolli |first=Maria |title=Erasure, Exclusion by Inclusion, and the Absence of Intersectionality: Introducing Bisexuality in Education|url=https://www.researchgate.net/publication/275136513_Erasure_Exclusion_by_Inclusion_and_the_Absence_of_Intersectionality_Introducing_Bisexuality_i
+
+
+256. Title: Plume
+   Text preview (first 500 chars):
+   ==English==
+
+===Proper  noun===
+{{en-prop}}
+
+#{{surname|en}}
+
+====Derived terms====
+{{col|en|Plumian
+}}
 
 ============================================================
 GOAL: Reach fixed point (no samples in any category)
