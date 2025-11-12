@@ -96,6 +96,8 @@ LANGUAGE_SECTION = re.compile(r'^==\s*([^=]+?)\s*==$', re.MULTILINE)
 POS_HEADER = re.compile(r'^===+\s*(.+?)\s*===+\s*$', re.MULTILINE)
 # Fallback: extract POS from {{head|en|POS}} templates when section headers missing
 HEAD_TEMPLATE = re.compile(r'\{\{(?:head|en-head)\|en\|([^}|]+)', re.IGNORECASE)
+# Special template patterns for specific POS types
+PREP_PHRASE_TEMPLATE = re.compile(r'\{\{en-prepphr\b', re.IGNORECASE)
 CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
 CATEGORY = re.compile(r'\[\[Category:English\s+([^\]]+)\]\]', re.IGNORECASE)
 DICT_ONLY = re.compile(r'\{\{no entry\|en\|', re.IGNORECASE)
@@ -193,6 +195,13 @@ def extract_pos_tags(text: str) -> List[str]:
                 pos_tags.append('phrase')
             elif pos == 'numeral':
                 pos_tags.append('numeral')
+
+    # Additional fallback: Check for prepositional phrase template or category
+    if not pos_tags:
+        if PREP_PHRASE_TEMPLATE.search(text):
+            pos_tags.append('phrase')
+        elif 'Category:English prepositional phrases' in text:
+            pos_tags.append('phrase')
 
     return sorted(set(pos_tags))
 
@@ -402,7 +411,7 @@ PAIRS_LAYOUT = [
 def fmt(name: str, value) -> str:
     """Format metric value based on field name."""
     if name == "Rate":
-        return f"{value:,} pg/s"
+        return f"{int(value):,} pg/s"
     elif name == "Decomp Rate":
         return f"{value:.1f} MB/s"
     return f"{value:,}"
@@ -425,10 +434,10 @@ def make_form(metrics: dict) -> Panel:
             if label is None:
                 cells += ["", ""]
             else:
-                cells += [Text(f"{label}:", style="bold dim"), Text(fmt(label, metrics[key]), style="bold")]
+                cells += [Text(f"{label}:", style="bold grey50"), Text(fmt(label, metrics[key]), style="bright_cyan")]
         grid.add_row(*cells)
 
-    return Panel(grid, title="Status", border_style="dim", box=box.SIMPLE)
+    return Panel(grid, title="Status", box=box.SIMPLE, border_style="bright_black")
 
 
 def scan_pages(file_obj, chunk_size: int = 1024 * 1024):
