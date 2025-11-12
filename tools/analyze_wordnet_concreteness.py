@@ -64,95 +64,229 @@ def extract_wordnet_data(archive_path: Path) -> Dict[str, List[Dict]]:
     synsets_by_category = defaultdict(list)
 
     with tarfile.open(archive_path, 'r:gz') as tar:
-        # Find XML files - try different naming patterns
-        xml_files = [m for m in tar.getmembers() if m.name.endswith('.xml')]
+        # First, explore the archive to find data files
+        print("  Exploring archive structure...")
 
-        if not xml_files:
-            print("Warning: No XML files found in archive")
-            print("Archive contents:")
-            for member in tar.getmembers()[:20]:
-                print(f"  - {member.name}")
+        all_members = tar.getmembers()
+        print(f"  Total files in archive: {len(all_members)}")
+
+        # Look for different file types
+        xml_files = [m for m in all_members if m.name.endswith('.xml')]
+        tsv_files = [m for m in all_members if m.name.endswith('.tsv')]
+        txt_files = [m for m in all_members if m.name.endswith('.txt') and 'license' not in m.name.lower() and 'readme' not in m.name.lower()]
+
+        print(f"  XML files: {len(xml_files)}")
+        print(f"  TSV files: {len(tsv_files)}")
+        print(f"  TXT files (non-doc): {len(txt_files)}")
+
+        if xml_files:
+            print(f"  XML files found:")
+            for f in xml_files[:10]:
+                print(f"    - {f.name}")
+
+        if tsv_files:
+            print(f"  TSV files found:")
+            for f in tsv_files[:10]:
+                print(f"    - {f.name}")
+
+        if txt_files:
+            print(f"  TXT files found:")
+            for f in txt_files[:10]:
+                print(f"    - {f.name}")
+
+        # Try to find data files in common locations
+        data_files = []
+        for pattern in ['entries', 'synset', 'wordnet', 'data', 'dict']:
+            matches = [m for m in all_members if pattern in m.name.lower() and (m.name.endswith('.xml') or m.name.endswith('.tsv') or m.name.endswith('.txt'))]
+            if matches:
+                print(f"  Files matching '{pattern}':")
+                for m in matches[:5]:
+                    print(f"    - {m.name}")
+                data_files.extend(matches)
+
+        if not data_files:
+            print("  No obvious data files found. Showing directory structure:")
+            dirs = set()
+            for m in all_members[:100]:
+                parts = m.name.split('/')
+                if len(parts) > 1:
+                    dirs.add(parts[0] + '/' + parts[1] if len(parts) > 1 else parts[0])
+            for d in sorted(dirs)[:20]:
+                print(f"    - {d}/")
             return synsets_by_category
 
-        print(f"  Found {len(xml_files)} XML file(s)")
+        # Process XML files if found
+        if xml_files:
+            return extract_from_xml(tar, xml_files)
 
-        for xml_file in xml_files:
-            print(f"  Processing {xml_file.name}...")
-            f = tar.extractfile(xml_file)
-            if not f:
-                continue
+        # Process TSV files if found
+        if tsv_files:
+            return extract_from_tsv(tar, tsv_files)
 
-            try:
-                tree = ET.parse(f)
-                root = tree.getroot()
+    return synsets_by_category
 
-                print(f"    Root tag: {root.tag}")
-                print(f"    Root attribs: {root.attrib}")
 
-                # Try different namespace patterns
-                namespaces = {
-                    'wn': 'http://globalwordnet.github.io/schemas/wn',
-                    'dc': 'http://purl.org/dc/terms/'
-                }
+def extract_from_xml(tar, xml_files: List) -> Dict[str, List[Dict]]:
+    """Extract data from XML files."""
+    synsets_by_category = defaultdict(list)
 
-                # Try to find synsets with and without namespace
-                synsets = (
-                    root.findall('.//wn:Synset', namespaces) or
-                    root.findall('.//{http://globalwordnet.github.io/schemas/wn}Synset') or
-                    root.findall('.//Synset')
+    for xml_file in xml_files:
+        print(f"  Processing {xml_file.name}...")
+        f = tar.extractfile(xml_file)
+        if not f:
+            continue
+
+        try:
+            tree = ET.parse(f)
+            root = tree.getroot()
+
+            print(f"    Root tag: {root.tag}")
+            print(f"    Root attribs: {root.attrib}")
+
+            # Try different namespace patterns
+            namespaces = {
+                'wn': 'http://globalwordnet.github.io/schemas/wn',
+                'dc': 'http://purl.org/dc/terms/'
+            }
+
+            # Try to find synsets with and without namespace
+            synsets = (
+                root.findall('.//wn:Synset', namespaces) or
+                root.findall('.//{http://globalwordnet.github.io/schemas/wn}Synset') or
+                root.findall('.//Synset')
+            )
+
+            print(f"    Found {len(synsets)} synsets")
+
+            for synset in synsets:
+                synset_id = synset.get('id', '')
+
+                # Try different attribute patterns for lexfile
+                lexfile = (
+                    synset.get('{http://purl.org/dc/terms/}subject') or
+                    synset.get('subject') or
+                    synset.get('lexfile') or
+                    ''
                 )
 
-                print(f"    Found {len(synsets)} synsets")
+                if not lexfile:
+                    # Try to extract from ID (format: ewn-dog-n)
+                    if '-n' in synset_id:
+                        lexfile = 'noun'
+                    elif '-v' in synset_id:
+                        lexfile = 'verb'
+                    elif '-a' in synset_id:
+                        lexfile = 'adjective'
+                    elif '-r' in synset_id:
+                        lexfile = 'adverb'
+                    else:
+                        continue
 
-                for synset in synsets:
-                    synset_id = synset.get('id', '')
+                # Extract lemmas (words) in this synset
+                lemmas = []
+                for lemma_elem in synset.findall('.//wn:Lemma', namespaces) or synset.findall('.//Lemma'):
+                    written_form = lemma_elem.get('writtenForm', '')
+                    if written_form:
+                        lemmas.append(written_form.lower())
 
-                    # Try different attribute patterns for lexfile
-                    lexfile = (
-                        synset.get('{http://purl.org/dc/terms/}subject') or
-                        synset.get('subject') or
-                        synset.get('lexfile') or
-                        ''
-                    )
+                # Extract definition
+                definition = ''
+                for def_elem in synset.findall('.//wn:Definition', namespaces) or synset.findall('.//Definition'):
+                    definition = def_elem.text or ''
+                    break
 
-                    if not lexfile:
-                        # Try to extract from ID (format: ewn-dog-n)
-                        if '-n' in synset_id:
-                            lexfile = 'noun'
-                        elif '-v' in synset_id:
-                            lexfile = 'verb'
+                if lemmas:
+                    synsets_by_category[lexfile].append({
+                        'id': synset_id,
+                        'lemmas': lemmas,
+                        'definition': definition
+                    })
+
+            print(f"    Extracted {sum(len(s['lemmas']) for s in synsets_by_category.values())} total lemmas")
+
+        except ET.ParseError as e:
+            print(f"  Warning: Error parsing {xml_file.name}: {e}")
+            continue
+
+    print(f"  Total categories found: {len(synsets_by_category)}")
+    return synsets_by_category
+
+
+def extract_from_tsv(tar, tsv_files: List) -> Dict[str, List[Dict]]:
+    """Extract data from TSV files (WordNet TSV format)."""
+    synsets_by_category = defaultdict(list)
+
+    # WordNet TSV format typically has separate files for different data
+    # Look for synsets, senses, and entries files
+
+    for tsv_file in tsv_files:
+        print(f"  Processing {tsv_file.name}...")
+        f = tar.extractfile(tsv_file)
+        if not f:
+            continue
+
+        try:
+            lines = f.read().decode('utf-8').split('\n')
+            print(f"    Lines in file: {len(lines)}")
+
+            # Show first few lines to understand format
+            if len(lines) > 0:
+                print(f"    First line (header): {lines[0][:100]}")
+            if len(lines) > 1:
+                print(f"    Second line (sample): {lines[1][:100]}")
+
+            # Try to parse as TSV
+            # Common formats:
+            # synset_id<tab>lemma<tab>definition<tab>...
+            # or
+            # lemma<tab>pos<tab>synset_id<tab>...
+
+            header = lines[0].split('\t') if lines else []
+            print(f"    Columns: {header[:10]}")
+
+            # Parse based on file name
+            if 'synset' in tsv_file.name.lower():
+                # Synset file
+                for line in lines[1:1000]:  # Sample first 1000
+                    if not line.strip():
+                        continue
+                    parts = line.split('\t')
+                    if len(parts) >= 2:
+                        synset_id = parts[0]
+                        definition = parts[1] if len(parts) > 1 else ''
+
+                        # Extract POS from synset ID
+                        pos = 'noun'  # default
+                        if '-v' in synset_id:
+                            pos = 'verb'
                         elif '-a' in synset_id:
-                            lexfile = 'adjective'
+                            pos = 'adjective'
                         elif '-r' in synset_id:
-                            lexfile = 'adverb'
-                        else:
-                            continue
+                            pos = 'adverb'
 
-                    # Extract lemmas (words) in this synset
-                    lemmas = []
-                    for lemma_elem in synset.findall('.//wn:Lemma', namespaces) or synset.findall('.//Lemma'):
-                        written_form = lemma_elem.get('writtenForm', '')
-                        if written_form:
-                            lemmas.append(written_form.lower())
-
-                    # Extract definition
-                    definition = ''
-                    for def_elem in synset.findall('.//wn:Definition', namespaces) or synset.findall('.//Definition'):
-                        definition = def_elem.text or ''
-                        break
-
-                    if lemmas:
-                        synsets_by_category[lexfile].append({
+                        synsets_by_category[pos].append({
                             'id': synset_id,
-                            'lemmas': lemmas,
+                            'lemmas': [],  # Need to join with sense/entry files
                             'definition': definition
                         })
 
-                print(f"    Extracted {sum(len(s['lemmas']) for s in synsets_by_category.values())} total lemmas")
+            elif 'sense' in tsv_file.name.lower() or 'entry' in tsv_file.name.lower():
+                # Sense/entry file - links lemmas to synsets
+                for line in lines[1:1000]:  # Sample first 1000
+                    if not line.strip():
+                        continue
+                    parts = line.split('\t')
+                    if len(parts) >= 2:
+                        lemma = parts[0].lower()
+                        synset_id = parts[1] if len(parts) > 1 else ''
 
-            except ET.ParseError as e:
-                print(f"  Warning: Error parsing {xml_file.name}: {e}")
-                continue
+                        # Store for later joining
+                        # For now, just count
+                        pass
+
+        except Exception as e:
+            print(f"  Warning: Error reading {tsv_file.name}: {e}")
+            continue
 
     print(f"  Total categories found: {len(synsets_by_category)}")
     return synsets_by_category
