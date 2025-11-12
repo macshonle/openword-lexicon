@@ -3,16 +3,16 @@ AGGREGATE RESULTS
 ============================================================
 
 Total processed: 10,200,775
-Total written: 1,326,905
+Total written: 1,326,948
 Special pages: 238,663
 Redirects: 45,795
 Dictionary-only terms: 2,370
 Non-English pages: 8,581,048
 Non-Latin scripts: 5,938
-Total skipped: 56
+Total skipped: 13
 Success rate: 13.0%
-Time: 14m 6s
-Rate: 12044 pages/sec
+Time: 14m 7s
+Rate: 12043 pages/sec
 ============================================================
 
 
@@ -22,7 +22,7 @@ DIAGNOSTIC REPORT: Skip Reasons Breakdown
 
 Skip reason counts (showing first 10 and last 10 samples):
   1. No content extracted (no title/text or not English): 0 samples
-  2. parse_entry returned None (validation failed): 56 samples
+  2. parse_entry returned None (validation failed): 13 samples
   3. parse_entry threw exception: 0 samples
 
 Note: Special pages (Wiktionary:, MediaWiki:, Module:, Thread:, Appendix:, Help:, Template:, Reconstruction:), redirects,
@@ -80,255 +80,169 @@ From {{m|en|supposed}} and {{m|en|to}}, with fusion of {{IPAchar|/zdt/}} to {{IP
 * {{audio|en|LL-Q1860 (eng)-Persent101-be supposed to.wav|a=US|text
 
 
-2. Title: en- -en
-   Text preview (first 500 chars):
-   {{also|enen|Enen|énen}}
-==English==
-
-===Alternative forms===
-* {{alt|en|em- -en||before b-, p-, or m-}}
-
-===Pronunciation===
-* {{IPA|en|/ɛnˈ- -ən/}}
-
-===Circumfix===
-{{head|en|circumfix}}
-
-# {{n-g|Forms [[transitive verb]]s denoting an increase in, or [[intensification]] of, the quality denoted by the [[enclose]]d word.}}
-
-====Related terms====
-''Note: Not all of these words listed were etymologically constructed with the ''en-&amp;nbsp;-en'' circumfix. Those confirmed to have been so constructe
-
-
-3. Title: em- -en
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;emen&quot;}}
-==English==
-
-===Pronunciation===
-* {{IPA|en|/ɛmˈ- -n̩/}}
-
-===Circumfix===
-{{head|en|circumfix}}
-
-# {{alternative form of|en|en- -en}} used [[prebilabial]]ly, that is, when the word to which it is applied begins with ‘b’, ‘p’, or ‘m’.
-
-====Derived terms====
-See {{m|en|en- -en}}.
-
-===Anagrams===
-* {{anagrams|en|a=eemn|-neme|mene|neem}}
-
-
-4. Title: a- -ing
-   Text preview (first 500 chars):
-   {{also|aing}}
-==English==
-
-===Etymology===
-The {{m|en|a}} is a reduced form of the preposition {{m|ang|on}}, which was used in Old English with nouns indicating actions or states (e.g. ''iċ wæs on [[huntoþ]]e'', “I was hunting”). This is the source of such words as {{m|en|asleep}} and {{m|en|alive}}, which also show reduction of ''on'' to ''a''. In the Middle English period, the preposition came to be used with the present participles of verbs as well (formed in {{m|en|-ing}}), eventually coming
-
-
-5. Title: -estr-
-   Text preview (first 500 chars):
-   ==English==
-
-===Alternative forms===
-* {{alter|en|estr-}}
-
-===Etymology===
-From {{m|en|estrogen}}.
-
-===Pronunciation===
-* {{IPA|en|/ɛ.stɹ/}}
-
-===Interfix===
-{{head|en|interfix}}
-
-# {{lb|en|pharmaceutical drug}} {{ng|Used to form names of [[estrogen]]s}}.
-
-====Derived terms====
-{{interfixsee|en}}
-* {{l|en|-gestr-}}
-
-===Anagrams===
-* {{anagrams|en|a=erst|Rest.|'rest|rest.|REST|-ster|ERTs|rets|erst|rest|tres|RETs|TERs|SERT}}
-
-==Esperanto==
-
-===Pronunciation===
-* {{audio|eo|LL-Q143 (epo)-Lepticed7--
-
-
-6. Title: -s-
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;s&quot;}}
-==English==
-
-===Etymology===
-From {{inh|en|enm|[[-s]], [[-es]]}}, from {{inh|en|ang|-es||-'s|pos=masculine and neuter genitive singular ending}}, which survives in many old compounds. In more recent coinage, from contraction of the derived clitic {{m|en|-'s}} in compounds. For more, see {{m|en|-'s}}.
-
-===Interfix===
-{{head|en|interfix}}
-
-# {{non-gloss|Genitival interfix used to link elements in some compounds, equivalent to the possessive clitic {{m|
-
-
-7. Title: -k-
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;k&quot;}}
-==English==
-
-===Interfix===
-{{head|en|interfix}}
-
-# {{lb|en|pharmaceutical drug}} {{alt form|en|-kin-}}.
-
-====Derived terms====
-{{interfixsee|en}}
-
-====See also====
-* {{l|en|-i-}}
-* {{l|en|-o-}}
-
-
-8. Title: -vir-
-   Text preview (first 500 chars):
-   {{also|vir|Vir|VIR|vír|Vir.}}
-==English==
-
-===Etymology===
-From {{m|en|virus}}.
-
-===Interfix===
-{{head|en|interfix}}
-
-# {{lb|en|pharmaceutical drug}} {{ng|Used to form names of [[antiviral]]s}}.
-# {{lb|en|pharmaceutical drug}} {{alt form|en|-vi-}}.
-
-====Derived terms====
-{{interfixsee|en}}
-
-====Related terms====
-* {{l|en|-mab}} is the base suffix common to all monoclonal antibodies. (See that entry for full paradigm.)
-* {{l|en|-vir}}
-
-===References===
-* {{cite-book|year=2018|title=The use of ste
-
-
-9. Title: -kin-
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;kin&quot;}}
-==English==
-
-===Alternative forms===
-* {{l|en|-ki-}} before the suffix [[-xi-]] or [[-zu-]]
-
-===Etymology===
-From {{m|en|interleukin}}.
-
-===Interfix===
-{{head|en|interfix}}
-
-# {{lb|en|pharmacology}} a [[monoclonal antibody]] that targets [[interleukin]]s
-
-====Derived terms====
-{{interfixsee|en}}
-
-====Related terms====
-* {{l|en|-mab}} is the base suffix common to all monoclonal antibodies. (See that entry for full paradigm.)
-
-===Anagrams===
-* {{anag
-
-
-10. Title: -ö-
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;o&quot;}}
-==English==
-
-===Etymology===
-From the old practice, which comes from French, of using the [[w:diaeresis (diacritic)|diaeresis]] accent to communicate [[w:vowel hiatus|vowel hiatus]], i.e. to clarify that a vowel is to be spoken separately rather than joined with or influenced by the sounds before it; for example, {{m|en|Chloë}} is to be read as ''CLOH-EY'', not ''CLEE'' (i.e. an ''oe'' as in {{m|en|Oedipus#Pronunciation}}); and the ''ae'' in {{m|en|a
-
-... (36 samples omitted) ...
-
-
-47. Title: people mountain people sea
+2. Title: t3h
    Text preview (first 500 chars):
    ==English==
 
 ===Etymology===
-{{calque|en|zh|人山人海}}.
+[[leetspeak|Leetspeak]]. From {{m|en|teh}}, a deliberate misspelling of {{m|en|the}}.
 
-===Idiom===
-{{head|en|idiom}} 
+===Article===
+{{head|en|article}}
 
-# {{lb|en|China}} [[crowded]] or [[jam-packed]] with people 
-#* {{quote-book|en|author1=Kelvin Bei|title=Ravens' Haiku|url=https://www.google.com.ng/books/edition/Ravens_Haiku/qyOaDgAAQBAJ?hl=en&amp;gbpv=1&amp;dq=%2522people+mountain+people+sea%2522&amp;pg=PA23&amp;printsec=frontcover|publisher=Lulu.com|date=28 February 2017|isbn=978-1-365-74651-2|page=23|text='''People mountain''' / '''people sea''' / Heads bow
+# {{form of|en|[[leetspeak|Leetspeak]] spelling|the}}.
+
+{{catlangname|en|leetspeak}}
 
 
-48. Title: better luck next time
+3. Title: an/translations
+   Text preview (first 500 chars):
+   {{translation subpage}}
+==English==
+
+===Article===
+
+====Translations====
+{{trans-top|indefinite article}}
+* Afar: {{t|aa|hal}}
+* Afrikaans: {{t+|af|'n}}
+* Akkala Sami: {{not used|sia}}
+* Albanian: {{t+|sq|një}}
+* American Sign Language: {{not used|ase}}
+* Arabic: {{not used|ar}}
+*: Egyptian Arabic: {{not used|arz}}
+* Aragonese: {{t|an|un|m}}, {{t|an|una|f}}
+* Armenian: {{t+|hy|մը|id=article}} {{qualifier|Western Armenian}}, {{t|hy|մըն}} {{qualifier|Western Armenian, before a vowel}}
+* Asturian: 
+
+
+4. Title: yͤ
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;ye&quot;}}
+==English==
+[[File:EME ye.svg|100px|thumb|A blackletter representation of yͤ (y with superscript e above)]]
+
+===Etymology===
+Substituted the {{der|en|enm|þͤ||the}} due to the lack of a {{l|en|sort|id=typography}} for it and visual similarity in [[blackletter]] type. See {{w|Thorn (letter)#Middle and Early Modern English|Thorn (letter)}} on Wikipedia for more information.
+
+===Article===
+{{head|en|article}}
+
+# {{lb|en|EME}} {{alt form of|en|ye|t=the}}
+
+
+5. Title: imd
    Text preview (first 500 chars):
    ==English==
+'''{{PAGENAME}}'''
 
-===Idiom===
-{{head|en|idiom}}
-
-# Used to [[wish]] somebody [[hope]] in [[future]] [[success]] after a [[failure]].
-
-{{R:Cambridge}}
+# {{lb|en|stenoscript}} {{abbreviation of|en|immediate}} {{ng|and related forms of that word'' ('''[[immediately]], [[immediacy]],''' ''etc.'')}}
 
 
-49. Title: maximum attack
+6. Title: nfo
    Text preview (first 500 chars):
    ==English==
-
-===Idiom===
-{{head|en|idiom}}
-
-# {{lb|en|mainly|Finland|}} To drive as fast as possible, particularly in motor racing.
-#* {{quote-journal|en|date=Nov 19 2023|title=Maximum attack! In conversation with Markku Alén|titleurl=https://www.classicandsportscar.com/features/maximum-attack-conversation-markku-alen|journal=Classic &amp; Sports Car|accessdate=May 30 2025|passage=Just as night follows day, he would tender an unblinking death stare before uttering: “Now we go maximum attack!” An
+'''{{PAGENAME}}'''
+# {{lb|en|stenoscript}} {{abbreviation of|en|information}} {{ng|and related forms of that word'' ('''[[informational]]''' ''etc.'')}}
 
 
-50. Title: has the advantage of someone
+7. Title: rp
+   Text preview (first 500 chars):
+   {{also|Rp|RP|ŘP|rp.|r.p.|R/P}}
+==English==
+'''{{PAGENAME}}'''
+# {{lb|en|stenoscript}} {{abbreviation of|en|represent}} {{ng|and related forms of that word'' ('''[[representing]], [[representation]], [[representative]],''' ''etc.'')}}
+
+
+8. Title: rsp
    Text preview (first 500 chars):
    ==English==
+'''{{PAGENAME}}'''
 
-===Verb phrase===
-{{head|en|verb phrase form}}
-
-# {{infl of|en|have the advantage of someone||s-verb-form}}
+# {{lb|en|stenoscript}} {{abbreviation of|en|responsible}} {{ng|and related forms of that word'' ('''[[responsibility]]''' ''etc.'')}}
 
 
-51. Title: having the advantage of someone
+9. Title: aO
    Text preview (first 500 chars):
-   ==English==
+   {{also|Appendix:Variations of &quot;ao&quot;}}
+==English==
 
-===Verb phrase===
-{{head|en|verb phrase form}}
-
-# {{infl of|en|have the advantage of someone||ing-form}}
-
-
-52. Title: had the advantage of someone
-   Text preview (first 500 chars):
-   ==English==
-
-===Verb phrase===
-{{head|en|verb phrase form}}
-
-# {{infl of|en|have the advantage of someone||ed-form}}
+===Multiple parts of speech===
+{{head-lite|en|symbols|langname=English}}
+# {{lb|en|stenoscript}} {{abbreviation of|en|about}}.
 
 
-53. Title: bgm
+10. Title: bgm
    Text preview (first 500 chars):
    ==English==
 {{en-noun|~}}
 # {{alternative case form of|en|BGM|t={{initialism of|en|background music}}.}}
 
 
-54. Title: Perovski
+4. Title: yͤ
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;ye&quot;}}
+==English==
+[[File:EME ye.svg|100px|thumb|A blackletter representation of yͤ (y with superscript e above)]]
+
+===Etymology===
+Substituted the {{der|en|enm|þͤ||the}} due to the lack of a {{l|en|sort|id=typography}} for it and visual similarity in [[blackletter]] type. See {{w|Thorn (letter)#Middle and Early Modern English|Thorn (letter)}} on Wikipedia for more information.
+
+===Article===
+{{head|en|article}}
+
+# {{lb|en|EME}} {{alt form of|en|ye|t=the}}
+
+
+5. Title: imd
+   Text preview (first 500 chars):
+   ==English==
+'''{{PAGENAME}}'''
+
+# {{lb|en|stenoscript}} {{abbreviation of|en|immediate}} {{ng|and related forms of that word'' ('''[[immediately]], [[immediacy]],''' ''etc.'')}}
+
+
+6. Title: nfo
+   Text preview (first 500 chars):
+   ==English==
+'''{{PAGENAME}}'''
+# {{lb|en|stenoscript}} {{abbreviation of|en|information}} {{ng|and related forms of that word'' ('''[[informational]]''' ''etc.'')}}
+
+
+7. Title: rp
+   Text preview (first 500 chars):
+   {{also|Rp|RP|ŘP|rp.|r.p.|R/P}}
+==English==
+'''{{PAGENAME}}'''
+# {{lb|en|stenoscript}} {{abbreviation of|en|represent}} {{ng|and related forms of that word'' ('''[[representing]], [[representation]], [[representative]],''' ''etc.'')}}
+
+
+8. Title: rsp
+   Text preview (first 500 chars):
+   ==English==
+'''{{PAGENAME}}'''
+
+# {{lb|en|stenoscript}} {{abbreviation of|en|responsible}} {{ng|and related forms of that word'' ('''[[responsibility]]''' ''etc.'')}}
+
+
+9. Title: aO
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;ao&quot;}}
+==English==
+
+===Multiple parts of speech===
+{{head-lite|en|symbols|langname=English}}
+# {{lb|en|stenoscript}} {{abbreviation of|en|about}}.
+
+
+10. Title: bgm
+   Text preview (first 500 chars):
+   ==English==
+{{en-noun|~}}
+# {{alternative case form of|en|BGM|t={{initialism of|en|background music}}.}}
+
+
+11. Title: Perovski
    Text preview (first 500 chars):
    ==English==
 
@@ -342,7 +256,7 @@ From the old practice, which comes from French, of using the [[w:diaeresis (diac
 }}
 
 
-55. Title: bimisogyny
+12. Title: bimisogyny
    Text preview (first 500 chars):
    ==English==
 
@@ -353,7 +267,7 @@ From the old practice, which comes from French, of using the [[w:diaeresis (diac
 From {{af|en|bi-|misogyny}}. Has been in use since at least 2014.&lt;ref&gt;{{quote-journal|en|month=February |year=2014|last=Pallotta-Chiarolli |first=Maria |title=Erasure, Exclusion by Inclusion, and the Absence of Intersectionality: Introducing Bisexuality in Education|url=https://www.researchgate.net/publication/275136513_Erasure_Exclusion_by_Inclusion_and_the_Absence_of_Intersectionality_Introducing_Bisexuality_i
 
 
-56. Title: Plume
+13. Title: Plume
    Text preview (first 500 chars):
    ==English==
 
