@@ -14,6 +14,7 @@ WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
         export-wordlist-filtered-c50 export-wordlist-filtered-w3c50 build-binary package check-limits start-server \
         reports report-raw report-pipeline report-trie report-metadata report-compare \
         game-words analyze-game-metadata \
+        build-wordlists export-wordlist-game export-wordlist-vulgar-blocklist export-wordlist-kids-nouns export-wordlist-phrases \
         audit-wiktionary report-labels analyze-local baseline-decompress \
         diagnose-scanner scanner-commit scanner-push
 
@@ -198,6 +199,69 @@ game-words:
 analyze-game-metadata:
 	$(UV) run python tools/analyze_game_metadata.py core
 	$(UV) run python tools/analyze_game_metadata.py plus
+
+# ===========================
+# Specialized Word Lists
+# ===========================
+
+# Build all specialized word lists
+build-wordlists: build-wiktionary-json
+	@$(MAKE) export-wordlist-game
+	@$(MAKE) export-wordlist-vulgar-blocklist
+	@$(MAKE) export-wordlist-kids-nouns
+	@$(MAKE) export-wordlist-phrases
+
+# Game-appropriate words (single words, common POS, no special characters)
+export-wordlist-game: build-wiktionary-json
+	@echo "→ Building game word list..."
+	@mkdir -p data/wordlists
+	jq -r 'select( \
+		.is_phrase == false and \
+		(.pos | contains(["noun", "verb", "adjective", "adverb"])) and \
+		(.word | test("^[a-z]+$$")) and \
+		(.word | length >= 3) and \
+		(.labels.temporal | length == 0) \
+	) | .word' "$(WIKTIONARY_JSON)" | sort -u > data/wordlists/game-words.txt
+	@echo "✓ Game words: $$(wc -l < data/wordlists/game-words.txt) entries"
+
+# Vulgar/offensive word blocklist
+export-wordlist-vulgar-blocklist: build-wiktionary-json
+	@echo "→ Building vulgar/offensive blocklist..."
+	@mkdir -p data/wordlists
+	jq -r 'select( \
+		.labels.register | \
+		contains(["vulgar"]) or contains(["offensive"]) or contains(["derogatory"]) \
+	) | .word' "$(WIKTIONARY_JSON)" | sort -u > data/wordlists/vulgar-blocklist.txt
+	@echo "✓ Blocklist: $$(wc -l < data/wordlists/vulgar-blocklist.txt) entries"
+
+# Kids' concrete nouns (animals, food, toys, etc.)
+export-wordlist-kids-nouns: build-wiktionary-json
+	@echo "→ Building kids' noun list (simple concrete nouns)..."
+	@mkdir -p data/wordlists
+	jq -r 'select( \
+		(.pos | contains(["noun"])) and \
+		.is_phrase == false and \
+		(.word | test("^[a-z]+$$")) and \
+		(.word | length >= 3 and length <= 10) and \
+		(.labels.categories | any( \
+			test("animal|food|plant|toy|color|colour|body|furniture|tool|vehicle|clothing") \
+		)) \
+	) | .word' "$(WIKTIONARY_JSON)" | sort -u > data/wordlists/kids-nouns.txt
+	@echo "✓ Kids nouns: $$(wc -l < data/wordlists/kids-nouns.txt) entries"
+
+# Phrase types (all phrases, idioms, prepositional phrases)
+export-wordlist-phrases: build-wiktionary-json
+	@echo "→ Extracting phrase types..."
+	@mkdir -p data/wordlists
+	jq -r 'select(.pos | contains(["phrase"])) | .word' "$(WIKTIONARY_JSON)" \
+		| sort -u > data/wordlists/all-phrases.txt
+	jq -r 'select(.labels.categories | any(contains("idiom"))) | .word' "$(WIKTIONARY_JSON)" \
+		| sort -u > data/wordlists/idioms.txt
+	jq -r 'select(.labels.categories | any(contains("prepositional phrases"))) | .word' "$(WIKTIONARY_JSON)" \
+		| sort -u > data/wordlists/prepositional-phrases.txt
+	@echo "✓ All phrases: $$(wc -l < data/wordlists/all-phrases.txt) entries"
+	@echo "✓ Idioms: $$(wc -l < data/wordlists/idioms.txt) entries"
+	@echo "✓ Prep phrases: $$(wc -l < data/wordlists/prepositional-phrases.txt) entries"
 
 # ===========================
 # Local Analysis (run locally with full Wiktionary dump)
