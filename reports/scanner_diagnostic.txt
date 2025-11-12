@@ -2,17 +2,17 @@
 AGGREGATE RESULTS
 ============================================================
 
-Total processed: 10,200,775
-Total written: 1,326,820
-Special pages: 230,152
-Redirects: 52,884
-Dictionary-only terms: 2,254
-Non-English pages: 8,582,467
-Non-Latin scripts: 5,939
-Total skipped: 259
-Success rate: 13.0%
-Time: 14m 10s
-Rate: 11994 pages/sec
+Total processed: 5,255,303
+Total written: 716,058
+Special pages: 102,792
+Redirects: 21,752
+Dictionary-only terms: 2,153
+Non-English pages: 4,409,709
+Non-Latin scripts: 2,739
+Total skipped: 100
+Success rate: 13.6%
+Time: 7m 10s
+Rate: 12221 pages/sec
 ============================================================
 
 
@@ -21,11 +21,11 @@ DIAGNOSTIC REPORT: Skip Reasons Breakdown
 ============================================================
 
 Skip reason counts (showing first 10 and last 10 samples):
-  1. No content extracted (no title/text or not English): 3 samples
-  2. parse_entry returned None (validation failed): 256 samples
+  1. No content extracted (no title/text or not English): 0 samples
+  2. parse_entry returned None (validation failed): 100 samples
   3. parse_entry threw exception: 0 samples
 
-Note: Special pages (Wiktionary:, MediaWiki:, Module:, Appendix:, Help:, Template:, Reconstruction:), redirects,
+Note: Special pages (Wiktionary:, MediaWiki:, Module:, Thread:, Appendix:, Help:, Template:, Reconstruction:), redirects,
       dictionary-only terms, non-English pages, and non-Latin scripts are
       counted separately, not included in diagnostic samples.
 
@@ -33,97 +33,33 @@ Note: Special pages (Wiktionary:, MediaWiki:, Module:, Appendix:, Help:, Templat
 NON-ENGLISH PAGE STATISTICS
 ------------------------------------------------------------
 
-Total non-English pages: 8,582,467
+Total non-English pages: 4,409,709
 
 Top 20 languages by page count:
-   1. Latin                814,477 pages
-   2. Spanish              738,422 pages
-   3. Italian              572,757 pages
-   4. Russian              424,477 pages
-   5. Portuguese           375,144 pages
-   6. French               356,900 pages
-   7. German               333,906 pages
-   8. Chinese              296,282 pages
-   9. Swedish              287,364 pages
-  10. Finnish              245,218 pages
-  11. Galician             196,366 pages
-  12. Catalan              181,225 pages
-  13. Japanese             161,998 pages
-  14. Polish               155,744 pages
-  15. Esperanto            129,836 pages
-  16. Dutch                124,547 pages
-  17. Latvian              123,513 pages
-  18. Romanian             112,882 pages
-  19. Translingual         84,151 pages
-  20. Greek                80,784 pages
+   1. Latin                775,213 pages
+   2. Italian              532,865 pages
+   3. Spanish              432,282 pages
+   4. Russian              322,761 pages
+   5. French               305,356 pages
+   6. Portuguese           268,112 pages
+   7. German               185,735 pages
+   8. Finnish              124,106 pages
+   9. Latvian              120,618 pages
+  10. Esperanto            110,645 pages
+  11. Chinese              102,543 pages
+  12. Swedish              91,742 pages
+  13. Catalan              90,315 pages
+  14. Galician             86,338 pages
+  15. Japanese             81,087 pages
+  16. Dutch                75,336 pages
+  17. Serbo-Croatian       52,845 pages
+  18. Translingual         49,646 pages
+  19. Hungarian            48,436 pages
+  20. Norwegian Bokmål     45,608 pages
 
-  ... and 6781 more languages
+  ... and 4406 more languages
 
-Total unique languages: 6,801
-
-------------------------------------------------------------
-SAMPLES: No content extracted
-------------------------------------------------------------
-
-1. Title: Thread:User talk:CodeCat/Regex code
-   Page preview (first 500 chars):
-   <page>
-    <title>Thread:User talk:CodeCat/Regex code</title>
-    <ns>90</ns>
-    <id>5965617</id>
-    <revision>
-      <id>41864141</id>
-      <parentid>41734080</parentid>
-      <timestamp>2016-12-13T01:09:13Z</timestamp>
-      <contributor>
-        <username>AmazingJus</username>
-        <id>3172395</id>
-      </contributor>
-      <comment>Again, not worth it</comment>
-      <origin>41864141</origin>
-      <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text bytes="0" sha1="
-
-
-2. Title: Thread:User talk:CodeCat/Regex code/reply
-   Page preview (first 500 chars):
-   <page>
-    <title>Thread:User talk:CodeCat/Regex code/reply</title>
-    <ns>90</ns>
-    <id>5965618</id>
-    <revision>
-      <id>41864137</id>
-      <parentid>41734091</parentid>
-      <timestamp>2016-12-13T01:08:24Z</timestamp>
-      <contributor>
-        <username>AmazingJus</username>
-        <id>3172395</id>
-      </contributor>
-      <comment>Never mind. kc_kennylau helped me with this one. Not worth being here if it's being abandoned</comment>
-      <origin>41864137</origin>
-      <model>
-
-
-3. Title: Thread:User talk:CodeCat/Template nl-IPA/reply
-   Page preview (first 500 chars):
-   <page>
-    <title>Thread:User talk:CodeCat/Template nl-IPA/reply</title>
-    <ns>90</ns>
-    <id>6000743</id>
-    <revision>
-      <id>41954253</id>
-      <parentid>41954235</parentid>
-      <timestamp>2016-12-28T12:21:17Z</timestamp>
-      <contributor>
-        <username>AmazingJus</username>
-        <id>3172395</id>
-      </contributor>
-      <comment>Blanked the page</comment>
-      <origin>41954253</origin>
-      <model>wikitext</model>
-      <format>text/x-wiki</format>
-      <text bytes="0
+Total unique languages: 4,426
 
 ------------------------------------------------------------
 SAMPLES: parse_entry returned None
@@ -189,66 +125,13 @@ From {{m|en|supposed}} and {{m|en|to}}, with fusion of {{IPAchar|/zdt/}} to {{IP
 {{no entry|en}}
 
 
-6. Title: Ð
-   Text preview (first 500 chars):
-   {{also|ð|Đ|Ɖ|Đ.|[[File:Latin capital letter african D with hook.svg|18px|link=Unsupported titles/D with hook and tail]]|Appendix:Variations of &quot;d&quot;}}
-{{character info}}
-{{character image|Latin capital letter african D with hook.svg | caption = Capital ''ð'' may have different form, more similar to the lower case.}}
-==English==
-
-===Pronunciation===
-* {{enPR|''th''}}
-* {{IPA|en|/ð/|a=RP,GenAm,CanE,AuE,NZE,ScE}}
-* {{IPA|en|/d̪/|a=InE}}
-
-===Letter===
-{{en-letter}}
-
-# {{ng|Replaces ''Th'' fo
-
-
-7. Title: Þ
-   Text preview (first 500 chars):
-   {{also|þ|Ϸ|-þ|Appendix:Variations of &quot;th&quot;}}
-{{character info}}
-==English==
-
-===Pronunciation===
-* {{enPR|th}}
-* {{IPA|en|/θ/|a=RP,GenAm,CanE,AuE,NZE,ScE}}
-* {{IPA|en|/t̪/|a=InE}}
-
-===Letter===
-{{en-letter}}
-
-# {{ng|Replaces ''Th'' for an {{lg|archaic}} style.}}
-
-==Icelandic==
-
-===Pronunciation===
-* {{IPA|is|/θ/}}
-
-===Letter===
-{{head|is|letter|lower case|þ}}
-
-# {{Latn-def|is|letter|30}}
-
-===See also===
-{{list:Latin script letters/is}}
-
-==Old English==
-
-===Pronunciation===
-* {{ang-IPA|þ
-
-
-8. Title: anapnoic
+6. Title: anapnoic
    Text preview (first 500 chars):
    ==English==
 {{no entry|en}}
 
 
-9. Title: -o-
+7. Title: -o-
    Text preview (first 500 chars):
    {{also|Appendix:Variations of &quot;o&quot;}}&lt;!--Which covers [[o']], [[O']], and others--&gt;
 ==English==
@@ -263,130 +146,176 @@ Adopted from {{bor|en|la|-o-}}, originating ultimately from {{der|en|grc|-ο-}}.
 In English, the connective is found from the Middle English period in direct borrowings from Latin. Direct 
 
 
-10. Title: ſ
+8. Title: en- -en
    Text preview (first 500 chars):
-   {{also|⌠|∫|ʃ|ẛ|ꞅ|Appendix:Variations of &quot;s&quot;|uni=auto}}
-{{character info}}
-==Translingual==
-{{wp|Long s}}
-[[Image:Trausaal.jpg|thumb|200px|right|Proper use of the long [[s]] is demonstrated by the words [[Bürger]][[Saal#German|ſaal]] and [[Rats]][[Säle|ſäle]] on a German sign, but incorrect use can be seen in the third word, [[trauen#German|Trau]][[Saal#German|saal]], causing it to be parsed as ‘Traus[[Aal|aal]]’.]]
-
-===Letter===
-{{mul-letter|lower=ſ|script=Latn}}
-
-# {{lb|mul|obsolete|o
-
-... (236 samples omitted) ...
-
-
-247. Title: gone by the name of
-   Text preview (first 500 chars):
-   ==English==
-
-===Verb form===
-{{head|en|past participle}}
-
-# {{infl of|en|go by the name of||past|part}}
-
-
-248. Title: gotten the bird
-   Text preview (first 500 chars):
-   ==English==
-
-===Participle===
-{{head|en|past participle}}
-
-# {{infl of|en|get the bird||past|part}}
-
-
-249. Title: bgm
-   Text preview (first 500 chars):
-   ==English==
-{{en-noun|~}}
-# {{alternative case form of|en|BGM|t={{initialism of|en|background music}}.}}
-
-
-250. Title: Ralli
-   Text preview (first 500 chars):
-   {{also|ralli|ral·li}}
+   {{also|enen|Enen|énen}}
 ==English==
-{{wp}}
-
-===Proper name===
-{{en-prop}}
-
-# {{surname|en}}.
-#* {{quote-journal|en|author=Anna Bahney|title=These people bought homes without ever stepping inside|magazine=w:CNN Business|url=https://www.cnn.com/2020/06/26/success/real-estate-buying-without-seeing-coronavirus|date=2020-06-26|passage=When stay-at-home orders kept Jeff and Janet '''Ralli''' from looking at a home in the neighborhood they had their eye on in Ocean County, New Jersey, they forged ahead o
-
-
-251. Title: Perovski
-   Text preview (first 500 chars):
-   ==English==
-
-===Proper  noun===
-{{en-prop}}
-
-# {{surname|en}}
-
-====Derived terms====
-{{col|en|perovskite
-}}
-
-
-252. Title: New York English
-   Text preview (first 500 chars):
-   ==English==
-{{wp}}
-
-===Propernoun===
-{{en-proper noun}}
-
-# The variety of English spoken in [[New York]].
-
-
-253. Title: swum like a fish
-   Text preview (first 500 chars):
-   ==English==
-
-===Participle===
-{{head|en|past participle}}
-
-# {{infl of|en|swim like a fish||past|part}}
-
-
-254. Title: flown like a bird
-   Text preview (first 500 chars):
-   ==English==
-
-===Participle===
-{{head|en|past participle}}
-
-# {{infl of|en|fly like a bird||past|part}}
-
-
-255. Title: bimisogyny
-   Text preview (first 500 chars):
-   ==English==
 
 ===Alternative forms===
-* {{alt|en|bi-misogyny}}
+* {{alt|en|em- -en||before b-, p-, or m-}}
+
+===Pronunciation===
+* {{IPA|en|/ɛnˈ- -ən/}}
+
+===Circumfix===
+{{head|en|circumfix}}
+
+# {{n-g|Forms [[transitive verb]]s denoting an increase in, or [[intensification]] of, the quality denoted by the [[enclose]]d word.}}
+
+====Related terms====
+''Note: Not all of these words listed were etymologically constructed with the ''en-&amp;nbsp;-en'' circumfix. Those confirmed to have been so constructe
+
+
+9. Title: -fucking-
+   Text preview (first 500 chars):
+   {{also|fucking|Fucking}}
+==English==
+
+===Alternative forms===
+* {{l|en|fucking}} {{q|when the original word has a space}}
+* {{l|en|-fuckin'-}}
+* {{l|en|-fuckin-}}
 
 ===Etymology===
-From {{af|en|bi-|misogyny}}. Has been in use since at least 2014.&lt;ref&gt;{{quote-journal|en|month=February |year=2014|last=Pallotta-Chiarolli |first=Maria |title=Erasure, Exclusion by Inclusion, and the Absence of Intersectionality: Introducing Bisexuality in Education|url=https://www.researchgate.net/publication/275136513_Erasure_Exclusion_by_Inclusion_and_the_Absence_of_Intersectionality_Introducing_Bisexuality_i
+From {{m|en|fucking}}, from {{m|en|fuck}}.
+
+===Infix===
+{{head|en|infix}}
+
+# {{lb|en|vulgar}} {{non-gloss|An [[intensifier]].}}
+#: {{syn|en|-bloody-|-goddamn-|-motherfucking-}}
+#: {{ux|en|Holy shit! That's unbe'''fucking'''lievable!}}
+#* {{quote-av|en|title={{w|Snatch (film)|Snatch}}|medium=motion picture|year=2000|wri
 
 
-256. Title: Plume
+10. Title: em- -en
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;emen&quot;}}
+==English==
+
+===Pronunciation===
+* {{IPA|en|/ɛmˈ- -n̩/}}
+
+===Circumfix===
+{{head|en|circumfix}}
+
+# {{alternative form of|en|en- -en}} used [[prebilabial]]ly, that is, when the word to which it is applied begins with ‘b’, ‘p’, or ‘m’.
+
+====Derived terms====
+See {{m|en|en- -en}}.
+
+===Anagrams===
+* {{anagrams|en|a=eemn|-neme|mene|neem}}
+
+... (80 samples omitted) ...
+
+
+91. Title: swizzer
+   Text preview (first 500 chars):
+   {{also|Swizzer}}
+==English==
+{{no entry|en}}
+
+
+92. Title: -h-
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;h&quot;}}
+==English==
+
+===Interfix===
+{{head|en|infix}}
+
+# {{lb|en|rare}} {{non-gloss|Emphasises obscenities.}}
+#: {{afex|en|fuck|-h-|fuhuck|alt1=fuck!|alt3=fuhuck!}}
+#: {{afex|en|damn|-h-|dahamn|alt1=damn!|alt3=dahamn!}}
+# {{lb|en|dated|fandom slang|jocular}} {{non-gloss|Indicates a [[fannish]] context or an association with [[science fiction]] [[fandom]].}}
+#: {{afex|en|beer|-h-|bheer}}
+#: {{afex|en|boy|-h-|bhoy}}
+#: {{afex|en|god|-h-|ghod}}
+#: {{afex|en|goo
+
+
+93. Title: -l-
    Text preview (first 500 chars):
    ==English==
 
-===Proper  noun===
-{{en-prop}}
+===Interfix===
+{{head|en|interfix}}
 
-#{{surname|en}}
+# {{lb|en|pharmaceutical drug}} {{alt form|en|-lim-}}.
 
 ====Derived terms====
-{{col|en|Plumian
-}}
+{{interfixsee|en}}
+
+==French==
+
+===Etymology===
+{{rfe|fr}}
+
+===Interfix===
+{{head|fr|interfix}}
+
+# {{n-g|used to break up certain vowel sequences, when certain suffixes—particularly {{m|fr|-ais}}—follow certain vowels, especially '''''o'''''}}
+#: {{cot|fr|-t-}}
+#: {{uxi|fr|[[togolais|togo'''l'''ais]]|Togolese}}
+#: {{uxi|fr|[[congolais|congo'''l'''ais]]|Congolese}}
+#: {{
+
+
+94. Title: Uessian
+   Text preview (first 500 chars):
+   ==English==
+{{no entry|en}}
+
+
+95. Title: cold Charlie
+   Text preview (first 500 chars):
+   ==English==
+{{no entry|en}}
+
+
+96. Title: -iz-
+   Text preview (first 500 chars):
+   {{also|Appendix:Variations of &quot;iz&quot;}}
+==English==
+
+===Etymology===
+From a style of cant used by African Americans in the 1970s and popularized by rapper [[w:Snoop Dogg|Snoop Dogg]]. See {{m|en|-izzle}} for more.
+
+===Infix===
+{{head|en|infix}}
+
+# {{lb|en|slang|AAVE}} {{non-gloss|An [[intensifier]].}}
+#: {{afex|en|shit|-iz-|shiznit}}
+#: {{afex|en|house|-iz-|hizouse}}
+#: {{afex|en|damn|-iz-|dizamn}}
+
+====Usage notes====
+Characteristic of [[African American Vernacular English]]. Usually ins
+
+
+97. Title: manwoman
+   Text preview (first 500 chars):
+   ==English==
+{{no entry|en}}
+
+
+98. Title: Tchawoosh
+   Text preview (first 500 chars):
+   ==English==
+{{no entry|en}}
+
+
+99. Title: infoanarchism
+   Text preview (first 500 chars):
+   ==English==
+{{no entry|en}}
+
+
+100. Title: Union Jacker
+   Text preview (first 500 chars):
+   ==English==
+{{no entry|en}}
 
 ============================================================
 GOAL: Reach fixed point (no samples in any category)
