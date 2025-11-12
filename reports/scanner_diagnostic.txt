@@ -3,16 +3,16 @@ AGGREGATE RESULTS
 ============================================================
 
 Total processed: 10,200,775
-Total written: 1,326,838
+Total written: 1,326,842
 Special pages: 238,785
 Redirects: 45,793
 Dictionary-only terms: 2,370
 Non-English pages: 8,581,047
 Non-Latin scripts: 5,938
-Total skipped: 4
+Total skipped: 0
 Success rate: 13.0%
-Time: 14m 14s
-Rate: 11931 pages/sec
+Time: 14m 7s
+Rate: 12035 pages/sec
 ============================================================
 
 
@@ -22,7 +22,7 @@ DIAGNOSTIC REPORT: Skip Reasons Breakdown
 
 Skip reason counts (showing first 10 and last 10 samples):
   1. No content extracted (no title/text or not English): 0 samples
-  2. parse_entry returned None (validation failed): 4 samples
+  2. parse_entry returned None (validation failed): 0 samples
   3. parse_entry threw exception: 0 samples
 
 Note: Special pages (Wiktionary:, MediaWiki:, Module:, Thread:, Appendix:, Help:, Template:, Reconstruction:), redirects,
@@ -60,40 +60,6 @@ Top 20 languages by page count:
   ... and 6781 more languages
 
 Total unique languages: 6,801
-
-------------------------------------------------------------
-SAMPLES: parse_entry returned None
-------------------------------------------------------------
-
-1. Title: imd
-   Text preview (first 500 chars):
-   ==English==
-'''{{PAGENAME}}'''
-
-# {{lb|en|stenoscript}} {{abbreviation of|en|immediate}} {{ng|and related forms of that word'' ('''[[immediately]], [[immediacy]],''' ''etc.'')}}
-
-
-2. Title: nfo
-   Text preview (first 500 chars):
-   ==English==
-'''{{PAGENAME}}'''
-# {{lb|en|stenoscript}} {{abbreviation of|en|information}} {{ng|and related forms of that word'' ('''[[informational]]''' ''etc.'')}}
-
-
-3. Title: rp
-   Text preview (first 500 chars):
-   {{also|Rp|RP|ŘP|rp.|r.p.|R/P}}
-==English==
-'''{{PAGENAME}}'''
-# {{lb|en|stenoscript}} {{abbreviation of|en|represent}} {{ng|and related forms of that word'' ('''[[representing]], [[representation]], [[representative]],''' ''etc.'')}}
-
-
-4. Title: rsp
-   Text preview (first 500 chars):
-   ==English==
-'''{{PAGENAME}}'''
-
-# {{lb|en|stenoscript}} {{abbreviation of|en|responsible}} {{ng|and related forms of that word'' ('''[[responsibility]]''' ''etc.'')}}
 
 ============================================================
 GOAL: Reach fixed point (no samples in any category)
