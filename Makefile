@@ -61,6 +61,7 @@ fetch-plus:
 	@bash scripts/fetch/fetch_frequency.sh
 	@bash scripts/sys/limits.sh update
 
+build: build-core build-plus
 
 build-core:
 	$(UV) run python src/openword/core_ingest.py

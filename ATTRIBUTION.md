@@ -1,5 +1,5 @@
 # Openword Lexicon — Attribution
-Generated: 2025-11-07 22:18:58 UTC
+Generated: 2025-11-12 07:26:39 UTC
 
 ---
 
@@ -28,7 +28,7 @@ This lexicon is built from multiple open sources. Each source has its own licens
 
 **Notes:** Public domain word list for word games and NLP applications
 
-*Downloaded: 2025-11-07T09:12:01Z*
+*Downloaded: 2025-11-12T07:10:06Z*
 
 *SHA256: `3f16130220645692ed49c7134e24a18504c2ca55b3c012f7290e3e77c63b1a89`*
 
@@ -46,7 +46,7 @@ This lexicon is built from multiple open sources. Each source has its own licens
 
 **Notes:** Words up to 10 letters, no proper nouns, no hyphens, diacritics removed
 
-*Downloaded: 2025-11-07T09:12:05Z*
+*Downloaded: 2025-11-12T07:10:07Z*
 
 *SHA256: `d9a74f713f21486092a3c37799ae0a6b7c40f32e33e87a6085b53322bacf3933`*
 
