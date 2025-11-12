@@ -3,16 +3,16 @@ AGGREGATE RESULTS
 ============================================================
 
 Total processed: 10,200,775
-Total written: 1,326,948
-Special pages: 238,663
-Redirects: 45,795
+Total written: 1,326,838
+Special pages: 238,785
+Redirects: 45,793
 Dictionary-only terms: 2,370
-Non-English pages: 8,581,048
+Non-English pages: 8,581,047
 Non-Latin scripts: 5,938
-Total skipped: 13
+Total skipped: 4
 Success rate: 13.0%
-Time: 14m 7s
-Rate: 12043 pages/sec
+Time: 14m 14s
+Rate: 11931 pages/sec
 ============================================================
 
 
@@ -22,7 +22,7 @@ DIAGNOSTIC REPORT: Skip Reasons Breakdown
 
 Skip reason counts (showing first 10 and last 10 samples):
   1. No content extracted (no title/text or not English): 0 samples
-  2. parse_entry returned None (validation failed): 13 samples
+  2. parse_entry returned None (validation failed): 4 samples
   3. parse_entry threw exception: 0 samples
 
 Note: Special pages (Wiktionary:, MediaWiki:, Module:, Thread:, Appendix:, Help:, Template:, Reconstruction:), redirects,
@@ -33,7 +33,7 @@ Note: Special pages (Wiktionary:, MediaWiki:, Module:, Thread:, Appendix:, Help:
 NON-ENGLISH PAGE STATISTICS
 ------------------------------------------------------------
 
-Total non-English pages: 8,581,048
+Total non-English pages: 8,581,047
 
 Top 20 languages by page count:
    1. Latin                814,477 pages
@@ -65,73 +65,7 @@ Total unique languages: 6,801
 SAMPLES: parse_entry returned None
 ------------------------------------------------------------
 
-1. Title: supposed to
-   Text preview (first 500 chars):
-   ==English==
-{{rfd|en}}
-
-===Etymology===
-From {{m|en|supposed}} and {{m|en|to}}, with fusion of {{IPAchar|/zdt/}} to {{IPAchar|/s(t)t/}} by regressive assimilation. Compare the devoicing in {{m|en|used to}} and {{m|en|have to}}/{{m|en|has to}}.
-
-===Pronunciation===
-* {{IPA|en|/səˈpəʊs(t) ˌtuː/|a=RP}}
-* {{audio|en|LL-Q1860 (eng)-Vealhurl-supposed to.wav|a=Southern England}}
-* {{IPA|en|/səˈpoʊs(t) ˌtu/|a=GA}} {{qualifier|stressed}}
-* {{audio|en|LL-Q1860 (eng)-Persent101-be supposed to.wav|a=US|text
-
-
-2. Title: t3h
-   Text preview (first 500 chars):
-   ==English==
-
-===Etymology===
-[[leetspeak|Leetspeak]]. From {{m|en|teh}}, a deliberate misspelling of {{m|en|the}}.
-
-===Article===
-{{head|en|article}}
-
-# {{form of|en|[[leetspeak|Leetspeak]] spelling|the}}.
-
-{{catlangname|en|leetspeak}}
-
-
-3. Title: an/translations
-   Text preview (first 500 chars):
-   {{translation subpage}}
-==English==
-
-===Article===
-
-====Translations====
-{{trans-top|indefinite article}}
-* Afar: {{t|aa|hal}}
-* Afrikaans: {{t+|af|'n}}
-* Akkala Sami: {{not used|sia}}
-* Albanian: {{t+|sq|një}}
-* American Sign Language: {{not used|ase}}
-* Arabic: {{not used|ar}}
-*: Egyptian Arabic: {{not used|arz}}
-* Aragonese: {{t|an|un|m}}, {{t|an|una|f}}
-* Armenian: {{t+|hy|մը|id=article}} {{qualifier|Western Armenian}}, {{t|hy|մըն}} {{qualifier|Western Armenian, before a vowel}}
-* Asturian: 
-
-
-4. Title: yͤ
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;ye&quot;}}
-==English==
-[[File:EME ye.svg|100px|thumb|A blackletter representation of yͤ (y with superscript e above)]]
-
-===Etymology===
-Substituted the {{der|en|enm|þͤ||the}} due to the lack of a {{l|en|sort|id=typography}} for it and visual similarity in [[blackletter]] type. See {{w|Thorn (letter)#Middle and Early Modern English|Thorn (letter)}} on Wikipedia for more information.
-
-===Article===
-{{head|en|article}}
-
-# {{lb|en|EME}} {{alt form of|en|ye|t=the}}
-
-
-5. Title: imd
+1. Title: imd
    Text preview (first 500 chars):
    ==English==
 '''{{PAGENAME}}'''
@@ -139,14 +73,14 @@ Substituted the {{der|en|enm|þͤ||the}} due to the lack of a {{l|en|sort|id=typ
 # {{lb|en|stenoscript}} {{abbreviation of|en|immediate}} {{ng|and related forms of that word'' ('''[[immediately]], [[immediacy]],''' ''etc.'')}}
 
 
-6. Title: nfo
+2. Title: nfo
    Text preview (first 500 chars):
    ==English==
 '''{{PAGENAME}}'''
 # {{lb|en|stenoscript}} {{abbreviation of|en|information}} {{ng|and related forms of that word'' ('''[[informational]]''' ''etc.'')}}
 
 
-7. Title: rp
+3. Title: rp
    Text preview (first 500 chars):
    {{also|Rp|RP|ŘP|rp.|r.p.|R/P}}
 ==English==
@@ -154,131 +88,12 @@ Substituted the {{der|en|enm|þͤ||the}} due to the lack of a {{l|en|sort|id=typ
 # {{lb|en|stenoscript}} {{abbreviation of|en|represent}} {{ng|and related forms of that word'' ('''[[representing]], [[representation]], [[representative]],''' ''etc.'')}}
 
 
-8. Title: rsp
+4. Title: rsp
    Text preview (first 500 chars):
    ==English==
 '''{{PAGENAME}}'''
 
 # {{lb|en|stenoscript}} {{abbreviation of|en|responsible}} {{ng|and related forms of that word'' ('''[[responsibility]]''' ''etc.'')}}
-
-
-9. Title: aO
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;ao&quot;}}
-==English==
-
-===Multiple parts of speech===
-{{head-lite|en|symbols|langname=English}}
-# {{lb|en|stenoscript}} {{abbreviation of|en|about}}.
-
-
-10. Title: bgm
-   Text preview (first 500 chars):
-   ==English==
-{{en-noun|~}}
-# {{alternative case form of|en|BGM|t={{initialism of|en|background music}}.}}
-
-
-4. Title: yͤ
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;ye&quot;}}
-==English==
-[[File:EME ye.svg|100px|thumb|A blackletter representation of yͤ (y with superscript e above)]]
-
-===Etymology===
-Substituted the {{der|en|enm|þͤ||the}} due to the lack of a {{l|en|sort|id=typography}} for it and visual similarity in [[blackletter]] type. See {{w|Thorn (letter)#Middle and Early Modern English|Thorn (letter)}} on Wikipedia for more information.
-
-===Article===
-{{head|en|article}}
-
-# {{lb|en|EME}} {{alt form of|en|ye|t=the}}
-
-
-5. Title: imd
-   Text preview (first 500 chars):
-   ==English==
-'''{{PAGENAME}}'''
-
-# {{lb|en|stenoscript}} {{abbreviation of|en|immediate}} {{ng|and related forms of that word'' ('''[[immediately]], [[immediacy]],''' ''etc.'')}}
-
-
-6. Title: nfo
-   Text preview (first 500 chars):
-   ==English==
-'''{{PAGENAME}}'''
-# {{lb|en|stenoscript}} {{abbreviation of|en|information}} {{ng|and related forms of that word'' ('''[[informational]]''' ''etc.'')}}
-
-
-7. Title: rp
-   Text preview (first 500 chars):
-   {{also|Rp|RP|ŘP|rp.|r.p.|R/P}}
-==English==
-'''{{PAGENAME}}'''
-# {{lb|en|stenoscript}} {{abbreviation of|en|represent}} {{ng|and related forms of that word'' ('''[[representing]], [[representation]], [[representative]],''' ''etc.'')}}
-
-
-8. Title: rsp
-   Text preview (first 500 chars):
-   ==English==
-'''{{PAGENAME}}'''
-
-# {{lb|en|stenoscript}} {{abbreviation of|en|responsible}} {{ng|and related forms of that word'' ('''[[responsibility]]''' ''etc.'')}}
-
-
-9. Title: aO
-   Text preview (first 500 chars):
-   {{also|Appendix:Variations of &quot;ao&quot;}}
-==English==
-
-===Multiple parts of speech===
-{{head-lite|en|symbols|langname=English}}
-# {{lb|en|stenoscript}} {{abbreviation of|en|about}}.
-
-
-10. Title: bgm
-   Text preview (first 500 chars):
-   ==English==
-{{en-noun|~}}
-# {{alternative case form of|en|BGM|t={{initialism of|en|background music}}.}}
-
-
-11. Title: Perovski
-   Text preview (first 500 chars):
-   ==English==
-
-===Proper  noun===
-{{en-prop}}
-
-# {{surname|en}}
-
-====Derived terms====
-{{col|en|perovskite
-}}
-
-
-12. Title: bimisogyny
-   Text preview (first 500 chars):
-   ==English==
-
-===Alternative forms===
-* {{alt|en|bi-misogyny}}
-
-===Etymology===
-From {{af|en|bi-|misogyny}}. Has been in use since at least 2014.&lt;ref&gt;{{quote-journal|en|month=February |year=2014|last=Pallotta-Chiarolli |first=Maria |title=Erasure, Exclusion by Inclusion, and the Absence of Intersectionality: Introducing Bisexuality in Education|url=https://www.researchgate.net/publication/275136513_Erasure_Exclusion_by_Inclusion_and_the_Absence_of_Intersectionality_Introducing_Bisexuality_i
-
-
-13. Title: Plume
-   Text preview (first 500 chars):
-   ==English==
-
-===Proper  noun===
-{{en-prop}}
-
-#{{surname|en}}
-
-====Derived terms====
-{{col|en|Plumian
-}}
 
 ============================================================
 GOAL: Reach fixed point (no samples in any category)
