@@ -67,7 +67,7 @@ def read_wordlist(filepath: Path, source_id: str) -> Set[str]:
             if normalized:
                 words.add(normalized)
 
-    logger.info(f"  → Loaded {len(words):,} unique words from {source_id}")
+    logger.info(f"  -> Loaded {len(words):,} unique words from {source_id}")
     return words
 
 
@@ -109,7 +109,7 @@ def write_jsonl(entries: list, output_path: Path) -> None:
             line = orjson.dumps(entry) + b'\n'
             f.write(line)
 
-    logger.info(f"✓ Written: {output_path}")
+    logger.info(f"Written: {output_path}")
 
 
 def main():
@@ -123,9 +123,7 @@ def main():
     eowl_path = raw_dir / "eowl.txt"
     output_path = intermediate_dir / "core_entries.jsonl"
 
-    logger.info("=" * 60)
-    logger.info("PHASE 5: Core word list ingestion")
-    logger.info("=" * 60)
+    logger.info("Core word list ingestion")
 
     # Read source lists
     enable_words = read_wordlist(enable_path, "ENABLE")
@@ -155,7 +153,7 @@ def main():
     logger.info(f"  EOWL only: {sum(1 for e in entries if e['sources'] == ['eowl']):,}")
     logger.info(f"  Both sources: {sum(1 for e in entries if len(e['sources']) == 2):,}")
     logger.info("")
-    logger.info("✓ Core ingest complete")
+    logger.info("Core ingest complete")
 
 
 if __name__ == '__main__':

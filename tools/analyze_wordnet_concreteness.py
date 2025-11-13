@@ -74,12 +74,12 @@ def ensure_wordnet_data():
     try:
         # Check if WordNet is available
         wn.synsets('test')
-        logger.info("✓ WordNet data found")
+        logger.info("WordNet data found")
     except LookupError:
         logger.info("Downloading WordNet data...")
         nltk.download('wordnet', quiet=False)
         nltk.download('omw-1.4', quiet=False)  # Open Multilingual WordNet
-        logger.info("✓ WordNet data downloaded")
+        logger.info("WordNet data downloaded")
 
 
 def extract_wordnet_data() -> Dict[str, List[Tuple[object, List[str]]]]:
@@ -430,7 +430,7 @@ def generate_report(stats: Dict, output_path: Path):
         ])
     else:
         lines.extend([
-            "✓ Successfully extracted WordNet data via NLTK.",
+            "Successfully extracted WordNet data via NLTK.",
             "",
             f"WordNet contains {stats['total_synsets']:,} noun synsets organized into {stats['total_categories']} lexicographer files (categories).",
             ""
@@ -641,9 +641,7 @@ def generate_report(stats: Dict, output_path: Path):
 
 
 def main():
-    logger.info("=" * 60)
     logger.info("WordNet Concreteness Analysis")
-    logger.info("=" * 60)
 
     # Ensure WordNet data is available
     ensure_wordnet_data()
@@ -657,7 +655,7 @@ def main():
 
     # Analyze categories
     stats = analyze_categories(synsets_by_category)
-    logger.info(f"✓ Analyzed {stats['total_synsets']:,} synsets")
+    logger.info(f"Analyzed {stats['total_synsets']:,} synsets")
     logger.info(f"  Concrete categories: {len(stats['concrete_stats'])}")
     logger.info(f"  Kids categories: {len(stats['kids_stats'])}")
     logger.info(f"  Abstract categories: {len(stats['abstract_stats'])}")
@@ -665,7 +663,7 @@ def main():
     # Generate report
     output_path = Path("reports/wordnet_concreteness.md")
     generate_report(stats, output_path)
-    logger.info(f"✓ Report saved: {output_path}")
+    logger.info(f"Report saved: {output_path}")
 
     # Print summary
     logger.info("")

@@ -84,7 +84,7 @@ def compare_metadata(core_meta: Dict, plus_meta: Dict, overlap_words: Set[str]) 
         if core_entry.get('frequency_tier') != plus_entry.get('frequency_tier'):
             diff_freq_tier += 1
             has_diff = True
-            diffs.append(f"freq_tier: {core_entry.get('frequency_tier')} → {plus_entry.get('frequency_tier')}")
+            diffs.append(f"freq_tier: {core_entry.get('frequency_tier')} -> {plus_entry.get('frequency_tier')}")
 
         # Compare sources
         core_sources = set(core_entry.get('sources', []))
@@ -92,7 +92,7 @@ def compare_metadata(core_meta: Dict, plus_meta: Dict, overlap_words: Set[str]) 
         if core_sources != plus_sources:
             diff_sources += 1
             has_diff = True
-            diffs.append(f"sources: {core_sources} → {plus_sources}")
+            diffs.append(f"sources: {core_sources} -> {plus_sources}")
 
         # Compare labels
         core_labels = core_entry.get('labels', {})
@@ -211,7 +211,7 @@ def generate_report():
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"✓ Distribution comparison report written to {output_path}")
+    print(f"Distribution comparison report written to {output_path}")
     return output_path
 
 

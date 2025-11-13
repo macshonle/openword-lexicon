@@ -193,7 +193,7 @@ def generate_report(distribution: str = 'core'):
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"✓ Trie inspection report ({distribution}) written to {output_path}")
+    print(f"Trie inspection report ({distribution}) written to {output_path}")
     return output_path
 
 

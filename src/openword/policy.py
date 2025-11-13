@@ -143,9 +143,9 @@ def apply_policy(input_path: Path, output_path: Path,
             line = orjson.dumps(entry) + b'\n'
             f.write(line)
 
-    logger.info(f"  ✓ Included: {len(included):,} entries")
-    logger.info(f"  ✗ Excluded: {excluded_count:,} entries")
-    logger.info(f"  → {output_path}")
+    logger.info(f"  Included: {len(included):,} entries")
+    logger.info(f"  Excluded: {excluded_count:,} entries")
+    logger.info(f"  -> {output_path}")
 
 
 def generate_smoke_test(filtered_path: Path, output_path: Path, limit: int = 5):
@@ -176,7 +176,7 @@ def generate_smoke_test(filtered_path: Path, output_path: Path, limit: int = 5):
         for word in words:
             f.write(f"{word}\n")
 
-    logger.info(f"  ✓ Smoke test: {len(words)} words → {output_path}")
+    logger.info(f"  Smoke test: {len(words)} words -> {output_path}")
 
 
 def main():
@@ -189,9 +189,7 @@ def main():
 
     overrides_file = docs_root / "policy_overrides.yaml"
 
-    logger.info("=" * 60)
-    logger.info("PHASE 10: Policy layer (family-friendly)")
-    logger.info("=" * 60)
+    logger.info("Policy layer (family-friendly)")
 
     # Load overrides
     overrides = load_policy_overrides(overrides_file)
@@ -219,7 +217,7 @@ def main():
         generate_smoke_test(plus_output, smoke_output, limit=5)
 
     logger.info("")
-    logger.info("✓ Policy filtering complete")
+    logger.info("Policy filtering complete")
 
 
 if __name__ == '__main__':

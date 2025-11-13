@@ -57,7 +57,7 @@ def load_entries(input_path: Path) -> List[Dict]:
                 logger.warning(f"Line {line_num}: JSON decode error: {e}")
                 continue
 
-    logger.info(f"  → Loaded {len(entries):,} entries")
+    logger.info(f"  -> Loaded {len(entries):,} entries")
     return entries
 
 
@@ -83,7 +83,7 @@ def build_trie(entries: List[Dict], trie_path: Path, meta_path: Path):
     # Save trie
     trie_path.parent.mkdir(parents=True, exist_ok=True)
     trie.save(str(trie_path))
-    logger.info(f"  ✓ Trie saved: {trie_path}")
+    logger.info(f"  Trie saved: {trie_path}")
 
     # Save metadata as JSON array (indexed by position)
     logger.info("  Writing metadata...")
@@ -97,7 +97,7 @@ def build_trie(entries: List[Dict], trie_path: Path, meta_path: Path):
             f.write(orjson.dumps(entry))
         f.write(b'\n]\n')
 
-    logger.info(f"  ✓ Metadata saved: {meta_path}")
+    logger.info(f"  Metadata saved: {meta_path}")
 
     # Report stats
     trie_size_kb = trie_path.stat().st_size / 1024
@@ -120,15 +120,15 @@ def verify_trie(trie_path: Path, entries: List[Dict]):
 
     for word in test_words:
         if word in trie:
-            logger.info(f"  ✓ Found: '{word}'")
+            logger.info(f"  Found: '{word}'")
         else:
-            logger.error(f"  ✗ Missing: '{word}'")
+            logger.error(f"  Missing: '{word}'")
 
     # Check word count
     if len(trie) == len(entries):
-        logger.info(f"  ✓ Word count matches: {len(trie):,}")
+        logger.info(f"  Word count matches: {len(trie):,}")
     else:
-        logger.error(f"  ✗ Word count mismatch: {len(trie)} vs {len(entries)}")
+        logger.error(f"  Word count mismatch: {len(trie)} vs {len(entries)}")
 
 
 def main():
@@ -137,9 +137,7 @@ def main():
     filtered_dir = data_root / "filtered"
     build_dir = data_root / "build"
 
-    logger.info("=" * 60)
-    logger.info("PHASE 12: Trie build (MARISA)")
-    logger.info("=" * 60)
+    logger.info("Trie build (MARISA)")
 
     # Build core trie
     core_input = filtered_dir / "core" / "family_friendly.jsonl"
@@ -166,7 +164,7 @@ def main():
             verify_trie(plus_trie, entries)
 
     logger.info("")
-    logger.info("✓ Trie build complete")
+    logger.info("Trie build complete")
 
 
 if __name__ == '__main__':
