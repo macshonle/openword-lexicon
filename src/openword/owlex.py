@@ -330,7 +330,7 @@ class OwlexFilter:
 
         return score
 
-    def format_output(self, entries: List[Dict]) -> str:
+    def format_output(self, entries: List[Dict], verbose: bool = False) -> str:
         """Format filtered entries according to output spec."""
         output_config = self.spec.get('output', {})
         output_format = output_config.get('format', 'text')
@@ -339,13 +339,24 @@ class OwlexFilter:
         limit = output_config.get('limit')
         sort_by = output_config.get('sort_by', 'alphabetical')
 
+        if verbose and sort_by:
+            logger.info(f"Sorting by: {sort_by}")
+
         # Sort entries
         if sort_by == 'alphabetical':
             entries = sorted(entries, key=lambda e: e['word'])
         elif sort_by == 'score':
             entries = sorted(entries, key=lambda e: self.calculate_score(e), reverse=True)
         elif sort_by == 'frequency':
+            # Sort by frequency tier score (highest score = most frequent first)
             entries = sorted(entries, key=lambda e: self.tier_scores.get(e.get('frequency_tier', 'rare'), 0), reverse=True)
+            if verbose and len(entries) > 0:
+                # Show first few entries with their frequency tiers
+                logger.info("First 5 entries after frequency sort:")
+                for entry in entries[:5]:
+                    tier = entry.get('frequency_tier', 'rare')
+                    score = self.tier_scores.get(tier, 0)
+                    logger.info(f"  {entry['word']:15} tier={tier:10} score={score}")
         elif sort_by == 'length':
             entries = sorted(entries, key=lambda e: len(e['word']))
 
@@ -429,8 +440,25 @@ class OwlexFilter:
             logger.info(f"Processed {total:,} entries")
             logger.info(f"Matched {len(filtered):,} entries ({len(filtered) / total * 100:.1f}%)")
 
+            # Show warning if description doesn't match filters
+            if self.spec.get('description'):
+                desc = self.spec['description'].lower()
+                filters = self.spec.get('filters', {})
+
+                # Check for common mismatches
+                if 'us' in desc or 'american' in desc:
+                    if not filters.get('labels', {}).get('region', {}).get('exclude'):
+                        logger.warning("⚠ Description mentions US/American but no region filter is set")
+                        logger.warning("  → Consider adding: filters.labels.region.exclude = ['en-GB']")
+
+                if any(word in desc for word in ['vulgar', 'profan', 'family', 'clean']):
+                    if not filters.get('policy', {}).get('family_friendly'):
+                        if not filters.get('labels', {}).get('register', {}).get('exclude'):
+                            logger.warning("⚠ Description mentions profanity/family-friendly but no filter is set")
+                            logger.warning("  → Consider adding: filters.policy.family_friendly = true")
+
         # Format output
-        output = self.format_output(filtered)
+        output = self.format_output(filtered, verbose)
 
         # Write output
         if output_path:
