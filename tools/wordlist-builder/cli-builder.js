@@ -103,7 +103,24 @@ async function buildSpec() {
 
   // Step 3: Select preset or build from scratch
   if (!presetArg) {
-    const usePreset = await question('\nStart from a preset? (y/n): ');
+    // Show available presets first
+    const presets = helpers.getPresets();
+    const currentDist = builder.spec.distribution;
+    const availablePresets = presets.filter(name => {
+      const preset = helpers.getPreset(name);
+      return preset.distribution === currentDist;
+    });
+
+    if (availablePresets.length > 0) {
+      print('\nAvailable presets for ' + currentDist + ':', 'cyan');
+      availablePresets.forEach(name => {
+        const preset = helpers.getPreset(name);
+        print(`  • ${preset.name}: ${preset.description}`, 'dim');
+      });
+      console.log();
+    }
+
+    const usePreset = await question('Start from a preset? (y/n) [n]: ');
     if (usePreset.toLowerCase() === 'y') {
       await selectPreset(builder);
     }
@@ -342,39 +359,73 @@ async function configureConcretenessFilter(builder) {
 }
 
 async function configureLabelsFilter(builder) {
-  print('\nLabel categories: register, temporal, domain, region');
-  const category = await question('Configure which category? [register]: ') || 'register';
+  print('\nLabel filtering allows filtering by sociolinguistic properties (Plus only).');
+  print('Available categories:', 'dim');
+  print('  • register: vulgar, offensive, slang, formal, etc.', 'dim');
+  print('  • temporal: archaic, obsolete, dated, modern', 'dim');
+  print('  • domain: medical, legal, technical, computing, etc.', 'dim');
+  print('  • region: en-US, en-GB, etc.\n', 'dim');
 
-  const action = await question(`Include or exclude ${category} labels? (include/exclude) [exclude]: `) || 'exclude';
+  let configuringLabels = true;
 
-  const options = category === 'region'
-    ? ['en-US', 'en-GB']
-    : CAPABILITIES.filters.labels.fields[category][action].options;
+  while (configuringLabels) {
+    print('\n' + '─'.repeat(50), 'dim');
+    const category = await question('\nConfigure which category? (register/temporal/domain/region) [done to skip]: ');
 
-  print(`\nAvailable ${category} labels:`, 'dim');
-  print(`  ${options.join(', ')}\n`, 'dim');
+    if (!category || category.toLowerCase() === 'done') {
+      configuringLabels = false;
+      continue;
+    }
 
-  const labels = await question(`Labels (comma-separated): `);
-  if (labels) {
-    const labelList = labels.split(',').map(l => l.trim());
-    builder.addFilter('labels', `${category}.${action}`, labelList);
+    const cat = category.trim().toLowerCase();
+    if (!['register', 'temporal', 'domain', 'region'].includes(cat)) {
+      print('Invalid category. Choose: register, temporal, domain, or region', 'yellow');
+      continue;
+    }
+
+    const action = await question(`Include or exclude ${cat} labels? (include/exclude) [exclude]: `) || 'exclude';
+
+    const options = cat === 'region'
+      ? ['en-US', 'en-GB']
+      : CAPABILITIES.filters.labels.fields[cat][action].options;
+
+    print(`\nAvailable ${cat} labels:`, 'dim');
+    print(`  ${options.join(', ')}\n`, 'dim');
+
+    const labels = await question(`Labels to ${action} (comma-separated): `);
+    if (labels) {
+      const labelList = labels.split(',').map(l => l.trim());
+      builder.addFilter('labels', `${cat}.${action}`, labelList);
+      print(`✓ Added ${cat} ${action} filter`, 'green');
+    }
+
+    const more = await question('\nConfigure another label category? (y/n) [n]: ');
+    if (more.toLowerCase() !== 'y') {
+      configuringLabels = false;
+    }
   }
 }
 
 async function configurePolicyFilter(builder) {
-  const familyFriendly = await question('Family-friendly (exclude vulgar/offensive)? (y/n) [n]: ');
+  print('\nPolicy filters are convenient shortcuts that combine multiple label filters.');
+  print('(Requires Plus distribution for full effect)\n', 'dim');
+
+  const familyFriendly = await question('Family-friendly? (excludes vulgar, offensive, derogatory words) (y/n) [n]: ');
   if (familyFriendly.toLowerCase() === 'y') {
     builder.setPolicyFilter('family_friendly', true);
+    print('  ✓ Will exclude profanity and offensive language', 'green');
   }
 
-  const modernOnly = await question('Modern words only (exclude archaic)? (y/n) [n]: ');
+  const modernOnly = await question('\nModern words only? (excludes archaic, obsolete, dated words) (y/n) [n]: ');
   if (modernOnly.toLowerCase() === 'y') {
     builder.setPolicyFilter('modern_only', true);
+    print('  ✓ Will exclude old-fashioned words', 'green');
   }
 
-  const noJargon = await question('No technical jargon? (y/n) [n]: ');
+  const noJargon = await question('\nNo technical jargon? (excludes medical, legal, technical, scientific) (y/n) [n]: ');
   if (noJargon.toLowerCase() === 'y') {
     builder.setPolicyFilter('no_jargon', true);
+    print('  ✓ Will exclude specialized terminology', 'green');
   }
 }
 
