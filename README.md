@@ -131,4 +131,4 @@ Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) (coming soo
 - **Core Data**: CC BY 4.0
 - **Plus Data**: CC BY-SA 4.0
 
-See LICENSE and data/{core,plus}/LICENSE for full terms.
+See [LICENSE](LICENSE) for code terms. Data licensing details are in ATTRIBUTION.md (generated during builds).
