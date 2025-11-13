@@ -100,18 +100,18 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": ["top10", "top100", "top1k", "top10k", "top100k", "rare"]
+                "enum": ["top10", "top100", "top300", "top500", "top1k", "top3k", "top10k", "top25k", "top50k", "rare"]
               },
               "description": "Include only these frequency tiers"
             },
             "min_tier": {
               "type": "string",
-              "enum": ["top10", "top100", "top1k", "top10k", "top100k", "rare"],
+              "enum": ["top10", "top100", "top300", "top500", "top1k", "top3k", "top10k", "top25k", "top50k", "rare"],
               "description": "Minimum frequency tier (more common)"
             },
             "max_tier": {
               "type": "string",
-              "enum": ["top10", "top100", "top1k", "top10k", "top100k", "rare"],
+              "enum": ["top10", "top100", "top300", "top500", "top1k", "top3k", "top10k", "top25k", "top50k", "rare"],
               "description": "Maximum frequency tier (rarer)"
             },
             "min_score": {

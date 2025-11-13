@@ -70,28 +70,32 @@ const CAPABILITIES = {
       fields: {
         tiers: {
           type: 'array',
-          options: ['top10', 'top100', 'top1k', 'top10k', 'top100k', 'rare'],
+          options: ['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare'],
           description: 'Include only these frequency tiers'
         },
         min_tier: {
           type: 'enum',
-          options: ['top10', 'top100', 'top1k', 'top10k', 'top100k', 'rare'],
+          options: ['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare'],
           description: 'Minimum frequency (more common)'
         },
         max_tier: {
           type: 'enum',
-          options: ['top10', 'top100', 'top1k', 'top10k', 'top100k', 'rare'],
+          options: ['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare'],
           description: 'Maximum frequency (rarer)'
         },
         min_score: { type: 'integer', description: 'Minimum frequency score (0-100)' }
       },
       tiers: {
-        top10: { rank: '1-10', description: 'Ultra-frequent words (the, and, be)', score: 100 },
-        top100: { rank: '11-100', description: 'Very frequent', score: 90 },
-        top1k: { rank: '101-1,000', description: 'Everyday vocabulary', score: 80 },
-        top10k: { rank: '1,001-10,000', description: 'Common words', score: 70 },
-        top100k: { rank: '10,001-100,000', description: 'Extended vocabulary', score: 50 },
-        rare: { rank: '>100,000', description: 'Rare/specialized', score: 10 }
+        top10: { rank: '1-10', description: 'Ultra-common function words', score: 100 },
+        top100: { rank: '11-100', description: 'Core vocabulary for basic communication', score: 95 },
+        top300: { rank: '101-300', description: 'Early reader / sight word level', score: 90 },
+        top500: { rank: '301-500', description: 'Simple children\'s book vocabulary', score: 85 },
+        top1k: { rank: '501-1,000', description: 'High-frequency everyday words', score: 80 },
+        top3k: { rank: '1,001-3,000', description: 'Conversational fluency (~95% coverage)', score: 70 },
+        top10k: { rank: '3,001-10,000', description: 'Standard educated vocabulary', score: 60 },
+        top25k: { rank: '10,001-25,000', description: 'Extended vocabulary with specialized terms', score: 40 },
+        top50k: { rank: '25,001-50,000', description: 'Rare words, technical terms, variants', score: 20 },
+        rare: { rank: '>50,000', description: 'Very rare/specialized (not in dataset)', score: 5 }
       }
     },
 

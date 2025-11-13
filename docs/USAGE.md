@@ -148,23 +148,50 @@ print(f"Family-friendly words: {len(family_friendly_words)}")
 
 ---
 
-## CLI Usage (Coming Soon)
+## CLI Usage with owlex
 
-The `owlex` CLI is planned but not yet implemented. Proposed usage:
+The `owlex` CLI tool filters word lists using JSON specification files. See [Interactive Word List Builder](../README.md#interactive-word-list-builder) for creating specifications.
+
+### Basic Usage
 
 ```bash
-# Search for words matching pattern
-owlex search --pattern '^cas.*' --len 6-8
+# Filter using a specification file
+owlex filter wordlist-spec.json
 
-# Filter by attributes
-owlex search --pos noun --tier top10k --family-friendly
+# Output to file
+owlex filter wordlist-spec.json > filtered_words.txt
 
-# Get word info
-owlex info castle
-
-# Export filtered list
-owlex export --pos noun --tier top1k --format txt > nouns_top1k.txt
+# Use verbose mode to see filtering details
+owlex filter wordlist-spec.json --verbose
 ```
+
+### Specification File Format
+
+Create a JSON specification file defining your filters:
+
+```json
+{
+  "version": "1.0",
+  "distribution": "core",
+  "filters": {
+    "character": {
+      "exact_length": 5
+    },
+    "frequency": {
+      "tiers": ["top1k", "top3k", "top10k"]
+    },
+    "policy": {
+      "family_friendly": true
+    }
+  },
+  "output": {
+    "format": "text",
+    "sort_by": "frequency"
+  }
+}
+```
+
+See `docs/schema/wordlist_spec.schema.json` for complete specification format and `examples/wordlist-specs/` for examples.
 
 ---
 

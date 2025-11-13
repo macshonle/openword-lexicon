@@ -1084,16 +1084,15 @@ class RhymeFilter(FilterPlugin):
 ## Recommendations
 
 ### Short-Term (1-2 weeks)
-1. **Implement `owlex` CLI tool**:
-   - Wrap existing filter tools into unified interface
-   - Add character-level filtering options
-   - Implement preset configurations
-   - Add JSON/CSV output formats
+1. **Enhance filtering capabilities**:
+   - Add more preset configurations
+   - Expand policy filter options
+   - Improve filter validation and error messages
 
-2. **Document current capabilities**:
-   - Update README with filter examples
-   - Create tutorial for common use cases
-   - Add examples for profanity filtering
+2. **Expand documentation**:
+   - Add more real-world examples
+   - Create video tutorials for common use cases
+   - Document best practices for game development
 
 ### Medium-Term (1-2 months)
 3. **Integrate syllable extraction**:

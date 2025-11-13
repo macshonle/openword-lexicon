@@ -238,17 +238,21 @@ async function configureFilter(builder, category) {
     const tiers = await clack.multiselect({
       message: 'Select frequency tiers',
       options: [
-        { value: 'top10', label: 'top10', hint: 'Ultra-frequent (1-10)' },
-        { value: 'top100', label: 'top100', hint: 'Very frequent (11-100)' },
-        { value: 'top1k', label: 'top1k', hint: 'Frequent (101-1K)' },
-        { value: 'top10k', label: 'top10k', hint: 'Common (1K-10K)' },
-        { value: 'top100k', label: 'top100k', hint: 'Known (10K-100K)' },
-        { value: 'rare', label: 'rare', hint: 'Rare (>100K)' }
+        { value: 'top10', label: 'top10', hint: 'Ultra-common (1-10)' },
+        { value: 'top100', label: 'top100', hint: 'Core vocabulary (11-100)' },
+        { value: 'top300', label: 'top300', hint: 'Early reader (101-300)' },
+        { value: 'top500', label: 'top500', hint: 'Simple vocabulary (301-500)' },
+        { value: 'top1k', label: 'top1k', hint: 'Everyday words (501-1K)' },
+        { value: 'top3k', label: 'top3k', hint: 'Conversational fluency (1K-3K)' },
+        { value: 'top10k', label: 'top10k', hint: 'Educated vocabulary (3K-10K)' },
+        { value: 'top25k', label: 'top25k', hint: 'Extended vocabulary (10K-25K)' },
+        { value: 'top50k', label: 'top50k', hint: 'Rare/technical (25K-50K)' },
+        { value: 'rare', label: 'rare', hint: 'Very rare (>50K)' }
       ],
-      initialValues: ['top1k', 'top10k']
+      initialValues: ['top1k', 'top3k', 'top10k']
     });
 
-    if (!clack.isCancel(tiers) && tiers.length > 0 && tiers.length < 6) {
+    if (!clack.isCancel(tiers) && tiers.length > 0 && tiers.length < 10) {
       builder.addFilter('frequency', 'tiers', tiers);
     }
   } else if (category === 'policy') {
