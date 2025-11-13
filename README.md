@@ -119,7 +119,7 @@ uv run python src/openword/package_release.py
 | Distribution | Words | Trie Size | License |
 |--------------|-------|-----------|---------|
 | Core | 208,201 | 510 KB | CC BY 4.0 |
-| Plus | 208,204 | 510 KB | CC BY-SA 4.0 |
+| Plus | 1,039,950 | 2.9 MB | CC BY-SA 4.0 |
 
 ## Contributing
 
