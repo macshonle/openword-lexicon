@@ -5,26 +5,44 @@ SHELL := /bin/bash
 UV ?= uv
 PY_VERSION ?= 3.11
 
-WIKTIONARY_DUMP := data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2
-WIKTIONARY_JSON := data/intermediate/plus/wikt.jsonl
-CORE_TRIE := data/build/core/core.trie
-CORE_WORDLIST := data/build/core/wordlist.txt
-GAME_WORD_LIST := data/wordlists/game-words.txt
-VULGAR_BLOCKLIST := data/wordlists/vulgar-blocklist.txt
-KIDS_NOUNS_LIST := data/wordlists/kids-nouns.txt
-ALL_PHRASES_LIST := data/wordlists/all-phrases.txt
-IDIOMS_LIST := data/wordlists/idioms.txt
-PREP_PHRASES_LIST := data/wordlists/prepositional-phrases.txt
-CORE_META := data/build/core/core.meta.json
-PLUS_META := data/build/plus/plus.meta.json
-GAME_WORDS_CORE := data/game_words/words_core.txt
-GAME_WORDS_CORE_SCORED := data/game_words/words_scored_core.txt
-GAME_WORDS_CORE_REVIEW := data/game_words/review_core.md
-GAME_WORDS_PLUS := data/game_words/words_plus.txt
-GAME_WORDS_PLUS_SCORED := data/game_words/words_scored_plus.txt
-GAME_WORDS_PLUS_REVIEW := data/game_words/review_plus.md
-GAME_META_REPORT_CORE := reports/game_metadata_analysis_core.md
-GAME_META_REPORT_PLUS := reports/game_metadata_analysis_plus.md
+# Directory structure
+RAW_PLUS_DIR := data/raw/plus
+INTERMEDIATE_PLUS_DIR := data/intermediate/plus
+CORE_BUILD_DIR := data/build/core
+PLUS_BUILD_DIR := data/build/plus
+WORDLISTS_DIR := data/wordlists
+GAME_WORDS_DIR := data/game_words
+REPORTS_DIR := reports
+
+# Build artifacts
+WIKTIONARY_DUMP := $(RAW_PLUS_DIR)/enwiktionary-latest-pages-articles.xml.bz2
+WIKTIONARY_JSON := $(INTERMEDIATE_PLUS_DIR)/wikt.jsonl
+FREQUENCY_DATA := $(RAW_PLUS_DIR)/en_50k.txt
+WORDNET_ARCHIVE := $(RAW_PLUS_DIR)/english-wordnet-2024.tar.gz
+CORE_TRIE := $(CORE_BUILD_DIR)/core.trie
+CORE_WORDLIST := $(CORE_BUILD_DIR)/wordlist.txt
+CORE_META := $(CORE_BUILD_DIR)/core.meta.json
+PLUS_META := $(PLUS_BUILD_DIR)/plus.meta.json
+
+# Specialized word lists
+GAME_WORD_LIST := $(WORDLISTS_DIR)/game-words.txt
+VULGAR_BLOCKLIST := $(WORDLISTS_DIR)/vulgar-blocklist.txt
+KIDS_NOUNS_LIST := $(WORDLISTS_DIR)/kids-nouns.txt
+ALL_PHRASES_LIST := $(WORDLISTS_DIR)/all-phrases.txt
+IDIOMS_LIST := $(WORDLISTS_DIR)/idioms.txt
+PREP_PHRASES_LIST := $(WORDLISTS_DIR)/prepositional-phrases.txt
+
+# Game words filtering outputs
+GAME_WORDS_CORE := $(GAME_WORDS_DIR)/words_core.txt
+GAME_WORDS_CORE_SCORED := $(GAME_WORDS_DIR)/words_scored_core.txt
+GAME_WORDS_CORE_REVIEW := $(GAME_WORDS_DIR)/review_core.md
+GAME_WORDS_PLUS := $(GAME_WORDS_DIR)/words_plus.txt
+GAME_WORDS_PLUS_SCORED := $(GAME_WORDS_DIR)/words_scored_plus.txt
+GAME_WORDS_PLUS_REVIEW := $(GAME_WORDS_DIR)/review_plus.md
+
+# Analysis reports
+GAME_META_REPORT_CORE := $(REPORTS_DIR)/game_metadata_analysis_core.md
+GAME_META_REPORT_PLUS := $(REPORTS_DIR)/game_metadata_analysis_plus.md
 
 .PHONY: bootstrap venv deps fmt lint test clean clean-viewer scrub \
         fetch fetch-core fetch-plus build-wiktionary-json \
@@ -304,19 +322,19 @@ analyze-enhanced-metadata: report-frequency-analysis report-syllable-analysis re
 	@echo "Enhanced metadata analysis complete"
 
 # Analyze frequency data structure and tiers
-report-frequency-analysis: deps data/raw/plus/en_50k.txt
-	@mkdir -p reports
-	$(UV) run python tools/analyze_frequency_data.py data/raw/plus/en_50k.txt
+report-frequency-analysis: deps $(FREQUENCY_DATA)
+	@mkdir -p $(REPORTS_DIR)
+	$(UV) run python tools/analyze_frequency_data.py $(FREQUENCY_DATA)
 
 # Analyze syllable data availability in Wiktionary
 report-syllable-analysis: deps $(WIKTIONARY_DUMP)
-	@mkdir -p reports
+	@mkdir -p $(REPORTS_DIR)
 	$(UV) run python tools/analyze_syllable_data.py "$(WIKTIONARY_DUMP)" 10000
 
 # Analyze WordNet for concrete/abstract noun classification
-report-wordnet-concreteness: deps data/raw/plus/english-wordnet-2024.tar.gz
-	@mkdir -p reports
-	$(UV) run python tools/analyze_wordnet_concreteness.py data/raw/plus/english-wordnet-2024.tar.gz
+report-wordnet-concreteness: deps $(WORDNET_ARCHIVE)
+	@mkdir -p $(REPORTS_DIR)
+	$(UV) run python tools/analyze_wordnet_concreteness.py $(WORDNET_ARCHIVE)
 
 # ===========================
 # Local Analysis (run locally with full Wiktionary dump)
@@ -351,8 +369,8 @@ baseline-decompress: deps $(WIKTIONARY_DUMP)
 
 # Run scanner parser in diagnostic mode to identify issues
 diagnose-scanner: deps $(WIKTIONARY_DUMP)
-	@mkdir -p reports
+	@mkdir -p $(REPORTS_DIR)
 	$(UV) run python tools/wiktionary_scanner_parser.py \
 		"$(WIKTIONARY_DUMP)" \
 		/tmp/scanner_diagnostic.jsonl \
-		--diagnostic reports/scanner_diagnostic.txt
+		--diagnostic $(REPORTS_DIR)/scanner_diagnostic.txt
