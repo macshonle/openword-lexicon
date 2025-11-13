@@ -44,7 +44,7 @@ GAME_WORDS_PLUS_REVIEW := $(GAME_WORDS_DIR)/review_plus.md
 GAME_META_REPORT_CORE := $(REPORTS_DIR)/game_metadata_analysis_core.md
 GAME_META_REPORT_PLUS := $(REPORTS_DIR)/game_metadata_analysis_plus.md
 
-.PHONY: bootstrap venv deps fmt lint test clean clean-viewer scrub \
+.PHONY: bootstrap venv deps fmt lint test clean clean-build clean-viewer scrub \
         fetch fetch-core fetch-plus build-wiktionary-json \
         build-core build-plus export-wordlist export-wordlist-filtered-w3 export-wordlist-filtered-w4 \
         export-wordlist-filtered-c50 export-wordlist-filtered-w3c50 build-binary package check-limits start-server \
@@ -163,17 +163,16 @@ clean:
 	find . -name '__pycache__' -type d -prune -exec rm -rf '{}' +
 	find . -name '*.egg-info' -type d -prune -exec rm -rf '{}' +
 
+clean-build:
+	rm -rf data/intermediate data/filtered data/build data/core data/plus \
+		data/artifacts data/.limits-log.json \
+		ATTRIBUTION.md MANIFEST.json
+
 clean-viewer:
 	rm -rf viewer/node_modules viewer/pnpm-lock.yaml viewer/data viewer/dist
 
-scrub: clean
-	rm -rf .venv \
-		data/intermediate data/filtered data/build data/core data/plus \
-		data/artifacts \
-		ATTRIBUTION.md \
-		MANIFEST.json \
-		data/LICENSE \
-		data/.limits-log.json
+scrub: clean clean-build
+	rm -rf .venv
 
 # Start local development server for trie viewer
 start-server: $(CORE_WORDLIST)

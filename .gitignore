@@ -6,6 +6,11 @@
 /.ruff_cache/
 /.pytest_cache/
 
+# Generated build artifacts
+/ATTRIBUTION.md
+/MANIFEST.json
+
+# Data directories (reproducible)
 /data/raw/
 /data/intermediate/
 /data/artifacts/
@@ -14,6 +19,8 @@
 /data/filtered_words/
 /data/wordlists/
 /data/game_words/
+/data/core/
+/data/plus/
 /data/.limits-log.json
 
 # Byte-compiled / optimized / DLL files
