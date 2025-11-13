@@ -258,7 +258,7 @@ Based on Wiktionary content:
 
 ## Implementation Recommendation
 
-### Phase 1: Prototype (Python)
+### Stage 1: Prototype (Python)
 
 Create `scripts/fetch/parse_wiktionary_simple.py`:
 ```python
@@ -278,7 +278,7 @@ Extracts:
 # See tools/wiktionary_scanner_parser.py for implementation
 ```
 
-### Phase 2: Validation
+### Stage 2: Validation
 
 Run both approaches on same dump:
 ```bash
@@ -292,7 +292,7 @@ python scripts/fetch/parse_wiktionary_simple.py  # Minutes, no errors
 python tools/compare_wikt_extractions.py
 ```
 
-### Phase 3: Optimize
+### Stage 3: Optimize
 
 If Python is still slow, rewrite in Rust/Go for production.
 

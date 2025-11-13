@@ -157,7 +157,7 @@ Words are scored on multiple dimensions (0-100+):
 
 ## Recommended Workflow
 
-### Phase 1: Automated Filtering (done)
+### Step 1: Automated Filtering (done)
 ```bash
 # Generate initial candidates
 make game-words
@@ -166,19 +166,19 @@ make game-words
 make analyze-game-metadata
 ```
 
-### Phase 2: Improve Filters
+### Step 2: Improve Filters
 1. Add exclusion list for pronouns/verbs
 2. Fix concreteness false positives
 3. Add manual adult content blocklist
 4. Test on sample words
 
-### Phase 3: Manual Review
+### Step 3: Manual Review
 1. Review top 500-1000 candidates
 2. Create verified whitelist
 3. Create blocklist of inappropriate words
 4. Document edge cases
 
-### Phase 4: Production List
+### Step 4: Production List
 1. Combine automated filter + manual review
 2. Export final word list
 3. Add metadata (difficulty level, categories)

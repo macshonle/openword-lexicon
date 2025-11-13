@@ -42,61 +42,68 @@ This document describes the design decisions and architecture of the Openword Le
 ### High-Level Flow
 
 ```
-┌─────────────┐
-│   Phase 1   │  Guardrails (disk/RAM limits)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 2-3 │  Fetch sources (checksums, provenance)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 4   │  Normalization (schema, NFKC, labels)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 5   │  Core ingest (ENABLE, EOWL → JSONL)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 6   │  Wiktionary extraction (plus only)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 7   │  WordNet enrichment (concreteness, POS)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 8   │  Frequency tiers (bucketing)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 9   │  Merge & deduplicate (per distribution)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 10  │  Policy filters (family-friendly, etc.)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 11  │  Attribution (ATTRIBUTION.md, LICENSE)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 12  │  Trie build (MARISA + metadata sidecar)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 15  │  CI/CD (workflows, manifest)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 16  │  Packaging (tarballs, checksums)
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│   Phase 17  │  Documentation
-└─────────────┘
+┌─────────────────────────────────────┐
+│  Guardrails (disk/RAM limits)       │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  Fetch sources (checksums,          │
+│  provenance)                        │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  Normalization (schema, NFKC,       │
+│  labels)                            │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  Core ingest (ENABLE, EOWL → JSONL) │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  Wiktionary extraction (plus only)  │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  WordNet enrichment (concreteness,  │
+│  POS)                               │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  Frequency tiers (bucketing)        │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  Merge & deduplicate (per           │
+│  distribution)                      │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  Policy filters (family-friendly,   │
+│  etc.)                              │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  Attribution (ATTRIBUTION.md,       │
+│  LICENSE)                           │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  Trie build (MARISA + metadata      │
+│  sidecar)                           │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  CI/CD (workflows, manifest)        │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  Packaging (tarballs, checksums)    │
+└─────────────┬───────────────────────┘
+              │
+┌─────────────▼───────────────────────┐
+│  Documentation                      │
+└─────────────────────────────────────┘
 ```
 
 ### Data Flow

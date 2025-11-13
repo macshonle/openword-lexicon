@@ -104,7 +104,7 @@ Specialized subject fields or technical areas.
 
 ## Concreteness (`concreteness`)
 
-Applied to nouns via WordNet enrichment (Phase 7).
+Applied to nouns via WordNet enrichment.
 
 | Value | Description | Example |
 |-------|-------------|---------|
@@ -116,7 +116,7 @@ Applied to nouns via WordNet enrichment (Phase 7).
 
 ## Frequency Tiers (`frequency_tier`)
 
-Coarse ranking buckets based on corpus frequency (Phase 8).
+Coarse ranking buckets based on corpus frequency.
 
 | Value | Description | Rank Range | Example |
 |-------|-------------|------------|---------|
@@ -209,4 +209,4 @@ normalized = unicodedata.normalize('NFKC', word)
 
 ## Changelog
 
-- **2025-11-07**: Initial taxonomy for Phases 4–9 (normalization, ingest, enrichment, merging).
+- **2025-11-07**: Initial taxonomy for normalization, ingest, enrichment, and merging pipeline.

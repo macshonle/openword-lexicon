@@ -1,11 +1,11 @@
 """
-openword.cli — Command-line interface (placeholder for Phase 0).
+openword.cli — Command-line interface placeholder.
 
 Entry point for the `owlex` CLI tool.
 """
 
 
 def main():
-    """Placeholder CLI entry point (wired in later phases)."""
-    print("owlex CLI placeholder — implementation coming in future phases")
+    """Placeholder CLI entry point."""
+    print("owlex CLI placeholder — implementation coming soon")
     return 0

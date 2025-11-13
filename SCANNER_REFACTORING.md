@@ -319,7 +319,7 @@ build-core: deps fetch-core build-wiktionary-json
 
 ## Implementation Priority
 
-### Phase 1: Cleanup (Immediate)
+### Priority 1: Cleanup (Immediate)
 1. ✅ Remove wiktextract dependencies from pyproject.toml
 2. ✅ Remove fetch-post-process-plus target
 3. ✅ Remove fetch-simple target
@@ -327,19 +327,19 @@ build-core: deps fetch-core build-wiktionary-json
 5. ✅ Delete wiktionary_simple_parser.py
 6. ✅ Update build-plus dependencies
 
-### Phase 2: Basic Filtering (Short-term)
+### Priority 2: Basic Filtering (Short-term)
 1. ✅ Add export-wordlist-vulgar-blocklist target
 2. ✅ Add export-wordlist-phrases target
 3. ✅ Add export-wordlist-game target
 4. ✅ Test filtering with existing schema
 
-### Phase 3: Enhanced Metadata (Medium-term)
+### Priority 3: Enhanced Metadata (Medium-term)
 1. ⏳ Add complexity metrics to scanner parser
 2. ⏳ Add simplified category tagging
 3. ⏳ Add export-wordlist-kids-nouns target
 4. ⏳ Test semantic category filtering
 
-### Phase 4: External Data Integration (Long-term)
+### Priority 4: External Data Integration (Long-term)
 1. ⏳ Research frequency data sources
 2. ⏳ Create frequency data pipeline
 3. ⏳ Merge frequency with Wiktionary data

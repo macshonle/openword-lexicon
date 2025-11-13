@@ -313,7 +313,7 @@ $(ALL_PHRASES_LIST) $(IDIOMS_LIST) $(PREP_PHRASES_LIST): $(WIKTIONARY_JSON)
 export-wordlist-phrases: $(ALL_PHRASES_LIST) $(IDIOMS_LIST) $(PREP_PHRASES_LIST)
 
 # ===========================
-# Enhanced Metadata Analysis (Phase 3)
+# Enhanced Metadata Analysis
 # ===========================
 
 # Run all enhanced metadata analysis
