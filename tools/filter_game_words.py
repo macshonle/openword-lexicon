@@ -321,10 +321,24 @@ def main():
     )
 
     parser.add_argument(
-        '--output-dir',
+        '--output-wordlist',
         type=Path,
-        default=Path('data/game_words'),
-        help='Output directory (default: data/game_words)'
+        required=True,
+        help='Output path for plain word list'
+    )
+
+    parser.add_argument(
+        '--output-scored',
+        type=Path,
+        required=True,
+        help='Output path for scored word list'
+    )
+
+    parser.add_argument(
+        '--output-review',
+        type=Path,
+        required=True,
+        help='Output path for review report'
     )
 
     args = parser.parse_args()
@@ -350,19 +364,17 @@ def main():
     print()
 
     # Generate outputs
-    output_dir = args.output_dir
-    output_dir.mkdir(parents=True, exist_ok=True)
+    wordlist_path = args.output_wordlist
+    scored_path = args.output_scored
+    report_path = args.output_review
 
     # Report for manual review
-    report_path = output_dir / f'review_{dist}.md'
     generate_report(candidates, report_path)
 
     # Word list (plain)
-    wordlist_path = output_dir / f'words_{dist}.txt'
     export_wordlist(candidates, wordlist_path, with_scores=False)
 
     # Word list with scores
-    scored_path = output_dir / f'words_scored_{dist}.txt'
     export_wordlist(candidates, scored_path, with_scores=True)
 
     print()

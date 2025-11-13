@@ -74,7 +74,7 @@ def analyze_coverage(metadata: Dict[str, Dict]):
     }
 
 
-def generate_report(distribution: str = 'core'):
+def generate_report(distribution: str = 'core', output_path: Path = None):
     """Generate coverage analysis report."""
     meta_path = Path(f'data/build/{distribution}/{distribution}.meta.json')
 
@@ -176,7 +176,9 @@ def generate_report(distribution: str = 'core'):
     report += "- Use lists to train better filters\n\n"
 
     # Write report
-    output_path = Path(f'reports/game_metadata_analysis_{distribution}.md')
+    if output_path is None:
+        output_path = Path(f'reports/game_metadata_analysis_{distribution}.md')
+
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     with open(output_path, 'w', encoding='utf-8') as f:
@@ -187,12 +189,20 @@ def generate_report(distribution: str = 'core'):
 
 
 if __name__ == '__main__':
-    import sys
+    import argparse
 
-    distribution = sys.argv[1] if len(sys.argv) > 1 else 'core'
+    parser = argparse.ArgumentParser(description='Analyze game metadata coverage')
+    parser.add_argument(
+        'distribution',
+        choices=['core', 'plus'],
+        help='Which distribution to analyze'
+    )
+    parser.add_argument(
+        '--output',
+        type=Path,
+        help='Output path for report (default: reports/game_metadata_analysis_{distribution}.md)'
+    )
 
-    if distribution not in ['core', 'plus']:
-        print(f"Error: distribution must be 'core' or 'plus', got '{distribution}'")
-        sys.exit(1)
+    args = parser.parse_args()
 
-    generate_report(distribution)
+    generate_report(args.distribution, args.output)

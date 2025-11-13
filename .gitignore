@@ -12,6 +12,8 @@
 /data/build/
 /data/filtered/
 /data/filtered_words/
+/data/wordlists/
+/data/game_words/
 /data/.limits-log.json
 
 # Byte-compiled / optimized / DLL files
@@ -228,3 +230,4 @@ pnpm-lock.yaml
 .pnpm-store/
 viewer/data/
 viewer/dist/
+.claude/settings.local.json

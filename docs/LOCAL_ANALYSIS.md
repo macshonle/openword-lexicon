@@ -55,8 +55,7 @@ Extract all English entries with labels:
 
 ```bash
 # Run streaming parser (10-30 minutes for full dump)
-chmod +x tools/prototypes/wiktionary_simple_parser.py
-uv run python tools/prototypes/wiktionary_simple_parser.py \
+uv run python tools/wiktionary_scanner_parser.py \
   data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2 \
   data/intermediate/plus/wikt.jsonl
 ```
@@ -187,16 +186,15 @@ uv run python tools/filter_words.py \
 
 ## Comparison with wiktextract
 
-If you want to compare the simple parser with wiktextract:
+If you want to compare the scanner parser with wiktextract:
 
 ```bash
 # Run wiktextract (slow, several hours)
 make fetch-post-process-plus
 
-# Compare outputs
-uv run python tools/prototypes/compare_wikt_extractions.py \
-  data/intermediate/plus/wikt.jsonl \
-  data/intermediate/plus/wikt_entries.jsonl
+# Then manually compare the outputs from:
+# - data/intermediate/plus/wikt.jsonl (scanner parser)
+# - data/intermediate/plus/wikt_entries.jsonl (wiktextract)
 ```
 
 ## File Structure
@@ -240,6 +238,8 @@ data/filtered_words/
 - ✗ `data/intermediate/` - Extracted data (reproducible)
 - ✗ `data/build/` - Built artifacts (reproducible)
 - ✗ `data/filtered_words/` - Generated word lists (reproducible)
+- ✗ `data/wordlists/` - Specialized word lists (reproducible via make build-wordlists)
+- ✗ `data/game_words/` - Game-filtered word lists (reproducible via make game-words)
 
 ## CI/CD Integration
 
@@ -308,7 +308,7 @@ uv run python tools/audit_wiktionary_extraction.py \
 less reports/wiktionary_audit.md
 
 # 4. Extract (if audit looks good)
-uv run python tools/prototypes/wiktionary_simple_parser.py \
+uv run python tools/wiktionary_scanner_parser.py \
   data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2 \
   data/intermediate/plus/wikt.jsonl
 

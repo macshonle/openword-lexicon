@@ -275,7 +275,7 @@ Extracts:
 10-100x faster than wiktextract, 90%+ coverage.
 """
 
-# See tools/prototypes/wiktionary_simple_parser.py for implementation
+# See tools/wiktionary_scanner_parser.py for implementation
 ```
 
 ### Phase 2: Validation
@@ -323,9 +323,9 @@ If Python is still slow, rewrite in Rust/Go for production.
 
 3. **Prototype simple parser:**
    ```bash
-   python tools/prototypes/wiktionary_simple_parser.py \
+   python tools/wiktionary_scanner_parser.py \
      data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2 \
-     data/intermediate/plus/wikt_simple.jsonl
+     data/intermediate/plus/wikt.jsonl
    ```
 
 4. **Compare outputs:**
