@@ -48,7 +48,7 @@ Create a JSON file directly using the schema:
       "max_length": 10
     },
     "frequency": {
-      "tiers": ["top1k", "top10k"]
+      "tiers": ["top1k", "top3k", "top10k"]
     }
   }
 }
@@ -204,8 +204,9 @@ Python CLI tool that:
 - Starts with / ends with / contains
 
 **Frequency Filters** (Always available):
-- 6 tiers: top10, top100, top1k, top10k, top100k, rare
-- Based on OpenSubtitles corpus
+- 10 tiers: top10, top100, top300, top500, top1k, top3k, top10k, top25k, top50k, rare
+- Based on OpenSubtitles 2018 corpus (50,000 words)
+- Linguistically meaningful breakpoints (esp. top3k = 95% comprehension)
 - 100% coverage (all words assigned a tier)
 
 **POS Filters** (~52.5% coverage):
@@ -265,7 +266,7 @@ This outputs all words from the core distribution with no filtering.
       "max_words": 1
     },
     "frequency": {
-      "tiers": ["top1k", "top10k"]
+      "tiers": ["top1k", "top3k", "top10k"]
     },
     "pos": {
       "include": ["noun", "verb", "adjective"],

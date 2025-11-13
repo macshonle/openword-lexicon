@@ -8,7 +8,7 @@
       "max_words": 1
     },
     "frequency": {
-      "min_tier": "top100k"
+      "min_tier": "top50k"
     }
   },
   "output": {

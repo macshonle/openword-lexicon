@@ -107,14 +107,19 @@ This document describes which filtering capabilities are available on each distr
 **Tiers**:
 | Tier | Rank | Description | Typical Use |
 |------|------|-------------|-------------|
-| `top10` | 1-10 | Function words (the, and, be) | Ultra-common |
-| `top100` | 11-100 | Core communication | Essential words |
-| `top1k` | 101-1,000 | Everyday vocabulary | Beginner learners |
-| `top10k` | 1,001-10,000 | Common words | General literacy |
-| `top100k` | 10,001-100,000 | Extended vocabulary | Advanced learners |
-| `rare` | >100,000 or unseen | Rare/specialized | Crosswords, technical |
+| `top10` | 1-10 | Ultra-common function words | Essential particles |
+| `top100` | 11-100 | Core vocabulary for basic communication | Essential words |
+| `top300` | 101-300 | Early reader / sight word level | Children's books (K-1) |
+| `top500` | 301-500 | Simple children's book vocabulary | Elementary (Grade 2-3) |
+| `top1k` | 501-1,000 | High-frequency everyday words | Early elementary complete |
+| `top3k` | 1,001-3,000 | Conversational fluency (~95% coverage) | Everyday conversation |
+| `top10k` | 3,001-10,000 | Standard educated vocabulary | General literacy |
+| `top25k` | 10,001-25,000 | Extended vocabulary with specialized terms | Advanced learners |
+| `top50k` | 25,001-50,000 | Rare words, technical terms, variants | Specialized domains |
+| `rare` | >50,000 or unseen | Very rare/specialized (not in dataset) | Crosswords, technical |
 
 **Data source**: OpenSubtitles 2018 corpus (50,000 ranked words)
+**Note**: The 3,000-word breakpoint represents ~95% comprehension threshold in linguistic research
 
 **Use cases**:
 - Kids' word lists (top1k-top10k)

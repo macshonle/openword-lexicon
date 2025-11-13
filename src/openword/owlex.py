@@ -28,11 +28,15 @@ class OwlexFilter:
         self.spec = self._load_spec()
         self.tier_scores = {
             'top10': 100,
-            'top100': 90,
+            'top100': 95,
+            'top300': 90,
+            'top500': 85,
             'top1k': 80,
-            'top10k': 70,
-            'top100k': 50,
-            'rare': 10
+            'top3k': 70,
+            'top10k': 60,
+            'top25k': 40,
+            'top50k': 20,
+            'rare': 5
         }
 
     def _load_spec(self) -> Dict:

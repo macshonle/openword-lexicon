@@ -590,7 +590,7 @@
                     <div class="form-group">
                         <label>Include tiers (select multiple)</label>
                         <div class="checkbox-group">
-                            ${['top10', 'top100', 'top1k', 'top10k', 'top100k', 'rare'].map(tier => `
+                            ${['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare'].map(tier => `
                                 <label class="checkbox-option">
                                     <input type="checkbox" id="freq-${tier}" value="${tier}">
                                     ${tier}: ${CAPABILITIES.filters.frequency.tiers[tier].description}
@@ -716,10 +716,10 @@
             if (phraseMax) builder.addFilter('phrase', 'max_words', parseInt(phraseMax));
 
             // Frequency filters
-            const freqTiers = ['top10', 'top100', 'top1k', 'top10k', 'top100k', 'rare']
+            const freqTiers = ['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare']
                 .filter(tier => document.getElementById(`freq-${tier}`)?.checked)
                 .map(tier => tier);
-            if (freqTiers.length > 0 && freqTiers.length < 6) {
+            if (freqTiers.length > 0 && freqTiers.length < 10) {
                 builder.addFilter('frequency', 'tiers', freqTiers);
             }
 
