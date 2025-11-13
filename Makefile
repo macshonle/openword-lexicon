@@ -451,7 +451,13 @@ wordlist-builder-cli:
 		echo "Please install Node.js from: https://nodejs.org/"; \
 		exit 1; \
 	fi
-	@node tools/wordlist-builder/cli-builder.js
+	@if [ -d "tools/wordlist-builder/node_modules/@clack/prompts" ]; then \
+		echo "Using enhanced TUI (Clack)..."; \
+		node tools/wordlist-builder/cli-builder-clack.js; \
+	else \
+		echo "Using basic CLI (run 'cd tools/wordlist-builder && npm install' for enhanced UI)..."; \
+		node tools/wordlist-builder/cli-builder.js; \
+	fi
 
 # Open web builder in default browser
 wordlist-builder-web:
