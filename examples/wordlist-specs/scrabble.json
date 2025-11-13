@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "name": "Scrabble Words",
+  "description": "Single words suitable for Scrabble",
+  "distribution": "core",
+  "filters": {
+    "phrase": {
+      "max_words": 1
+    },
+    "frequency": {
+      "min_tier": "top100k"
+    }
+  },
+  "output": {
+    "format": "text",
+    "sort_by": "alphabetical"
+  }
+}

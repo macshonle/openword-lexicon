@@ -1,0 +1,32 @@
+{
+  "version": "1.0",
+  "name": "Kids Game Words",
+  "description": "Concrete nouns appropriate for children's games",
+  "distribution": "core",
+  "filters": {
+    "character": {
+      "min_length": 3,
+      "max_length": 10
+    },
+    "phrase": {
+      "max_words": 1
+    },
+    "frequency": {
+      "tiers": ["top1k", "top10k"]
+    },
+    "pos": {
+      "include": ["noun"]
+    },
+    "concreteness": {
+      "values": ["concrete"]
+    },
+    "policy": {
+      "family_friendly": true,
+      "modern_only": true
+    }
+  },
+  "output": {
+    "format": "text",
+    "sort_by": "frequency"
+  }
+}

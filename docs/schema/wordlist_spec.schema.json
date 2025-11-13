@@ -1,0 +1,397 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/macshonle/openword-lexicon/schemas/wordlist_spec.schema.json",
+  "title": "OpenWord Lexicon - Word List Specification",
+  "description": "Schema for word list filter specifications used by owlex CLI tool",
+  "type": "object",
+  "required": ["version", "distribution"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Specification format version"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name for this word list",
+      "examples": ["Kids Game Words", "Wordle List", "Profanity Blocklist"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of intended use case"
+    },
+    "distribution": {
+      "type": "string",
+      "enum": ["core", "plus"],
+      "description": "Which distribution to filter (core: permissive licenses only, plus: includes CC BY-SA)"
+    },
+    "filters": {
+      "type": "object",
+      "description": "Filter criteria to apply",
+      "properties": {
+        "character": {
+          "type": "object",
+          "description": "Character-level filters (available on both distributions)",
+          "properties": {
+            "min_length": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Minimum word/phrase length in characters"
+            },
+            "max_length": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Maximum word/phrase length in characters"
+            },
+            "exact_length": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Exact length (e.g., 5 for Wordle)"
+            },
+            "pattern": {
+              "type": "string",
+              "description": "Regular expression pattern to match",
+              "examples": ["^[a-z]+$", "^[aeiou].*[aeiou]$", "ing$"]
+            },
+            "starts_with": {
+              "type": "string",
+              "description": "Words must start with this string"
+            },
+            "ends_with": {
+              "type": "string",
+              "description": "Words must end with this string"
+            },
+            "contains": {
+              "type": "string",
+              "description": "Words must contain this substring"
+            },
+            "exclude_pattern": {
+              "type": "string",
+              "description": "Regular expression pattern to exclude"
+            }
+          }
+        },
+        "phrase": {
+          "type": "object",
+          "description": "Multi-word phrase filters (available on both distributions)",
+          "properties": {
+            "min_words": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Minimum word count (space-separated)"
+            },
+            "max_words": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Maximum word count (1 = single words only, 3 = include idioms)",
+              "examples": [1, 3]
+            },
+            "is_phrase": {
+              "type": "boolean",
+              "description": "If true, only include multi-word phrases; if false, only single words"
+            }
+          }
+        },
+        "frequency": {
+          "type": "object",
+          "description": "Frequency tier filters (available on both distributions)",
+          "properties": {
+            "tiers": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["top10", "top100", "top1k", "top10k", "top100k", "rare"]
+              },
+              "description": "Include only these frequency tiers"
+            },
+            "min_tier": {
+              "type": "string",
+              "enum": ["top10", "top100", "top1k", "top10k", "top100k", "rare"],
+              "description": "Minimum frequency tier (more common)"
+            },
+            "max_tier": {
+              "type": "string",
+              "enum": ["top10", "top100", "top1k", "top10k", "top100k", "rare"],
+              "description": "Maximum frequency tier (rarer)"
+            },
+            "min_score": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Minimum frequency score (top10=100, rare=10)"
+            }
+          }
+        },
+        "pos": {
+          "type": "object",
+          "description": "Part-of-speech filters (requires WordNet enrichment, ~52.5% coverage)",
+          "properties": {
+            "include": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["noun", "verb", "adjective", "adverb", "pronoun", "preposition", "conjunction", "interjection", "determiner", "particle", "auxiliary"]
+              },
+              "description": "Include only these POS tags"
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["noun", "verb", "adjective", "adverb", "pronoun", "preposition", "conjunction", "interjection", "determiner", "particle", "auxiliary"]
+              },
+              "description": "Exclude these POS tags"
+            },
+            "require_pos": {
+              "type": "boolean",
+              "description": "If true, exclude words without POS data"
+            }
+          }
+        },
+        "concreteness": {
+          "type": "object",
+          "description": "Noun concreteness filters (WordNet enrichment, ~34.5% coverage)",
+          "properties": {
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["concrete", "abstract", "mixed"]
+              },
+              "description": "Include only these concreteness values"
+            },
+            "require_concreteness": {
+              "type": "boolean",
+              "description": "If true, exclude words without concreteness data"
+            }
+          }
+        },
+        "labels": {
+          "type": "object",
+          "description": "Label-based filters (Wiktionary only, ~11.2% coverage)",
+          "properties": {
+            "register": {
+              "type": "object",
+              "description": "Sociolinguistic register filters",
+              "properties": {
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["formal", "informal", "colloquial", "slang", "vulgar", "offensive", "derogatory", "euphemistic", "humorous", "literary"]
+                  }
+                },
+                "exclude": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["formal", "informal", "colloquial", "slang", "vulgar", "offensive", "derogatory", "euphemistic", "humorous", "literary"]
+                  }
+                }
+              }
+            },
+            "region": {
+              "type": "object",
+              "description": "Regional/dialectal filters",
+              "properties": {
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^en-[A-Z]{2}$"
+                  },
+                  "examples": [["en-US"], ["en-GB"]]
+                },
+                "exclude": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^en-[A-Z]{2}$"
+                  }
+                }
+              }
+            },
+            "temporal": {
+              "type": "object",
+              "description": "Historical usage filters",
+              "properties": {
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["archaic", "obsolete", "dated", "historical", "modern"]
+                  }
+                },
+                "exclude": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["archaic", "obsolete", "dated", "historical", "modern"]
+                  }
+                }
+              }
+            },
+            "domain": {
+              "type": "object",
+              "description": "Subject domain filters",
+              "properties": {
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["medical", "legal", "technical", "scientific", "military", "nautical", "botanical", "zoological", "computing", "mathematics", "music", "art", "religion", "culinary", "sports", "business", "finance"]
+                  }
+                },
+                "exclude": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["medical", "legal", "technical", "scientific", "military", "nautical", "botanical", "zoological", "computing", "mathematics", "music", "art", "religion", "culinary", "sports", "business", "finance"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "policy": {
+          "type": "object",
+          "description": "High-level policy filters",
+          "properties": {
+            "family_friendly": {
+              "type": "boolean",
+              "description": "Exclude vulgar, offensive, and derogatory words"
+            },
+            "modern_only": {
+              "type": "boolean",
+              "description": "Exclude archaic, obsolete, and dated words"
+            },
+            "no_jargon": {
+              "type": "boolean",
+              "description": "Exclude technical, medical, legal, and scientific domains"
+            }
+          }
+        },
+        "sources": {
+          "type": "object",
+          "description": "Source dataset filters",
+          "properties": {
+            "include": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["enable", "eowl", "wikt", "wordnet", "frequency"]
+              },
+              "description": "Include only words from these sources"
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["enable", "eowl", "wikt", "wordnet", "frequency"]
+              },
+              "description": "Exclude words from these sources"
+            }
+          }
+        },
+        "syllables": {
+          "type": "object",
+          "description": "Syllable count filters (NOT YET IMPLEMENTED - future feature)",
+          "properties": {
+            "min": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Minimum syllable count"
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Maximum syllable count"
+            },
+            "exact": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Exact syllable count"
+            },
+            "require_syllables": {
+              "type": "boolean",
+              "description": "If true, exclude words without syllable data"
+            }
+          }
+        }
+      }
+    },
+    "scoring": {
+      "type": "object",
+      "description": "Scoring configuration for ranking results",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable scoring (adds score to output)"
+        },
+        "weights": {
+          "type": "object",
+          "description": "Custom scoring weights",
+          "properties": {
+            "frequency": {
+              "type": "number",
+              "description": "Weight for frequency score (0-100)"
+            },
+            "concreteness": {
+              "type": "number",
+              "description": "Bonus for concrete nouns"
+            },
+            "length_penalty": {
+              "type": "number",
+              "description": "Penalty per character over threshold"
+            },
+            "jargon_penalty": {
+              "type": "number",
+              "description": "Penalty for technical domains"
+            }
+          }
+        },
+        "min_score": {
+          "type": "number",
+          "description": "Minimum score threshold"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "description": "Output formatting options",
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["text", "json", "jsonl", "csv", "tsv"],
+          "default": "text",
+          "description": "Output format"
+        },
+        "include_metadata": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include word metadata in output"
+        },
+        "metadata_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Specific metadata fields to include",
+          "examples": [["word", "frequency_tier", "concreteness"]]
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of words to output"
+        },
+        "sort_by": {
+          "type": "string",
+          "enum": ["alphabetical", "score", "frequency", "length"],
+          "default": "alphabetical",
+          "description": "Output sort order"
+        }
+      }
+    }
+  }
+}
