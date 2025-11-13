@@ -1,4 +1,4 @@
-# Makefile (root) — uv-only Python workflow
+# Makefile (root) - uv-only Python workflow
 # Use uv for ALL Python-related actions. No direct python/pip.
 
 SHELL := /bin/bash
@@ -125,13 +125,13 @@ export-wordlist-filtered-w3c50:
 
 # Build compact binary trie for browser (requires wordlist.txt)
 build-binary: $(CORE_WORDLIST)
-	@echo "→ Building binary trie for browser..."
+	@echo "Building binary trie for browser..."
 	@if ! command -v pnpm &> /dev/null; then \
-		echo "✗ pnpm not found. Install with: npm install -g pnpm"; \
+		echo "Error: pnpm not found. Install with: npm install -g pnpm"; \
 		exit 1; \
 	fi
 	@if [ ! -d "viewer/node_modules" ]; then \
-		echo "→ Installing viewer dependencies..."; \
+		echo "Installing viewer dependencies..."; \
 		cd viewer && pnpm install; \
 	fi
 	@cd viewer && pnpm run build-trie
@@ -159,16 +159,16 @@ scrub: clean
 
 # Start local development server for trie viewer
 start-server: $(CORE_WORDLIST)
-	@echo "→ Starting local server for trie viewer..."
+	@echo "Starting local server for trie viewer..."
 	@if ! command -v pnpm &> /dev/null; then \
-		echo "✗ pnpm not found. Install with: npm install -g pnpm"; \
+		echo "Error: pnpm not found. Install with: npm install -g pnpm"; \
 		exit 1; \
 	fi
 	@if [ ! -d "viewer/node_modules" ]; then \
-		echo "→ Installing viewer dependencies..."; \
+		echo "Installing viewer dependencies..."; \
 		cd viewer && pnpm install; \
 	fi
-	@echo "→ Starting server from project root on http://localhost:8080/viewer/"
+	@echo "Server starting at http://localhost:8080/viewer/"
 	@cd viewer && npx http-server .. -p 8080 -o /viewer/ --cors
 
 # ===========================
@@ -249,7 +249,7 @@ $(GAME_WORD_LIST): $(WIKTIONARY_JSON)
 		(.word | length >= 3) and \
 		(.labels.temporal | length == 0) \
 	) | .word' "$<" | sort -u > $@
-	@echo "✓ Game words: $$(wc -l < $@) entries"
+	@echo "Game words: $$(wc -l < $@) entries"
 
 export-wordlist-game: $(GAME_WORD_LIST)
 
@@ -260,7 +260,7 @@ $(VULGAR_BLOCKLIST): $(WIKTIONARY_JSON)
 		.labels.register | \
 		contains(["vulgar"]) or contains(["offensive"]) or contains(["derogatory"]) \
 	) | .word' "$<" | sort -u > $@
-	@echo "✓ Blocklist: $$(wc -l < $@) entries"
+	@echo "Blocklist: $$(wc -l < $@) entries"
 
 export-wordlist-vulgar-blocklist: $(VULGAR_BLOCKLIST)
 
@@ -276,7 +276,7 @@ $(KIDS_NOUNS_LIST): $(WIKTIONARY_JSON)
 			test("animal|food|plant|toy|color|colour|body|furniture|tool|vehicle|clothing") \
 		)) \
 	) | .word' "$<" | sort -u > $@
-	@echo "✓ Kids nouns: $$(wc -l < $@) entries"
+	@echo "Kids nouns: $$(wc -l < $@) entries"
 
 export-wordlist-kids-nouns: $(KIDS_NOUNS_LIST)
 
@@ -289,9 +289,9 @@ $(ALL_PHRASES_LIST) $(IDIOMS_LIST) $(PREP_PHRASES_LIST): $(WIKTIONARY_JSON)
 		| sort -u > $(IDIOMS_LIST)
 	jq -r 'select(.labels.categories | any(contains("prepositional phrases"))) | .word' "$<" \
 		| sort -u > $(PREP_PHRASES_LIST)
-	@echo "✓ All phrases: $$(wc -l < $(ALL_PHRASES_LIST)) entries"
-	@echo "✓ Idioms: $$(wc -l < $(IDIOMS_LIST)) entries"
-	@echo "✓ Prep phrases: $$(wc -l < $(PREP_PHRASES_LIST)) entries"
+	@echo "All phrases: $$(wc -l < $(ALL_PHRASES_LIST)) entries"
+	@echo "Idioms: $$(wc -l < $(IDIOMS_LIST)) entries"
+	@echo "Prep phrases: $$(wc -l < $(PREP_PHRASES_LIST)) entries"
 
 export-wordlist-phrases: $(ALL_PHRASES_LIST) $(IDIOMS_LIST) $(PREP_PHRASES_LIST)
 
@@ -301,41 +301,22 @@ export-wordlist-phrases: $(ALL_PHRASES_LIST) $(IDIOMS_LIST) $(PREP_PHRASES_LIST)
 
 # Run all enhanced metadata analysis
 analyze-enhanced-metadata: report-frequency-analysis report-syllable-analysis report-wordnet-concreteness
-	@echo ""
-	@echo "=========================================="
-	@echo "✓ Enhanced metadata analysis complete!"
-	@echo "=========================================="
-	@echo ""
-	@echo "Generated reports (commit to version control):"
-	@echo "  reports/frequency_analysis.md"
-	@echo "  reports/frequency_tiers.json"
-	@echo "  reports/syllable_analysis.md"
-	@echo "  reports/wordnet_concreteness.md"
-	@echo ""
-	@echo "Review these reports to understand available metadata"
-	@echo "for enhanced word list filtering."
+	@echo "Enhanced metadata analysis complete"
 
 # Analyze frequency data structure and tiers
 report-frequency-analysis: deps data/raw/plus/en_50k.txt
 	@mkdir -p reports
-	@echo "→ Analyzing frequency data structure..."
 	$(UV) run python tools/analyze_frequency_data.py data/raw/plus/en_50k.txt
-	@echo "✓ Report saved: reports/frequency_analysis.md"
 
 # Analyze syllable data availability in Wiktionary
 report-syllable-analysis: deps $(WIKTIONARY_DUMP)
 	@mkdir -p reports
-	@echo "→ Analyzing syllable data in Wiktionary..."
-	@echo "  (sampling 10,000 pages to detect hyphenation templates)"
 	$(UV) run python tools/analyze_syllable_data.py "$(WIKTIONARY_DUMP)" 10000
-	@echo "✓ Report saved: reports/syllable_analysis.md"
 
 # Analyze WordNet for concrete/abstract noun classification
 report-wordnet-concreteness: deps data/raw/plus/english-wordnet-2024.tar.gz
 	@mkdir -p reports
-	@echo "→ Analyzing WordNet categories for concreteness..."
 	$(UV) run python tools/analyze_wordnet_concreteness.py data/raw/plus/english-wordnet-2024.tar.gz
-	@echo "✓ Report saved: reports/wordnet_concreteness.md"
 
 # ===========================
 # Local Analysis (run locally with full Wiktionary dump)
@@ -343,54 +324,25 @@ report-wordnet-concreteness: deps data/raw/plus/english-wordnet-2024.tar.gz
 
 # Build Wiktionary JSONL using lightweight scanner parser (file-based dependency)
 $(WIKTIONARY_JSON): $(WIKTIONARY_DUMP)
-	@echo "→ Extracting Wiktionary with lightweight scanner parser..."
-	@echo "  (No full XML parsing - just string scanning for <page> boundaries)"
-	@echo "  (Expected: 5-15 minutes for full dump)"
+	@echo "Extracting Wiktionary..."
 	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
 	$(UV) run python tools/wiktionary_scanner_parser.py \
 		"$(WIKTIONARY_DUMP)" \
 		"$(WIKTIONARY_JSON)"
-	@echo "✓ Extraction complete: $(WIKTIONARY_JSON)"
 
 # Convenience target (will only rebuild if output missing or input newer)
 build-wiktionary-json: deps $(WIKTIONARY_JSON)
 
-# Audit Wiktionary extraction approach (validates simple parser on 10k sample)
 # Generate label statistics from extracted Wiktionary data
 report-labels: deps $(WIKTIONARY_JSON)
-	@echo "→ Generating label statistics report..."
 	$(UV) run python tools/report_label_statistics.py "$(WIKTIONARY_JSON)"
-	@echo ""
-	@echo "✓ Statistics complete. Review reports:"
-	@echo "  reports/label_statistics.md"
-	@echo "  reports/label_examples.json"
-	@echo ""
-	@echo "Commit these reports to version control for review."
 
 # Run full local analysis workflow (extract + statistics)
 analyze-local: build-wiktionary-json report-labels
-	@echo ""
-	@echo "=========================================="
-	@echo "✓ Local analysis complete!"
-	@echo "=========================================="
-	@echo ""
-	@echo "Generated reports (commit to version control):"
-	@echo "  reports/label_statistics.md"
-	@echo "  reports/label_examples.json"
-	@echo ""
-	@echo "Next steps:"
-	@echo "  1. Review reports: less reports/label_statistics.md"
-	@echo "  2. Commit reports: git add reports/*.md reports/*.json && git commit"
-	@echo "  3. Build distribution: make build-plus"
-	@echo "  4. Test filters: uv run python tools/filter_words.py --use-case wordle"
-	@echo ""
-	@echo "See docs/LOCAL_ANALYSIS.md for detailed workflow."
+	@echo "Local analysis complete"
 
 # Baseline decompression benchmark (no XML parsing)
 baseline-decompress: deps $(WIKTIONARY_DUMP)
-	@echo "→ Running baseline decompression benchmark..."
-	@echo "  (This shows pure decompression speed without XML parsing)"
-	@echo ""
 	$(UV) run python tools/baseline_decompress.py "$(WIKTIONARY_DUMP)"
 
 # ===========================
@@ -400,10 +352,7 @@ baseline-decompress: deps $(WIKTIONARY_DUMP)
 # Run scanner parser in diagnostic mode to identify issues
 diagnose-scanner: deps $(WIKTIONARY_DUMP)
 	@mkdir -p reports
-	@echo "→ Running diagnostic scan..."
 	$(UV) run python tools/wiktionary_scanner_parser.py \
 		"$(WIKTIONARY_DUMP)" \
 		/tmp/scanner_diagnostic.jsonl \
 		--diagnostic reports/scanner_diagnostic.txt
-	@echo ""
-	@echo "✓ Report saved to: reports/scanner_diagnostic.txt"
