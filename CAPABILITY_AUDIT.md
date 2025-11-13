@@ -73,63 +73,74 @@ def parse_syllable_count(hyphenation_content: str) -> int:
 
 ---
 
-## 2. WordNet Concreteness Experiment
+## 2. WordNet Concreteness Analysis
 
-### Current Status: FAILED / NEEDS DEBUGGING
+### Current Status: FIXED AND FULLY OPERATIONAL ✅
 
 #### What Was Done
-An analysis tool (`tools/analyze_wordnet_concreteness.py`) was created to extract concrete/abstract noun classifications from WordNet data.
+An analysis tool (`tools/analyze_wordnet_concreteness.py`) was created to extract concrete/abstract noun classifications from WordNet data for analysis and reporting.
 
-#### Results
-**From `reports/wordnet_concreteness.md`:**
+#### Initial Problem
+The original tool attempted to parse WordNet from a tar.gz archive, but this approach failed because the pipeline actually uses NLTK's WordNet interface, not direct archive parsing.
+
+#### Fix Applied
+**Updated the tool to use NLTK's WordNet** (matching the pipeline's approach):
+- Uses `nltk.corpus.wordnet` for data extraction
+- Automatically downloads WordNet data if not present
+- Extracts all noun synsets and organizes by lexicographer files (lexnames)
+- Generates comprehensive analysis report
+
+#### Current Results
+**From updated `reports/wordnet_concreteness.md`:**
 ```
-- Total synsets: 0
-- Total categories: 0
-- Concrete categories found: 0
-- Kids-suitable categories found: 0
-- Abstract categories found: 0
+- Total synsets: 82,115
+- Total categories: 26
+- Concrete categories found: 7
+- Kids-suitable categories found: 5
+- Abstract categories found: 15
 ```
 
-**Status**: ⚠️ **Extraction completely failed**
+**Kids-appropriate categories with word counts:**
+- Animals: 14,319 words
+- Objects and toys: 16,322 words
+- Body parts: 3,568 words
+- Food: 3,583 words
+- Plants and flowers: 17,773 words
 
-#### Root Cause Analysis
-The extraction failure suggests:
-1. **Archive format mismatch**: The WordNet archive structure differs from expected
-2. **XML/namespace issues**: The XML parsing may not match the actual WordNet schema
-3. **File format unknown**: May be TSV, different XML structure, or other format
+**Status**: ✅ **Fully operational**
 
-#### What Needs to Be Done
-1. **Debug the WordNet archive format**:
-   - Inspect actual archive structure manually
-   - Identify correct file format (XML vs TSV vs other)
-   - Update extraction logic to match actual schema
+#### How to Run
+```bash
+# Via Makefile (recommended)
+make report-wordnet-concreteness
 
-2. **Alternative approach**: The code already uses WordNet via NLTK for concreteness classification in `wordnet_enrich.py`, which **DOES work**:
-   ```python
-   # From wordnet_enrich.py - THIS CODE WORKS
-   def determine_concreteness(synset) -> str:
-       """Classify synset as concrete, abstract, or mixed."""
-       # Uses WordNet lexname (lexicographer file) to classify
-       # This approach is FUNCTIONAL
-   ```
+# Directly
+uv run python tools/analyze_wordnet_concreteness.py
+```
 
-3. **Verification**: The game metadata analysis shows:
-   ```
-   Concreteness coverage: 71,860 / 208,201 = 34.5%
-   - Concrete nouns: 20,670
-   - Abstract nouns: 25,782
-   - Mixed: 25,408
-   ```
-   This proves concreteness classification **IS working** in the build pipeline!
+#### Integration with Pipeline
+The enrichment pipeline (`src/openword/wordnet_enrich.py`) uses the same NLTK WordNet interface to:
+1. **Classify nouns as concrete/abstract/mixed**
+   - Uses lexicographer file names (lexnames)
+   - Checks hypernym paths for physical_entity vs abstraction
+   - Stores result in `concreteness` field
+
+2. **Backfill POS tags**
+   - For entries missing POS data
+   - Uses WordNet synset lookups
+
+**Current enrichment coverage** (from game metadata analysis):
+- ~34.5% of core distribution entries have concreteness data
+- 20,670 concrete nouns, 25,782 abstract, 25,408 mixed
 
 #### Conclusion
-**The concreteness feature IS AVAILABLE and WORKING**, but the standalone analysis tool (`analyze_wordnet_concreteness.py`) failed to extract data for reporting purposes. The actual pipeline enrichment works fine.
-
-**Concreteness is available:**
+**Both the analysis tool AND the pipeline enrichment are fully operational:**
+- ✅ Analysis tool generates detailed WordNet category reports
+- ✅ Pipeline enriches entries with concreteness classifications
 - ✅ For ~34.5% of core distribution entries
-- ✅ Via WordNet NLTK integration in `wordnet_enrich.py`
+- ✅ Via WordNet NLTK integration
 - ✅ Stored in metadata as `"concreteness": "concrete|abstract|mixed"`
-- ✅ Usable for filtering game words
+- ✅ Usable for filtering game words and kids' vocabulary lists
 
 ---
 
@@ -1085,12 +1096,7 @@ class RhymeFilter(FilterPlugin):
    - Add examples for profanity filtering
 
 ### Medium-Term (1-2 months)
-3. **Fix WordNet concreteness analysis tool**:
-   - Debug archive format issues
-   - Document actual WordNet structure
-   - Update extraction logic
-
-4. **Integrate syllable extraction**:
+3. **Integrate syllable extraction**:
    - Add syllable counting to Wiktionary scanner
    - Update JSONL schema
    - Implement syllable-based filtering

@@ -52,6 +52,7 @@ GAME_META_REPORT_PLUS := $(REPORTS_DIR)/game_metadata_analysis_plus.md
         game-words analyze-game-metadata \
         build-wordlists export-wordlist-game export-wordlist-vulgar-blocklist export-wordlist-kids-nouns export-wordlist-phrases \
         analyze-enhanced-metadata report-frequency-analysis report-syllable-analysis report-wordnet-concreteness \
+        analyze-all-reports \
         report-labels analyze-local baseline-decompress \
         diagnose-scanner scanner-commit scanner-push
 
@@ -320,6 +321,32 @@ export-wordlist-phrases: $(ALL_PHRASES_LIST) $(IDIOMS_LIST) $(PREP_PHRASES_LIST)
 analyze-enhanced-metadata: report-frequency-analysis report-syllable-analysis report-wordnet-concreteness
 	@echo "Enhanced metadata analysis complete"
 
+# Run ALL available analysis and reporting commands
+# This comprehensive target is useful after data changes or for complete audits
+analyze-all-reports: deps
+	@echo "=========================================="
+	@echo "Running ALL Analysis and Reports"
+	@echo "=========================================="
+	@echo ""
+	@echo "1/4: Enhanced Metadata Analysis..."
+	@$(MAKE) analyze-enhanced-metadata
+	@echo ""
+	@echo "2/4: Standard Inspection Reports..."
+	@$(MAKE) reports
+	@echo ""
+	@echo "3/4: Game Metadata Analysis..."
+	@$(MAKE) analyze-game-metadata
+	@echo ""
+	@echo "4/4: Distribution Comparison..."
+	@$(MAKE) report-compare
+	@echo ""
+	@echo "=========================================="
+	@echo "✓ All analysis and reports complete!"
+	@echo "=========================================="
+	@echo ""
+	@echo "Reports generated in: $(REPORTS_DIR)/"
+	@ls -lh $(REPORTS_DIR)/*.md 2>/dev/null || true
+
 # Analyze frequency data structure and tiers
 report-frequency-analysis: deps $(FREQUENCY_DATA)
 	@mkdir -p $(REPORTS_DIR)
@@ -331,9 +358,10 @@ report-syllable-analysis: deps $(WIKTIONARY_DUMP)
 	$(UV) run python tools/analyze_syllable_data.py "$(WIKTIONARY_DUMP)" 10000
 
 # Analyze WordNet for concrete/abstract noun classification
-report-wordnet-concreteness: deps $(WORDNET_ARCHIVE)
+# Note: Uses NLTK's WordNet (will download if not present), not archive
+report-wordnet-concreteness: deps
 	@mkdir -p $(REPORTS_DIR)
-	$(UV) run python tools/analyze_wordnet_concreteness.py $(WORDNET_ARCHIVE)
+	$(UV) run python tools/analyze_wordnet_concreteness.py
 
 # ===========================
 # Local Analysis (run locally with full Wiktionary dump)
