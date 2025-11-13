@@ -11,8 +11,8 @@ Outputs:
   - data/plus/LICENSE (CC BY-SA 4.0)
 
 License matrix:
-  - CORE: ENABLE (PD), EOWL (permissive) → CC BY 4.0
-  - PLUS: + Wiktionary (CC BY-SA) + WordNet + Frequency → CC BY-SA 4.0
+  - CORE: ENABLE (PD), EOWL (permissive) -> CC BY 4.0
+  - PLUS: + Wiktionary (CC BY-SA) + WordNet + Frequency -> CC BY-SA 4.0
 """
 
 import json
@@ -121,7 +121,7 @@ def generate_attribution_md(sources: List[Dict], output_path: Path):
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(''.join(content))
 
-    logger.info(f"✓ Written: {output_path}")
+    logger.info(f"Written: {output_path}")
 
 
 def generate_core_license(output_path: Path):
@@ -198,7 +198,7 @@ For detailed source attributions, see ATTRIBUTION.md
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(content)
 
-    logger.info(f"✓ Written: {output_path}")
+    logger.info(f"Written: {output_path}")
 
 
 def generate_plus_license(output_path: Path):
@@ -285,7 +285,7 @@ For detailed source attributions, see ATTRIBUTION.md
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(content)
 
-    logger.info(f"✓ Written: {output_path}")
+    logger.info(f"Written: {output_path}")
 
 
 def main():
@@ -293,9 +293,7 @@ def main():
     project_root = Path(__file__).parent.parent.parent
     data_root = project_root / "data"
 
-    logger.info("=" * 60)
-    logger.info("PHASE 11: Attribution and licensing")
-    logger.info("=" * 60)
+    logger.info("Attribution and licensing")
 
     # Load source metadata
     sources = load_source_metadata(data_root / "raw")
@@ -312,7 +310,7 @@ def main():
     generate_plus_license(plus_license_path)
 
     logger.info("")
-    logger.info("✓ Attribution and licensing complete")
+    logger.info("Attribution and licensing complete")
     logger.info(f"  ATTRIBUTION.md: {len(sources)} sources documented")
     logger.info(f"  Core license: CC BY 4.0")
     logger.info(f"  Plus license: CC BY-SA 4.0")

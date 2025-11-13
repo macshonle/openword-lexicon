@@ -55,7 +55,7 @@ GAME_META_REPORT_PLUS := $(REPORTS_DIR)/game_metadata_analysis_plus.md
         analyze-all-reports \
         report-labels analyze-local baseline-decompress \
         diagnose-scanner scanner-commit scanner-push \
-        wordlist-builder wordlist-builder-cli wordlist-builder-web owlex-filter help-builder
+        wordlist-builder wordlist-builder-install wordlist-builder-cli wordlist-builder-web owlex-filter help-builder
 
 # Bootstrap local dev environment (idempotent)
 bootstrap: venv deps
@@ -453,6 +453,17 @@ help-builder:
 	@echo "  - docs/FILTER_CAPABILITIES.md - Filter reference"
 	@echo "  - docs/schema/wordlist_spec.schema.json - Specification schema"
 	@echo ""
+
+# Build CLI tool dependencies with pnpm
+wordlist-builder-install:
+	@echo "Installing wordlist builder dependencies..."
+	@if ! command -v pnpm >/dev/null 2>&1; then \
+		echo "Error: pnpm is required but not installed."; \
+		echo "Install with: npm install -g pnpm"; \
+		echo "Or use: cd tools/wordlist-builder && npm install"; \
+		exit 1; \
+	fi
+	@cd tools/wordlist-builder && pnpm install
 
 # Launch CLI builder (requires Node.js)
 wordlist-builder-cli:

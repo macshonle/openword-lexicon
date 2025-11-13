@@ -93,6 +93,51 @@ uv run python src/openword/package_release.py
 - `ATTRIBUTION.md`, `data/LICENSE`
 - Release archives: `*-core-<ver>.tar.zst` / `*-plus-<ver>.tar.zst`
 
+## Interactive Word List Builder
+
+Create custom filtered word lists using the interactive CLI or web interface:
+
+```bash
+# Install builder dependencies (optional, for enhanced UI)
+make wordlist-builder-install  # Uses pnpm
+
+# Launch interactive CLI builder
+make wordlist-builder-cli
+
+# Or use web interface
+make wordlist-builder-web
+```
+
+The builder creates JSON specifications that describe filtering criteria:
+
+```bash
+# Generate word list from specification
+make owlex-filter SPEC=wordlist-spec.json > words.txt
+
+# With verbose output for debugging
+uv run python -m openword.owlex wordlist-spec.json --verbose --output words.txt
+```
+
+### Available Filters
+
+- **Character**: Length, patterns, regex (100% coverage)
+- **Frequency**: 6 tiers from top10 to rare (100% coverage)
+- **Part-of-speech**: noun, verb, adjective, etc. (~52.5% coverage)
+- **Concreteness**: concrete/abstract/mixed nouns (~34.5% core, ~8.8% plus)
+- **Labels** (Plus only): register, domain, temporal, region (~3-11% coverage)
+- **Policy**: family-friendly, modern-only, no-jargon shortcuts
+
+### Example Specifications
+
+Pre-built examples in `examples/wordlist-specs/`:
+
+- `wordle.json` - 5-letter common words
+- `kids-nouns.json` - Concrete nouns for children
+- `scrabble.json` - Single words for Scrabble
+- `profanity-blocklist.json` - Flagged inappropriate words
+
+See `tools/wordlist-builder/README.md` for complete documentation.
+
 ## Status
 
 ✅ **Core Pipeline Complete**

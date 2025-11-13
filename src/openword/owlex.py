@@ -448,14 +448,14 @@ class OwlexFilter:
                 # Check for common mismatches
                 if 'us' in desc or 'american' in desc:
                     if not filters.get('labels', {}).get('region', {}).get('exclude'):
-                        logger.warning("⚠ Description mentions US/American but no region filter is set")
-                        logger.warning("  → Consider adding: filters.labels.region.exclude = ['en-GB']")
+                        logger.warning("Warning: Description mentions US/American but no region filter is set")
+                        logger.warning("  -> Consider adding: filters.labels.region.exclude = ['en-GB']")
 
                 if any(word in desc for word in ['vulgar', 'profan', 'family', 'clean']):
                     if not filters.get('policy', {}).get('family_friendly'):
                         if not filters.get('labels', {}).get('register', {}).get('exclude'):
-                            logger.warning("⚠ Description mentions profanity/family-friendly but no filter is set")
-                            logger.warning("  → Consider adding: filters.policy.family_friendly = true")
+                            logger.warning("Warning: Description mentions profanity/family-friendly but no filter is set")
+                            logger.warning("  -> Consider adding: filters.policy.family_friendly = true")
 
         # Format output
         output = self.format_output(filtered, verbose)

@@ -410,7 +410,7 @@ def export_wordlist(
             else:
                 f.write(f"{word}\n")
 
-    print(f"✓ Word list written to {output_path} ({len(candidates)} words)")
+    print(f"Word list written to {output_path} ({len(candidates)} words)")
 
 
 def main():
@@ -470,7 +470,7 @@ def main():
     meta_path = Path(f'data/build/{dist}/{dist}.meta.json')
 
     if not meta_path.exists():
-        print(f"✗ Metadata not found: {meta_path}")
+        print(f"Metadata not found: {meta_path}")
         print(f"  Run 'make build-{dist}' first")
         return 1
 
@@ -484,7 +484,7 @@ def main():
     # Apply filters
     candidates = filter_words(metadata, config, args.max_words)
 
-    print(f"✓ Found {len(candidates):,} matching words")
+    print(f"Found {len(candidates):,} matching words")
     print()
 
     # Export

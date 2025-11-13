@@ -92,7 +92,7 @@ def generate_report(distribution: str = 'core'):
     meta_path = Path(f'data/build/{distribution}/{distribution}.meta.json')
 
     if not meta_path.exists():
-        print(f"✗ Metadata not found: {meta_path}")
+        print(f"Metadata not found: {meta_path}")
         print(f"  Run 'make build-{distribution}' first")
         return 1
 
@@ -245,7 +245,7 @@ def generate_report(distribution: str = 'core'):
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"✓ Label analysis report written to {output_path}")
+    print(f"Label analysis report written to {output_path}")
     return output_path
 
 

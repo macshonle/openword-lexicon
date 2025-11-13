@@ -67,7 +67,7 @@ def load_frequency_ranks(freq_file: Path) -> Dict[str, int]:
             normalized = unicodedata.normalize('NFKC', word.lower())
             ranks[normalized] = rank
 
-    logger.info(f"  → Loaded {len(ranks):,} frequency ranks")
+    logger.info(f"  -> Loaded {len(ranks):,} frequency ranks")
     return ranks
 
 
@@ -143,14 +143,14 @@ def process_file(input_path: Path, output_path: Path, ranks: Dict[str, int]):
             line = orjson.dumps(entry) + b'\n'
             f.write(line)
 
-    logger.info(f"  ✓ Tiered {len(entries):,} entries")
+    logger.info(f"  Tiered {len(entries):,} entries")
     logger.info(f"    top10:    {tier_counts['top10']:,}")
     logger.info(f"    top100:   {tier_counts['top100']:,}")
     logger.info(f"    top1k:    {tier_counts['top1k']:,}")
     logger.info(f"    top10k:   {tier_counts['top10k']:,}")
     logger.info(f"    top100k:  {tier_counts['top100k']:,}")
     logger.info(f"    rare:     {tier_counts['rare']:,}")
-    logger.info(f"  → {output_path}")
+    logger.info(f"  -> {output_path}")
 
 
 def main():
@@ -161,9 +161,7 @@ def main():
 
     freq_file = raw_dir / "en_50k.txt"
 
-    logger.info("=" * 60)
-    logger.info("PHASE 8: Frequency tier assignment")
-    logger.info("=" * 60)
+    logger.info("Frequency tier assignment")
 
     # Load frequency ranks
     ranks = load_frequency_ranks(freq_file)
@@ -186,7 +184,7 @@ def main():
         process_file(plus_input, plus_output, ranks)
 
     logger.info("")
-    logger.info("✓ Frequency tier assignment complete")
+    logger.info("Frequency tier assignment complete")
 
 
 if __name__ == '__main__':

@@ -151,7 +151,7 @@ def generate_report(distribution: str = 'plus'):
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"✓ Phrase analysis report ({distribution}) written to {output_path}")
+    print(f"Phrase analysis report ({distribution}) written to {output_path}")
     return output_path
 
 

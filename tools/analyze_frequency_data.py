@@ -205,7 +205,7 @@ def main():
         print(f"Error: File not found: {freq_file}")
         sys.exit(1)
 
-    print(f"→ Analyzing frequency data: {freq_file}")
+    print(f"-> Analyzing frequency data: {freq_file}")
 
     entries = parse_frequency_file(freq_file)
     print(f"  Parsed {len(entries):,} word entries")
@@ -215,7 +215,7 @@ def main():
 
     output_path = Path("reports/frequency_analysis.md")
     generate_report(entries, tiers, output_path)
-    print(f"✓ Report saved: {output_path}")
+    print(f"Report saved: {output_path}")
 
     # Also save tier data as JSON for programmatic use
     tier_json_path = Path("reports/frequency_tiers.json")
@@ -229,7 +229,7 @@ def main():
         for tier_name, tier in tiers.items()
     }
     tier_json_path.write_text(json.dumps(tier_json, indent=2), encoding='utf-8')
-    print(f"✓ Tier data saved: {tier_json_path}")
+    print(f"Tier data saved: {tier_json_path}")
 
 
 if __name__ == '__main__':

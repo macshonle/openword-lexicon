@@ -273,7 +273,7 @@ def generate_report(
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"✓ Report written to {output_path}")
+    print(f"Report written to {output_path}")
 
 
 def export_wordlist(
@@ -291,7 +291,7 @@ def export_wordlist(
             else:
                 f.write(f"{word}\n")
 
-    print(f"✓ Word list written to {output_path}")
+    print(f"Word list written to {output_path}")
 
 
 def main():
@@ -348,7 +348,7 @@ def main():
     meta_path = Path(f'data/build/{dist}/{dist}.meta.json')
 
     if not meta_path.exists():
-        print(f"✗ Metadata not found: {meta_path}")
+        print(f"Metadata not found: {meta_path}")
         print(f"  Run 'make build-{dist}' first")
         return 1
 
@@ -360,7 +360,7 @@ def main():
     # Filter and score
     candidates = filter_game_words(meta_path, args.min_score, args.max_words)
 
-    print(f"✓ Found {len(candidates)} candidates")
+    print(f"Found {len(candidates)} candidates")
     print()
 
     # Generate outputs

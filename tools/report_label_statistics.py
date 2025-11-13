@@ -190,7 +190,7 @@ Regional labels enable filtering for games like Wordle (exclude British English)
         report += "| (none found) | 0 | 0.0% | - |\n"
 
     report += f"""
-**Filtering Impact:** {'✓ Good' if stats['entries_with_region'] > total * 0.05 else '⚠ Limited'} - {
+**Filtering Impact:** {'Good' if stats['entries_with_region'] > total * 0.05 else 'Warning: Limited'} - {
     f"{stats['entries_with_region']:,} words can be filtered by region"
     if stats['entries_with_region'] > 0
     else "No regional filtering possible"
@@ -215,7 +215,7 @@ Register labels enable filtering for age-appropriate content.
         report += "| (none found) | 0 | 0.0% | - |\n"
 
     report += f"""
-**Filtering Impact:** {'✓ Good' if stats['entries_with_register'] > total * 0.01 else '⚠ Limited'} - {
+**Filtering Impact:** {'Good' if stats['entries_with_register'] > total * 0.01 else 'Warning: Limited'} - {
     f"{stats['entries_with_register']:,} words can be filtered by register"
     if stats['entries_with_register'] > 0
     else "No register filtering possible"
@@ -240,7 +240,7 @@ Temporal labels enable filtering out archaic/obsolete words.
         report += "| (none found) | 0 | 0.0% | - |\n"
 
     report += f"""
-**Filtering Impact:** {'✓ Good' if stats['entries_with_temporal'] > total * 0.01 else '⚠ Limited'} - {
+**Filtering Impact:** {'Good' if stats['entries_with_temporal'] > total * 0.01 else 'Warning: Limited'} - {
     f"{stats['entries_with_temporal']:,} archaic/obsolete words can be excluded"
     if stats['entries_with_temporal'] > 0
     else "No temporal filtering possible"
@@ -265,7 +265,7 @@ Domain labels enable filtering technical/specialized terms.
         report += "| (none found) | 0 | 0.0% | - |\n"
 
     report += f"""
-**Filtering Impact:** {'✓ Good' if stats['entries_with_domain'] > total * 0.05 else '⚠ Limited'} - {
+**Filtering Impact:** {'Good' if stats['entries_with_domain'] > total * 0.05 else 'Warning: Limited'} - {
     f"{stats['entries_with_domain']:,} technical terms can be filtered"
     if stats['entries_with_domain'] > 0
     else "No domain filtering possible"
@@ -318,25 +318,25 @@ Based on label coverage, here's what's feasible:
 """
 
     if stats['entries_with_region'] > 0:
-        report += f"✓ **Feasible** - {stats['region_counts'].get('en-GB', 0):,} British English words can be excluded\n"
+        report += f"**Feasible** - {stats['region_counts'].get('en-GB', 0):,} British English words can be excluded\n"
     else:
-        report += "⚠ **Limited** - No regional labels found, cannot exclude British English\n"
+        report += "Warning: **Limited** - No regional labels found, cannot exclude British English\n"
 
     report += "\n### 20 Questions (concrete nouns, age-appropriate)\n"
 
     if stats['entries_with_register'] > 0:
         vulgar = stats['register_counts'].get('vulgar', 0)
         offensive = stats['register_counts'].get('offensive', 0)
-        report += f"✓ **Feasible** - {vulgar + offensive:,} inappropriate words can be excluded\n"
+        report += f"**Feasible** - {vulgar + offensive:,} inappropriate words can be excluded\n"
     else:
-        report += "⚠ **Limited** - No register labels found, limited content filtering\n"
+        report += "Warning: **Limited** - No register labels found, limited content filtering\n"
 
     report += "\n### Crossword (allow archaic, obscure words)\n"
 
     if stats['entries_with_temporal'] > 0:
-        report += f"✓ **Feasible** - {stats['entries_with_temporal']:,} archaic words available\n"
+        report += f"**Feasible** - {stats['entries_with_temporal']:,} archaic words available\n"
     else:
-        report += "⚠ **Limited** - No temporal labels found\n"
+        report += "Warning: **Limited** - No temporal labels found\n"
 
     report += f"""
 ---
@@ -346,21 +346,21 @@ Based on label coverage, here's what's feasible:
 """
 
     if stats['entries_with_any_label'] / total > 0.2:
-        report += "✓ **Label coverage is excellent** - Advanced filtering is feasible\n\n"
+        report += "**Label coverage is excellent** - Advanced filtering is feasible\n\n"
     elif stats['entries_with_any_label'] / total > 0.05:
-        report += "✓ **Label coverage is good** - Most filtering use cases are supported\n\n"
+        report += "**Label coverage is good** - Most filtering use cases are supported\n\n"
     else:
-        report += "⚠ **Label coverage is limited** - Consider supplementing with other data sources\n\n"
+        report += "Warning: **Label coverage is limited** - Consider supplementing with other data sources\n\n"
 
     if stats['entries_with_region'] > total * 0.05:
-        report += "✓ Regional filtering (British/US) is well-supported\n\n"
+        report += "Regional filtering (British/US) is well-supported\n\n"
     else:
-        report += "⚠ Regional filtering may have gaps - review examples carefully\n\n"
+        report += "Warning: Regional filtering may have gaps - review examples carefully\n\n"
 
     if stats['entries_with_register'] > total * 0.01:
-        report += "✓ Content filtering (vulgar/offensive) is well-supported\n\n"
+        report += "Content filtering (vulgar/offensive) is well-supported\n\n"
     else:
-        report += "⚠ Content filtering may have gaps - consider manual review\n\n"
+        report += "Warning: Content filtering may have gaps - consider manual review\n\n"
 
     report += """
 ---
@@ -378,7 +378,7 @@ Based on label coverage, here's what's feasible:
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"✓ Statistics report written: {output_path}")
+    print(f"Statistics report written: {output_path}")
 
 
 def main():
@@ -426,7 +426,7 @@ def main():
     with open(examples_path, 'w', encoding='utf-8') as f:
         json.dump(examples, f, indent=2, ensure_ascii=False)
 
-    print(f"✓ Example words written: {examples_path}")
+    print(f"Example words written: {examples_path}")
     print()
     print("Review these reports and commit them to version control:")
     print("  reports/label_statistics.md")

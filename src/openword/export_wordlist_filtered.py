@@ -134,7 +134,7 @@ def main():
             output_path = Path(f'data/build/{dist}/wordlist.txt')
 
     if not trie_path.exists():
-        print(f"✗ Trie not found: {trie_path}")
+        print(f"Trie not found: {trie_path}")
         print(f"  Run 'make build-{dist}' first")
         return 1
 
@@ -157,7 +157,7 @@ def main():
     )
 
     # Report
-    print(f"✓ Exported to {output_path}")
+    print(f"Exported to {output_path}")
     print()
     print(f"Total words:     {total:,}")
     print(f"Kept:            {kept:,} ({kept/total*100:.2f}%)")

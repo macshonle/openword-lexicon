@@ -295,8 +295,8 @@ def generate_report():
     report += "\n"
 
     report += "### What Might Require Template Expansion\n\n"
-    report += "- ⚠️ Context labels: `{{lb|en|informal}}` → \"informal\"\n"
-    report += "- ⚠️ Inflection templates: `{{en-noun|dogs}}` → forms\n"
+    report += "- ⚠️ Context labels: `{{lb|en|informal}}` -> \"informal\"\n"
+    report += "- ⚠️ Inflection templates: `{{en-noun|dogs}}` -> forms\n"
     report += "- ⚠️ Some complex glosses with templates\n"
     report += "\n"
 
@@ -321,7 +321,7 @@ def generate_report():
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"✓ Analysis report written to {output_path}")
+    print(f"Analysis report written to {output_path}")
     return output_path
 
 
