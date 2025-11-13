@@ -10,18 +10,18 @@ This report analyzes the final MARISA trie structure and metadata.
 
 **Trie file:** `data/build/plus/plus.trie`  
 **Metadata file:** `data/build/plus/plus.meta.json`  
-**Total words:** 1,306,870  
-**Trie size:** 3,901,072 bytes (3809.6 KB)  
-**Metadata size:** 170,874,949 bytes (166870.1 KB)  
-**Bytes per word (trie):** 2.99  
+**Total words:** 1,039,950  
+**Trie size:** 3,063,888 bytes (2992.1 KB)  
+**Metadata size:** 137,840,698 bytes (134610.1 KB)  
+**Bytes per word (trie):** 2.95  
 **Min word length:** 1  
-**Max word length:** 115  
-**Avg word length:** 10.88  
+**Max word length:** 111  
+**Avg word length:** 10.62  
 
 ## Word Length Extremes
 
-**Shortest words:** `s`, `c`, `p`, `m`, `b`  
-**Longest words:** `when you're up to your neck in alligators, it's hard to remember that your initial objective was to drain the swamp`, `it is easier for a camel to go through the eye of a needle than for a rich man to enter into the kingdom of god`, `when i see a bird that walks like a duck and swims like a duck and quacks like a duck, i call that bird a duck`, `bababadalgharaghtakamminarronnkonnbronntonnerronntuonnthunntrovarrhounawnskawntoohoohoordenenthurnuk`, `give a man a fish and you feed him for a day; teach a man to fish and you feed him for a lifetime`  
+**Shortest words:** `s`, `c`, `p`, `m`, `a`  
+**Longest words:** `it is easier for a camel to go through the eye of a needle than for a rich man to enter into the kingdom of god`, `tetaumatawhakatangihangakoauaotamateaurehaeaturipukapihimaungahoronukupokaiwhenuaakitanarahu`, `taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu`, `it doesn't matter what they say about you as long as they spell your name right`, `no one ever went broke underestimating the intelligence of the american public`  
 
 ---
 
@@ -29,52 +29,52 @@ This report analyzes the final MARISA trie structure and metadata.
 
 ### Random Word Lookups
 
-**`cuckservative`**  
+**`hypophosphorylated`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
 
-**`sequevars`**  
+**`combinest`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
 
-**`adds in quadrature`**  
+**`stomachals`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
 
-**`buick`**  
+**`ecophenotypically`**  
 - In trie: True  
-- Frequency tier: top100k  
+- Frequency tier: rare  
 - Sources: wikt  
 
-**`bedabbling`**  
+**`management accounting`**  
+- In trie: True  
+- Frequency tier: rare  
+- Sources: wikt  
+
+**`phono-semantic matchings`**  
+- In trie: True  
+- Frequency tier: rare  
+- Sources: wikt  
+
+**`post-gasm`**  
+- In trie: True  
+- Frequency tier: rare  
+- Sources: wikt  
+
+**`capricci`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: enable, eowl, wikt  
 
-**`poleyns`**  
+**`eluviating`**  
 - In trie: True  
 - Frequency tier: rare  
-- Sources: enable, eowl, wikt  
+- Sources: enable, wikt  
 
-**`craniopharyngiomas`**  
-- In trie: True  
-- Frequency tier: rare  
-- Sources: wikt  
-
-**`unhead`**  
-- In trie: True  
-- Frequency tier: rare  
-- Sources: eowl, wikt  
-
-**`catamnesis`**  
-- In trie: True  
-- Frequency tier: rare  
-- Sources: wikt  
-
-**`kechuan`**  
+**`contentually`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
@@ -83,45 +83,45 @@ This report analyzes the final MARISA trie structure and metadata.
 ### Prefix Search Tests
 
 **Prefix: `pre`**  
-- Matches: 8,744  
-- Sample: `pre`, `pres`, `press`, `pressure`, `pressure cabin`  
+- Matches: 7,231  
+- Sample: `pre`, `pres`, `press`, `pressure`, `pressure gradient`  
 
 **Prefix: `un`**  
-- Matches: 27,763  
+- Matches: 22,836  
 - Sample: `un`, `und`, `unde`, `under`, `unders`  
 
 **Prefix: `anti`**  
-- Matches: 6,372  
-- Sample: `anti`, `antic`, `antico`, `anticonservation`, `anticonservationist`  
+- Matches: 5,476  
+- Sample: `anti`, `antic`, `anticonservation`, `anticonservationist`, `anticonservationists`  
 
 **Prefix: `pro`**  
-- Matches: 8,080  
-- Sample: `pro`, `prot`, `proto`, `proto-`, `proto-malay`  
+- Matches: 6,849  
+- Sample: `pro`, `prot`, `proto`, `protocol`, `protocolise`  
 
 **Prefix: `sub`**  
-- Matches: 6,322  
-- Sample: `sub`, `subs`, `subst`, `substant`, `substantivise`  
+- Matches: 5,232  
+- Sample: `sub`, `subs`, `substant`, `substantial`, `substantialise`  
 
 
 ### Successor/Predecessor Tests
 
-**`georgemas`**  
-- Predecessor: `georgelos`  
-- Successor: `georgopoulos`  
+**`fragile`**  
+- Predecessor: `fragilise`  
+- Successor: `fragile x`  
 
-**`shoots the messenger`**  
-- Predecessor: `shoots the bull`  
-- Successor: `shoots the messenger boy`  
+**`epizoons`**  
+- Predecessor: `epizoonotic`  
+- Successor: `epizoodic`  
 
-**`saurolophids`**  
-- Predecessor: `saurolophid`  
-- Successor: `saurolophine`  
+**`ornitholestids`**  
+- Predecessor: `ornitholestid`  
+- Successor: `ornitholite`  
 
-**`chaprasi`**  
-- Predecessor: `chaprassy`  
-- Successor: `chaprasis`  
+**`tortuosity`**  
+- Predecessor: `tortuosities`  
+- Successor: `tortuose`  
 
-**`baudelaireian`**  
-- Predecessor: `baudelairean`  
-- Successor: `baudelairian`  
+**`slickems`**  
+- Predecessor: `slickem`  
+- Successor: `slickest`  
 

@@ -17,14 +17,14 @@ This report shows random samples from the original downloaded datasets.
 ## Wiktionary Dataset
 
 **Location:** `data/intermediate/plus/wikt.jsonl`  
-**Total entries:** 1,310,956
+**Total entries:** 1,052,438
 
 **Sample entries:**
 
-1. `claggier`
+1. `snobbiest`
 ```json
 {
-  "word": "claggier",
+  "word": "snobbiest",
   "pos": [
     "adjective"
   ],
@@ -36,13 +36,12 @@ This report shows random samples from the original downloaded datasets.
 }
 ```
 
-2. `undertaking`
+2. `paratha`
 ```json
 {
-  "word": "undertaking",
+  "word": "paratha",
   "pos": [
-    "noun",
-    "verb"
+    "noun"
   ],
   "labels": {},
   "is_phrase": false,
@@ -52,16 +51,15 @@ This report shows random samples from the original downloaded datasets.
 }
 ```
 
-3. `code mixing`
+3. `serviceless`
 ```json
 {
-  "word": "code mixing",
+  "word": "serviceless",
   "pos": [
-    "noun",
-    "verb"
+    "adjective"
   ],
   "labels": {},
-  "is_phrase": true,
+  "is_phrase": false,
   "sources": [
     "wikt"
   ]

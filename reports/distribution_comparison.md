@@ -9,14 +9,14 @@ This report compares the core and plus distributions.
 ## Word List Comparison
 
 **Core total:** 208,201  
-**Plus total:** 1,306,870  
+**Plus total:** 1,039,950  
 **Overlap:** 208,201  
 **Core-only:** 0  
-**Plus-only:** 1,098,669  
+**Plus-only:** 831,749  
 
 ### Sample Plus-Only Words
 
-`daemonical`, `area 51`, `mefloquine`, `kufic`, `ingerminated`, `ecstasied`, `cow-chip`, `clabbering up`, `simplified sewerage`, `autorepresses`, `attendance allowance`, `comeovers`, `ill-wished`, `jeziorski`, `wash up`, `arterialised`, `hazelbury bryan`, `shrike-tyrants`, `in a sense`, `supermartingales`
+`sialooligosaccharides`, `carpetbeater`, `amphophilous`, `unindividualized`, `getting a wriggle on`, `festue`, `enfuvirtide`, `cofacilitated`, `underconcern`, `cabinet minister`, `subornee`, `unharried`, `polyspecialist`, `borobudur`, `rejuvenatingly`, `merwitches`, `antidairy`, `anterior communicating artery`, `broadwayish`, `elicitates`
 
 
 ---
@@ -24,40 +24,40 @@ This report compares the core and plus distributions.
 ## Metadata Comparison (Overlapping Words)
 
 **Words with different frequency tiers:** 0  
-**Words with different sources:** 199,299  
+**Words with different sources:** 196,595  
 **Words with different labels:** 0  
 
 ### Example Differences
 
 **`aa`**
-- sources: {'enable', 'eowl'} → {'wikt', 'enable', 'eowl'}
+- sources: {'enable', 'eowl'} → {'enable', 'wikt', 'eowl'}
 
 **`aah`**
-- sources: {'enable', 'eowl'} → {'wikt', 'enable', 'eowl'}
+- sources: {'enable', 'eowl'} → {'enable', 'wikt', 'eowl'}
 
 **`aahed`**
-- sources: {'enable'} → {'wikt', 'enable'}
+- sources: {'enable'} → {'enable', 'wikt'}
 
 **`aahing`**
-- sources: {'enable'} → {'wikt', 'enable'}
+- sources: {'enable'} → {'enable', 'wikt'}
 
 **`aahs`**
-- sources: {'enable'} → {'wikt', 'enable'}
+- sources: {'enable'} → {'enable', 'wikt'}
 
 **`aal`**
-- sources: {'enable', 'eowl'} → {'wikt', 'enable', 'eowl'}
+- sources: {'enable', 'eowl'} → {'enable', 'wikt', 'eowl'}
 
 **`aalii`**
-- sources: {'enable', 'eowl'} → {'wikt', 'enable', 'eowl'}
+- sources: {'enable', 'eowl'} → {'enable', 'wikt', 'eowl'}
 
 **`aaliis`**
-- sources: {'enable'} → {'wikt', 'enable'}
+- sources: {'enable'} → {'enable', 'wikt'}
 
 **`aals`**
-- sources: {'enable'} → {'wikt', 'enable'}
+- sources: {'enable'} → {'enable', 'wikt'}
 
 **`aardvark`**
-- sources: {'enable', 'eowl'} → {'wikt', 'enable', 'eowl'}
+- sources: {'enable', 'eowl'} → {'enable', 'wikt', 'eowl'}
 
 
 ---
@@ -68,5 +68,5 @@ This report compares the core and plus distributions.
 |--------|-----:|-----:|-----------:|
 | enable | 172,823 | 172,823 | 0 |
 | eowl | 128,983 | 128,983 | 0 |
-| wikt | 0 | 1,297,968 | +1,297,968 |
+| wikt | 0 | 1,028,344 | +1,028,344 |
 

@@ -6,7 +6,7 @@ This report analyzes the metadata sidecar in detail.
 
 ---
 
-**Total entries:** 1,306,870
+**Total entries:** 1,039,950
 
 ---
 
@@ -14,20 +14,20 @@ This report analyzes the metadata sidecar in detail.
 
 | Tier | Count | Percentage |
 |------|------:|-----------:|
-| rare | 1,261,557 | 96.5% |
+| rare | 995,137 | 95.7% |
 | top10 | 10 | 0.0% |
 | top100 | 90 | 0.0% |
-| top100k | 35,419 | 2.7% |
-| top10k | 8,907 | 0.7% |
+| top100k | 34,929 | 3.4% |
+| top10k | 8,897 | 0.9% |
 | top1k | 887 | 0.1% |
 
 ### Sample Words by Tier
 
-**Tier rare:** `convertance`, `antunovac`, `kicktail`, `hydrus`, `half-natural`  
-**Tier top10:** `a`, `'t`, `to`, `i`, `and`  
-**Tier top100:** `about`, `'ve`, `be`, `had`, `he`  
-**Tier top100k:** `uninhibited`, `ashram`, `gonzo`, `scheming`, `highland`  
-**Tier top10k:** `snarling`, `lean`, `activated`, `eighth`, `schedule`  
+**Tier rare:** `playmaster`, `brozes`, `alta california`, `scoundrelles`, `ethnobiologicals`  
+**Tier top10:** `and`, `you`, `a`, `it`, `'s`  
+**Tier top100:** `would`, `think`, `be`, `was`, `or`  
+**Tier top100k:** `babbitt`, `authoritarian`, `commentary`, `hints`, `impregnable`  
+**Tier top10k:** `troops`, `arthur`, `fright`, `santa`, `hall`  
 
 
 ---
@@ -38,7 +38,7 @@ This report analyzes the metadata sidecar in detail.
 
 | Source | Words |
 |--------|------:|
-| wikt | 1,297,968 |
+| wikt | 1,028,344 |
 | enable | 172,823 |
 | eowl | 128,983 |
 
@@ -46,13 +46,13 @@ This report analyzes the metadata sidecar in detail.
 
 | Sources | Words |
 |---------|------:|
-| wikt | 1,098,669 |
-| enable, eowl, wikt | 92,899 |
-| enable, wikt | 74,274 |
-| eowl, wikt | 32,126 |
-| enable | 4,944 |
-| eowl | 3,252 |
-| enable, eowl | 706 |
+| wikt | 831,749 |
+| enable, eowl, wikt | 92,624 |
+| enable, wikt | 72,951 |
+| eowl, wikt | 31,020 |
+| enable | 6,267 |
+| eowl | 4,358 |
+| enable, eowl | 981 |
 
 
 ---
