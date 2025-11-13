@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "name": "Profanity Blocklist",
+  "description": "Words flagged as vulgar, offensive, or derogatory",
+  "distribution": "plus",
+  "filters": {
+    "labels": {
+      "register": {
+        "include": ["vulgar", "offensive", "derogatory"]
+      }
+    }
+  },
+  "output": {
+    "format": "text",
+    "sort_by": "alphabetical"
+  }
+}
