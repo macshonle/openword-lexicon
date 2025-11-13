@@ -2,26 +2,23 @@
 
 This document describes which filtering capabilities are available on each distribution and their coverage/limitations.
 
----
-
 ## Distribution Overview
 
 ### Core Distribution
-**License**: Ultra-permissive (Public Domain, UKACD)
-**Sources**: ENABLE, EOWL, WordNet, OpenSubtitles frequency
-**Total entries**: ~208,201 words
-**Best for**: Commercial projects requiring permissive licensing
+ * **License**: Ultra-permissive (Public Domain, UKACD)
+ * **Sources**: ENABLE, EOWL, WordNet, OpenSubtitles frequency
+ * **Total entries**: ~208,201 words
+ * **Best for**: Commercial projects requiring permissive licensing
+
 
 ### Plus Distribution
-**License**: Includes CC BY-SA 4.0
-**Sources**: Core + Wiktionary
-**Total entries**: ~1,039,950 words
-**Best for**: Maximum vocabulary coverage, label-based filtering
+ * **License**: Includes CC BY-SA 4.0
+ * **Sources**: Core + Wiktionary
+ * **Total entries**: ~1,039,950 words
+ * **Best for**: Maximum vocabulary coverage, label-based filtering
 
----
 
 ## Filter Capability Matrix
-
 | Filter Type | Core | Plus | Coverage | Notes |
 |-------------|------|------|----------|-------|
 | **Character filters** | ✅ | ✅ | 100% | Length, patterns, regex - always available |
@@ -35,14 +32,13 @@ This document describes which filtering capabilities are available on each distr
 | **Region labels** | ❌ | ✅ | ~1.9% | en-US, en-GB, etc. |
 | **Syllable counts** | ❌ | ❌ | N/A | Not yet implemented |
 
----
 
 ## Detailed Capability Descriptions
 
 ### Character-Level Filters
-**Available on**: Core, Plus
-**Coverage**: 100%
-**Requires**: Nothing (always available)
+ * **Available on**: Core, Plus
+ * **Coverage**: 100%
+ * **Requires**: Nothing (always available)
 
 **Capabilities**:
 - Minimum/maximum length
