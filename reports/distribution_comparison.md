@@ -30,34 +30,34 @@ This report compares the core and plus distributions.
 ### Example Differences
 
 **`aa`**
-- sources: {'enable', 'eowl'} → {'enable', 'wikt', 'eowl'}
+- sources: {'eowl', 'enable'} → {'eowl', 'wikt', 'enable'}
 
 **`aah`**
-- sources: {'enable', 'eowl'} → {'enable', 'wikt', 'eowl'}
+- sources: {'eowl', 'enable'} → {'eowl', 'wikt', 'enable'}
 
 **`aahed`**
-- sources: {'enable'} → {'enable', 'wikt'}
+- sources: {'enable'} → {'wikt', 'enable'}
 
 **`aahing`**
-- sources: {'enable'} → {'enable', 'wikt'}
+- sources: {'enable'} → {'wikt', 'enable'}
 
 **`aahs`**
-- sources: {'enable'} → {'enable', 'wikt'}
+- sources: {'enable'} → {'wikt', 'enable'}
 
 **`aal`**
-- sources: {'enable', 'eowl'} → {'enable', 'wikt', 'eowl'}
+- sources: {'eowl', 'enable'} → {'eowl', 'wikt', 'enable'}
 
 **`aalii`**
-- sources: {'enable', 'eowl'} → {'enable', 'wikt', 'eowl'}
+- sources: {'eowl', 'enable'} → {'eowl', 'wikt', 'enable'}
 
 **`aaliis`**
-- sources: {'enable'} → {'enable', 'wikt'}
+- sources: {'enable'} → {'wikt', 'enable'}
 
 **`aals`**
-- sources: {'enable'} → {'enable', 'wikt'}
+- sources: {'enable'} → {'wikt', 'enable'}
 
 **`aardvark`**
-- sources: {'enable', 'eowl'} → {'enable', 'wikt', 'eowl'}
+- sources: {'eowl', 'enable'} → {'eowl', 'wikt', 'enable'}
 
 
 ---
