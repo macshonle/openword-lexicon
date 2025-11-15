@@ -114,10 +114,12 @@ Edit `filter_kids_vocabulary.sh`:
 (.frequency_tier == "top1k") and
 (.word | length >= 3 and length <= 6) and
 
-# For older children (include top 100k, longer words)
+# For older children (include up to top 50k, longer words)
 (.frequency_tier == "top1k" or
+ .frequency_tier == "top3k" or
  .frequency_tier == "top10k" or
- .frequency_tier == "top100k") and
+ .frequency_tier == "top25k" or
+ .frequency_tier == "top50k") and
 (.word | length >= 3 and length <= 15) and
 ```
 
@@ -154,8 +156,8 @@ Edit `create_profanity_blocklist.sh`:
 # Ultra-common (top 1000)
 .frequency_tier == "top1k"
 
-# Common to somewhat rare (top 10k to 100k)
-(.frequency_tier == "top10k" or .frequency_tier == "top100k")
+# Common to somewhat rare (top 3k to 50k)
+(.frequency_tier == "top3k" or .frequency_tier == "top10k" or .frequency_tier == "top25k" or .frequency_tier == "top50k")
 
 # Include rare words for crosswords
 .frequency_tier == "rare"
@@ -273,7 +275,7 @@ From `core_entries_enriched.jsonl`:
 - `word` - The word itself
 - `pos` - Part of speech tags (array): `["noun"]`, `["verb"]`, etc.
 - `concreteness` - Concrete/abstract/mixed classification
-- `frequency_tier` - top10, top100, top1k, top10k, top100k, rare
+- `frequency_tier` - top10, top100, top300, top500, top1k, top3k, top10k, top25k, top50k, rare
 - `is_phrase` - Boolean: true for multi-word phrases
 - `labels` - Object with subcategories:
   - `labels.register` - formal, informal, slang, vulgar, offensive, etc.
