@@ -1,18 +1,14 @@
 # Phrase Filtering Guide
 
+**Note:** This document is for reference only. Ad hoc phrase filtering targets have been removed. Use the general-purpose `tools/filter_words.py` framework instead. See `docs/GAME_WORDS.md` for usage examples.
+
 The Plus distribution includes multi-word phrases from Wiktionary, ranging from useful idioms like "kick the bucket" to full proverbs like "when you're up to your neck in alligators, it's hard to remember that your initial objective was to drain the swamp."
 
-This guide explains how to filter the wordlist to exclude very long phrases while retaining useful content.
+For reference, this guide describes phrase characteristics and filtering considerations.
 
 ## Analysis
 
-Use the phrase analysis tool to understand the distribution:
-
-```bash
-uv run python tools/inspect_phrases.py plus
-```
-
-This generates `reports/phrase_analysis_plus.md` showing:
+The phrase analysis report (`reports/phrase_analysis_plus.md`) shows:
 - Distribution by word count (1-word, 2-word, 3-word, etc.)
 - Distribution by character length
 - Examples at each threshold

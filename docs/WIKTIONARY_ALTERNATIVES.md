@@ -309,42 +309,26 @@ If Python is still slow, rewrite in Rust/Go for production.
 
 *100% of complex structures we don't use anyway
 
-## Next Steps
+## Implementation Status
 
-1. **Analyze current extraction:**
-   ```bash
-   uv run python tools/analyze_wiktionary_needs.py
-   ```
+**✅ COMPLETED** - The scanner parser has been implemented and is now the primary method for Wiktionary processing.
 
-2. **Review report:**
-   ```bash
-   cat reports/wiktionary_analysis.md
-   ```
+**Results:**
+- 10-100x faster than wiktextract
+- No Lua errors
+- Includes contractions
+- Full coverage for our schema needs
 
-3. **Prototype simple parser:**
-   ```bash
-   python tools/wiktionary_scanner_parser.py \
-     data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2 \
-     data/intermediate/plus/wikt.jsonl
-   ```
+**Usage:**
+```bash
+# Build Wiktionary JSONL
+make build-wiktionary-json
 
-4. **Compare outputs:**
-   ```bash
-   python tools/compare_wikt_extractions.py \
-     data/intermediate/plus/wikt.jsonl \
-     data/intermediate/plus/wikt_simple.jsonl
-   ```
-
-5. **Measure:**
-   - Word count difference
-   - Label coverage
-   - Processing time
-   - Error rate
-
-6. **Decide:**
-   - If <5% data loss and >10x speedup → switch
-   - If significant loss → iterate on regex patterns
-   - If marginal gain → keep wiktextract
+# Or manually:
+uv run python tools/wiktionary_scanner_parser.py \
+  data/raw/plus/enwiktionary-latest-pages-articles.xml.bz2 \
+  data/intermediate/plus/wikt.jsonl
+```
 
 ## Contractions Bonus
 
