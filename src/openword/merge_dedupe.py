@@ -72,8 +72,8 @@ def merge_entries(entry1: dict, entry2: dict) -> dict:
         merged['concreteness'] = entry2['concreteness']
 
     # frequency_tier: prefer lower tier (more frequent)
-    # Order: top10 < top100 < top1k < top10k < top100k < rare
-    tier_order = ['top10', 'top100', 'top1k', 'top10k', 'top100k', 'rare']
+    # Order: top10 < top100 < top300 < top500 < top1k < top3k < top10k < top25k < top50k < rare
+    tier_order = ['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare']
     tier1 = entry1.get('frequency_tier', 'rare')
     tier2 = entry2.get('frequency_tier', 'rare')
 

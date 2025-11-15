@@ -138,9 +138,13 @@
       "enum": [
         "top10",
         "top100",
+        "top300",
+        "top500",
         "top1k",
+        "top3k",
         "top10k",
-        "top100k",
+        "top25k",
+        "top50k",
         "rare"
       ]
     },

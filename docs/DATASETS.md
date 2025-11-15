@@ -162,7 +162,7 @@ WordNet is a lexical database grouping words into synsets (sets of cognitive syn
 **Entry Count**: 50,000
 
 **Description**:
-Word frequency data compiled from movie and TV subtitles corpus. Used to assign frequency tier buckets (top10, top100, top1k, top10k, top100k, rare).
+Word frequency data compiled from movie and TV subtitles corpus. Used to assign frequency tier buckets (top10, top100, top300, top500, top1k, top3k, top10k, top25k, top50k, rare).
 
 **Characteristics:**
 - Based on spoken language (subtitles)

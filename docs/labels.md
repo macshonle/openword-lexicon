@@ -120,12 +120,16 @@ Coarse ranking buckets based on corpus frequency.
 
 | Value | Description | Rank Range | Example |
 |-------|-------------|------------|---------|
-| `top10` | Ultra-frequent | 1–10 | *the*, *and* |
-| `top100` | Very frequent | 11–100 | *would*, *there* |
-| `top1k` | Frequent | 101–1,000 | *important*, *someone* |
-| `top10k` | Common | 1,001–10,000 | *castle*, *umbrella* |
-| `top100k` | Known | 10,001–100,000 | *protozoa*, *osmosis* |
-| `rare` | Rare/specialized | >100,000 | *zugzwang*, *quixotic* |
+| `top10` | Ultra-frequent function words | 1–10 | *the*, *and* |
+| `top100` | Core vocabulary | 11–100 | *would*, *there* |
+| `top300` | Early reader / sight words | 101–300 | *should*, *between* |
+| `top500` | Simple vocabulary | 301–500 | *behind*, *quite* |
+| `top1k` | High-frequency everyday | 501–1,000 | *important*, *someone* |
+| `top3k` | Conversational fluency | 1,001–3,000 | *castle*, *umbrella* |
+| `top10k` | Standard educated vocabulary | 3,001–10,000 | *suburb*, *dolphin* |
+| `top25k` | Extended vocabulary | 10,001–25,000 | *osmosis*, *quaint* |
+| `top50k` | Rare/technical/variants | 25,001–50,000 | *protozoa*, *phlegmatic* |
+| `rare` | Very rare/specialized | >50,000 | *zugzwang*, *quixotic* |
 
 ---
 

@@ -233,7 +233,7 @@ def passes_frequency_filter(entry: Dict, config: FilterConfig) -> bool:
 
     tier = entry.get('frequency_tier', 'rare')
 
-    tier_order = ['top10', 'top100', 'top1k', 'top10k', 'top100k', 'rare']
+    tier_order = ['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare']
     tier_index = {t: i for i, t in enumerate(tier_order)}
 
     min_index = tier_index.get(config.min_frequency_tier, 5)
@@ -347,11 +347,15 @@ def calculate_score(word: str, entry: Dict, config: FilterConfig) -> float:
     tier = entry.get('frequency_tier', 'rare')
     tier_scores = {
         'top10': 100,
-        'top100': 90,
+        'top100': 95,
+        'top300': 90,
+        'top500': 85,
         'top1k': 80,
-        'top10k': 70,
-        'top100k': 50,
-        'rare': 10,
+        'top3k': 70,
+        'top10k': 60,
+        'top25k': 40,
+        'top50k': 20,
+        'rare': 5,
     }
     score += tier_scores.get(tier, 0) * config.frequency_weight
 
