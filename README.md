@@ -57,11 +57,9 @@ make bootstrap
 # Build core distribution (permissive sources only)
 make fetch-core
 
-# Note: uv will download wikitextprocessor directly from GitHub to pick up the latest Scribunto fixes.
-
 # Build plus distribution inputs (optional; includes Wiktionary extraction)
 make fetch-plus
-make fetch-post-process-plus  # runs wiktextract → data/intermediate/plus/wikt.jsonl
+make build-wiktionary-json  # Parses Wiktionary dump → data/intermediate/plus/wikt.jsonl
 
 uv run python src/openword/core_ingest.py
 uv run python src/openword/wordnet_enrich.py
@@ -76,7 +74,7 @@ uv run python src/openword/package_release.py
 # Result: data/artifacts/releases/openword-lexicon-core-0.1.0.tar.gz
 ```
 
-> **Building PLUS:** Run `make fetch-plus && make fetch-post-process-plus`, then include `uv run python src/openword/wikt_ingest.py` before `wordnet_enrich.py` (or run `make build-plus` to automate the entire sequence).
+> **Building PLUS:** Run `make build-plus` to automate the entire sequence (fetch, parse, ingest, enrich, build).
 
 ## High‑level pipeline
 1. **Fetch** sources (core | plus) with checksums & provenance.
@@ -103,17 +101,18 @@ uv run python src/openword/package_release.py
 - CI/CD, packaging, releases, and documentation
 
 🚧 **TODO**
-- CLI implementation (`owlex` command)
 - Comprehensive test suite
 - Performance benchmarks
 
+See [docs/planned/](docs/planned/) for future feature plans.
+
 ## Documentation
 
-- [USAGE.md](docs/USAGE.md) — CLI usage and examples
+- [USAGE.md](docs/USAGE.md) — Python API usage and examples
 - [SCHEMA.md](docs/SCHEMA.md) — Entry schema reference
 - [DATASETS.md](docs/DATASETS.md) — Source dataset details
 - [DESIGN.md](docs/DESIGN.md) — Architecture and design decisions
-- [ATTRIBUTION.md](ATTRIBUTION.md) — Full source attributions
+- [ATTRIBUTION.md](ATTRIBUTION.md) — Full source attributions (generated during builds)
 
 ## Statistics
 
@@ -124,7 +123,7 @@ uv run python src/openword/package_release.py
 
 ## Contributing
 
-Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) (coming soon) for guidelines.
+Contributions welcome! Please open an issue or pull request to discuss proposed changes.
 
 ## License
 

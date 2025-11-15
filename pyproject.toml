@@ -25,9 +25,6 @@ dev = [
   "black>=24.0"
 ]
 
-[project.scripts]
-owlex = "openword.cli:main"  # placeholder; wired later
-
 [tool.setuptools]
 package-dir = {"" = "src"}
-packages = ["openword", "openword.cli"]
+packages = ["openword"]
