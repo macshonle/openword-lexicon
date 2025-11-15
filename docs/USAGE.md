@@ -6,7 +6,6 @@ This guide covers how to use the Openword Lexicon in your projects.
 
 - [Installation](#installation)
 - [Python API](#python-api)
-- [CLI Usage](#cli-usage-coming-soon)
 - [Common Use Cases](#common-use-cases)
 - [Performance Notes](#performance-notes)
 
@@ -144,26 +143,6 @@ for entry in metadata:
         family_friendly_words.append(entry['word'])
 
 print(f"Family-friendly words: {len(family_friendly_words)}")
-```
-
----
-
-## CLI Usage (Coming Soon)
-
-The `owlex` CLI is planned but not yet implemented. Proposed usage:
-
-```bash
-# Search for words matching pattern
-owlex search --pattern '^cas.*' --len 6-8
-
-# Filter by attributes
-owlex search --pos noun --tier top10k --family-friendly
-
-# Get word info
-owlex info castle
-
-# Export filtered list
-owlex export --pos noun --tier top1k --format txt > nouns_top1k.txt
 ```
 
 ---

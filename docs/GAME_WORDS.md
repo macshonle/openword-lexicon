@@ -36,26 +36,24 @@ uv run python tools/analyze_game_metadata.py plus
 - Label type usage
 - Recommendations for improvement
 
-### 2. Word Filter (`tools/filter_game_words.py`)
+### 2. Word Filter (`tools/filter_words.py`)
 
-Filters and scores words based on multiple criteria:
+Filters and scores words using predefined use-case configurations:
 
 ```bash
-# Generate game word lists
+# Generate game word lists (20 Questions)
 make game-words
 
-# Or with custom parameters
-uv run python tools/filter_game_words.py \
+# Or manually
+uv run python tools/filter_words.py \
+  --use-case 20q \
   --distribution core \
-  --min-score 70 \
-  --max-words 1000 \
-  --output-dir data/game_words
+  --output-dir data/game_words \
+  --with-scores
 ```
 
 **Output:**
-- `data/game_words/review_{dist}.md` - Manual review report
-- `data/game_words/words_{dist}.txt` - Plain word list
-- `data/game_words/words_scored_{dist}.txt` - Words with scores
+- `data/game_words/20q_{dist}.txt` - Word list with scores (if --with-scores used)
 
 ## Current Metadata Coverage (Core)
 
@@ -206,8 +204,10 @@ python tools/review_game_words.py \
 
 ### Add Common Exclusions
 
+Example additions to filter_words.py configurations:
+
 ```python
-# tools/filter_game_words.py
+# In TWENTY_Q_CONFIG or custom configuration
 
 EXCLUDE_WORDS = {
     # Pronouns
@@ -247,7 +247,7 @@ def is_primarily_noun(entry: Dict) -> bool:
 ## References
 
 - Metadata schema: `docs/SCHEMA.md`
-- Word filtering: `tools/filter_game_words.py`
+- Word filtering: `tools/filter_words.py`
 - Metadata analysis: `tools/analyze_game_metadata.py`
 - Current results: `data/game_words/`, `reports/game_metadata_analysis_*.md`
 
