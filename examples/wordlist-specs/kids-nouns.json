@@ -12,7 +12,7 @@
       "max_words": 1
     },
     "frequency": {
-      "tiers": ["top1k", "top3k", "top10k"]
+      "tiers": ["M", "N", "O", "P", "Q"]
     },
     "pos": {
       "include": ["noun"]

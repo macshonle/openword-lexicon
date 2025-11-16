@@ -114,13 +114,13 @@ def merge_entries(entry1: dict, entry2: dict) -> dict:
     if 'concreteness' in entry2 and not entry1.get('concreteness'):
         merged['concreteness'] = entry2['concreteness']
 
-    # frequency_tier: prefer lower tier (more frequent)
-    # Order: top10 < top100 < top300 < top500 < top1k < top3k < top10k < top25k < top50k < rare
-    tier_order = ['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare']
-    tier1 = entry1.get('frequency_tier', 'rare')
-    tier2 = entry2.get('frequency_tier', 'rare')
+    # frequency_tier: prefer more frequent tier (earlier in alphabet)
+    # Order: A (most frequent) < B < C < ... < Z (extremely rare)
+    tier1 = entry1.get('frequency_tier', 'Z')
+    tier2 = entry2.get('frequency_tier', 'Z')
 
-    if tier_order.index(tier1) < tier_order.index(tier2):
+    # Simple alphabetical comparison (A < B < ... < Z)
+    if tier1 < tier2:
         merged['frequency_tier'] = tier1
     else:
         merged['frequency_tier'] = tier2

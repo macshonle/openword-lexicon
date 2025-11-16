@@ -134,19 +134,8 @@
     },
     "frequency_tier": {
       "type": "string",
-      "description": "Coarse frequency ranking bucket",
-      "enum": [
-        "top10",
-        "top100",
-        "top300",
-        "top500",
-        "top1k",
-        "top3k",
-        "top10k",
-        "top25k",
-        "top50k",
-        "rare"
-      ]
+      "description": "Frequency rank code (A-Z) based on logarithmic scale. A=rank 1 (most frequent), M≈1000, Q≈10000, U≈100000, Z=extremely rare",
+      "pattern": "^[A-Z]$"
     },
     "sources": {
       "type": "array",

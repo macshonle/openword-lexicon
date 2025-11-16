@@ -26,17 +26,11 @@ class OwlexFilter:
         """Initialize filter with a specification file."""
         self.spec_path = spec_path
         self.spec = self._load_spec()
+        # Tier scores: A (most frequent) = 100, Z (rarest) = 0
+        # Linear scale based on band index (0-25)
         self.tier_scores = {
-            'top10': 100,
-            'top100': 95,
-            'top300': 90,
-            'top500': 85,
-            'top1k': 80,
-            'top3k': 70,
-            'top10k': 60,
-            'top25k': 40,
-            'top50k': 20,
-            'rare': 5
+            chr(ord('A') + i): 100 - (i * 4)
+            for i in range(26)
         }
 
     def _load_spec(self) -> Dict:
@@ -180,20 +174,20 @@ class OwlexFilter:
 
     def _check_frequency_filters(self, entry: Dict, filters: Dict) -> bool:
         """Apply frequency tier filters."""
-        tier = entry.get('frequency_tier', 'rare')
+        tier = entry.get('frequency_tier', 'Z')  # Z = extremely rare/unranked
 
         if 'tiers' in filters:
             if tier not in filters['tiers']:
                 return False
 
         if 'min_tier' in filters:
-            # More restrictive tier (higher in list) is minimum
+            # More frequent tier (higher score) is minimum
             min_score = self.tier_scores.get(filters['min_tier'], 0)
             if self.tier_scores.get(tier, 0) < min_score:
                 return False
 
         if 'max_tier' in filters:
-            # Less restrictive tier (lower in list) is maximum
+            # Less frequent tier (lower score) is maximum
             max_score = self.tier_scores.get(filters['max_tier'], 100)
             if self.tier_scores.get(tier, 0) > max_score:
                 return False

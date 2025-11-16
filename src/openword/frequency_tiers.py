@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-frequency_tiers.py — Assign frequency tier buckets to entries.
+frequency_tiers.py — Assign frequency rank codes (A–Z) to entries.
 
 Reads:
   - data/raw/plus/en_50k.txt (frequency list: word<space>count)
@@ -9,24 +9,42 @@ Reads:
 Outputs:
   - data/intermediate/{core,plus}/*_tiered.jsonl
 
-Tiers (based on 50k frequency dataset):
-  - top10:    ranks 1-10         (ultra-common function words)
-  - top100:   ranks 11-100       (core vocabulary)
-  - top300:   ranks 101-300      (early reader / sight words)
-  - top500:   ranks 301-500      (simple vocabulary)
-  - top1k:    ranks 501-1,000    (high-frequency everyday)
-  - top3k:    ranks 1,001-3,000  (conversational fluency, ~95% coverage)
-  - top10k:   ranks 3,001-10,000 (standard educated vocabulary)
-  - top25k:   ranks 10,001-25,000 (extended vocabulary)
-  - top50k:   ranks 25,001-50,000 (rare/technical/variants)
-  - rare:     ranks >50,000 or not in frequency list
+Rank Code System (A–Z, logarithmic scale with base B = 10^(1/4)):
+  Each letter represents a geometric band on the frequency rank scale.
+  - A: rank 1 (most frequent word)
+  - B: rank 2
+  - C: ranks 3-4
+  - D: ranks 5-7 (ultra-top function words)
+  - E: ranks 8-13 (core function words)
+  - F: ranks 14-23 (very frequent function/structure words)
+  - G: ranks 24-42 (high-frequency function + extremely common content)
+  - H: ranks 43-74 (very common grammatical items, basic content)
+  - I: ranks 75-133 (high-frequency core vocabulary)
+  - J: ranks 134-237 (core high-frequency; early "sight" vocabulary)
+  - K: ranks 238-421 (basic everyday content vocabulary)
+  - L: ranks 422-749 (common conversational words; early reader level)
+  - M: ranks 750-1333 (simple vocabulary; frequent in everyday texts)
+  - N: ranks 1334-2371 (high-frequency everyday vocabulary)
+  - O: ranks 2372-4216 (conversational fluency band)
+  - P: ranks 4217-7498 (broad conversational fluency; frequent in general prose)
+  - Q: ranks 7499-13335 (general educated vocabulary)
+  - R: ranks 13336-23713 (educated usage; lower-mid frequency)
+  - S: ranks 23714-42169 (standard educated vocabulary; mid-frequency)
+  - T: ranks 42170-74989 (extended vocabulary; literary and academic)
+  - U: ranks 74990-133352 (extended/technical vocabulary)
+  - V: ranks 133353-237137 (specialized but relatively well-attested)
+  - W: ranks 237138-421696 (rare/specialized; tail of large general lexicons)
+  - X: ranks 421697-749894 (very rare; technical terms, obscure lexemes)
+  - Y: ranks 749895-1333521 (very rare; domain-specific vocabulary, proper names)
+  - Z: ranks 1333522+ (extremely rare; highly specialized jargon, neologisms)
 """
 
 import json
 import logging
+import math
 import unicodedata
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, Tuple
 
 import orjson
 
@@ -75,51 +93,97 @@ def load_frequency_ranks(freq_file: Path) -> Dict[str, int]:
     return ranks
 
 
-def get_tier(rank: Optional[int]) -> str:
+def rank_to_code(rank: Optional[int]) -> str:
     """
-    Convert rank to tier bucket.
+    Convert frequency rank to single-letter code (A–Z).
 
-    10-tier system aligned with 50k frequency dataset:
-    - Respects linguistic breakpoints (esp. 3k = 95% comprehension)
-    - Better granularity in critical 1k-10k range
-    - Supports educational use cases (grade-level targeting)
+    Uses logarithmic scale with base B = 10^(1/4):
+    - A = rank 1 (most frequent)
+    - B = rank 2
+    - ...
+    - M ≈ rank 1000
+    - Q ≈ rank 10000
+    - U ≈ rank 100000
+    - Z = ranks 1333522+ (extremely rare)
+
+    Args:
+        rank: Integer rank (1-indexed), or None for unranked words
+
+    Returns:
+        Single letter code A–Z
     """
-    if rank is None:
-        return 'rare'
-    elif rank <= 10:
-        return 'top10'
-    elif rank <= 100:
-        return 'top100'
-    elif rank <= 300:
-        return 'top300'
-    elif rank <= 500:
-        return 'top500'
-    elif rank <= 1000:
-        return 'top1k'
-    elif rank <= 3000:
-        return 'top3k'
-    elif rank <= 10000:
-        return 'top10k'
-    elif rank <= 25000:
-        return 'top25k'
-    elif rank <= 50000:
-        return 'top50k'
+    if rank is None or rank < 1:
+        # Unranked words get 'Z' (extremely rare)
+        return 'Z'
+
+    # Base B = 10^(1/4) = 10^0.25
+    B = 10 ** 0.25
+
+    # Continuous band index on log_B scale
+    i_real = math.log(rank) / math.log(B)
+
+    # Nearest integer index
+    i = round(i_real)
+
+    # Clamp to 0..25 (A..Z)
+    i = max(0, min(25, i))
+
+    # Convert to letter
+    code = chr(ord('A') + i)
+
+    return code
+
+
+def code_to_rank(code: str) -> Tuple[int, int, int, int]:
+    """
+    Convert letter code to band index, center rank, and rank range.
+
+    Args:
+        code: Single letter A–Z
+
+    Returns:
+        Tuple of (band_index, center_rank, low_rank, high_rank)
+        All ranks are inclusive.
+
+    Raises:
+        ValueError: If code is not A–Z
+    """
+    c = code.upper()
+    i = ord(c) - ord('A')
+
+    if i < 0 or i > 25:
+        raise ValueError(f"Code must be A-Z, got: {code}")
+
+    # Base B = 10^(1/4)
+    B = 10 ** 0.25
+
+    # Center of the band
+    center = round(B ** i)
+
+    # Half-step boundaries
+    if i == 0:
+        low = 1
     else:
-        return 'rare'
+        low = math.ceil(B ** (i - 0.5))
+        low = max(1, low)
+
+    high = math.ceil(B ** (i + 0.5)) - 1
+
+    return (i, center, low, high)
 
 
 def assign_tier(entry: dict, ranks: Dict[str, int]) -> dict:
-    """Assign frequency tier to an entry."""
+    """Assign frequency rank code to an entry."""
     word = entry['word']
     rank = ranks.get(word)
-    tier = get_tier(rank)
+    code = rank_to_code(rank)
 
-    entry['frequency_tier'] = tier
+    entry['frequency_tier'] = code
     return entry
 
 
 def process_file(input_path: Path, output_path: Path, ranks: Dict[str, int]):
-    """Process a JSONL file and assign tiers."""
+    """Process a JSONL file and assign rank codes."""
     if not input_path.exists():
         logger.warning(f"Input file not found: {input_path}")
         return
@@ -127,18 +191,8 @@ def process_file(input_path: Path, output_path: Path, ranks: Dict[str, int]):
     logger.info(f"Processing {input_path.name}")
 
     entries = []
-    tier_counts = {
-        'top10': 0,
-        'top100': 0,
-        'top300': 0,
-        'top500': 0,
-        'top1k': 0,
-        'top3k': 0,
-        'top10k': 0,
-        'top25k': 0,
-        'top50k': 0,
-        'rare': 0
-    }
+    # Initialize counts for all letter codes A-Z
+    tier_counts = {chr(ord('A') + i): 0 for i in range(26)}
 
     with open(input_path, 'r', encoding='utf-8') as f:
         for line_num, line in enumerate(f, 1):
@@ -166,17 +220,14 @@ def process_file(input_path: Path, output_path: Path, ranks: Dict[str, int]):
             line = orjson.dumps(entry, option=orjson.OPT_SORT_KEYS) + b'\n'
             f.write(line)
 
-    logger.info(f"  Tiered {len(entries):,} entries")
-    logger.info(f"    top10:    {tier_counts['top10']:,}")
-    logger.info(f"    top100:   {tier_counts['top100']:,}")
-    logger.info(f"    top300:   {tier_counts['top300']:,}")
-    logger.info(f"    top500:   {tier_counts['top500']:,}")
-    logger.info(f"    top1k:    {tier_counts['top1k']:,}")
-    logger.info(f"    top3k:    {tier_counts['top3k']:,}")
-    logger.info(f"    top10k:   {tier_counts['top10k']:,}")
-    logger.info(f"    top25k:   {tier_counts['top25k']:,}")
-    logger.info(f"    top50k:   {tier_counts['top50k']:,}")
-    logger.info(f"    rare:     {tier_counts['rare']:,}")
+    logger.info(f"  Assigned rank codes to {len(entries):,} entries")
+    # Log counts for codes that have entries
+    for code in sorted(tier_counts.keys()):
+        count = tier_counts[code]
+        if count > 0:
+            # Get rank range for this code
+            _, center, low, high = code_to_rank(code)
+            logger.info(f"    {code}: {count:6,}  (ranks {low:,}-{high:,}, center ~{center:,})")
     logger.info(f"  -> {output_path}")
 
 
