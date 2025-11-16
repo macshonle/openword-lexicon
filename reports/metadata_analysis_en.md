@@ -391,66 +391,66 @@ Representative samples from different source combinations:
 **`torch songs`**
 ```json
 {
-  "word": "torch songs",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
+  "frequency_tier": "rare",
   "is_phrase": true,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "wikt"
-  ],
   "license_sources": {
     "CC-BY-SA-4.0": [
       "wikt"
     ]
   },
-  "frequency_tier": "rare"
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "wikt"
+  ],
+  "word": "torch songs"
 }
 ```
 
 **`divaism`**
 ```json
 {
-  "word": "divaism",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
+  "frequency_tier": "rare",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "wikt"
-  ],
   "license_sources": {
     "CC-BY-SA-4.0": [
       "wikt"
     ]
   },
-  "frequency_tier": "rare"
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "wikt"
+  ],
+  "word": "divaism"
 }
 ```
 
 **`representee`**
 ```json
 {
-  "word": "representee",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
+  "frequency_tier": "rare",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "wikt"
-  ],
   "license_sources": {
     "CC-BY-SA-4.0": [
       "wikt"
     ]
   },
-  "frequency_tier": "rare"
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "wikt"
+  ],
+  "word": "representee"
 }
 ```
 
@@ -460,82 +460,82 @@ Representative samples from different source combinations:
 **`capitalized`**
 ```json
 {
-  "word": "capitalized",
+  "frequency_tier": "rare",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ]
+  },
   "pos": [
     "adjective",
     "verb"
   ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
   "sources": [
     "enable",
     "wikt"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ]
-  },
   "syllables": null,
-  "frequency_tier": "rare"
+  "word": "capitalized"
 }
 ```
 
 **`saccharometers`**
 ```json
 {
-  "word": "saccharometers",
+  "frequency_tier": "rare",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ]
+  },
   "pos": [
     "noun"
   ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
   "sources": [
     "enable",
     "wikt"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ]
-  },
   "syllables": null,
-  "frequency_tier": "rare"
+  "word": "saccharometers"
 }
 ```
 
 **`intramurally`**
 ```json
 {
-  "word": "intramurally",
+  "frequency_tier": "rare",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ]
+  },
   "pos": [
     "adverb"
   ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
   "sources": [
     "enable",
     "wikt"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ]
-  },
   "syllables": null,
-  "frequency_tier": "rare"
+  "word": "intramurally"
 }
 ```
 
@@ -545,99 +545,99 @@ Representative samples from different source combinations:
 **`parasitize`**
 ```json
 {
-  "word": "parasitize",
-  "pos": [
-    "verb"
-  ],
+  "frequency_tier": "rare",
+  "is_phrase": false,
   "labels": {
     "domain": [
       "biology"
     ]
   },
-  "is_phrase": false,
   "lemma": null,
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt"
-  ],
   "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
     "CC0": [
       "enable"
     ],
     "UKACD": [
       "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
     ]
   },
+  "pos": [
+    "verb"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt"
+  ],
   "syllables": null,
-  "frequency_tier": "rare"
+  "word": "parasitize"
 }
 ```
 
 **`wambles`**
 ```json
 {
-  "word": "wambles",
-  "pos": [
-    "noun",
-    "verb"
-  ],
-  "labels": {},
+  "frequency_tier": "rare",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt"
-  ],
   "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
     "CC0": [
       "enable"
     ],
     "UKACD": [
       "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
     ]
   },
+  "pos": [
+    "noun",
+    "verb"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt"
+  ],
   "syllables": null,
-  "frequency_tier": "rare"
+  "word": "wambles"
 }
 ```
 
 **`flittering`**
 ```json
 {
-  "word": "flittering",
-  "pos": [
-    "noun",
-    "verb"
-  ],
-  "labels": {},
+  "frequency_tier": "rare",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt"
-  ],
   "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
     "CC0": [
       "enable"
     ],
     "UKACD": [
       "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
     ]
   },
+  "pos": [
+    "noun",
+    "verb"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt"
+  ],
   "syllables": null,
-  "frequency_tier": "rare"
+  "word": "flittering"
 }
 ```
 
@@ -647,109 +647,109 @@ Representative samples from different source combinations:
 **`secureness`**
 ```json
 {
-  "word": "secureness",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
+  "concreteness": "abstract",
+  "frequency_tier": "rare",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
   "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
     "CC0": [
       "enable"
     ],
     "UKACD": [
       "eowl"
     ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
     "WordNet": [
       "wordnet"
     ]
   },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
   "syllables": null,
-  "frequency_tier": "rare",
-  "concreteness": "abstract"
+  "word": "secureness"
 }
 ```
 
 **`baskets`**
 ```json
 {
-  "word": "baskets",
-  "pos": [
-    "noun",
-    "verb"
-  ],
-  "labels": {},
+  "concreteness": "mixed",
+  "frequency_tier": "top25k",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
   "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
     "CC0": [
       "enable"
     ],
     "UKACD": [
       "eowl"
     ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
     "WordNet": [
       "wordnet"
     ]
   },
+  "pos": [
+    "noun",
+    "verb"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
   "syllables": null,
-  "frequency_tier": "top25k",
-  "concreteness": "mixed"
+  "word": "baskets"
 }
 ```
 
 **`arsine`**
 ```json
 {
-  "word": "arsine",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
+  "concreteness": "concrete",
+  "frequency_tier": "rare",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
   "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
     "CC0": [
       "enable"
     ],
     "UKACD": [
       "eowl"
     ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
     "WordNet": [
       "wordnet"
     ]
   },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
   "syllables": null,
-  "frequency_tier": "rare",
-  "concreteness": "concrete"
+  "word": "arsine"
 }
 ```
 
@@ -759,81 +759,81 @@ Representative samples from different source combinations:
 **`sippled`**
 ```json
 {
-  "word": "sippled",
+  "frequency_tier": "rare",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
   "pos": [
     "verb"
   ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
   "sources": [
     "eowl",
     "wikt"
   ],
-  "license_sources": {
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ]
-  },
   "syllables": null,
-  "frequency_tier": "rare"
+  "word": "sippled"
 }
 ```
 
 **`eruciform`**
 ```json
 {
-  "word": "eruciform",
+  "frequency_tier": "rare",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
   "pos": [
     "adjective"
   ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
   "sources": [
     "eowl",
     "wikt"
   ],
-  "license_sources": {
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ]
-  },
   "syllables": null,
-  "frequency_tier": "rare"
+  "word": "eruciform"
 }
 ```
 
 **`tritanopic`**
 ```json
 {
-  "word": "tritanopic",
+  "frequency_tier": "rare",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
   "pos": [
     "adjective"
   ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
   "sources": [
     "eowl",
     "wikt"
   ],
-  "license_sources": {
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ]
-  },
   "syllables": null,
-  "frequency_tier": "rare"
+  "word": "tritanopic"
 }
 ```
 
@@ -843,21 +843,15 @@ Representative samples from different source combinations:
 **`ji`**
 ```json
 {
-  "word": "ji",
-  "pos": [
-    "noun"
-  ],
+  "concreteness": "abstract",
+  "frequency_tier": "top10k",
+  "is_phrase": false,
   "labels": {
     "temporal": [
       "historical"
     ]
   },
-  "is_phrase": false,
   "lemma": null,
-  "sources": [
-    "wikt",
-    "wordnet"
-  ],
   "license_sources": {
     "CC-BY-SA-4.0": [
       "wikt"
@@ -866,26 +860,25 @@ Representative samples from different source combinations:
       "wordnet"
     ]
   },
-  "concreteness": "abstract",
-  "frequency_tier": "top10k"
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "wikt",
+    "wordnet"
+  ],
+  "word": "ji"
 }
 ```
 
 **`braun`**
 ```json
 {
-  "word": "braun",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
+  "concreteness": "concrete",
+  "frequency_tier": "top25k",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": 1,
   "license_sources": {
     "CC-BY-SA-4.0": [
       "wikt"
@@ -894,26 +887,26 @@ Representative samples from different source combinations:
       "wordnet"
     ]
   },
-  "concreteness": "concrete",
-  "frequency_tier": "top25k"
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "wikt",
+    "wordnet"
+  ],
+  "syllables": 1,
+  "word": "braun"
 }
 ```
 
 **`guinevere`**
 ```json
 {
-  "word": "guinevere",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
+  "concreteness": "mixed",
+  "frequency_tier": "top25k",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": 3,
   "license_sources": {
     "CC-BY-SA-4.0": [
       "wikt"
@@ -922,8 +915,15 @@ Representative samples from different source combinations:
       "wordnet"
     ]
   },
-  "concreteness": "mixed",
-  "frequency_tier": "top25k"
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "wikt",
+    "wordnet"
+  ],
+  "syllables": 3,
+  "word": "guinevere"
 }
 ```
 
@@ -933,96 +933,96 @@ Representative samples from different source combinations:
 **`coagulations`**
 ```json
 {
-  "word": "coagulations",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
+  "concreteness": "mixed",
+  "frequency_tier": "rare",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "enable",
-    "wikt",
-    "wordnet"
-  ],
   "license_sources": {
-    "CC0": [
-      "enable"
-    ],
     "CC-BY-SA-4.0": [
       "wikt"
+    ],
+    "CC0": [
+      "enable"
     ],
     "WordNet": [
       "wordnet"
     ]
   },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "enable",
+    "wikt",
+    "wordnet"
+  ],
   "syllables": null,
-  "frequency_tier": "rare",
-  "concreteness": "mixed"
+  "word": "coagulations"
 }
 ```
 
 **`paratroopers`**
 ```json
 {
-  "word": "paratroopers",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
+  "concreteness": "concrete",
+  "frequency_tier": "top50k",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "enable",
-    "wikt",
-    "wordnet"
-  ],
   "license_sources": {
-    "CC0": [
-      "enable"
-    ],
     "CC-BY-SA-4.0": [
       "wikt"
+    ],
+    "CC0": [
+      "enable"
     ],
     "WordNet": [
       "wordnet"
     ]
   },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "enable",
+    "wikt",
+    "wordnet"
+  ],
   "syllables": null,
-  "frequency_tier": "top50k",
-  "concreteness": "concrete"
+  "word": "paratroopers"
 }
 ```
 
 **`intensities`**
 ```json
 {
-  "word": "intensities",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
+  "concreteness": "abstract",
+  "frequency_tier": "rare",
   "is_phrase": false,
+  "labels": {},
   "lemma": null,
-  "sources": [
-    "enable",
-    "wikt",
-    "wordnet"
-  ],
   "license_sources": {
-    "CC0": [
-      "enable"
-    ],
     "CC-BY-SA-4.0": [
       "wikt"
+    ],
+    "CC0": [
+      "enable"
     ],
     "WordNet": [
       "wordnet"
     ]
   },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "enable",
+    "wikt",
+    "wordnet"
+  ],
   "syllables": null,
-  "frequency_tier": "rare",
-  "concreteness": "abstract"
+  "word": "intensities"
 }
 ```
 
@@ -1032,16 +1032,36 @@ Representative samples from different source combinations:
 **`mama`**
 ```json
 {
-  "word": "mama",
+  "concreteness": "concrete",
+  "concreteness_rating": 4.3,
+  "concreteness_sd": 1.15,
+  "frequency_tier": "top1k",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
   "pos": [
     "adjective",
     "noun",
     "pronoun",
     "verb"
   ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
   "sources": [
     "brysbaert",
     "enable",
@@ -1049,35 +1069,38 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": 2,
-  "frequency_tier": "top1k",
-  "concreteness": "concrete",
-  "concreteness_rating": 4.3,
-  "concreteness_sd": 1.15
+  "word": "mama"
 }
 ```
 
 **`rite`**
 ```json
 {
-  "word": "rite",
+  "concreteness": "mixed",
+  "concreteness_rating": 2.54,
+  "concreteness_sd": 1.37,
+  "frequency_tier": "top25k",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
   "pos": [
     "adjective",
     "adverb",
@@ -1085,9 +1108,6 @@ Representative samples from different source combinations:
     "noun",
     "verb"
   ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
   "sources": [
     "brysbaert",
     "enable",
@@ -1095,42 +1115,19 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": 2,
-  "frequency_tier": "top25k",
-  "concreteness": "mixed",
-  "concreteness_rating": 2.54,
-  "concreteness_sd": 1.37
+  "word": "rite"
 }
 ```
 
 **`wane`**
 ```json
 {
-  "word": "wane",
-  "pos": [
-    "adjective",
-    "adverb",
-    "conjunction",
-    "noun",
-    "verb"
-  ],
+  "concreteness": "mixed",
+  "concreteness_rating": 2.54,
+  "concreteness_sd": 1.67,
+  "frequency_tier": "top50k",
+  "is_phrase": false,
   "labels": {
     "register": [
       "literary",
@@ -1141,8 +1138,31 @@ Representative samples from different source combinations:
       "obsolete"
     ]
   },
-  "is_phrase": false,
   "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "adjective",
+    "adverb",
+    "conjunction",
+    "noun",
+    "verb"
+  ],
   "sources": [
     "brysbaert",
     "enable",
@@ -1150,28 +1170,8 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": 2,
-  "frequency_tier": "top50k",
-  "concreteness": "mixed",
-  "concreteness_rating": 2.54,
-  "concreteness_sd": 1.67
+  "word": "wane"
 }
 ```
 
@@ -1186,7 +1186,49 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 
 ```json
 {
-  "word": "bar",
+  "concreteness": "concrete",
+  "concreteness_rating": 4.67,
+  "concreteness_sd": 0.62,
+  "frequency_tier": "top1k",
+  "is_phrase": false,
+  "labels": {
+    "domain": [
+      "law",
+      "mathematics",
+      "military",
+      "nautical",
+      "physics",
+      "sports"
+    ],
+    "region": [
+      "en-GB",
+      "en-US"
+    ],
+    "register": [
+      "slang"
+    ],
+    "temporal": [
+      "obsolete"
+    ]
+  },
+  "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
   "pos": [
     "adjective",
     "adverb",
@@ -1196,28 +1238,6 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "pronoun",
     "verb"
   ],
-  "labels": {
-    "register": [
-      "slang"
-    ],
-    "temporal": [
-      "obsolete"
-    ],
-    "region": [
-      "en-GB",
-      "en-US"
-    ],
-    "domain": [
-      "law",
-      "mathematics",
-      "military",
-      "nautical",
-      "physics",
-      "sports"
-    ]
-  },
-  "is_phrase": false,
-  "lemma": null,
   "sources": [
     "brysbaert",
     "enable",
@@ -1225,28 +1245,8 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": 1,
-  "frequency_tier": "top1k",
-  "concreteness": "concrete",
-  "concreteness_rating": 4.67,
-  "concreteness_sd": 0.62
+  "word": "bar"
 }
 ```
 
@@ -1254,19 +1254,12 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 
 ```json
 {
-  "word": "delta",
-  "pos": [
-    "adjective",
-    "noun",
-    "verb"
-  ],
+  "concreteness": "mixed",
+  "concreteness_rating": 3.21,
+  "concreteness_sd": 1.69,
+  "frequency_tier": "top10k",
+  "is_phrase": false,
   "labels": {
-    "register": [
-      "informal"
-    ],
-    "region": [
-      "en-US"
-    ],
     "domain": [
       "chemistry",
       "computing",
@@ -1274,10 +1267,37 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "medicine",
       "military",
       "physics"
+    ],
+    "region": [
+      "en-US"
+    ],
+    "register": [
+      "informal"
     ]
   },
-  "is_phrase": false,
   "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "adjective",
+    "noun",
+    "verb"
+  ],
   "sources": [
     "brysbaert",
     "enable",
@@ -1285,28 +1305,8 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": 2,
-  "frequency_tier": "top10k",
-  "concreteness": "mixed",
-  "concreteness_rating": 3.21,
-  "concreteness_sd": 1.69
+  "word": "delta"
 }
 ```
 
@@ -1314,22 +1314,12 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 
 ```json
 {
-  "word": "flag",
-  "pos": [
-    "noun",
-    "verb"
-  ],
+  "concreteness": "concrete",
+  "concreteness_rating": 4.79,
+  "concreteness_sd": 0.62,
+  "frequency_tier": "top3k",
+  "is_phrase": false,
   "labels": {
-    "register": [
-      "slang"
-    ],
-    "temporal": [
-      "archaic",
-      "obsolete"
-    ],
-    "region": [
-      "en-GB"
-    ],
     "domain": [
       "aviation",
       "biology",
@@ -1337,10 +1327,40 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "mathematics",
       "nautical",
       "sports"
+    ],
+    "region": [
+      "en-GB"
+    ],
+    "register": [
+      "slang"
+    ],
+    "temporal": [
+      "archaic",
+      "obsolete"
     ]
   },
-  "is_phrase": false,
   "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "noun",
+    "verb"
+  ],
   "sources": [
     "brysbaert",
     "enable",
@@ -1348,28 +1368,8 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": 1,
-  "frequency_tier": "top3k",
-  "concreteness": "concrete",
-  "concreteness_rating": 4.79,
-  "concreteness_sd": 0.62
+  "word": "flag"
 }
 ```
 
@@ -1377,13 +1377,24 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 
 ```json
 {
-  "word": "point",
-  "pos": [
-    "adverb",
-    "noun",
-    "verb"
-  ],
+  "concreteness": "mixed",
+  "concreteness_rating": 3.39,
+  "concreteness_sd": 1.13,
+  "frequency_tier": "top500",
+  "is_phrase": false,
   "labels": {
+    "domain": [
+      "computing",
+      "mathematics",
+      "medicine",
+      "military",
+      "nautical",
+      "sports"
+    ],
+    "region": [
+      "en-GB",
+      "en-US"
+    ],
     "register": [
       "informal",
       "slang"
@@ -1393,22 +1404,31 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "dated",
       "historical",
       "obsolete"
-    ],
-    "region": [
-      "en-GB",
-      "en-US"
-    ],
-    "domain": [
-      "computing",
-      "mathematics",
-      "medicine",
-      "military",
-      "nautical",
-      "sports"
     ]
   },
-  "is_phrase": false,
   "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "adverb",
+    "noun",
+    "verb"
+  ],
   "sources": [
     "brysbaert",
     "enable",
@@ -1416,28 +1436,8 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": null,
-  "frequency_tier": "top500",
-  "concreteness": "mixed",
-  "concreteness_rating": 3.39,
-  "concreteness_sd": 1.13
+  "word": "point"
 }
 ```
 
@@ -1445,23 +1445,12 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 
 ```json
 {
-  "word": "port",
-  "pos": [
-    "adjective",
-    "noun",
-    "verb"
-  ],
+  "concreteness": "concrete",
+  "concreteness_rating": 4.41,
+  "concreteness_sd": 1.18,
+  "frequency_tier": "top10k",
+  "is_phrase": false,
   "labels": {
-    "register": [
-      "informal"
-    ],
-    "temporal": [
-      "archaic",
-      "historical"
-    ],
-    "region": [
-      "en-US"
-    ],
     "domain": [
       "aviation",
       "computing",
@@ -1469,10 +1458,41 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "medicine",
       "military",
       "nautical"
+    ],
+    "region": [
+      "en-US"
+    ],
+    "register": [
+      "informal"
+    ],
+    "temporal": [
+      "archaic",
+      "historical"
     ]
   },
-  "is_phrase": false,
   "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "adjective",
+    "noun",
+    "verb"
+  ],
   "sources": [
     "brysbaert",
     "enable",
@@ -1480,28 +1500,8 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": 1,
-  "frequency_tier": "top10k",
-  "concreteness": "concrete",
-  "concreteness_rating": 4.41,
-  "concreteness_sd": 1.18
+  "word": "port"
 }
 ```
 
@@ -1509,7 +1509,42 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 
 ```json
 {
-  "word": "aa",
+  "concreteness": "mixed",
+  "frequency_tier": "top25k",
+  "is_phrase": false,
+  "labels": {
+    "domain": [
+      "aviation",
+      "chemistry",
+      "law",
+      "medicine",
+      "military",
+      "physics"
+    ],
+    "region": [
+      "en-GB",
+      "en-US"
+    ],
+    "temporal": [
+      "dated",
+      "historical"
+    ]
+  },
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
   "pos": [
     "adjective",
     "adverb",
@@ -1522,49 +1557,14 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "pronoun",
     "verb"
   ],
-  "labels": {
-    "temporal": [
-      "dated",
-      "historical"
-    ],
-    "region": [
-      "en-GB",
-      "en-US"
-    ],
-    "domain": [
-      "aviation",
-      "chemistry",
-      "law",
-      "medicine",
-      "military",
-      "physics"
-    ]
-  },
-  "is_phrase": false,
-  "lemma": null,
   "sources": [
     "enable",
     "eowl",
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
   "syllables": 1,
-  "frequency_tier": "top25k",
-  "concreteness": "mixed"
+  "word": "aa"
 }
 ```
 
@@ -1572,14 +1572,23 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 
 ```json
 {
-  "word": "ace",
-  "pos": [
-    "adjective",
-    "noun",
-    "pronoun",
-    "verb"
-  ],
+  "concreteness": "concrete",
+  "concreteness_rating": 3.92,
+  "concreteness_sd": 1.47,
+  "frequency_tier": "top10k",
+  "is_phrase": false,
   "labels": {
+    "domain": [
+      "computing",
+      "medicine",
+      "military",
+      "physics",
+      "sports"
+    ],
+    "region": [
+      "en-GB",
+      "en-US"
+    ],
     "register": [
       "informal",
       "slang"
@@ -1587,21 +1596,32 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "temporal": [
       "dated",
       "obsolete"
-    ],
-    "region": [
-      "en-GB",
-      "en-US"
-    ],
-    "domain": [
-      "computing",
-      "medicine",
-      "military",
-      "physics",
-      "sports"
     ]
   },
-  "is_phrase": false,
   "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "adjective",
+    "noun",
+    "pronoun",
+    "verb"
+  ],
   "sources": [
     "brysbaert",
     "enable",
@@ -1609,28 +1629,8 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": null,
-  "frequency_tier": "top10k",
-  "concreteness": "concrete",
-  "concreteness_rating": 3.92,
-  "concreteness_sd": 1.47
+  "word": "ace"
 }
 ```
 
@@ -1638,10 +1638,11 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 
 ```json
 {
-  "word": "activate",
-  "pos": [
-    "verb"
-  ],
+  "concreteness": "mixed",
+  "concreteness_rating": 2.97,
+  "concreteness_sd": 1.35,
+  "frequency_tier": "top10k",
+  "is_phrase": false,
   "labels": {
     "domain": [
       "biology",
@@ -1652,33 +1653,32 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "sports"
     ]
   },
-  "is_phrase": false,
   "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "pos": [
+    "verb"
+  ],
   "sources": [
     "brysbaert",
     "enable",
     "eowl",
     "wikt"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": null,
-  "frequency_tier": "top10k",
-  "concreteness": "mixed",
-  "concreteness_rating": 2.97,
-  "concreteness_sd": 1.35
+  "word": "activate"
 }
 ```
 
@@ -1686,13 +1686,22 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 
 ```json
 {
-  "word": "base",
-  "pos": [
-    "adjective",
-    "noun",
-    "verb"
-  ],
+  "concreteness": "concrete",
+  "concreteness_rating": 3.86,
+  "concreteness_sd": 1.48,
+  "frequency_tier": "top3k",
+  "is_phrase": false,
   "labels": {
+    "domain": [
+      "aviation",
+      "biology",
+      "chemistry",
+      "mathematics",
+      "military"
+    ],
+    "region": [
+      "en-US"
+    ],
     "register": [
       "slang"
     ],
@@ -1701,20 +1710,31 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "historical",
       "obsolete",
       "rare"
-    ],
-    "region": [
-      "en-US"
-    ],
-    "domain": [
-      "aviation",
-      "biology",
-      "chemistry",
-      "mathematics",
-      "military"
     ]
   },
-  "is_phrase": false,
   "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "adjective",
+    "noun",
+    "verb"
+  ],
   "sources": [
     "brysbaert",
     "enable",
@@ -1722,28 +1742,8 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": 1,
-  "frequency_tier": "top3k",
-  "concreteness": "concrete",
-  "concreteness_rating": 3.86,
-  "concreteness_sd": 1.48
+  "word": "base"
 }
 ```
 
@@ -1751,30 +1751,50 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 
 ```json
 {
-  "word": "core",
-  "pos": [
-    "adjective",
-    "noun",
-    "verb"
-  ],
+  "concreteness": "concrete",
+  "concreteness_rating": 3.96,
+  "concreteness_sd": 1.28,
+  "frequency_tier": "top10k",
+  "is_phrase": false,
   "labels": {
-    "register": [
-      "informal"
-    ],
-    "temporal": [
-      "historical",
-      "obsolete"
-    ],
     "domain": [
       "aviation",
       "computing",
       "medicine",
       "military",
       "physics"
+    ],
+    "register": [
+      "informal"
+    ],
+    "temporal": [
+      "historical",
+      "obsolete"
     ]
   },
-  "is_phrase": false,
   "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "adjective",
+    "noun",
+    "verb"
+  ],
   "sources": [
     "brysbaert",
     "enable",
@@ -1782,28 +1802,8 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ],
-    "Brysbaert-Research": [
-      "brysbaert"
-    ]
-  },
   "syllables": null,
-  "frequency_tier": "top10k",
-  "concreteness": "concrete",
-  "concreteness_rating": 3.96,
-  "concreteness_sd": 1.28
+  "word": "core"
 }
 ```
 

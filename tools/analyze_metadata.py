@@ -573,7 +573,7 @@ def sample_entries_by_source(metadata: Dict[str, Any]) -> str:
         for word, meta in sample_entries:
             report += f"**`{word}`**\n"
             report += "```json\n"
-            report += json.dumps(meta, indent=2, ensure_ascii=False)
+            report += json.dumps(meta, indent=2, ensure_ascii=False, sort_keys=True)
             report += "\n```\n\n"
 
         report += "\n"
@@ -606,7 +606,7 @@ def sample_rich_entries(metadata: Dict[str, Any]) -> str:
     for word, meta, score in rich_entries[:10]:
         report += f"### `{word}` (richness: {score})\n\n"
         report += "```json\n"
-        report += json.dumps(meta, indent=2, ensure_ascii=False)
+        report += json.dumps(meta, indent=2, ensure_ascii=False, sort_keys=True)
         report += "\n```\n\n"
 
     return report
