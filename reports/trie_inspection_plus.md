@@ -10,18 +10,18 @@ This report analyzes the final MARISA trie structure and metadata.
 
 **Trie file:** `data/build/plus/plus.trie`  
 **Metadata file:** `data/build/plus/plus.meta.json`  
-**Total words:** 1,039,950  
-**Trie size:** 3,063,888 bytes (2992.1 KB)  
-**Metadata size:** 137,840,698 bytes (134610.1 KB)  
-**Bytes per word (trie):** 2.95  
+**Total words:** 1,295,010  
+**Trie size:** 3,863,112 bytes (3772.6 KB)  
+**Metadata size:** 174,172,807 bytes (170090.6 KB)  
+**Bytes per word (trie):** 2.98  
 **Min word length:** 1  
 **Max word length:** 111  
-**Avg word length:** 10.62  
+**Avg word length:** 10.88  
 
 ## Word Length Extremes
 
-**Shortest words:** `s`, `c`, `p`, `m`, `a`  
-**Longest words:** `it is easier for a camel to go through the eye of a needle than for a rich man to enter into the kingdom of god`, `tetaumatawhakatangihangakoauaotamateaurehaeaturipukapihimaungahoronukupokaiwhenuaakitanarahu`, `taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu`, `it doesn't matter what they say about you as long as they spell your name right`, `no one ever went broke underestimating the intelligence of the american public`  
+**Shortest words:** `s`, `p`, `m`, `b`, `a`  
+**Longest words:** `it is easier for a camel to go through the eye of a needle than for a rich man to enter into the kingdom of god`, `bababadalgharaghtakamminarronnkonnbronntonnerronntuonnthunntrovarrhounawnskawntoohoohoordenenthurnuk`, `tetaumatawhakatangihangakoauaotamateaurehaeaturipukapihimaungahoronukupokaiwhenuaakitanarahu`, `taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu`, `it doesn't matter what they say about you as long as they spell your name right`  
 
 ---
 
@@ -29,52 +29,52 @@ This report analyzes the final MARISA trie structure and metadata.
 
 ### Random Word Lookups
 
-**`hypophosphorylated`**  
+**`ceratosaurian`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
 
-**`combinest`**  
+**`sewing kit`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
 
-**`stomachals`**  
+**`apogastropods`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
 
-**`ecophenotypically`**  
+**`blow up in one's face`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
 
-**`management accounting`**  
+**`beis`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
 
-**`phono-semantic matchings`**  
+**`posthepatitic`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
 
-**`post-gasm`**  
+**`craypot`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
 
-**`capricci`**  
+**`itsself`**  
 - In trie: True  
 - Frequency tier: rare  
-- Sources: enable, eowl, wikt  
+- Sources: wikt  
 
-**`eluviating`**  
+**`catoptromantic`**  
 - In trie: True  
 - Frequency tier: rare  
-- Sources: enable, wikt  
+- Sources: wikt  
 
-**`contentually`**  
+**`kct`**  
 - In trie: True  
 - Frequency tier: rare  
 - Sources: wikt  
@@ -83,45 +83,45 @@ This report analyzes the final MARISA trie structure and metadata.
 ### Prefix Search Tests
 
 **Prefix: `pre`**  
-- Matches: 7,231  
-- Sample: `pre`, `pres`, `press`, `pressure`, `pressure gradient`  
+- Matches: 8,729  
+- Sample: `pre`, `pres`, `press`, `pressure`, `pressure cabin`  
 
 **Prefix: `un`**  
-- Matches: 22,836  
+- Matches: 27,709  
 - Sample: `un`, `und`, `unde`, `under`, `unders`  
 
 **Prefix: `anti`**  
-- Matches: 5,476  
-- Sample: `anti`, `antic`, `anticonservation`, `anticonservationist`, `anticonservationists`  
+- Matches: 6,361  
+- Sample: `antic`, `antico`, `anticonservation`, `anticonservationist`, `anticonservationists`  
 
 **Prefix: `pro`**  
-- Matches: 6,849  
-- Sample: `pro`, `prot`, `proto`, `protocol`, `protocolise`  
+- Matches: 8,047  
+- Sample: `pro`, `prot`, `proto`, `proto-`, `proto-malay`  
 
 **Prefix: `sub`**  
-- Matches: 5,232  
-- Sample: `sub`, `subs`, `substant`, `substantial`, `substantialise`  
+- Matches: 6,317  
+- Sample: `sub`, `subs`, `subst`, `substant`, `substantivise`  
 
 
 ### Successor/Predecessor Tests
 
-**`fragile`**  
-- Predecessor: `fragilise`  
-- Successor: `fragile x`  
+**`glycoantigens`**  
+- Predecessor: `glycoantigen`  
+- Successor: `glycoarray`  
 
-**`epizoons`**  
-- Predecessor: `epizoonotic`  
-- Successor: `epizoodic`  
+**`shopfloors`**  
+- Predecessor: `shopfloor`  
+- Successor: `shopfolk`  
 
-**`ornitholestids`**  
-- Predecessor: `ornitholestid`  
-- Successor: `ornitholite`  
+**`saddle points`**  
+- Predecessor: `saddle point`  
+- Successor: `saddle roof`  
 
-**`tortuosity`**  
-- Predecessor: `tortuosities`  
-- Successor: `tortuose`  
+**`chaabi`**  
+- Predecessor: `chaats`  
+- Successor: `chaas`  
 
-**`slickems`**  
-- Predecessor: `slickem`  
-- Successor: `slickest`  
+**`benenatis`**  
+- Predecessor: `benenati`  
+- Successor: `benexate`  
 

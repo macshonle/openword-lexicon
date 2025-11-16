@@ -17,7 +17,7 @@ This report shows random samples from the original downloaded datasets.
 ## Wiktionary Dataset
 
 **Location:** `data/intermediate/plus/wikt.jsonl`  
-**Total entries:** 1,052,438
+**Total entries:** 1,326,842
 
 **Sample entries:**
 

@@ -153,7 +153,21 @@ def extract_pos(wikt_entry: dict) -> List[str]:
 
 
 def extract_labels(wikt_entry: dict) -> dict:
-    """Extract and categorize labels from wiktextract entry."""
+    """Extract and categorize labels from wiktextract entry or scanner parser format."""
+
+    # Support scanner parser format (pre-extracted labels)
+    # Scanner parser outputs labels in a 'labels' dict with keys: register, region, temporal, domain
+    if 'labels' in wikt_entry and isinstance(wikt_entry['labels'], dict):
+        extracted_labels = {}
+        for key in ['register', 'region', 'temporal', 'domain']:
+            if key in wikt_entry['labels']:
+                values = wikt_entry['labels'][key]
+                if isinstance(values, list) and values:
+                    # Deduplicate and sort
+                    extracted_labels[key] = sorted(set(values))
+        return extracted_labels
+
+    # Original code for wiktextract format (tags/topics)
     labels = {
         'register': [],
         'region': [],

@@ -194,8 +194,8 @@ report-trie:
 	$(UV) run python tools/inspect_trie.py plus
 
 report-metadata:
-	$(UV) run python tools/inspect_metadata.py core
-	$(UV) run python tools/inspect_metadata.py plus
+	$(UV) run python tools/analyze_metadata.py core
+	$(UV) run python tools/analyze_metadata.py plus
 
 report-compare:
 	$(UV) run python tools/compare_distributions.py
@@ -223,16 +223,8 @@ game-words-plus: $(PLUS_META)
 
 game-words: game-words-core game-words-plus
 
-# Analyze metadata coverage for game filtering
-$(GAME_META_REPORT_CORE): $(CORE_META)
-	@mkdir -p $(dir $@)
-	$(UV) run python tools/analyze_game_metadata.py core --output $@
-
-$(GAME_META_REPORT_PLUS): $(PLUS_META)
-	@mkdir -p $(dir $@)
-	$(UV) run python tools/analyze_game_metadata.py plus --output $@
-
-analyze-game-metadata: $(GAME_META_REPORT_CORE) $(GAME_META_REPORT_PLUS)
+# Game metadata analysis is now part of the consolidated metadata report
+# (see report-metadata target which runs analyze_metadata.py)
 
 # ===========================
 # Specialized Word Lists
@@ -298,12 +290,8 @@ $(ALL_PHRASES_LIST) $(IDIOMS_LIST) $(PREP_PHRASES_LIST): $(WIKTIONARY_JSON)
 export-wordlist-phrases: $(ALL_PHRASES_LIST) $(IDIOMS_LIST) $(PREP_PHRASES_LIST)
 
 # ===========================
-# Enhanced Metadata Analysis
+# Comprehensive Analysis
 # ===========================
-
-# Run all enhanced metadata analysis
-analyze-enhanced-metadata: report-frequency-analysis report-syllable-analysis report-wordnet-concreteness
-	@echo "Enhanced metadata analysis complete"
 
 # Run ALL available analysis and reporting commands
 # This comprehensive target is useful after data changes or for complete audits
@@ -312,16 +300,10 @@ analyze-all-reports: deps
 	@echo "Running ALL Analysis and Reports"
 	@echo "=========================================="
 	@echo ""
-	@echo "1/4: Enhanced Metadata Analysis..."
-	@$(MAKE) analyze-enhanced-metadata
-	@echo ""
-	@echo "2/4: Standard Inspection Reports..."
+	@echo "1/2: Standard Inspection Reports..."
 	@$(MAKE) reports
 	@echo ""
-	@echo "3/4: Game Metadata Analysis..."
-	@$(MAKE) analyze-game-metadata
-	@echo ""
-	@echo "4/4: Distribution Comparison..."
+	@echo "2/2: Distribution Comparison..."
 	@$(MAKE) report-compare
 	@echo ""
 	@echo "=========================================="
@@ -330,22 +312,6 @@ analyze-all-reports: deps
 	@echo ""
 	@echo "Reports generated in: $(REPORTS_DIR)/"
 	@ls -lh $(REPORTS_DIR)/*.md 2>/dev/null || true
-
-# Analyze frequency data structure and tiers
-report-frequency-analysis: deps $(FREQUENCY_DATA)
-	@mkdir -p $(REPORTS_DIR)
-	$(UV) run python tools/analyze_frequency_data.py $(FREQUENCY_DATA)
-
-# Analyze syllable data availability in Wiktionary
-report-syllable-analysis: deps $(WIKTIONARY_DUMP)
-	@mkdir -p $(REPORTS_DIR)
-	$(UV) run python tools/analyze_syllable_data.py "$(WIKTIONARY_DUMP)" 10000
-
-# Analyze WordNet for concrete/abstract noun classification
-# Note: Uses NLTK's WordNet (will download if not present), not archive
-report-wordnet-concreteness: deps
-	@mkdir -p $(REPORTS_DIR)
-	$(UV) run python tools/analyze_wordnet_concreteness.py
 
 # ===========================
 # Local Analysis (run locally with full Wiktionary dump)
@@ -362,23 +328,13 @@ $(WIKTIONARY_JSON): $(WIKTIONARY_DUMP)
 # Convenience target (will only rebuild if output missing or input newer)
 build-wiktionary-json: deps $(WIKTIONARY_JSON)
 
-# Generate label statistics from extracted Wiktionary data (raw)
-report-labels-raw: deps $(WIKTIONARY_JSON)
-	$(UV) run python tools/report_label_statistics_raw.py "$(WIKTIONARY_JSON)"
+# Label statistics are now part of the consolidated metadata report
+# (see report-metadata target which runs analyze_metadata.py)
 
-# Generate label statistics from built distribution (what made it through pipeline)
-report-labels-built-core: deps $(CORE_META)
-	$(UV) run python tools/report_label_statistics_built.py core --output $(REPORTS_DIR)/label_statistics_built_core.md
-
-report-labels-built-plus: deps $(PLUS_META)
-	$(UV) run python tools/report_label_statistics_built.py plus --output $(REPORTS_DIR)/label_statistics_built_plus.md
-
-# Generate both raw and built label reports
-report-labels: report-labels-raw report-labels-built-core report-labels-built-plus
-
-# Run full local analysis workflow (extract + statistics)
-analyze-local: build-wiktionary-json report-labels-raw
-	@echo "Local analysis complete"
+# Run full local analysis workflow (extract Wiktionary data)
+analyze-local: build-wiktionary-json
+	@echo "Local analysis complete - Wiktionary data extracted"
+	@echo "Run 'make reports' after building distributions to generate comprehensive reports"
 
 # ===========================
 # Scanner Parser Diagnostics

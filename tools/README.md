@@ -47,17 +47,25 @@ uv run python tools/inspect_trie.py plus
 make report-trie
 ```
 
-### `inspect_metadata.py`
-Explores the metadata sidecar, analyzing frequency tiers, labels, sources, and rich entries.
+### `analyze_metadata.py`
+Comprehensive metadata analysis consolidating multiple analyses:
+- Frequency tier distribution and coverage
+- Source distribution (ENABLE, EOWL, Wiktionary)
+- Label coverage (register, domain, region, temporal)
+- Game-specific filtering analysis (concreteness, POS tags)
+- Sense-based format recommendations
+- Data quality insights and filtering recommendations
 
-**Generates:** `reports/metadata_exploration_{core,plus}.md`
+**Generates:** `reports/metadata_analysis_{core,plus}.md`
 
 ```bash
-uv run python tools/inspect_metadata.py core
-uv run python tools/inspect_metadata.py plus
+uv run python tools/analyze_metadata.py core
+uv run python tools/analyze_metadata.py plus
 # or
 make report-metadata
 ```
+
+**Note:** This replaces the previous separate scripts (`inspect_metadata.py`, `analyze_game_metadata.py`, `report_label_statistics_built.py`) which have been consolidated into this comprehensive analysis.
 
 ### `compare_distributions.py`
 Compares the core and plus distributions, identifying unique words and metadata differences.
@@ -80,6 +88,25 @@ uv run python tools/generate_reports.py
 # or
 make reports
 ```
+
+## Recent Improvements (2025)
+
+**Report Consolidation:**
+- Merged metadata exploration, game analysis, and label statistics into comprehensive metadata reports
+- Reduced from 12 generating scripts to 6 (~50% reduction)
+- Reduced from 21 report files to ~11 files
+- No duplication, better organization
+
+**Pipeline Enhancements:**
+- **Fixed label data loss:** Labels are now properly preserved from Wiktionary extraction through the entire pipeline (was 0.0% coverage, now 11%+)
+- **Added syllable extraction:** Wiktionary scanner parser now extracts syllable counts from hyphenation templates, handling complex formats like language codes and alternatives
+- **Sense-based format analysis:** New reports include recommendations for sense-level data representation (e.g., `crow.n.1`, `crow.v.1`)
+
+**Removed Obsolete Reports:**
+- `analyze_frequency_data.py` - Frequency tiers already implemented
+- `analyze_wordnet_concreteness.py` - WordNet enrichment already operational
+- `analyze_syllable_data.py` - Syllable extraction now in scanner parser
+- Orphaned reports without source scripts
 
 ## Generated Reports
 
