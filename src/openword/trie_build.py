@@ -103,7 +103,7 @@ def build_trie(entries: List[Dict], trie_path: Path, meta_path: Path):
             if i > 0:
                 f.write(b',\n')
             f.write(b'  ')
-            f.write(orjson.dumps(entry))
+            f.write(orjson.dumps(entry, option=orjson.OPT_SORT_KEYS))
         f.write(b'\n]\n')
 
     logger.info(f"  Metadata saved: {meta_path}")

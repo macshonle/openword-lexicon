@@ -381,17 +381,17 @@ class OwlexFilter:
 
         elif output_format == 'json':
             if include_metadata:
-                return json.dumps(entries, indent=2)
+                return json.dumps(entries, indent=2, sort_keys=True)
             else:
-                return json.dumps([entry['word'] for entry in entries], indent=2)
+                return json.dumps([entry['word'] for entry in entries], indent=2, sort_keys=True)
 
         elif output_format == 'jsonl':
             lines = []
             for entry in entries:
                 if include_metadata:
-                    lines.append(json.dumps(entry))
+                    lines.append(json.dumps(entry, sort_keys=True))
                 else:
-                    lines.append(json.dumps({'word': entry['word']}))
+                    lines.append(json.dumps({'word': entry['word']}, sort_keys=True))
             return '\n'.join(lines)
 
         elif output_format == 'csv':

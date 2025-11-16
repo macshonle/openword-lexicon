@@ -132,7 +132,7 @@ def write_merged(entries: Dict[str, dict], output_path: Path):
 
     with open(output_path, 'wb') as f:
         for word in sorted_words:
-            line = orjson.dumps(entries[word]) + b'\n'
+            line = orjson.dumps(entries[word], option=orjson.OPT_SORT_KEYS) + b'\n'
             f.write(line)
 
     logger.info(f"Written: {output_path}")

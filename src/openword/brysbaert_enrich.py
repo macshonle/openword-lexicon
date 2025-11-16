@@ -202,7 +202,7 @@ def process_file(
                     entries_enriched += 1
 
                 # Write enriched entry
-                f_out.write(json.dumps(enriched_entry, ensure_ascii=False) + '\n')
+                f_out.write(json.dumps(enriched_entry, ensure_ascii=False, sort_keys=True) + '\n')
                 entries_processed += 1
 
             except json.JSONDecodeError:

@@ -106,7 +106,7 @@ def write_jsonl(entries: list, output_path: Path) -> None:
     with open(output_path, 'wb') as f:
         for entry in entries:
             # orjson.dumps returns bytes
-            line = orjson.dumps(entry) + b'\n'
+            line = orjson.dumps(entry, option=orjson.OPT_SORT_KEYS) + b'\n'
             f.write(line)
 
     logger.info(f"Written: {output_path}")

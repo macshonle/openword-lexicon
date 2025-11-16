@@ -334,7 +334,7 @@ def apply_filters(input_path: Path, output_path: Path,
 
     with open(output_path, 'wb') as f:
         for entry in included:
-            line = orjson.dumps(entry) + b'\n'
+            line = orjson.dumps(entry, option=orjson.OPT_SORT_KEYS) + b'\n'
             f.write(line)
 
     logger.info(f"  Included: {len(included):,} entries")

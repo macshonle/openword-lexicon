@@ -163,7 +163,7 @@ def process_file(input_path: Path, output_path: Path, ranks: Dict[str, int]):
 
     with open(output_path, 'wb') as f:
         for entry in entries:
-            line = orjson.dumps(entry) + b'\n'
+            line = orjson.dumps(entry, option=orjson.OPT_SORT_KEYS) + b'\n'
             f.write(line)
 
     logger.info(f"  Tiered {len(entries):,} entries")
