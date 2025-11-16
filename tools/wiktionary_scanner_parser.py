@@ -105,6 +105,8 @@ PREP_PHRASE_TEMPLATE = re.compile(r'\{\{en-prepphr\b', re.IGNORECASE)
 CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
 CATEGORY = re.compile(r'\[\[Category:English\s+([^\]]+)\]\]', re.IGNORECASE)
 DICT_ONLY = re.compile(r'\{\{no entry\|en', re.IGNORECASE)  # Matches both {{no entry|en}} and {{no entry|en|...}}
+# Extract hyphenation data for syllable counts
+HYPHENATION_TEMPLATE = re.compile(r'\{\{(?:hyphenation|hyph)\|([^}]+)\}\}', re.IGNORECASE)
 
 # Simple extraction patterns (no full XML parsing)
 TITLE_PATTERN = re.compile(r'<title>([^<]+)</title>')
@@ -307,6 +309,58 @@ def extract_labels(text: str) -> Dict[str, List[str]]:
     return {k: sorted(v) for k, v in labels.items() if v}
 
 
+def extract_syllable_count(text: str) -> Optional[int]:
+    """
+    Extract syllable count from {{hyphenation|...}} template.
+
+    Handles complex formats:
+    - Language codes: {{hyphenation|en|dic|tion|a|ry}}
+    - Alternatives: {{hyphenation|en|dic|tion|a|ry||dic|tion|ary}}
+    - Parameters: {{hyphenation|en|lang=en-US|dic|tion|a|ry}}
+    - Empty segments between pipes
+
+    Examples:
+    - {{hyphenation|en|dic|tion|a|ry}} -> 4 syllables
+    - {{hyphenation|en|dic|tion|a|ry||dic|tion|ary}} -> 4 syllables (uses first alternative)
+    - {{hyphenation|cat}} -> 1 syllable
+    """
+    match = HYPHENATION_TEMPLATE.search(text)
+    if not match:
+        return None
+
+    content = match.group(1)
+
+    # Handle alternatives (||) - use first alternative
+    alternatives = content.split('||')
+    first_alt = alternatives[0] if alternatives else content
+
+    # Parse pipe-separated segments
+    parts = first_alt.split('|')
+
+    # Filter syllables (exclude lang codes, parameters, empty)
+    syllables = []
+    for i, part in enumerate(parts):
+        part = part.strip()
+
+        # Skip empty
+        if not part:
+            continue
+
+        # Skip parameter assignments (lang=, caption=, etc.)
+        if '=' in part:
+            continue
+
+        # Skip 2-3 letter lang codes at start (en, da, en-US, en-GB)
+        # These are always in the first position
+        if i == 0 and len(part) <= 5 and ('-' in part or (len(part) <= 3 and part.isalpha())):
+            continue
+
+        syllables.append(part)
+
+    # Return syllable count if we found any syllables
+    return len(syllables) if syllables else None
+
+
 def extract_page_content(page_xml: str) -> Optional[tuple]:
     """
     Extract title and text from page XML using simple regex.
@@ -440,14 +494,21 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
 
     labels = extract_labels(text)
     is_phrase = ' ' in word
+    syllable_count = extract_syllable_count(text)
 
-    return {
+    entry = {
         'word': word,
         'pos': pos_tags,
         'labels': labels,
         'is_phrase': is_phrase,
         'sources': ['wikt'],
     }
+
+    # Only include syllable count if present
+    if syllable_count is not None:
+        entry['syllables'] = syllable_count
+
+    return entry
 
 
 # Layout for status display (label, value) pairs

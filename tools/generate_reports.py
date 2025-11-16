@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import inspect_raw
 import inspect_pipeline
 import inspect_trie
-import inspect_metadata
+import analyze_metadata
 import compare_distributions
 
 
@@ -72,19 +72,19 @@ def generate_all_reports():
         print(f"   ⚠️  Error: {e}")
     print()
 
-    # 6. Metadata exploration - core
-    print("🏷️  Exploring metadata (core)...")
+    # 6. Comprehensive metadata analysis - core
+    print("🏷️  Analyzing metadata (core)...")
     try:
-        report_path = inspect_metadata.generate_report('core')
+        report_path = analyze_metadata.generate_report('core')
         reports_generated.append(report_path)
     except Exception as e:
         print(f"   ⚠️  Error: {e}")
     print()
 
-    # 7. Metadata exploration - plus
-    print("🏷️  Exploring metadata (plus)...")
+    # 7. Comprehensive metadata analysis - plus
+    print("🏷️  Analyzing metadata (plus)...")
     try:
-        report_path = inspect_metadata.generate_report('plus')
+        report_path = analyze_metadata.generate_report('plus')
         reports_generated.append(report_path)
     except Exception as e:
         print(f"   ⚠️  Error: {e}")
@@ -115,7 +115,7 @@ def generate_index():
     index = "# Openword Lexicon - Inspection Reports\n\n"
     index += "This directory contains automated inspection reports for the Openword Lexicon project.\n\n"
     index += "## Available Reports\n\n"
-    index += "### Raw Data\n"
+    index += "### Raw Data Analysis\n"
     index += "- [Raw Data Inspection](raw_data_inspection.md) - Samples from downloaded datasets\n\n"
     index += "### Pipeline Analysis\n"
     index += "- [Pipeline Inspection (Core)](pipeline_inspection_core.md) - Core distribution pipeline stages\n"
@@ -123,11 +123,26 @@ def generate_index():
     index += "### Trie Analysis\n"
     index += "- [Trie Inspection (Core)](trie_inspection_core.md) - Core trie structure and tests\n"
     index += "- [Trie Inspection (Plus)](trie_inspection_plus.md) - Plus trie structure and tests\n\n"
-    index += "### Metadata Exploration\n"
-    index += "- [Metadata Exploration (Core)](metadata_exploration_core.md) - Core metadata analysis\n"
-    index += "- [Metadata Exploration (Plus)](metadata_exploration_plus.md) - Plus metadata analysis\n\n"
+    index += "### Comprehensive Metadata Analysis\n"
+    index += "- [Metadata Analysis (Core)](metadata_analysis_core.md) - Comprehensive metadata, labels, and filtering analysis\n"
+    index += "- [Metadata Analysis (Plus)](metadata_analysis_plus.md) - Comprehensive metadata, labels, and filtering analysis\n\n"
+    index += "**Note:** These consolidated reports include:\n"
+    index += "- Frequency tier distribution\n"
+    index += "- Source distribution (ENABLE, EOWL, Wiktionary)\n"
+    index += "- Label coverage (register, domain, region, temporal)\n"
+    index += "- Game-specific filtering analysis (concreteness, POS tags)\n"
+    index += "- Sense-based format recommendations\n"
+    index += "- Filtering recommendations and data quality insights\n\n"
     index += "### Distribution Comparison\n"
     index += "- [Distribution Comparison](distribution_comparison.md) - Core vs Plus analysis\n\n"
+    index += "---\n\n"
+    index += "## Recent Improvements\n\n"
+    index += "**Report Consolidation (2025):**\n"
+    index += "- Merged metadata exploration, game analysis, and label statistics into comprehensive metadata reports\n"
+    index += "- Fixed label data loss pipeline issue - labels now preserved from Wiktionary extraction\n"
+    index += "- Added syllable extraction to Wiktionary scanner parser (handles complex hyphenation formats)\n"
+    index += "- Removed obsolete exploratory reports (frequency analysis, WordNet concreteness)\n"
+    index += "- Added sense-based intermediate format analysis and recommendations\n\n"
     index += "---\n\n"
     index += "**Generation:** Run `make reports` or `uv run python tools/generate_reports.py`\n"
 
