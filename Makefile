@@ -42,7 +42,7 @@ GAME_META_REPORT_PLUS := $(REPORTS_DIR)/game_metadata_analysis_plus.md
 
 .PHONY: bootstrap venv deps fmt lint test clean clean-build clean-viewer scrub \
         fetch fetch-core fetch-plus build-wiktionary-json \
-        build-core build-plus export-wordlist \
+        build-core build-plus build-unified export-wordlist \
         build-binary package check-limits start-server \
         reports report-raw report-pipeline report-trie report-metadata report-compare \
         game-words analyze-game-metadata \
@@ -118,6 +118,27 @@ build-plus: fetch-plus build-wiktionary-json
 	$(UV) run python src/openword/attribution.py
 	$(UV) run python src/openword/trie_build.py
 	$(UV) run python src/openword/export_wordlist.py
+
+# Unified build (recommended for new projects)
+build-unified: fetch-plus build-wiktionary-json
+	@echo "=== Unified Build Pipeline ==="
+	@echo "Step 1: Ingest source data"
+	$(UV) run python src/openword/core_ingest.py
+	$(UV) run python src/openword/wikt_ingest.py
+	@echo ""
+	@echo "Step 2: Merge all sources"
+	$(UV) run python src/openword/merge_all.py
+	@echo ""
+	@echo "Step 3: Enrich with WordNet"
+	$(UV) run python src/openword/wordnet_enrich.py --unified
+	@echo ""
+	@echo "Step 4: Assign frequency tiers"
+	$(UV) run python src/openword/frequency_tiers.py --unified
+	@echo ""
+	@echo "Step 5: Build trie and package"
+	$(UV) run python src/openword/trie_build.py --unified
+	@echo ""
+	@echo "=== Unified build complete ==="
 
 # File-based rule: generate wordlist from trie
 $(CORE_WORDLIST): $(CORE_TRIE)

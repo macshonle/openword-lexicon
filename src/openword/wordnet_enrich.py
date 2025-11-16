@@ -2,6 +2,14 @@
 """
 wordnet_enrich.py — Enrich entries with WordNet data (concreteness, POS backfill).
 
+UNIFIED BUILD MODE:
+Reads:
+  - data/intermediate/unified/entries_merged.jsonl
+
+Outputs:
+  - data/intermediate/unified/entries_enriched.jsonl
+
+LEGACY MODE (Core/Plus):
 Reads:
   - data/intermediate/{core,plus}/*_entries.jsonl
 
@@ -11,6 +19,8 @@ Outputs:
 Enrichment:
   - Adds 'concreteness' field for nouns: concrete|abstract|mixed
   - Backfills POS tags where confident and missing
+  - Tracks 'wordnet' source when enrichment is applied
+  - Updates license_sources to include WordNet license
   - Uses NLTK's WordNet interface
 """
 
@@ -139,9 +149,31 @@ def get_wordnet_pos(word: str) -> List[str]:
     return sorted(pos_tags)
 
 
+def add_wordnet_source(entry: dict) -> dict:
+    """Add 'wordnet' to sources and update license_sources if enrichment was applied."""
+    sources = entry.get('sources', [])
+
+    # Only add if enrichment actually happened
+    if 'wordnet' not in sources:
+        entry['sources'] = sorted(sources + ['wordnet'])
+
+        # Update license_sources
+        license_sources = entry.get('license_sources', {})
+        wordnet_license = 'WordNet'
+        if wordnet_license not in license_sources:
+            license_sources[wordnet_license] = ['wordnet']
+        elif 'wordnet' not in license_sources[wordnet_license]:
+            license_sources[wordnet_license] = sorted(license_sources[wordnet_license] + ['wordnet'])
+
+        entry['license_sources'] = license_sources
+
+    return entry
+
+
 def enrich_entry(entry: dict) -> dict:
     """Enrich a single entry with WordNet data."""
     word = entry['word']
+    enriched = False
 
     # Skip multi-word phrases (WordNet doesn't handle them well)
     if entry.get('is_phrase', False):
@@ -152,12 +184,19 @@ def enrich_entry(entry: dict) -> dict:
         wn_pos = get_wordnet_pos(word)
         if wn_pos:
             entry['pos'] = wn_pos
+            enriched = True
 
     # Add concreteness for nouns
     if 'noun' in entry.get('pos', []):
-        concreteness = get_concreteness(word)
-        if concreteness:
-            entry['concreteness'] = concreteness
+        if not entry.get('concreteness'):  # Only add if missing
+            concreteness = get_concreteness(word)
+            if concreteness:
+                entry['concreteness'] = concreteness
+                enriched = True
+
+    # Track WordNet as a source if we enriched the entry
+    if enriched:
+        entry = add_wordnet_source(entry)
 
     return entry
 
@@ -216,6 +255,13 @@ def process_file(input_path: Path, output_path: Path):
 
 def main():
     """Main enrichment pipeline."""
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Enrich entries with WordNet data')
+    parser.add_argument('--unified', action='store_true',
+                        help='Use unified build mode (default: legacy core/plus mode)')
+    args = parser.parse_args()
+
     data_root = Path(__file__).parent.parent.parent / "data"
     intermediate_dir = data_root / "intermediate"
 
@@ -224,19 +270,36 @@ def main():
     # Ensure WordNet data is available
     ensure_wordnet_data()
 
-    # Process core entries
-    core_input = intermediate_dir / "core" / "core_entries.jsonl"
-    core_output = intermediate_dir / "core" / "core_entries_enriched.jsonl"
+    if args.unified:
+        # UNIFIED BUILD MODE
+        logger.info("Mode: Unified build")
 
-    if core_input.exists():
-        process_file(core_input, core_output)
+        unified_input = intermediate_dir / "unified" / "entries_merged.jsonl"
+        unified_output = intermediate_dir / "unified" / "entries_enriched.jsonl"
 
-    # Process wikt entries
-    plus_input = intermediate_dir / "plus" / "wikt_entries.jsonl"
-    plus_output = intermediate_dir / "plus" / "wikt_entries_enriched.jsonl"
+        if unified_input.exists():
+            process_file(unified_input, unified_output)
+        else:
+            logger.error(f"Unified input file not found: {unified_input}")
+            logger.error("Run merge_all.py first")
+            sys.exit(1)
+    else:
+        # LEGACY MODE (Core/Plus separate)
+        logger.info("Mode: Legacy (Core/Plus separate)")
 
-    if plus_input.exists():
-        process_file(plus_input, plus_output)
+        # Process core entries
+        core_input = intermediate_dir / "core" / "core_entries.jsonl"
+        core_output = intermediate_dir / "core" / "core_entries_enriched.jsonl"
+
+        if core_input.exists():
+            process_file(core_input, core_output)
+
+        # Process wikt entries
+        plus_input = intermediate_dir / "plus" / "wikt_entries.jsonl"
+        plus_output = intermediate_dir / "plus" / "wikt_entries_enriched.jsonl"
+
+        if plus_input.exists():
+            process_file(plus_input, plus_output)
 
     logger.info("")
     logger.info("WordNet enrichment complete")

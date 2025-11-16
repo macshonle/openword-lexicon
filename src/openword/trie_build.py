@@ -2,6 +2,15 @@
 """
 trie_build.py — Build compact trie structures with metadata sidecar.
 
+UNIFIED BUILD MODE:
+Reads:
+  - data/intermediate/unified/entries_tiered.jsonl
+
+Outputs:
+  - data/build/unified/unified.trie (MARISA trie)
+  - data/build/unified/unified.meta.json (metadata as JSON array)
+
+LEGACY MODE (Core/Plus):
 Reads:
   - data/filtered/{core,plus}/family_friendly.jsonl
 
@@ -133,35 +142,67 @@ def verify_trie(trie_path: Path, entries: List[Dict]):
 
 def main():
     """Main trie build pipeline."""
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Build trie structures')
+    parser.add_argument('--unified', action='store_true',
+                        help='Use unified build mode (default: legacy core/plus mode)')
+    args = parser.parse_args()
+
     data_root = Path(__file__).parent.parent.parent / "data"
+    intermediate_dir = data_root / "intermediate"
     filtered_dir = data_root / "filtered"
     build_dir = data_root / "build"
 
     logger.info("Trie build (MARISA)")
 
-    # Build core trie
-    core_input = filtered_dir / "core" / "family_friendly.jsonl"
-    core_trie = build_dir / "core" / "core.trie"
-    core_meta = build_dir / "core" / "core.meta.json"
+    if args.unified:
+        # UNIFIED BUILD MODE
+        logger.info("Mode: Unified build")
+        logger.info("\nBuilding UNIFIED trie (all sources, full metadata)...")
 
-    if core_input.exists():
-        logger.info("\nBuilding CORE distribution trie...")
-        entries = load_entries(core_input)
-        if entries:
-            build_trie(entries, core_trie, core_meta)
-            verify_trie(core_trie, entries)
+        unified_input = intermediate_dir / "unified" / "entries_tiered.jsonl"
+        unified_trie = build_dir / "unified" / "unified.trie"
+        unified_meta = build_dir / "unified" / "unified.meta.json"
 
-    # Build plus trie
-    plus_input = filtered_dir / "plus" / "family_friendly.jsonl"
-    plus_trie = build_dir / "plus" / "plus.trie"
-    plus_meta = build_dir / "plus" / "plus.meta.json"
+        if unified_input.exists():
+            entries = load_entries(unified_input)
+            if entries:
+                build_trie(entries, unified_trie, unified_meta)
+                verify_trie(unified_trie, entries)
+            else:
+                logger.error("No entries loaded from unified file")
+        else:
+            logger.error(f"Unified input file not found: {unified_input}")
+            logger.error("Run frequency_tiers.py --unified first")
+            sys.exit(1)
+    else:
+        # LEGACY MODE (Core/Plus separate)
+        logger.info("Mode: Legacy (Core/Plus separate)")
 
-    if plus_input.exists():
-        logger.info("\nBuilding PLUS distribution trie...")
-        entries = load_entries(plus_input)
-        if entries:
-            build_trie(entries, plus_trie, plus_meta)
-            verify_trie(plus_trie, entries)
+        # Build core trie
+        core_input = filtered_dir / "core" / "family_friendly.jsonl"
+        core_trie = build_dir / "core" / "core.trie"
+        core_meta = build_dir / "core" / "core.meta.json"
+
+        if core_input.exists():
+            logger.info("\nBuilding CORE distribution trie...")
+            entries = load_entries(core_input)
+            if entries:
+                build_trie(entries, core_trie, core_meta)
+                verify_trie(core_trie, entries)
+
+        # Build plus trie
+        plus_input = filtered_dir / "plus" / "family_friendly.jsonl"
+        plus_trie = build_dir / "plus" / "plus.trie"
+        plus_meta = build_dir / "plus" / "plus.meta.json"
+
+        if plus_input.exists():
+            logger.info("\nBuilding PLUS distribution trie...")
+            entries = load_entries(plus_input)
+            if entries:
+                build_trie(entries, plus_trie, plus_meta)
+                verify_trie(plus_trie, entries)
 
     logger.info("")
     logger.info("Trie build complete")

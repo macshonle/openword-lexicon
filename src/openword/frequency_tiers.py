@@ -182,6 +182,14 @@ def process_file(input_path: Path, output_path: Path, ranks: Dict[str, int]):
 
 def main():
     """Main frequency tier assignment pipeline."""
+    import argparse
+    import sys
+
+    parser = argparse.ArgumentParser(description='Assign frequency tiers to entries')
+    parser.add_argument('--unified', action='store_true',
+                        help='Use unified build mode (default: legacy core/plus mode)')
+    args = parser.parse_args()
+
     data_root = Path(__file__).parent.parent.parent / "data"
     raw_dir = data_root / "raw" / "plus"
     intermediate_dir = data_root / "intermediate"
@@ -196,19 +204,36 @@ def main():
     if not ranks:
         logger.warning("No frequency data loaded. All words will be marked 'rare'.")
 
-    # Process core entries
-    core_input = intermediate_dir / "core" / "core_entries_enriched.jsonl"
-    core_output = intermediate_dir / "core" / "core_entries_tiered.jsonl"
+    if args.unified:
+        # UNIFIED BUILD MODE
+        logger.info("Mode: Unified build")
 
-    if core_input.exists():
-        process_file(core_input, core_output, ranks)
+        unified_input = intermediate_dir / "unified" / "entries_enriched.jsonl"
+        unified_output = intermediate_dir / "unified" / "entries_tiered.jsonl"
 
-    # Process wikt entries
-    plus_input = intermediate_dir / "plus" / "wikt_entries_enriched.jsonl"
-    plus_output = intermediate_dir / "plus" / "wikt_entries_tiered.jsonl"
+        if unified_input.exists():
+            process_file(unified_input, unified_output, ranks)
+        else:
+            logger.error(f"Unified input file not found: {unified_input}")
+            logger.error("Run wordnet_enrich.py --unified first")
+            sys.exit(1)
+    else:
+        # LEGACY MODE (Core/Plus separate)
+        logger.info("Mode: Legacy (Core/Plus separate)")
 
-    if plus_input.exists():
-        process_file(plus_input, plus_output, ranks)
+        # Process core entries
+        core_input = intermediate_dir / "core" / "core_entries_enriched.jsonl"
+        core_output = intermediate_dir / "core" / "core_entries_tiered.jsonl"
+
+        if core_input.exists():
+            process_file(core_input, core_output, ranks)
+
+        # Process wikt entries
+        plus_input = intermediate_dir / "plus" / "wikt_entries_enriched.jsonl"
+        plus_output = intermediate_dir / "plus" / "wikt_entries_tiered.jsonl"
+
+        if plus_input.exists():
+            process_file(plus_input, plus_output, ranks)
 
     logger.info("")
     logger.info("Frequency tier assignment complete")

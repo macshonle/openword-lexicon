@@ -157,6 +157,19 @@
       },
       "minItems": 1,
       "uniqueItems": true
+    },
+    "license_sources": {
+      "type": "object",
+      "description": "Mapping of licenses to source identifiers (e.g., {'CC0': ['enable'], 'CC-BY-SA-4.0': ['wikt']})",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[a-z_]+$"
+        },
+        "uniqueItems": true
+      },
+      "default": {}
     }
   }
 }

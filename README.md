@@ -1,11 +1,16 @@
 # Openword Lexicon
 
-Permissively usable English lexicon for any application (games, NLP, education). Two distributions and a fast trie enable configurable, high‑quality word lists with rich labels and frequency tiers.
+Permissively usable English lexicon for any application (games, NLP, education). A unified build integrates all sources (ENABLE, EOWL, Wiktionary, WordNet) with per-source licensing tracking, enabling flexible runtime filtering for your specific use case.
 
-## Distributions
-- **core** — ultra‑permissive sources only (data: CC0 or CC BY 4.0)
-- **plus** — enhanced coverage/labels incl. CC‑BY‑SA inputs (data: CC BY‑SA 4.0)  
-**Code:** Apache‑2.0
+## Approach
+
+**Unified Build** (recommended): Single comprehensive dataset with all sources integrated. Filter at runtime based on your needs (child-safety, region, license requirements, etc.).
+
+**Legacy Distributions** (deprecated): Separate Core (permissive-only) and Plus (comprehensive) builds. Use unified build for new projects.
+
+**License Tracking**: Every entry includes `license_sources` mapping, so you know exactly which licenses apply to each word.
+
+**Code License:** Apache-2.0
 
 ## Constraints
 - Total downloads ≤ **100 GB**
@@ -54,42 +59,39 @@ cd openword-lexicon
 # Bootstrap environment
 make bootstrap
 
-# Build core distribution (permissive sources only)
-make fetch-core
+# Unified build (recommended - integrates all sources)
+make build-unified
 
-# Build plus distribution inputs (optional; includes Wiktionary extraction)
-make fetch-plus
-make build-wiktionary-json  # Parses Wiktionary dump → data/intermediate/plus/wikt.jsonl
-
-uv run python src/openword/core_ingest.py
-uv run python src/openword/wordnet_enrich.py
-uv run python src/openword/frequency_tiers.py
-uv run python src/openword/merge_dedupe.py
-uv run python src/openword/policy.py
-uv run python src/openword/trie_build.py
-
-# Package release
-uv run python src/openword/package_release.py
-
-# Result: data/artifacts/releases/openword-lexicon-core-0.1.0.tar.gz
+# Result: data/build/unified/unified.trie + unified.meta.json
 ```
 
-> **Building PLUS:** Run `make build-plus` to automate the entire sequence (fetch, parse, ingest, enrich, build).
+**Pipeline Steps (automated by `make build-unified`):**
+1. **Ingest** sources (ENABLE, EOWL, Wiktionary)
+2. **Merge** all entries with license tracking
+3. **Enrich** with WordNet (concreteness, POS tags)
+4. **Tier** by frequency (10 granular tiers)
+5. **Build** trie + metadata sidecar
 
-## High‑level pipeline
-1. **Fetch** sources (core | plus) with checksums & provenance.
-2. **Normalize** entries to JSONL (schema, NFKC, controlled labels).
-3. **Enrich** with WordNet (concreteness/POS); **Tier** by frequency.
-4. **Merge & deduplicate** per distribution.
-5. **Policy filters** (e.g., family‑friendly) for curated views.
-6. **Trie build** (compressed radix/DAWG) + sidecar metadata.
-7. **CLI & releases** (artifacts + ATTRIBUTION + data LICENSE).
+**Legacy builds** (deprecated):
+```bash
+make build-core   # Permissive sources only
+make build-plus   # All sources (old approach)
+```
+
+## High-level pipeline (Unified Build)
+1. **Fetch** sources (ENABLE, EOWL, Wiktionary) with checksums & provenance
+2. **Normalize** entries to JSONL (schema, NFKC, controlled labels)
+3. **Merge** all sources with license tracking
+4. **Enrich** with WordNet (concreteness/POS for ALL entries)
+5. **Tier** by frequency (10 granular tiers)
+6. **Build** trie (compressed MARISA) + metadata sidecar
+7. **Filter** at runtime using `filters.py` (child-safe, region, license, etc.)
 
 ## Primary artifacts
-- `core.trie` / `plus.trie` and `*.meta.db`
-- `entries_merged.jsonl` (intermediate)
-- `ATTRIBUTION.md`, `data/LICENSE`
-- Release archives: `*-core-<ver>.tar.zst` / `*-plus-<ver>.tar.zst`
+- `unified.trie` + `unified.meta.json` (unified build)
+- `entries_tiered.jsonl` (intermediate with all metadata)
+- `ATTRIBUTION.md` (generated per build)
+- Legacy: `core.trie`, `plus.trie` (deprecated)
 
 ## Interactive Word List Builder
 
@@ -161,10 +163,17 @@ See [docs/planned/](docs/planned/) for future feature plans.
 
 ## Statistics
 
-| Distribution | Words | Trie Size | License |
-|--------------|-------|-----------|---------|
-| Core | 208,201 | 510 KB | CC BY 4.0 |
-| Plus | 1,039,950 | 2.9 MB | CC BY-SA 4.0 |
+| Build | Words | Trie Size | License Model |
+|-------|-------|-----------|---------------|
+| **Unified** | ~1.3M | ~3 MB | Per-word tracking via `license_sources` |
+| Core (legacy) | 208K | 510 KB | CC BY 4.0 |
+| Plus (legacy) | 1.0M | 2.9 MB | CC BY-SA 4.0 |
+
+**New in Unified**:
+- WordNet enrichment on ALL entries (not just Core) → 4x better concreteness coverage
+- Safe defaults for child-appropriate filtering
+- Runtime license filtering (filter to CC0+UKACD if you want permissive-only)
+- Better integration between sources
 
 ## Contributing
 
