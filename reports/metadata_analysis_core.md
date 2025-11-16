@@ -61,16 +61,27 @@ This consolidated report analyzes metadata coverage, quality, and filtering capa
 
 ## Label Coverage Analysis
 
-**Label coverage summary:**
+**Metadata coverage summary:**
 
-| Label Type | Entries with Label | Percentage |
-|-----------|-------------------:|-----------:|
+| Metadata Type | Entries | Percentage |
+|--------------|--------:|-----------:|
+| POS tags | 109,383 | 52.5% |
 | Any labels | 0 | 0.0% |
-| POS labels | 0 | 0.0% |
 | Register labels | 0 | 0.0% |
 | Domain labels | 0 | 0.0% |
 | Region labels | 0 | 0.0% |
 | Temporal labels | 0 | 0.0% |
+
+*Note: POS tags are stored separately from labels in the metadata.*
+
+### Part of Speech Tags
+
+| POS | Count |
+|-----|------:|
+| noun | 71,862 |
+| verb | 31,922 |
+| adjective | 17,665 |
+| adverb | 3,466 |
 
 ---
 
