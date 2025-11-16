@@ -134,42 +134,58 @@ def analyze_labels(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         if labels:
             entries_with_labels += 1
 
-        for pos in labels.get('pos', []):
-            pos_counts[pos] += 1
+        # POS is stored in the top-level 'pos' field, not in 'labels'
+        pos_list = meta.get('pos', [])
+        if pos_list:
             entries_with_pos += 1
+            for pos in pos_list:
+                pos_counts[pos] += 1
 
-        for reg in labels.get('register', []):
-            register_counts[reg] += 1
+        # Register labels
+        register_list = labels.get('register', [])
+        if register_list:
             entries_with_register += 1
+            for reg in register_list:
+                register_counts[reg] += 1
 
-        for dom in labels.get('domain', []):
-            domain_counts[dom] += 1
+        # Domain labels
+        domain_list = labels.get('domain', [])
+        if domain_list:
             entries_with_domain += 1
+            for dom in domain_list:
+                domain_counts[dom] += 1
 
-        for reg in labels.get('region', []):
-            region_counts[reg] += 1
+        # Region labels
+        region_list = labels.get('region', [])
+        if region_list:
             entries_with_region += 1
+            for reg in region_list:
+                region_counts[reg] += 1
 
-        for tmp in labels.get('temporal', []):
-            temporal_counts[tmp] += 1
+        # Temporal labels
+        temporal_list = labels.get('temporal', [])
+        if temporal_list:
             entries_with_temporal += 1
+            for tmp in temporal_list:
+                temporal_counts[tmp] += 1
 
     total = len(metadata)
 
     report = "## Label Coverage Analysis\n\n"
-    report += f"**Label coverage summary:**\n\n"
-    report += "| Label Type | Entries with Label | Percentage |\n"
-    report += "|-----------|-------------------:|-----------:|\n"
+    report += f"**Metadata coverage summary:**\n\n"
+    report += "| Metadata Type | Entries | Percentage |\n"
+    report += "|--------------|--------:|-----------:|\n"
+    report += f"| POS tags | {entries_with_pos:,} | {entries_with_pos/total*100:.1f}% |\n"
     report += f"| Any labels | {entries_with_labels:,} | {entries_with_labels/total*100:.1f}% |\n"
-    report += f"| POS labels | {entries_with_pos:,} | {entries_with_pos/total*100:.1f}% |\n"
     report += f"| Register labels | {entries_with_register:,} | {entries_with_register/total*100:.1f}% |\n"
     report += f"| Domain labels | {entries_with_domain:,} | {entries_with_domain/total*100:.1f}% |\n"
     report += f"| Region labels | {entries_with_region:,} | {entries_with_region/total*100:.1f}% |\n"
     report += f"| Temporal labels | {entries_with_temporal:,} | {entries_with_temporal/total*100:.1f}% |\n"
     report += "\n"
+    report += "*Note: POS tags are stored separately from labels in the metadata.*\n\n"
 
     if pos_counts:
-        report += "### Part of Speech Labels\n\n"
+        report += "### Part of Speech Tags\n\n"
         report += "| POS | Count |\n"
         report += "|-----|------:|\n"
         for pos, count in pos_counts.most_common(15):
