@@ -353,11 +353,11 @@ def main():
     """Main wiktionary ingestion pipeline."""
     # Paths
     data_root = Path(__file__).parent.parent.parent / "data"
-    intermediate_dir = data_root / "intermediate" / "plus"
+    intermediate_dir = data_root / "intermediate" / "en"
     input_path = intermediate_dir / "wikt.jsonl"
     output_path = intermediate_dir / "wikt_entries.jsonl"
 
-    logger.info("Wiktionary ingestion")
+    logger.info("Wiktionary ingestion (English)")
 
     # Read wiktextract output
     entries_dict = read_wiktextract(input_path)

@@ -263,17 +263,17 @@ def print_statistics(entries: Dict[str, dict]):
 def main():
     """Main unified merge pipeline."""
     data_root = Path(__file__).parent.parent.parent / "data"
-    intermediate_dir = data_root / "intermediate"
+    intermediate_dir = data_root / "intermediate" / "en"
 
-    logger.info("=== Unified Merge Pipeline ===")
+    logger.info("=== Unified Merge Pipeline (English) ===")
     logger.info("Merging all sources: ENABLE + EOWL + Wiktionary")
 
     # Load core entries (ENABLE + EOWL)
-    core_path = intermediate_dir / "core" / "core_entries.jsonl"
+    core_path = intermediate_dir / "core_entries.jsonl"
     core_entries = load_entries(core_path)
 
     # Load Wiktionary entries
-    wikt_path = intermediate_dir / "plus" / "wikt_entries.jsonl"
+    wikt_path = intermediate_dir / "wikt_entries.jsonl"
     wikt_entries = load_entries(wikt_path)
 
     # --- Unified merge ---
@@ -289,7 +289,7 @@ def main():
             unified[word] = entry
 
     # Write output
-    unified_output = intermediate_dir / "unified" / "entries_merged.jsonl"
+    unified_output = intermediate_dir / "entries_merged.jsonl"
     write_merged(unified, unified_output)
 
     # Print statistics

@@ -4,22 +4,22 @@
 SHELL := /bin/bash
 UV ?= uv
 PY_VERSION ?= 3.11
-LANG ?= en
+LEXICON_LANG ?= en
 
 # Directory structure (language-based)
-RAW_DIR := data/raw/$(LANG)
-INTERMEDIATE_DIR := data/intermediate/$(LANG)
-BUILD_DIR := data/build/$(LANG)
+RAW_DIR := data/raw/$(LEXICON_LANG)
+INTERMEDIATE_DIR := data/intermediate/$(LEXICON_LANG)
+BUILD_DIR := data/build/$(LEXICON_LANG)
 REPORTS_DIR := reports
 WORDLISTS_DIR := data/wordlists
 
 # Build artifacts
-WIKTIONARY_DUMP := $(RAW_DIR)/$(LANG)wiktionary-latest-pages-articles.xml.bz2
+WIKTIONARY_DUMP := $(RAW_DIR)/$(LEXICON_LANG)wiktionary-latest-pages-articles.xml.bz2
 WIKTIONARY_JSON := $(INTERMEDIATE_DIR)/wikt.jsonl
-FREQUENCY_DATA := $(RAW_DIR)/$(LANG)_50k.txt
+FREQUENCY_DATA := $(RAW_DIR)/$(LEXICON_LANG)_50k.txt
 WORDNET_ARCHIVE := $(RAW_DIR)/english-wordnet-2024.tar.gz
-UNIFIED_TRIE := $(BUILD_DIR)/$(LANG).trie
-UNIFIED_META := $(BUILD_DIR)/$(LANG).meta.json
+UNIFIED_TRIE := $(BUILD_DIR)/$(LEXICON_LANG).trie
+UNIFIED_META := $(BUILD_DIR)/$(LEXICON_LANG).meta.json
 WORDLIST_TXT := $(BUILD_DIR)/wordlist.txt
 
 .PHONY: bootstrap venv deps fmt lint test clean clean-build clean-viewer scrub \
@@ -325,3 +325,57 @@ examples/wordlist-specs:
 	@echo '{"version":"1.0","name":"Scrabble Words","filters":{"phrase":{"max_words":1},"character":{"pattern":"^[a-z]+$$"}}}' | jq '.' > examples/wordlist-specs/scrabble.json
 	@echo "✓ Created example specifications in examples/wordlist-specs/"
 	@ls -lh examples/wordlist-specs/
+
+# ===========================
+# Migration Helpers
+# ===========================
+
+# Migrate old data structure to new language-based structure
+migrate-to-language-structure:
+	@echo "Migrating to language-based directory structure..."
+	@echo ""
+	@# Create new directories
+	@mkdir -p data/raw/en data/intermediate/en data/build/en
+	@echo "✓ Created language directories"
+	@echo ""
+	@# Move raw data
+	@if [ -d "data/raw/core" ] || [ -d "data/raw/plus" ]; then \
+		echo "Moving raw data..."; \
+		[ -d "data/raw/core" ] && find data/raw/core -type f -exec sh -c 'cp "$$1" "data/raw/en/$$(basename "$$1")"' _ {} \; || true; \
+		[ -d "data/raw/plus" ] && find data/raw/plus -type f -exec sh -c 'cp "$$1" "data/raw/en/$$(basename "$$1")"' _ {} \; || true; \
+		echo "✓ Raw data migrated to data/raw/en/"; \
+	fi
+	@echo ""
+	@# Move intermediate data (prefer unified if exists, otherwise use plus)
+	@if [ -d "data/intermediate/unified" ]; then \
+		echo "Moving unified intermediate data..."; \
+		cp -r data/intermediate/unified/* data/intermediate/en/ 2>/dev/null || true; \
+		echo "✓ Unified data migrated to data/intermediate/en/"; \
+	elif [ -d "data/intermediate/plus" ]; then \
+		echo "Moving plus intermediate data..."; \
+		cp -r data/intermediate/plus/* data/intermediate/en/ 2>/dev/null || true; \
+		echo "✓ Plus data migrated to data/intermediate/en/"; \
+	fi
+	@echo ""
+	@# Move build artifacts (prefer unified if exists)
+	@if [ -d "data/build/unified" ]; then \
+		echo "Moving unified build artifacts..."; \
+		[ -f "data/build/unified/unified.trie" ] && cp data/build/unified/unified.trie data/build/en/en.trie || true; \
+		[ -f "data/build/unified/unified.meta.json" ] && cp data/build/unified/unified.meta.json data/build/en/en.meta.json || true; \
+		echo "✓ Build artifacts migrated to data/build/en/"; \
+	fi
+	@echo ""
+	@echo "=========================================="
+	@echo "Migration complete!"
+	@echo "=========================================="
+	@echo ""
+	@echo "New structure:"
+	@ls -lh data/raw/en/ 2>/dev/null | head -10 || echo "  (no files yet)"
+	@echo ""
+	@echo "You can now run: make build-en"
+	@echo ""
+	@echo "Old directories preserved for safety."
+	@echo "After verifying the new build works, you can remove:"
+	@echo "  rm -rf data/raw/core data/raw/plus"
+	@echo "  rm -rf data/intermediate/core data/intermediate/plus data/intermediate/unified"
+	@echo "  rm -rf data/build/core data/build/plus data/build/unified"

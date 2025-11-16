@@ -259,7 +259,9 @@ def main():
 
     parser = argparse.ArgumentParser(description='Enrich entries with WordNet data')
     parser.add_argument('--unified', action='store_true',
-                        help='Use unified build mode (default: legacy core/plus mode)')
+                        help='Use unified build mode (language-based structure)')
+    parser.add_argument('--language', default='en',
+                        help='Language code (default: en)')
     args = parser.parse_args()
 
     data_root = Path(__file__).parent.parent.parent / "data"
@@ -271,11 +273,12 @@ def main():
     ensure_wordnet_data()
 
     if args.unified:
-        # UNIFIED BUILD MODE
-        logger.info("Mode: Unified build")
+        # UNIFIED BUILD MODE (language-based)
+        logger.info(f"Mode: Unified build ({args.language})")
 
-        unified_input = intermediate_dir / "unified" / "entries_merged.jsonl"
-        unified_output = intermediate_dir / "unified" / "entries_enriched.jsonl"
+        lang_dir = intermediate_dir / args.language
+        unified_input = lang_dir / "entries_merged.jsonl"
+        unified_output = lang_dir / "entries_enriched.jsonl"
 
         if unified_input.exists():
             process_file(unified_input, unified_output)
@@ -284,7 +287,8 @@ def main():
             logger.error("Run merge_all.py first")
             sys.exit(1)
     else:
-        # LEGACY MODE (Core/Plus separate)
+        # LEGACY MODE (Core/Plus separate) - deprecated
+        logger.warning("Legacy mode is deprecated. Use --unified flag.")
         logger.info("Mode: Legacy (Core/Plus separate)")
 
         # Process core entries

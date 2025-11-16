@@ -146,7 +146,9 @@ def main():
 
     parser = argparse.ArgumentParser(description='Build trie structures')
     parser.add_argument('--unified', action='store_true',
-                        help='Use unified build mode (default: legacy core/plus mode)')
+                        help='Use unified build mode (language-based structure)')
+    parser.add_argument('--language', default='en',
+                        help='Language code (default: en)')
     args = parser.parse_args()
 
     data_root = Path(__file__).parent.parent.parent / "data"
@@ -157,13 +159,16 @@ def main():
     logger.info("Trie build (MARISA)")
 
     if args.unified:
-        # UNIFIED BUILD MODE
-        logger.info("Mode: Unified build")
-        logger.info("\nBuilding UNIFIED trie (all sources, full metadata)...")
+        # UNIFIED BUILD MODE (language-based)
+        logger.info(f"Mode: Unified build ({args.language})")
+        logger.info(f"\nBuilding {args.language.upper()} trie (all sources, full metadata)...")
 
-        unified_input = intermediate_dir / "unified" / "entries_tiered.jsonl"
-        unified_trie = build_dir / "unified" / "unified.trie"
-        unified_meta = build_dir / "unified" / "unified.meta.json"
+        lang_dir_intermediate = intermediate_dir / args.language
+        lang_dir_build = build_dir / args.language
+
+        unified_input = lang_dir_intermediate / "entries_tiered.jsonl"
+        unified_trie = lang_dir_build / f"{args.language}.trie"
+        unified_meta = lang_dir_build / f"{args.language}.meta.json"
 
         if unified_input.exists():
             entries = load_entries(unified_input)
