@@ -9,14 +9,18 @@ This report compares the core and plus distributions.
 ## Word List Comparison
 
 **Core total:** 208,201  
-**Plus total:** 1,039,950  
-**Overlap:** 208,201  
-**Core-only:** 0  
-**Plus-only:** 831,749  
+**Plus total:** 1,295,010  
+**Overlap:** 206,858  
+**Core-only:** 1,343  
+**Plus-only:** 1,088,152  
+
+### Sample Core-Only Words
+
+`wimp`, `cocksucker`, `barbie`, `homosexuality`, `goop`, `gadfly`, `curialism`, `chug`, `spade`, `canuck`, `tool`, `placeman`, `berk`, `bell`, `cheeks`, `fucking`, `gibs`, `shagging`, `tripe`, `bat`
 
 ### Sample Plus-Only Words
 
-`sialooligosaccharides`, `carpetbeater`, `amphophilous`, `unindividualized`, `getting a wriggle on`, `festue`, `enfuvirtide`, `cofacilitated`, `underconcern`, `cabinet minister`, `subornee`, `unharried`, `polyspecialist`, `borobudur`, `rejuvenatingly`, `merwitches`, `antidairy`, `anterior communicating artery`, `broadwayish`, `elicitates`
+`helmspersons`, `skeleta`, `infissile`, `syracusians`, `microentrepreneurs`, `adiantum`, `firebrandism`, `smokening`, `persoonia`, `microcerebral`, `favorises`, `iconotheca`, `pedotubule`, `cranioscopical`, `cometosheath`, `reconqueror`, `conusable`, `precelebrated`, `photoproduce`, `malefactives`
 
 
 ---
@@ -24,40 +28,40 @@ This report compares the core and plus distributions.
 ## Metadata Comparison (Overlapping Words)
 
 **Words with different frequency tiers:** 0  
-**Words with different sources:** 196,595  
-**Words with different labels:** 0  
+**Words with different sources:** 197,956  
+**Words with different labels:** 30,843  
 
 ### Example Differences
 
 **`aa`**
-- sources: {'eowl', 'enable'} → {'eowl', 'wikt', 'enable'}
+- sources: {'enable', 'eowl'} -> {'wikt', 'enable', 'eowl'}
 
 **`aah`**
-- sources: {'eowl', 'enable'} → {'eowl', 'wikt', 'enable'}
+- sources: {'enable', 'eowl'} -> {'wikt', 'enable', 'eowl'}
 
 **`aahed`**
-- sources: {'enable'} → {'wikt', 'enable'}
+- sources: {'enable'} -> {'wikt', 'enable'}
 
 **`aahing`**
-- sources: {'enable'} → {'wikt', 'enable'}
+- sources: {'enable'} -> {'wikt', 'enable'}
 
 **`aahs`**
-- sources: {'enable'} → {'wikt', 'enable'}
+- sources: {'enable'} -> {'wikt', 'enable'}
 
 **`aal`**
-- sources: {'eowl', 'enable'} → {'eowl', 'wikt', 'enable'}
+- sources: {'enable', 'eowl'} -> {'wikt', 'enable', 'eowl'}
 
 **`aalii`**
-- sources: {'eowl', 'enable'} → {'eowl', 'wikt', 'enable'}
+- sources: {'enable', 'eowl'} -> {'wikt', 'enable', 'eowl'}
 
 **`aaliis`**
-- sources: {'enable'} → {'wikt', 'enable'}
+- sources: {'enable'} -> {'wikt', 'enable'}
 
 **`aals`**
-- sources: {'enable'} → {'wikt', 'enable'}
+- sources: {'enable'} -> {'wikt', 'enable'}
 
 **`aardvark`**
-- sources: {'eowl', 'enable'} → {'eowl', 'wikt', 'enable'}
+- sources: {'enable', 'eowl'} -> {'wikt', 'enable', 'eowl'}
 
 
 ---
@@ -66,7 +70,7 @@ This report compares the core and plus distributions.
 
 | Source | Core | Plus | Difference |
 |--------|-----:|-----:|-----------:|
-| enable | 172,823 | 172,823 | 0 |
-| eowl | 128,983 | 128,983 | 0 |
-| wikt | 0 | 1,028,344 | +1,028,344 |
+| enable | 172,823 | 171,628 | -1,195 |
+| eowl | 128,983 | 127,816 | -1,167 |
+| wikt | 0 | 1,286,108 | +1,286,108 |
 

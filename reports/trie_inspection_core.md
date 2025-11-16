@@ -12,7 +12,7 @@ This report analyzes the final MARISA trie structure and metadata.
 **Metadata file:** `data/build/core/core.meta.json`  
 **Total words:** 208,201  
 **Trie size:** 521,848 bytes (509.6 KB)  
-**Metadata size:** 28,501,230 bytes (27833.2 KB)  
+**Metadata size:** 28,475,123 bytes (27807.7 KB)  
 **Bytes per word (trie):** 2.51  
 **Min word length:** 2  
 **Max word length:** 28  
