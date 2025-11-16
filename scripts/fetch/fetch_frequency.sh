@@ -6,9 +6,10 @@ set -euo pipefail
 
 # Configuration
 readonly FREQ_REPO="https://github.com/hermitdave/FrequencyWords.git"
-readonly OUTPUT_DIR="data/raw/plus"
+readonly LANG="${LEXICON_LANG:-en}"
+readonly OUTPUT_DIR="data/raw/${LANG}"
 readonly TEMP_DIR="${OUTPUT_DIR}/freq_temp"
-readonly OUTPUT_FILE="${OUTPUT_DIR}/en_50k.txt"
+readonly OUTPUT_FILE="${OUTPUT_DIR}/${LANG}_50k.txt"
 readonly SOURCE_FILE="${OUTPUT_DIR}/frequency.SOURCE.json"
 
 # Create output directory

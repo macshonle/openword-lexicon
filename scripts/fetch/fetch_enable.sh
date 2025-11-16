@@ -6,7 +6,8 @@ set -euo pipefail
 
 # Configuration
 readonly ENABLE_URL="https://raw.githubusercontent.com/dolph/dictionary/master/enable1.txt"
-readonly OUTPUT_DIR="data/raw/core"
+readonly LANG="${LEXICON_LANG:-en}"
+readonly OUTPUT_DIR="data/raw/${LANG}"
 readonly OUTPUT_FILE="${OUTPUT_DIR}/enable1.txt"
 readonly SOURCE_FILE="${OUTPUT_DIR}/enable1.SOURCE.json"
 

@@ -7,7 +7,8 @@ set -euo pipefail
 # Configuration
 readonly WORDNET_REPO="https://github.com/globalwordnet/english-wordnet.git"
 readonly WORDNET_TAG="2024"  # Use 2024 Edition
-readonly OUTPUT_DIR="data/raw/plus"
+readonly LANG="${LEXICON_LANG:-en}"
+readonly OUTPUT_DIR="data/raw/${LANG}"
 readonly TEMP_DIR="${OUTPUT_DIR}/wordnet_temp"
 readonly OUTPUT_ARCHIVE="${OUTPUT_DIR}/english-wordnet-2024.tar.gz"
 readonly SOURCE_FILE="${OUTPUT_DIR}/wordnet.SOURCE.json"

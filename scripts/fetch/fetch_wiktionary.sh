@@ -6,7 +6,8 @@ set -euo pipefail
 
 # Configuration
 readonly WIKTIONARY_BASE="https://dumps.wikimedia.org/enwiktionary"
-readonly OUTPUT_DIR="data/raw/plus"
+readonly LANG="${LEXICON_LANG:-en}"
+readonly OUTPUT_DIR="data/raw/${LANG}"
 readonly DUMP_FILE="enwiktionary-latest-pages-articles.xml.bz2"
 readonly OUTPUT_FILE="${OUTPUT_DIR}/${DUMP_FILE}"
 readonly SOURCE_FILE="${OUTPUT_DIR}/wiktionary.SOURCE.json"
