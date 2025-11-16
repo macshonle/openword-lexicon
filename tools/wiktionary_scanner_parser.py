@@ -333,7 +333,7 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
         return ('SPECIAL_PAGE', title)
 
     # Check for redirects AFTER special pages
-    # This catches regular redirects like "grain of salt" → "with a grain of salt"
+    # This catches regular redirects like "grain of salt" -> "with a grain of salt"
     if REDIRECT_PATTERN.search(page_xml):
         return ('REDIRECT', title)
 
@@ -879,7 +879,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
             write("Fixed point achieved when all sample lists are empty!")
             write("=" * 60)
 
-        print(f"\n✓ Diagnostic report written to: {diagnostic_file}")
+        print(f"\nDiagnostic report written to: {diagnostic_file}")
 
 
 def main():

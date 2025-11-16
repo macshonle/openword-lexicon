@@ -309,7 +309,7 @@ def read_wiktextract(filepath: Path) -> Dict[str, dict]:
                 logger.warning(f"Line {line_num}: JSON decode error: {e}")
                 continue
 
-    logger.info(f"  → Loaded {len(entries):,} unique words from wiktextract")
+    logger.info(f"  -> Loaded {len(entries):,} unique words from wiktextract")
     return entries
 
 
@@ -324,7 +324,7 @@ def write_jsonl(entries: List[dict], output_path: Path) -> None:
             line = orjson.dumps(entry) + b'\n'
             f.write(line)
 
-    logger.info(f"✓ Written: {output_path}")
+    logger.info(f"Written: {output_path}")
 
 
 def main():
@@ -335,9 +335,7 @@ def main():
     input_path = intermediate_dir / "wikt.jsonl"
     output_path = intermediate_dir / "wikt_entries.jsonl"
 
-    logger.info("=" * 60)
-    logger.info("PHASE 6: Wiktionary ingestion")
-    logger.info("=" * 60)
+    logger.info("Wiktionary ingestion")
 
     # Read wiktextract output
     entries_dict = read_wiktextract(input_path)
@@ -361,7 +359,7 @@ def main():
     logger.info(f"  With labels: {sum(1 for e in entries if e['labels']):,}")
     logger.info(f"  With lemma: {sum(1 for e in entries if e['lemma']):,}")
     logger.info("")
-    logger.info("✓ Wiktionary ingest complete")
+    logger.info("Wiktionary ingest complete")
 
 
 if __name__ == '__main__':

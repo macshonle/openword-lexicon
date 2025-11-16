@@ -208,10 +208,10 @@ def process_file(input_path: Path, output_path: Path):
             line = orjson.dumps(entry) + b'\n'
             f.write(line)
 
-    logger.info(f"  ✓ Enriched {len(entries):,} entries")
+    logger.info(f"  Enriched {len(entries):,} entries")
     logger.info(f"    Concreteness added: {enriched_count:,}")
     logger.info(f"    POS backfilled: {pos_backfilled:,}")
-    logger.info(f"  → {output_path}")
+    logger.info(f"  -> {output_path}")
 
 
 def main():
@@ -219,9 +219,7 @@ def main():
     data_root = Path(__file__).parent.parent.parent / "data"
     intermediate_dir = data_root / "intermediate"
 
-    logger.info("=" * 60)
-    logger.info("PHASE 7: WordNet enrichment")
-    logger.info("=" * 60)
+    logger.info("WordNet enrichment")
 
     # Ensure WordNet data is available
     ensure_wordnet_data()
@@ -241,7 +239,7 @@ def main():
         process_file(plus_input, plus_output)
 
     logger.info("")
-    logger.info("✓ WordNet enrichment complete")
+    logger.info("WordNet enrichment complete")
 
 
 if __name__ == '__main__':

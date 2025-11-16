@@ -219,7 +219,7 @@ def generate_report(stats: Dict, output_path: Path):
     ])
 
     for title, hyphenation, syllable_count, parsed in stats['hyphenation_examples'][:25]:
-        lines.append(f"- **{title}**: `{hyphenation}` → `{parsed}` ({syllable_count} syllables)")
+        lines.append(f"- **{title}**: `{hyphenation}` -> `{parsed}` ({syllable_count} syllables)")
 
     lines.extend([
         "",
@@ -322,7 +322,7 @@ def main():
         print(f"Error: File not found: {dump_file}")
         sys.exit(1)
 
-    print(f"→ Analyzing syllable data from Wiktionary dump")
+    print(f"-> Analyzing syllable data from Wiktionary dump")
     print(f"  Sample size: {sample_size:,} pages")
 
     pages = extract_page_content(dump_file, sample_size)
@@ -333,7 +333,7 @@ def main():
 
     output_path = Path("reports/syllable_analysis.md")
     generate_report(stats, output_path)
-    print(f"✓ Report saved: {output_path}")
+    print(f"Report saved: {output_path}")
 
 
 if __name__ == '__main__':

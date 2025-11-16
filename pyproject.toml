@@ -25,6 +25,9 @@ dev = [
   "black>=24.0"
 ]
 
+[project.scripts]
+owlex = "openword.owlex:main"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 packages = ["openword"]

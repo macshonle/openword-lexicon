@@ -72,8 +72,8 @@ def merge_entries(entry1: dict, entry2: dict) -> dict:
         merged['concreteness'] = entry2['concreteness']
 
     # frequency_tier: prefer lower tier (more frequent)
-    # Order: top10 < top100 < top1k < top10k < top100k < rare
-    tier_order = ['top10', 'top100', 'top1k', 'top10k', 'top100k', 'rare']
+    # Order: top10 < top100 < top300 < top500 < top1k < top3k < top10k < top25k < top50k < rare
+    tier_order = ['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare']
     tier1 = entry1.get('frequency_tier', 'rare')
     tier2 = entry2.get('frequency_tier', 'rare')
 
@@ -117,7 +117,7 @@ def load_entries(filepath: Path) -> Dict[str, dict]:
                 logger.warning(f"Line {line_num}: JSON decode error: {e}")
                 continue
 
-    logger.info(f"  → Loaded {len(entries):,} unique words")
+    logger.info(f"  -> Loaded {len(entries):,} unique words")
     return entries
 
 
@@ -135,7 +135,7 @@ def write_merged(entries: Dict[str, dict], output_path: Path):
             line = orjson.dumps(entries[word]) + b'\n'
             f.write(line)
 
-    logger.info(f"✓ Written: {output_path}")
+    logger.info(f"Written: {output_path}")
 
 
 def main():
@@ -143,9 +143,7 @@ def main():
     data_root = Path(__file__).parent.parent.parent / "data"
     intermediate_dir = data_root / "intermediate"
 
-    logger.info("=" * 60)
-    logger.info("PHASE 9: Merge and deduplicate")
-    logger.info("=" * 60)
+    logger.info("Merge and deduplicate")
 
     # Load core entries
     core_path = intermediate_dir / "core" / "core_entries_tiered.jsonl"
@@ -189,7 +187,7 @@ def main():
     logger.info(f"    Sources: {sorted(set(src for e in combined.values() for src in e['sources']))}")
 
     logger.info("")
-    logger.info("✓ Merge and deduplicate complete")
+    logger.info("Merge and deduplicate complete")
 
 
 if __name__ == '__main__':

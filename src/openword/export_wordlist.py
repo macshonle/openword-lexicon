@@ -36,7 +36,7 @@ def export_trie_to_wordlist(trie_path: Path, output_path: Path):
         for word in trie:
             f.write(f"{word}\n")
 
-    logger.info(f"✓ Exported to {output_path}")
+    logger.info(f"Exported to {output_path}")
 
 
 def main():

@@ -168,7 +168,7 @@ def generate_manifest(project_root: Path, output_path: Path):
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(manifest, f, indent=2, sort_keys=True)
 
-    logger.info(f"✓ Manifest written: {output_path}")
+    logger.info(f"Manifest written: {output_path}")
 
     # Report stats
     logger.info("")
@@ -186,14 +186,12 @@ def main():
     project_root = Path(__file__).parent.parent.parent
     output_path = project_root / "MANIFEST.json"
 
-    logger.info("=" * 60)
-    logger.info("PHASE 15: Manifest generation")
-    logger.info("=" * 60)
+    logger.info("Manifest generation")
 
     generate_manifest(project_root, output_path)
 
     logger.info("")
-    logger.info("✓ Manifest generation complete")
+    logger.info("Manifest generation complete")
 
 
 if __name__ == '__main__':

@@ -169,7 +169,7 @@ def generate_report():
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"✓ Raw data inspection report written to {output_path}")
+    print(f"Raw data inspection report written to {output_path}")
     return output_path
 
 

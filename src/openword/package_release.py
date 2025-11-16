@@ -186,7 +186,7 @@ def package_distribution(distribution: str, version: str,
             '--use-compress-program=zstd',
             stage_dir.name
         ], check=True, capture_output=True)
-        logger.info(f"  ✓ Created: {tarball_path}")
+        logger.info(f"  Created: {tarball_path}")
     except (subprocess.CalledProcessError, FileNotFoundError):
         # Fall back to gzip
         logger.warning("  zstd not available, using gzip")
@@ -196,7 +196,7 @@ def package_distribution(distribution: str, version: str,
         with tarfile.open(tarball_path, 'w:gz') as tar:
             tar.add(stage_dir, arcname=stage_dir.name)
 
-        logger.info(f"  ✓ Created: {tarball_path}")
+        logger.info(f"  Created: {tarball_path}")
 
     # Compute checksum
     sha256 = compute_sha256(tarball_path)
@@ -205,7 +205,7 @@ def package_distribution(distribution: str, version: str,
     with open(checksum_path, 'w') as f:
         f.write(f"{sha256}  {tarball_path.name}\n")
 
-    logger.info(f"  ✓ Checksum: {checksum_path}")
+    logger.info(f"  Checksum: {checksum_path}")
 
     # Clean up staging
     shutil.rmtree(stage_dir)
@@ -241,7 +241,7 @@ def verify_package(tarball_path: Path) -> bool:
         # Find extracted directory
         extracted_dirs = list(temp_dir.glob("openword-lexicon-*"))
         if not extracted_dirs:
-            logger.error("  ✗ No extracted directory found")
+            logger.error("  No extracted directory found")
             return False
 
         extracted_dir = extracted_dirs[0]
@@ -254,10 +254,10 @@ def verify_package(tarball_path: Path) -> bool:
         for filename in required_files:
             filepath = extracted_dir / filename
             if not filepath.exists():
-                logger.error(f"  ✗ Missing file: {filename}")
+                logger.error(f"  Missing file: {filename}")
                 return False
 
-        logger.info("  ✓ All required files present")
+        logger.info("  All required files present")
 
         # Try loading trie
         try:
@@ -270,19 +270,19 @@ def verify_package(tarball_path: Path) -> bool:
                 # Get first word
                 for word in list(trie)[:1]:
                     if word in trie:
-                        logger.info(f"  ✓ Trie lookup works: '{word}' found")
+                        logger.info(f"  Trie lookup works: '{word}' found")
                     break
 
-            logger.info(f"  ✓ Trie contains {len(trie):,} words")
+            logger.info(f"  Trie contains {len(trie):,} words")
         except Exception as e:
-            logger.error(f"  ✗ Trie verification failed: {e}")
+            logger.error(f"  Trie verification failed: {e}")
             return False
 
-        logger.info("  ✓ Package verification passed")
+        logger.info("  Package verification passed")
         return True
 
     except Exception as e:
-        logger.error(f"  ✗ Verification failed: {e}")
+        logger.error(f"  Verification failed: {e}")
         return False
     finally:
         # Clean up
@@ -296,9 +296,7 @@ def main():
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    logger.info("=" * 60)
-    logger.info("PHASE 16: Packaging & releases")
-    logger.info("=" * 60)
+    logger.info("Packaging & releases")
     logger.info(f"Version: {VERSION}")
     logger.info("")
 
@@ -318,7 +316,7 @@ def main():
         verify_package(plus_tarball)
 
     logger.info("")
-    logger.info("✓ Packaging complete")
+    logger.info("Packaging complete")
     logger.info(f"  Release directory: {output_dir}")
 
     # List all release files

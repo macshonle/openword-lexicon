@@ -48,8 +48,10 @@ GAME_META_REPORT_PLUS := $(REPORTS_DIR)/game_metadata_analysis_plus.md
         game-words analyze-game-metadata \
         build-wordlists export-wordlist-game export-wordlist-vulgar-blocklist export-wordlist-kids-nouns export-wordlist-phrases \
         analyze-enhanced-metadata report-frequency-analysis report-syllable-analysis report-wordnet-concreteness \
+        analyze-all-reports \
         report-labels report-labels-raw report-labels-built-core report-labels-built-plus analyze-local \
-        diagnose-scanner
+        diagnose-scanner \
+        wordlist-builder wordlist-builder-install wordlist-builder-cli wordlist-builder-web owlex-filter help-builder
 
 # Bootstrap local dev environment (idempotent)
 bootstrap: venv deps
@@ -303,6 +305,32 @@ export-wordlist-phrases: $(ALL_PHRASES_LIST) $(IDIOMS_LIST) $(PREP_PHRASES_LIST)
 analyze-enhanced-metadata: report-frequency-analysis report-syllable-analysis report-wordnet-concreteness
 	@echo "Enhanced metadata analysis complete"
 
+# Run ALL available analysis and reporting commands
+# This comprehensive target is useful after data changes or for complete audits
+analyze-all-reports: deps
+	@echo "=========================================="
+	@echo "Running ALL Analysis and Reports"
+	@echo "=========================================="
+	@echo ""
+	@echo "1/4: Enhanced Metadata Analysis..."
+	@$(MAKE) analyze-enhanced-metadata
+	@echo ""
+	@echo "2/4: Standard Inspection Reports..."
+	@$(MAKE) reports
+	@echo ""
+	@echo "3/4: Game Metadata Analysis..."
+	@$(MAKE) analyze-game-metadata
+	@echo ""
+	@echo "4/4: Distribution Comparison..."
+	@$(MAKE) report-compare
+	@echo ""
+	@echo "=========================================="
+	@echo "✓ All analysis and reports complete!"
+	@echo "=========================================="
+	@echo ""
+	@echo "Reports generated in: $(REPORTS_DIR)/"
+	@ls -lh $(REPORTS_DIR)/*.md 2>/dev/null || true
+
 # Analyze frequency data structure and tiers
 report-frequency-analysis: deps $(FREQUENCY_DATA)
 	@mkdir -p $(REPORTS_DIR)
@@ -314,9 +342,10 @@ report-syllable-analysis: deps $(WIKTIONARY_DUMP)
 	$(UV) run python tools/analyze_syllable_data.py "$(WIKTIONARY_DUMP)" 10000
 
 # Analyze WordNet for concrete/abstract noun classification
-report-wordnet-concreteness: deps $(WORDNET_ARCHIVE)
+# Note: Uses NLTK's WordNet (will download if not present), not archive
+report-wordnet-concreteness: deps
 	@mkdir -p $(REPORTS_DIR)
-	$(UV) run python tools/analyze_wordnet_concreteness.py $(WORDNET_ARCHIVE)
+	$(UV) run python tools/analyze_wordnet_concreteness.py
 
 # ===========================
 # Local Analysis (run locally with full Wiktionary dump)
@@ -362,3 +391,127 @@ diagnose-scanner: deps $(WIKTIONARY_DUMP)
 		"$(WIKTIONARY_DUMP)" \
 		/tmp/scanner_diagnostic.jsonl \
 		--diagnostic $(REPORTS_DIR)/scanner_diagnostic.txt
+
+# ===========================
+# Interactive Word List Builder
+# ===========================
+
+# Display help for word list builder
+help-builder:
+	@echo ""
+	@echo "═══════════════════════════════════════════════════════════"
+	@echo "  OpenWord Lexicon - Interactive Word List Builder"
+	@echo "═══════════════════════════════════════════════════════════"
+	@echo ""
+	@echo "The word list builder helps you create custom filtered word lists"
+	@echo "by generating JSON specifications that the 'owlex' tool can use."
+	@echo ""
+	@echo "Available Targets:"
+	@echo ""
+	@echo "  make wordlist-builder-cli"
+	@echo "      Launch interactive CLI builder (terminal-based questionnaire)"
+	@echo ""
+	@echo "  make wordlist-builder-web"
+	@echo "      Open web-based builder interface in browser"
+	@echo ""
+	@echo "  make owlex-filter SPEC=<file.json>"
+	@echo "      Generate filtered word list from specification"
+	@echo ""
+	@echo "Examples:"
+	@echo ""
+	@echo "  # Create specification interactively"
+	@echo "  make wordlist-builder-cli"
+	@echo ""
+	@echo "  # Use web interface"
+	@echo "  make wordlist-builder-web"
+	@echo ""
+	@echo "  # Generate word list from specification"
+	@echo "  make owlex-filter SPEC=wordlist-spec.json > words.txt"
+	@echo ""
+	@echo "  # Load a preset"
+	@echo "  node tools/wordlist-builder/cli-builder.js --preset wordle"
+	@echo ""
+	@echo "Presets Available:"
+	@echo "  - wordle: 5-letter common words"
+	@echo "  - kids-nouns: Concrete nouns for children"
+	@echo "  - scrabble: Single words for Scrabble"
+	@echo "  - profanity-blocklist: Flagged inappropriate words"
+	@echo "  - crossword: Words for crossword puzzles"
+	@echo ""
+	@echo "Documentation:"
+	@echo "  - docs/FILTER_CAPABILITIES.md - Filter reference"
+	@echo "  - docs/schema/wordlist_spec.schema.json - Specification schema"
+	@echo ""
+
+# Build CLI tool dependencies with pnpm
+wordlist-builder-install:
+	@echo "Installing wordlist builder dependencies..."
+	@if ! command -v pnpm >/dev/null 2>&1; then \
+		echo "Error: pnpm is required but not installed."; \
+		echo "Install with: npm install -g pnpm"; \
+		echo "Or use: cd tools/wordlist-builder && npm install"; \
+		exit 1; \
+	fi
+	@cd tools/wordlist-builder && pnpm install
+
+# Launch CLI builder (requires Node.js)
+wordlist-builder-cli:
+	@echo "Launching interactive word list builder..."
+	@if ! command -v node >/dev/null 2>&1; then \
+		echo "Error: Node.js is required but not installed."; \
+		echo "Please install Node.js from: https://nodejs.org/"; \
+		exit 1; \
+	fi
+	@if [ -d "tools/wordlist-builder/node_modules/@clack/prompts" ]; then \
+		echo "Using enhanced TUI (Clack)..."; \
+		node tools/wordlist-builder/cli-builder-clack.js; \
+	else \
+		echo "Using basic CLI (run 'cd tools/wordlist-builder && npm install' for enhanced UI)..."; \
+		node tools/wordlist-builder/cli-builder.js; \
+	fi
+
+# Open web builder in default browser
+wordlist-builder-web:
+	@echo "Opening web-based word list builder..."
+	@if command -v xdg-open >/dev/null 2>&1; then \
+		xdg-open tools/wordlist-builder/web-builder.html; \
+	elif command -v open >/dev/null 2>&1; then \
+		open tools/wordlist-builder/web-builder.html; \
+	elif command -v start >/dev/null 2>&1; then \
+		start tools/wordlist-builder/web-builder.html; \
+	else \
+		echo "Please open this file in your browser:"; \
+		echo "  file://$(shell pwd)/tools/wordlist-builder/web-builder.html"; \
+	fi
+
+# Run owlex filter (requires SPEC parameter)
+owlex-filter: deps
+	@if [ -z "$(SPEC)" ]; then \
+		echo "Error: SPEC parameter required"; \
+		echo "Usage: make owlex-filter SPEC=wordlist-spec.json"; \
+		echo ""; \
+		echo "To create a specification, run:"; \
+		echo "  make wordlist-builder-cli"; \
+		echo "or:"; \
+		echo "  make wordlist-builder-web"; \
+		exit 1; \
+	fi
+	@if [ ! -f "$(SPEC)" ]; then \
+		echo "Error: Specification file not found: $(SPEC)"; \
+		exit 1; \
+	fi
+	@echo "Filtering with specification: $(SPEC)"
+	$(UV) run python -m openword.owlex "$(SPEC)"
+
+# Convenience target: Combined CLI builder workflow
+wordlist-builder: help-builder
+
+# Example specifications (create sample specs)
+examples/wordlist-specs:
+	@mkdir -p examples/wordlist-specs
+	@echo "Creating example specifications..."
+	@echo '{"version":"1.0","name":"Wordle Words","distribution":"core","filters":{"character":{"exact_length":5,"pattern":"^[a-z]+$$"},"phrase":{"max_words":1},"frequency":{"min_tier":"top10k"}}}' | jq '.' > examples/wordlist-specs/wordle.json
+	@echo '{"version":"1.0","name":"Kids Game Words","distribution":"core","filters":{"character":{"min_length":3,"max_length":10},"phrase":{"max_words":1},"frequency":{"tiers":["top1k","top10k"]},"pos":{"include":["noun"]},"concreteness":{"values":["concrete"]},"policy":{"family_friendly":true,"modern_only":true}}}' | jq '.' > examples/wordlist-specs/kids-nouns.json
+	@echo '{"version":"1.0","name":"Profanity Blocklist","distribution":"plus","filters":{"labels":{"register":{"include":["vulgar","offensive","derogatory"]}}}}' | jq '.' > examples/wordlist-specs/profanity-blocklist.json
+	@echo "✓ Created example specifications in examples/wordlist-specs/"
+	@ls -lh examples/wordlist-specs/

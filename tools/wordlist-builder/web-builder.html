@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenWord Lexicon - Word List Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group .description {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-option,
+        .checkbox-option {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .radio-option:hover,
+        .checkbox-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .radio-option input,
+        .checkbox-option input {
+            margin-right: 10px;
+        }
+
+        .radio-option.selected,
+        .checkbox-option.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .filter-category {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .filter-category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .filter-category-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-category-coverage {
+            font-size: 0.85em;
+            color: #666;
+            background: #e0e0e0;
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+
+        .filter-category-content {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .filter-category.expanded .filter-category-content {
+            display: block;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .filter-category.expanded .toggle-icon {
+            transform: rotate(90deg);
+        }
+
+        .button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .button-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .button-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .button-secondary:hover {
+            background: #f0f4ff;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .output-section {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .output-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        #specOutput {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 8px;
+        }
+
+        .warning-list {
+            list-style-position: inside;
+            color: #856404;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border: 1px solid #0c5460;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            color: #0c5460;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 OpenWord Lexicon</h1>
+            <p>Interactive Word List Builder</p>
+        </div>
+
+        <div class="content">
+            <!-- Step 1: Distribution -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-number">1</span>
+                    <span>Choose Distribution</span>
+                </div>
+
+                <div class="form-group">
+                    <div class="radio-group" id="distributionGroup">
+                        <label class="radio-option" onclick="selectDistribution('core')">
+                            <input type="radio" name="distribution" value="core" checked>
+                            <div>
+                                <strong>Core Distribution</strong> (208,201 words)
+                                <div class="description">Ultra-permissive licenses (Public Domain, UKACD). Best for commercial projects.</div>
+                            </div>
+                        </label>
+                        <label class="radio-option" onclick="selectDistribution('plus')">
+                            <input type="radio" name="distribution" value="plus">
+                            <div>
+                                <strong>Plus Distribution</strong> (1,039,950 words)
+                                <div class="description">Includes CC BY-SA 4.0 (Wiktionary). Maximum vocabulary with label-based filtering.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Metadata -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-number">2</span>
+                    <span>Word List Information</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="listName">Name</label>
+                    <input type="text" id="listName" placeholder="e.g., Kids Game Words">
+                </div>
+
+                <div class="form-group">
+                    <label for="listDescription">Description</label>
+                    <textarea id="listDescription" rows="2" placeholder="e.g., Concrete nouns for children's word guessing games"></textarea>
+                </div>
+            </div>
+
+            <!-- Step 3: Presets -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-number">3</span>
+                    <span>Start from Preset (Optional)</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="presetSelect">Select a preset to start with</label>
+                    <select id="presetSelect" onchange="loadPreset()">
+                        <option value="">-- None (build from scratch) --</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Step 4: Filters -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-number">4</span>
+                    <span>Configure Filters</span>
+                </div>
+
+                <div class="info-box">
+                    Filters are combined with AND logic. Add multiple filters to narrow down your word list.
+                </div>
+
+                <div id="filterCategories"></div>
+            </div>
+
+            <!-- Step 5: Output -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="section-number">5</span>
+                    <span>Output Configuration</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="outputFormat">Format</label>
+                    <select id="outputFormat">
+                        <option value="text">Plain Text</option>
+                        <option value="json">JSON</option>
+                        <option value="jsonl">JSON Lines</option>
+                        <option value="csv">CSV</option>
+                        <option value="tsv">TSV</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="outputLimit">Maximum words (optional)</label>
+                    <input type="number" id="outputLimit" placeholder="Unlimited">
+                </div>
+
+                <div class="form-group">
+                    <label for="sortBy">Sort by</label>
+                    <select id="sortBy">
+                        <option value="alphabetical">Alphabetical</option>
+                        <option value="score">Score (if scoring enabled)</option>
+                        <option value="frequency">Frequency</option>
+                        <option value="length">Length</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div class="button-group" style="margin-top: 20px;">
+                <button class="button button-primary" onclick="generateSpec()">Generate Specification</button>
+                <button class="button button-secondary" onclick="resetForm()">Reset Form</button>
+            </div>
+
+            <!-- Output -->
+            <div id="outputContainer" class="hidden">
+                <div class="output-section">
+                    <div class="output-title">Generated Specification</div>
+
+                    <div id="validationWarnings" class="hidden warning-box">
+                        <div class="warning-title">⚠️ Warnings</div>
+                        <ul id="warningsList" class="warning-list"></ul>
+                    </div>
+
+                    <div id="estimateInfo" class="info-box">
+                        <strong>Estimated results:</strong> <span id="estimatedCount">0</span> words
+                    </div>
+
+                    <pre id="specOutput"></pre>
+
+                    <div class="button-group" style="margin-top: 15px;">
+                        <button class="button button-primary" onclick="downloadSpec()">💾 Download JSON</button>
+                        <button class="button button-secondary" onclick="copySpec()">📋 Copy to Clipboard</button>
+                    </div>
+
+                    <div class="info-box" style="margin-top: 15px;">
+                        <strong>Next steps:</strong><br>
+                        1. Download or copy the specification<br>
+                        2. Run: <code>owlex filter wordlist-spec.json</code><br>
+                        3. Your filtered word list will be generated!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="spec-builder.js"></script>
+    <script>
+        let builder = new SpecBuilder();
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePresets();
+            renderFilters();
+            selectDistribution('core');
+        });
+
+        function selectDistribution(dist) {
+            builder.setDistribution(dist);
+
+            // Update radio button visuals
+            document.querySelectorAll('.radio-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.closest('.radio-option').classList.add('selected');
+
+            // Update available presets and filters
+            updatePresets();
+            renderFilters();
+        }
+
+        function updatePresets() {
+            const select = document.getElementById('presetSelect');
+            const currentDist = builder.spec.distribution;
+
+            select.innerHTML = '<option value="">-- None (build from scratch) --</option>';
+
+            specBuilderHelpers.getPresets().forEach(name => {
+                const preset = specBuilderHelpers.getPreset(name);
+                if (preset.distribution === currentDist) {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = `${preset.name} - ${preset.description}`;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        function loadPreset() {
+            const presetName = document.getElementById('presetSelect').value;
+            if (!presetName) return;
+
+            builder.loadPreset(presetName);
+            const preset = specBuilderHelpers.getPreset(presetName);
+
+            document.getElementById('listName').value = preset.name || '';
+            document.getElementById('listDescription').value = preset.description || '';
+
+            // Update distribution radio
+            const distRadio = document.querySelector(`input[name="distribution"][value="${preset.distribution}"]`);
+            if (distRadio) {
+                distRadio.checked = true;
+                selectDistribution(preset.distribution);
+            }
+
+            renderFilters();
+            alert(`Loaded preset: ${preset.name}\nYou can now modify the filters below.`);
+        }
+
+        function renderFilters() {
+            const container = document.getElementById('filterCategories');
+            container.innerHTML = '';
+
+            const categories = specBuilderHelpers.getFilterCategories(builder.spec.distribution);
+
+            categories.forEach(category => {
+                const capability = specBuilderHelpers.getFilterCapability(category);
+                if (category === 'syllables') return; // Skip unimplemented
+
+                const coverage = typeof capability.coverage === 'object'
+                    ? capability.coverage[builder.spec.distribution]
+                    : capability.coverage;
+
+                const coverageText = coverage !== null ? `${coverage}% coverage` : 'Always available';
+
+                const filterDiv = document.createElement('div');
+                filterDiv.className = 'filter-category';
+                filterDiv.id = `filter-${category}`;
+
+                filterDiv.innerHTML = `
+                    <div class="filter-category-header" onclick="toggleFilter('${category}')">
+                        <div>
+                            <div class="filter-category-title">${capability.name}</div>
+                            <div class="description">${capability.description}</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="filter-category-coverage">${coverageText}</span>
+                            <span class="toggle-icon">▶</span>
+                        </div>
+                    </div>
+                    <div class="filter-category-content" id="filter-content-${category}">
+                        ${renderFilterFields(category, capability)}
+                    </div>
+                `;
+
+                container.appendChild(filterDiv);
+            });
+        }
+
+        function renderFilterFields(category, capability) {
+            if (category === 'character') {
+                return `
+                    <div class="form-group">
+                        <label>Exact length (e.g., 5 for Wordle)</label>
+                        <input type="number" id="char-exact" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Minimum length</label>
+                        <input type="number" id="char-min" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Maximum length</label>
+                        <input type="number" id="char-max" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Pattern (regex)</label>
+                        <input type="text" id="char-pattern" placeholder="^[a-z]+$">
+                    </div>
+                `;
+            } else if (category === 'phrase') {
+                return `
+                    <div class="form-group">
+                        <label>Maximum word count (1=single words, 3=with idioms)</label>
+                        <input type="number" id="phrase-max" min="1" value="1">
+                    </div>
+                `;
+            } else if (category === 'frequency') {
+                return `
+                    <div class="form-group">
+                        <label>Include tiers (select multiple)</label>
+                        <div class="checkbox-group">
+                            ${['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare'].map(tier => `
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="freq-${tier}" value="${tier}">
+                                    ${tier}: ${CAPABILITIES.filters.frequency.tiers[tier].description}
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else if (category === 'pos') {
+                return `
+                    <div class="form-group">
+                        <label>Include POS tags (select multiple)</label>
+                        <div class="checkbox-group">
+                            ${['noun', 'verb', 'adjective', 'adverb'].map(pos => `
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="pos-${pos}" value="${pos}">
+                                    ${pos}
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="pos-require">
+                            Exclude words without POS data
+                        </label>
+                    </div>
+                `;
+            } else if (category === 'concreteness') {
+                return `
+                    <div class="form-group">
+                        <label>Include values</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="concrete-concrete" value="concrete">
+                                Concrete (physical objects)
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="concrete-abstract" value="abstract">
+                                Abstract (ideas, concepts)
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="concrete-mixed" value="mixed">
+                                Mixed (both)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="concrete-require">
+                            Exclude words without concreteness data
+                        </label>
+                    </div>
+                `;
+            } else if (category === 'labels') {
+                return `
+                    <div class="form-group">
+                        <label>Exclude register labels</label>
+                        <div class="checkbox-group">
+                            ${['vulgar', 'offensive', 'derogatory', 'slang', 'archaic'].map(label => `
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="label-register-exclude-${label}" value="${label}">
+                                    ${label}
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else if (category === 'policy') {
+                return `
+                    <div class="checkbox-group">
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="policy-family">
+                            Family-friendly (exclude vulgar/offensive/derogatory)
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="policy-modern">
+                            Modern only (exclude archaic/obsolete/dated)
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="policy-jargon">
+                            No jargon (exclude technical/medical/legal/scientific)
+                        </label>
+                    </div>
+                `;
+            }
+            return '';
+        }
+
+        function toggleFilter(category) {
+            const filterDiv = document.getElementById(`filter-${category}`);
+            filterDiv.classList.toggle('expanded');
+        }
+
+        function generateSpec() {
+            // Reset builder
+            builder = new SpecBuilder();
+
+            // Distribution
+            const dist = document.querySelector('input[name="distribution"]:checked').value;
+            builder.setDistribution(dist);
+
+            // Metadata
+            const name = document.getElementById('listName').value.trim();
+            const desc = document.getElementById('listDescription').value.trim();
+            if (name || desc) {
+                builder.setMetadata(name || null, desc || null);
+            }
+
+            // Character filters
+            const charExact = document.getElementById('char-exact')?.value;
+            const charMin = document.getElementById('char-min')?.value;
+            const charMax = document.getElementById('char-max')?.value;
+            const charPattern = document.getElementById('char-pattern')?.value;
+
+            if (charExact) builder.addFilter('character', 'exact_length', parseInt(charExact));
+            if (charMin) builder.addFilter('character', 'min_length', parseInt(charMin));
+            if (charMax) builder.addFilter('character', 'max_length', parseInt(charMax));
+            if (charPattern) builder.addFilter('character', 'pattern', charPattern);
+
+            // Phrase filters
+            const phraseMax = document.getElementById('phrase-max')?.value;
+            if (phraseMax) builder.addFilter('phrase', 'max_words', parseInt(phraseMax));
+
+            // Frequency filters
+            const freqTiers = ['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare']
+                .filter(tier => document.getElementById(`freq-${tier}`)?.checked)
+                .map(tier => tier);
+            if (freqTiers.length > 0 && freqTiers.length < 10) {
+                builder.addFilter('frequency', 'tiers', freqTiers);
+            }
+
+            // POS filters
+            const posTags = ['noun', 'verb', 'adjective', 'adverb']
+                .filter(pos => document.getElementById(`pos-${pos}`)?.checked);
+            if (posTags.length > 0) {
+                builder.addFilter('pos', 'include', posTags);
+            }
+            if (document.getElementById('pos-require')?.checked) {
+                builder.addFilter('pos', 'require_pos', true);
+            }
+
+            // Concreteness filters
+            const concreteValues = ['concrete', 'abstract', 'mixed']
+                .filter(val => document.getElementById(`concrete-${val}`)?.checked);
+            if (concreteValues.length > 0 && concreteValues.length < 3) {
+                builder.addFilter('concreteness', 'values', concreteValues);
+            }
+            if (document.getElementById('concrete-require')?.checked) {
+                builder.addFilter('concreteness', 'require_concreteness', true);
+            }
+
+            // Label filters
+            const registerExclude = ['vulgar', 'offensive', 'derogatory', 'slang', 'archaic']
+                .filter(label => document.getElementById(`label-register-exclude-${label}`)?.checked);
+            if (registerExclude.length > 0) {
+                builder.addFilter('labels', 'register.exclude', registerExclude);
+            }
+
+            // Policy filters
+            if (document.getElementById('policy-family')?.checked) {
+                builder.setPolicyFilter('family_friendly', true);
+            }
+            if (document.getElementById('policy-modern')?.checked) {
+                builder.setPolicyFilter('modern_only', true);
+            }
+            if (document.getElementById('policy-jargon')?.checked) {
+                builder.setPolicyFilter('no_jargon', true);
+            }
+
+            // Output configuration
+            const format = document.getElementById('outputFormat').value;
+            const limit = document.getElementById('outputLimit').value;
+            const sortBy = document.getElementById('sortBy').value;
+
+            builder.setOutput({
+                format,
+                ...(limit ? { limit: parseInt(limit) } : {}),
+                sort_by: sortBy
+            });
+
+            // Build and display
+            try {
+                const { spec, validation } = builder.build();
+
+                // Show warnings
+                if (validation.warnings.length > 0) {
+                    document.getElementById('validationWarnings').classList.remove('hidden');
+                    const warningsList = document.getElementById('warningsList');
+                    warningsList.innerHTML = validation.warnings.map(w => `<li>${w}</li>`).join('');
+                } else {
+                    document.getElementById('validationWarnings').classList.add('hidden');
+                }
+
+                // Show estimate
+                const estimate = specBuilderHelpers.estimateResultCount(spec);
+                document.getElementById('estimatedCount').textContent = estimate.toLocaleString();
+
+                // Show spec
+                document.getElementById('specOutput').textContent = JSON.stringify(spec, null, 2);
+                document.getElementById('outputContainer').classList.remove('hidden');
+
+                // Scroll to output
+                document.getElementById('outputContainer').scrollIntoView({ behavior: 'smooth' });
+
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        function downloadSpec() {
+            const spec = document.getElementById('specOutput').textContent;
+            const blob = new Blob([spec], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'wordlist-spec.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function copySpec() {
+            const spec = document.getElementById('specOutput').textContent;
+            navigator.clipboard.writeText(spec).then(() => {
+                alert('Specification copied to clipboard!');
+            });
+        }
+
+        function resetForm() {
+            if (confirm('Reset all filters and start over?')) {
+                location.reload();
+            }
+        }
+
+        // Make checkboxes update visual state
+        document.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox' && e.target.closest('.checkbox-option')) {
+                const option = e.target.closest('.checkbox-option');
+                if (e.target.checked) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

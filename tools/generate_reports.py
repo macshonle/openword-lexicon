@@ -101,7 +101,7 @@ def generate_all_reports():
 
     # Summary
     print("=" * 60)
-    print(f"✓ Generated {len(reports_generated)} reports")
+    print(f"Generated {len(reports_generated)} reports")
     print("=" * 60)
     print()
     print("Reports available in reports/:")
@@ -137,7 +137,7 @@ def generate_index():
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(index)
 
-    print(f"✓ Index written to {output_path}")
+    print(f"Index written to {output_path}")
 
 
 if __name__ == '__main__':
