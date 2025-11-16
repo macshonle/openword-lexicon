@@ -34,10 +34,10 @@ This report compares the core and plus distributions.
 ### Example Differences
 
 **`aa`**
-- sources: {'enable', 'eowl'} -> {'wikt', 'enable', 'eowl'}
+- sources: {'eowl', 'enable'} -> {'wikt', 'eowl', 'enable'}
 
 **`aah`**
-- sources: {'enable', 'eowl'} -> {'wikt', 'enable', 'eowl'}
+- sources: {'eowl', 'enable'} -> {'wikt', 'eowl', 'enable'}
 
 **`aahed`**
 - sources: {'enable'} -> {'wikt', 'enable'}
@@ -49,10 +49,10 @@ This report compares the core and plus distributions.
 - sources: {'enable'} -> {'wikt', 'enable'}
 
 **`aal`**
-- sources: {'enable', 'eowl'} -> {'wikt', 'enable', 'eowl'}
+- sources: {'eowl', 'enable'} -> {'wikt', 'eowl', 'enable'}
 
 **`aalii`**
-- sources: {'enable', 'eowl'} -> {'wikt', 'enable', 'eowl'}
+- sources: {'eowl', 'enable'} -> {'wikt', 'eowl', 'enable'}
 
 **`aaliis`**
 - sources: {'enable'} -> {'wikt', 'enable'}
@@ -61,7 +61,7 @@ This report compares the core and plus distributions.
 - sources: {'enable'} -> {'wikt', 'enable'}
 
 **`aardvark`**
-- sources: {'enable', 'eowl'} -> {'wikt', 'enable', 'eowl'}
+- sources: {'eowl', 'enable'} -> {'wikt', 'eowl', 'enable'}
 
 
 ---

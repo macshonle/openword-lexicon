@@ -339,9 +339,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "verb"
   ],
   "labels": {
-    "region": [
-      "en-GB",
-      "en-US"
+    "temporal": [
+      "dated",
+      "historical"
     ],
     "domain": [
       "aviation",
@@ -351,9 +351,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "military",
       "physics"
     ],
-    "temporal": [
-      "dated",
-      "historical"
+    "region": [
+      "en-GB",
+      "en-US"
     ]
   },
   "is_phrase": false,
@@ -412,12 +412,8 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "verb"
   ],
   "labels": {
-    "register": [
-      "slang"
-    ],
-    "region": [
-      "en-GB",
-      "en-US"
+    "temporal": [
+      "obsolete"
     ],
     "domain": [
       "law",
@@ -427,8 +423,12 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "physics",
       "sports"
     ],
-    "temporal": [
-      "obsolete"
+    "region": [
+      "en-GB",
+      "en-US"
+    ],
+    "register": [
+      "slang"
     ]
   },
   "is_phrase": false,
@@ -454,12 +454,6 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "verb"
   ],
   "labels": {
-    "register": [
-      "informal"
-    ],
-    "region": [
-      "en-US"
-    ],
     "domain": [
       "chemistry",
       "computing",
@@ -467,6 +461,12 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "medicine",
       "military",
       "physics"
+    ],
+    "region": [
+      "en-US"
+    ],
+    "register": [
+      "informal"
     ]
   },
   "is_phrase": false,
@@ -499,13 +499,6 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "verb"
   ],
   "labels": {
-    "register": [
-      "informal"
-    ],
-    "region": [
-      "en-GB",
-      "en-US"
-    ],
     "domain": [
       "biology",
       "computing",
@@ -513,6 +506,13 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "military",
       "physics",
       "sports"
+    ],
+    "region": [
+      "en-GB",
+      "en-US"
+    ],
+    "register": [
+      "informal"
     ]
   },
   "is_phrase": false,
@@ -537,11 +537,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "verb"
   ],
   "labels": {
-    "register": [
-      "slang"
-    ],
-    "region": [
-      "en-GB"
+    "temporal": [
+      "archaic",
+      "obsolete"
     ],
     "domain": [
       "aviation",
@@ -551,9 +549,11 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "nautical",
       "sports"
     ],
-    "temporal": [
-      "archaic",
-      "obsolete"
+    "region": [
+      "en-GB"
+    ],
+    "register": [
+      "slang"
     ]
   },
   "is_phrase": false,
@@ -579,13 +579,11 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "verb"
   ],
   "labels": {
-    "register": [
-      "informal",
-      "slang"
-    ],
-    "region": [
-      "en-GB",
-      "en-US"
+    "temporal": [
+      "archaic",
+      "dated",
+      "historical",
+      "obsolete"
     ],
     "domain": [
       "computing",
@@ -595,11 +593,13 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "nautical",
       "sports"
     ],
-    "temporal": [
-      "archaic",
-      "dated",
-      "historical",
-      "obsolete"
+    "region": [
+      "en-GB",
+      "en-US"
+    ],
+    "register": [
+      "informal",
+      "slang"
     ]
   },
   "is_phrase": false,
@@ -625,11 +625,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "verb"
   ],
   "labels": {
-    "register": [
-      "informal"
-    ],
-    "region": [
-      "en-US"
+    "temporal": [
+      "archaic",
+      "historical"
     ],
     "domain": [
       "aviation",
@@ -639,9 +637,11 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "military",
       "nautical"
     ],
-    "temporal": [
-      "archaic",
-      "historical"
+    "region": [
+      "en-US"
+    ],
+    "register": [
+      "informal"
     ]
   },
   "is_phrase": false,
@@ -668,13 +668,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "verb"
   ],
   "labels": {
-    "register": [
-      "informal",
-      "slang"
-    ],
-    "region": [
-      "en-GB",
-      "en-US"
+    "temporal": [
+      "dated",
+      "obsolete"
     ],
     "domain": [
       "computing",
@@ -683,9 +679,13 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "physics",
       "sports"
     ],
-    "temporal": [
-      "dated",
-      "obsolete"
+    "region": [
+      "en-GB",
+      "en-US"
+    ],
+    "register": [
+      "informal",
+      "slang"
     ]
   },
   "is_phrase": false,
@@ -717,9 +717,8 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "verb"
   ],
   "labels": {
-    "region": [
-      "en-GB",
-      "en-US"
+    "temporal": [
+      "historical"
     ],
     "domain": [
       "aviation",
@@ -728,8 +727,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "military",
       "sports"
     ],
-    "temporal": [
-      "historical"
+    "region": [
+      "en-GB",
+      "en-US"
     ]
   },
   "is_phrase": false,
