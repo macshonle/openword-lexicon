@@ -59,15 +59,24 @@ def analyze_frequency_tiers(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
 
     report += "\n"
 
-    # Sample words from each tier
+    # Sample words from each tier - show ALL tiers, enumerate when count < 10
     report += "### Sample Words by Tier\n\n"
 
-    for tier in sorted_tiers[:5]:  # Top 5 tiers
+    for tier in sorted_tiers:  # Show ALL tiers
         tier_words = [w for w, m in metadata.items() if m.get('frequency_tier') == tier]
-        sample = random.sample(tier_words, min(5, len(tier_words)))
-
         tier_display = tier if tier is not None else 'N/A'
-        report += f"**Tier {tier_display}:** {', '.join(f'`{w}`' for w in sample)}  \n"
+
+        if not tier_words:
+            # Explicitly report null cases
+            report += f"**Tier {tier_display}:** *(no words)*  \n"
+        elif len(tier_words) < 10:
+            # Enumerate all words when count < 10
+            sorted_words = sorted(tier_words)
+            report += f"**Tier {tier_display}:** ({len(tier_words)} words) {', '.join(f'`{w}`' for w in sorted_words)}  \n"
+        else:
+            # Sample 5 words for larger sets
+            sample = random.sample(tier_words, 5)
+            report += f"**Tier {tier_display}:** ({len(tier_words):,} words) {', '.join(f'`{w}`' for w in sample)}  \n"
 
     report += "\n"
 
@@ -343,8 +352,25 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
             for syll_count in [1, 2, 3, 4, 5]:
                 if syll_count in syllable_dist:
                     words_with_syll = [w for w, e in metadata.items() if e.get('syllables') == syll_count]
-                    sample = random.sample(words_with_syll, min(5, len(words_with_syll)))
-                    report += f"**{syll_count} syllable{'s' if syll_count > 1 else ''}:** {', '.join(f'`{w}`' for w in sample)}  \n"
+                    count = len(words_with_syll)
+
+                    if count < 10:
+                        # Enumerate all when < 10
+                        sorted_words = sorted(words_with_syll)
+                        report += f"**{syll_count} syllable{'s' if syll_count > 1 else ''}:** ({count} words) {', '.join(f'`{w}`' for w in sorted_words)}  \n"
+                    else:
+                        # Sample 5 for larger sets
+                        sample = random.sample(words_with_syll, 5)
+                        report += f"**{syll_count} syllable{'s' if syll_count > 1 else ''}:** {', '.join(f'`{w}`' for w in sample)}  \n"
+
+            # Complete enumeration for rare syllable counts (< 10 words)
+            rare_syllable_counts = [k for k, v in syllable_dist.items() if v < 10 and k > 5]
+            if rare_syllable_counts:
+                report += "\n#### Complete Enumeration for Rare Syllable Counts\n\n"
+                for syll_count in sorted(rare_syllable_counts):
+                    words_with_syll = sorted([w for w, e in metadata.items() if e.get('syllables') == syll_count])
+                    count = len(words_with_syll)
+                    report += f"**{syll_count} syllables:** ({count} word{'s' if count > 1 else ''}) {', '.join(f'`{w}`' for w in words_with_syll)}  \n"
 
             report += "\n"
 
@@ -356,13 +382,26 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         report += f"| {concrete_type} | {count:,} |\n"
     report += "\n"
 
-    # Frequency distribution
-    report += "#### Frequency Distribution (Nouns Only)\n\n"
-    report += "| Tier | Count |\n"
-    report += "|------|------:|\n"
-    for tier in ['top10', 'top100', 'top1k', 'top10k', 'top100k', 'rare']:
-        count = noun_freq.get(tier, 0)
-        report += f"| {tier} | {count:,} |\n"
+    # Frequency distribution (using letter-based tiers A-Z)
+    report += "#### Frequency Distribution by Tier (Nouns Only)\n\n"
+    report += "| Tier | Count | Percentage |\n"
+    report += "|------|------:|-----------:|\n"
+
+    # Get all tiers present in noun data
+    all_tiers = sorted(set(noun_freq.keys()))
+    total_nouns_with_tier = sum(noun_freq.values())
+
+    for tier in all_tiers:
+        count = noun_freq[tier]
+        pct = (count / total_nouns_with_tier * 100) if total_nouns_with_tier > 0 else 0
+        tier_display = tier if tier is not None else 'N/A'
+        report += f"| {tier_display} | {count:,} | {pct:.1f}% |\n"
+
+    # Show total
+    report += f"\n**Total nouns with frequency tier:** {total_nouns_with_tier:,}  \n"
+    if len(nouns) > total_nouns_with_tier:
+        missing = len(nouns) - total_nouns_with_tier
+        report += f"**Nouns without frequency tier:** {missing:,}  \n"
     report += "\n"
 
     stats = {
@@ -614,9 +653,17 @@ def sample_rich_entries(metadata: Dict[str, Any]) -> str:
 
 def generate_report(language: str = 'en'):
     """Generate comprehensive metadata analysis report for a language."""
-    random.seed(42)  # Reproducible samples
-
     meta_path = Path(f'data/build/{language}/{language}.meta.json')
+
+    # Load metadata first to set reproducible seed based on data
+    metadata = load_metadata(meta_path)
+
+    # Set seed based on metadata size for reproducibility that changes with data
+    # This makes sampling reproducible but updates when data significantly changes
+    if metadata:
+        random.seed(len(metadata))
+    else:
+        random.seed(42)  # Fallback for empty metadata
 
     report = f"# Comprehensive Metadata Analysis Report ({language.upper()})\n\n"
     report += f"Generated by `tools/analyze_metadata.py`\n\n"
@@ -626,9 +673,6 @@ def generate_report(language: str = 'en'):
     report += "- Game-specific filtering analysis (formerly `analyze_game_metadata.py`)\n"
     report += "- Label coverage analysis (formerly `report_label_statistics_built.py`)\n\n"
     report += "---\n\n"
-
-    # Load metadata
-    metadata = load_metadata(meta_path)
 
     if not metadata:
         report += f"## Error\n\nMetadata not found at `{meta_path}`\n"
