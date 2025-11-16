@@ -739,7 +739,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                 try:
                     entry = parse_entry(title, text)
                     if entry:
-                        out.write(json.dumps(entry, ensure_ascii=False) + '\n')
+                        out.write(json.dumps(entry, ensure_ascii=False, sort_keys=True) + '\n')
                         entries_written += 1
                         metrics["Written"] = entries_written
                     else:

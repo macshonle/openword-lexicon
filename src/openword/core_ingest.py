@@ -106,7 +106,7 @@ def write_jsonl(entries: list, output_path: Path) -> None:
     with open(output_path, 'wb') as f:
         for entry in entries:
             # orjson.dumps returns bytes
-            line = orjson.dumps(entry) + b'\n'
+            line = orjson.dumps(entry, option=orjson.OPT_SORT_KEYS) + b'\n'
             f.write(line)
 
     logger.info(f"Written: {output_path}")
@@ -116,14 +116,14 @@ def main():
     """Main ingestion pipeline."""
     # Paths
     data_root = Path(__file__).parent.parent.parent / "data"
-    raw_dir = data_root / "raw" / "core"
-    intermediate_dir = data_root / "intermediate" / "core"
+    raw_dir = data_root / "raw" / "en"
+    intermediate_dir = data_root / "intermediate" / "en"
 
     enable_path = raw_dir / "enable1.txt"
     eowl_path = raw_dir / "eowl.txt"
     output_path = intermediate_dir / "core_entries.jsonl"
 
-    logger.info("Core word list ingestion")
+    logger.info("Core word list ingestion (English)")
 
     # Read source lists
     enable_words = read_wordlist(enable_path, "ENABLE")

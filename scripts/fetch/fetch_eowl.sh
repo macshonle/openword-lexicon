@@ -6,7 +6,8 @@ set -euo pipefail
 
 # Configuration
 readonly EOWL_REPO="https://github.com/kloge/The-English-Open-Word-List.git"
-readonly OUTPUT_DIR="data/raw/core"
+readonly LANG="${LEXICON_LANG:-en}"
+readonly OUTPUT_DIR="data/raw/${LANG}"
 readonly TEMP_DIR="${OUTPUT_DIR}/eowl_temp"
 readonly OUTPUT_FILE="${OUTPUT_DIR}/eowl.txt"
 readonly SOURCE_FILE="${OUTPUT_DIR}/eowl.SOURCE.json"

@@ -190,6 +190,16 @@ def analyze_labels(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         report += "|-----|------:|\n"
         for pos, count in pos_counts.most_common(15):
             report += f"| {pos} | {count:,} |\n"
+
+        # Check for expected but missing POS tags
+        all_expected_pos = {'noun', 'verb', 'adjective', 'adverb', 'pronoun', 'preposition',
+                           'conjunction', 'interjection', 'determiner', 'particle', 'auxiliary'}
+        missing_pos = all_expected_pos - set(pos_counts.keys())
+
+        if missing_pos:
+            report += f"\n⚠️  **Missing POS tags:** {', '.join(sorted(missing_pos))}  \n"
+            report += "*These POS tags are defined in the schema but have zero occurrences in the data.*\n"
+
         report += "\n"
 
     if register_counts:
@@ -246,6 +256,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     has_frequency = sum(1 for e in metadata.values() if e.get('frequency_tier'))
     has_labels = sum(1 for e in metadata.values() if e.get('labels'))
     has_gloss = sum(1 for e in metadata.values() if e.get('gloss'))
+    has_syllables = sum(1 for e in metadata.values() if e.get('syllables'))
 
     # Count nouns
     nouns = [e for e in metadata.values() if 'noun' in e.get('pos', [])]
@@ -279,6 +290,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         ('Concreteness', has_concreteness),
         ('Frequency tier', has_frequency),
         ('Labels', has_labels),
+        ('Syllables', has_syllables),
         ('Gloss', has_gloss),
     ]
 
@@ -297,8 +309,47 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         pct_missing = len(nouns_no_concrete) / len(nouns) * 100 if len(nouns) > 0 else 0
         report += f"⚠️  **{pct_missing:.1f}%** of nouns lack concreteness metadata!\n\n"
 
+    #Syllable analysis
+    if has_syllables > 0:
+        syllable_dist = Counter()
+        for entry in metadata.values():
+            syll_count = entry.get('syllables')
+            if syll_count is not None:
+                syllable_dist[syll_count] += 1
+
+        report += "\n### Syllable Analysis\n\n"
+        report += f"**Words with syllable data:** {has_syllables:,} ({has_syllables/total*100:.1f}%)\n\n"
+
+        if syllable_dist:
+            report += "#### Syllable Distribution\n\n"
+            report += "| Syllables | Count | Percentage |\n"
+            report += "|-----------|------:|-----------:|\n"
+
+            for syll_count in sorted(syllable_dist.keys())[:15]:  # Top 15
+                count = syllable_dist[syll_count]
+                pct = count / has_syllables * 100
+                report += f"| {syll_count} | {count:,} | {pct:.1f}% |\n"
+
+            # Summary stats
+            total_syllables = sum(k * v for k, v in syllable_dist.items())
+            avg_syllables = total_syllables / has_syllables if has_syllables > 0 else 0
+            max_syllables = max(syllable_dist.keys()) if syllable_dist else 0
+
+            report += f"\n**Average syllables:** {avg_syllables:.2f}  \n"
+            report += f"**Max syllables:** {max_syllables}  \n"
+
+            # Sample words by syllable count
+            report += "\n#### Sample Words by Syllable Count\n\n"
+            for syll_count in [1, 2, 3, 4, 5]:
+                if syll_count in syllable_dist:
+                    words_with_syll = [w for w, e in metadata.items() if e.get('syllables') == syll_count]
+                    sample = random.sample(words_with_syll, min(5, len(words_with_syll)))
+                    report += f"**{syll_count} syllable{'s' if syll_count > 1 else ''}:** {', '.join(f'`{w}`' for w in sample)}  \n"
+
+            report += "\n"
+
     # Concreteness distribution
-    report += "#### Concreteness Distribution\n\n"
+    report += "### Concreteness Distribution\n\n"
     report += "| Type | Count |\n"
     report += "|------|------:|\n"
     for concrete_type, count in concrete_dist.most_common():
@@ -494,6 +545,42 @@ def generate_filtering_recommendations(label_stats: Dict, game_stats: Dict) -> s
     return report
 
 
+def sample_entries_by_source(metadata: Dict[str, Any]) -> str:
+    """Sample entries from different source combinations."""
+    # Group entries by source combinations
+    source_combinations = defaultdict(list)
+
+    for word, meta in metadata.items():
+        sources = tuple(sorted(meta.get('sources', [])))
+        source_combinations[sources].append((word, meta))
+
+    report = "## Sample Entries by Source\n\n"
+    report += "Representative samples from different source combinations:\n\n"
+
+    # Sort by count (most common first)
+    sorted_combos = sorted(source_combinations.items(), key=lambda x: len(x[1]), reverse=True)
+
+    # Show samples from top source combinations
+    for sources, entries in sorted_combos[:8]:  # Top 8 combinations
+        sources_str = ', '.join(sources) if sources else 'None'
+        count = len(entries)
+
+        report += f"### {sources_str} ({count:,} entries)\n\n"
+
+        # Sample 3 entries
+        sample_entries = random.sample(entries, min(3, len(entries)))
+
+        for word, meta in sample_entries:
+            report += f"**`{word}`**\n"
+            report += "```json\n"
+            report += json.dumps(meta, indent=2, ensure_ascii=False, sort_keys=True)
+            report += "\n```\n\n"
+
+        report += "\n"
+
+    return report
+
+
 def sample_rich_entries(metadata: Dict[str, Any]) -> str:
     """Sample entries with rich metadata."""
     # Find entries with lots of metadata
@@ -519,19 +606,19 @@ def sample_rich_entries(metadata: Dict[str, Any]) -> str:
     for word, meta, score in rich_entries[:10]:
         report += f"### `{word}` (richness: {score})\n\n"
         report += "```json\n"
-        report += json.dumps(meta, indent=2, ensure_ascii=False)
+        report += json.dumps(meta, indent=2, ensure_ascii=False, sort_keys=True)
         report += "\n```\n\n"
 
     return report
 
 
-def generate_report(distribution: str = 'core'):
-    """Generate comprehensive metadata analysis report."""
+def generate_report(language: str = 'en'):
+    """Generate comprehensive metadata analysis report for a language."""
     random.seed(42)  # Reproducible samples
 
-    meta_path = Path(f'data/build/{distribution}/{distribution}.meta.json')
+    meta_path = Path(f'data/build/{language}/{language}.meta.json')
 
-    report = f"# Comprehensive Metadata Analysis Report ({distribution.upper()})\n\n"
+    report = f"# Comprehensive Metadata Analysis Report ({language.upper()})\n\n"
     report += f"Generated by `tools/analyze_metadata.py`\n\n"
     report += "This consolidated report analyzes metadata coverage, quality, and filtering capabilities.\n\n"
     report += "**Consolidates:**\n"
@@ -545,7 +632,7 @@ def generate_report(distribution: str = 'core'):
 
     if not metadata:
         report += f"## Error\n\nMetadata not found at `{meta_path}`\n"
-        report += f"Run `make build-{distribution}` first.\n"
+        report += f"Run `make build-{language}` first.\n"
     else:
         report += f"**Total entries:** {len(metadata):,}\n\n"
         report += "---\n\n"
@@ -577,27 +664,28 @@ def generate_report(distribution: str = 'core'):
         report += generate_filtering_recommendations(label_stats, game_stats)
         report += "---\n\n"
 
+        # Representative samples by source
+        report += sample_entries_by_source(metadata)
+        report += "---\n\n"
+
         # Sample rich entries
         report += sample_rich_entries(metadata)
 
     # Write report
-    output_path = Path(f'reports/metadata_analysis_{distribution}.md')
+    output_path = Path(f'reports/metadata_analysis_{language}.md')
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"Comprehensive metadata analysis report ({distribution}) written to {output_path}")
+    print(f"Comprehensive metadata analysis report ({language}) written to {output_path}")
     return output_path
 
 
 if __name__ == '__main__':
     import sys
 
-    distribution = sys.argv[1] if len(sys.argv) > 1 else 'core'
+    language = sys.argv[1] if len(sys.argv) > 1 else 'en'
 
-    if distribution not in ['core', 'plus']:
-        print(f"Error: distribution must be 'core' or 'plus', got '{distribution}'")
-        sys.exit(1)
-
-    generate_report(distribution)
+    print(f"Generating report for language: {language}")
+    generate_report(language)

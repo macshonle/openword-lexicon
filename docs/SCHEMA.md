@@ -51,6 +51,26 @@ Provenance: which source datasets contributed this entry.
 - `wordnet` — Princeton WordNet (WordNet License)
 - `frequency` — OpenSubtitles 2018 frequency data
 
+#### `license_sources` (object)
+
+Mapping of license identifiers to the sources that require them.
+
+- **Format**: Object with license IDs as keys, arrays of source IDs as values
+- **Default**: `{}` (computed from `sources`)
+- **Example**: `{"CC0": ["enable"], "UKACD": ["eowl"], "CC-BY-SA-4.0": ["wikt"]}`
+
+**License IDs:**
+- `CC0` — Public Domain (ENABLE)
+- `UKACD` — UK Advanced Cryptics Dictionary License (EOWL)
+- `CC-BY-SA-4.0` — Creative Commons Attribution-ShareAlike 4.0 (Wiktionary)
+- `CC-BY-4.0` — Creative Commons Attribution 4.0 (OpenSubtitles frequency data)
+- `WordNet` — Princeton WordNet License (WordNet enrichment)
+
+**Notes:**
+- This field enables users to filter words based on license requirements
+- For example, filtering to only `CC0` and `UKACD` licenses excludes Wiktionary data
+- The license information is automatically computed from the `sources` field during the merge phase
+
 ---
 
 ### Optional Fields

@@ -32,7 +32,7 @@ def test_metadata_to_jsonl(sample_metadata, temp_dir):
     # Write JSONL
     with open(jsonl_path, 'w', encoding='utf-8') as f:
         for entry in sample_metadata:
-            f.write(json.dumps(entry) + '\n')
+            f.write(json.dumps(entry, sort_keys=True) + '\n')
 
     # Verify file
     assert jsonl_path.exists()
