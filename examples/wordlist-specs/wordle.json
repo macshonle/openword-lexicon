@@ -12,7 +12,7 @@
       "max_words": 1
     },
     "frequency": {
-      "min_tier": "top10k"
+      "min_tier": "Q"
     }
   },
   "output": {

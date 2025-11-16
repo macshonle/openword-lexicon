@@ -50,7 +50,7 @@ class FilterConfig:
     allow_mixed: bool = True
 
     # Frequency constraints
-    min_frequency_tier: str = None  # 'top100k', 'top10k', etc.
+    min_frequency_tier: str = None  # Letter code A-Z (e.g., 'M' ≈ rank 1k, 'Q' ≈ rank 10k, 'U' ≈ rank 100k)
     prefer_common: bool = True
 
     # Regional variants
@@ -92,7 +92,7 @@ WORDLE_CONFIG = FilterConfig(
     allow_abstract=True,
     allow_mixed=True,
     require_concrete=False,
-    min_frequency_tier='top100k',  # Want common words
+    min_frequency_tier='U',  # U ≈ rank 100k (common words)
     exclude_regional=True,  # No British-only or other regional variants
     exclude_offensive=True,
     exclude_vulgar=True,
@@ -111,7 +111,7 @@ TWENTY_Q_CONFIG = FilterConfig(
     allowed_pos={'noun'},
     require_primary_pos=True,
     require_concrete=True,
-    min_frequency_tier='top100k',
+    min_frequency_tier='U',  # U ≈ rank 100k
     exclude_regional=False,  # Regional nouns are OK (like "lorry")
     exclude_offensive=True,
     exclude_vulgar=True,
@@ -231,15 +231,11 @@ def passes_frequency_filter(entry: Dict, config: FilterConfig) -> bool:
     if config.min_frequency_tier is None:
         return True  # No minimum
 
-    tier = entry.get('frequency_tier', 'rare')
+    tier = entry.get('frequency_tier', 'Z')
 
-    tier_order = ['top10', 'top100', 'top300', 'top500', 'top1k', 'top3k', 'top10k', 'top25k', 'top50k', 'rare']
-    tier_index = {t: i for i, t in enumerate(tier_order)}
-
-    min_index = tier_index.get(config.min_frequency_tier, 5)
-    word_index = tier_index.get(tier, 5)
-
-    return word_index <= min_index
+    # Rank codes: A (most frequent) < B < ... < Z (extremely rare)
+    # min_frequency_tier is the maximum rank code allowed (most rare acceptable)
+    return tier <= config.min_frequency_tier
 
 
 def passes_regional_filter(entry: Dict, config: FilterConfig) -> bool:
@@ -344,18 +340,12 @@ def calculate_score(word: str, entry: Dict, config: FilterConfig) -> float:
     score = 0.0
 
     # Frequency score
-    tier = entry.get('frequency_tier', 'rare')
+    tier = entry.get('frequency_tier', 'Z')
+    # Tier scores: A (most frequent) = 100, Z (rarest) = 0
+    # Linear scale based on band index (0-25)
     tier_scores = {
-        'top10': 100,
-        'top100': 95,
-        'top300': 90,
-        'top500': 85,
-        'top1k': 80,
-        'top3k': 70,
-        'top10k': 60,
-        'top25k': 40,
-        'top50k': 20,
-        'rare': 5,
+        chr(ord('A') + i): 100 - (i * 4)
+        for i in range(26)
     }
     score += tier_scores.get(tier, 0) * config.frequency_weight
 

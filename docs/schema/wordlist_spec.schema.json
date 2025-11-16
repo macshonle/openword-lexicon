@@ -94,31 +94,31 @@
         },
         "frequency": {
           "type": "object",
-          "description": "Frequency tier filters (available on both distributions)",
+          "description": "Frequency rank code filters (available on both distributions)",
           "properties": {
             "tiers": {
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": ["top10", "top100", "top300", "top500", "top1k", "top3k", "top10k", "top25k", "top50k", "rare"]
+                "pattern": "^[A-Z]$"
               },
-              "description": "Include only these frequency tiers"
+              "description": "Include only these frequency rank codes (A-Z)"
             },
             "min_tier": {
               "type": "string",
-              "enum": ["top10", "top100", "top300", "top500", "top1k", "top3k", "top10k", "top25k", "top50k", "rare"],
-              "description": "Minimum frequency tier (more common)"
+              "pattern": "^[A-Z]$",
+              "description": "Minimum frequency tier - maximum rank code allowed (e.g., 'M' ≈ rank 1k, 'Q' ≈ rank 10k)"
             },
             "max_tier": {
               "type": "string",
-              "enum": ["top10", "top100", "top300", "top500", "top1k", "top3k", "top10k", "top25k", "top50k", "rare"],
-              "description": "Maximum frequency tier (rarer)"
+              "pattern": "^[A-Z]$",
+              "description": "Maximum frequency tier - minimum rank code allowed (more frequent)"
             },
             "min_score": {
               "type": "integer",
               "minimum": 0,
               "maximum": 100,
-              "description": "Minimum frequency score (top10=100, rare=10)"
+              "description": "Minimum frequency score (A=100, Z=0)"
             }
           }
         },

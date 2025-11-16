@@ -231,33 +231,26 @@ def matches_pos(entry: dict, required_pos: Set[str]) -> bool:
 def matches_frequency(entry: dict, min_tier: Optional[str] = None,
                      max_tier: Optional[str] = None) -> bool:
     """
-    Filter by frequency tier.
+    Filter by frequency rank code.
 
-    Tier order: top10 < top100 < top300 < top500 < top1k < top3k < top10k < top25k < top50k < rare
+    Rank codes: A (most frequent) < B < C < ... < Z (extremely rare)
 
     Args:
         entry: Entry dict from schema
-        min_tier: Minimum frequency tier (e.g., 'top10k' excludes rarer words)
-        max_tier: Maximum frequency tier (e.g., 'top1k' excludes top10-top100)
+        min_tier: Minimum frequency tier (e.g., 'M' excludes words rarer than ~rank 1000)
+        max_tier: Maximum frequency tier (e.g., 'E' excludes words more frequent than ~rank 10)
 
     Returns:
         True if entry's frequency is within range
     """
-    tier_order = ['top10', 'top100', 'top300', 'top500', 'top1k',
-                  'top3k', 'top10k', 'top25k', 'top50k', 'rare']
+    entry_tier = entry.get('frequency_tier', 'Z')
 
-    entry_tier = entry.get('frequency_tier', 'rare')
-    entry_idx = tier_order.index(entry_tier)
+    # Simple alphabetical comparison (A < B < ... < Z)
+    if min_tier and entry_tier > min_tier:
+        return False
 
-    if min_tier:
-        min_idx = tier_order.index(min_tier)
-        if entry_idx > min_idx:
-            return False
-
-    if max_tier:
-        max_idx = tier_order.index(max_tier)
-        if entry_idx < max_idx:
-            return False
+    if max_tier and entry_tier < max_tier:
+        return False
 
     return True
 
