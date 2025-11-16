@@ -4,43 +4,32 @@ This directory contains automated inspection reports for the Openword Lexicon pr
 
 ## Available Reports
 
-### Raw Data Analysis
-- [Raw Data Inspection](raw_data_inspection.md) - Samples from downloaded datasets
-
-### Pipeline Analysis
-- [Pipeline Inspection (Core)](pipeline_inspection_core.md) - Core distribution pipeline stages
-- [Pipeline Inspection (Plus)](pipeline_inspection_plus.md) - Plus distribution pipeline stages
-
-### Trie Analysis
-- [Trie Inspection (Core)](trie_inspection_core.md) - Core trie structure and tests
-- [Trie Inspection (Plus)](trie_inspection_plus.md) - Plus trie structure and tests
-
 ### Comprehensive Metadata Analysis
-- [Metadata Analysis (Core)](metadata_analysis_core.md) - Comprehensive metadata, labels, and filtering analysis
-- [Metadata Analysis (Plus)](metadata_analysis_plus.md) - Comprehensive metadata, labels, and filtering analysis
+- [Metadata Analysis (EN)](metadata_analysis_en.md) - Comprehensive metadata, labels, and filtering analysis
 
-**Note:** These consolidated reports include:
+**Note:** This consolidated report includes:
 - Frequency tier distribution
 - Source distribution (ENABLE, EOWL, Wiktionary)
 - Label coverage (register, domain, region, temporal)
-- Game-specific filtering analysis (concreteness, POS tags)
+- Game-specific filtering analysis (concreteness, POS tags, syllables)
 - Sense-based format recommendations
 - Filtering recommendations and data quality insights
-
-### Distribution Comparison
-- [Distribution Comparison](distribution_comparison.md) - Core vs Plus analysis
+- Representative samples from all data sources
 
 ---
 
 ## Recent Improvements
 
-**Report Consolidation (2025):**
-- Merged metadata exploration, game analysis, and label statistics into comprehensive metadata reports
-- Fixed label data loss pipeline issue - labels now preserved from Wiktionary extraction
-- Added syllable extraction to Wiktionary scanner parser (handles complex hyphenation formats)
-- Removed obsolete exploratory reports (frequency analysis, WordNet concreteness)
-- Added sense-based intermediate format analysis and recommendations
+**Unified Build (2025):**
+- Unified build integrating all sources (ENABLE, EOWL, Wiktionary, WordNet)
+- Per-word license tracking via `license_sources` field
+- Language-based organization (English-only currently)
+- Safe defaults philosophy for missing metadata
+- Runtime filtering support (child-safe, region-specific, profanity, etc.)
+- Fixed syllable data loss pipeline issue
+- Added missing POS tag detection
+- Enhanced analysis with source-specific sampling
 
 ---
 
-**Generation:** Run `make reports` or `uv run python tools/generate_reports.py`
+**Generation:** Run `make report-en` or `uv run python tools/generate_reports.py`

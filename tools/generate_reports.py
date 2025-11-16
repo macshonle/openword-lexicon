@@ -11,7 +11,6 @@ from pathlib import Path
 # Add tools directory to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-import inspect_raw
 import analyze_metadata
 
 
@@ -24,16 +23,7 @@ def generate_all_reports(language: str = 'en'):
 
     reports_generated = []
 
-    # 1. Raw data inspection
-    print("📊 Inspecting raw datasets...")
-    try:
-        report_path = inspect_raw.generate_report()
-        reports_generated.append(report_path)
-    except Exception as e:
-        print(f"   ⚠️  Error: {e}")
-    print()
-
-    # 2. Comprehensive metadata analysis
+    # 1. Comprehensive metadata analysis
     print(f"🏷️  Analyzing metadata ({language})...")
     try:
         report_path = analyze_metadata.generate_report(language)
@@ -58,8 +48,6 @@ def generate_index(language: str = 'en'):
     index = "# Openword Lexicon - Inspection Reports\n\n"
     index += "This directory contains automated inspection reports for the Openword Lexicon project.\n\n"
     index += "## Available Reports\n\n"
-    index += "### Raw Data Analysis\n"
-    index += "- [Raw Data Inspection](raw_data_inspection.md) - Samples from downloaded datasets\n\n"
     index += "### Comprehensive Metadata Analysis\n"
     index += f"- [Metadata Analysis ({language.upper()})](metadata_analysis_{language}.md) - Comprehensive metadata, labels, and filtering analysis\n\n"
     index += "**Note:** This consolidated report includes:\n"
