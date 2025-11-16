@@ -352,7 +352,8 @@ def extract_syllable_count(text: str) -> Optional[int]:
 
         # Skip 2-3 letter lang codes at start (en, da, en-US, en-GB)
         # These are always in the first position
-        if i == 0 and len(part) <= 5 and ('-' in part or (len(part) <= 3 and part.isalpha())):
+        # Only skip if there are more parts after it (prevents filtering single-syllable words)
+        if i == 0 and len(parts) > 1 and len(part) <= 5 and ('-' in part or (len(part) <= 3 and part.isalpha())):
             continue
 
         syllables.append(part)
