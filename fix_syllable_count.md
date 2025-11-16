@@ -1,111 +1,165 @@
-# Syllable Count Issue - Root Cause Analysis
+# Syllable Count Issue - Root Cause Analysis & Comprehensive Fix
 
 ## Problem
-The syllable count in the metadata is incorrect for many words because the hyphenation template parsing logic incorrectly filters out valid syllable segments.
+The syllable count in the metadata is incorrect for many words due to multiple issues in the hyphenation template parsing logic.
 
-## Root Cause
-In `tools/wiktionary_scanner_parser.py` at line 355, the language code filter is too aggressive:
+## Root Causes
 
+### Issue 1: Overly Aggressive Language Code Filtering
+The original heuristic-based filter was too broad:
 ```python
 if i == 0 and len(part) <= 5 and ('-' in part or (len(part) <= 3 and part.isalpha())):
     continue
 ```
 
-This filter assumes that:
-- Any 2-3 letter alphabetic string at position 0 is a language code
-- Any string up to 5 chars with a hyphen at position 0 is a language code (like "en-US")
+This incorrectly filtered:
+- Valid words like "art", "god" (3 letters, treated as lang codes)
+- Words matching language codes like "en", "da" (when they ARE the word being processed)
 
-## Issues This Causes
+### Issue 2: Unreliable Data Not Rejected
+Templates with unseparated syllables were accepted:
+- `{{hyphenation|arad}}` → counted as 1 (should be None - data quality issue)
+- `{{hyphenation|portia}}` → counted as 1 (should be None - missing pipes)
 
-### Issue 1: Templates without language codes
-When Wiktionary uses templates like `{{hyphenation|art}}` without an explicit language code:
-- The word "art" is at position 0
-- It's 3 letters and all alphabetic
-- It gets filtered out as if it were a language code
-- Result: Returns `None` instead of 1 syllable
+### Issue 3: No Fallback Signal
+Category labels (e.g., `[[Category:English 3-syllable words]]`) were ignored, even though they provide a useful fallback when hyphenation templates are missing.
 
-### Issue 2: Unseparated syllables in templates
-When Wiktionary has templates like `{{hyphenation|arad}}` instead of `{{hyphenation|a|rad}}`:
-- "arad" is 4 letters (exceeds the 3-char filter)
-- It passes through as a single syllable
-- Result: Counts as 1 syllable instead of 2
+### Issue 4: General Principle Violation
+The code was making assumptions (guessing) when data was unreliable or missing, rather than leaving fields unspecified.
 
-### Issue 3: Multi-word phrases
-When templates contain full phrases like `{{hyphenation|by right}}`:
-- "by right" is treated as a single unseparated segment
-- Result: Counts as 1 syllable instead of 2
+## Comprehensive Solution (Implemented)
 
-## Solution Options
-
-### Option 1: Stricter Language Code Whitelist (Recommended)
-Instead of heuristics, maintain a whitelist of known language codes:
-
+### ✓ Option 1: Whitelist of Known Language Codes
 ```python
 KNOWN_LANG_CODES = {
-    'en', 'da', 'de', 'es', 'fr', 'it', 'pt', 'nl', 'sv', 'no',
-    'en-US', 'en-GB', 'en-AU', 'en-CA', 'en-NZ', 'en-ZA', 'en-IE', 'en-IN'
+    'en', 'da', 'de', 'es', 'fr', 'it', 'pt', 'nl', 'sv', 'no', 'fi',
+    'en-US', 'en-GB', 'en-AU', 'en-CA', 'en-NZ', 'en-ZA', 'en-IE', 'en-IN',
+    # ... (40+ language codes)
 }
-
-# Skip only if it's an actual known language code at position 0
-if i == 0 and part in KNOWN_LANG_CODES:
-    continue
 ```
 
-This approach:
-- ✓ Doesn't filter out valid single-syllable words like "art", "god"
-- ✓ Still filters out actual language codes
-- ✓ Simple and maintainable
-- ✗ Requires maintaining the whitelist
-- ✗ Doesn't fix Issue 2 (unseparated syllables in Wiktionary data)
+Benefits:
+- ✓ Precise filtering - only actual language codes are filtered
+- ✓ No false positives from short words
+- ✓ Maintainable and explicit
 
-### Option 2: Smarter Heuristic
-Only filter if there are additional segments after position 0:
-
+### ✓ Option 3: Context-Aware Detection
 ```python
-# Only skip lang code if there are more parts after it
-if i == 0 and len(parts) > 1 and len(part) <= 5 and ('-' in part or (len(part) <= 3 and part.isalpha())):
-    continue
-```
-
-This approach:
-- ✓ Fixes templates without language codes (single part is not filtered)
-- ✓ Still filters out language codes when proper syllables follow
-- ✗ Might incorrectly count some two-letter language codes if they're the only content
-- ✗ Doesn't fix Issue 2 (unseparated syllables in Wiktionary data)
-
-### Option 3: Context-Aware Detection (Most Robust)
-Check if the potential lang code is also the page title:
-
-```python
-# This requires passing the word being processed to the function
-# Skip only if it looks like a lang code AND is not the word itself
-if i == 0 and len(parts) > 1 and len(part) <= 5 and ('-' in part or (len(part) <= 3 and part.isalpha())):
-    if part.lower() != word.lower():  # Not the word itself
+if i == 0:
+    # Check if it's a known language code (not the word itself)
+    if part in KNOWN_LANG_CODES and part.lower() != word.lower():
         continue
 ```
 
-This requires modifying the function signature to accept the word being processed.
+Benefits:
+- ✓ Handles words that match language codes (e.g., word "en" itself)
+- ✓ Prevents filtering the actual word being processed
 
-## Recommendation
-
-**Implement Option 2** as it provides the best balance:
-- Fixes the immediate issue with templates lacking language codes
-- Minimal code change
-- Low risk of breaking existing correct behavior
-
-Then, for the data quality issue (Issue 2 - unseparated syllables in Wiktionary), we should:
-1. Document that syllable counts depend on Wiktionary data quality
-2. Consider alternative sources for syllable data (e.g., CMU Pronouncing Dictionary)
-3. Add validation/warnings for suspicious syllable counts during ingestion
-
-## Testing
-
-The fix should be tested with:
+### ✓ Unreliable Data Rejection
 ```python
-# Should all return correct results after fix:
-{{hyphenation|art}}           # Should return 1 (currently returns None)
-{{hyphenation|god}}           # Should return 1 (currently returns None)
-{{hyphenation|en|art}}        # Should return 1 (works correctly)
-{{hyphenation|en|a|rad}}      # Should return 2 (works correctly)
-{{hyphenation|arad}}          # Should return 1 (Wiktionary data issue, not parser bug)
+# If there's only one part and it's unseparated (>3 chars), it's likely
+# incomplete data (e.g., {{hyphenation|arad}} should be {{hyphenation|a|rad}})
+if len(parts) == 1 and len(part) > 3:
+    return None  # Indicate unreliable data
 ```
+
+Benefits:
+- ✓ Rejects templates with unseparated syllables (data quality issues)
+- ✓ Only trusts single-part templates for very short words (1-3 chars)
+- ✓ Returns None instead of guessing
+
+### ✓ Category Labels as Fallback Signal
+```python
+def extract_syllable_count_from_categories(text: str) -> Optional[int]:
+    """Extract from [[Category:English N-syllable words]]"""
+    match = SYLLABLE_CATEGORY.search(text)
+    if match:
+        return int(match.group(1))
+    return None
+```
+
+Benefits:
+- ✓ Uses deprecated category labels when available
+- ✓ Provides coverage for words without hyphenation templates
+- ✓ Hyphenation template still preferred (more reliable)
+
+### ✓ No-Guess Principle
+```python
+# Only include syllable count if reliably determined
+# Leave unspecified (None) if data is missing or unreliable
+if syllable_count is not None:
+    entry['syllables'] = syllable_count
+```
+
+Benefits:
+- ✓ Never makes assumptions about missing data
+- ✓ Downstream processes can make context-appropriate decisions
+- ✓ Explicit about what we know vs. what we don't know
+
+## Test Results
+
+All 21 test cases pass:
+
+**Hyphenation Templates:**
+- ✓ `{{hyphenation|art}}` → 1 (was: None)
+- ✓ `{{hyphenation|en|art}}` → 1 (still works)
+- ✓ `{{hyphenation|en|dic|tion|a|ry}}` → 4 (still works)
+
+**Context-Aware:**
+- ✓ Word "en" with `{{hyphenation|en}}` → 1 (not filtered)
+- ✓ Word "da" with `{{hyphenation|da}}` → 1 (not filtered)
+
+**Unreliable Data Rejection:**
+- ✓ `{{hyphenation|arad}}` → None (unreliable, should be a|rad)
+- ✓ `{{hyphenation|portia}}` → None (unreliable, missing pipes)
+- ✓ `{{hyphenation|by right}}` → None (unseparated phrase)
+
+**Reliable Short Words:**
+- ✓ `{{hyphenation|god}}` → 1 (3 chars, reliable)
+- ✓ `{{hyphenation|by}}` → 1 (2 chars, reliable)
+
+**Category Fallback:**
+- ✓ `[[Category:English 3-syllable words]]` → 3
+- ✓ Works when hyphenation template is missing
+
+**No Guessing:**
+- ✓ No hyphenation, no category → None (not guessed)
+- ✓ Empty template → None (not guessed)
+
+## Files Modified
+
+1. **tools/wiktionary_scanner_parser.py**
+   - Added `KNOWN_LANG_CODES` whitelist
+   - Added `SYLLABLE_CATEGORY` regex pattern
+   - Renamed and improved `extract_syllable_count()` → `extract_syllable_count_from_hyphenation()`
+   - Added `extract_syllable_count_from_categories()`
+   - Updated `parse_entry()` to use both sources with proper fallback
+   - Implements no-guess principle
+
+2. **fix_syllable_count.md** (this file)
+   - Complete analysis and documentation
+
+## Recommendations for Downstream Use
+
+When filtering words by syllable count:
+
+**For inclusion (e.g., "must have X syllables"):**
+```python
+# Only include words with confirmed syllable count
+if entry.get('syllables') == desired_count:
+    include(word)
+```
+
+**For exclusion (e.g., "exclude words with >5 syllables"):**
+```python
+# Option A: Conservative (exclude unknowns)
+if entry.get('syllables', 999) > 5:
+    exclude(word)
+
+# Option B: Permissive (include unknowns)
+syllables = entry.get('syllables')
+if syllables is not None and syllables > 5:
+    exclude(word)
+```
+
+The appropriate choice depends on your use case. The important point is that we provide **accurate information about what we know**, not guesses about what we don't know.

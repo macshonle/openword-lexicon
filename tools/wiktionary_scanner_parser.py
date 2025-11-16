@@ -107,6 +107,22 @@ CATEGORY = re.compile(r'\[\[Category:English\s+([^\]]+)\]\]', re.IGNORECASE)
 DICT_ONLY = re.compile(r'\{\{no entry\|en', re.IGNORECASE)  # Matches both {{no entry|en}} and {{no entry|en|...}}
 # Extract hyphenation data for syllable counts
 HYPHENATION_TEMPLATE = re.compile(r'\{\{(?:hyphenation|hyph)\|([^}]+)\}\}', re.IGNORECASE)
+# Extract syllable count from category labels (e.g., "Category:English 3-syllable words")
+SYLLABLE_CATEGORY = re.compile(r'\[\[Category:English\s+(\d+)-syllable\s+words?\]\]', re.IGNORECASE)
+
+# Known language codes for hyphenation templates
+# This whitelist prevents false positives when filtering language codes from syllable segments
+KNOWN_LANG_CODES = {
+    # Major languages
+    'en', 'da', 'de', 'es', 'fr', 'it', 'pt', 'nl', 'sv', 'no', 'fi',
+    'pl', 'cs', 'sk', 'hu', 'ro', 'bg', 'ru', 'uk', 'el', 'tr', 'ar',
+    'he', 'hi', 'bn', 'pa', 'ta', 'te', 'mr', 'gu', 'kn', 'ml', 'si',
+    'th', 'vi', 'zh', 'ja', 'ko', 'id', 'ms', 'tl', 'fa', 'ur',
+    # English variants
+    'en-US', 'en-GB', 'en-AU', 'en-CA', 'en-NZ', 'en-ZA', 'en-IE', 'en-IN',
+    # Other common codes
+    'la', 'sa', 'grc', 'ang', 'enm', 'fro', 'non',
+}
 
 # Simple extraction patterns (no full XML parsing)
 TITLE_PATTERN = re.compile(r'<title>([^<]+)</title>')
@@ -309,20 +325,31 @@ def extract_labels(text: str) -> Dict[str, List[str]]:
     return {k: sorted(v) for k, v in labels.items() if v}
 
 
-def extract_syllable_count(text: str) -> Optional[int]:
+def extract_syllable_count_from_hyphenation(text: str, word: str) -> Optional[int]:
     """
     Extract syllable count from {{hyphenation|...}} template.
 
-    Handles complex formats:
-    - Language codes: {{hyphenation|en|dic|tion|a|ry}}
-    - Alternatives: {{hyphenation|en|dic|tion|a|ry||dic|tion|ary}}
-    - Parameters: {{hyphenation|en|lang=en-US|dic|tion|a|ry}}
-    - Empty segments between pipes
+    Uses multiple strategies to avoid false positives:
+    1. Whitelist of known language codes (KNOWN_LANG_CODES)
+    2. Context-aware detection (don't filter if it matches the word being processed)
+    3. Only count properly separated syllable segments
 
-    Examples:
-    - {{hyphenation|en|dic|tion|a|ry}} -> 4 syllables
-    - {{hyphenation|en|dic|tion|a|ry||dic|tion|ary}} -> 4 syllables (uses first alternative)
-    - {{hyphenation|cat}} -> 1 syllable
+    Args:
+        text: The Wiktionary page text
+        word: The word being processed (for context-aware filtering)
+
+    Returns:
+        Number of syllables if reliably determined, None otherwise
+
+    Handles complex formats:
+    - Language codes: {{hyphenation|en|dic|tion|a|ry}} -> 4 syllables
+    - Alternatives: {{hyphenation|en|dic|tion|a|ry||dic|tion|ary}} -> 4 (uses first)
+    - Parameters: {{hyphenation|en|lang=en-US|dic|tion|a|ry}} -> 4
+    - Without lang code: {{hyphenation|art}} -> 1 syllable
+
+    Returns None for unreliable cases:
+    - {{hyphenation|arad}} -> None (unseparated, data quality issue)
+    - {{hyphenation|}} -> None (empty)
     """
     match = HYPHENATION_TEMPLATE.search(text)
     if not match:
@@ -350,16 +377,45 @@ def extract_syllable_count(text: str) -> Optional[int]:
         if '=' in part:
             continue
 
-        # Skip 2-3 letter lang codes at start (en, da, en-US, en-GB)
-        # These are always in the first position
-        # Only skip if there are more parts after it (prevents filtering single-syllable words)
-        if i == 0 and len(parts) > 1 and len(part) <= 5 and ('-' in part or (len(part) <= 3 and part.isalpha())):
-            continue
+        # Skip known language codes at position 0
+        # Use whitelist for reliability + context-awareness
+        if i == 0:
+            # Check if it's a known language code (not the word itself)
+            if part in KNOWN_LANG_CODES and part.lower() != word.lower():
+                continue
+
+            # If there's only one part and it's unseparated (>3 chars), it's likely
+            # incomplete data (e.g., {{hyphenation|arad}} should be {{hyphenation|a|rad}})
+            # We only trust single-part templates for very short words (1-3 chars)
+            # Return None to indicate unreliable data for longer unseparated words
+            if len(parts) == 1 and len(part) > 3:
+                return None
 
         syllables.append(part)
 
     # Return syllable count if we found any syllables
     return len(syllables) if syllables else None
+
+
+def extract_syllable_count_from_categories(text: str) -> Optional[int]:
+    """
+    Extract syllable count from category labels as a fallback signal.
+
+    Example: [[Category:English 3-syllable words]] -> 3
+
+    Note: These categories are deprecated in Wiktionary but can still provide
+    a useful signal when hyphenation templates are missing.
+
+    Args:
+        text: The Wiktionary page text
+
+    Returns:
+        Number of syllables from category label, or None if not found
+    """
+    match = SYLLABLE_CATEGORY.search(text)
+    if match:
+        return int(match.group(1))
+    return None
 
 
 def extract_page_content(page_xml: str) -> Optional[tuple]:
@@ -495,7 +551,20 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
 
     labels = extract_labels(text)
     is_phrase = ' ' in word
-    syllable_count = extract_syllable_count(text)
+
+    # Extract syllable count from multiple sources, preferring hyphenation template
+    # Only set syllable count when we have reliable data - never guess
+    syllable_count = None
+
+    # First try hyphenation template (most reliable when properly formatted)
+    hyph_count = extract_syllable_count_from_hyphenation(text, word)
+    if hyph_count is not None:
+        syllable_count = hyph_count
+    else:
+        # Fallback to category labels (deprecated but sometimes available)
+        cat_count = extract_syllable_count_from_categories(text)
+        if cat_count is not None:
+            syllable_count = cat_count
 
     entry = {
         'word': word,
@@ -505,7 +574,8 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
         'sources': ['wikt'],
     }
 
-    # Only include syllable count if present
+    # Only include syllable count if reliably determined
+    # Leave unspecified (None) if data is missing or unreliable
     if syllable_count is not None:
         entry['syllables'] = syllable_count
 
