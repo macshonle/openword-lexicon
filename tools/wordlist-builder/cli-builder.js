@@ -8,10 +8,15 @@
  *   node cli-builder.js [--preset <name>] [--output <file>]
  */
 
-const readline = require('readline');
-const fs = require('fs');
-const path = require('path');
-const { SpecBuilder, CAPABILITIES, helpers } = require('./spec-builder.js');
+import readline from 'readline';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import { SpecBuilder, CAPABILITIES, helpers } from './spec-builder.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // ANSI color codes
 const colors = {
@@ -511,8 +516,8 @@ async function main() {
 }
 
 // Run if executed directly
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
 
-module.exports = { buildSpec };
+export { buildSpec };

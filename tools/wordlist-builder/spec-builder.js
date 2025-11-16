@@ -589,18 +589,10 @@ const helpers = {
 };
 
 /**
- * Export for Node.js and browser
+ * Export for ES modules
  */
-if (typeof module !== 'undefined' && module.exports) {
-  // Node.js
-  module.exports = {
-    SpecBuilder,
-    CAPABILITIES,
-    helpers
-  };
-} else {
-  // Browser
-  window.SpecBuilder = SpecBuilder;
-  window.CAPABILITIES = CAPABILITIES;
-  window.specBuilderHelpers = helpers;
-}
+export {
+  SpecBuilder,
+  CAPABILITIES,
+  helpers
+};
