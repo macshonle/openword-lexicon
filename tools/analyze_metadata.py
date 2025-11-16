@@ -190,6 +190,16 @@ def analyze_labels(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         report += "|-----|------:|\n"
         for pos, count in pos_counts.most_common(15):
             report += f"| {pos} | {count:,} |\n"
+
+        # Check for expected but missing POS tags
+        all_expected_pos = {'noun', 'verb', 'adjective', 'adverb', 'pronoun', 'preposition',
+                           'conjunction', 'interjection', 'determiner', 'particle', 'auxiliary'}
+        missing_pos = all_expected_pos - set(pos_counts.keys())
+
+        if missing_pos:
+            report += f"\n⚠️  **Missing POS tags:** {', '.join(sorted(missing_pos))}  \n"
+            report += "*These POS tags are defined in the schema but have zero occurrences in the data.*\n"
+
         report += "\n"
 
     if register_counts:
@@ -246,6 +256,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     has_frequency = sum(1 for e in metadata.values() if e.get('frequency_tier'))
     has_labels = sum(1 for e in metadata.values() if e.get('labels'))
     has_gloss = sum(1 for e in metadata.values() if e.get('gloss'))
+    has_syllables = sum(1 for e in metadata.values() if e.get('syllables'))
 
     # Count nouns
     nouns = [e for e in metadata.values() if 'noun' in e.get('pos', [])]
@@ -279,6 +290,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         ('Concreteness', has_concreteness),
         ('Frequency tier', has_frequency),
         ('Labels', has_labels),
+        ('Syllables', has_syllables),
         ('Gloss', has_gloss),
     ]
 
@@ -297,8 +309,47 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         pct_missing = len(nouns_no_concrete) / len(nouns) * 100 if len(nouns) > 0 else 0
         report += f"⚠️  **{pct_missing:.1f}%** of nouns lack concreteness metadata!\n\n"
 
+    #Syllable analysis
+    if has_syllables > 0:
+        syllable_dist = Counter()
+        for entry in metadata.values():
+            syll_count = entry.get('syllables')
+            if syll_count is not None:
+                syllable_dist[syll_count] += 1
+
+        report += "\n### Syllable Analysis\n\n"
+        report += f"**Words with syllable data:** {has_syllables:,} ({has_syllables/total*100:.1f}%)\n\n"
+
+        if syllable_dist:
+            report += "#### Syllable Distribution\n\n"
+            report += "| Syllables | Count | Percentage |\n"
+            report += "|-----------|------:|-----------:|\n"
+
+            for syll_count in sorted(syllable_dist.keys())[:15]:  # Top 15
+                count = syllable_dist[syll_count]
+                pct = count / has_syllables * 100
+                report += f"| {syll_count} | {count:,} | {pct:.1f}% |\n"
+
+            # Summary stats
+            total_syllables = sum(k * v for k, v in syllable_dist.items())
+            avg_syllables = total_syllables / has_syllables if has_syllables > 0 else 0
+            max_syllables = max(syllable_dist.keys()) if syllable_dist else 0
+
+            report += f"\n**Average syllables:** {avg_syllables:.2f}  \n"
+            report += f"**Max syllables:** {max_syllables}  \n"
+
+            # Sample words by syllable count
+            report += "\n#### Sample Words by Syllable Count\n\n"
+            for syll_count in [1, 2, 3, 4, 5]:
+                if syll_count in syllable_dist:
+                    words_with_syll = [w for w, e in metadata.items() if e.get('syllables') == syll_count]
+                    sample = random.sample(words_with_syll, min(5, len(words_with_syll)))
+                    report += f"**{syll_count} syllable{'s' if syll_count > 1 else ''}:** {', '.join(f'`{w}`' for w in sample)}  \n"
+
+            report += "\n"
+
     # Concreteness distribution
-    report += "#### Concreteness Distribution\n\n"
+    report += "### Concreteness Distribution\n\n"
     report += "| Type | Count |\n"
     report += "|------|------:|\n"
     for concrete_type, count in concrete_dist.most_common():
@@ -575,6 +626,10 @@ def generate_report(distribution: str = 'core'):
 
         # Filtering recommendations
         report += generate_filtering_recommendations(label_stats, game_stats)
+        report += "---\n\n"
+
+        # Representative samples by source
+        report += sample_entries_by_source(metadata)
         report += "---\n\n"
 
         # Sample rich entries

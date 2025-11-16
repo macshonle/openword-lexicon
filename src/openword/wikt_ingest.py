@@ -269,6 +269,10 @@ def process_wikt_entry(wikt_entry: dict) -> Optional[dict]:
         'sources': ['wikt']
     }
 
+    # Pass through syllables field if present (from scanner parser)
+    if 'syllables' in wikt_entry:
+        entry['syllables'] = wikt_entry['syllables']
+
     return entry
 
 
@@ -316,6 +320,10 @@ def read_wiktextract(filepath: Path) -> Dict[str, dict]:
                         # Keep lemma if present
                         if entry['lemma'] and not entries[word]['lemma']:
                             entries[word]['lemma'] = entry['lemma']
+
+                        # Keep syllables if present
+                        if entry.get('syllables') and not entries[word].get('syllables'):
+                            entries[word]['syllables'] = entry['syllables']
                     else:
                         entries[word] = entry
 

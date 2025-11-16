@@ -107,6 +107,9 @@ def merge_entries(entry1: dict, entry2: dict) -> dict:
     # lemma: prefer non-null
     merged['lemma'] = entry1.get('lemma') or entry2.get('lemma')
 
+    # syllables: prefer non-null
+    merged['syllables'] = entry1.get('syllables') or entry2.get('syllables')
+
     # concreteness: prefer non-null
     if 'concreteness' in entry2 and not entry1.get('concreteness'):
         merged['concreteness'] = entry2['concreteness']
