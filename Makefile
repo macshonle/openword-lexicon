@@ -71,6 +71,7 @@ fetch-en:
 	@bash scripts/fetch/fetch_wiktionary.sh
 	@bash scripts/fetch/fetch_wordnet.sh
 	@bash scripts/fetch/fetch_frequency.sh
+	@bash scripts/fetch/fetch_brysbaert.sh
 	@bash scripts/sys/limits.sh update
 	@echo "=== Fetch complete ==="
 
@@ -88,13 +89,16 @@ build-en: fetch-en build-wiktionary-json
 	@echo "Step 2: Merge all sources"
 	$(UV) run python src/openword/merge_all.py
 	@echo ""
-	@echo "Step 3: Enrich with WordNet"
+	@echo "Step 3: Enrich with WordNet (POS tags, initial concreteness)"
 	$(UV) run python src/openword/wordnet_enrich.py --unified
 	@echo ""
-	@echo "Step 4: Assign frequency tiers"
+	@echo "Step 4: Enrich with Brysbaert (improved concreteness ratings)"
+	$(UV) run python src/openword/brysbaert_enrich.py --unified
+	@echo ""
+	@echo "Step 5: Assign frequency tiers"
 	$(UV) run python src/openword/frequency_tiers.py --unified
 	@echo ""
-	@echo "Step 5: Build trie"
+	@echo "Step 6: Build trie"
 	$(UV) run python src/openword/trie_build.py --unified
 	@echo ""
 	@echo "=== English lexicon build complete ==="

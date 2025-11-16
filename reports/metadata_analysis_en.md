@@ -49,17 +49,22 @@ This consolidated report analyzes metadata coverage, quality, and filtering capa
 | enable | 172,823 |
 | eowl | 128,983 |
 | wordnet | 109,383 |
+| brysbaert | 35,199 |
 
 ### Source Combinations
 
 | Sources | Words |
 |---------|------:|
-| enable, eowl, wordnet | 69,645 |
-| enable | 43,783 |
-| enable, wordnet | 35,435 |
-| eowl | 31,075 |
-| enable, eowl | 23,960 |
-| eowl, wordnet | 4,303 |
+| enable, eowl, wordnet | 46,651 |
+| enable | 41,278 |
+| eowl | 30,759 |
+| enable, wordnet | 27,757 |
+| brysbaert, enable, eowl, wordnet | 22,994 |
+| enable, eowl | 22,451 |
+| brysbaert, enable, wordnet | 7,678 |
+| eowl, wordnet | 4,106 |
+| brysbaert, enable | 2,505 |
+| brysbaert, enable, eowl | 1,509 |
 
 ---
 
@@ -103,7 +108,7 @@ This section analyzes metadata coverage for word game filtering needs.
 | Field | Coverage | Percentage |
 |-------|------:|----------:|
 | POS tags | 109,383 | 52.5% |
-| Concreteness | 71,860 | 34.5% |
+| Concreteness | 88,348 | 42.4% |
 | Frequency tier | 208,201 | 100.0% |
 | Labels | 0 | 0.0% |
 | Syllables | 0 | 0.0% |
@@ -112,10 +117,10 @@ This section analyzes metadata coverage for word game filtering needs.
 ### Noun Analysis
 
 **Total nouns:** 71,862
-**Concrete nouns:** 20,670
-**Abstract nouns:** 25,782
-**Mixed nouns:** 25,408
-**Nouns without concreteness data:** 2
+**Concrete nouns:** 25,808
+**Abstract nouns:** 22,816
+**Mixed nouns:** 23,237
+**Nouns without concreteness data:** 1
 
 ⚠️  **0.0%** of nouns lack concreteness metadata!
 
@@ -123,10 +128,10 @@ This section analyzes metadata coverage for word game filtering needs.
 
 | Type | Count |
 |------|------:|
-| abstract | 25,782 |
-| mixed | 25,408 |
-| concrete | 20,670 |
-| unknown | 2 |
+| concrete | 25,808 |
+| mixed | 23,237 |
+| abstract | 22,816 |
+| unknown | 1 |
 
 #### Frequency Distribution (Nouns Only)
 
@@ -275,393 +280,12 @@ Even with good filters, manual review is essential:
 
 Representative samples from different source combinations:
 
-### enable, eowl, wordnet (69,645 entries)
+### enable, eowl, wordnet (46,651 entries)
 
-**`shillings`**
+**`salaamed`**
 ```json
 {
-  "word": "shillings",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable",
-    "eowl",
-    "wordnet"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "concreteness": "abstract",
-  "frequency_tier": "top25k"
-}
-```
-
-**`headway`**
-```json
-{
-  "word": "headway",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable",
-    "eowl",
-    "wordnet"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "concreteness": "abstract",
-  "frequency_tier": "top50k"
-}
-```
-
-**`sterols`**
-```json
-{
-  "word": "sterols",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable",
-    "eowl",
-    "wordnet"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "concreteness": "mixed",
-  "frequency_tier": "rare"
-}
-```
-
-
-### enable (43,783 entries)
-
-**`superspecials`**
-```json
-{
-  "word": "superspecials",
-  "pos": [],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ]
-  },
-  "frequency_tier": "rare"
-}
-```
-
-**`introspectionistic`**
-```json
-{
-  "word": "introspectionistic",
-  "pos": [],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ]
-  },
-  "frequency_tier": "rare"
-}
-```
-
-**`afficionados`**
-```json
-{
-  "word": "afficionados",
-  "pos": [],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ]
-  },
-  "frequency_tier": "rare"
-}
-```
-
-
-### enable, wordnet (35,435 entries)
-
-**`dubonnets`**
-```json
-{
-  "word": "dubonnets",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable",
-    "wordnet"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "concreteness": "mixed",
-  "frequency_tier": "rare"
-}
-```
-
-**`riverbank`**
-```json
-{
-  "word": "riverbank",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable",
-    "wordnet"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "concreteness": "concrete",
-  "frequency_tier": "top50k"
-}
-```
-
-**`orthodontics`**
-```json
-{
-  "word": "orthodontics",
-  "pos": [
-    "noun"
-  ],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable",
-    "wordnet"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "concreteness": "abstract",
-  "frequency_tier": "rare"
-}
-```
-
-
-### eowl (31,075 entries)
-
-**`fratches`**
-```json
-{
-  "word": "fratches",
-  "pos": [],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "eowl"
-  ],
-  "license_sources": {
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "frequency_tier": "rare"
-}
-```
-
-**`cowal`**
-```json
-{
-  "word": "cowal",
-  "pos": [],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "eowl"
-  ],
-  "license_sources": {
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "frequency_tier": "rare"
-}
-```
-
-**`dwalming`**
-```json
-{
-  "word": "dwalming",
-  "pos": [],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "eowl"
-  ],
-  "license_sources": {
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "frequency_tier": "rare"
-}
-```
-
-
-### enable, eowl (23,960 entries)
-
-**`lientery`**
-```json
-{
-  "word": "lientery",
-  "pos": [],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable",
-    "eowl"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "frequency_tier": "rare"
-}
-```
-
-**`coopts`**
-```json
-{
-  "word": "coopts",
-  "pos": [],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable",
-    "eowl"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "frequency_tier": "rare"
-}
-```
-
-**`coaler`**
-```json
-{
-  "word": "coaler",
-  "pos": [],
-  "labels": {},
-  "is_phrase": false,
-  "lemma": null,
-  "sources": [
-    "enable",
-    "eowl"
-  ],
-  "license_sources": {
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "frequency_tier": "rare"
-}
-```
-
-
-### eowl, wordnet (4,303 entries)
-
-**`rubify`**
-```json
-{
-  "word": "rubify",
+  "word": "salaamed",
   "pos": [
     "verb"
   ],
@@ -669,10 +293,14 @@ Representative samples from different source combinations:
   "is_phrase": false,
   "lemma": null,
   "sources": [
+    "enable",
     "eowl",
     "wordnet"
   ],
   "license_sources": {
+    "CC0": [
+      "enable"
+    ],
     "UKACD": [
       "eowl"
     ],
@@ -684,10 +312,201 @@ Representative samples from different source combinations:
 }
 ```
 
-**`coachwhips`**
+**`newsier`**
 ```json
 {
-  "word": "coachwhips",
+  "word": "newsier",
+  "pos": [
+    "adjective"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "frequency_tier": "rare"
+}
+```
+
+**`envies`**
+```json
+{
+  "word": "envies",
+  "pos": [
+    "noun",
+    "verb"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "concreteness": "abstract",
+  "frequency_tier": "top50k"
+}
+```
+
+
+### enable (41,278 entries)
+
+**`pyelonephritides`**
+```json
+{
+  "word": "pyelonephritides",
+  "pos": [],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "enable"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ]
+  },
+  "frequency_tier": "rare"
+}
+```
+
+**`ultraconvenient`**
+```json
+{
+  "word": "ultraconvenient",
+  "pos": [],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "enable"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ]
+  },
+  "frequency_tier": "rare"
+}
+```
+
+**`lehayim`**
+```json
+{
+  "word": "lehayim",
+  "pos": [],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "enable"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ]
+  },
+  "frequency_tier": "rare"
+}
+```
+
+
+### eowl (30,759 entries)
+
+**`tizz`**
+```json
+{
+  "word": "tizz",
+  "pos": [],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "eowl"
+  ],
+  "license_sources": {
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "frequency_tier": "rare"
+}
+```
+
+**`unscaling`**
+```json
+{
+  "word": "unscaling",
+  "pos": [],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "eowl"
+  ],
+  "license_sources": {
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "frequency_tier": "rare"
+}
+```
+
+**`acushlas`**
+```json
+{
+  "word": "acushlas",
+  "pos": [],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "eowl"
+  ],
+  "license_sources": {
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "frequency_tier": "rare"
+}
+```
+
+
+### enable, wordnet (27,757 entries)
+
+**`synchros`**
+```json
+{
+  "word": "synchros",
   "pos": [
     "noun"
   ],
@@ -695,26 +514,374 @@ Representative samples from different source combinations:
   "is_phrase": false,
   "lemma": null,
   "sources": [
-    "eowl",
+    "enable",
     "wordnet"
   ],
   "license_sources": {
-    "UKACD": [
-      "eowl"
+    "CC0": [
+      "enable"
     ],
     "WordNet": [
       "wordnet"
     ]
   },
-  "concreteness": "concrete",
+  "concreteness": "mixed",
   "frequency_tier": "rare"
 }
 ```
 
-**`quenchings`**
+**`uncongenial`**
 ```json
 {
-  "word": "quenchings",
+  "word": "uncongenial",
+  "pos": [
+    "adjective"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "enable",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "frequency_tier": "rare"
+}
+```
+
+**`companionway`**
+```json
+{
+  "word": "companionway",
+  "pos": [
+    "noun"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "enable",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "concreteness": "mixed",
+  "frequency_tier": "rare"
+}
+```
+
+
+### brysbaert, enable, eowl, wordnet (22,994 entries)
+
+**`writing`**
+```json
+{
+  "word": "writing",
+  "pos": [
+    "noun",
+    "verb"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "concrete",
+  "concreteness_rating": 3.7,
+  "concreteness_sd": 1.49,
+  "frequency_tier": "top3k"
+}
+```
+
+**`paddlefish`**
+```json
+{
+  "word": "paddlefish",
+  "pos": [
+    "noun"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "concrete",
+  "concreteness_rating": 4.82,
+  "concreteness_sd": 0.48,
+  "frequency_tier": "rare"
+}
+```
+
+**`lazy`**
+```json
+{
+  "word": "lazy",
+  "pos": [
+    "adjective"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "mixed",
+  "concreteness_rating": 2.67,
+  "concreteness_sd": 1.39,
+  "frequency_tier": "top10k"
+}
+```
+
+
+### enable, eowl (22,451 entries)
+
+**`inwinding`**
+```json
+{
+  "word": "inwinding",
+  "pos": [],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "enable",
+    "eowl"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "frequency_tier": "rare"
+}
+```
+
+**`elopers`**
+```json
+{
+  "word": "elopers",
+  "pos": [],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "enable",
+    "eowl"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "frequency_tier": "rare"
+}
+```
+
+**`gendering`**
+```json
+{
+  "word": "gendering",
+  "pos": [],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "enable",
+    "eowl"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "frequency_tier": "rare"
+}
+```
+
+
+### brysbaert, enable, wordnet (7,678 entries)
+
+**`stereoscope`**
+```json
+{
+  "word": "stereoscope",
+  "pos": [
+    "noun"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "concrete",
+  "concreteness_rating": 4.19,
+  "concreteness_sd": 1.36,
+  "frequency_tier": "rare"
+}
+```
+
+**`habitability`**
+```json
+{
+  "word": "habitability",
+  "pos": [
+    "noun"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "abstract",
+  "concreteness_rating": 2.18,
+  "concreteness_sd": 1.33,
+  "frequency_tier": "rare"
+}
+```
+
+**`childproof`**
+```json
+{
+  "word": "childproof",
+  "pos": [
+    "verb"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "mixed",
+  "concreteness_rating": 3.41,
+  "concreteness_sd": 1.4,
+  "frequency_tier": "rare"
+}
+```
+
+
+### eowl, wordnet (4,106 entries)
+
+**`clubbings`**
+```json
+{
+  "word": "clubbings",
   "pos": [
     "noun"
   ],
@@ -735,6 +902,59 @@ Representative samples from different source combinations:
   },
   "concreteness": "abstract",
   "frequency_tier": "rare"
+}
+```
+
+**`sendings`**
+```json
+{
+  "word": "sendings",
+  "pos": [
+    "noun"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "concreteness": "abstract",
+  "frequency_tier": "rare"
+}
+```
+
+**`colourful`**
+```json
+{
+  "word": "colourful",
+  "pos": [
+    "adjective"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "frequency_tier": "top25k"
 }
 ```
 
@@ -744,4 +964,386 @@ Representative samples from different source combinations:
 ## Sample Rich Entries
 
 These entries have extensive metadata (multiple sources, labels, glosses, etc.)
+
+### `aardvark` (richness: 5)
+
+```json
+{
+  "word": "aardvark",
+  "pos": [
+    "noun"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "concrete",
+  "concreteness_rating": 4.68,
+  "concreteness_sd": 0.86,
+  "frequency_tier": "top50k"
+}
+```
+
+### `aback` (richness: 5)
+
+```json
+{
+  "word": "aback",
+  "pos": [
+    "adverb"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "abstract",
+  "concreteness_rating": 1.65,
+  "concreteness_sd": 1.07,
+  "frequency_tier": "top50k"
+}
+```
+
+### `abacus` (richness: 5)
+
+```json
+{
+  "word": "abacus",
+  "pos": [
+    "noun"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "concrete",
+  "concreteness_rating": 4.52,
+  "concreteness_sd": 1.12,
+  "frequency_tier": "top50k"
+}
+```
+
+### `abandon` (richness: 5)
+
+```json
+{
+  "word": "abandon",
+  "pos": [
+    "noun",
+    "verb"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "mixed",
+  "concreteness_rating": 2.54,
+  "concreteness_sd": 1.45,
+  "frequency_tier": "top10k"
+}
+```
+
+### `abandoned` (richness: 5)
+
+```json
+{
+  "word": "abandoned",
+  "pos": [
+    "adjective",
+    "verb"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "mixed",
+  "concreteness_rating": 2.52,
+  "concreteness_sd": 1.27,
+  "frequency_tier": "top3k"
+}
+```
+
+### `abasement` (richness: 5)
+
+```json
+{
+  "word": "abasement",
+  "pos": [
+    "noun"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "abstract",
+  "concreteness_rating": 1.67,
+  "concreteness_sd": 1.01,
+  "frequency_tier": "rare"
+}
+```
+
+### `abatement` (richness: 5)
+
+```json
+{
+  "word": "abatement",
+  "pos": [
+    "noun"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "abstract",
+  "concreteness_rating": 1.92,
+  "concreteness_sd": 1.29,
+  "frequency_tier": "rare"
+}
+```
+
+### `abbreviate` (richness: 5)
+
+```json
+{
+  "word": "abbreviate",
+  "pos": [
+    "verb"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "mixed",
+  "concreteness_rating": 2.59,
+  "concreteness_sd": 1.53,
+  "frequency_tier": "rare"
+}
+```
+
+### `abdicate` (richness: 5)
+
+```json
+{
+  "word": "abdicate",
+  "pos": [
+    "verb"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "abstract",
+  "concreteness_rating": 2.08,
+  "concreteness_sd": 1.29,
+  "frequency_tier": "top50k"
+}
+```
+
+### `abdomen` (richness: 5)
+
+```json
+{
+  "word": "abdomen",
+  "pos": [
+    "noun"
+  ],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wordnet"
+  ],
+  "license_sources": {
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ],
+    "Brysbaert-Research": [
+      "brysbaert"
+    ]
+  },
+  "concreteness": "concrete",
+  "concreteness_rating": 4.7,
+  "concreteness_sd": 0.67,
+  "frequency_tier": "top25k"
+}
+```
 

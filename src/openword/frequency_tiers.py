@@ -211,15 +211,24 @@ def main():
         logger.info(f"Mode: Unified build ({args.language})")
 
         lang_dir = intermediate_dir / args.language
-        unified_input = lang_dir / "entries_enriched.jsonl"
-        unified_output = lang_dir / "entries_tiered.jsonl"
 
-        if unified_input.exists():
-            process_file(unified_input, unified_output, ranks)
+        # Prefer Brysbaert-enriched file if available, otherwise use WordNet-enriched
+        brysbaert_input = lang_dir / "entries_enriched_brysbaert.jsonl"
+        wordnet_input = lang_dir / "entries_enriched.jsonl"
+
+        if brysbaert_input.exists():
+            unified_input = brysbaert_input
+            logger.info("Using Brysbaert-enriched entries")
+        elif wordnet_input.exists():
+            unified_input = wordnet_input
+            logger.info("Using WordNet-enriched entries (Brysbaert data not available)")
         else:
-            logger.error(f"Unified input file not found: {unified_input}")
+            logger.error(f"No enriched input file found in {lang_dir}")
             logger.error("Run wordnet_enrich.py --unified first")
             sys.exit(1)
+
+        unified_output = lang_dir / "entries_tiered.jsonl"
+        process_file(unified_input, unified_output, ranks)
     else:
         # LEGACY MODE (Core/Plus separate) - deprecated
         logger.warning("Legacy mode is deprecated. Use --unified flag.")
