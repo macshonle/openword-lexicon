@@ -1,0 +1,48 @@
+  <page>
+    <title>鈋</title>
+    <ns>0</ns>
+    <id>29272</id>
+    <revision>
+      <id>87578702</id>
+      <parentid>78682421</parentid>
+      <timestamp>2025-10-24T17:19:40Z</timestamp>
+      <contributor>
+        <username>AutoDooz</username>
+        <id>3732454</id>
+      </contributor>
+      <minor />
+      <comment>Han ref: removed unused param 'ud'</comment>
+      <origin>87578702</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="412" sha1="4asai457gxq03xb6cccaadl8fawf6vk" xml:space="preserve">{{character info}}
+==Translingual==
+
+===Han character===
+{{Han char|rn=167|rad=金|as=04|sn=12|four=|canj=COP,XCOP|ids=⿰釒化}}
+
+====References====
+* {{Han ref|kx=1298.110|dkj=40217|dj=1801.040|hdz=64176.170|uh=920B}}
+
+==Chinese==
+{{zh-forms|s=𨱂}}
+
+===Glyph origin===
+{{Han etym}}
+
+===Pronunciation===
+{{zh-pron
+|m=é
+|c=
+|mc=y
+|oc=y
+|cat=
+}}
+
+===Definitions===
+{{head|zh|hanzi}}
+
+# {{rfdef|zh|sort=金04}}</text>
+      <sha1>4asai457gxq03xb6cccaadl8fawf6vk</sha1>
+    </revision>
+... [truncated]
