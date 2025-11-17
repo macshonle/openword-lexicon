@@ -1,0 +1,26 @@
+  <page>
+    <title>podcast</title>
+    <ns>0</ns>
+    <id>78164</id>
+    <revision>
+      <id>87951192</id>
+      <parentid>87612367</parentid>
+      <timestamp>2025-11-01T03:06:21Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wp}} to new syntax</comment>
+      <origin>87951192</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="14269" sha1="9u8ehrvt6wrpi6ksb7s7t6w3g9xdsv2" xml:space="preserve">{{also|podčást|Podcast|podčasť}}
+==English==
+{{was wotd|2023|February|13}}
+
+[[File:AfterDinner.jpg|thumb|Two [[podcaster]]s about to [[record#Verb|record]] an [[episode]] of a podcast ''({{senseno|en|program}})''.]]
+
+===Etymology===
+{{etymon|en|id=online audio program|:blend|iPod&lt;id:portable music player&gt;|broadcast&lt;id:distribute widely&gt;|tree=1}}
+... [truncated]

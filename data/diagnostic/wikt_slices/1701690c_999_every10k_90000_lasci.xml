@@ -1,0 +1,27 @@
+  <page>
+    <title>lasci</title>
+    <ns>0</ns>
+    <id>188113</id>
+    <revision>
+      <id>63551537</id>
+      <parentid>63237385</parentid>
+      <timestamp>2021-08-06T03:02:10Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>combine adjacent calls to {{inflection of|it|lasciare}} (4); combine {{inflection of|it|lasciare}} tag sets 1|s|pres|subj and 2|s|pres|subj into 1//2|s|pres|subj; combine {{inflection of|it|lasciare}} tag sets 1//2|s|pres|subj and 3|s|pres|subj into 1//2//3|s|pres|subj</comment>
+      <origin>63551537</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="185" sha1="3r7x8aymni14u0c0dy5dk7wu96uibcp" xml:space="preserve">==Italian==
+
+===Verb===
+{{head|it|verb form}}
+
+# {{inflection of|it|lasciare||2|s|pres|ind|;|1//2//3|s|pres|subj|;|3|s|impr}}
+
+===Anagrams===
+* {{anagrams|it|a=acils|lisca|salci|scali}}</text>
+... [truncated]

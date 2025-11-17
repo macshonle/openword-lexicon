@@ -1,0 +1,33 @@
+  <page>
+    <title>portmanteau</title>
+    <ns>0</ns>
+    <id>29</id>
+    <revision>
+      <id>87672199</id>
+      <parentid>87661811</parentid>
+      <timestamp>2025-10-31T19:27:19Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87672199</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6226" sha1="ah7ua50jwb7h3w8rvini8p8z7qpqqy3" xml:space="preserve">==English==
+{{was wotd|2007|March|8}}
+{{wp}}
+
+===Pronunciation===
+* {{IPA|en|/pɔːtˈmæn.təʊ/|a=RP}}
+* {{enPR|pôrtmă'ntō|pô'rtmăntōʹ|a=US}}, {{IPA|en|/pɔːɹtˈmæntoʊ/|/ˌpɔːɹtmænˈtoʊ/}}
+* {{audio|en|en-us-portmanteau-1.ogg|a=US}}
+* {{audio|en|en-us-portmanteau-2.ogg|a=US}}
+* {{audio|en|en-au-portmanteau.ogg|a=AU}}
+* {{rhymes|en|æntəʊ|əʊ|s=3}}
+
+===Etymology 1===
+{{etymid|en|luggage}}
+{{root|en|ine-pro|*per- (fare)}}
+... [truncated]

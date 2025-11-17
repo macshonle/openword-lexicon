@@ -1,0 +1,21 @@
+  <page>
+    <title>Wiktionary:Language considerations</title>
+    <ns>4</ns>
+    <id>25</id>
+    <revision>
+      <id>68669064</id>
+      <parentid>66408835</parentid>
+      <timestamp>2022-08-19T06:13:16Z</timestamp>
+      <contributor>
+        <username>This, that and the other</username>
+        <id>36412</id>
+      </contributor>
+      <comment>use clearer language</comment>
+      <origin>68669064</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1407" sha1="ig2dnhkuuq24q2cgue095ewv162qkps" xml:space="preserve">{{shortcut|WT:LC}}
+
+While this Wiktionary is known as the English Wiktionary, it is a matter of fundamental policy that this dictionary includes &quot;all words in all languages&quot;.  This means that our entries need to reflect the structure and peculiarities of a wide variety of different languages – modern and ancient, widespread and rare, attested and reconstructed, written in a range of [[WT:LOS|scripts]], and so forth.
+
+... [truncated]

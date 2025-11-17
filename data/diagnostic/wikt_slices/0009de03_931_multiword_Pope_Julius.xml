@@ -1,0 +1,31 @@
+  <page>
+    <title>Pope Julius</title>
+    <ns>0</ns>
+    <id>78</id>
+    <revision>
+      <id>87672605</id>
+      <parentid>85197229</parentid>
+      <timestamp>2025-10-31T19:27:58Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87672605</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1126" sha1="3tjgw4y33h9sbqxbxfm3c7ao427ybmm" xml:space="preserve">==English==
+{{wp|+ (card game)}}
+
+===Alternative forms===
+* {{alt|en|Pope Julio|Pope July}}
+
+===Etymology===
+{{unk|en}}. Presumably named after [[w:Pope Julius II|Pope Julius II]], the Warrior Pope.
+
+===Noun===
+{{en-noun|-}}
+
+# {{lb|en|obsolete}} A sixteenth-century [[gambling]] [[card game]] about which little is known.
+... [truncated]

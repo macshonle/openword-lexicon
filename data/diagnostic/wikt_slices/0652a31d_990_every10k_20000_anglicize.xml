@@ -1,0 +1,21 @@
+  <page>
+    <title>anglicize</title>
+    <ns>0</ns>
+    <id>23546</id>
+    <revision>
+      <id>85184571</id>
+      <parentid>80142762</parentid>
+      <timestamp>2025-06-19T22:47:05Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>add period after English uses of {{standard form of}}/{{standard spelling of}}/{{pronunciation variant of}}/{{pronunciation spelling of}}/{{superseded spelling of}} as it's no longer automatic, per [[Wiktionary:Beer parlour/2024/June#Full stops after templates like {{synonym of}}]] and general consistency with other definition-generating and etymology-generating templates; remove nodot=, nocap= (manually assisted)</comment>
+      <origin>85184571</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="307" sha1="8ba2a35fzs9ru3hwnw1gpq4shv9qjz4" xml:space="preserve">==English==
+
+===Pronunciation===
+... [truncated]

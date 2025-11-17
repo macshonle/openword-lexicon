@@ -1,0 +1,36 @@
+  <page>
+    <title>儼</title>
+    <ns>0</ns>
+    <id>11367</id>
+    <revision>
+      <id>83798012</id>
+      <parentid>83472538</parentid>
+      <timestamp>2025-02-01T04:12:57Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{zh-obsolete}}, {{zh-historical-dict}}, {{zh-no-solo}} and redirects to labels per [[WT:RFDO#Template:zh-obsolete]] (manually assisted)</comment>
+      <origin>83798012</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1388" sha1="1mnco3dmlsteoxa6jtovca6g7hpn9pv" xml:space="preserve">{{also|俨|𠑊}}
+{{character info}}
+==Translingual==
+{{Han simplified forms|儼|𠑊|俨|ex=y}}
+
+===Han character===
+{{Han char|rn=9|rad=人|as=20|sn=22|four=26248|canj=ORRK|ids=⿰亻嚴}}
+
+====Derived characters====
+* {{l|mul|[[𭍍]]}}
+
+====References====
+{{Han ref|kx=0122.050|dkj=01324|dj=0257.110|hdz=10240.020|uh=513C}}
+
+==Chinese==
+{{zh-forms|s=俨}}
+
+===Glyph origin===
+... [truncated]

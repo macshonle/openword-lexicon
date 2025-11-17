@@ -1,0 +1,12 @@
+{
+  "slices_written": 50,
+  "entries_scanned": 260000,
+  "sampled_types": [
+    "cat_no_pos",
+    "labels",
+    "multiword",
+    "pos_no_cat",
+    "syllable"
+  ],
+  "source_file": "data/raw/en/enwiktionary-latest-pages-articles.xml.bz2"
+}

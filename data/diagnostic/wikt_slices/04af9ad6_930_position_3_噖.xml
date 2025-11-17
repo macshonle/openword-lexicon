@@ -1,0 +1,31 @@
+  <page>
+    <title>噖</title>
+    <ns>0</ns>
+    <id>12753</id>
+    <revision>
+      <id>71811751</id>
+      <parentid>58963385</parentid>
+      <timestamp>2023-03-17T18:38:48Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>remove horizontal rule separators per [[Wiktionary:Votes/2023-02/Removing the horizontal rule]]</comment>
+      <origin>71811751</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="243" sha1="ajw30yw56xwz4zfgww20vidt9mdpoj2" xml:space="preserve">{{character info}}
+==Translingual==
+
+===Han character===
+{{Han char|rn=30|rad=口|as=12|sn=15|four=|canj=RMGN|ids=⿰口琴}}
+
+====References====
+{{Han ref|kx=0209.151|dkj=04344|dj=0431.400|hdz=10680.070|uh=5656}}
+
+==Chinese==
+{{zh-see|吟|v}}</text>
+      <sha1>ajw30yw56xwz4zfgww20vidt9mdpoj2</sha1>
+    </revision>
+  </page>

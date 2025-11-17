@@ -1,0 +1,27 @@
+  <page>
+    <title>encyclopaedia</title>
+    <ns>0</ns>
+    <id>32</id>
+    <revision>
+      <id>87672220</id>
+      <parentid>87606327</parentid>
+      <timestamp>2025-10-31T19:27:21Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87672220</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2207" sha1="9kqgtroozubn49dh2b8stue84n5gyiw" xml:space="preserve">{{also|encyclopædia}}
+==English==
+[[File:EB-mat-Joerbicher w.jpg|thumb|right|300px|The 15th edition of the ''Encyclopaedia Britannica'' with its yearbook supplements.]]
+
+===Etymology===
+{{bor+|en|NL.|encyclopaedia}}; the English word is an etymologically restored spelling variant of earlier {{m|la|encyclopedia}}, q.v.
+
+===Pronunciation===
+* {{IPA|en|/ɪnˌsaɪ.kləˈpi(ː).di.ə/|/ɛn-/|a=UK,US,Canada}}
+... [truncated]

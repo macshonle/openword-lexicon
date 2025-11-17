@@ -1,0 +1,33 @@
+  <page>
+    <title>wraiths</title>
+    <ns>0</ns>
+    <id>390534</id>
+    <revision>
+      <id>80232737</id>
+      <parentid>54695262</parentid>
+      <timestamp>2024-06-13T15:44:42Z</timestamp>
+      <contributor>
+        <username>ExcarnateSojournerBot</username>
+        <id>3993589</id>
+      </contributor>
+      <minor />
+      <comment>Add syllable counts to English rhymes ([[Wiktionary:Beer parlour/2024/April#Copying rhyme syllable counts from existing categories|discussion]]).</comment>
+      <origin>80232737</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="237" sha1="kmkcjeknxafk41apax26bsfahuk813u" xml:space="preserve">==English==
+
+===Pronunciation===
+* {{enPR|rāths}}, {{IPA|en|/ɹeɪθs/}}
+* {{rhymes|en|eɪθs|s=1}}
+
+===Noun===
+{{head|en|noun form}}
+
+# {{plural of|en|wraith}}
+
+===Anagrams===
+* {{anagrams|en|a=ahirstw|Swihart|Wishart|trishaw|wartish}}</text>
+      <sha1>kmkcjeknxafk41apax26bsfahuk813u</sha1>
+    </revision>
+  </page>

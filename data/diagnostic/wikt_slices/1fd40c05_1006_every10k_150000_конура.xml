@@ -1,0 +1,40 @@
+  <page>
+    <title>конура</title>
+    <ns>0</ns>
+    <id>275248</id>
+    <revision>
+      <id>79251607</id>
+      <parentid>79251605</parentid>
+      <timestamp>2024-05-15T20:51:23Z</timestamp>
+      <contributor>
+        <username>LemosSsha</username>
+        <id>4136278</id>
+      </contributor>
+      <comment>/* Etymology */</comment>
+      <origin>79251607</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="433" sha1="5cpfmqtu35ccz50cfoz5u98rzvt6dv1" xml:space="preserve">==Russian==
+
+===Etymology===
+{{inh+|ru|sla-pro|*konura}}. Compare {{cog|mn|хонуурь}}.
+
+===Pronunciation===
+* {{ru-IPA|конура́}}
+
+===Noun===
+{{ru-noun+|конура́}}
+
+# [[kennel]], [[doghouse]]
+# {{lb|ru|informal}} small in size, often dirty, unsightly housing
+
+====Declension====
+{{ru-noun-table|конура́}}
+
+====Synonyms====
+* {{l|ru|бу́дка}}
+
+{{topics|ru|Animal dwellings|Buildings and structures|Dogs}}</text>
+      <sha1>5cpfmqtu35ccz50cfoz5u98rzvt6dv1</sha1>
+    </revision>
+  </page>

@@ -1,0 +1,27 @@
+  <page>
+    <title>thesaurus</title>
+    <ns>0</ns>
+    <id>20</id>
+    <revision>
+      <id>87672182</id>
+      <parentid>87487828</parentid>
+      <timestamp>2025-10-31T19:27:16Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87672182</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="8171" sha1="405oggp1eswpc53m408wkabrpu5ssrh" xml:space="preserve">{{also|Thesaurus|thésaurus}}
+{{selfref|For the Wiktionary thesaurus, see [[Wiktionary:Thesaurus]]}}
+==English==
+{{wp}}
+
+===Etymology===
+16th century, {{bor+|en|la|thēsaurus|nocap=1}}, from {{der|en|grc|θησαυρός||storehouse, treasure}}; its current English usage/meaning was established soon after the publication of Peter Roget's ''Thesaurus of English Words and Phrases'' in 1852. {{doublet|en|treasure}}.
+
+===Pronunciation===
+... [truncated]

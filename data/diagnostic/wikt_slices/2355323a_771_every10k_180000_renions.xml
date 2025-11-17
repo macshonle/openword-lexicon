@@ -1,0 +1,29 @@
+  <page>
+    <title>renions</title>
+    <ns>0</ns>
+    <id>324644</id>
+    <revision>
+      <id>55438110</id>
+      <parentid>48522228</parentid>
+      <timestamp>2019-10-15T01:01:05Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>move lang= to 1= in {{inflection of}}</comment>
+      <origin>55438110</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="125" sha1="obmy54u3k17mc91b4zed0zvlej7v1ke" xml:space="preserve">==French==
+
+===Verb===
+{{head|fr|verb form}}
+
+# {{inflection of|fr|renier||1|p|pres|indc}}
+
+===Anagrams===
+* {{l|fr|nierons}}</text>
+      <sha1>obmy54u3k17mc91b4zed0zvlej7v1ke</sha1>
+    </revision>
+  </page>

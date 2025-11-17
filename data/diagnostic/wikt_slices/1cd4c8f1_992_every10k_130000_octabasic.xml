@@ -1,0 +1,33 @@
+  <page>
+    <title>octabasic</title>
+    <ns>0</ns>
+    <id>245142</id>
+    <revision>
+      <id>82614529</id>
+      <parentid>81204981</parentid>
+      <timestamp>2024-11-10T21:41:54Z</timestamp>
+      <contributor>
+        <username>Flame, not lame</username>
+        <id>4017496</id>
+      </contributor>
+      <comment>/* Pronunciation */</comment>
+      <origin>82614529</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="374" sha1="f2pyyuvojhxbqmrcvv3xao7qynpqan2" xml:space="preserve">==English==
+
+===Etymology===
+From {{prefix|en|octa|basic}}.
+
+===Pronunciation===
+* {{audio|en|LL-Q1860 (eng)-Flame, not lame-octabasic.wav|a=US}}
+*: {{rhymes|en|eɪsɪk|s=4}}
+
+===Adjective===
+{{en-adj|-}}
+
+# {{lb|en|chemistry|of an acid}} containing eight [[replaceable]] [[hydrogen]] [[atom]]s
+# {{lb|en|chemistry|of a salt}} having eight atoms of a [[univalent]] [[metal]]</text>
+      <sha1>f2pyyuvojhxbqmrcvv3xao7qynpqan2</sha1>
+    </revision>
+  </page>

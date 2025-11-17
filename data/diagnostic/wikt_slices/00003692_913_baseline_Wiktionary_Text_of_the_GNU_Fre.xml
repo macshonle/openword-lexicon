@@ -1,0 +1,31 @@
+  <page>
+    <title>Wiktionary:Text of the GNU Free Documentation License</title>
+    <ns>4</ns>
+    <id>8</id>
+    <revision>
+      <id>11480759</id>
+      <parentid>11480731</parentid>
+      <timestamp>2011-01-26T23:50:34Z</timestamp>
+      <contributor>
+        <username>Mglovesfun</username>
+        <id>27458</id>
+      </contributor>
+      <minor />
+      <comment>sigh</comment>
+      <origin>11480759</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="16898" sha1="771dfimergb1jk8r72plskc48b7x1rx" xml:space="preserve">GNU Free Documentation License
+
+Version 1.1, March 2000
+
+&lt;pre&gt;
+Copyright (C) 2000  Free Software Foundation, Inc.
+59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+Everyone is permitted to copy and distribute verbatim copies
+of this license document, but changing it is not allowed.
+&lt;/pre&gt;
+
+== 0. PREAMBLE ==
+
+... [truncated]

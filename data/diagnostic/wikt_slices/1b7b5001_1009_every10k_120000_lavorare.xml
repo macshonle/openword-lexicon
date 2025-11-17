@@ -1,0 +1,32 @@
+  <page>
+    <title>lavorare</title>
+    <ns>0</ns>
+    <id>229646</id>
+    <revision>
+      <id>85063594</id>
+      <parentid>71374260</parentid>
+      <timestamp>2025-06-08T06:36:38Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert 8 raw elements under ==Derived terms== to {{col|it|lavorante|lavorarsi|...}}</comment>
+      <origin>85063594</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1201" sha1="jiokmwo17j7abk8lf9h7a9xsia5hmrz" xml:space="preserve">==Italian==
+
+===Etymology===
+From {{inh|it|la|labōrō|labōrāre}}.
+
+===Pronunciation===
+{{it-pr|+&lt;audio:LL-Q652 (ita)-Happypheasant-lavorare.wav&gt;}}
+
+===Verb===
+{{it-verb|a/ó}}
+
+# {{lb|it|intransitive}} to [[work]]; to [[labor]]
+#: {{syn|it|esercitare|svolgere|occuparsi|professare|operare|agire|ingegnarsi|adoperarsi|impegnarsi}}
+# {{lb|it|intransitive}} to work; to [[function]]
+... [truncated]

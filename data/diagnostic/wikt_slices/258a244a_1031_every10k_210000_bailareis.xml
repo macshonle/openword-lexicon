@@ -1,0 +1,46 @@
+  <page>
+    <title>bailareis</title>
+    <ns>0</ns>
+    <id>360097</id>
+    <revision>
+      <id>77133098</id>
+      <parentid>73542482</parentid>
+      <timestamp>2023-12-11T03:18:53Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>insert lang section with Galician (reintegrationist) verb form entry of [[bailar]] before Portuguese entry</comment>
+      <origin>77133098</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="414" sha1="l6bghpordgpnwa1v4rvxeub6hye6rrw" xml:space="preserve">{{also|bailaréis|bailáreis}}
+==Asturian==
+
+===Verb===
+{{head|ast|verb form}}
+
+# {{inflection of|ast|bailar||2|p|plup|indc}}
+# {{inflection of|ast|bailar||2|p|impf|subj}}
+
+==Galician==
+
+===Verb===
+{{head|gl|verb form}}
+
+# {{gl-reinteg-verb form of|bailar}}
+
+==Portuguese==
+
+===Verb===
+{{head|pt|verb form}}
+
+# {{pt-verb form of|bailar}}
+
+==Spanish==
+
+===Verb===
+{{head|es|verb form}}
+
+... [truncated]
