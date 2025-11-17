@@ -43,11 +43,27 @@ This consolidated report analyzes metadata coverage, quality, and filtering capa
 
 ### Sample Words by Tier
 
-**Tier A:** `you`  
-**Tier B:** `i`  
-**Tier C:** `to`, `the`  
-**Tier D:** `'s`, `it`, `a`  
-**Tier E:** `that`, `of`, `'t`, `in`, `and`  
+**Tier A:** (1 words) `you`  
+**Tier B:** (1 words) `i`  
+**Tier C:** (2 words) `the`, `to`  
+**Tier D:** (3 words) `'s`, `a`, `it`  
+**Tier E:** (6 words) `'t`, `and`, `in`, `is`, `of`, `that`  
+**Tier F:** (10 words) `he`, `what`, `on`, `my`, `this`  
+**Tier G:** (19 words) `can`, `no`, `know`, `there`, `here`  
+**Tier H:** (32 words) `from`, `want`, `got`, `out`, `good`  
+**Tier I:** (58 words) `off`, `hey`, `us`, `need`, `has`  
+**Tier J:** (100 words) `listen`, `fine`, `wanted`, `ever`, `these`  
+**Tier K:** (181 words) `different`, `knows`, `shit`, `actually`, `went`  
+**Tier L:** (327 words) `uncle`, `air`, `pick`, `outside`, `months`  
+**Tier M:** (578 words) `bob`, `closed`, `sold`, `bank`, `certainly`  
+**Tier N:** (1,035 words) `nights`, `plate`, `priest`, `chase`, `beach`  
+**Tier O:** (1,834 words) `wave`, `precisely`, `stabbed`, `impressive`, `billion`  
+**Tier P:** (3,256 words) `fee`, `reference`, `eastern`, `chickens`, `chemistry`  
+**Tier Q:** (5,689 words) `disguised`, `shaped`, `involving`, `drugged`, `everest`  
+**Tier R:** (9,829 words) `chunks`, `sewn`, `duran`, `fiddler`, `comedians`  
+**Tier S:** (16,084 words) `tyrol`, `shit-faced`, `org`, `bade`, `kurds`  
+**Tier T:** (6,268 words) `suppository`, `bourbons`, `chantry`, `pooled`, `best-known`  
+**Tier Z:** (1,258,370 words) `unbobbed`, `bachicha`, `defoamers`, `lobsterers`, `spraybow`  
 
 ---
 
@@ -226,11 +242,22 @@ This section analyzes metadata coverage for word game filtering needs.
 
 #### Sample Words by Syllable Count
 
-**1 syllable:** `bahr`, `baal`, `class`, `hatch`, `house`  
-**2 syllables:** `pupa`, `stockpile`, `apple`, `self-service`, `elba`  
-**3 syllables:** `wanderwort`, `rafflesian`, `halifax`, `samurai`, `lacertus`  
-**4 syllables:** `ruedas`, `suarez`, `abello`, `propaganda`, `rosenbergers`  
-**5 syllables:** `content management system`, `oficina`, `kinabatangan`, `hypercorrection`, `conquistadora`  
+**1 syllable:** `łódź`, `lief`, `vor`, `xxviith`, `elk`  
+**2 syllables:** `changfeng`, `kaping`, `dora`, `levant`, `garnish`  
+**3 syllables:** `endearing`, `camembert`, `halfpennies`, `douchebaggery`, `mulay`  
+**4 syllables:** `acromia`, `oceania`, `internetting`, `aplasia`, `magnality`  
+**5 syllables:** `neanderthaler`, `interspecific`, `compositional`, `quadrilateral`, `encyclopaedia`  
+
+#### Complete Enumeration for Rare Syllable Counts
+
+**9 syllables:** (9 words) `autoandrogynemorphophilia`, `autogynandromorphophilia`, `gaspésie–îles-de-la-madeleine`, `general mamerto natividad`, `methylenetetrahydrofolate`, `oligodendroglioma`, `rhombicosidodecahedra`, `rhombicosidodecahedron`, `solution in search of a problem`  
+**11 syllables:** (5 words) `antidisestablishmentarianism`, `fibrodysplasia ossificans progressiva`, `honorificabilitudinity`, `pseudopseudohypoparathyroidism`, `zeal without knowledge is a runaway horse`  
+**12 syllables:** (2 words) `esophagogastroduodenoscopy`, `methylenetetrahydrofolatereductase`  
+**13 syllables:** (2 words) `hexahectaenneacontakaiheptagon`, `honorificabilitudinitatibus`  
+**14 syllables:** (1 word) `supercalifragilisticexpialidocious`  
+**15 syllables:** (1 word) `hippopotomonstrosesquipedaliophobia`  
+**19 syllables:** (2 words) `llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch`, `pneumonoultramicroscopicsilicovolcanoconiosis`  
+**40 syllables:** (1 word) `taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu`  
 
 ### Concreteness Distribution
 
@@ -241,16 +268,33 @@ This section analyzes metadata coverage for word game filtering needs.
 | abstract | 31,342 |
 | mixed | 31,062 |
 
-#### Frequency Distribution (Nouns Only)
+#### Frequency Distribution by Tier (Nouns Only)
 
-| Tier | Count |
-|------|------:|
-| top10 | 0 |
-| top100 | 0 |
-| top1k | 0 |
-| top10k | 0 |
-| top100k | 0 |
-| rare | 0 |
+| Tier | Count | Percentage |
+|------|------:|-----------:|
+| A | 1 | 0.0% |
+| B | 1 | 0.0% |
+| C | 2 | 0.0% |
+| D | 3 | 0.0% |
+| E | 5 | 0.0% |
+| F | 9 | 0.0% |
+| G | 18 | 0.0% |
+| H | 29 | 0.0% |
+| I | 54 | 0.0% |
+| J | 89 | 0.0% |
+| K | 166 | 0.0% |
+| L | 287 | 0.0% |
+| M | 495 | 0.1% |
+| N | 873 | 0.1% |
+| O | 1,570 | 0.2% |
+| P | 2,756 | 0.3% |
+| Q | 4,770 | 0.5% |
+| R | 7,939 | 0.8% |
+| S | 12,761 | 1.4% |
+| T | 4,965 | 0.5% |
+| Z | 897,868 | 96.1% |
+
+**Total nouns with frequency tier:** 934,661  
 
 ---
 
@@ -399,51 +443,7 @@ Representative samples from different source combinations:
 
 ### wikt (1,070,498 entries)
 
-**`inchers`**
-```json
-{
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {},
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ]
-  },
-  "pos": [
-    "noun"
-  ],
-  "sources": [
-    "wikt"
-  ],
-  "word": "inchers"
-}
-```
-
-**`philosophists`**
-```json
-{
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {},
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ]
-  },
-  "pos": [
-    "noun"
-  ],
-  "sources": [
-    "wikt"
-  ],
-  "word": "philosophists"
-}
-```
-
-**`cross-dresses`**
+**`sadpost`**
 ```json
 {
   "frequency_tier": "Z",
@@ -461,14 +461,58 @@ Representative samples from different source combinations:
   "sources": [
     "wikt"
   ],
-  "word": "cross-dresses"
+  "word": "sadpost"
+}
+```
+
+**`aftertale`**
+```json
+{
+  "frequency_tier": "Z",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ]
+  },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "wikt"
+  ],
+  "word": "aftertale"
+}
+```
+
+**`shit-fits`**
+```json
+{
+  "frequency_tier": "Z",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ]
+  },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "wikt"
+  ],
+  "word": "shit-fits"
 }
 ```
 
 
 ### enable, wikt (44,993 entries)
 
-**`chowses`**
+**`outbulked`**
 ```json
 {
   "frequency_tier": "Z",
@@ -491,11 +535,11 @@ Representative samples from different source combinations:
     "wikt"
   ],
   "syllables": null,
-  "word": "chowses"
+  "word": "outbulked"
 }
 ```
 
-**`noneconomist`**
+**`astrobiologist`**
 ```json
 {
   "frequency_tier": "Z",
@@ -518,11 +562,11 @@ Representative samples from different source combinations:
     "wikt"
   ],
   "syllables": null,
-  "word": "noneconomist"
+  "word": "astrobiologist"
 }
 ```
 
-**`citral`**
+**`tramels`**
 ```json
 {
   "frequency_tier": "Z",
@@ -545,14 +589,14 @@ Representative samples from different source combinations:
     "wikt"
   ],
   "syllables": null,
-  "word": "citral"
+  "word": "tramels"
 }
 ```
 
 
 ### enable, eowl, wikt (39,095 entries)
 
-**`palmary`**
+**`blunged`**
 ```json
 {
   "frequency_tier": "Z",
@@ -565,6 +609,276 @@ Representative samples from different source combinations:
     ],
     "CC0": [
       "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "pos": [
+    "verb"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt"
+  ],
+  "syllables": null,
+  "word": "blunged"
+}
+```
+
+**`glossators`**
+```json
+{
+  "frequency_tier": "Z",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt"
+  ],
+  "syllables": null,
+  "word": "glossators"
+}
+```
+
+**`narco`**
+```json
+{
+  "frequency_tier": "S",
+  "is_phrase": false,
+  "labels": {
+    "register": [
+      "colloquial"
+    ]
+  },
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt"
+  ],
+  "syllables": null,
+  "word": "narco"
+}
+```
+
+
+### enable, eowl, wikt, wordnet (29,301 entries)
+
+**`stylites`**
+```json
+{
+  "concreteness": "concrete",
+  "frequency_tier": "Z",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
+  "syllables": null,
+  "word": "stylites"
+}
+```
+
+**`ravers`**
+```json
+{
+  "concreteness": "concrete",
+  "frequency_tier": "Z",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
+  "syllables": null,
+  "word": "ravers"
+}
+```
+
+**`machismo`**
+```json
+{
+  "concreteness": "abstract",
+  "frequency_tier": "Z",
+  "is_phrase": false,
+  "labels": {
+    "register": [
+      "informal"
+    ]
+  },
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "enable",
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
+  "syllables": 4,
+  "word": "machismo"
+}
+```
+
+
+### eowl, wikt (28,872 entries)
+
+**`ungodlily`**
+```json
+{
+  "frequency_tier": "Z",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "pos": [
+    "adverb"
+  ],
+  "sources": [
+    "eowl",
+    "wikt"
+  ],
+  "syllables": null,
+  "word": "ungodlily"
+}
+```
+
+**`oughtness`**
+```json
+{
+  "frequency_tier": "Z",
+  "is_phrase": false,
+  "labels": {
+    "temporal": [
+      "rare"
+    ]
+  },
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "eowl",
+    "wikt"
+  ],
+  "syllables": null,
+  "word": "oughtness"
+}
+```
+
+**`chapeless`**
+```json
+{
+  "frequency_tier": "Z",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
     ],
     "UKACD": [
       "eowl"
@@ -574,160 +888,18 @@ Representative samples from different source combinations:
     "adjective"
   ],
   "sources": [
-    "enable",
     "eowl",
     "wikt"
   ],
   "syllables": null,
-  "word": "palmary"
-}
-```
-
-**`opts`**
-```json
-{
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {},
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "pos": [
-    "verb"
-  ],
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt"
-  ],
-  "syllables": null,
-  "word": "opts"
-}
-```
-
-**`iolite`**
-```json
-{
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {},
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "pos": [
-    "noun"
-  ],
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt"
-  ],
-  "syllables": null,
-  "word": "iolite"
+  "word": "chapeless"
 }
 ```
 
 
-### enable, eowl, wikt, wordnet (29,301 entries)
+### wikt, wordnet (20,622 entries)
 
-**`throws`**
-```json
-{
-  "concreteness": "mixed",
-  "frequency_tier": "P",
-  "is_phrase": false,
-  "labels": {},
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "pos": [
-    "noun",
-    "verb"
-  ],
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": null,
-  "word": "throws"
-}
-```
-
-**`arista`**
-```json
-{
-  "concreteness": "concrete",
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {
-    "domain": [
-      "biology"
-    ]
-  },
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "pos": [
-    "adjective",
-    "noun",
-    "verb"
-  ],
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": 3,
-  "word": "arista"
-}
-```
-
-**`skirls`**
+**`hypoglycaemias`**
 ```json
 {
   "concreteness": "abstract",
@@ -739,93 +911,53 @@ Representative samples from different source combinations:
     "CC-BY-SA-4.0": [
       "wikt"
     ],
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "noun"
+  ],
+  "sources": [
+    "wikt",
+    "wordnet"
+  ],
+  "word": "hypoglycaemias"
+}
+```
+
+**`eventrations`**
+```json
+{
+  "concreteness": "abstract",
+  "frequency_tier": "Z",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
     ],
     "WordNet": [
       "wordnet"
     ]
   },
   "pos": [
-    "noun",
-    "verb"
-  ],
-  "sources": [
-    "enable",
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": null,
-  "word": "skirls"
-}
-```
-
-
-### eowl, wikt (28,872 entries)
-
-**`nousling`**
-```json
-{
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {},
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "pos": [
-    "verb"
-  ],
-  "sources": [
-    "eowl",
-    "wikt"
-  ],
-  "syllables": null,
-  "word": "nousling"
-}
-```
-
-**`pogos`**
-```json
-{
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {},
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "pos": [
-    "adjective",
     "noun"
   ],
   "sources": [
-    "eowl",
-    "wikt"
+    "wikt",
+    "wordnet"
   ],
-  "syllables": null,
-  "word": "pogos"
+  "word": "eventrations"
 }
 ```
 
-**`cleruchy`**
+**`plantagenet`**
 ```json
 {
-  "frequency_tier": "Z",
+  "concreteness": "abstract",
+  "frequency_tier": "S",
   "is_phrase": false,
   "labels": {
     "temporal": [
@@ -837,37 +969,6 @@ Representative samples from different source combinations:
     "CC-BY-SA-4.0": [
       "wikt"
     ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "pos": [
-    "noun"
-  ],
-  "sources": [
-    "eowl",
-    "wikt"
-  ],
-  "syllables": null,
-  "word": "cleruchy"
-}
-```
-
-
-### wikt, wordnet (20,622 entries)
-
-**`muhammadanism`**
-```json
-{
-  "concreteness": "abstract",
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {},
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
     "WordNet": [
       "wordnet"
     ]
@@ -879,68 +980,14 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "word": "muhammadanism"
-}
-```
-
-**`brahmaputras`**
-```json
-{
-  "concreteness": "concrete",
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {},
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "pos": [
-    "noun"
-  ],
-  "sources": [
-    "wikt",
-    "wordnet"
-  ],
-  "word": "brahmaputras"
-}
-```
-
-**`synechias`**
-```json
-{
-  "concreteness": "abstract",
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {},
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "pos": [
-    "noun"
-  ],
-  "sources": [
-    "wikt",
-    "wordnet"
-  ],
-  "word": "synechias"
+  "word": "plantagenet"
 }
 ```
 
 
 ### enable, wikt, wordnet (19,101 entries)
 
-**`knackwursts`**
+**`secretors`**
 ```json
 {
   "concreteness": "concrete",
@@ -968,11 +1015,44 @@ Representative samples from different source combinations:
     "wordnet"
   ],
   "syllables": null,
-  "word": "knackwursts"
+  "word": "secretors"
 }
 ```
 
-**`obligingness`**
+**`savoring`**
+```json
+{
+  "concreteness": "mixed",
+  "frequency_tier": "Z",
+  "is_phrase": false,
+  "labels": {},
+  "lemma": null,
+  "license_sources": {
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "noun",
+    "verb"
+  ],
+  "sources": [
+    "enable",
+    "wikt",
+    "wordnet"
+  ],
+  "syllables": null,
+  "word": "savoring"
+}
+```
+
+**`bemusements`**
 ```json
 {
   "concreteness": "abstract",
@@ -1000,51 +1080,126 @@ Representative samples from different source combinations:
     "wordnet"
   ],
   "syllables": null,
-  "word": "obligingness"
-}
-```
-
-**`winemakings`**
-```json
-{
-  "concreteness": "abstract",
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {},
-  "lemma": null,
-  "license_sources": {
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "CC0": [
-      "enable"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "pos": [
-    "noun"
-  ],
-  "sources": [
-    "enable",
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": null,
-  "word": "winemakings"
+  "word": "bemusements"
 }
 ```
 
 
 ### brysbaert, enable, eowl, wikt, wordnet (14,152 entries)
 
-**`debacle`**
+**`trooper`**
 ```json
 {
-  "concreteness": "abstract",
-  "concreteness_rating": 2.29,
-  "concreteness_sd": 1.12,
+  "concreteness": "concrete",
+  "concreteness_rating": 4.0,
+  "concreteness_sd": 1.26,
+  "frequency_tier": "R",
+  "is_phrase": false,
+  "labels": {
+    "domain": [
+      "military",
+      "nautical"
+    ],
+    "region": [
+      "en-AU",
+      "en-GB",
+      "en-US"
+    ],
+    "register": [
+      "colloquial"
+    ]
+  },
+  "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "noun",
+    "verb"
+  ],
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
+  "syllables": 2,
+  "word": "trooper"
+}
+```
+
+**`vessel`**
+```json
+{
+  "concreteness": "concrete",
+  "concreteness_rating": 4.66,
+  "concreteness_sd": 0.67,
+  "frequency_tier": "P",
+  "is_phrase": false,
+  "labels": {
+    "domain": [
+      "biology",
+      "nautical"
+    ],
+    "temporal": [
+      "obsolete"
+    ]
+  },
+  "lemma": null,
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "CC0": [
+      "enable"
+    ],
+    "UKACD": [
+      "eowl"
+    ],
+    "WordNet": [
+      "wordnet"
+    ]
+  },
+  "pos": [
+    "noun",
+    "verb"
+  ],
+  "sources": [
+    "brysbaert",
+    "enable",
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
+  "syllables": null,
+  "word": "vessel"
+}
+```
+
+**`flail`**
+```json
+{
+  "concreteness": "concrete",
+  "concreteness_rating": 3.79,
+  "concreteness_sd": 1.26,
   "frequency_tier": "S",
   "is_phrase": false,
   "labels": {},
@@ -1067,63 +1222,6 @@ Representative samples from different source combinations:
     ]
   },
   "pos": [
-    "noun"
-  ],
-  "sources": [
-    "brysbaert",
-    "enable",
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": 3,
-  "word": "debacle"
-}
-```
-
-**`snow`**
-```json
-{
-  "concreteness": "concrete",
-  "concreteness_rating": 4.85,
-  "concreteness_sd": 0.37,
-  "frequency_tier": "N",
-  "is_phrase": false,
-  "labels": {
-    "domain": [
-      "chemistry",
-      "nautical"
-    ],
-    "region": [
-      "en-US"
-    ],
-    "register": [
-      "slang"
-    ],
-    "temporal": [
-      "dated",
-      "historical"
-    ]
-  },
-  "lemma": null,
-  "license_sources": {
-    "Brysbaert-Research": [
-      "brysbaert"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "pos": [
     "noun",
     "verb"
   ],
@@ -1135,54 +1233,7 @@ Representative samples from different source combinations:
     "wordnet"
   ],
   "syllables": null,
-  "word": "snow"
-}
-```
-
-**`birdcall`**
-```json
-{
-  "concreteness": "concrete",
-  "concreteness_rating": 3.75,
-  "concreteness_sd": 1.38,
-  "frequency_tier": "Z",
-  "is_phrase": false,
-  "labels": {
-    "temporal": [
-      "rare"
-    ]
-  },
-  "lemma": null,
-  "license_sources": {
-    "Brysbaert-Research": [
-      "brysbaert"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "CC0": [
-      "enable"
-    ],
-    "UKACD": [
-      "eowl"
-    ],
-    "WordNet": [
-      "wordnet"
-    ]
-  },
-  "pos": [
-    "noun",
-    "verb"
-  ],
-  "sources": [
-    "brysbaert",
-    "enable",
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": null,
-  "word": "birdcall"
+  "word": "flail"
 }
 ```
 
