@@ -1,0 +1,27 @@
+  <page>
+    <title>key server</title>
+    <ns>0</ns>
+    <id>92341</id>
+    <revision>
+      <id>85288404</id>
+      <parentid>55195361</parentid>
+      <timestamp>2025-06-23T08:51:42Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>add period after English uses of {{alternative form of}}/{{alternative spelling of}}/{{alternative case form of}} and remove period after non-English uses, per [[Wiktionary:Beer parlour/2024/June#Full stops after templates like {{synonym of}}]] and general consistency with other definition-generating and etymology-generating templates; remove nodot=, nocap=, dot=; misc cleanups (manually assisted)</comment>
+      <origin>85288404</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="99" sha1="mwn16pcki2uzblwz2bywgchs68oi5jh" xml:space="preserve">{{also|keyserver}}
+==English==
+
+===Noun===
+{{en-noun}}
+
+# {{alternative spelling of|en|keyserver}}.</text>
+      <sha1>mwn16pcki2uzblwz2bywgchs68oi5jh</sha1>
+    </revision>
+  </page>

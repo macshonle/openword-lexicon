@@ -1,0 +1,69 @@
+  <page>
+    <title>ejector</title>
+    <ns>0</ns>
+    <id>33714</id>
+    <revision>
+      <id>83389267</id>
+      <parentid>81108947</parentid>
+      <timestamp>2025-01-02T21:38:02Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>rename {{der2}}/{{der3}}/{{der4}}/{{rel3}}/{{rel4}}} to corresponding {{colN}} per [[WT:RFDO#remove lesser-used column templates]]</comment>
+      <origin>83389267</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1567" sha1="q6le5nv3g33h124rwrx6bgbigt9rhq6" xml:space="preserve">==English==
+
+===Etymology===
+From {{suffix|en|eject|or}}.
+
+===Pronunciation===
+* {{IPA|en|/ɪˈd͡ʒɛktɚ/|/iːˈd͡ʒɛktɚ/}}
+* {{audio|en|LL-Q1860 (eng)-Vealhurl-ejector.wav|a=Southern England}}
+{{attention|en|check the second pronunciation, label it as restricted to particular varieties of English as needed}}
+
+===Noun===
+{{en-noun}}
+
+# One who, or that which, [[eject]]s or [[dispossess]]es.
+# {{lb|en|mechanics}} A [[jet]] [[jump]] for [[lift]]ing water or [[withdraw]]ing air from a space.&lt;!-- {Ejector condenser} ([[steam|Steam]] [[engine|Engine]]), a condenser in which the [[vacuum]] is maintained by a jet pump. --&gt;{{attention|en|where do we put this?}}
+# ejector [[seat]]: a pilot's seat in an airplane that can be forcibly ejected in the case of an emergency; then the pilot descends by [[parachute]].
+# That part of the mechanism of a breech-loading firearm which ejects the empty shell.
+# A [[lever]] for removing [[circuit]] [[board]]s from an [[electronic]] [[chassis]].
+
+====Derived terms====
+{{col2|en|ejector condenser|ejector seat|cartridge ejector|saliva ejector}}
+
+====Translations====
+{{trans-top|ejector}}
+* Italian: {{t|it|espulsore|m}}
+* Polish: {{t|pl|wyrzutnik|m}}
+* Spanish: {{t|es|eyector|m}}
+* Swedish: {{t|sv|ejektor|c}}, {{t+|sv|utkastare|c}}
+{{trans-bottom}}
+
+==Latin==
+
+===Verb===
+{{head|la|verb form|head=ējector}}
+
+# {{inflection of|la|ējectō||1|s|pres|pasv|indc}}
+
+==Romanian==
+
+===Etymology===
+{{bor+|ro|fr|éjecteur}}.
+
+===Noun===
+{{ro-noun|n|ejectoare}}
+
+# {{l|en|ejector}}
+
+====Declension====
+{{ro-noun-n|pl=ejectoare}}</text>
+      <sha1>q6le5nv3g33h124rwrx6bgbigt9rhq6</sha1>
+    </revision>
+  </page>

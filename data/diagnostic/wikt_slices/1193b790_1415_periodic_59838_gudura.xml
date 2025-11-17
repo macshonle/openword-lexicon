@@ -1,0 +1,61 @@
+  <page>
+    <title>gudura</title>
+    <ns>0</ns>
+    <id>76596</id>
+    <revision>
+      <id>85593586</id>
+      <parentid>85567731</parentid>
+      <timestamp>2025-07-20T01:23:53Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>move g-&gt;2, head-&gt;1 in {{sh-noun}}</comment>
+      <origin>85593586</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="778" sha1="j06epklw42auqi9kgmkewspbj2i7mkc" xml:space="preserve">==Romanian==
+
+===Etymology===
+Per Russu, from a Balkan substrate, from {{inh|ro|ine-pro|*gʷʰedʰ-}}. Compare Albanian {{m|sq|gudulis}}.
+
+===Pronunciation===
+* {{IPA|ro|/ɡu.duˈra/}}
+
+===Verb===
+{{ro-verb|gudură|gudurat|gudure}}
+
+# {{lb|ro|of dogs}} to [[fawn]] {{gloss|wag its tail to show devotion}}
+# {{lb|ro|figurative}} to [[fawn]] {{gloss|seek favour by flattery and obsequious behaviour}}
+
+====Conjugation====
+{{ro-conj-a|gudur}}
+
+===Further reading===
+* {{R:DEX}}
+
+==Serbo-Croatian==
+
+===Pronunciation===
+* {{IPA|sh|/ɡǔdura/}}
+* {{hyphenation|sh|gu|du|ra}}
+
+===Noun===
+{{sh-noun|gùdura|f}}
+
+# [[gorge]], [[ravine]]
+
+====Declension====
+{{sh-decl-noun
+|gudura|gudure
+|gudure|gudura
+|guduri|gudurama
+|guduru|gudure
+|guduro|gudure
+|guduri|gudurama
+|gudurom|gudurama
+}}</text>
+      <sha1>j06epklw42auqi9kgmkewspbj2i7mkc</sha1>
+    </revision>
+  </page>

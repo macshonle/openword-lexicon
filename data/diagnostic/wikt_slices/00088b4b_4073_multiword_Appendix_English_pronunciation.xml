@@ -1,0 +1,60 @@
+  <page>
+    <title>Appendix:English pronunciation</title>
+    <ns>100</ns>
+    <id>72</id>
+    <revision>
+      <id>87613330</id>
+      <parentid>87600970</parentid>
+      <timestamp>2025-10-26T22:49:52Z</timestamp>
+      <contributor>
+        <username>Adelpine</username>
+        <id>472128</id>
+      </contributor>
+      <comment>/* Vowels */ Deleting or changing non-IPA symbols (one of them coïncides with an IPA one). Improving some IPA pronunciations.</comment>
+      <origin>87613330</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="41080" sha1="ad8ew7iktqbt50l27xh8ehr0op5gbdk" xml:space="preserve">{{shortcut|AP:ENPRON}}
+
+The following tables show the [[International Phonetic Alphabet]] (IPA) and the English pronunciation (enPR) or {{w|American Heritage Dictionary}} (AHD) symbols that are used to represent the various sounds of the {{w|English language}}. They illustrate the pronunciation of major dialects, including [[Received Pronunciation]] (RP, UK), [[General American]] (GenAm, US), [[Canadian English]] (CanE), [[Australian English]] (AuE){{,}} [[New Zealand English]] (NZE) and [[Indian English]] (InE; more broadly South Asian).
+
+For a fuller list of dialects, see Wikipedia's {{w|IPA chart for English dialects}}. An [[:File:IPA Chart for English 2.png|image of an old version of these tables]] is also available.
+
+==Vowels==
+{{w|rhoticity in English|Non-rhotic}} dialects (RP, Australia, New Zealand) do not pronounce what was historically a syllable-final {{m|en||-r}}; instead they have a schwa ({{IPAchar|/-ə/}}), centering diphthong (ending in {{IPAchar|/-ə̯/}}) or a long vowel (ending in {{IPAchar|/-ː/}}). Rhotic dialects (General American, Canadian and Scottish) pronounce the syllable-final {{m|en||-r}}; they also make no vowel length distinction, so none of their vowels are transcribed with the length symbol {{IPAchar|/ː/}}.
+
+South Asian English, including Indian English, has both rhotic and non-rhotic speakers. Rhotic speakers may pronounce the {{m|en||-r}} in syllable-final positions, sometimes combining this with non-rhotic features like centering diphthongs, influenced by spelling or exposure to non-rhotic varieties. We write both centering diphthongs and the syllable-final {{m|en||-r}}, bracketed, for simplicity.
+
+This vowel table below lists the standard phonemic vowel notations in each accent and contains both [[monophthong]]s and [[diphthong]]s. Variations of notation within the same accent are also listed.
+
+{| class=&quot;wikitable sortable sticky-header-multi&quot; style=&quot;font-size:larger&quot;
+|- style=&quot;font-size:initial&quot;
+! rowspan=2 | [[Template:enPR|enPR]] / {{w|American Heritage Dictionary|AHD}}&lt;ref name=&quot;AHD&quot;&gt;{{cite-web|title=Pronunciation Key|url=https://www.ahdictionary.com/application/resources/misc/pronkey.pdf|work=The American Heritage Dictionary Of The English Language|year=2018|edition=5th|publisher=Houghton Mifflin Harcourt|archiveurl=http://archive.today/mSgk0|archivedate=19 Jan 2024}}&lt;/ref&gt;
+! colspan=7 | {{w|International Phonetic Alphabet|IPA}}
+! rowspan=2 | Examples
+|- style=&quot;font-size:initial&quot;
+! [[File:Flag of the United Kingdom.svg|30px]] RP
+! [[File:Flag of the United States.svg|30px]] GenAm
+! [[File:Flag of Canada.svg|30px]] CanE
+! [[File:Flag of Australia.svg|30px]]  AuE
+! [[File:Flag of New Zealand.svg|30px]] NZE
+! [[File:Flag of Scotland.svg|30px]] ScE
+! [[File:Flag of India.svg|30px]] InE
+|-
+! {{enPRchar|ä}}
+! rowspan=2 | {{IPAfont|ɑː}}
+! {{IPAchar2|Open back unrounded vowel.ogg|ɑ}}
+! {{IPAfont|ɒ, ɑ}}
+! colspan=2 rowspan=2 | {{IPAfont|ɐː}}
+! {{IPAfont|a}}
+! {{IPAfont|aː}}
+| style=&quot;font-size:initial&quot; | {{anchor|main vowel in the word father}}{{l|en|f'''a'''ther}}, {{l|en|p'''a'''lm}}
+|-
+! {{enPRchar|är}}
+! colspan=2 | {{IPAfont|ɑɹ}}
+! {{IPAfont|aɹ}}
+! {{IPAfont|aːʳ}}
+| style=&quot;font-size:initial&quot; | {{anchor|vowel in the word arm}} {{l|en|'''ar'''m}}, {{l|en|b'''ar'''d}}, {{l|en|st'''arr'''y}}, {{l|en|st'''ar'''t}}
+|-
+! {{enPRchar|ă}}
+... [truncated]

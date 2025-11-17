@@ -1,0 +1,26 @@
+  <page>
+    <title>encuerabais</title>
+    <ns>0</ns>
+    <id>389883</id>
+    <revision>
+      <id>68383936</id>
+      <parentid>45053501</parentid>
+      <timestamp>2022-07-19T02:45:52Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>replace {{es-verb form of}} conjugation(s) for infinitive [[encuerar]] with 'encuerar'</comment>
+      <origin>68383936</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="77" sha1="i511oeyb9tvh1m9olpdztx6y9jejo8b" xml:space="preserve">==Spanish==
+
+===Verb===
+{{head|es|verb form}}
+
+# {{es-verb form of|encuerar}}</text>
+      <sha1>i511oeyb9tvh1m9olpdztx6y9jejo8b</sha1>
+    </revision>
+  </page>

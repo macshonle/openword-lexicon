@@ -1,0 +1,52 @@
+  <page>
+    <title>dictionary</title>
+    <ns>0</ns>
+    <id>16</id>
+    <revision>
+      <id>87640821</id>
+      <parentid>87640053</parentid>
+      <timestamp>2025-10-29T15:46:53Z</timestamp>
+      <contributor>
+        <username>J3133</username>
+        <id>3466327</id>
+      </contributor>
+      <comment>Undo revision [[Special:Diff/87640053|87640053]] by [[Special:Contributions/Kasasalinwika|Kasasalinwika]] ([[User talk:Kasasalinwika|talk]])</comment>
+      <origin>87640821</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="27483" sha1="gl8iep9qhaotzt793mgyy4jusk9by3x" xml:space="preserve">{{also|Dictionary}}
+==English==
+{{was wotd|2022|December|12}}
+[[File:Auerbach open.jpg|thumb|Two interlanguage dictionaries.]]
+
+===Etymology===
+{{root|en|ine-pro|*deyḱ-}}
+{{etymon|en|id=Q23622|:inh|enm:dixionare&lt;id:dictionary&gt;|:afeq|diction&lt;id:?&gt;|-ary&lt;id:?&gt;|tree=1}}
+From {{inh|en|enm|dixionare}},&lt;ref&gt;{{R:MED Online|entry=dicciọ̄nārīe|pos=n|id=MED11549.5}}&lt;/ref&gt; a {{glossary|learned borrowing}} from {{der|en|ML.|dictiōnārium}}, from {{der|en|la|dictiōnārius}}, from {{m|la|dictiō||a speaking}}, from {{m|la|dictus}}, perfect past participle of {{m|la|dīcō|t= to speak}} + {{m|la|-ārium|t=room, place}}. {{surf|en|diction|-ary}}.
+
+===Pronunciation===
+* {{IPA|en|/ˈdɪk.ʃə.nə.ɹi/|/ˈdɪk.ʃən.ɹi/|/ˈdɪkʃ.nə.ɹi/|a=RP}}
+** {{audio|en|En-uk-dictionary.ogg|a=RP}}
+* {{enPR|dĭk'shə-nĕr-ē|a=US}}, {{IPA|en|/ˈdɪk.ʃəˌnɛ.ɹi/}}
+** {{audio|en|En-us-dictionary.ogg|a=California}}
+* {{IPA|en|/ˈɖɪkʃ(ə)nəri/|a=Indic}}
+* {{rhymes|en|ɪkʃənɛəɹi|s=4}}
+* {{hyphenation|en|dic|tion|a|ry||dic|tion|ary}}
+
+===Noun===
+{{en-noun}}
+
+# {{senseid|en|Q23622}} A [[reference work]] listing [[word]]s or [[name]]s from one or more [[language]]s, usually ordered [[alphabetically]], explaining each word's [[meaning#Noun|meanings]] or {{l|en|sense|id=any particular meaning of a word|senses}}, oftentimes also containing information on its [[etymology#Noun|etymology]], [[pronunciation#Noun|pronunciation]], {{l|en|usage|id=language}}, [[Wiktionary:Semantic relations|semantic relations]], [[translation#Noun|translations]], as well as other relevant information. {{defdate|ca. 1480}}
+#: {{syn|en|Thesaurus:dictionary}}
+#: {{hyper|en|wordbook}}
+#: {{cot|en|thesaurus}}
+#: {{ux|en|If you want to know the meaning of a word, look it up in the '''dictionary'''.}}
+#* {{quote-book|en|year=1988|author=Andrew Radford|title=Transformational grammar: a first course|location=Cambridge, UK|publisher=Cambridge University Press|page=339|chapter=7|passage=But what other kind(s) of syntactic information should be included in Lexical Entries? Traditional '''dictionaries''' such as Hornby's (1974) ''Oxford Advanced Learner's '''Dictionary''' of Current English'' include not only ''categorial'' information in their entries, but also information about the range of ''Complements'' which a given item permits (this information is represented by the use of a number/letter code).}}
+# {{lb|en|by extension}} A [[reference work]] on a particular [[subject]] or [[activity]] in which the entries are arranged alphabetically; an [[alphabetical]] [[encyclopedia]]. {{defdate|from 1570s}}
+#: {{uxi|en|a '''law''' dictionary}}
+#: {{uxi|en|a dictionary of '''sports'''}}
+# {{lb|en|figurative}} A [[person]] or [[thing]] regarded as a [[repository]] or [[compendium]] of [[information]]. {{defdate|from 1730s}}
+# {{lb|en|with {{m|en|of}} or possessive|frequently|figurative|especially|disparaging}} The [[collection]] of [[word]]s used or understood by a particular [[person]]; [[vocabulary]]. {{defdate|from 1570s}}
+# {{lb|en|preceded by {{m|en|the}}}} A [[synchronic]] dictionary of a standardised language held to only contain words that are properly part of the language.
+#* {{RQ:Lindsay Redheap|chapter=6|section=I|page=106|passage=Look it up in the '''dictionary''', and what do you find?}}
+... [truncated]
