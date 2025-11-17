@@ -23,6 +23,10 @@
 /data/plus/
 /data/.limits-log.json
 
+# Exception: Track diagnostic slices for analysis
+!/data/diagnostic/
+!/data/diagnostic/wikt_slices/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

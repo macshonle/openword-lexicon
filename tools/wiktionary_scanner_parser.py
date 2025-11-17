@@ -619,18 +619,39 @@ def has_english_categories(text: str) -> bool:
 
 
 def parse_entry(title: str, text: str) -> Optional[Dict]:
-    """Parse a single Wiktionary page."""
+    """
+    Parse a single Wiktionary page.
+
+    Uses multiple signals to validate English entries:
+    1. Primary: Successful POS extraction (strongest signal)
+    2. Secondary: English categories present
+    3. Tertiary: English templates ({{en-noun}}, etc.)
+
+    Philosophy: When information is present (POS, labels, etc.), include the entry.
+    Only reject if we have NO English signals at all.
+    """
     word = title.lower().strip()
 
-    # Validate that this is actually an English entry by checking for English categories
-    # This filters out foreign words like 'łódź' that may have an English section
-    # but are not actually English words
-    if not has_english_categories(text):
+    # Try to extract POS tags - this is the STRONGEST signal that it's English
+    pos_tags = extract_pos_tags(text)
+
+    # Check for English categories as a secondary signal
+    has_categories = has_english_categories(text)
+
+    # Check for English-specific templates as tertiary signal
+    has_en_templates = bool(re.search(r'\{\{en-(?:noun|verb|adj|adv)', text))
+
+    # Decision logic: Keep if ANY strong English signal is present
+    if not pos_tags and not has_categories and not has_en_templates:
+        # No English signals at all - reject
         return None
 
-    pos_tags = extract_pos_tags(text)
-    if not pos_tags:
-        return None
+    # If we have categories but no POS, this might be a minimal entry
+    # Keep it but it will have empty POS list
+    if not pos_tags and (has_categories or has_en_templates):
+        # Valid English entry with categories/templates but no extractable POS
+        # This can happen with some stub entries or special formats
+        pos_tags = []  # Empty but valid
 
     labels = extract_labels(text)
 
