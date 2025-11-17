@@ -317,7 +317,8 @@ def passes_phrase_filter(entry: Dict, config: FilterConfig) -> bool:
     if config.allow_phrases:
         return True
 
-    return not entry.get('is_phrase', False)
+    # Reject multi-word entries (word_count > 1)
+    return entry.get('word_count', 1) == 1
 
 
 def passes_all_filters(word: str, entry: Dict, config: FilterConfig) -> bool:

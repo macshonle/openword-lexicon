@@ -371,7 +371,7 @@ def main():
     logger.info("")
     logger.info("Statistics:")
     logger.info(f"  Total unique words: {len(entries):,}")
-    logger.info(f"  Multi-word phrases: {sum(1 for e in entries if e['is_phrase']):,}")
+    logger.info(f"  Multi-word phrases: {sum(1 for e in entries if e.get('word_count', 1) > 1):,}")
     logger.info(f"  With POS tags: {sum(1 for e in entries if e['pos']):,}")
     logger.info(f"  With labels: {sum(1 for e in entries if e['labels']):,}")
     logger.info(f"  With lemma: {sum(1 for e in entries if e['lemma']):,}")
