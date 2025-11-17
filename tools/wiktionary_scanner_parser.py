@@ -541,6 +541,44 @@ def is_englishlike(token: str) -> bool:
     return saw_latin_letter
 
 
+def extract_phrase_type(text: str) -> Optional[str]:
+    """
+    Extract specific phrase type before POS normalization.
+
+    Returns the specific type (idiom, proverb, etc.) or None if not a phrase.
+    This preserves granularity lost during POS_MAP normalization.
+    """
+    # Check section headers for specific phrase types
+    for match in POS_HEADER.finditer(text):
+        header = match.group(1).lower().strip()
+        header = ' '.join(header.split())  # Normalize whitespace
+
+        if header in ['idiom', 'proverb', 'prepositional phrase', 'adverbial phrase',
+                      'verb phrase', 'verb phrase form']:
+            return header
+
+    # Check {{head}} templates
+    for match in HEAD_TEMPLATE.finditer(text):
+        pos = match.group(1).lower().strip()
+        if pos in ['idiom', 'proverb', 'prepositional phrase', 'adverbial phrase',
+                   'verb phrase']:
+            return pos
+
+    # Check for prepositional phrase template
+    if PREP_PHRASE_TEMPLATE.search(text):
+        return 'prepositional phrase'
+
+    # Check categories
+    if 'Category:English prepositional phrases' in text:
+        return 'prepositional phrase'
+    if 'Category:English idioms' in text:
+        return 'idiom'
+    if 'Category:English proverbs' in text:
+        return 'proverb'
+
+    return None
+
+
 def parse_entry(title: str, text: str) -> Optional[Dict]:
     """Parse a single Wiktionary page."""
     word = title.lower().strip()
@@ -551,6 +589,12 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
 
     labels = extract_labels(text)
     is_phrase = ' ' in word
+
+    # Extract specific phrase type before normalization
+    phrase_type = extract_phrase_type(text) if is_phrase else None
+
+    # Calculate word count for multi-word entries
+    word_count = len(word.split()) if is_phrase else 1
 
     # Extract syllable count from multiple sources, preferring hyphenation template
     # Only set syllable count when we have reliable data - never guess
@@ -573,6 +617,12 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
         'is_phrase': is_phrase,
         'sources': ['wikt'],
     }
+
+    # Add phrase-specific metadata
+    if phrase_type:
+        entry['phrase_type'] = phrase_type
+    if word_count > 1:
+        entry['word_count'] = word_count
 
     # Only include syllable count if reliably determined
     # Leave unspecified (None) if data is missing or unreliable

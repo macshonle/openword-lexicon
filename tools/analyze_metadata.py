@@ -368,9 +368,30 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
             if rare_syllable_counts:
                 report += "\n#### Complete Enumeration for Rare Syllable Counts\n\n"
                 for syll_count in sorted(rare_syllable_counts):
-                    words_with_syll = sorted([w for w, e in metadata.items() if e.get('syllables') == syll_count])
-                    count = len(words_with_syll)
-                    report += f"**{syll_count} syllables:** ({count} word{'s' if count > 1 else ''}) {', '.join(f'`{w}`' for w in words_with_syll)}  \n"
+                    words_with_syll_data = [(w, metadata[w]) for w in metadata.keys()
+                                           if metadata[w].get('syllables') == syll_count]
+                    words_with_syll_data.sort(key=lambda x: x[0])  # Sort by word
+
+                    count = len(words_with_syll_data)
+
+                    # Format each word with metadata annotations
+                    formatted_words = []
+                    for word, meta in words_with_syll_data:
+                        phrase_type = meta.get('phrase_type')
+                        word_count = meta.get('word_count')
+
+                        if phrase_type or (word_count and word_count > 3):
+                            # Annotate special cases
+                            annotations = []
+                            if phrase_type:
+                                annotations.append(phrase_type)
+                            if word_count and word_count > 3:
+                                annotations.append(f"{word_count} words")
+                            formatted_words.append(f"`{word}` ({', '.join(annotations)})")
+                        else:
+                            formatted_words.append(f"`{word}`")
+
+                    report += f"**{syll_count} syllables:** ({count} word{'s' if count > 1 else ''}) {', '.join(formatted_words)}  \n"
 
             report += "\n"
 
