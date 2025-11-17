@@ -1,0 +1,53 @@
+  <page>
+    <title>Atelier</title>
+    <ns>0</ns>
+    <id>112803</id>
+    <revision>
+      <id>87716986</id>
+      <parentid>86869131</parentid>
+      <timestamp>2025-10-31T20:40:59Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87716986</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="501" sha1="2eu2o9s0ulgpfbq4txwq18tszq29u70" xml:space="preserve">{{also|atelier|ateliér}}
+==German==
+{{wp|de:}}
+
+===Etymology===
+{{ubor|de|fr|atelier}}.
+
+===Pronunciation===
+* {{IPA|de|/atəˈli̯eː/}}
+* {{audio|de|De-Atelier.ogg|a=&lt;&lt;Germany&gt;&gt; (&lt;&lt;Berlin&gt;&gt;)}}
+
+===Noun===
+{{de-noun|n,,s}}
+
+# {{lb|de|artist's or photographer's workshop}} [[studio]]
+
+====Declension====
+{{de-ndecl|n,,s}}
+
+===Further reading===
+* {{R:de:Duden}}
+* {{R:de:DWDS}}
+
+==Luxembourgish==
+
+===Pronunciation===
+* {{IPA|lb|/ɑtəˈljeː/}}
+
+===Noun===
+{{lb-noun|m}}
+
+# [[studio]]
+# [[workshop]]</text>
+      <sha1>2eu2o9s0ulgpfbq4txwq18tszq29u70</sha1>
+    </revision>
+  </page>

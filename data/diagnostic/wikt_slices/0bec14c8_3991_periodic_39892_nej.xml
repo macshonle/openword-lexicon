@@ -1,0 +1,173 @@
+  <page>
+    <title>nej</title>
+    <ns>0</ns>
+    <id>48740</id>
+    <revision>
+      <id>87852102</id>
+      <parentid>87220951</parentid>
+      <timestamp>2025-11-01T00:14:34Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87852102</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3321" sha1="lwze7nvf2lqgwv38l7ei9jviaojhr3y" xml:space="preserve">{{also|nèj|nej-|něj|ней}}
+==Translingual==
+
+===Symbol===
+{{mul-symbol}}
+
+# {{ISO 639|3}}
+
+===See also===
+* {{langcat}}
+
+==Danish==
+
+===Pronunciation===
+* {{IPA|da|/nɛj/|[najˀ]}}
+* {{rhymes|da|ajˀ|s=1}}
+* {{rhymes|da|aj|s=1}}
+
+===Etymology 1===
+From {{der|da|sv|nej}}, from {{der|da|gmq-osw|næi}}, from {{der|da|non|nei}}, from {{der|da|gem-pro|*nai||never}}, {{m|gem-pro|*nē||not}}, from {{der|da|ine-pro|*né}}, {{m|ine-pro|*nē}}, {{m|ine-pro|*nēy|pos=negative particle}}.
+
+====Interjection====
+{{head|da|intj}}
+
+# [[no]]
+# [[oh]], [[oh no]]
+
+====Noun====
+{{da-noun|et|er}}
+
+# [[no]]
+
+=====Inflection=====
+{{da-noun-infl|et|er}}
+
+===Etymology 2===
+See {{m|da|neje||to curtsey}}.
+
+====Verb====
+{{head|da|verb form}}
+
+# {{inflection of|da|neje||imp}}
+
+===Further reading===
+* {{R:DDO}}
+* {{R:ODS online}}
+
+==Hungarian==
+
+===Etymology===
+{{back-formation|hu}}{{attn|hu|is this term appropriate here? Similar fej, száj, máj, díj are listed as instances of rebracketing only}} or {{rebracketing|hu|nocap=y}} of the possessive form {{m|hu|neje}} into {{m|hu||nej&amp;nbsp;+&amp;nbsp;e}} instead of earlier {{m|hu||ne&amp;nbsp;+&amp;nbsp;je (&lt;&amp;nbsp;nő&amp;nbsp;+&amp;nbsp;je)}}.
+
+===Pronunciation===
+* {{hu-IPA}}
+
+===Noun===
+{{hu-noun|ek}}&lt;ref&gt;In: [http://polc.ttk.pte.hu/tamop-4.1.2.b.2-13/1-2013-0014/2/43_alaktan_s_nyelvtrtnet.html A nyelvtanról három megközelítésben – magyartanár-jelölteknek] (’On Grammar, in Three Approaches – for Would-be Teachers of Hungarian’) by Fancsaly, Éva et al., 2014&lt;/ref&gt;
+
+# {{lb|hu|proscribed}} {{synonym of|hu|feleség||wife}}
+
+====Declension====
+{{hu-decl-ek|ne|j|acc2=et|esm_sg2=nejül}}{{hu-pos-etek|nej||ei}}
+
+===References===
+&lt;references/&gt;
+
+{{cln|hu|3-letter words}}
+
+==Maltese==
+
+===Etymology===
+From {{inh|mt|ar|نَيِّئ}}.
+
+===Pronunciation===
+* {{IPA|mt|/nɛj/}}
+* {{rhymes|mt|ɛj|s=1}}
+
+===Adjective===
+{{mt-adjective|f=nejja|p=nejjin}}
+
+# [[raw]] {{gl|uncooked}}
+# [[unripe]]
+
+==Slovak==
+
+===Alternative forms===
+* {{alter|sk|jej}}
+
+===Pronunciation===
+* {{sk-IPA}}
+
+===Pronoun===
+{{head|sk|pronoun form}}
+
+# {{inflection of|sk|ona||gen//dat//loc}}
+
+====Usage notes====
+Used after prepositions.
+
+==Swedish==
+{{wp|sv:}}
+
+===Etymology===
+From {{inh|sv|gmq-osw|næi}}, from {{inh|sv|non|nei}}, from {{inh|sv|gem-pro|*nai||never}}, {{m|gem-pro|*nē||not}}, from {{inh|sv|ine-pro|*né}}, {{m|ine-pro|*nē}}, {{m|ine-pro|*nēy|pos=negative particle}}.
+
+===Pronunciation===
+* {{IPA|sv|/nɛj/}}
+* {{IPA|sv|/naj/|a=Scania}}
+* {{audio|sv|Sv-nej.ogg}}
+* {{rhymes|sv|ɛj|aj|q2=Scania|s=1}}
+
+===Adverb===
+{{sv-adv|-}}
+
+# [[no]]; ''a negative answer''
+#: {{ux|sv|'''Nej''', jag har inga pengar med mig.|'''''No''', I have no money with me.''}}
+
+====Antonyms====
+* {{l|sv|ja}}, {{l|sv|jo}}
+
+====Related terms====
+* {{l|sv|nja}}
+
+===Noun===
+{{sv-noun|n}}
+
+# a [[no]], a [[nay]]; a negative answer or vote
+
+====Declension====
+{{sv-infl-noun-n-zero}}
+
+===References===
+* {{R:svenska.se|so}}
+* {{R:svenska.se|saol}}
+* {{R:svenska.se|saob}}
+
+==White Hmong==
+
+===Etymology===
+From {{inh|mww|hmx-pro|*mi̯əu||you all}}.
+
+===Pronunciation===
+{{mww-pron}}
+
+===Pronoun===
+{{head|mww|pronoun}}
+
+# [[you]] {{qualifier|three or more: second person plural}}
+# [[your]] {{qualifier|three or more: second person plural}}
+
+===References===
+* {{R:mww:Heimbach|page=136}}
+* {{R:hmx-pro:Ratliff 2010}}</text>
+      <sha1>lwze7nvf2lqgwv38l7ei9jviaojhr3y</sha1>
+    </revision>
+  </page>

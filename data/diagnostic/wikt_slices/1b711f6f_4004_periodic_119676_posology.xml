@@ -1,0 +1,38 @@
+  <page>
+    <title>posology</title>
+    <ns>0</ns>
+    <id>229175</id>
+    <revision>
+      <id>81927168</id>
+      <parentid>79625110</parentid>
+      <timestamp>2024-09-27T07:35:37Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>clean up uses of double apostrophe in mention glosses</comment>
+      <origin>81927168</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6284" sha1="6ctsj8sqcdyx1u3vad00ruvrschrd6u" xml:space="preserve">==English==
+{{was wotd|2017|January|22}}
+[[File:4 Pewter medicine spoons or measures. Wellcome L0008770.jpg|thumb|[[spoon|Spoons]], probably made of [[pewter]], used to [[measure]] [[dose#Noun|doses]] of [[medicine]], from the collection of the {{w|Wellcome Library}} in [[London]], UK]]
+
+===Etymology===
+From {{der|en|grc|πόσος||[[how much]]?}} {{suffix|en||ology|pos2=suffix indicating a [[branch]] of [[learning]]}}.
+
+===Pronunciation===
+* {{IPA|en|/pəʊˈsɒ.lə.d͡ʒi/|/pə-/|a=RP}}
+** {{audio|en|LL-Q1860 (eng)-Vealhurl-posology.wav|a=Southern England}}
+* {{IPA|en|/pəˈzɑ.lə.d͡ʒi/|a=GA}}
+* {{hyphenation|en|po|so|lo|gy}}
+
+===Noun===
+{{en-noun|-|+}}
+
+# {{lb|en|countable|uncountable|pharmacy|pharmacology}} The [[study]] of the [[dosage]]s of [[drug]]s, especially the [[determination]] of [[appropriate]] dosages. {{defdate|from 19th c.}}&lt;!--Needs verification.--&gt;
+#* {{quote-journal|en|author=E. Milligan|title=On the Doses of the Ancient Physicians|journal=The Edinburgh Medical and Surgical Journal: Exhibiting a Concise View of the Latest and Most Discoveries in Medicine, Surgery, and Pharmacy|location=Edinburgh|publisher=Printed by George Ramsay &amp; Company, for [[w:Constable &amp; Robinson|Archibald Constable and Company]], Edinburgh; [[w:Longman|Longman, Hurst, Rees, Orme, &amp; Brown]], London; and John Cumming, Dublin|month=April|year=1820|volume=XVI|issue=LXIII|page=186|pageurl=https://books.google.com/books?id=IM0EAAAAQAAJ&amp;pg=PA186|oclc=476511450|passage=The difficulty here alluded to occurs in the {{smallcaps|doses}} of medicine exhibited by the ancient physicians. These have long been observed to be very large; and it was on remarking the impossibility, according to our ideas, of exhibiting them with safety to human life, or even of escaping destruction under their influence, that my observation was first drawn to the subject of ancient '''posology'''.}}
+#* {{quote-book|en|author=L. D. Kapoor|chapter=Introduction|title=Handbook of Ayurvedic Medicinal Plants|series=Herbal Reference Library|location=Boca Raton, Fla.|publisher=w:CRC Press|year=2000|page=1|pageurl=https://books.google.com/books?id=-q45EZEfz0sC&amp;pg=PA1|isbn=978-0-8493-2929-6|passage=Dr. Wise {{...}} mentions two systems of Hindu surgery and nine systems of medicine, three of materia medica, one of '''posology''', one of pharmacy, and three of metallic preparations alone. From these one can gather the strength and dimensions of the scientific knowledge of ancient India regarding therapeutic agents of both organic and inorganic origin.}}
+#* {{quote-book|en|author=Elaine Elisabetsky|chapter=Traditional Medicines and the New Paradigm of Psychotropic Drug Action|editors=[[w:Maurice Iwu|Maurice M[maduakolam] Iwu]]; Jacqueline C. Wootton|title=Ethnomedicine and Drug Discovery|series=Advances in Phytomedicine|seriesvolume=1|location=Amsterdam|publisher=[[w:Elsevier|Elsevier Science]]|year=2002|page=136|pageurl=https://books.google.com/books?id=vnmFkdDlIIMC&amp;pg=PA136|isbn=978-0-444-50852-2|passage='''Posology''' is usually well defined by medicinal plant specialists. Traditional formulations of medicinal plants processed for therapeutic uses (such as teas, syrups, concoctions, beverages, etc.) are expected to be ingested over a given period of time, varying with the expected length of the condition to be treated, and the time required for the remedy to attain its curative goal.}}
+... [truncated]

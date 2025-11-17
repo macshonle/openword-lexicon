@@ -1,0 +1,36 @@
+  <page>
+    <title>zutano</title>
+    <ns>0</ns>
+    <id>91835</id>
+    <revision>
+      <id>84050241</id>
+      <parentid>75703369</parentid>
+      <timestamp>2025-02-27T02:50:57Z</timestamp>
+      <contributor>
+        <username>Rodrigo5260</username>
+        <id>3579806</id>
+      </contributor>
+      <comment>/* Spanish */</comment>
+      <origin>84050241</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="440" sha1="1mh8pdl2e15vu2voh9a1iv0r13j5ndj" xml:space="preserve">==Spanish==
+
+===Etymology===
+From [[Old Spanish]] *''citano'', from [[Latin]] *''scitanus'', from {{m|la|scitus||known one}}, from {{m|la|scire||to know}} (not related to [[Spanish]] {{m|es|saber||to know}}).
+
+===Pronunciation===
+{{es-pr}}
+
+===Noun===
+{{es-noun|m|f=+}}
+
+# [[what's-his-name]]; [[so-and-so]]
+#: {{syn|es|fulano|mengano}}
+#: {{uxi|es|fulano, mengano y '''zutano'''|Tom, Dick and Harry}}
+
+===Further reading===
+* {{R:es:DRAE}}</text>
+      <sha1>1mh8pdl2e15vu2voh9a1iv0r13j5ndj</sha1>
+    </revision>
+  </page>

@@ -1,0 +1,35 @@
+  <page>
+    <title>Wiktionary:Welcome, newcomers</title>
+    <ns>4</ns>
+    <id>6</id>
+    <revision>
+      <id>87303334</id>
+      <parentid>86791040</parentid>
+      <timestamp>2025-10-05T10:17:38Z</timestamp>
+      <contributor>
+        <username>Yivan000</username>
+        <id>3589771</id>
+      </contributor>
+      <comment>use PAGESINCAT to show actual entries</comment>
+      <origin>87303334</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6261" sha1="7e1s7si3r7os95lvr0v818ulr2xws3j" xml:space="preserve">{{shortcut|WT:About|WT:Welcome|WT:WELCOME}}
+Hello, and welcome! Wiktionary is a [[multilingual]] [[free]] [[dictionary]], being written collaboratively on this website by people from around the world. Entries may be [[Help:How to edit a page|edit]]ed by anyone!
+
+You are reading the '''English''' version of this multilingual '''dictionary of all languages''', in which all words of all languages are explained in English, in a [[descriptivist]] (not [[prescriptivist]]) way. In the left sidebar, you will find links to [[m:Wiktionary|other language versions of Wiktionary]], in which the definitions are presented in other languages; each Wiktionary has a language code in its URL that designates which language it uses for its explanations.
+
+Designed as the lexical companion to [[:w:Main Page|Wikipedia]], the encyclopedia project, Wiktionary has grown beyond a standard dictionary and now includes a [[Wiktionary:Thesaurus|thesaurus]], a [[Wiktionary:Rhymes|rhyme guide]], [[:Category:Phrasebooks by language|phrasebooks]], language statistics and extensive appendices.  We aim to include not only the definition of a word, but also enough information to really understand it. Thus, [[etymology|etymologies]], pronunciations, sample quotations, synonyms, antonyms, translations, spelling variants, non-standard spellings, etc., are included.
+
+Wiktionary is a [[wiki]], which means that you can edit it, and all the content is dual-licensed under both the [[Wiktionary:Text of Creative Commons Attribution-ShareAlike 4.0 International License|Creative Commons Attribution-ShareAlike 4.0 International License]] and the [[Wiktionary:GNU Free Documentation License|GNU Free Documentation License]]. Before you contribute, you may wish to read through some of our [[Wiktionary:Help|Help]] pages, and bear in mind that we do things quite differently from other wikis. In particular, we have strict [[Wiktionary:Entry layout|layout conventions]] and [[Wiktionary:Criteria for inclusion|inclusion criteria]]. Learn how to [[Help:Starting a new page|start a page]], how to [[Help:How to edit a page|edit entries]], experiment in the [[Wiktionary:Sandbox|sandbox]] and visit our [[Wiktionary:Community Portal|Community Portal]] to see how you can participate in the development of Wiktionary.
+
+We have created '''{{PAGESINCAT:Pages with entries}}''' entries since starting in December 2002, and we’re still growing.
+
+==Editing Wiktionary==
+People like you are very active in building this project. While you are reading this, someone is likely editing one of our entries. Many knowledgeable people are already at work, but everybody is welcome!
+
+Contributing does not require [{{fullurl:Special:UserLogin|type=signup}} logging in], but we would prefer that you do, as it facilitates the administration of this site. (Note that logging in also prevents the IP address of your computer from being displayed in the [{{fullurl:Wiktionary:Welcome, newcomers|action=history}} page history].)
+
+You can dive in right now and add or alter a definition, add example sentences, or help us to format or categorize entries properly. You can even [[Help:Starting a new page|create a page]] for a missing term. Please feel free to [[Wiktionary:Be bold in updating pages|be bold]] in editing pages!
+
+... [truncated]

@@ -176,7 +176,7 @@ def enrich_entry(entry: dict) -> dict:
     enriched = False
 
     # Skip multi-word phrases (WordNet doesn't handle them well)
-    if entry.get('is_phrase', False):
+    if entry.get('word_count', 1) > 1:
         return entry
 
     # Backfill POS if empty

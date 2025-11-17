@@ -357,11 +357,11 @@ def get_preset_filters(preset: str) -> List[Callable[[dict], bool]]:
         'child-safe': [
             is_child_safe,
             is_modern,
-            lambda e: not e.get('is_phrase', False)
+            lambda e: e.get('word_count', 1) == 1  # Single words only
         ],
         'wordle': [
             lambda e: matches_length(e, 5, 5),
-            lambda e: not e.get('is_phrase', False),
+            lambda e: e.get('word_count', 1) == 1,  # Single words only
             lambda e: matches_frequency(e, max_tier='top50k'),
             is_child_safe
         ],
@@ -372,7 +372,7 @@ def get_preset_filters(preset: str) -> List[Callable[[dict], bool]]:
             lambda e: matches_frequency(e, max_tier='top25k')
         ],
         'scrabble': [
-            lambda e: not e.get('is_phrase', False),
+            lambda e: e.get('word_count', 1) == 1,  # Single words only
             is_modern,
             lambda e: not is_profanity(e)
         ],

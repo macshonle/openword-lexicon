@@ -1,0 +1,79 @@
+  <page>
+    <title>portmanteau</title>
+    <ns>0</ns>
+    <id>29</id>
+    <revision>
+      <id>87672199</id>
+      <parentid>87661811</parentid>
+      <timestamp>2025-10-31T19:27:19Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87672199</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6226" sha1="ah7ua50jwb7h3w8rvini8p8z7qpqqy3" xml:space="preserve">==English==
+{{was wotd|2007|March|8}}
+{{wp}}
+
+===Pronunciation===
+* {{IPA|en|/pɔːtˈmæn.təʊ/|a=RP}}
+* {{enPR|pôrtmă'ntō|pô'rtmăntōʹ|a=US}}, {{IPA|en|/pɔːɹtˈmæntoʊ/|/ˌpɔːɹtmænˈtoʊ/}}
+* {{audio|en|en-us-portmanteau-1.ogg|a=US}}
+* {{audio|en|en-us-portmanteau-2.ogg|a=US}}
+* {{audio|en|en-au-portmanteau.ogg|a=AU}}
+* {{rhymes|en|æntəʊ|əʊ|s=3}}
+
+===Etymology 1===
+{{etymid|en|luggage}}
+{{root|en|ine-pro|*per- (fare)}}
+From {{bor|en|frm|portemanteau||coat stand}}, from {{compound|frm|nocat=1|porter|alt1=porte|t1=carries|pos1=third-person singular present indicative of {{m|frm|porter|t=to carry}}|manteau|t2=coat|lit=[that which] carries coat}}.
+
+====Noun====
+{{en-noun|s|portmanteaux}}
+
+# A large [[travel]]ling [[case]] usually made of [[leather]], and [[open]]ing into two [[equal]] [[section]]s.
+#: {{alti|en|portemanteau|portmantua&lt;q:obsolete&gt;}}
+#* {{quote-book|en|year=1667|author=w:Charles Croke|title=Fortune's Uncertainty|text=Rodolphus therefore finding such an earnest Invitation, embrac'd it with thanks, and with his Servant and '''Portmanteau''', went to Don Juan's; where they first found good Stabling for their Horses, and afterwards as good Provision for themselves.}}
+#* {{RQ:Dickens Haunted House|page=7|column=2|chapter=The Mortals in the House|text=He brought down with him to our haunted house a little cask of salt beef; for, he is always convinced that all salt beef not of his own pickling, is mere carrion, and invariably, when he goes to London, packs a piece in his '''portmanteau'''.}}
+#* {{RQ:Mansfield Bliss|page=71|passage=I believe that people are like '''portmanteaux'''—packed with certain things, started going, thrown about, tossed away, dumped down, lost and found, half emptied suddenly, or squeezed fatter than ever, until finally the Ultimate Porter swings them on to the Ultimate Train and away they rattle. . . .}}
+# {{lb|en|Australia|dated}} A [[schoolbag]].
+#: {{syn|en|port|school port}}
+# {{lb|en|archaic}} A [[hook]] on which to [[hang]] [[clothing]].
+#* {{RQ:Mansfield Bliss|page=72|passage=But before I started that long and rather far-fetched and not frightfully original digression, what I meant to say quite simply was that there are no '''portmanteaux''' to be examined here because the clientele of this café, ladies and gentlemen, does not sit down.}}
+
+=====Translations=====
+{{trans-top|case}}
+* Albanian: {{t+|sq|baule|f}}
+* Arabic: {{t|ar|حَقِيبَة سَفَر|tr=ḥaqībat safar|f}}
+* Breton: {{t+|br|mal|f}}, {{t|br|malizenn|f}}
+* Bulgarian: {{t|bg|голям кожен куфар}}
+* Czech: {{t|cs|kontaminace}}
+* Dutch: {{t+|nl|koffer|f}}, {{t+|nl|valies|f}}
+* Estonian: {{t|et|reisikott}}, {{t|et|kohver}}, {{t|et|laadik}}
+* Finnish: {{t+|fi|matkalaukku}}
+* French: {{t+|fr|portemanteau|m}}, {{t+|fr|valise|f}}, {{t+|fr|malle|f}}
+* German: {{t+|de|Koffer|m}}
+* Interlingua: {{t|ia|valise}}
+* Latin: {{t|la|averta|f}}
+* Lithuanian: {{t|lt|lagaminas|m}}
+* Norwegian:
+*: Bokmål: {{t|nb|koffert|m}}
+*: Nynorsk: {{t|nn|koffert|m}}
+* Ottoman Turkish: {{t|ota|خرج|tr=hurc}}
+* Persian: {{t+|fa|چمدان|tr=čamedân}}
+* Polish: {{t+|pl|waliza|f}}
+* Portuguese: {{t+|pt|maleta|f}}, {{t+|pt|valise|f}}
+* Romanian: {{t+|ro|valiză|f}}
+* Russian: {{t+|ru|чемода́н|m}}, {{t+|ru|бау́л|m}}, дорожная {{t+|ru|су́мка|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{t|sh|кожни кофер|m|tr=kožni kofer|sc=Cyrl}}
+* Spanish: {{t+|es|maleta|f}}, {{t+|es|valija|f}}
+* Swedish: {{t+|sv|kappsäck|c}}
+* Turkish: {{t+|tr|bavul}}
+* Vietnamese: {{t+|vi|va li}}
+* Yoruba: {{t|yo|pọtimáńtò}}
+... [truncated]

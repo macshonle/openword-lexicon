@@ -14,8 +14,8 @@ Merge logic:
   - Union all label categories
   - Union sources
   - Compute license_sources from sources
-  - Prefer non-null values for lemma, concreteness, frequency_tier
-  - Keep is_phrase if any source has it as true
+  - Prefer non-null values for lemma, concreteness, frequency_tier, phrase_type
+  - Use max word_count (in case one source has better multi-word detection)
 
 License tracking:
   - Automatically compute license requirements from sources
@@ -101,8 +101,15 @@ def merge_entries(entry1: dict, entry2: dict) -> dict:
 
     merged['labels'] = merged_labels
 
-    # is_phrase: true if either is true
-    merged['is_phrase'] = entry1.get('is_phrase', False) or entry2.get('is_phrase', False)
+    # word_count: prefer max (in case one source has better multi-word detection)
+    wc1 = entry1.get('word_count', len(entry1['word'].split()))
+    wc2 = entry2.get('word_count', len(entry2['word'].split()))
+    merged['word_count'] = max(wc1, wc2)
+
+    # phrase_type: prefer non-null
+    merged_phrase_type = entry1.get('phrase_type') or entry2.get('phrase_type')
+    if merged_phrase_type:
+        merged['phrase_type'] = merged_phrase_type
 
     # lemma: prefer non-null
     merged['lemma'] = entry1.get('lemma') or entry2.get('lemma')
@@ -256,7 +263,7 @@ def print_statistics(entries: Dict[str, dict]):
     logger.info(f"  Frequency tier: {freq_count:,} ({100 * freq_count / len(entries):.1f}%)")
 
     # Phrases
-    phrases = sum(1 for e in entries.values() if e.get('is_phrase'))
+    phrases = sum(1 for e in entries.values() if e.get('word_count', 1) > 1)
     logger.info(f"  Multi-word phrases: {phrases:,} ({100 * phrases / len(entries):.1f}%)")
 
 

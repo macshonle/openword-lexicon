@@ -198,6 +198,16 @@ diagnose-scanner: deps $(WIKTIONARY_DUMP)
 		/tmp/scanner_diagnostic.jsonl \
 		--diagnostic $(REPORTS_DIR)/scanner_diagnostic.txt
 
+# Extract diagnostic XML slices for analysis
+extract-slices: deps $(WIKTIONARY_DUMP)
+	@echo "Extracting diagnostic XML slices..."
+	@mkdir -p data/diagnostic/wikt_slices
+	$(UV) run python tools/wiktionary_xml_slicer.py \
+		"$(WIKTIONARY_DUMP)" \
+		data/diagnostic/wikt_slices
+	@echo "Slices written to data/diagnostic/wikt_slices/"
+	@echo "Add to git with: git add data/diagnostic/wikt_slices/"
+
 # ===========================
 # Interactive Word List Builder
 # ===========================

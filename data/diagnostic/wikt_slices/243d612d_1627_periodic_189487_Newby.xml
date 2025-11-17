@@ -1,0 +1,45 @@
+  <page>
+    <title>Newby</title>
+    <ns>0</ns>
+    <id>337348</id>
+    <revision>
+      <id>87999969</id>
+      <parentid>87340121</parentid>
+      <timestamp>2025-11-01T04:15:23Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87999969</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="924" sha1="l3yxy4pxddpijf8wv2mm3ddak8jvt9l" xml:space="preserve">==English==
+{{wp}}
+
+===Etymology===
+From {{suffix|en|new|by}}. Meaning &quot;new settlement&quot;.
+
+===Proper noun===
+{{en-proper noun|~|s}}
+
+# A [[placename]]; any of several places:
+## {{place|en|small village|par/Clapham cum Newby|co/North Yorkshire|cc/England|previously in|dist/Craven}} {{q|[[OS]] grid ref SD7270}}.
+## {{place|en|village/and/cpar|in|co/North Yorkshire|previously in|dist/Hambleton}} {{q|[[OS]] grid ref NZ5012}}. &lt;ref&gt;[https://maps.walkingclub.org.uk/admin/north-yorkshire/newby-parish.html Parish map (Hambleton, North Yorkshire)]&lt;/ref&gt;
+## {{place|en|village|par/Newby and Scalby|co/North Yorkshire|previously in|dist/Scarborough}} {{q|OS grid ref TA0189}}.
+# {{lb|en|countable}} {{surname|en|English [[habitational]]|from=Middle English}} for someone from one of these places.
+
+====Derived terms====
+{{col3|en|
+|Clapham cum Newby
+|Newby and Scalby
+|Newby Bridge
+|Newby Wiske
+}}
+
+===References===
+&lt;references/&gt;</text>
+      <sha1>l3yxy4pxddpijf8wv2mm3ddak8jvt9l</sha1>
+    </revision>
+  </page>

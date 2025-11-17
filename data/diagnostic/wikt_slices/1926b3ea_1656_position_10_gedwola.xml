@@ -1,0 +1,51 @@
+  <page>
+    <title>gedwola</title>
+    <ns>0</ns>
+    <id>206558</id>
+    <revision>
+      <id>85001824</id>
+      <parentid>82483949</parentid>
+      <timestamp>2025-06-01T04:29:18Z</timestamp>
+      <contributor>
+        <username>Vergencescattered</username>
+        <id>3992398</id>
+      </contributor>
+      <comment>/* Old English */</comment>
+      <origin>85001824</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1061" sha1="530dy96vs9okklk2wlirbnvs8eqnpwy" xml:space="preserve">==Old English==
+
+===Alternative forms===
+* {{alter|ang|ġedweola}}
+
+===Etymology===
+From or related to the verb {{m|ang|dwolian||to make a mistake, be wrong}}.
+
+===Pronunciation===
+* {{ang-IPA|ġedwola}}
+
+===Noun===
+{{ang-noun|m|head=ġedwola}}
+
+# {{lb|ang|countable}} [[mistake]], [[error]]
+# {{lb|ang|uncountable}} [[error]]
+#: {{ux|ang|sē mennesca '''ġedwola'''|human '''error'''}}
+# {{lb|ang|countable|uncountable}} [[heresy]]
+#* '''late 9th century''', [https://books.google.com/books?id=YD9HAQAAMAAJ&amp;pg=PA42 translation] of [[w:Bede|Bede's]] ''[[w:Ecclesiastical History of the English People|Ecclesiastical History]]''
+#*: {{quote|ang|''Þēos sibb āwunade on Crīstes cyriċan...ōþ ðā tīde þe sē Arrianisċa '''gėdweolda''' ārās.''|This peace persisted in Christ's church...until the time that the Arian '''heresy''' arose.}}
+# [[heretic]]
+
+====Declension====
+{{ang-decl-noun-n-m|ġedwol}}
+
+====Derived terms====
+* {{l|ang|ġedwolcræft}}
+* {{l|ang|ġedwolgod}}
+* {{l|ang|ġedwolsprǣc}}
+
+===References===
+* {{R:ang:BT|ĠEDWOLA|ref=014135}}</text>
+      <sha1>530dy96vs9okklk2wlirbnvs8eqnpwy</sha1>
+    </revision>
+  </page>

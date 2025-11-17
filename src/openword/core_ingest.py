@@ -13,7 +13,7 @@ Each entry has:
   - word (NFKC normalized)
   - pos: [] (empty; no POS in source)
   - labels: {} (empty; no labels in source)
-  - is_phrase: false
+  - word_count: 1 (single words from these sources)
   - lemma: null
   - sources: ["enable"] or ["eowl"] or both
 """
@@ -91,7 +91,7 @@ def create_entry(word: str, sources: list) -> dict:
         "word": word,
         "pos": [],
         "labels": {},
-        "is_phrase": False,
+        "word_count": 1,  # Core sources only contain single words
         "lemma": None,
         "sources": sorted(set(sources))  # deduplicate and sort
     }

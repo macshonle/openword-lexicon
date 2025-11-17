@@ -1,0 +1,52 @@
+  <page>
+    <title>esperimento</title>
+    <ns>0</ns>
+    <id>80991</id>
+    <revision>
+      <id>87956459</id>
+      <parentid>71373908</parentid>
+      <timestamp>2025-11-01T03:17:36Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87956459</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="508" sha1="j6j8asubtto41dvsld753sgny223h27" xml:space="preserve">{{also|esperimentò}}
+==Italian==
+{{wp|it:}}
+
+===Pronunciation===
+{{it-pr}}
+
+===Etymology 1===
+From {{der|it|la|experīmentum}}.
+
+====Noun====
+{{it-noun|m}}
+
+# [[experiment]]
+# [[test]], [[trial]], [[examination]]
+
+=====Related terms=====
+* {{l|it|esperienza}}
+* {{l|it|esperire}}
+* {{l|it|sperimentabile}}
+* {{l|it|sperimentale}}
+* {{l|it|sperimentazione}}
+
+===Etymology 2===
+
+====Verb====
+{{head|it|verb form}}
+
+# {{inflection of|it|esperimentare||1|s|pres|indc}}
+
+===Further reading===
+* {{R:it:Treccani}}</text>
+      <sha1>j6j8asubtto41dvsld753sgny223h27</sha1>
+    </revision>
+  </page>

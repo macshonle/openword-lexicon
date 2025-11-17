@@ -99,17 +99,46 @@ HEAD_TEMPLATE = re.compile(r'\{\{(?:head|en-head|head-lite)\|en\|([^}|]+)', re.I
 # Extract POS from {{en-POS}} templates (e.g., {{en-noun}}, {{en-verb}}, {{en-prop}})
 EN_POS_TEMPLATE = re.compile(r'\{\{en-(noun|verb|adj|adv|prop|pron)\b', re.IGNORECASE)
 # Check for abbreviation templates
-ABBREVIATION_TEMPLATE = re.compile(r'\{\{(?:abbreviation of|abbrev of|initialism of)\|en\|', re.IGNORECASE)
+ABBREVIATION_TEMPLATE = re.compile(r'\{\{(?:abbreviation of|abbrev of|abbr of|initialism of)\|en\|', re.IGNORECASE)
+# Definition-generating templates that indicate English content (even without POS headers)
+# These are quaternary validation signals for entries that have definitions but no POS headers
+DEFINITION_TEMPLATES = re.compile(r'\{\{(?:' +
+    r'abbr of|abbreviation of|abbrev of|initialism of|acronym of|' +
+    r'alternative form of|alt form|alt sp|' +
+    r'plural of|' +
+    r'past tense of|past participle of|' +
+    r'present participle of|' +
+    r'en-(?:noun|verb|adj|adv|past of)' +
+    r')\|en\|', re.IGNORECASE)
 # Special template patterns for specific POS types
 PREP_PHRASE_TEMPLATE = re.compile(r'\{\{en-prepphr\b', re.IGNORECASE)
 CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
 CATEGORY = re.compile(r'\[\[Category:English\s+([^\]]+)\]\]', re.IGNORECASE)
 DICT_ONLY = re.compile(r'\{\{no entry\|en', re.IGNORECASE)  # Matches both {{no entry|en}} and {{no entry|en|...}}
-# Extract hyphenation data for syllable counts
-HYPHENATION_TEMPLATE = re.compile(r'\{\{(?:hyphenation|hyph)\|([^}]+)\}\}', re.IGNORECASE)
+# Extract hyphenation data for syllable counts (English-specific via |en| param)
+HYPHENATION_TEMPLATE = re.compile(r'\{\{(?:hyphenation|hyph)\|en\|([^}]+)\}\}', re.IGNORECASE)
+# Extract syllable count from rhymes template: {{rhymes|en|...|s=N}}
+RHYMES_SYLLABLE = re.compile(r'\{\{rhymes\|en\|[^}]*\|s=(\d+)', re.IGNORECASE)
+# Extract syllable count from category labels (e.g., "Category:English 3-syllable words")
+SYLLABLE_CATEGORY = re.compile(r'\[\[Category:English\s+(\d+)-syllable\s+words?\]\]', re.IGNORECASE)
+
+# Known language codes for hyphenation templates
+# This whitelist prevents false positives when filtering language codes from syllable segments
+KNOWN_LANG_CODES = {
+    # Major languages
+    'en', 'da', 'de', 'es', 'fr', 'it', 'pt', 'nl', 'sv', 'no', 'fi',
+    'pl', 'cs', 'sk', 'hu', 'ro', 'bg', 'ru', 'uk', 'el', 'tr', 'ar',
+    'he', 'hi', 'bn', 'pa', 'ta', 'te', 'mr', 'gu', 'kn', 'ml', 'si',
+    'th', 'vi', 'zh', 'ja', 'ko', 'id', 'ms', 'tl', 'fa', 'ur',
+    # English variants
+    'en-US', 'en-GB', 'en-AU', 'en-CA', 'en-NZ', 'en-ZA', 'en-IE', 'en-IN',
+    # Other common codes
+    'la', 'sa', 'grc', 'ang', 'enm', 'fro', 'non',
+}
 
 # Simple extraction patterns (no full XML parsing)
 TITLE_PATTERN = re.compile(r'<title>([^<]+)</title>')
+NS_PATTERN = re.compile(r'<ns>(\d+)</ns>')
 TEXT_PATTERN = re.compile(r'<text[^>]*>(.+?)</text>', re.DOTALL)
 REDIRECT_PATTERN = re.compile(r'<redirect\s+title="[^"]+"')
 
@@ -123,6 +152,8 @@ SPECIAL_PAGE_PREFIXES = (
     'Help:',
     'Template:',
     'Reconstruction:',  # Proto-language reconstructions
+    'Unsupported titles/',  # Special namespace for unsupported page titles
+    'Category:',        # Category pages (metadata, not words)
 )
 
 # Regional label patterns
@@ -195,6 +226,38 @@ DOMAIN_LABELS = {
     'computing', 'mathematics', 'medicine', 'biology', 'chemistry',
     'physics', 'law', 'military', 'nautical', 'aviation', 'sports'
 }
+
+
+def extract_english_section(text: str) -> Optional[str]:
+    """
+    Extract ONLY the ==English== section from a Wiktionary page.
+
+    This prevents contamination from other language sections (French, Translingual, etc.)
+    which could have different POS headers, templates, and categories.
+
+    Returns the English section text, or None if no English section found.
+    """
+    # Find the start of the English section
+    english_match = ENGLISH_SECTION.search(text)
+    if not english_match:
+        return None
+
+    english_start = english_match.end()
+
+    # Find the start of the next language section (or end of text)
+    # Language sections are marked with == (level 2 headers)
+    next_section = None
+    for match in LANGUAGE_SECTION.finditer(text, english_start):
+        lang = match.group(1).strip()
+        if lang.lower() != 'english':
+            next_section = match.start()
+            break
+
+    # Extract English section only
+    if next_section:
+        return text[english_start:next_section]
+    else:
+        return text[english_start:]
 
 
 def extract_pos_tags(text: str) -> List[str]:
@@ -309,20 +372,31 @@ def extract_labels(text: str) -> Dict[str, List[str]]:
     return {k: sorted(v) for k, v in labels.items() if v}
 
 
-def extract_syllable_count(text: str) -> Optional[int]:
+def extract_syllable_count_from_hyphenation(text: str, word: str) -> Optional[int]:
     """
     Extract syllable count from {{hyphenation|...}} template.
 
-    Handles complex formats:
-    - Language codes: {{hyphenation|en|dic|tion|a|ry}}
-    - Alternatives: {{hyphenation|en|dic|tion|a|ry||dic|tion|ary}}
-    - Parameters: {{hyphenation|en|lang=en-US|dic|tion|a|ry}}
-    - Empty segments between pipes
+    Uses multiple strategies to avoid false positives:
+    1. Whitelist of known language codes (KNOWN_LANG_CODES)
+    2. Context-aware detection (don't filter if it matches the word being processed)
+    3. Only count properly separated syllable segments
 
-    Examples:
-    - {{hyphenation|en|dic|tion|a|ry}} -> 4 syllables
-    - {{hyphenation|en|dic|tion|a|ry||dic|tion|ary}} -> 4 syllables (uses first alternative)
-    - {{hyphenation|cat}} -> 1 syllable
+    Args:
+        text: The Wiktionary page text
+        word: The word being processed (for context-aware filtering)
+
+    Returns:
+        Number of syllables if reliably determined, None otherwise
+
+    Handles complex formats:
+    - Language codes: {{hyphenation|en|dic|tion|a|ry}} -> 4 syllables
+    - Alternatives: {{hyphenation|en|dic|tion|a|ry||dic|tion|ary}} -> 4 (uses first)
+    - Parameters: {{hyphenation|en|lang=en-US|dic|tion|a|ry}} -> 4
+    - Without lang code: {{hyphenation|art}} -> 1 syllable
+
+    Returns None for unreliable cases:
+    - {{hyphenation|arad}} -> None (unseparated, data quality issue)
+    - {{hyphenation|}} -> None (empty)
     """
     match = HYPHENATION_TEMPLATE.search(text)
     if not match:
@@ -350,15 +424,60 @@ def extract_syllable_count(text: str) -> Optional[int]:
         if '=' in part:
             continue
 
-        # Skip 2-3 letter lang codes at start (en, da, en-US, en-GB)
-        # These are always in the first position
-        if i == 0 and len(part) <= 5 and ('-' in part or (len(part) <= 3 and part.isalpha())):
-            continue
+        # Skip known language codes at position 0
+        # Use whitelist for reliability + context-awareness
+        if i == 0:
+            # Check if it's a known language code (not the word itself)
+            if part in KNOWN_LANG_CODES and part.lower() != word.lower():
+                continue
+
+            # If there's only one part and it's unseparated (>3 chars), it's likely
+            # incomplete data (e.g., {{hyphenation|arad}} should be {{hyphenation|a|rad}})
+            # We only trust single-part templates for very short words (1-3 chars)
+            # Return None to indicate unreliable data for longer unseparated words
+            if len(parts) == 1 and len(part) > 3:
+                return None
 
         syllables.append(part)
 
     # Return syllable count if we found any syllables
     return len(syllables) if syllables else None
+
+
+def extract_syllable_count_from_rhymes(text: str) -> Optional[int]:
+    """
+    Extract syllable count from {{rhymes|en|...|s=N}} template.
+
+    The rhymes template often includes a syllable count parameter.
+    Example: {{rhymes|en|eɪθs|s=1}} indicates 1 syllable.
+
+    Returns syllable count if found, None otherwise.
+    """
+    match = RHYMES_SYLLABLE.search(text)
+    if match:
+        return int(match.group(1))
+    return None
+
+
+def extract_syllable_count_from_categories(text: str) -> Optional[int]:
+    """
+    Extract syllable count from category labels as a fallback signal.
+
+    Example: [[Category:English 3-syllable words]] -> 3
+
+    Note: These categories are deprecated in Wiktionary but can still provide
+    a useful signal when hyphenation templates are missing.
+
+    Args:
+        text: The Wiktionary page text
+
+    Returns:
+        Number of syllables from category label, or None if not found
+    """
+    match = SYLLABLE_CATEGORY.search(text)
+    if match:
+        return int(match.group(1))
+    return None
 
 
 def extract_page_content(page_xml: str) -> Optional[tuple]:
@@ -376,7 +495,20 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
         return None
     title = title_match.group(1)
 
-    # Check for special pages FIRST (before redirects)
+    # Check namespace FIRST - only process main namespace (ns=0)
+    # This is the authoritative way to filter special pages
+    # ns=0: Main (dictionary entries)
+    # ns=14: Category
+    # ns=100: Appendix
+    # ns=118: Reconstruction
+    # All other namespaces should be filtered out
+    ns_match = NS_PATTERN.search(page_xml)
+    if ns_match:
+        namespace = int(ns_match.group(1))
+        if namespace != 0:
+            return ('SPECIAL_PAGE', title)
+
+    # Check for special pages by title prefix (backup for entries without ns tag)
     # Special page redirects count as special pages, not redirects
     if title.startswith(SPECIAL_PAGE_PREFIXES):
         return ('SPECIAL_PAGE', title)
@@ -484,27 +616,412 @@ def is_englishlike(token: str) -> bool:
     return saw_latin_letter
 
 
+def extract_phrase_type(text: str) -> Optional[str]:
+    """
+    Extract specific phrase type before POS normalization.
+
+    Returns the specific type (idiom, proverb, etc.) or None if not a phrase.
+    This preserves granularity lost during POS_MAP normalization.
+
+    Distinction criteria:
+    - **Word**: word_count == 1 (handled elsewhere)
+    - **Idiom**: Non-literal figurative expression ("kick the bucket")
+    - **Proverb**: Complete sentence with advice/wisdom ("a stitch in time saves nine")
+    - **Phrase**: Generic multi-word without specific type
+    - **Prepositional phrase**: Starts with preposition ("at least", "on hold")
+    - **Adverbial phrase**: Functions as adverb ("all of a sudden")
+    - **Verb phrase**: Multi-word verb expression ("give up", "take over")
+
+    Detection methods:
+    1. Section headers: ===Idiom===, ===Proverb===, etc.
+    2. Templates: {{head|en|idiom}}, {{en-prepphr}}
+    3. Categories: [[Category:English idioms]], etc.
+    """
+    # Check section headers for specific phrase types
+    for match in POS_HEADER.finditer(text):
+        header = match.group(1).lower().strip()
+        header = ' '.join(header.split())  # Normalize whitespace
+
+        # Exact matches for phrase types
+        if header in ['idiom', 'proverb', 'prepositional phrase', 'adverbial phrase',
+                      'verb phrase', 'verb phrase form', 'noun phrase']:
+            return header
+
+        # Additional phrase type variations
+        if header in ['saying', 'adage']:
+            return 'proverb'  # Sayings/adages are proverb-like
+
+    # Check {{head}} templates
+    for match in HEAD_TEMPLATE.finditer(text):
+        pos = match.group(1).lower().strip()
+        if pos in ['idiom', 'proverb', 'prepositional phrase', 'adverbial phrase',
+                   'verb phrase', 'noun phrase', 'saying', 'adage']:
+            return 'proverb' if pos in ['saying', 'adage'] else pos
+
+    # Check for phrase-specific templates
+    if PREP_PHRASE_TEMPLATE.search(text):
+        return 'prepositional phrase'
+
+    # Check categories (more comprehensive)
+    category_patterns = {
+        'Category:English idioms': 'idiom',
+        'Category:English proverbs': 'proverb',
+        'Category:English prepositional phrases': 'prepositional phrase',
+        'Category:English adverbial phrases': 'adverbial phrase',
+        'Category:English verb phrases': 'verb phrase',
+        'Category:English noun phrases': 'noun phrase',
+        'Category:English sayings': 'proverb',
+    }
+
+    for pattern, phrase_type in category_patterns.items():
+        if pattern in text:
+            return phrase_type
+
+    return None
+
+
+def detect_abbreviation(text: str, pos_tags: List[str]) -> bool:
+    """
+    Detect if entry is an abbreviation.
+
+    Detection methods:
+    1. Templates: {{abbr of|en|...}}, {{abbreviation of|en|...}}, {{initialism of|en|...}}
+    2. Categories: Category:English abbreviations, Category:English initialisms
+    3. POS: symbol (often abbreviations)
+
+    Examples: USA, Dr., etc., crp (stenoscript)
+    """
+    # Check templates
+    if ABBREVIATION_TEMPLATE.search(text):
+        return True
+
+    # Check categories
+    if 'Category:English abbreviations' in text:
+        return True
+    if 'Category:English initialisms' in text:
+        return True
+    if 'Category:English acronyms' in text:
+        return True
+    if 'Category:English Stenoscript abbreviations' in text:
+        return True
+
+    # Symbol POS is often used for abbreviations
+    if 'symbol' in pos_tags:
+        return True
+
+    return False
+
+
+def detect_proper_noun(text: str, pos_tags: List[str]) -> bool:
+    """
+    Detect if entry is a proper noun (name, place, etc.).
+
+    Detection methods:
+    1. POS: proper noun mapped to 'noun' in POS_MAP
+    2. Section header: ===Proper noun===
+    3. Templates: {{en-proper noun}}, {{en-prop}}
+
+    Examples: London, Shakespeare, Microsoft
+    """
+    # Check for proper noun section header
+    for match in POS_HEADER.finditer(text):
+        header = match.group(1).lower().strip()
+        header = ' '.join(header.split())
+        if header in ['proper noun', 'proper name', 'propernoun']:
+            return True
+
+    # Check for proper noun templates
+    if re.search(r'\{\{en-(?:proper noun|prop)\b', text, re.IGNORECASE):
+        return True
+
+    return False
+
+
+def detect_vulgar_or_offensive(labels: Dict) -> bool:
+    """
+    Detect if entry is vulgar or offensive.
+
+    Uses label data already extracted.
+    Examples: profanity, slurs, offensive terms
+    """
+    register = labels.get('register', [])
+    return 'vulgar' in register or 'offensive' in register
+
+
+def detect_archaic_or_obsolete(labels: Dict) -> bool:
+    """
+    Detect if entry is archaic or obsolete.
+
+    Uses label data already extracted.
+    Examples: thou, whence, forsooth
+    """
+    temporal = labels.get('temporal', [])
+    return 'archaic' in temporal or 'obsolete' in temporal
+
+
+def detect_rare(labels: Dict) -> bool:
+    """
+    Detect if entry is marked as rare.
+
+    Uses label data already extracted.
+    """
+    temporal = labels.get('temporal', [])
+    return 'rare' in temporal
+
+
+def detect_informal_or_slang(labels: Dict) -> bool:
+    """
+    Detect if entry is informal or slang.
+
+    Uses label data already extracted.
+    Examples: gonna, wanna, ain't
+    """
+    register = labels.get('register', [])
+    return 'informal' in register or 'slang' in register or 'colloquial' in register
+
+
+def detect_technical(labels: Dict) -> bool:
+    """
+    Detect if entry is technical/domain-specific jargon.
+
+    Uses domain labels already extracted.
+    Examples: mitochondria (biology), tort (law), algorithm (computing)
+
+    Useful for: Filtering out specialized terminology for general-purpose
+    dictionaries vs keeping it for domain-specific applications.
+    """
+    domain = labels.get('domain', [])
+    # Technical if it has ANY domain label (medical, legal, computing, etc.)
+    return len(domain) > 0
+
+
+def detect_regional(labels: Dict) -> bool:
+    """
+    Detect if entry is region-specific (dialectal).
+
+    Uses region labels already extracted.
+    Examples: lift (British), elevator (American), arvo (Australian)
+
+    Useful for: Dictionary localization and dialect-aware applications.
+    """
+    region = labels.get('region', [])
+    return len(region) > 0
+
+
+def detect_inflected_form(text: str, pos_tags: List[str]) -> bool:
+    """
+    Detect if entry is an inflected form rather than a base word.
+
+    Detection methods:
+    1. Templates: {{plural of|en|...}}, {{past tense of|en|...}}, etc.
+    2. POS categories indicating forms: "verb forms", "noun forms", etc.
+
+    Examples: cats (plural of cat), ran (past tense of run), better (comparative of good)
+
+    Useful for: Base-word-only dictionaries, lemmatization, reducing redundancy.
+    """
+    # Check for inflection templates
+    inflection_patterns = [
+        r'\{\{plural of\|en\|',
+        r'\{\{past tense of\|en\|',
+        r'\{\{past participle of\|en\|',
+        r'\{\{present participle of\|en\|',
+        r'\{\{comparative of\|en\|',
+        r'\{\{superlative of\|en\|',
+        r'\{\{inflection of\|en\|',
+    ]
+
+    for pattern in inflection_patterns:
+        if re.search(pattern, text, re.IGNORECASE):
+            return True
+
+    # Check for form categories
+    form_categories = [
+        'Category:English verb forms',
+        'Category:English noun forms',
+        'Category:English adjective forms',
+        'Category:English adverb forms',
+        'Category:English plurals',
+    ]
+
+    for category in form_categories:
+        if category in text:
+            return True
+
+    return False
+
+
+def detect_dated(labels: Dict) -> bool:
+    """
+    Detect if entry is dated (understood but not commonly used).
+
+    Different from archaic - dated words are still understood but old-fashioned.
+    Examples: wireless (for radio), icebox (for refrigerator)
+
+    Useful for: More granular temporal filtering than archaic/obsolete.
+    """
+    temporal = labels.get('temporal', [])
+    return 'dated' in temporal
+
+
+def has_english_categories(text: str) -> bool:
+    """
+    Check if the text contains English POS categories.
+
+    This validates that a page is actually an English entry, not just a page
+    with an English section. Filters out foreign words like 'łódź' that may
+    have an English section but no English POS categories.
+
+    Returns True if any English POS categories are found.
+    """
+    # Common English POS categories
+    english_pos_patterns = [
+        'Category:English nouns',
+        'Category:English verbs',
+        'Category:English adjectives',
+        'Category:English adverbs',
+        'Category:English pronouns',
+        'Category:English prepositions',
+        'Category:English conjunctions',
+        'Category:English interjections',
+        'Category:English determiners',
+        'Category:English articles',
+        'Category:English proper nouns',
+        'Category:English idioms',
+        'Category:English phrases',
+        'Category:English proverbs',
+        'Category:English prepositional phrases',
+        'Category:English verb forms',
+        'Category:English noun forms',
+        'Category:English adjective forms',
+        'Category:English adverb forms',
+        'Category:English contractions',
+        'Category:English abbreviations',
+    ]
+
+    text_lower = text.lower()
+    return any(pattern.lower() in text_lower for pattern in english_pos_patterns)
+
+
 def parse_entry(title: str, text: str) -> Optional[Dict]:
-    """Parse a single Wiktionary page."""
+    """
+    Parse a single Wiktionary page.
+
+    Critical: Extracts ONLY the ==English== section before parsing to prevent
+    contamination from other language sections (French, Translingual, etc.).
+
+    Uses multiple signals to validate English entries:
+    1. Primary: Successful POS extraction (strongest signal)
+    2. Secondary: English categories present
+    3. Tertiary: English templates ({{en-noun}}, etc.)
+    4. Quaternary: Definition-generating templates ({{abbr of|en|...}}, etc.)
+
+    Philosophy: When information is present (POS, labels, etc.), include the entry.
+    Only reject if we have NO English signals at all.
+
+    Examples handled:
+    - "crp": Has {{abbr of|en|corporate}} but no POS header → included via signal 4
+    - Entries with only categories → included via signal 2
+    - Entries with en-templates → included via signal 3
+    """
     word = title.lower().strip()
 
-    pos_tags = extract_pos_tags(text)
-    if not pos_tags:
+    # CRITICAL: Extract ONLY the ==English== section
+    # This prevents contamination from other language sections
+    english_text = extract_english_section(text)
+    if not english_text:
+        return None  # No English section found
+
+    # Try to extract POS tags - this is the STRONGEST signal that it's English
+    pos_tags = extract_pos_tags(english_text)
+
+    # Check for English categories as a secondary signal
+    has_categories = has_english_categories(english_text)
+
+    # Check for English-specific templates as tertiary signal
+    has_en_templates = bool(re.search(r'\{\{en-(?:noun|verb|adj|adv)', english_text))
+
+    # Check for definition-generating templates (quaternary signal)
+    # Catches entries like "crp" that have {{abbr of|en|...}} but no POS headers
+    has_definition_templates = bool(DEFINITION_TEMPLATES.search(english_text))
+
+    # Decision logic: Keep if ANY strong English signal is present
+    if not pos_tags and not has_categories and not has_en_templates and not has_definition_templates:
+        # No English signals at all - reject
         return None
 
-    labels = extract_labels(text)
-    is_phrase = ' ' in word
-    syllable_count = extract_syllable_count(text)
+    # If we have categories/templates but no POS, this might be a minimal entry
+    # Keep it but it will have empty POS list
+    if not pos_tags and (has_categories or has_en_templates or has_definition_templates):
+        # Valid English entry with categories/templates but no extractable POS
+        # This can happen with some stub entries, abbreviations, or special formats
+        pos_tags = []  # Empty but valid
+
+    labels = extract_labels(english_text)
+
+    # Calculate word count (always track, even for single words)
+    word_count = len(word.split())
+
+    # Extract specific phrase type for multi-word entries
+    phrase_type = extract_phrase_type(english_text) if word_count > 1 else None
+
+    # Extract syllable count from multiple sources, trying in priority order
+    # Only set syllable count when we have reliable data - never guess
+    syllable_count = None
+
+    # Priority 1: Hyphenation template (most reliable when properly formatted)
+    hyph_count = extract_syllable_count_from_hyphenation(english_text, word)
+    if hyph_count is not None:
+        syllable_count = hyph_count
+    else:
+        # Priority 2: Rhymes template (often has syllable count)
+        rhymes_count = extract_syllable_count_from_rhymes(english_text)
+        if rhymes_count is not None:
+            syllable_count = rhymes_count
+        else:
+            # Priority 3: Category labels (deprecated but sometimes available)
+            cat_count = extract_syllable_count_from_categories(english_text)
+            if cat_count is not None:
+                syllable_count = cat_count
+
+    # Detect boolean properties for filtering
+    is_phrase = word_count > 1
+    is_abbreviation = detect_abbreviation(english_text, pos_tags)
+    is_proper_noun = detect_proper_noun(english_text, pos_tags)
+    is_vulgar = detect_vulgar_or_offensive(labels)
+    is_archaic = detect_archaic_or_obsolete(labels)
+    is_rare = detect_rare(labels)
+    is_informal = detect_informal_or_slang(labels)
+    is_technical = detect_technical(labels)
+    is_regional = detect_regional(labels)
+    is_inflected = detect_inflected_form(english_text, pos_tags)
+    is_dated = detect_dated(labels)
 
     entry = {
         'word': word,
         'pos': pos_tags,
         'labels': labels,
+        'word_count': word_count,
         'is_phrase': is_phrase,
+        'is_abbreviation': is_abbreviation,
+        'is_proper_noun': is_proper_noun,
+        'is_vulgar': is_vulgar,
+        'is_archaic': is_archaic,
+        'is_rare': is_rare,
+        'is_informal': is_informal,
+        'is_technical': is_technical,
+        'is_regional': is_regional,
+        'is_inflected': is_inflected,
+        'is_dated': is_dated,
         'sources': ['wikt'],
     }
 
-    # Only include syllable count if present
+    # Add phrase type for multi-word entries
+    if phrase_type:
+        entry['phrase_type'] = phrase_type
+
+    # Only include syllable count if reliably determined
+    # Leave unspecified (None) if data is missing or unreliable
     if syllable_count is not None:
         entry['syllables'] = syllable_count
 
@@ -622,6 +1139,10 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
         print(f"Diagnostic mode: Will stop after 100 skips and write report to {diagnostic_file}")
     print()
 
+    # Prepare skip log file (always write, regardless of diagnostic mode)
+    skip_log_path = output_path.parent / "wikt_skipped_pages.jsonl"
+    skip_log = open(skip_log_path, 'w', encoding='utf-8')
+
     # Prepare metrics dictionary for Live display
     metrics = {
         "Processed": 0,
@@ -685,10 +1206,18 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                 if not result:
                     entries_skipped += 1
                     metrics["Skipped"] = entries_skipped
+
+                    # Log to skip file
+                    title_match = TITLE_PATTERN.search(page_xml)
+                    title = title_match.group(1) if title_match else "NO_TITLE"
+                    skip_log.write(json.dumps({
+                        'reason': 'no_content_extracted',
+                        'title': title,
+                        'page_xml': page_xml
+                    }, ensure_ascii=False) + '\n')
+                    skip_log.flush()
+
                     if diagnostic_mode:
-                        # Extract what we can for diagnostic
-                        title_match = TITLE_PATTERN.search(page_xml)
-                        title = title_match.group(1) if title_match else "NO_TITLE"
                         skip_reasons['no_content_extracted'].append({
                             'title': title,
                             'page_preview': page_xml[:500]
@@ -745,6 +1274,15 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     else:
                         entries_skipped += 1
                         metrics["Skipped"] = entries_skipped
+
+                        # Log to skip file
+                        skip_log.write(json.dumps({
+                            'reason': 'parse_entry_none',
+                            'title': title,
+                            'text': text
+                        }, ensure_ascii=False) + '\n')
+                        skip_log.flush()
+
                         if diagnostic_mode:
                             skip_reasons['parse_entry_none'].append({
                                 'title': title,
@@ -757,6 +1295,16 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                 except Exception as e:
                     entries_skipped += 1
                     metrics["Skipped"] = entries_skipped
+
+                    # Log to skip file
+                    skip_log.write(json.dumps({
+                        'reason': 'parse_entry_exception',
+                        'title': title,
+                        'exception': str(e),
+                        'text': text
+                    }, ensure_ascii=False) + '\n')
+                    skip_log.flush()
+
                     if diagnostic_mode:
                         skip_reasons['parse_entry_exception'].append({
                             'title': title,
@@ -782,6 +1330,9 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     print(f"\nReached limit of {limit:,} entries")
                     break
 
+    # Close skip log file
+    skip_log.close()
+
     elapsed = time.time() - start_time
     elapsed_min = int(elapsed / 60)
     elapsed_sec = int(elapsed % 60)
@@ -801,6 +1352,11 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     print(f"Time: {elapsed_min}m {elapsed_sec}s")
     print(f"Rate: {entries_processed / elapsed:.0f} pages/sec")
     print("=" * 60)
+
+    # Report skip log location
+    if entries_skipped > 0:
+        print(f"\nSkipped pages logged to: {skip_log_path}")
+        print(f"Review with: cat {skip_log_path} | jq .")
 
     # Write diagnostic information to file if in diagnostic mode
     if diagnostic_mode:
