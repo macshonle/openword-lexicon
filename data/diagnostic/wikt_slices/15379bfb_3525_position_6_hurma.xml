@@ -1,0 +1,182 @@
+  <page>
+    <title>hurma</title>
+    <ns>0</ns>
+    <id>105244</id>
+    <revision>
+      <id>87711591</id>
+      <parentid>85594196</parentid>
+      <timestamp>2025-10-31T20:32:30Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wp}} to new syntax; convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87711591</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2903" sha1="4bz6zci8f3mxjn2lqlrxbrsndqeltth" xml:space="preserve">{{also|hurmą}}
+==Finnish==
+
+===Etymology===
+From {{inh|fi|urj-fin-pro|*hurma}}. Cognates include {{cog|et|urm|t=blood}}, {{cog|krl|hurmata|t=to stun}}, {{cog|liv|ūrmatõ|t=to stun}}.
+
+===Pronunciation===
+{{fi-p}}
+
+===Noun===
+{{fi-noun}}
+
+# [[ecstasy]], [[rapture]]
+#: {{syn|fi|ekstaasi|hurmio|huuma|kiihko}}
+# [[appeal]], [[enchantment]]
+#: {{syn|fi|lumo|lumovoima|tenho|tenhovoima}}
+# [[charm]]
+#: {{syn|fi|šarmi|veto|vetovoima}}
+
+====Declension====
+{{fi-decl-koira|hurm|||a}}
+
+====Derived terms====
+{{col|fi
+|Hurmalainen
+|hurmata
+|hurme
+|hurmio
+|hurmos
+|hurmuri
+|hurvitella
+}}
+
+{{col|fi|title=compounds
+|hurmahenki
+|hurmahenkinen
+|voitonhurma
+}}
+
+====Descendants====
+* {{desc|et|hurm|bor=1}}
+
+===Further reading===
+* {{R:KTSK|accessdate=2023-07-02}}
+
+===Anagrams===
+* {{anagrams|fi|a=ahmru|murha}}
+
+==Latvian==
+[[File:Kaki2.jpg|thumb|upright=1.15|{{lang|lv|hurmas}}]]
+
+===Etymology===
+From {{der|lv|ota|خرما|tr=hurma}}, from {{der|lv|fa-cls|خُرْمَا}}.
+
+===Noun===
+{{lv-noun|f|4th}}
+
+# [[persimmon]]
+
+====Declension====
+{{lv-decl-noun|hurm|a|4th|extrawidth=-60}}
+
+{{topics|lv|Ericales order plants|Fruits}}
+
+==Polish==
+{{wp|pl:}}
+
+===Pronunciation===
+{{pl-pr|a=LL-Q809 (pol)-Poemat-hurma.wav}}
+
+===Etymology 1===
+{{rfe|pl}}
+
+====Noun====
+{{pl-noun|f}}
+
+# {{lb|pl|obsolete}} [[crowd]], [[throng]]
+#: {{syn|pl|chmara|ciżba|gromada|tłum}}
+
+=====Declension=====
+{{pl-decl-noun-f}}
+
+=====Descendants=====
+* {{desc|ru|гурьба́|bor=1}}
+
+===Etymology 2===
+{{bor+|pl|ota|خرما|tr=hurma}}, from {{der|pl|fa-cls|خُرْمَا}}.
+
+====Noun====
+{{pl-noun|f}}
+
+# [[persimmon]] {{gl|tree}}
+#: {{syn|pl|hebanowiec|kaki|persymona|szaron}}
+
+=====Declension=====
+{{pl-decl-noun-f}}
+
+===Further reading===
+* {{R:pl:WSJP}}
+* {{R:pl:PWN}}
+
+{{C|pl|Collectives|Ericales order plants|Trees}}
+
+==Serbo-Croatian==
+
+===Alternative forms===
+* {{alt|sh|ùrma}}
+
+===Etymology===
+{{bor+|sh|ota|خرما|tr=hurma}}, from {{der|sh|fa-cls|خُرْمَا}}.
+
+===Pronunciation===
+* {{sh-IPA|húrma}}
+
+===Noun===
+{{sh-noun|húrma|f}}
+
+# [[date]] {{gloss|fruit}}
+#: {{syn|sh|dàtulja}}
+# [[persimmon]] {{gloss|fruit}}
+
+====Declension====
+{{sh-decl-noun
+|hùrma|hùrme
+|hùrme|[[hȗrmā]] / [[hȗrmī]]
+|hùrmi|hùrmama
+|hùrmu|hùrme
+|hùrmo|hùrme
+|hùrmi|hùrmama
+|hùrmom|hùrmama
+}}
+
+====Derived terms====
+* {{l|sh|ìndījska hùrma|t=tamarind}}
+
+===Further reading===
+* {{R:sh:HJP|fVtkXBY%3D}}
+
+{{C|sh|Commelinids|Ericales order plants|Fruits}}
+
+==Turkish==
+{{wp|tr:}}
+[[File:Kaki2.jpg|thumb|hurma]]
+
+===Etymology===
+From {{inh|tr|ota|خرما|tr=hurma}}, from {{der|tr|fa-cls|خُرْمَا}}.
+
+===Pronunciation===
+* {{IPA|tr|[huɾˈma]}}
+* {{audio|tr|LL-Q256 (tur)-ToprakM-hurma.wav}}
+* {{hyphenation|tr|hur|ma}}
+
+===Noun===
+{{tr-noun|yı|lar}}
+
+# [[date]] {{gloss|fruit}}
+# [[persimmon]] {{gloss|fruit}}
+
+====Declension====
+{{tr-infl-noun-v|a|poss=1}}
+
+{{topics|tr|Commelinids|Ericales order plants|Fruits}}</text>
+      <sha1>4bz6zci8f3mxjn2lqlrxbrsndqeltth</sha1>
+    </revision>
+  </page>

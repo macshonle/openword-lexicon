@@ -1,0 +1,37 @@
+  <page>
+    <title>溃</title>
+    <ns>0</ns>
+    <id>19256</id>
+    <revision>
+      <id>87590032</id>
+      <parentid>71905123</parentid>
+      <timestamp>2025-10-24T18:55:16Z</timestamp>
+      <contributor>
+        <username>AutoDooz</username>
+        <id>3732454</id>
+      </contributor>
+      <minor />
+      <comment>Han ref: removed unused param 'ud'</comment>
+      <origin>87590032</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="308" sha1="9nhuhtqljc1y1m2ocbuwjceusqq7vlo" xml:space="preserve">{{also|潰}}
+{{character info}}
+==Translingual==
+
+===Han character===
+{{Han char|rn=85|rad=水|as=09|sn=12|four=|canj=ELMO,XELMO|ids=⿰氵贵}}
+
+====References====
+* {{Han ref|kx=0639.111|hdz=31677.040|uh=6E83}}
+
+==Chinese==
+
+===Glyph origin===
+{{Han simp|潰|f=貴|t=贵}}
+
+===Definitions===
+{{zh-see|潰}}</text>
+      <sha1>9nhuhtqljc1y1m2ocbuwjceusqq7vlo</sha1>
+    </revision>
+  </page>

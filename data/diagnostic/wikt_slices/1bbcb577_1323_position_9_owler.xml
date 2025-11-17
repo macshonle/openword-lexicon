@@ -1,0 +1,48 @@
+  <page>
+    <title>owler</title>
+    <ns>0</ns>
+    <id>232523</id>
+    <revision>
+      <id>81282068</id>
+      <parentid>80513477</parentid>
+      <timestamp>2024-08-19T03:45:47Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>add missing From in English etyms, remove stray spaces and L2R markers (manually assisted)</comment>
+      <origin>81282068</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="635" sha1="q6lldik8tukkt8xabz6qd9q302inbnn" xml:space="preserve">==English==
+
+===Pronunciation===
+* {{IPA|en|/ˈaʊlɚ/|a=GA}}
+* {{IPA|en|/ˈaʊlə/|a=RP}}
+* {{rhymes|en|aʊlə(ɹ)|s=2}}
+
+===Etymology 1===
+Archaic variant of {{m|en|alder}} from {{inh|en|enm|aller}}.
+
+====Noun====
+{{en-noun}}
+
+# {{lb|en|Lancashire|Northern English dialectal}}{{topic|en|Birch family plants}} The [[alder]] tree.
+
+===Etymology 2===
+From {{suf|en|owl|-er|id2=agent noun|id1=smuggle}}. {{etystub|en}}
+
+====Noun====
+{{en-noun}}
+
+# {{lb|en|dated}}{{topic|en|Occupations}} A [[smuggler]] of [[sheep]] or [[wool]].
+
+=====Related terms=====
+* {{l|en|owling}}
+
+===Anagrams===
+* {{anagrams|en|a=elorw|Lower|Worle|lower|rowel}}</text>
+      <sha1>q6lldik8tukkt8xabz6qd9q302inbnn</sha1>
+    </revision>
+  </page>

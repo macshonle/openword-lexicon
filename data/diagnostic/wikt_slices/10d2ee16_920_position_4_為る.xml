@@ -1,0 +1,32 @@
+  <page>
+    <title>為る</title>
+    <ns>0</ns>
+    <id>72456</id>
+    <revision>
+      <id>86453280</id>
+      <parentid>60016552</parentid>
+      <timestamp>2025-08-27T20:13:06Z</timestamp>
+      <contributor>
+        <username>KovachevBot</username>
+        <id>3834987</id>
+      </contributor>
+      <minor />
+      <comment>Kanjipedia references for Japanese words: added references section; added Kanjipedia kotoba reference</comment>
+      <origin>86453280</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="220" sha1="io0m04tjgq54elttts3rfvgcqpub93k" xml:space="preserve">==Japanese==
+
+===Etymology 1===
+{{ja-kanjitab|す|yomi=kun}}
+{{ja-see|する}}
+
+===Etymology 2===
+{{ja-kanjitab|な|yomi=kun}}
+{{ja-see|なる}}
+
+===References===
+* {{R:Kanjipedia Kotoba|0000140500|&lt;sup&gt;△&lt;/sup&gt;為る}}</text>
+      <sha1>io0m04tjgq54elttts3rfvgcqpub93k</sha1>
+    </revision>
+  </page>

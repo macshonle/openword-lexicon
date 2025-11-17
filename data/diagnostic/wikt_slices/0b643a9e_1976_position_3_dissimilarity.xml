@@ -1,0 +1,48 @@
+  <page>
+    <title>dissimilarity</title>
+    <ns>0</ns>
+    <id>44989</id>
+    <revision>
+      <id>83445441</id>
+      <parentid>83315334</parentid>
+      <timestamp>2025-01-03T22:26:46Z</timestamp>
+      <contributor>
+        <username>Box16</username>
+        <id>4143801</id>
+      </contributor>
+      <origin>83445441</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1423" sha1="3uq21m7itdgtiqnjjhxzeldkq94ucdk" xml:space="preserve">==English==
+
+===Etymology===
+From {{prefix|en|dis|similarity}} or {{suffix|en|dissimilar|-ity}}.
+
+===Pronunciation===
+* {{IPA|en|/dɪˌsɪmɪˈlæɹɪti/|a=UK}}
+
+===Noun===
+{{en-noun|~}}
+
+# A lack of similarity or a lack of [[likeness]] in [[appearance]] to something else.
+#: {{syn|en|dissimilitude|nonresemblance}}
+#: {{ant|en|similarity|resemblance|;|likeness|;|sameness}}
+#* {{quote-journal|en|year=1940|month=May|title=The Why and the Wherefore: Pulverised Fuel Experiment|journal=Railway Magazine|page=318|text=The experiment was abandoned when one fine day spontaneous combustion of the pulverised coal in the container occurred, and a black cloud of the very finely divided fuel rose into the air by the force of the explosion, and was slowly wafted by the prevailing breeze over the town, upon which it descended with the resemblance of black snow, but with the '''dissimilarity''' that it did not melt.}}
+
+====Related terms====
+{{col|en
+|dissimilation&lt;!--the process produces the result: dissimilation produces dissimilarity--&gt;
+}}
+
+====Translations====
+{{trans-top|lack of similarity in appearance to something else}}
+* Esperanto: {{t|eo|malsimileco}}
+* French: {{t+|fr|dissimilitude|f}}
+* Irish: {{t|ga|éagsúlacht|f}}
+* Portuguese: {{t|pt|dissimilaridade|f}}, {{t+|pt|dessemelhança|f}}
+* Spanish: {{t+|es|desemejanza|f}}, {{t+|es|disimilitud|f}}
+* Ukrainian: {{t|uk|несхо́жість|f}}
+{{trans-bottom}}</text>
+      <sha1>3uq21m7itdgtiqnjjhxzeldkq94ucdk</sha1>
+    </revision>
+  </page>
