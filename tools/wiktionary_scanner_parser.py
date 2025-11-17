@@ -99,7 +99,16 @@ HEAD_TEMPLATE = re.compile(r'\{\{(?:head|en-head|head-lite)\|en\|([^}|]+)', re.I
 # Extract POS from {{en-POS}} templates (e.g., {{en-noun}}, {{en-verb}}, {{en-prop}})
 EN_POS_TEMPLATE = re.compile(r'\{\{en-(noun|verb|adj|adv|prop|pron)\b', re.IGNORECASE)
 # Check for abbreviation templates
-ABBREVIATION_TEMPLATE = re.compile(r'\{\{(?:abbreviation of|abbrev of|initialism of)\|en\|', re.IGNORECASE)
+ABBREVIATION_TEMPLATE = re.compile(r'\{\{(?:abbreviation of|abbrev of|abbr of|initialism of)\|en\|', re.IGNORECASE)
+# Definition-generating templates that indicate English content (even without POS headers)
+DEFINITION_TEMPLATES = re.compile(r'\{\{(?:' +
+    r'abbr of|abbreviation of|abbrev of|initialism of|' +
+    r'alternative form of|alt form|' +
+    r'plural of|' +
+    r'past tense of|past participle of|' +
+    r'present participle of|' +
+    r'en-(?:noun|verb|adj|adv|past|adj|adv)' +
+    r')\|en\|', re.IGNORECASE)
 # Special template patterns for specific POS types
 PREP_PHRASE_TEMPLATE = re.compile(r'\{\{en-prepphr\b', re.IGNORECASE)
 CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
@@ -141,6 +150,8 @@ SPECIAL_PAGE_PREFIXES = (
     'Help:',
     'Template:',
     'Reconstruction:',  # Proto-language reconstructions
+    'Unsupported titles/',  # Special namespace for unsupported page titles
+    'Category:',        # Category pages (metadata, not words)
 )
 
 # Regional label patterns
@@ -704,9 +715,15 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     1. Primary: Successful POS extraction (strongest signal)
     2. Secondary: English categories present
     3. Tertiary: English templates ({{en-noun}}, etc.)
+    4. Quaternary: Definition-generating templates ({{abbr of|en|...}}, etc.)
 
     Philosophy: When information is present (POS, labels, etc.), include the entry.
     Only reject if we have NO English signals at all.
+
+    Examples handled:
+    - "crp": Has {{abbr of|en|corporate}} but no POS header → included via signal 4
+    - Entries with only categories → included via signal 2
+    - Entries with en-templates → included via signal 3
     """
     word = title.lower().strip()
 
@@ -725,16 +742,20 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     # Check for English-specific templates as tertiary signal
     has_en_templates = bool(re.search(r'\{\{en-(?:noun|verb|adj|adv)', english_text))
 
+    # Check for definition-generating templates (quaternary signal)
+    # Catches entries like "crp" that have {{abbr of|en|...}} but no POS headers
+    has_definition_templates = bool(DEFINITION_TEMPLATES.search(english_text))
+
     # Decision logic: Keep if ANY strong English signal is present
-    if not pos_tags and not has_categories and not has_en_templates:
+    if not pos_tags and not has_categories and not has_en_templates and not has_definition_templates:
         # No English signals at all - reject
         return None
 
-    # If we have categories but no POS, this might be a minimal entry
+    # If we have categories/templates but no POS, this might be a minimal entry
     # Keep it but it will have empty POS list
-    if not pos_tags and (has_categories or has_en_templates):
+    if not pos_tags and (has_categories or has_en_templates or has_definition_templates):
         # Valid English entry with categories/templates but no extractable POS
-        # This can happen with some stub entries or special formats
+        # This can happen with some stub entries, abbreviations, or special formats
         pos_tags = []  # Empty but valid
 
     labels = extract_labels(english_text)
