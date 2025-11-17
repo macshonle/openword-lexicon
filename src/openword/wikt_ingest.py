@@ -12,7 +12,7 @@ Maps wiktextract output to our schema with:
   - POS tags
   - Region labels (en-GB, en-US, etc.)
   - Register labels (vulgar, offensive, archaic, etc.)
-  - Multi-word phrases (is_phrase=true)
+  - Multi-word phrases (word_count > 1)
   - Lemmatization info
 """
 
@@ -223,11 +223,6 @@ def extract_labels(wikt_entry: dict) -> dict:
     return labels
 
 
-def is_phrase(word: str) -> bool:
-    """Check if entry is a multi-word phrase."""
-    return ' ' in word.strip()
-
-
 def process_wikt_entry(wikt_entry: dict) -> Optional[dict]:
     """Process a single wiktextract entry and map to our schema."""
     # Get the word
@@ -248,7 +243,7 @@ def process_wikt_entry(wikt_entry: dict) -> Optional[dict]:
     # Extract components
     pos = extract_pos(wikt_entry)
     labels = extract_labels(wikt_entry)
-    phrase = is_phrase(normalized_word)
+    word_count = len(normalized_word.split())
 
     # Check for lemma/form_of
     lemma = None
@@ -264,7 +259,7 @@ def process_wikt_entry(wikt_entry: dict) -> Optional[dict]:
         'word': normalized_word,
         'pos': pos,
         'labels': labels,
-        'is_phrase': phrase,
+        'word_count': word_count,
         'lemma': lemma,
         'sources': ['wikt']
     }

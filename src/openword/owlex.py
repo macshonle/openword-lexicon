@@ -154,9 +154,8 @@ class OwlexFilter:
 
     def _check_phrase_filters(self, entry: Dict, filters: Dict) -> bool:
         """Apply phrase/word count filters."""
-        word = entry['word']
-        word_count = len(word.split())
-        is_phrase = entry.get('is_phrase', False)
+        word_count = entry.get('word_count', len(entry['word'].split()))
+        phrase_type = entry.get('phrase_type')
 
         if 'min_words' in filters:
             if word_count < filters['min_words']:
@@ -166,8 +165,16 @@ class OwlexFilter:
             if word_count > filters['max_words']:
                 return False
 
+        # Legacy is_phrase filter: true means word_count > 1, false means word_count == 1
         if 'is_phrase' in filters:
-            if filters['is_phrase'] != is_phrase:
+            if filters['is_phrase'] and word_count == 1:
+                return False
+            if not filters['is_phrase'] and word_count > 1:
+                return False
+
+        # New phrase_type filter: filter by specific phrase type
+        if 'phrase_type' in filters:
+            if filters['phrase_type'] != phrase_type:
                 return False
 
         return True

@@ -132,37 +132,43 @@ if word_count > 1:
 - Distinguish "by right" (2 words) from "zeal without knowledge..." (8 words)
 - Statistics on phrase length distribution
 
-## Recommendations
+## Implementation Status
 
-### Short Term (Immediate)
-1. ✅ **Add phrase type detection** - extract before POS_MAP normalization
-2. ✅ **Add word count** - simple split-based counting
-3. ✅ **Update reports** - label phrase types in samples/enumeration
+### ✅ Completed (2025-11-17)
 
-### Medium Term (Next Sprint)
-4. **Enhanced filtering UI** - expose phrase_type and word_count in filters
-5. **Language origin labels** - tag borrowed words, place names
-6. **Documentation** - explain what counts as "English" in this lexicon
+1. **✅ Solution 1: Add Phrase Type Metadata**
+   - Removed `is_phrase` field entirely
+   - Added `word_count` field (always present, default 1)
+   - Added `phrase_type` field (present for multi-word entries)
+   - Updated all downstream tools: merge_all.py, merge_dedupe.py, owlex.py, wordnet_enrich.py, core_ingest.py, filters.py, wikt_ingest.py
 
-### Long Term (Future)
-7. **Frequency-based filtering** - auto-exclude rare non-basic-Latin words
-8. **Separate phrase lexicon** - dedicated dataset for idioms/proverbs
-9. **Sense-level tracking** - distinguish borrowed vs naturalized senses
+2. **✅ Solution 2: Improve Report Filtering**
+   - Regular syllable samples now exclude proverbs and >5 word phrases
+   - All samples annotate phrase type and word count
+   - Rare syllable enumeration includes full metadata annotations
+   - Better visibility of phrase types in reports
 
-## Implementation Priority
+3. **✅ Solution 3B: Label-based Language Filtering**
+   - Added `has_english_categories()` function
+   - Validates English POS categories before accepting entry
+   - Filters out foreign words like 'łódź' that have English sections but no English categories
+   - Checks for common English categories: nouns, verbs, adjectives, idioms, phrases, etc.
 
-**High Priority:**
-- Phrase type metadata (fixes proverb issue)
-- Word count metadata (enables better filtering)
-- Report improvements (immediate visibility)
+### Pending Investigation
 
-**Medium Priority:**
-- Enhanced language filtering (more subjective)
-- Better documentation (helps users understand)
+4. **⏳ Find other instances of false labeling**
+   - Need to rebuild data and analyze results
+   - Compare before/after filtering effectiveness
+   - May need to tune category list
 
-**Low Priority:**
-- Separate phrase lexicon (nice-to-have)
-- Advanced sense tracking (requires major refactor)
+### Future Enhancements
+
+5. **📋 Enhanced filtering UI** - expose phrase_type and word_count in filters
+6. **📋 Language origin labels** - tag borrowed words, place names
+7. **📋 Documentation** - explain what counts as "English" in this lexicon
+8. **📋 Frequency-based filtering** - auto-exclude rare non-basic-Latin words
+9. **📋 Separate phrase lexicon** - dedicated dataset for idioms/proverbs
+10. **📋 Sense-level tracking** - distinguish borrowed vs naturalized senses
 
 ## Examples
 

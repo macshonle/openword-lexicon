@@ -349,19 +349,54 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
 
             # Sample words by syllable count
             report += "\n#### Sample Words by Syllable Count\n\n"
+            report += "*(Excludes proverbs and long phrases with >5 words)*\n\n"
             for syll_count in [1, 2, 3, 4, 5]:
                 if syll_count in syllable_dist:
-                    words_with_syll = [w for w, e in metadata.items() if e.get('syllables') == syll_count]
+                    # Filter out proverbs and long phrases from samples
+                    words_with_syll = [
+                        w for w, e in metadata.items()
+                        if e.get('syllables') == syll_count
+                        and e.get('phrase_type') != 'proverb'
+                        and e.get('word_count', 1) <= 5
+                    ]
                     count = len(words_with_syll)
 
                     if count < 10:
-                        # Enumerate all when < 10
-                        sorted_words = sorted(words_with_syll)
-                        report += f"**{syll_count} syllable{'s' if syll_count > 1 else ''}:** ({count} words) {', '.join(f'`{w}`' for w in sorted_words)}  \n"
+                        # Enumerate all when < 10, with annotations
+                        words_with_meta = [(w, metadata[w]) for w in words_with_syll]
+                        words_with_meta.sort(key=lambda x: x[0])
+                        formatted = []
+                        for w, meta in words_with_meta:
+                            phrase_type = meta.get('phrase_type')
+                            word_count = meta.get('word_count', 1)
+                            if phrase_type or word_count > 1:
+                                annotations = []
+                                if phrase_type:
+                                    annotations.append(phrase_type)
+                                if word_count > 1:
+                                    annotations.append(f"{word_count} words")
+                                formatted.append(f"`{w}` ({', '.join(annotations)})")
+                            else:
+                                formatted.append(f"`{w}`")
+                        report += f"**{syll_count} syllable{'s' if syll_count > 1 else ''}:** ({count} words) {', '.join(formatted)}  \n"
                     else:
                         # Sample 5 for larger sets
-                        sample = random.sample(words_with_syll, 5)
-                        report += f"**{syll_count} syllable{'s' if syll_count > 1 else ''}:** {', '.join(f'`{w}`' for w in sample)}  \n"
+                        sample = random.sample(words_with_syll, min(5, len(words_with_syll)))
+                        formatted = []
+                        for w in sample:
+                            meta = metadata[w]
+                            phrase_type = meta.get('phrase_type')
+                            word_count = meta.get('word_count', 1)
+                            if phrase_type or word_count > 1:
+                                annotations = []
+                                if phrase_type:
+                                    annotations.append(phrase_type)
+                                if word_count > 1:
+                                    annotations.append(f"{word_count} words")
+                                formatted.append(f"`{w}` ({', '.join(annotations)})")
+                            else:
+                                formatted.append(f"`{w}`")
+                        report += f"**{syll_count} syllable{'s' if syll_count > 1 else ''}:** {', '.join(formatted)}  \n"
 
             # Complete enumeration for rare syllable counts (< 10 words)
             rare_syllable_counts = [k for k, v in syllable_dist.items() if v < 10 and k > 5]

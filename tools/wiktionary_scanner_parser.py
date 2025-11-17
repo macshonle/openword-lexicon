@@ -579,22 +579,66 @@ def extract_phrase_type(text: str) -> Optional[str]:
     return None
 
 
+def has_english_categories(text: str) -> bool:
+    """
+    Check if the text contains English POS categories.
+
+    This validates that a page is actually an English entry, not just a page
+    with an English section. Filters out foreign words like 'łódź' that may
+    have an English section but no English POS categories.
+
+    Returns True if any English POS categories are found.
+    """
+    # Common English POS categories
+    english_pos_patterns = [
+        'Category:English nouns',
+        'Category:English verbs',
+        'Category:English adjectives',
+        'Category:English adverbs',
+        'Category:English pronouns',
+        'Category:English prepositions',
+        'Category:English conjunctions',
+        'Category:English interjections',
+        'Category:English determiners',
+        'Category:English articles',
+        'Category:English proper nouns',
+        'Category:English idioms',
+        'Category:English phrases',
+        'Category:English proverbs',
+        'Category:English prepositional phrases',
+        'Category:English verb forms',
+        'Category:English noun forms',
+        'Category:English adjective forms',
+        'Category:English adverb forms',
+        'Category:English contractions',
+        'Category:English abbreviations',
+    ]
+
+    text_lower = text.lower()
+    return any(pattern.lower() in text_lower for pattern in english_pos_patterns)
+
+
 def parse_entry(title: str, text: str) -> Optional[Dict]:
     """Parse a single Wiktionary page."""
     word = title.lower().strip()
+
+    # Validate that this is actually an English entry by checking for English categories
+    # This filters out foreign words like 'łódź' that may have an English section
+    # but are not actually English words
+    if not has_english_categories(text):
+        return None
 
     pos_tags = extract_pos_tags(text)
     if not pos_tags:
         return None
 
     labels = extract_labels(text)
-    is_phrase = ' ' in word
 
-    # Extract specific phrase type before normalization
-    phrase_type = extract_phrase_type(text) if is_phrase else None
+    # Calculate word count (always track, even for single words)
+    word_count = len(word.split())
 
-    # Calculate word count for multi-word entries
-    word_count = len(word.split()) if is_phrase else 1
+    # Extract specific phrase type for multi-word entries
+    phrase_type = extract_phrase_type(text) if word_count > 1 else None
 
     # Extract syllable count from multiple sources, preferring hyphenation template
     # Only set syllable count when we have reliable data - never guess
@@ -614,15 +658,13 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
         'word': word,
         'pos': pos_tags,
         'labels': labels,
-        'is_phrase': is_phrase,
+        'word_count': word_count,
         'sources': ['wikt'],
     }
 
-    # Add phrase-specific metadata
+    # Add phrase type for multi-word entries
     if phrase_type:
         entry['phrase_type'] = phrase_type
-    if word_count > 1:
-        entry['word_count'] = word_count
 
     # Only include syllable count if reliably determined
     # Leave unspecified (None) if data is missing or unreliable
