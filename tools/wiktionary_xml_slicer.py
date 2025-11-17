@@ -2,12 +2,13 @@
 """
 wiktionary_xml_slicer.py - Extract diagnostic XML slices from Wiktionary dump
 
-Creates ~1KB slices of XML at strategic points during parsing to enable
+Creates ~4KiB slices of XML at strategic points during parsing to enable
 deep analysis of Wiktionary data format without loading the full dump.
 
 Slicing strategy:
 1. First 10 entries (baseline format)
-2. Every 10,000th entry (statistical sampling)
+2. Prime-modulo periodic sampling (every 9973rd entry)
+   - Uses prime to avoid clustering artifacts and pattern alignment
 3. Entries with specific characteristics:
    - Has POS tags but no categories
    - Has categories but no POS tags
@@ -17,7 +18,7 @@ Slicing strategy:
 4. Random samples from different file positions
 
 Output:
-- data/diagnostic/wikt_slices/OFFSET_LEN.xml
+- data/diagnostic/wikt_slices/OFFSET_LEN_REASON_TITLE.xml
   where OFFSET is hex position, LEN is decimal byte length
 """
 
@@ -61,9 +62,10 @@ class XMLSlicer:
         if self.entry_count < 10:
             return "baseline"
 
-        # Every 10,000th entry (statistical)
-        if self.entry_count % 10000 == 0:
-            return f"every10k_{self.entry_count}"
+        # Periodic sampling using prime modulo (reduces clustering artifacts)
+        # Prime 9973 gives good distribution without aligning with common patterns
+        if self.entry_count % 9973 == 0:
+            return f"periodic_{self.entry_count}"
 
         # Multi-word entries
         if ' ' in title and 'multiword' not in self.sampled_types:
