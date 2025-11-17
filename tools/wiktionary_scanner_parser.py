@@ -101,13 +101,14 @@ EN_POS_TEMPLATE = re.compile(r'\{\{en-(noun|verb|adj|adv|prop|pron)\b', re.IGNOR
 # Check for abbreviation templates
 ABBREVIATION_TEMPLATE = re.compile(r'\{\{(?:abbreviation of|abbrev of|abbr of|initialism of)\|en\|', re.IGNORECASE)
 # Definition-generating templates that indicate English content (even without POS headers)
+# These are quaternary validation signals for entries that have definitions but no POS headers
 DEFINITION_TEMPLATES = re.compile(r'\{\{(?:' +
-    r'abbr of|abbreviation of|abbrev of|initialism of|' +
-    r'alternative form of|alt form|' +
+    r'abbr of|abbreviation of|abbrev of|initialism of|acronym of|' +
+    r'alternative form of|alt form|alt sp|' +
     r'plural of|' +
     r'past tense of|past participle of|' +
     r'present participle of|' +
-    r'en-(?:noun|verb|adj|adv|past|adj|adv)' +
+    r'en-(?:noun|verb|adj|adv|past of)' +
     r')\|en\|', re.IGNORECASE)
 # Special template patterns for specific POS types
 PREP_PHRASE_TEMPLATE = re.compile(r'\{\{en-prepphr\b', re.IGNORECASE)
@@ -665,6 +666,190 @@ def extract_phrase_type(text: str) -> Optional[str]:
     return None
 
 
+def detect_abbreviation(text: str, pos_tags: List[str]) -> bool:
+    """
+    Detect if entry is an abbreviation.
+
+    Detection methods:
+    1. Templates: {{abbr of|en|...}}, {{abbreviation of|en|...}}, {{initialism of|en|...}}
+    2. Categories: Category:English abbreviations, Category:English initialisms
+    3. POS: symbol (often abbreviations)
+
+    Examples: USA, Dr., etc., crp (stenoscript)
+    """
+    # Check templates
+    if ABBREVIATION_TEMPLATE.search(text):
+        return True
+
+    # Check categories
+    if 'Category:English abbreviations' in text:
+        return True
+    if 'Category:English initialisms' in text:
+        return True
+    if 'Category:English acronyms' in text:
+        return True
+    if 'Category:English Stenoscript abbreviations' in text:
+        return True
+
+    # Symbol POS is often used for abbreviations
+    if 'symbol' in pos_tags:
+        return True
+
+    return False
+
+
+def detect_proper_noun(text: str, pos_tags: List[str]) -> bool:
+    """
+    Detect if entry is a proper noun (name, place, etc.).
+
+    Detection methods:
+    1. POS: proper noun mapped to 'noun' in POS_MAP
+    2. Section header: ===Proper noun===
+    3. Templates: {{en-proper noun}}, {{en-prop}}
+
+    Examples: London, Shakespeare, Microsoft
+    """
+    # Check for proper noun section header
+    for match in POS_HEADER.finditer(text):
+        header = match.group(1).lower().strip()
+        header = ' '.join(header.split())
+        if header in ['proper noun', 'proper name', 'propernoun']:
+            return True
+
+    # Check for proper noun templates
+    if re.search(r'\{\{en-(?:proper noun|prop)\b', text, re.IGNORECASE):
+        return True
+
+    return False
+
+
+def detect_vulgar_or_offensive(labels: Dict) -> bool:
+    """
+    Detect if entry is vulgar or offensive.
+
+    Uses label data already extracted.
+    Examples: profanity, slurs, offensive terms
+    """
+    register = labels.get('register', [])
+    return 'vulgar' in register or 'offensive' in register
+
+
+def detect_archaic_or_obsolete(labels: Dict) -> bool:
+    """
+    Detect if entry is archaic or obsolete.
+
+    Uses label data already extracted.
+    Examples: thou, whence, forsooth
+    """
+    temporal = labels.get('temporal', [])
+    return 'archaic' in temporal or 'obsolete' in temporal
+
+
+def detect_rare(labels: Dict) -> bool:
+    """
+    Detect if entry is marked as rare.
+
+    Uses label data already extracted.
+    """
+    temporal = labels.get('temporal', [])
+    return 'rare' in temporal
+
+
+def detect_informal_or_slang(labels: Dict) -> bool:
+    """
+    Detect if entry is informal or slang.
+
+    Uses label data already extracted.
+    Examples: gonna, wanna, ain't
+    """
+    register = labels.get('register', [])
+    return 'informal' in register or 'slang' in register or 'colloquial' in register
+
+
+def detect_technical(labels: Dict) -> bool:
+    """
+    Detect if entry is technical/domain-specific jargon.
+
+    Uses domain labels already extracted.
+    Examples: mitochondria (biology), tort (law), algorithm (computing)
+
+    Useful for: Filtering out specialized terminology for general-purpose
+    dictionaries vs keeping it for domain-specific applications.
+    """
+    domain = labels.get('domain', [])
+    # Technical if it has ANY domain label (medical, legal, computing, etc.)
+    return len(domain) > 0
+
+
+def detect_regional(labels: Dict) -> bool:
+    """
+    Detect if entry is region-specific (dialectal).
+
+    Uses region labels already extracted.
+    Examples: lift (British), elevator (American), arvo (Australian)
+
+    Useful for: Dictionary localization and dialect-aware applications.
+    """
+    region = labels.get('region', [])
+    return len(region) > 0
+
+
+def detect_inflected_form(text: str, pos_tags: List[str]) -> bool:
+    """
+    Detect if entry is an inflected form rather than a base word.
+
+    Detection methods:
+    1. Templates: {{plural of|en|...}}, {{past tense of|en|...}}, etc.
+    2. POS categories indicating forms: "verb forms", "noun forms", etc.
+
+    Examples: cats (plural of cat), ran (past tense of run), better (comparative of good)
+
+    Useful for: Base-word-only dictionaries, lemmatization, reducing redundancy.
+    """
+    # Check for inflection templates
+    inflection_patterns = [
+        r'\{\{plural of\|en\|',
+        r'\{\{past tense of\|en\|',
+        r'\{\{past participle of\|en\|',
+        r'\{\{present participle of\|en\|',
+        r'\{\{comparative of\|en\|',
+        r'\{\{superlative of\|en\|',
+        r'\{\{inflection of\|en\|',
+    ]
+
+    for pattern in inflection_patterns:
+        if re.search(pattern, text, re.IGNORECASE):
+            return True
+
+    # Check for form categories
+    form_categories = [
+        'Category:English verb forms',
+        'Category:English noun forms',
+        'Category:English adjective forms',
+        'Category:English adverb forms',
+        'Category:English plurals',
+    ]
+
+    for category in form_categories:
+        if category in text:
+            return True
+
+    return False
+
+
+def detect_dated(labels: Dict) -> bool:
+    """
+    Detect if entry is dated (understood but not commonly used).
+
+    Different from archaic - dated words are still understood but old-fashioned.
+    Examples: wireless (for radio), icebox (for refrigerator)
+
+    Useful for: More granular temporal filtering than archaic/obsolete.
+    """
+    temporal = labels.get('temporal', [])
+    return 'dated' in temporal
+
+
 def has_english_categories(text: str) -> bool:
     """
     Check if the text contains English POS categories.
@@ -785,11 +970,35 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
             if cat_count is not None:
                 syllable_count = cat_count
 
+    # Detect boolean properties for filtering
+    is_phrase = word_count > 1
+    is_abbreviation = detect_abbreviation(english_text, pos_tags)
+    is_proper_noun = detect_proper_noun(english_text, pos_tags)
+    is_vulgar = detect_vulgar_or_offensive(labels)
+    is_archaic = detect_archaic_or_obsolete(labels)
+    is_rare = detect_rare(labels)
+    is_informal = detect_informal_or_slang(labels)
+    is_technical = detect_technical(labels)
+    is_regional = detect_regional(labels)
+    is_inflected = detect_inflected_form(english_text, pos_tags)
+    is_dated = detect_dated(labels)
+
     entry = {
         'word': word,
         'pos': pos_tags,
         'labels': labels,
         'word_count': word_count,
+        'is_phrase': is_phrase,
+        'is_abbreviation': is_abbreviation,
+        'is_proper_noun': is_proper_noun,
+        'is_vulgar': is_vulgar,
+        'is_archaic': is_archaic,
+        'is_rare': is_rare,
+        'is_informal': is_informal,
+        'is_technical': is_technical,
+        'is_regional': is_regional,
+        'is_inflected': is_inflected,
+        'is_dated': is_dated,
         'sources': ['wikt'],
     }
 
