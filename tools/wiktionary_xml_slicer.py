@@ -111,8 +111,8 @@ class XMLSlicer:
     def write_slice(self, page_xml: str, title: str, reason: str):
         """Write a slice to disk."""
 
-        # Trim to ~1KB if needed
-        max_len = 1024
+        # Trim to ~4KiB if needed (larger slices help detect malformed tags and edge cases)
+        max_len = 4 * 1024
         if len(page_xml) > max_len:
             # Try to cut at a reasonable boundary
             truncated = page_xml[:max_len]
