@@ -596,34 +596,60 @@ def extract_phrase_type(text: str) -> Optional[str]:
 
     Returns the specific type (idiom, proverb, etc.) or None if not a phrase.
     This preserves granularity lost during POS_MAP normalization.
+
+    Distinction criteria:
+    - **Word**: word_count == 1 (handled elsewhere)
+    - **Idiom**: Non-literal figurative expression ("kick the bucket")
+    - **Proverb**: Complete sentence with advice/wisdom ("a stitch in time saves nine")
+    - **Phrase**: Generic multi-word without specific type
+    - **Prepositional phrase**: Starts with preposition ("at least", "on hold")
+    - **Adverbial phrase**: Functions as adverb ("all of a sudden")
+    - **Verb phrase**: Multi-word verb expression ("give up", "take over")
+
+    Detection methods:
+    1. Section headers: ===Idiom===, ===Proverb===, etc.
+    2. Templates: {{head|en|idiom}}, {{en-prepphr}}
+    3. Categories: [[Category:English idioms]], etc.
     """
     # Check section headers for specific phrase types
     for match in POS_HEADER.finditer(text):
         header = match.group(1).lower().strip()
         header = ' '.join(header.split())  # Normalize whitespace
 
+        # Exact matches for phrase types
         if header in ['idiom', 'proverb', 'prepositional phrase', 'adverbial phrase',
-                      'verb phrase', 'verb phrase form']:
+                      'verb phrase', 'verb phrase form', 'noun phrase']:
             return header
+
+        # Additional phrase type variations
+        if header in ['saying', 'adage']:
+            return 'proverb'  # Sayings/adages are proverb-like
 
     # Check {{head}} templates
     for match in HEAD_TEMPLATE.finditer(text):
         pos = match.group(1).lower().strip()
         if pos in ['idiom', 'proverb', 'prepositional phrase', 'adverbial phrase',
-                   'verb phrase']:
-            return pos
+                   'verb phrase', 'noun phrase', 'saying', 'adage']:
+            return 'proverb' if pos in ['saying', 'adage'] else pos
 
-    # Check for prepositional phrase template
+    # Check for phrase-specific templates
     if PREP_PHRASE_TEMPLATE.search(text):
         return 'prepositional phrase'
 
-    # Check categories
-    if 'Category:English prepositional phrases' in text:
-        return 'prepositional phrase'
-    if 'Category:English idioms' in text:
-        return 'idiom'
-    if 'Category:English proverbs' in text:
-        return 'proverb'
+    # Check categories (more comprehensive)
+    category_patterns = {
+        'Category:English idioms': 'idiom',
+        'Category:English proverbs': 'proverb',
+        'Category:English prepositional phrases': 'prepositional phrase',
+        'Category:English adverbial phrases': 'adverbial phrase',
+        'Category:English verb phrases': 'verb phrase',
+        'Category:English noun phrases': 'noun phrase',
+        'Category:English sayings': 'proverb',
+    }
+
+    for pattern, phrase_type in category_patterns.items():
+        if pattern in text:
+            return phrase_type
 
     return None
 
@@ -869,6 +895,10 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
         print(f"Diagnostic mode: Will stop after 100 skips and write report to {diagnostic_file}")
     print()
 
+    # Prepare skip log file (always write, regardless of diagnostic mode)
+    skip_log_path = output_path.parent / "wikt_skipped_pages.jsonl"
+    skip_log = open(skip_log_path, 'w', encoding='utf-8')
+
     # Prepare metrics dictionary for Live display
     metrics = {
         "Processed": 0,
@@ -932,10 +962,18 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                 if not result:
                     entries_skipped += 1
                     metrics["Skipped"] = entries_skipped
+
+                    # Log to skip file
+                    title_match = TITLE_PATTERN.search(page_xml)
+                    title = title_match.group(1) if title_match else "NO_TITLE"
+                    skip_log.write(json.dumps({
+                        'reason': 'no_content_extracted',
+                        'title': title,
+                        'page_xml': page_xml
+                    }, ensure_ascii=False) + '\n')
+                    skip_log.flush()
+
                     if diagnostic_mode:
-                        # Extract what we can for diagnostic
-                        title_match = TITLE_PATTERN.search(page_xml)
-                        title = title_match.group(1) if title_match else "NO_TITLE"
                         skip_reasons['no_content_extracted'].append({
                             'title': title,
                             'page_preview': page_xml[:500]
@@ -992,6 +1030,15 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     else:
                         entries_skipped += 1
                         metrics["Skipped"] = entries_skipped
+
+                        # Log to skip file
+                        skip_log.write(json.dumps({
+                            'reason': 'parse_entry_none',
+                            'title': title,
+                            'text': text
+                        }, ensure_ascii=False) + '\n')
+                        skip_log.flush()
+
                         if diagnostic_mode:
                             skip_reasons['parse_entry_none'].append({
                                 'title': title,
@@ -1004,6 +1051,16 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                 except Exception as e:
                     entries_skipped += 1
                     metrics["Skipped"] = entries_skipped
+
+                    # Log to skip file
+                    skip_log.write(json.dumps({
+                        'reason': 'parse_entry_exception',
+                        'title': title,
+                        'exception': str(e),
+                        'text': text
+                    }, ensure_ascii=False) + '\n')
+                    skip_log.flush()
+
                     if diagnostic_mode:
                         skip_reasons['parse_entry_exception'].append({
                             'title': title,
@@ -1029,6 +1086,9 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     print(f"\nReached limit of {limit:,} entries")
                     break
 
+    # Close skip log file
+    skip_log.close()
+
     elapsed = time.time() - start_time
     elapsed_min = int(elapsed / 60)
     elapsed_sec = int(elapsed % 60)
@@ -1048,6 +1108,11 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     print(f"Time: {elapsed_min}m {elapsed_sec}s")
     print(f"Rate: {entries_processed / elapsed:.0f} pages/sec")
     print("=" * 60)
+
+    # Report skip log location
+    if entries_skipped > 0:
+        print(f"\nSkipped pages logged to: {skip_log_path}")
+        print(f"Review with: cat {skip_log_path} | jq .")
 
     # Write diagnostic information to file if in diagnostic mode
     if diagnostic_mode:
