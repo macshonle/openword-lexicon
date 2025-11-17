@@ -35,6 +35,8 @@ import nltk
 from nltk.corpus import wordnet as wn
 import orjson
 
+from openword.progress_display import ProgressDisplay
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -213,31 +215,31 @@ def process_file(input_path: Path, output_path: Path):
     enriched_count = 0
     pos_backfilled = 0
 
-    with open(input_path, 'r', encoding='utf-8') as f:
-        for line_num, line in enumerate(f, 1):
-            if line_num % 10000 == 0:
-                logger.info(f"  Processed {line_num:,} entries...")
+    with ProgressDisplay(f"Enriching {input_path.name}", update_interval=1000) as progress:
+        with open(input_path, 'r', encoding='utf-8') as f:
+            for line_num, line in enumerate(f, 1):
+                line = line.strip()
+                if not line:
+                    continue
 
-            line = line.strip()
-            if not line:
-                continue
+                try:
+                    entry = json.loads(line)
+                    original_pos = entry.get('pos', [])
 
-            try:
-                entry = json.loads(line)
-                original_pos = entry.get('pos', [])
+                    enriched = enrich_entry(entry)
 
-                enriched = enrich_entry(entry)
+                    # Track stats
+                    if 'concreteness' in enriched:
+                        enriched_count += 1
+                    if not original_pos and enriched.get('pos'):
+                        pos_backfilled += 1
 
-                # Track stats
-                if 'concreteness' in enriched:
-                    enriched_count += 1
-                if not original_pos and enriched.get('pos'):
-                    pos_backfilled += 1
+                    entries.append(enriched)
+                    progress.update(Lines=line_num, Entries=len(entries), Enriched=enriched_count)
 
-                entries.append(enriched)
-            except json.JSONDecodeError as e:
-                logger.warning(f"Line {line_num}: JSON decode error: {e}")
-                continue
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Line {line_num}: JSON decode error: {e}")
+                    continue
 
     # Write output
     output_path.parent.mkdir(parents=True, exist_ok=True)

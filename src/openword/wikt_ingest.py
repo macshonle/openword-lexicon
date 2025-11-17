@@ -25,6 +25,8 @@ from typing import Dict, List, Set, Optional
 
 import orjson
 
+from openword.progress_display import ProgressDisplay
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -281,50 +283,50 @@ def read_wiktextract(filepath: Path) -> Dict[str, dict]:
 
     logger.info(f"Reading wiktextract data from {filepath}")
 
-    with open(filepath, 'r', encoding='utf-8') as f:
-        for line_num, line in enumerate(f, 1):
-            if line_num % 10000 == 0:
-                logger.info(f"  Processed {line_num:,} lines...")
+    with ProgressDisplay(f"Processing {filepath.name}", update_interval=1000) as progress:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            for line_num, line in enumerate(f, 1):
+                line = line.strip()
+                if not line:
+                    continue
 
-            line = line.strip()
-            if not line:
-                continue
+                try:
+                    wikt_entry = json.loads(line)
+                    entry = process_wikt_entry(wikt_entry)
 
-            try:
-                wikt_entry = json.loads(line)
-                entry = process_wikt_entry(wikt_entry)
+                    if entry:
+                        word = entry['word']
 
-                if entry:
-                    word = entry['word']
+                        # Merge if word already exists
+                        if word in entries:
+                            # Union POS
+                            entries[word]['pos'] = sorted(set(
+                                entries[word]['pos'] + entry['pos']
+                            ))
 
-                    # Merge if word already exists
-                    if word in entries:
-                        # Union POS
-                        entries[word]['pos'] = sorted(set(
-                            entries[word]['pos'] + entry['pos']
-                        ))
+                            # Union labels
+                            for label_cat in ['register', 'region', 'temporal', 'domain']:
+                                if label_cat in entry['labels']:
+                                    existing = entries[word]['labels'].get(label_cat, [])
+                                    entries[word]['labels'][label_cat] = sorted(set(
+                                        existing + entry['labels'][label_cat]
+                                    ))
 
-                        # Union labels
-                        for label_cat in ['register', 'region', 'temporal', 'domain']:
-                            if label_cat in entry['labels']:
-                                existing = entries[word]['labels'].get(label_cat, [])
-                                entries[word]['labels'][label_cat] = sorted(set(
-                                    existing + entry['labels'][label_cat]
-                                ))
+                            # Keep lemma if present
+                            if entry['lemma'] and not entries[word]['lemma']:
+                                entries[word]['lemma'] = entry['lemma']
 
-                        # Keep lemma if present
-                        if entry['lemma'] and not entries[word]['lemma']:
-                            entries[word]['lemma'] = entry['lemma']
+                            # Keep syllables if present
+                            if entry.get('syllables') and not entries[word].get('syllables'):
+                                entries[word]['syllables'] = entry['syllables']
+                        else:
+                            entries[word] = entry
 
-                        # Keep syllables if present
-                        if entry.get('syllables') and not entries[word].get('syllables'):
-                            entries[word]['syllables'] = entry['syllables']
-                    else:
-                        entries[word] = entry
+                    progress.update(Lines=line_num, Words=len(entries))
 
-            except json.JSONDecodeError as e:
-                logger.warning(f"Line {line_num}: JSON decode error: {e}")
-                continue
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Line {line_num}: JSON decode error: {e}")
+                    continue
 
     logger.info(f"  -> Loaded {len(entries):,} unique words from wiktextract")
     return entries

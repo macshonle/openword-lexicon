@@ -25,6 +25,8 @@ from typing import Dict, List, Set
 
 import orjson
 
+from openword.progress_display import ProgressDisplay
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -105,24 +107,27 @@ def load_entries(filepath: Path) -> Dict[str, dict]:
 
     logger.info(f"Loading {filepath.name}")
 
-    with open(filepath, 'r', encoding='utf-8') as f:
-        for line_num, line in enumerate(f, 1):
-            line = line.strip()
-            if not line:
-                continue
+    with ProgressDisplay(f"Loading {filepath.name}", update_interval=10000) as progress:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            for line_num, line in enumerate(f, 1):
+                line = line.strip()
+                if not line:
+                    continue
 
-            try:
-                entry = json.loads(line)
-                word = entry['word']
+                try:
+                    entry = json.loads(line)
+                    word = entry['word']
 
-                if word in entries:
-                    # Merge with existing
-                    entries[word] = merge_entries(entries[word], entry)
-                else:
-                    entries[word] = entry
-            except json.JSONDecodeError as e:
-                logger.warning(f"Line {line_num}: JSON decode error: {e}")
-                continue
+                    if word in entries:
+                        # Merge with existing
+                        entries[word] = merge_entries(entries[word], entry)
+                    else:
+                        entries[word] = entry
+
+                    progress.update(Lines=line_num, Words=len(entries))
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Line {line_num}: JSON decode error: {e}")
+                    continue
 
     logger.info(f"  -> Loaded {len(entries):,} unique words")
     return entries

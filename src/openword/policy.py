@@ -23,6 +23,8 @@ from typing import Dict, List, Set, Optional
 
 import orjson
 
+from openword.progress_display import ProgressDisplay
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -114,26 +116,26 @@ def apply_policy(input_path: Path, output_path: Path,
     included = []
     excluded_count = 0
 
-    with open(input_path, 'r', encoding='utf-8') as f:
-        for line_num, line in enumerate(f, 1):
-            if line_num % 10000 == 0:
-                logger.info(f"  Processed {line_num:,} entries...")
+    with ProgressDisplay(f"Applying policy to {input_path.name}", update_interval=1000) as progress:
+        with open(input_path, 'r', encoding='utf-8') as f:
+            for line_num, line in enumerate(f, 1):
+                line = line.strip()
+                if not line:
+                    continue
 
-            line = line.strip()
-            if not line:
-                continue
+                try:
+                    entry = json.loads(line)
 
-            try:
-                entry = json.loads(line)
+                    if policy_func(entry, overrides):
+                        included.append(entry)
+                    else:
+                        excluded_count += 1
 
-                if policy_func(entry, overrides):
-                    included.append(entry)
-                else:
-                    excluded_count += 1
+                    progress.update(Lines=line_num, Included=len(included), Excluded=excluded_count)
 
-            except json.JSONDecodeError as e:
-                logger.warning(f"Line {line_num}: JSON decode error: {e}")
-                continue
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Line {line_num}: JSON decode error: {e}")
+                    continue
 
     # Write output
     output_path.parent.mkdir(parents=True, exist_ok=True)

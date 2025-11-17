@@ -16,6 +16,8 @@ import sys
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 
+from openword.progress_display import ProgressDisplay
+
 # Setup logging
 logging.basicConfig(
     level=logging.INFO,
@@ -43,30 +45,29 @@ def load_brysbaert_ratings(filepath: Path) -> Dict[str, Tuple[float, float]]:
 
     logger.info(f"Loading Brysbaert ratings from {filepath}")
 
-    with open(filepath, 'r', encoding='utf-8') as f:
-        # Skip header line
-        header = f.readline().strip().split('\t')
+    with ProgressDisplay(f"Loading {filepath.name}", update_interval=1000) as progress:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            # Skip header line
+            header = f.readline().strip().split('\t')
 
-        # Verify expected columns
-        if header[0] != 'Word' or header[2] != 'Conc.M':
-            logger.warning(f"Unexpected header format in Brysbaert file: {header}")
+            # Verify expected columns
+            if header[0] != 'Word' or header[2] != 'Conc.M':
+                logger.warning(f"Unexpected header format in Brysbaert file: {header}")
 
-        for line_num, line in enumerate(f, 2):  # Start at 2 since we skipped header
-            if line_num % 10000 == 0:
-                logger.info(f"  Loaded {line_num-1:,} ratings...")
+            for line_num, line in enumerate(f, 2):  # Start at 2 since we skipped header
+                parts = line.strip().split('\t')
+                if len(parts) < 3:
+                    continue
 
-            parts = line.strip().split('\t')
-            if len(parts) < 3:
-                continue
-
-            word = parts[0].lower()  # Normalize to lowercase
-            try:
-                mean_rating = float(parts[2])  # Conc.M
-                std_dev = float(parts[3]) if len(parts) > 3 else 0.0  # Conc.SD
-                ratings[word] = (mean_rating, std_dev)
-            except (ValueError, IndexError):
-                logger.warning(f"Line {line_num}: Could not parse rating for '{word}'")
-                continue
+                word = parts[0].lower()  # Normalize to lowercase
+                try:
+                    mean_rating = float(parts[2])  # Conc.M
+                    std_dev = float(parts[3]) if len(parts) > 3 else 0.0  # Conc.SD
+                    ratings[word] = (mean_rating, std_dev)
+                    progress.update(Lines=line_num-1, Ratings=len(ratings))
+                except (ValueError, IndexError):
+                    logger.warning(f"Line {line_num}: Could not parse rating for '{word}'")
+                    continue
 
     logger.info(f"  -> Loaded {len(ratings):,} concreteness ratings")
     return ratings
@@ -175,39 +176,39 @@ def process_file(
     entries_processed = 0
     entries_enriched = 0
 
-    with open(input_path, 'r', encoding='utf-8') as f_in, \
-         open(output_path, 'w', encoding='utf-8') as f_out:
+    with ProgressDisplay(f"Enriching {input_path.name}", update_interval=1000) as progress:
+        with open(input_path, 'r', encoding='utf-8') as f_in, \
+             open(output_path, 'w', encoding='utf-8') as f_out:
 
-        for line_num, line in enumerate(f_in, 1):
-            if line_num % 10000 == 0:
-                logger.info(f"  Processed {line_num:,} entries...")
+            for line_num, line in enumerate(f_in, 1):
+                line = line.strip()
+                if not line:
+                    continue
 
-            line = line.strip()
-            if not line:
-                continue
+                try:
+                    entry = json.loads(line)
 
-            try:
-                entry = json.loads(line)
+                    # Check if entry will be enriched
+                    word = entry.get('word', '').lower()
+                    had_concreteness = entry.get('concreteness') is not None
 
-                # Check if entry will be enriched
-                word = entry.get('word', '').lower()
-                had_concreteness = entry.get('concreteness') is not None
+                    # Enrich entry
+                    enriched_entry = enrich_entry(entry, ratings, prefer_brysbaert)
 
-                # Enrich entry
-                enriched_entry = enrich_entry(entry, ratings, prefer_brysbaert)
+                    # Count if we added new data
+                    has_concreteness = enriched_entry.get('concreteness') is not None
+                    if has_concreteness and (not had_concreteness or prefer_brysbaert):
+                        entries_enriched += 1
 
-                # Count if we added new data
-                has_concreteness = enriched_entry.get('concreteness') is not None
-                if has_concreteness and (not had_concreteness or prefer_brysbaert):
-                    entries_enriched += 1
+                    # Write enriched entry
+                    f_out.write(json.dumps(enriched_entry, ensure_ascii=False, sort_keys=True) + '\n')
+                    entries_processed += 1
 
-                # Write enriched entry
-                f_out.write(json.dumps(enriched_entry, ensure_ascii=False, sort_keys=True) + '\n')
-                entries_processed += 1
+                    progress.update(Lines=line_num, Processed=entries_processed, Enriched=entries_enriched)
 
-            except json.JSONDecodeError:
-                logger.warning(f"Line {line_num}: Invalid JSON")
-                continue
+                except json.JSONDecodeError:
+                    logger.warning(f"Line {line_num}: Invalid JSON")
+                    continue
 
     logger.info(f"  Enriched {entries_processed:,} entries")
     logger.info(f"    Added/updated concreteness: {entries_enriched:,}")

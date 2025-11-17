@@ -48,6 +48,8 @@ from typing import Dict, Optional, Tuple
 
 import orjson
 
+from openword.progress_display import ProgressDisplay
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -194,23 +196,22 @@ def process_file(input_path: Path, output_path: Path, ranks: Dict[str, int]):
     # Initialize counts for all letter codes A-Z
     tier_counts = {chr(ord('A') + i): 0 for i in range(26)}
 
-    with open(input_path, 'r', encoding='utf-8') as f:
-        for line_num, line in enumerate(f, 1):
-            if line_num % 10000 == 0:
-                logger.info(f"  Processed {line_num:,} entries...")
+    with ProgressDisplay(f"Assigning tiers to {input_path.name}", update_interval=1000) as progress:
+        with open(input_path, 'r', encoding='utf-8') as f:
+            for line_num, line in enumerate(f, 1):
+                line = line.strip()
+                if not line:
+                    continue
 
-            line = line.strip()
-            if not line:
-                continue
-
-            try:
-                entry = json.loads(line)
-                tiered = assign_tier(entry, ranks)
-                tier_counts[tiered['frequency_tier']] += 1
-                entries.append(tiered)
-            except json.JSONDecodeError as e:
-                logger.warning(f"Line {line_num}: JSON decode error: {e}")
-                continue
+                try:
+                    entry = json.loads(line)
+                    tiered = assign_tier(entry, ranks)
+                    tier_counts[tiered['frequency_tier']] += 1
+                    entries.append(tiered)
+                    progress.update(Lines=line_num, Entries=len(entries))
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Line {line_num}: JSON decode error: {e}")
+                    continue
 
     # Write output
     output_path.parent.mkdir(parents=True, exist_ok=True)

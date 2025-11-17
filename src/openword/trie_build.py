@@ -31,6 +31,8 @@ import sys
 import marisa_trie
 import orjson
 
+from openword.progress_display import ProgressDisplay
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -50,21 +52,20 @@ def load_entries(input_path: Path) -> List[Dict]:
 
     entries = []
 
-    with open(input_path, 'r', encoding='utf-8') as f:
-        for line_num, line in enumerate(f, 1):
-            if line_num % 10000 == 0:
-                logger.info(f"  Loaded {line_num:,} entries...")
+    with ProgressDisplay(f"Loading {input_path.name}", update_interval=1000) as progress:
+        with open(input_path, 'r', encoding='utf-8') as f:
+            for line_num, line in enumerate(f, 1):
+                line = line.strip()
+                if not line:
+                    continue
 
-            line = line.strip()
-            if not line:
-                continue
-
-            try:
-                entry = json.loads(line)
-                entries.append(entry)
-            except json.JSONDecodeError as e:
-                logger.warning(f"Line {line_num}: JSON decode error: {e}")
-                continue
+                try:
+                    entry = json.loads(line)
+                    entries.append(entry)
+                    progress.update(Lines=line_num, Entries=len(entries))
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Line {line_num}: JSON decode error: {e}")
+                    continue
 
     logger.info(f"  -> Loaded {len(entries):,} entries")
     return entries
