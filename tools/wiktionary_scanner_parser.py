@@ -105,8 +105,10 @@ PREP_PHRASE_TEMPLATE = re.compile(r'\{\{en-prepphr\b', re.IGNORECASE)
 CONTEXT_LABEL = re.compile(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', re.IGNORECASE)
 CATEGORY = re.compile(r'\[\[Category:English\s+([^\]]+)\]\]', re.IGNORECASE)
 DICT_ONLY = re.compile(r'\{\{no entry\|en', re.IGNORECASE)  # Matches both {{no entry|en}} and {{no entry|en|...}}
-# Extract hyphenation data for syllable counts
-HYPHENATION_TEMPLATE = re.compile(r'\{\{(?:hyphenation|hyph)\|([^}]+)\}\}', re.IGNORECASE)
+# Extract hyphenation data for syllable counts (English-specific via |en| param)
+HYPHENATION_TEMPLATE = re.compile(r'\{\{(?:hyphenation|hyph)\|en\|([^}]+)\}\}', re.IGNORECASE)
+# Extract syllable count from rhymes template: {{rhymes|en|...|s=N}}
+RHYMES_SYLLABLE = re.compile(r'\{\{rhymes\|en\|[^}]*\|s=(\d+)', re.IGNORECASE)
 # Extract syllable count from category labels (e.g., "Category:English 3-syllable words")
 SYLLABLE_CATEGORY = re.compile(r'\[\[Category:English\s+(\d+)-syllable\s+words?\]\]', re.IGNORECASE)
 
@@ -211,6 +213,38 @@ DOMAIN_LABELS = {
     'computing', 'mathematics', 'medicine', 'biology', 'chemistry',
     'physics', 'law', 'military', 'nautical', 'aviation', 'sports'
 }
+
+
+def extract_english_section(text: str) -> Optional[str]:
+    """
+    Extract ONLY the ==English== section from a Wiktionary page.
+
+    This prevents contamination from other language sections (French, Translingual, etc.)
+    which could have different POS headers, templates, and categories.
+
+    Returns the English section text, or None if no English section found.
+    """
+    # Find the start of the English section
+    english_match = ENGLISH_SECTION.search(text)
+    if not english_match:
+        return None
+
+    english_start = english_match.end()
+
+    # Find the start of the next language section (or end of text)
+    # Language sections are marked with == (level 2 headers)
+    next_section = None
+    for match in LANGUAGE_SECTION.finditer(text, english_start):
+        lang = match.group(1).strip()
+        if lang.lower() != 'english':
+            next_section = match.start()
+            break
+
+    # Extract English section only
+    if next_section:
+        return text[english_start:next_section]
+    else:
+        return text[english_start:]
 
 
 def extract_pos_tags(text: str) -> List[str]:
@@ -395,6 +429,21 @@ def extract_syllable_count_from_hyphenation(text: str, word: str) -> Optional[in
 
     # Return syllable count if we found any syllables
     return len(syllables) if syllables else None
+
+
+def extract_syllable_count_from_rhymes(text: str) -> Optional[int]:
+    """
+    Extract syllable count from {{rhymes|en|...|s=N}} template.
+
+    The rhymes template often includes a syllable count parameter.
+    Example: {{rhymes|en|eɪθs|s=1}} indicates 1 syllable.
+
+    Returns syllable count if found, None otherwise.
+    """
+    match = RHYMES_SYLLABLE.search(text)
+    if match:
+        return int(match.group(1))
+    return None
 
 
 def extract_syllable_count_from_categories(text: str) -> Optional[int]:
@@ -622,6 +671,9 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     """
     Parse a single Wiktionary page.
 
+    Critical: Extracts ONLY the ==English== section before parsing to prevent
+    contamination from other language sections (French, Translingual, etc.).
+
     Uses multiple signals to validate English entries:
     1. Primary: Successful POS extraction (strongest signal)
     2. Secondary: English categories present
@@ -632,14 +684,20 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     """
     word = title.lower().strip()
 
+    # CRITICAL: Extract ONLY the ==English== section
+    # This prevents contamination from other language sections
+    english_text = extract_english_section(text)
+    if not english_text:
+        return None  # No English section found
+
     # Try to extract POS tags - this is the STRONGEST signal that it's English
-    pos_tags = extract_pos_tags(text)
+    pos_tags = extract_pos_tags(english_text)
 
     # Check for English categories as a secondary signal
-    has_categories = has_english_categories(text)
+    has_categories = has_english_categories(english_text)
 
     # Check for English-specific templates as tertiary signal
-    has_en_templates = bool(re.search(r'\{\{en-(?:noun|verb|adj|adv)', text))
+    has_en_templates = bool(re.search(r'\{\{en-(?:noun|verb|adj|adv)', english_text))
 
     # Decision logic: Keep if ANY strong English signal is present
     if not pos_tags and not has_categories and not has_en_templates:
@@ -653,27 +711,32 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
         # This can happen with some stub entries or special formats
         pos_tags = []  # Empty but valid
 
-    labels = extract_labels(text)
+    labels = extract_labels(english_text)
 
     # Calculate word count (always track, even for single words)
     word_count = len(word.split())
 
     # Extract specific phrase type for multi-word entries
-    phrase_type = extract_phrase_type(text) if word_count > 1 else None
+    phrase_type = extract_phrase_type(english_text) if word_count > 1 else None
 
-    # Extract syllable count from multiple sources, preferring hyphenation template
+    # Extract syllable count from multiple sources, trying in priority order
     # Only set syllable count when we have reliable data - never guess
     syllable_count = None
 
-    # First try hyphenation template (most reliable when properly formatted)
-    hyph_count = extract_syllable_count_from_hyphenation(text, word)
+    # Priority 1: Hyphenation template (most reliable when properly formatted)
+    hyph_count = extract_syllable_count_from_hyphenation(english_text, word)
     if hyph_count is not None:
         syllable_count = hyph_count
     else:
-        # Fallback to category labels (deprecated but sometimes available)
-        cat_count = extract_syllable_count_from_categories(text)
-        if cat_count is not None:
-            syllable_count = cat_count
+        # Priority 2: Rhymes template (often has syllable count)
+        rhymes_count = extract_syllable_count_from_rhymes(english_text)
+        if rhymes_count is not None:
+            syllable_count = rhymes_count
+        else:
+            # Priority 3: Category labels (deprecated but sometimes available)
+            cat_count = extract_syllable_count_from_categories(english_text)
+            if cat_count is not None:
+                syllable_count = cat_count
 
     entry = {
         'word': word,
