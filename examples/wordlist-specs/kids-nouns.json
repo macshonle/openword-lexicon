@@ -2,7 +2,7 @@
   "version": "1.0",
   "name": "Kids Game Words",
   "description": "Concrete nouns appropriate for children's games",
-  "distribution": "core",
+  "distribution": "en",
   "filters": {
     "character": {
       "min_length": 3,

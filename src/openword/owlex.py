@@ -59,8 +59,9 @@ class OwlexFilter:
         """Determine input JSONL file based on distribution."""
         dist = self.spec['distribution']
 
-        # Try enriched file first, fall back to merged
+        # Try tiered file first (has frequency tiers), then enriched, then merged
         candidates = [
+            Path(f'data/intermediate/{dist}/entries_tiered.jsonl'),
             Path(f'data/intermediate/{dist}/{dist}_entries_enriched.jsonl'),
             Path(f'data/intermediate/{dist}/entries_merged.jsonl'),
         ]
@@ -493,10 +494,7 @@ Examples:
   # Verbose output
   owlex filter wordlist-spec.json --verbose
 
-  # Create specification interactively
-  node tools/wordlist-builder/cli-builder.js
-
-  # Use web interface
+  # Create specification with web interface
   open tools/wordlist-builder/web-builder.html
         """
     )

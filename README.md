@@ -89,16 +89,10 @@ make build-en
 
 ## Interactive Word List Builder
 
-Create custom filtered word lists using the interactive CLI or web interface:
+Create custom filtered word lists using the web interface:
 
 ```bash
-# Install builder dependencies (optional, for enhanced UI)
-make wordlist-builder-install  # Uses pnpm
-
-# Launch interactive CLI builder
-make wordlist-builder-cli
-
-# Or use web interface
+# Open web-based builder
 make wordlist-builder-web
 ```
 

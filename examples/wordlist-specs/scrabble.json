@@ -2,7 +2,7 @@
   "version": "1.0",
   "name": "Scrabble Words",
   "description": "Single words suitable for Scrabble",
-  "distribution": "core",
+  "distribution": "en",
   "filters": {
     "phrase": {
       "max_words": 1

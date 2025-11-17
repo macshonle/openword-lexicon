@@ -1,27 +1,12 @@
 # OpenWord Lexicon - Interactive Word List Builder
 
-The Interactive Word List Builder provides a user-friendly way to create custom filtered word lists from the OpenWord Lexicon. Instead of manually writing filter criteria, you can use an interactive interface (CLI or web-based) to build a JSON specification that describes exactly what words you want.
+The Interactive Word List Builder provides a user-friendly way to create custom filtered word lists from the OpenWord Lexicon. Instead of manually writing filter criteria, you can use the web interface to build a JSON specification that describes exactly what words you want.
 
 ---
 
 ## Quick Start
 
-### Option 1: Command-Line Interface (CLI)
-
-```bash
-# Launch interactive CLI builder
-make wordlist-builder-cli
-
-# Or directly with Node.js
-node tools/wordlist-builder/cli-builder.js
-
-# With a preset
-node tools/wordlist-builder/cli-builder.js --preset wordle
-```
-
-The CLI will guide you through a series of questions to build your specification.
-
-### Option 2: Web Interface
+### Option 1: Web Interface
 
 ```bash
 # Open web builder in browser
@@ -31,9 +16,9 @@ make wordlist-builder-web
 open tools/wordlist-builder/web-builder.html
 ```
 
-The web interface provides a visual form-based builder with immediate feedback.
+The web interface provides a visual form-based builder with immediate feedback and allows you to see all available options at once.
 
-### Option 3: Manual JSON Specification
+### Option 2: Manual JSON Specification
 
 Create a JSON file directly using the schema:
 
@@ -76,11 +61,11 @@ uv run python -m openword.owlex wordlist-spec.json --verbose --output words.txt
 ## Complete Workflow Example
 
 ```bash
-# 1. Build the core distribution (one-time setup)
-make build-core
+# 1. Build the English lexicon (one-time setup)
+make build-en
 
-# 2. Create a specification interactively
-make wordlist-builder-cli
+# 2. Create a specification with web interface
+make wordlist-builder-web
 
 # 3. Generate the word list
 make owlex-filter SPEC=wordlist-spec.json > my-words.txt
@@ -121,14 +106,11 @@ The builder includes several pre-configured presets for common use cases:
 **Description**: Words for crossword puzzles
 **Filters**: Single words only, minimum 3 characters
 
-To use a preset:
+To use a preset, open the web builder and select from the preset dropdown, or use the example specifications in `examples/wordlist-specs/`:
 
 ```bash
-# CLI
-node tools/wordlist-builder/cli-builder.js --preset wordle
-
-# Then filter with the generated spec
-make owlex-filter SPEC=wordlist-spec.json
+# Use an example preset specification
+make owlex-filter SPEC=examples/wordlist-specs/wordle.json
 ```
 
 ---
@@ -153,17 +135,12 @@ JavaScript library that:
 - Expands policy filters to concrete criteria
 - Estimates result counts
 
-### 3. Interactive Builders
-
-**CLI Builder** (`cli-builder.js`):
-- Terminal-based interactive questionnaire
-- Colored output with progress indicators
-- Validates choices in real-time
-- Saves specification to JSON file
+### 3. Interactive Builder
 
 **Web Builder** (`web-builder.html`):
 - Visual form-based interface
 - Real-time validation and feedback
+- See all available options at once
 - Download or copy specification
 - Works offline (no server required)
 
@@ -474,14 +451,6 @@ filter_engine.run(output_path=Path('output.txt'), verbose=True)
 make build-core  # or make build-plus
 ```
 
-### "Node.js not found"
-
-**Error**: `Node.js is required but not installed`
-
-**Solution**: Install Node.js from https://nodejs.org/
-
-The web builder works without Node.js (open HTML file directly in browser).
-
 ### "Low coverage warning"
 
 **Warning**: `Filter 'concreteness' has low coverage (8.8%)`
@@ -540,19 +509,18 @@ head wordle-words.txt
 ### Example 2: Kids' Vocabulary
 
 ```bash
-# Use interactive builder
-make wordlist-builder-cli
+# Use example preset
+make owlex-filter SPEC=examples/wordlist-specs/kids-nouns.json > kids-words.txt
 
-# Select:
+# Or use web builder to create custom specification:
+# make wordlist-builder-web
+# Then select:
 # - Distribution: core
 # - Character: 3-10 length
 # - Frequency: top1k, top10k
 # - POS: noun
 # - Concreteness: concrete
 # - Policy: family_friendly, modern_only
-
-# Generate
-make owlex-filter SPEC=wordlist-spec.json > kids-words.txt
 ```
 
 ### Example 3: Profanity Filter

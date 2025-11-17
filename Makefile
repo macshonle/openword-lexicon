@@ -25,7 +25,7 @@ WORDLIST_TXT := $(BUILD_DIR)/wordlist.txt
 .PHONY: bootstrap venv deps fmt lint test clean clean-build clean-viewer scrub \
         fetch-en build-en build-wiktionary-json build-trie package check-limits \
         report-en analyze-all-reports analyze-local diagnose-scanner \
-        wordlist-builder wordlist-builder-install wordlist-builder-cli wordlist-builder-web owlex-filter help-builder
+        wordlist-builder wordlist-builder-web owlex-filter help-builder
 
 # ===========================
 # Development Environment
@@ -224,9 +224,6 @@ help-builder:
 	@echo ""
 	@echo "Available Targets:"
 	@echo ""
-	@echo "  make wordlist-builder-cli"
-	@echo "      Launch interactive CLI builder (terminal-based)"
-	@echo ""
 	@echo "  make wordlist-builder-web"
 	@echo "      Open web-based builder interface in browser"
 	@echo ""
@@ -235,10 +232,7 @@ help-builder:
 	@echo ""
 	@echo "Examples:"
 	@echo ""
-	@echo "  # Create specification interactively"
-	@echo "  make wordlist-builder-cli"
-	@echo ""
-	@echo "  # Use web interface"
+	@echo "  # Create specification with web interface"
 	@echo "  make wordlist-builder-web"
 	@echo ""
 	@echo "  # Generate word list from specification"
@@ -262,33 +256,6 @@ help-builder:
 	@echo "  - docs/UNIFIED_BUILD_DESIGN.md - Architecture"
 	@echo ""
 
-# Build CLI tool dependencies with pnpm
-wordlist-builder-install:
-	@echo "Installing wordlist builder dependencies..."
-	@if ! command -v pnpm >/dev/null 2>&1; then \
-		echo "Error: pnpm is required but not installed."; \
-		echo "Install with: npm install -g pnpm"; \
-		echo "Or use: cd tools/wordlist-builder && npm install"; \
-		exit 1; \
-	fi
-	@cd tools/wordlist-builder && pnpm install
-
-# Launch CLI builder (requires Node.js)
-wordlist-builder-cli:
-	@echo "Launching interactive word list builder..."
-	@if ! command -v node >/dev/null 2>&1; then \
-		echo "Error: Node.js is required but not installed."; \
-		echo "Please install Node.js from: https://nodejs.org/"; \
-		exit 1; \
-	fi
-	@if [ -d "tools/wordlist-builder/node_modules/@clack/prompts" ]; then \
-		echo "Using enhanced TUI (Clack)..."; \
-		node tools/wordlist-builder/cli-builder-clack.js; \
-	else \
-		echo "Using basic CLI (run 'make wordlist-builder-install' for enhanced UI)..."; \
-		node tools/wordlist-builder/cli-builder.js; \
-	fi
-
 # Open web builder in default browser
 wordlist-builder-web:
 	@echo "Opening web-based word list builder..."
@@ -310,8 +277,6 @@ owlex-filter: deps
 		echo "Usage: make owlex-filter SPEC=wordlist-spec.json"; \
 		echo ""; \
 		echo "To create a specification, run:"; \
-		echo "  make wordlist-builder-cli"; \
-		echo "or:"; \
 		echo "  make wordlist-builder-web"; \
 		exit 1; \
 	fi

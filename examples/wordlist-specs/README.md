@@ -73,23 +73,15 @@ uv run python -m openword.owlex examples/wordlist-specs/wordle.json > wordle-wor
 
 ## Creating Your Own
 
-### Method 1: Interactive CLI
-
-```bash
-make wordlist-builder-cli
-```
-
-Follow the prompts to build your specification.
-
-### Method 2: Web Interface
+### Method 1: Web Interface
 
 ```bash
 make wordlist-builder-web
 ```
 
-Use the visual form to configure filters.
+Use the visual form to configure filters and download the specification.
 
-### Method 3: Copy and Modify
+### Method 2: Copy and Modify
 
 Copy one of these examples and edit:
 

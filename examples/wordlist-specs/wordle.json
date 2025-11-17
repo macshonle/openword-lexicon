@@ -2,7 +2,7 @@
   "version": "1.0",
   "name": "Wordle Words",
   "description": "5-letter common words for Wordle-style games",
-  "distribution": "core",
+  "distribution": "en",
   "filters": {
     "character": {
       "exact_length": 5,

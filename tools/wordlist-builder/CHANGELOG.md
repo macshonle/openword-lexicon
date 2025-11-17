@@ -1,43 +1,24 @@
 # Changelog - Word List Builder
 
-## [1.1.0] - 2025-11-13
+## [1.2.0] - 2025-11-17
 
-### Added
-- **Enhanced TUI version** using `@clack/prompts` for better UX
-  - Arrow key navigation
-  - Multi-select for filters
-  - Beautiful color-coded interface
-  - Progress indicators and spinners
-  - Automatic fallback to basic CLI if not installed
-- **Package.json** for optional @clack/prompts dependency
-- **Verbose output** in owlex filter engine
-  - Shows sorting method being used
-  - Displays first 5 entries with frequency tiers when sorting by frequency
-  - Warns when description doesn't match actual filters
+### Changed
+- **Web-only interface**: Removed CLI/TUI builder in favor of web-based interface
+  - Deleted `cli-builder.js` and `cli-builder-clack.js`
+  - Deleted `package.json` (no Node.js dependencies needed)
+  - Web interface allows users to see all options at once
+  - Users prefer visual form over navigating CLI menus
+- **Simplified documentation**: Updated all docs to reference web interface only
+- **Streamlined Makefile**: Removed `wordlist-builder-cli` and `wordlist-builder-install` targets
 
-### Fixed
-- **Preset listing**: Now shows available presets BEFORE asking if user wants one
-- **Label configuration**: Now loops through all label categories (register, temporal, domain, region)
-  - Users can configure multiple label types in one session
-  - Better prompts explaining each category
-- **Policy filters**: Enhanced prompts explaining what each policy does
-  - Makes profanity filtering more discoverable
-  - Shows confirmation when filters are applied
-- **Frequency sorting**: Added debugging output to verify correct sorting
-  - Displays frequency tiers and scores in verbose mode
-  - Helps diagnose data issues
-
-### Improved
-- **Better UX**: All filter categories now have clearer descriptions
-- **Error messages**: More helpful warnings when description doesn't match filters
-  - Warns if description mentions "US" but no region filter set
-  - Warns if description mentions "profanity" but no family-friendly filter set
-- **Documentation**: Updated to mention both CLI versions
+### Notes
+- JSON specifications remain fully compatible
+- YAML output support planned for future release
+- Web interface works offline (no server required)
 
 ## [1.0.0] - 2025-11-13
 
 ### Initial Release
-- Basic CLI builder with readline
 - Web-based builder interface
 - JSON specification schema
 - JavaScript decision engine (spec-builder.js)
@@ -50,20 +31,15 @@
 
 ## Upgrade Guide
 
-### To Enhanced TUI Version
+### From v1.1.0 (CLI)
+
+The CLI builder has been removed. Use the web interface instead:
 
 ```bash
-cd tools/wordlist-builder
-npm install
-cd ../..
-make wordlist-builder-cli
+make wordlist-builder-web
 ```
 
-The enhanced version will automatically be used if @clack/prompts is installed.
-
-### Breaking Changes
-
-None. All specifications remain compatible.
+All existing JSON specifications remain compatible - no changes needed.
 
 ---
 

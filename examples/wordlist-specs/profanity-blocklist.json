@@ -2,7 +2,7 @@
   "version": "1.0",
   "name": "Profanity Blocklist",
   "description": "Words flagged as vulgar, offensive, or derogatory",
-  "distribution": "plus",
+  "distribution": "en",
   "filters": {
     "labels": {
       "register": {
