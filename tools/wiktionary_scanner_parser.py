@@ -138,6 +138,7 @@ KNOWN_LANG_CODES = {
 
 # Simple extraction patterns (no full XML parsing)
 TITLE_PATTERN = re.compile(r'<title>([^<]+)</title>')
+NS_PATTERN = re.compile(r'<ns>(\d+)</ns>')
 TEXT_PATTERN = re.compile(r'<text[^>]*>(.+?)</text>', re.DOTALL)
 REDIRECT_PATTERN = re.compile(r'<redirect\s+title="[^"]+"')
 
@@ -494,7 +495,20 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
         return None
     title = title_match.group(1)
 
-    # Check for special pages FIRST (before redirects)
+    # Check namespace FIRST - only process main namespace (ns=0)
+    # This is the authoritative way to filter special pages
+    # ns=0: Main (dictionary entries)
+    # ns=14: Category
+    # ns=100: Appendix
+    # ns=118: Reconstruction
+    # All other namespaces should be filtered out
+    ns_match = NS_PATTERN.search(page_xml)
+    if ns_match:
+        namespace = int(ns_match.group(1))
+        if namespace != 0:
+            return ('SPECIAL_PAGE', title)
+
+    # Check for special pages by title prefix (backup for entries without ns tag)
     # Special page redirects count as special pages, not redirects
     if title.startswith(SPECIAL_PAGE_PREFIXES):
         return ('SPECIAL_PAGE', title)
