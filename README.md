@@ -66,19 +66,19 @@ make build-en
 ```
 
 **Pipeline Steps (automated by `make build-en`):**
-1. **Fetch** English sources (ENABLE, EOWL, Wiktionary, WordNet, frequency data)
+1. **Fetch** English sources (ENABLE, EOWL, Wiktionary, WordNet, Brysbaert, frequency data)
 2. **Ingest** source data to normalized JSONL
 3. **Merge** all entries with license tracking
-4. **Enrich** with WordNet (concreteness, POS tags for ALL entries)
-5. **Tier** by frequency (10 granular tiers)
+4. **Enrich** with WordNet and Brysbaert (concreteness ratings + POS tags for ALL entries)
+5. **Tier** by frequency (A-Z logarithmic scale)
 6. **Build** trie + metadata sidecar
 
 ## High-level pipeline
 1. **Fetch** English sources with checksums & provenance
 2. **Normalize** entries to JSONL (schema, NFKC, controlled labels)
 3. **Merge** all sources with license tracking
-4. **Enrich** with WordNet (concreteness/POS for ALL entries)
-5. **Tier** by frequency (10 granular tiers)
+4. **Enrich** with WordNet and Brysbaert (concreteness ratings + POS for ALL entries)
+5. **Tier** by frequency (A-Z logarithmic scale)
 6. **Build** trie (compressed MARISA) + metadata sidecar
 7. **Filter** at runtime using `filters.py` (child-safe, region, license, etc.)
 
@@ -109,9 +109,13 @@ uv run python -m openword.owlex wordlist-spec.json --verbose --output words.txt
 ### Available Filters
 
 - **Character**: Length, patterns, regex (100% coverage)
-- **Frequency**: 6 tiers from top10 to rare (100% coverage)
+- **Frequency**: A-Z logarithmic tiers (100% coverage, top ~75k words = A-T, rest = Z)
 - **Part-of-speech**: noun, verb, adjective, etc. (~52.5% coverage)
-- **Concreteness**: concrete/abstract/mixed nouns (~34.5% core, ~8.8% plus)
+- **Concreteness**: Filter by how tangible/abstract words are (~39k words with Brysbaert ratings)
+  - Categorical: concrete/abstract/mixed classifications
+  - Numeric: Precise 1-5 ratings for custom filtering and ranking
+  - Confidence: Standard deviation for filtering ambiguous words
+  - Use cases: children's apps, language learning, accessibility
 - **Labels** (Plus only): register, domain, temporal, region (~3-11% coverage)
 - **Policy**: family-friendly, modern-only, no-jargon shortcuts
 
@@ -156,9 +160,10 @@ See [docs/planned/](docs/planned/) for future feature plans.
 | **English** | ~1.3M | ~3 MB | Per-word tracking via `license_sources` |
 
 **Metadata Coverage** (English):
-- WordNet enrichment on ALL entries (not just permissive sources)
-- 4x better concreteness coverage vs separate pipelines
-- Safe defaults for child-appropriate filtering
+- WordNet + Brysbaert enrichment on ALL entries (not just permissive sources)
+- Concreteness ratings: ~39,561 words from Brysbaert (1-5 scale with confidence scores)
+- 4x better concreteness coverage vs separate pipelines (~40k vs ~20-30k from WordNet alone)
+- Safe defaults for child-appropriate filtering (concrete words for kids)
 - Runtime license filtering (filter to CC0+UKACD for permissive-only)
 - Syllable data from Wiktionary hyphenation (~30-50% coverage)
 
@@ -174,6 +179,7 @@ Contributions welcome! Please open an issue or pull request to discuss proposed 
   - EOWL: UKACD (Permissive)
   - Wiktionary: CC BY-SA 4.0
   - WordNet: WordNet License
+  - Brysbaert: Research/Educational Use
   - Frequency data: CC BY 4.0
 
 See [LICENSE](LICENSE) for code terms. Data licensing details in ATTRIBUTION.md (generated during builds).

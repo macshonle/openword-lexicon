@@ -151,6 +151,56 @@ WordNet is a lexical database grouping words into synsets (sets of cognitive syn
 
 ---
 
+### Brysbaert Concreteness Ratings
+
+**Authors**: Marc Brysbaert, Amy Beth Warriner, Victor Kuperman
+
+**License**: Research/Educational Use (shared by authors for research purposes)
+
+**URL**: https://github.com/ArtsEngine/concreteness
+
+**Entry Count**: 39,954
+
+**Description**:
+Concreteness ratings for ~40,000 English word lemmas collected via crowdsourcing. Each word was rated by multiple participants on a 1-5 scale, where 1 represents highly abstract concepts (like "freedom" or "justice") and 5 represents highly concrete, tangible objects (like "castle" or "apple"). The dataset includes both the mean rating and standard deviation for each word, providing confidence measures for the ratings.
+
+**Academic Citation**:
+> Brysbaert, M., Warriner, A.B., & Kuperman, V. (2014). Concreteness ratings for 40 thousand generally known English word lemmas. *Behavior Research Methods*, 46, 904-911. DOI: [10.3758/s13428-013-0403-5](https://doi.org/10.3758/s13428-013-0403-5)
+
+**Characteristics:**
+- Empirically collected via crowdsourcing
+- Mean concreteness ratings (1.0-5.0 scale)
+- Standard deviation for each rating (confidence measure)
+- Lemmas only (base forms, not inflections)
+- Significantly better coverage than WordNet alone (~40k vs ~20-30k)
+
+**Attribution Required**: Yes (for academic/research use)
+
+**Integration**:
+- Enriches existing entries with three fields:
+  - `concreteness`: Categorical classification (concrete/mixed/abstract)
+  - `concreteness_rating`: Raw mean rating (1.0-5.0)
+  - `concreteness_sd`: Standard deviation of ratings
+- Preferred over WordNet concreteness by default
+- Does not add new words to lexicon
+- Source ID: `brysbaert` (in provenance metadata)
+- License ID: `Brysbaert-Research` (in license tracking)
+
+**Coverage Statistics**:
+- Total entries with Brysbaert data: ~39,561
+- Concrete (rating ≥ 3.5): ~37,933 nouns
+- Abstract (rating < 2.5): ~31,188 nouns
+- Mixed (rating 2.5-3.5): ~30,929 nouns
+
+**Use Cases**:
+- Children's educational apps (filter for concrete, tangible words)
+- Language learning tools (start with concrete vocabulary)
+- Accessibility applications (simplify to concrete language)
+- Word games requiring specific vocabulary types
+- NLP applications distinguishing abstract vs concrete concepts
+
+---
+
 ### OpenSubtitles 2018 Frequency Data
 
 **Compiler**: Hermit Dave (from OpenSubtitles.org data)
@@ -162,20 +212,22 @@ WordNet is a lexical database grouping words into synsets (sets of cognitive syn
 **Entry Count**: 50,000
 
 **Description**:
-Word frequency data compiled from movie and TV subtitles corpus. Used to assign frequency tier buckets (top10, top100, top300, top500, top1k, top3k, top10k, top25k, top50k, rare).
+Word frequency data compiled from movie and TV subtitles corpus. Used to assign logarithmic frequency tier codes (A-Z) based on rank.
 
 **Characteristics:**
 - Based on spoken language (subtitles)
 - Modern, conversational vocabulary
-- Rank-based tiers for easy filtering
+- Logarithmic scale (base 10^0.25) for even distribution across frequency spectrum
+- Single-letter codes: A (rank 1) to T (top ~75k), Z (unranked)
 
 **Attribution Required**: Yes
 
 **Integration**:
 - Loaded as frequency list (word + count)
-- Mapped to tier buckets
-- Enriches entries with `frequency_tier` field
+- Mapped to logarithmic tier codes using rank_to_code()
+- Enriches entries with `frequency_tier` field (single letter A-Z)
 - Source ID: `frequency` (in provenance metadata)
+- See [frequency_tiers.py](../src/openword/frequency_tiers.py) for tier algorithm
 
 ---
 
@@ -187,6 +239,7 @@ Word frequency data compiled from movie and TV subtitles corpus. Used to assign 
 | EOWL | UKACD License | Core | 128,983 | Required | No |
 | Wiktionary | CC BY-SA 4.0 | Plus | Sample | Required | Yes |
 | WordNet | WordNet License | Plus | (enrichment) | Required | No |
+| Brysbaert | Research Use | Plus | 39,954 | Required | No |
 | Frequency | CC BY-SA 4.0 | Plus | (tiers) | Required | Yes |
 
 **Core distribution**: CC BY 4.0 (most permissive common license)
@@ -268,6 +321,7 @@ bash scripts/fetch/fetch_eowl.sh
 # Plus sources
 bash scripts/fetch/fetch_wiktionary.sh  # Large download (2-3 GB)
 bash scripts/fetch/fetch_wordnet.sh     # Via NLTK
+bash scripts/fetch/fetch_brysbaert.sh   # Concreteness ratings
 bash scripts/fetch/fetch_frequency.sh
 ```
 

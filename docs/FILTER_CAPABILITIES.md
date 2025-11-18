@@ -25,7 +25,7 @@ This document describes which filtering capabilities are available on each distr
 | **Phrase filters** | ✅ | ✅ | 100% | Word count, multi-word detection |
 | **Frequency tiers** | ✅ | ✅ | 100% | 6 tiers from OpenSubtitles corpus |
 | **POS tags** | ✅ | ✅ | ~52.5% | Via WordNet enrichment |
-| **Concreteness** | ✅ | ✅ | ~34.5% (Core), ~8.8% (Plus) | Concrete/abstract/mixed for nouns |
+| **Concreteness** | ✅ | ✅ | ~39k Brysbaert, ~113k total | Concrete/abstract/mixed + numeric ratings (1-5) with confidence |
 | **Register labels** | ❌ | ✅ | ~3.2% | Vulgar, offensive, slang, formal, etc. |
 | **Temporal labels** | ❌ | ✅ | ~5.0% | Archaic, obsolete, dated, modern |
 | **Domain labels** | ❌ | ✅ | ~3.3% | Medical, legal, technical, etc. |
@@ -104,35 +104,40 @@ This document describes which filtering capabilities are available on each distr
 **Coverage**: 100% (all entries assigned a tier)
 **Requires**: Nothing (always available)
 
-**Tiers**:
-| Tier | Rank | Description | Typical Use |
-|------|------|-------------|-------------|
-| `top10` | 1-10 | Ultra-common function words | Essential particles |
-| `top100` | 11-100 | Core vocabulary for basic communication | Essential words |
-| `top300` | 101-300 | Early reader / sight word level | Children's books (K-1) |
-| `top500` | 301-500 | Simple children's book vocabulary | Elementary (Grade 2-3) |
-| `top1k` | 501-1,000 | High-frequency everyday words | Early elementary complete |
-| `top3k` | 1,001-3,000 | Conversational fluency (~95% coverage) | Everyday conversation |
-| `top10k` | 3,001-10,000 | Standard educated vocabulary | General literacy |
-| `top25k` | 10,001-25,000 | Extended vocabulary with specialized terms | Advanced learners |
-| `top50k` | 25,001-50,000 | Rare words, technical terms, variants | Specialized domains |
-| `rare` | >50,000 or unseen | Very rare/specialized (not in dataset) | Crosswords, technical |
+**Tier System**: Single-letter codes (A-Z) using logarithmic scale with base B = 10^(1/4)
+
+**Key Tiers**:
+| Code | Center Rank | Rank Range | Description | Typical Use |
+|------|------------:|------------|-------------|-------------|
+| A | 1 | 1 | Most frequent word ("the") | - |
+| D | 6 | 5-7 | Ultra-top function words | Essential particles |
+| E | 10 | 8-13 | Core function words | Basic communication |
+| I | 100 | 75-133 | High-frequency core vocabulary | Essential words |
+| L | 562 | 422-749 | Common conversational words | Early reader level |
+| M | 1,000 | 750-1,333 | Simple everyday vocabulary | Frequent in everyday texts |
+| O | 3,162 | 2,372-4,216 | Conversational fluency band | ~95% comprehension |
+| Q | 10,000 | 7,499-13,335 | General educated vocabulary | General literacy |
+| T | 56,234 | 42,170-74,989 | Extended/literary vocabulary | Advanced learners |
+| Z | - | 1,333,522+ | Extremely rare or unranked | Not in frequency data |
 
 **Data source**: OpenSubtitles 2018 corpus (50,000 ranked words)
-**Note**: The 3,000-word breakpoint represents ~95% comprehension threshold in linguistic research
+
+**Distribution**:
+- Tiers A-T: ~3.5% of entries (top ~75,000 words)
+- Tier Z: ~96.5% of entries (no frequency data available)
 
 **Use cases**:
-- Kids' word lists (top1k-top10k)
-- Language learning (progressive difficulty)
-- Exclude rare words players won't know
+- Kids' word lists (tiers A-M for top ~1,300 words)
+- Language learning (progressive difficulty A→M→Q→Z)
+- Exclude rare words (filter tiers A-Q only)
 
 **Example spec**:
 ```json
 {
   "filters": {
     "frequency": {
-      "tiers": ["top1k", "top10k"],
-      "min_score": 70
+      "min_tier": "A",
+      "max_tier": "Q"
     }
   }
 }
@@ -176,25 +181,130 @@ This document describes which filtering capabilities are available on each distr
 
 ### Concreteness Filters
 **Available on**: Core, Plus
-**Coverage**: ~34.5% of Core, ~8.8% of Plus
-**Requires**: WordNet enrichment (automatic), noun POS
+**Coverage**: ~39,561 words with Brysbaert ratings (~112,727 total with concreteness data)
+**Requires**: Brysbaert and/or WordNet enrichment (automatic), noun POS
 
-**Values**:
-- `concrete`: Physical, tangible objects (cat, table, rock)
-- `abstract`: Ideas, qualities, concepts (freedom, love, theory)
-- `mixed`: Both concrete and abstract senses (paper, face, bank)
+#### What is Concreteness?
 
-**Limitations**:
-- Only applies to nouns
-- Core has better coverage than Plus
-- Remaining nouns have no concreteness data
+**Concreteness** measures how tangible or perceptible a concept is. It's a fundamental dimension of word meaning that affects how easily people can understand and remember words.
 
-**Use cases**:
-- Kids' games (concrete nouns only)
-- Abstract concept lists
-- Educational categorization
+**Concrete words** refer to things you can experience directly with your senses:
+- **See**: "castle", "apple", "door"
+- **Touch**: "hammer", "rock", "fabric"
+- **Hear**: "bell", "whistle", "thunder"
+- **Smell**: "flower", "smoke", "perfume"
+- **Taste**: "chocolate", "lemon", "salt"
 
-**Example spec**:
+**Abstract words** refer to ideas, emotions, or qualities that exist only conceptually:
+- **Ideas**: "freedom", "justice", "democracy"
+- **Emotions**: "love", "anger", "happiness"
+- **Qualities**: "wisdom", "beauty", "courage"
+- **Concepts**: "theory", "meaning", "relationship"
+
+**Why it matters:**
+1. **Learning**: People acquire concrete words earlier and remember them better
+2. **Comprehension**: Concrete language is easier to understand across age groups
+3. **Accessibility**: Concrete words help readers with cognitive differences
+4. **Age-appropriateness**: Children understand concrete concepts before abstract ones
+
+#### Data Sources
+
+**Primary: Brysbaert et al. (2014)**
+- ~39,954 words with empirical concreteness ratings
+- Collected via crowdsourcing (multiple raters per word)
+- 1-5 scale: 1 = most abstract, 5 = most concrete
+- Includes standard deviation (confidence measure)
+- Preferred source when available
+
+**Fallback: WordNet**
+- ~20,000-30,000 words with categorical classifications
+- Used when Brysbaert data unavailable
+- Less granular than Brysbaert
+
+**Total Coverage**: ~112,727 nouns (~8.6% of all entries)
+
+#### Categorical Values
+
+- `concrete`: Physical, tangible objects (rating ≥ 3.5)
+  - Examples: "castle" (4.67), "apple" (4.83), "hammer" (4.92)
+  - Clear sensory properties
+  - Easy to visualize or demonstrate
+
+- `abstract`: Ideas, qualities, concepts (rating < 2.5)
+  - Examples: "freedom" (1.46), "justice" (1.93), "theory" (2.07)
+  - No physical form
+  - Understood through explanation, not demonstration
+
+- `mixed`: Both concrete and abstract senses (rating 2.5-3.5)
+  - Examples: "paper" (3.21), "bar" (3.17), "culture" (2.62)
+  - May have both physical and conceptual meanings
+  - Context-dependent interpretation
+
+#### Numeric Fields (Advanced)
+
+For fine-grained control, use the numeric rating fields:
+
+**`concreteness_rating`** (1.0-5.0):
+- Precise Brysbaert score for custom thresholds
+- Filter by exact ranges: `rating >= 4.0` for highly concrete
+- Rank/sort words by concreteness
+- ~39,561 words have this field
+
+**`concreteness_sd`** (0.0-2.0):
+- Standard deviation of ratings (confidence measure)
+- Low SD (< 0.8): High rater agreement, reliable rating
+- High SD (> 1.2): Low agreement, ambiguous or polysemous
+- Filter out ambiguous words for educational content
+
+#### Limitations
+
+- Only applies to nouns (not verbs, adjectives, etc.)
+- ~91.4% of entries lack concreteness data
+- Coverage varies: common words more likely to have data
+- Polysemous words may have mixed ratings
+
+#### Use Cases
+
+**Children's Educational Apps**:
+```json
+{
+  "filters": {
+    "pos": {"include": ["noun"]},
+    "concreteness": {"values": ["concrete"]},
+    "frequency": {"min_tier": "A", "max_tier": "Q"}
+  }
+}
+```
+Use concrete, common nouns that children can easily understand and visualize.
+
+**Language Learning (Progressive Difficulty)**:
+- **Beginner**: Concrete nouns (rating ≥ 4.0) - "dog", "table", "book"
+- **Intermediate**: Mixed concepts (rating 2.5-4.0) - "paper", "culture", "bar"
+- **Advanced**: Abstract concepts (rating < 2.5) - "freedom", "justice", "theory"
+
+**Accessibility Applications**:
+Filter to concrete language for readers with cognitive differences or language processing disorders.
+
+**Visualization Games**:
+Use concrete nouns for Pictionary, drawing games, or visual prompts.
+
+**Abstract Concept Games**:
+Use abstract nouns for philosophy discussions, creative writing, or concept games.
+
+**Quality Control with Confidence**:
+```json
+{
+  "filters": {
+    "concreteness_rating": {"min": 4.0},
+    "concreteness_sd": {"max": 0.8}
+  }
+}
+```
+Get highly concrete words with high rater agreement (reliable ratings).
+
+#### Example Specifications
+
+**Basic: Concrete nouns only**
 ```json
 {
   "filters": {
@@ -204,6 +314,38 @@ This document describes which filtering capabilities are available on each distr
     "concreteness": {
       "values": ["concrete"],
       "require_concreteness": true
+    }
+  }
+}
+```
+
+**Advanced: Highly concrete with confidence**
+```json
+{
+  "filters": {
+    "pos": {"include": ["noun"]},
+    "concreteness_rating": {
+      "min": 4.0,
+      "max": 5.0
+    },
+    "concreteness_sd": {
+      "max": 0.8
+    }
+  }
+}
+```
+
+**Language learning tiers**
+```json
+{
+  "filters": {
+    "pos": {"include": ["noun"]},
+    "concreteness_rating": {
+      "min": 4.0
+    },
+    "frequency": {
+      "min_tier": "A",
+      "max_tier": "Q"
     }
   }
 }

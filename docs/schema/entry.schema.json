@@ -129,8 +129,19 @@
     },
     "concreteness": {
       "type": "string",
-      "description": "Concreteness classification from WordNet (nouns only)",
+      "description": "Concreteness classification (nouns only): concrete (≥3.5), abstract (<2.5), or mixed (2.5-3.5). Source: Brysbaert et al. (2014) preferred, WordNet fallback.",
       "enum": ["concrete", "abstract", "mixed"]
+    },
+    "concreteness_rating": {
+      "type": "number",
+      "description": "Raw Brysbaert concreteness score on 1-5 scale. 1.0=most abstract (e.g., 'freedom'), 5.0=most concrete (e.g., 'castle'). Only present for ~39k words with Brysbaert data.",
+      "minimum": 1.0,
+      "maximum": 5.0
+    },
+    "concreteness_sd": {
+      "type": "number",
+      "description": "Standard deviation of Brysbaert concreteness ratings (0.0-2.0). Lower SD indicates higher rater agreement and more reliable rating. Only present for words with Brysbaert data.",
+      "minimum": 0.0
     },
     "frequency_tier": {
       "type": "string",

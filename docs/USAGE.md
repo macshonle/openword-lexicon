@@ -104,17 +104,17 @@ trie.load('plus.trie')
 with open('plus.meta.json', 'r') as f:
     metadata = json.load(f)
 
-# Find all concrete nouns in top 10k frequency
+# Find all concrete nouns in top 10k frequency (tiers A-Q)
 concrete_nouns = []
 for entry in metadata:
     if (
         'noun' in entry.get('pos', []) and
         entry.get('concreteness') == 'concrete' and
-        entry.get('frequency_tier') in ['top10', 'top100', 'top1k', 'top10k']
+        entry.get('frequency_tier', 'Z') <= 'Q'  # A-Q covers ranks 1-13,335
     ):
         concrete_nouns.append(entry['word'])
 
-print(f"Found {len(concrete_nouns)} concrete nouns in top 10k")
+print(f"Found {len(concrete_nouns)} concrete nouns in top ~13k")
 print("Examples:", concrete_nouns[:10])
 ```
 
@@ -143,6 +143,201 @@ for entry in metadata:
         family_friendly_words.append(entry['word'])
 
 print(f"Family-friendly words: {len(family_friendly_words)}")
+```
+
+### Using Concreteness Scores
+
+The lexicon includes concreteness ratings from Brysbaert et al. (2014), providing both categorical classifications and precise numeric scores for filtering and ranking words by how concrete or abstract they are.
+
+#### Basic Categorical Filtering
+
+```python
+import marisa_trie
+import json
+
+# Load data
+trie = marisa_trie.Trie()
+trie.load('plus.trie')
+
+with open('plus.meta.json', 'r') as f:
+    metadata = json.load(f)
+
+# Get only concrete nouns (tangible objects)
+concrete_nouns = [
+    entry['word'] for entry in metadata
+    if entry.get('concreteness') == 'concrete' and 'noun' in entry.get('pos', [])
+]
+
+print(f"Concrete nouns: {len(concrete_nouns)}")
+print("Examples:", concrete_nouns[:10])
+# Examples: ['castle', 'apple', 'hammer', 'door', 'chair', ...]
+
+# Get abstract nouns (ideas, concepts)
+abstract_nouns = [
+    entry['word'] for entry in metadata
+    if entry.get('concreteness') == 'abstract' and 'noun' in entry.get('pos', [])
+]
+
+print(f"Abstract nouns: {len(abstract_nouns)}")
+print("Examples:", abstract_nouns[:10])
+# Examples: ['freedom', 'justice', 'theory', 'wisdom', 'love', ...]
+```
+
+#### Fine-Grained Filtering with Numeric Ratings
+
+```python
+# Get highly concrete words (rating >= 4.0) for children's apps
+highly_concrete = [
+    entry['word'] for entry in metadata
+    if entry.get('concreteness_rating', 0) >= 4.0
+]
+
+print(f"Highly concrete words: {len(highly_concrete)}")
+# Use custom thresholds beyond the predefined categories
+
+# Get words in the "somewhat concrete" range (3.0-4.0)
+somewhat_concrete = [
+    entry['word'] for entry in metadata
+    if 3.0 <= entry.get('concreteness_rating', 0) < 4.0
+]
+
+# Exclude highly abstract words for language learning
+not_too_abstract = [
+    entry['word'] for entry in metadata
+    if entry.get('concreteness_rating', 0) >= 2.5
+]
+```
+
+#### Ranking and Scoring by Concreteness
+
+```python
+# Sort words by concreteness for progressive difficulty
+words_by_concreteness = sorted(
+    [e for e in metadata if 'concreteness_rating' in e],
+    key=lambda e: e['concreteness_rating'],
+    reverse=True  # Most concrete first
+)
+
+print("Most concrete words:")
+for entry in words_by_concreteness[:5]:
+    print(f"  {entry['word']}: {entry['concreteness_rating']}")
+# Output:
+#   castle: 4.92
+#   apple: 4.83
+#   hammer: 4.79
+#   ...
+
+print("\nMost abstract words:")
+for entry in words_by_concreteness[-5:]:
+    print(f"  {entry['word']}: {entry['concreteness_rating']}")
+# Output:
+#   freedom: 1.46
+#   justice: 1.52
+#   theory: 1.93
+#   ...
+```
+
+#### Confidence-Based Filtering (Using Standard Deviation)
+
+```python
+# Get words with high-confidence ratings (low SD)
+high_confidence_concrete = [
+    entry['word'] for entry in metadata
+    if (
+        entry.get('concreteness_rating', 0) >= 4.0 and
+        entry.get('concreteness_sd', 2.0) < 0.8  # Low variability = high agreement
+    )
+]
+
+print(f"High-confidence concrete words: {len(high_confidence_concrete)}")
+
+# Exclude ambiguous words (high SD) for educational content
+unambiguous_words = [
+    entry for entry in metadata
+    if entry.get('concreteness_sd', 2.0) < 1.0
+]
+
+print(f"Unambiguous words: {len(unambiguous_words)}")
+```
+
+#### Advanced: Confidence-Weighted Scoring
+
+```python
+# Combine rating with confidence for weighted selection
+def concreteness_score(entry):
+    """Calculate confidence-weighted concreteness score."""
+    rating = entry.get('concreteness_rating', 0)
+    sd = entry.get('concreteness_sd', 2.0)
+
+    # Lower SD = higher confidence
+    confidence = 1.0 / (1.0 + sd)
+
+    # Weight rating by confidence
+    return rating * confidence
+
+# Sort words by weighted score
+scored_words = sorted(
+    [e for e in metadata if 'concreteness_rating' in e],
+    key=concreteness_score,
+    reverse=True
+)
+
+print("Top 10 words by confidence-weighted concreteness:")
+for entry in scored_words[:10]:
+    score = concreteness_score(entry)
+    print(f"  {entry['word']}: rating={entry['concreteness_rating']}, "
+          f"sd={entry['concreteness_sd']}, weighted_score={score:.2f}")
+```
+
+#### Children's Educational Content
+
+```python
+# Build vocabulary list for kids: concrete, common, high-confidence
+kids_vocabulary = [
+    entry['word'] for entry in metadata
+    if (
+        entry.get('concreteness_rating', 0) >= 4.0 and  # Very concrete
+        entry.get('concreteness_sd', 2.0) < 0.8 and     # High confidence
+        entry.get('frequency_tier', 'Z') <= 'Q' and     # Common words (ranks 1-13,335)
+        'noun' in entry.get('pos', []) and
+        len(entry['word']) <= 8  # Not too long
+    )
+]
+
+print(f"Kids vocabulary: {len(kids_vocabulary)} words")
+print("Examples:", kids_vocabulary[:20])
+```
+
+#### Language Learning: Progressive Difficulty
+
+```python
+# Create tiered vocabulary lists by concreteness
+def create_learning_tiers(metadata):
+    """Create progressive difficulty tiers starting with concrete words."""
+    tiers = {
+        'beginner': [],      # Highly concrete (4.0+)
+        'intermediate': [],  # Somewhat concrete (3.0-4.0)
+        'advanced': []       # Abstract and mixed (< 3.0)
+    }
+
+    for entry in metadata:
+        rating = entry.get('concreteness_rating')
+        if rating is None:
+            continue
+
+        if rating >= 4.0:
+            tiers['beginner'].append(entry['word'])
+        elif rating >= 3.0:
+            tiers['intermediate'].append(entry['word'])
+        else:
+            tiers['advanced'].append(entry['word'])
+
+    return tiers
+
+learning_tiers = create_learning_tiers(metadata)
+print("Beginner words:", len(learning_tiers['beginner']))
+print("Intermediate words:", len(learning_tiers['intermediate']))
+print("Advanced words:", len(learning_tiers['advanced']))
 ```
 
 ---
@@ -177,7 +372,8 @@ Create a JSON specification file defining your filters:
       "exact_length": 5
     },
     "frequency": {
-      "tiers": ["top1k", "top3k", "top10k"]
+      "min_tier": "A",
+      "max_tier": "Q"
     },
     "policy": {
       "family_friendly": true

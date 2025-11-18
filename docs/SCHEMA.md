@@ -49,6 +49,7 @@ Provenance: which source datasets contributed this entry.
 - `eowl` — English Open Word List (UKACD License)
 - `wikt` — Wiktionary (CC BY-SA 4.0)
 - `wordnet` — Princeton WordNet (WordNet License)
+- `brysbaert` — Brysbaert concreteness ratings (Research Use)
 - `frequency` — OpenSubtitles 2018 frequency data
 
 #### `license_sources` (object)
@@ -65,6 +66,7 @@ Mapping of license identifiers to the sources that require them.
 - `CC-BY-SA-4.0` — Creative Commons Attribution-ShareAlike 4.0 (Wiktionary)
 - `CC-BY-4.0` — Creative Commons Attribution 4.0 (OpenSubtitles frequency data)
 - `WordNet` — Princeton WordNet License (WordNet enrichment)
+- `Brysbaert-Research` — Research/Educational Use (Brysbaert concreteness ratings)
 
 **Notes:**
 - This field enables users to filter words based on license requirements
@@ -141,33 +143,100 @@ Base form if this is an inflection.
 
 #### `concreteness` (string)
 
-Concreteness classification for nouns (from WordNet).
+Concreteness classification for nouns.
 
 - **Values**: `concrete`, `abstract`, `mixed`
+- **Source**: Primarily from Brysbaert et al. (2014), with WordNet as fallback
 - **Example**: `"concrete"` for "castle", `"abstract"` for "freedom", `"mixed"` for "paper"
+
+**What is concreteness?**
+Concreteness measures how tangible or perceptible a concept is. Concrete words refer to things you can experience with your senses (see, touch, hear, smell, taste), while abstract words refer to ideas, emotions, or qualities that exist only conceptually.
+
+**Categories:**
+- `concrete`: Physical, tangible objects (rating ≥ 3.5)
+  - Examples: "castle" (4.67), "apple" (4.83), "hammer" (4.92)
+- `abstract`: Ideas, qualities, concepts (rating < 2.5)
+  - Examples: "freedom" (1.46), "justice" (1.93), "theory" (2.07)
+- `mixed`: Words with both concrete and abstract senses (rating 2.5-3.5)
+  - Examples: "paper" (3.21), "bar" (3.17), "culture" (2.62)
 
 **Notes:**
 - Only present for nouns
-- `concrete`: Physical, tangible objects
-- `abstract`: Ideas, qualities, concepts
-- `mixed`: Both concrete and abstract senses
+- ~112,727 nouns have concreteness data (~8.6% of all entries)
+- Brysbaert provides better coverage (~40k words) than WordNet alone (~20-30k)
+
+#### `concreteness_rating` (number)
+
+Raw concreteness score from Brysbaert et al. (2014) dataset.
+
+- **Range**: 1.0 (most abstract) to 5.0 (most concrete)
+- **Precision**: Rounded to 2 decimal places
+- **Source**: Crowdsourced ratings from multiple participants
+- **Example**: 4.67 for "castle", 1.46 for "freedom", 3.21 for "paper"
+
+**Use cases:**
+- **Fine-grained filtering**: Set custom thresholds beyond the predefined categories
+- **Scoring/ranking**: Sort words by concreteness for progressive difficulty
+- **Weighted selection**: Prefer more concrete/abstract words without hard cutoffs
+
+**Notes:**
+- Only present when word has Brysbaert data (~39,561 entries)
+- More precise than categorical `concreteness` field
+- Use with `concreteness_sd` to assess rating confidence
+
+#### `concreteness_sd` (number)
+
+Standard deviation of Brysbaert concreteness ratings.
+
+- **Range**: 0.0 to ~2.0 (typical range 0.5-1.5)
+- **Precision**: Rounded to 2 decimal places
+- **Source**: Variability in crowdsourced ratings
+- **Example**: 0.62 for "bar", 1.52 for "blip", 0.86 for "freedom"
+
+**Interpretation:**
+- **Low SD (< 0.8)**: High agreement among raters, reliable rating
+  - Example: "castle" (SD=0.62) - clearly concrete
+- **Medium SD (0.8-1.2)**: Moderate agreement, word may have multiple senses
+  - Example: "bar" (SD=0.86) - concrete object vs abstract concept
+- **High SD (> 1.2)**: Low agreement, ambiguous or polysemous word
+  - Example: "blip" (SD=1.52) - meaning varies by context
+
+**Use cases:**
+- **Confidence filtering**: Exclude words with high SD (ambiguous meanings)
+- **Quality control**: Prefer low-SD words for educational content
+- **Weighted scoring**: Combine rating with confidence (e.g., `rating / (1 + sd)`)
+
+**Notes:**
+- Only present when word has Brysbaert data
+- Lower SD indicates more reliable concreteness rating
+- Useful for distinguishing polysemous words from clear-cut cases
 
 #### `frequency_tier` (string)
 
-Coarse frequency ranking bucket.
+Frequency rank code using logarithmic scale (A-Z).
 
-- **Values**: `top10`, `top100`, `top1k`, `top10k`, `top100k`, `rare`
-- **Example**: `"top10k"`
+- **Format**: Single letter A-Z
+- **Scale**: Base B = 10^(1/4) ≈ 1.778 (fourth root of 10)
+- **Range**: A (rank 1, most frequent) to Z (extremely rare/unranked)
+- **Example**: `"M"` for rank ~1000, `"Q"` for rank ~10,000
 
-**Ranking:**
-| Tier | Rank Range | Description |
-|------|------------|-------------|
-| `top10` | 1-10 | Ultra-frequent words (the, and, be) |
-| `top100` | 11-100 | Very frequent |
-| `top1k` | 101-1,000 | Frequent |
-| `top10k` | 1,001-10,000 | Common |
-| `top100k` | 10,001-100,000 | Known |
-| `rare` | >100,000 or unseen | Rare/specialized |
+**Key Tiers:**
+| Code | Center Rank | Rank Range | Description |
+|------|------------:|-----------|-------------|
+| A | 1 | 1 | The single most frequent word ("the") |
+| E | 10 | 8-13 | Core function words |
+| I | 100 | 75-133 | High-frequency core vocabulary |
+| M | 1,000 | 750-1,333 | Simple everyday vocabulary |
+| Q | 10,000 | 7,499-13,335 | General educated vocabulary |
+| T | ~56,000 | 42,170-74,989 | Extended/literary vocabulary |
+| Z | - | 1,333,522+ | Extremely rare or unranked words |
+
+**Notes:**
+- Each letter represents a geometric frequency band
+- Logarithmic spacing ensures even distribution across frequency spectrum
+- ~96.5% of entries are tier Z (not in frequency data)
+- Tiers A-T cover the top ~75,000 most frequent words
+- See [frequency_tiers.py](../src/openword/frequency_tiers.py) for complete tier definitions
 
 ---
 
@@ -383,7 +452,7 @@ word_count > 1 and phrase_type not in ['proverb', 'idiom']
 }
 ```
 
-### Enriched Entry (After WordNet + Frequency)
+### Enriched Entry (After WordNet + Brysbaert + Frequency)
 
 ```json
 {
@@ -392,9 +461,11 @@ word_count > 1 and phrase_type not in ['proverb', 'idiom']
   "labels": {},
   "is_phrase": false,
   "lemma": null,
-  "concreteness": "mixed",
-  "frequency_tier": "top10k",
-  "sources": ["enable", "eowl"]
+  "concreteness": "concrete",
+  "concreteness_rating": 4.67,
+  "concreteness_sd": 0.62,
+  "frequency_tier": "P",
+  "sources": ["enable", "eowl", "brysbaert"]
 }
 ```
 
@@ -410,7 +481,7 @@ word_count > 1 and phrase_type not in ['proverb', 'idiom']
   "is_phrase": false,
   "lemma": null,
   "concreteness": "mixed",
-  "frequency_tier": "top10k",
+  "frequency_tier": "P",
   "sources": ["enable", "eowl", "wikt"]
 }
 ```
@@ -427,7 +498,7 @@ word_count > 1 and phrase_type not in ['proverb', 'idiom']
   "is_phrase": false,
   "lemma": null,
   "concreteness": "concrete",
-  "frequency_tier": "top100k",
+  "frequency_tier": "U",
   "sources": ["wikt"]
 }
 ```
@@ -443,7 +514,7 @@ word_count > 1 and phrase_type not in ['proverb', 'idiom']
   },
   "is_phrase": false,
   "lemma": null,
-  "frequency_tier": "top100k",
+  "frequency_tier": "U",
   "sources": ["wikt"]
 }
 ```
@@ -457,7 +528,7 @@ word_count > 1 and phrase_type not in ['proverb', 'idiom']
   "labels": {},
   "is_phrase": true,
   "lemma": null,
-  "frequency_tier": "top1k",
+  "frequency_tier": "M",
   "sources": ["wikt"]
 }
 ```
@@ -471,7 +542,7 @@ word_count > 1 and phrase_type not in ['proverb', 'idiom']
   "labels": {},
   "is_phrase": false,
   "lemma": "run",
-  "frequency_tier": "top1k",
+  "frequency_tier": "I",
   "sources": ["wikt"]
 }
 ```
