@@ -446,6 +446,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": false,
+  "has_proper_usage": true,
+  "is_proper_noun": true,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -468,6 +471,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -490,6 +496,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -515,6 +524,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {
     "register": [
       "derogatory",
@@ -552,6 +564,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -579,6 +594,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -609,6 +627,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -640,6 +661,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -671,6 +695,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {
     "register": [
       "slang"
@@ -711,6 +738,9 @@ Representative samples from different source combinations:
 {
   "concreteness": "concrete",
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -747,6 +777,9 @@ Representative samples from different source combinations:
 {
   "concreteness": "mixed",
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": true,
+  "is_proper_noun": true,
   "labels": {
     "temporal": [
       "dated"
@@ -787,6 +820,9 @@ Representative samples from different source combinations:
 {
   "concreteness": "concrete",
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -825,6 +861,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {
     "temporal": [
       "obsolete"
@@ -856,6 +895,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {
     "temporal": [
       "obsolete",
@@ -888,6 +930,9 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {
     "region": [
       "en-GB"
@@ -928,6 +973,9 @@ Representative samples from different source combinations:
 {
   "concreteness": "abstract",
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -955,6 +1003,9 @@ Representative samples from different source combinations:
 {
   "concreteness": "abstract",
   "frequency_tier": "S",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -982,6 +1033,9 @@ Representative samples from different source combinations:
 {
   "concreteness": "concrete",
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -1012,6 +1066,9 @@ Representative samples from different source combinations:
 {
   "concreteness": "abstract",
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -1044,6 +1101,9 @@ Representative samples from different source combinations:
 {
   "concreteness": "mixed",
   "frequency_tier": "T",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -1076,6 +1136,9 @@ Representative samples from different source combinations:
 {
   "concreteness": "mixed",
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {},
   "lemma": null,
   "license_sources": {
@@ -1113,6 +1176,9 @@ Representative samples from different source combinations:
   "concreteness_rating": 3.19,
   "concreteness_sd": 1.52,
   "frequency_tier": "R",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {
     "register": [
       "informal"
@@ -1163,6 +1229,9 @@ Representative samples from different source combinations:
   "concreteness_rating": 4.67,
   "concreteness_sd": 0.84,
   "frequency_tier": "Z",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {
     "domain": [
       "medicine"
@@ -1212,6 +1281,9 @@ Representative samples from different source combinations:
   "concreteness_rating": 3.04,
   "concreteness_sd": 1.66,
   "frequency_tier": "T",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {
     "domain": [
       "nautical"
@@ -1267,6 +1339,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 4.67,
   "concreteness_sd": 0.62,
   "frequency_tier": "M",
+  "has_common_usage": true,
+  "has_proper_usage": true,
+  "is_proper_noun": true,
   "labels": {
     "domain": [
       "law",
@@ -1332,6 +1407,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 3.21,
   "concreteness_sd": 1.69,
   "frequency_tier": "P",
+  "has_common_usage": true,
+  "has_proper_usage": true,
+  "is_proper_noun": true,
   "labels": {
     "domain": [
       "chemistry",
@@ -1391,6 +1469,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 4.79,
   "concreteness_sd": 0.62,
   "frequency_tier": "O",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {
     "domain": [
       "aviation",
@@ -1454,6 +1535,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 3.39,
   "concreteness_sd": 1.13,
   "frequency_tier": "K",
+  "has_common_usage": true,
+  "has_proper_usage": true,
+  "is_proper_noun": true,
   "labels": {
     "domain": [
       "computing",
@@ -1521,6 +1605,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 4.41,
   "concreteness_sd": 1.18,
   "frequency_tier": "O",
+  "has_common_usage": true,
+  "has_proper_usage": true,
+  "is_proper_noun": true,
   "labels": {
     "domain": [
       "aviation",
@@ -1583,6 +1670,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 {
   "concreteness": "mixed",
   "frequency_tier": "Q",
+  "has_common_usage": true,
+  "has_proper_usage": true,
+  "is_proper_noun": true,
   "labels": {
     "domain": [
       "aviation",
@@ -1642,6 +1732,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 3.92,
   "concreteness_sd": 1.47,
   "frequency_tier": "P",
+  "has_common_usage": true,
+  "has_proper_usage": true,
+  "is_proper_noun": true,
   "labels": {
     "domain": [
       "computing",
@@ -1707,6 +1800,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 2.97,
   "concreteness_sd": 1.35,
   "frequency_tier": "P",
+  "has_common_usage": true,
+  "has_proper_usage": false,
+  "is_proper_noun": false,
   "labels": {
     "domain": [
       "biology",
@@ -1755,6 +1851,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 3.86,
   "concreteness_sd": 1.48,
   "frequency_tier": "N",
+  "has_common_usage": true,
+  "has_proper_usage": true,
+  "is_proper_noun": true,
   "labels": {
     "domain": [
       "aviation",
@@ -1820,6 +1919,9 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 3.96,
   "concreteness_sd": 1.28,
   "frequency_tier": "O",
+  "has_common_usage": true,
+  "has_proper_usage": true,
+  "is_proper_noun": true,
   "labels": {
     "domain": [
       "aviation",
