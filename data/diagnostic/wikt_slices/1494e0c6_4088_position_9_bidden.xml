@@ -1,0 +1,139 @@
+  <page>
+    <title>bidden</title>
+    <ns>0</ns>
+    <id>99869</id>
+    <revision>
+      <id>86842220</id>
+      <parentid>85062866</parentid>
+      <timestamp>2025-09-20T11:07:25Z</timestamp>
+      <contributor>
+        <username>Mnemosientje</username>
+        <id>1793585</id>
+      </contributor>
+      <comment>/* Dutch */</comment>
+      <origin>86842220</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5097" sha1="5dqp84p5hb9w2xfohq1c5x9o8u3wwz0" xml:space="preserve">{{also|Bidden}}
+==English==
+
+===Pronunciation===
+* {{IPA|en|/ˈbɪdn̩/}}
+* {{audio|en|LL-Q1860 (eng)-Vealhurl-bidden.wav|a=Southern England}}
+
+===Verb===
+{{head|en|verb form}}
+
+# {{past participle of|en|bid|nocat=1}}
+# {{past participle of|en|bide|nocat=1}}
+
+====Derived terms====
+{{col|en|unbidden}}
+
+===Anagrams===
+* {{anagrams|en|a=bddein|debind|binded|Dibden}}
+
+{{cln|en|irregular past participles}}
+
+==Danish==
+
+===Noun===
+{{head|da|noun form|g=c}}
+
+# {{infl of|da|bid||def|s}}
+
+==Dutch==
+[[File:Studies of a Woman Praying MET DP819927.jpg|thumb|{{uxi|nl|Een '''biddende''' vrouw.|A '''praying''' woman.}}]]
+[[File:Common kestrel hovering.jpg|thumb|{{uxi|nl|Een torenvalk '''bidt''' vaak tijdens de jacht.|A kestrel often '''hovers''' while hunting.}}]]
+
+===Etymology===
+{{root|nl|ine-pro|*gʷʰedʰ-}}
+From {{inh|nl|dum|bidden}}, from {{inh|nl|odt|bidden}}, from {{inh|nl|gmw-pro|*biddjan}}, from {{inh|nl|gem-pro|*bidjaną||to ask}}, from {{inh|nl|ine-pro|*gʷʰédʰyeti}}.
+
+===Pronunciation===
+* {{IPA|nl|/ˈbɪdə(n)/}}
+* {{audio|nl|Nl-bidden.ogg}}
+* {{hyphenation|nl|bid|den}}
+* {{rhyme|nl|ɪdən|s=2}}
+
+===Verb===
+{{nl-verb}}
+
+# {{lb|nl|intransitive}} to [[pray]]
+#: {{uxi|nl|'''Bidden''' tot God.|To '''pray''' to God.}}
+#: {{uxi|nl|Zij hebben de gewoonte om vijf maal per dag te '''bidden'''.|They have the custom of '''praying''' five times a day.}}
+# {{lb|nl|transitive}} to [[pray]] to {{q|often with a preposition phrase}}
+#: {{uxi|nl|Ze '''bad''' God om vergiffenis.|She '''prayed to''' God for forgiveness.}}
+# {{lb|nl|transitive|formal}} to [[bid]]
+#: {{uxi|nl|Ik '''bid''' u vaarwel.|I '''bid''' you farewell.}}
+# {{lb|nl|intransitive|ornithology|birdwatching}} to [[hover]] (of birds), to use [[wing]]s to [[remain]] in the same place in [[mid-air]]
+#: {{uxi|nl|De torenvalk speurde '''biddend''' naar zijn prooi.|The kestrel sought his prey while '''hovering'''.}}
+
+====Conjugation====
+{{nl-conj-st|class=5|bid|bad|beden|bidde|bade|baadt}}
+
+====Derived terms====
+{{col3|nl|title=nouns
+|biddag
+|bidder
+|bidprent
+|bidsnoer
+|bidsprinkhaan
+}}
+
+{{col3|nl|title=verbs
+|aanbidden
+|achteruitbidden
+|afbidden
+|doorbidden
+|heenbidden
+|meebidden
+|nabidden
+|ontbidden
+|opbidden
+|terugbidden
+|toebidden
+|uitbidden
+|verbidden
+|voorbidden
+|voortbidden
+}}
+
+====Related terms====
+* {{l|nl|bede}}
+* {{l|nl|gebed}}
+
+====Descendants====
+* {{desc|af|bid}}
+* {{desc|dcr|bed|bet|bit}}
+
+==Low German==
+
+===Etymology===
+{{root|nds|ine-pro|*gʷʰedʰ-}}
+From {{inh|nds|osx|biddian}}, from {{inh|nds|gem-pro|*bidjaną||to ask}}, from {{der|nds|ine-pro|*gʷʰedʰ-}}. Compare {{cog|nl|bidden}}, {{cog|fy|bidde}}, {{cog|de|bitten}}, {{cog|en|bid}}, {{cog|da|bede}}.
+
+===Verb===
+{{head|nds|verb|third-person singular simple present|biddt|past tense|beed|past participle|beden|auxiliary verb|hebben}}
+
+# to [[ask]]
+#: ''He '''beed''' € 12,50 to kriegen.'' &amp;mdash; He asked to have €12.50.
+# to [[pray]]
+#: ''De Sassen '''beden''' Saxnot mehr as alle annern Gödder.'' &amp;mdash; The Saxons prayed Saxnot more than any other god.
+# to [[request]]
+#: ''Ik '''bidd''' en beten Stillde!'' &amp;mdash; Silence!
+# To [[bid]]
+#: ''Ik '''bidd''' jo Fahrwoll.'' &amp;mdash; I bid you farewell.
+
+====Conjugation====
+{{nds-conj-st|class=5|bidd|bidd|beed|bed|bed}}
+
+==Luxembourgish==
+
+===Etymology===
+{{root|lb|ine-pro|*bʰewdʰ-}} {{dercat|lb|gmw-pro|gem-pro|ine-pro|inh=2}}
+From {{inh|lb|gmh|bieten}}, from {{inh|lb|goh||beodan}}, northern variant of {{m|goh|biotan}}. Cognate with {{cog|de|bieten}}, {{cog|nl|bieden}}, {{cog|en|bid}}.
+
+===Pronunciation===
+* {{IPA|lb|/ˈbiden/|[ˈbi.dən]}}
+... [truncated]

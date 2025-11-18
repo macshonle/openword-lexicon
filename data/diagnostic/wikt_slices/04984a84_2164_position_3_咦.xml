@@ -1,0 +1,105 @@
+  <page>
+    <title>咦</title>
+    <ns>0</ns>
+    <id>12286</id>
+    <revision>
+      <id>84428014</id>
+      <parentid>79243385</parentid>
+      <timestamp>2025-03-31T07:33:18Z</timestamp>
+      <contributor>
+        <username>MSG17</username>
+        <id>3411460</id>
+      </contributor>
+      <comment>/* Vietnamese */  (using [[MediaWiki:Gadget-AjaxEdit.js|AjaxEdit]])</comment>
+      <origin>84428014</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1621" sha1="9i0ekjprqutbzqwml40i5ka0rq5yqnk" xml:space="preserve">{{character info}}
+==Translingual==
+
+===Han character===
+{{Han char|rn=30|rad=口|as=06|sn=9|four=65032|canj=RKN|ids=⿰口夷}}
+
+====References====
+{{Han ref|kx=0186.080|dkj=03535|dj=0405.300|hdz=10614.010|uh=54A6}}
+
+==Chinese==
+{{zh-forms|alt=噫-sense 2}}
+
+===Glyph origin===
+{{Han etym}}
+{{Han compound|口|夷|ls=psc|c1=s|c2=p}}.
+
+===Pronunciation 1===
+{{zh-pron
+|m=yí
+|c=ji2,ji4
+|h=pfs=
+|md=
+|mn=
+|w=
+|cat=
+}}
+
+===Definitions===
+{{head|zh|hanzi}}
+
+# {{n-g|An interjection used to express confusion.}} [[huh]]?
+#: {{zh-x|咦，我 的 鑰匙{shi} 呢？|Huh? Where is my key?}}
+#: {{zh-x|咦，他 怎麼 在 這兒{r}？|Uh, why is he here?}}
+# {{lb|zh|Cantonese}} {{n-g|Expression of disgust.}} [[ew]]
+# {{rfdef|zh}}
+#: 《說文》：南陽謂大呼曰咦。
+
+====Usage notes====
+* The first sense expresses a relatively neutral feeling.
+* For the first sense, the vowel is short; for the second sense, the vowel is longer.
+
+===Pronunciation 2===
+{{zh-pron
+|m=xī
+|h=pfs=
+|md=
+|mn=
+|w=
+|mc=y
+|oc=y
+|cat=
+}}
+
+===Definitions===
+{{head|zh|hanzi}}
+
+# smiling
+
+==Japanese==
+
+===Kanji===
+{{ja-kanji|grade=|rs=口06}}
+
+# {{rfdef|ja|sort=口06}}
+
+====Readings====
+* {{ja-readings|on=い, き, たい, だい|kun=といき}}
+
+==Korean==
+
+===Hanja===
+{{ko-hanja|hangeul=[[이]], [[재]]|rv=i, jae|mr=i, chae}}
+
+# {{rfdef|ko|sort=口06}}
+
+==Vietnamese==
+
+===Han character===
+{{vi-readings|rs=口06
+|nom=gì-tdcndg;tdcntd;gdhn;btcn;taberd, di-tdcndg;tdcntd;gdhn, ri-tdcndg;tdcntd;gdhn, dè-tdcndg;tdcntd, rê-tdcndg;tdcntd, rì-tdcndg;tdcntd, rỉ-tdcndg
+}}
+
+# {{vi-Nom form of|gì|[[what]]}}
+
+===References===
+&lt;references/&gt;</text>
+      <sha1>9i0ekjprqutbzqwml40i5ka0rq5yqnk</sha1>
+    </revision>
+  </page>

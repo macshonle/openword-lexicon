@@ -1,0 +1,22 @@
+  <page>
+    <title>grain of salt</title>
+    <ns>0</ns>
+    <id>121</id>
+    <redirect title="with a grain of salt" />
+    <revision>
+      <id>46068729</id>
+      <parentid>46068724</parentid>
+      <timestamp>2017-06-06T20:21:09Z</timestamp>
+      <contributor>
+        <username>TheDaveRoss</username>
+        <id>4492</id>
+      </contributor>
+      <minor />
+      <comment>Reverted edits by [[Special:Contributions/TheDaveBot|TheDaveBot]]. If you think this rollback is in error, please leave a message on my talk page.</comment>
+      <origin>46068729</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="34" sha1="j6tomygzre70qgfb6aanbumaisxu9iy" xml:space="preserve">#REDIRECT [[with a grain of salt]]</text>
+      <sha1>j6tomygzre70qgfb6aanbumaisxu9iy</sha1>
+    </revision>
+  </page>

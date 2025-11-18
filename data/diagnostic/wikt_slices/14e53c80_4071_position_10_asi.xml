@@ -1,0 +1,175 @@
+  <page>
+    <title>asi</title>
+    <ns>0</ns>
+    <id>102450</id>
+    <revision>
+      <id>87704503</id>
+      <parentid>87221413</parentid>
+      <timestamp>2025-10-31T20:21:01Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wp}} to new syntax</comment>
+      <origin>87704503</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="16005" sha1="jxagtkyn3dy2uhss2dsitu2jn7ln11q" xml:space="preserve">{{also|Appendix:Variations of &quot;asi&quot;}}
+{{minitoc}}
+==Translingual==
+
+===Symbol===
+{{mul-symbol}}
+
+# {{ISO 639|3}}
+
+===See also===
+* {{langcat}}
+
+==Adi==
+
+===Etymology===
+From {{inh|adi|sit-tan-pro|*si||water}}, from {{inh|adi|sit-pro|*si||water}}. Cognate with {{cog|sit-bok|iɕi}}, {{cog|apt|yasi}}.
+
+===Noun===
+{{head|adi|noun}}
+
+# [[water]]
+#: {{ux|adi|ngo '''asi''' tilingdu|I want to drink '''water'''}}
+
+===References===
+* Tamo Mibang and P. T. Abraham, ''An introduction to Adi language'' (2001, {{ISBN|8186393358}}
+* Tianshin Jackson Sun, ''A Historical-Comparative Study of the Tani (Mirish) Branch in Tibeto-Burman'': Padam-Mising L ''a-si'', Padam L ''a-si'', Damu OY ''a-si''
+* J. Herbert Lorrain, ''A Dictionary of the Abor-Miri Language'' (1906): a-shi
+
+==Afar==
+
+===Pronunciation===
+* {{aa-IPA|así}}
+
+===Noun===
+{{aa-noun|así|g=f}}
+
+# {{lb|aa|geography}} [[reg]] {{gloss|hard surface of rock in sand}}
+
+====Declension====
+{{aa-decl|así}}
+
+===References===
+* {{R:aa:Hassan Kamil:2015|page=61}}
+
+==Azerbaijani==
+
+===Etymology===
+From {{der|az|ar|عَاصٍ}}. {{root|az|ar|ع ص ي}}
+
+===Pronunciation===
+* {{audio|az|LL-Q9292 (aze)-Azerbaijani audiorecordings-asi.wav}}
+
+===Adjective===
+{{az-adj}}
+
+# {{lb|az|dated}} [[rebellious]]
+#: {{syn|az|üsyankar}}
+
+====Derived terms====
+* {{l|az|asilik}}
+
+===Noun===
+{{az-noun}}
+
+# {{lb|az|dated}} [[rebel]]
+#: {{syn|az|üsyançı}}
+
+====Declension====
+{{az-decl-noun|i}}
+
+==Bikol Central==
+
+===Etymology===
+{{inh+|bcl|poz-pro|*asi||to show off}}.
+
+===Pronunciation===
+* {{bcl-IPA}}
+* {{hyph|bcl|a|si}}
+
+===Adjective===
+{{head|bcl|adjective|head=ási}}
+
+# [[impressed]]
+#: {{syn|bcl|gulat}}
+
+====Derived terms====
+{{col3|bcl|paasi}}
+
+==Central Nahuatl==
+
+===Alternative forms===
+* {{sense|Amecameca}} {{l|nhn|ahsi}}
+* {{sense|Cholula}} {{l|nhn|ahzi}}
+* {{sense|Jaltocán}} {{l|nhn|azi}}
+* {{sense|Milpa Alta}} {{l|nhn|ahci}}
+
+===Verb===
+{{head|nhn|verb}}
+
+# {{lb|nhn|intransitive}} to [[arrive]]
+
+[[Category:Nanacamilpa Central Nahuatl]]
+
+==Cross River Mbembe==
+
+===Noun===
+{{head|mfn|noun}}
+
+# [[water]]
+
+===References===
+* [http://asjp.clld.org/languages/MBEMBE ASJP]
+* Ebinda Oyama, Katharine Barnwell, ''[//www.rogerblench.info/Language/Niger-Congo/BC/Cross%20River/Upper%20Cross/Mbembe%20Dictionary.pdf Mbembe - English Dictionary]'' (1985/1995)
+
+==Czech==
+
+===Etymology===
+{{inh+|cs|zlw-ocs|[[asi]], [[as]]}}. {{surf|cs|a|si|t2=clitic form of {{m|cs|sobě}}}}.
+
+===Pronunciation===
+* {{cs-IPA}}
+* {{audio|cs|Cs-asi.ogg}}
+
+===Adverb===
+{{cs-adv|-}}
+
+# [[I guess]]/[[I think]]
+# [[approximately]]
+
+===Further reading===
+* {{R:cs:PSJC}}
+* {{R:cs:SSJC}}
+* {{R:cs:IJP}}
+
+==Estonian==
+{{wp|et:}}
+
+===Etymology===
+{{inh+|et|urj-fin-pro|*asja||matter, case}}, which is of disputed origin:
+* Possibly from both {{inh|et|urj-pro|*ate}} and {{m|urj-pro|*-ja}}, from {{inh|et|urj-pro|*-ja}}.
+* Possibly from {{inh|et|urj-fin-pro|*asëdak||to live}}, from {{inh|et|urj-pro|*ëśe-}}.
+* Possibly borrowed from {{der|et|gem-pro|*uzandiją|*(uz)andiją}}.
+{{etystub|et}}
+
+===Pronunciation===
+* {{et-IPA}}
+{{rfap|et}}
+* {{rhymes|et|ɑsi}}
+* {{hyph|et|a|si}}
+* {{homophones|et|asi-}}
+
+===Noun===
+{{et-noun|asja|asja}}
+
+# a [[thing]] {{q|that which is considered to [[exist]] as a separate [[entity]], [[object]], [[quality]] or [[concept]]}}
+#: {{ux|et|terve tuba oli igasuguseid '''asju''' täis|the whole room was full of all kinds of '''things'''|inline=1}}
+#: {{ux|et|naine pakkis oma '''asjad''' kokku ja läks minema|the woman packed her '''things''' and left|inline=1}}
+... [truncated]

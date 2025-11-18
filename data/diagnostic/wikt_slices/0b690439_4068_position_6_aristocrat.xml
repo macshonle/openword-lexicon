@@ -1,0 +1,74 @@
+  <page>
+    <title>aristocrat</title>
+    <ns>0</ns>
+    <id>45128</id>
+    <revision>
+      <id>87843419</id>
+      <parentid>85428423</parentid>
+      <timestamp>2025-11-01T00:00:59Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87843419</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5585" sha1="ld5jtryx3kxil7m2dl23bqu5qcq1svd" xml:space="preserve">==English==
+{{wp|Aristocracy}}
+
+===Etymology===
+{{root|en|ine-pro|*h₂er-}}
+From {{bor|en|fr|aristocrate||aristocrat}}, attested once in the 16th century but recoined in the {{w|French Revolution|Revolutionary}} era, from {{m|fr|aristocratie||aristocracy}}, from {{der|en|la-med|aristocratia}}, from {{der|en|grc|ἀριστοκρατία}}, from {{m|grc|ἄριστος||best}} (compare {{cog|ang|ar}}) + {{m|grc|κράτος||rule}}. {{surf|en|aristo-|-crat}}.
+
+===Pronunciation===
+* {{IPA|en|/ˈæɹɪstəˌkɹæt/|a=UK}}
+* {{audio|en|LL-Q1860 (eng)-Vealhurl-aristocrat.wav|a=Southern England}}
+* {{IPA|en|/əˈɹɪstəˌkɹæt/|a=US}}
+
+===Noun===
+{{en-noun}}
+
+# One of the [[aristocracy]], [[nobility]], or people of rank in a community; one of a ruling class; a [[noble]] (originally in Revolutionary France).
+#* {{quote-journal|en|author=Lianne Kolirin|title=Skeletal remains of Roman aristocrat discovered in hidden lead coffin|magazine=w:CNN|url=https://edition.cnn.com/2023/03/13/uk/roman-burial-garforth-scn-scli-gbr-intl|date=2023-03-13|passage=The remains of a Roman '''aristocrat''' have been unearthed by archaeologists in northern England.}}
+#* {{quote-journal|en-US|author=Michael M. Grynbaum|title=The Concorde-and-Caviar Era of Condé Nast, When Magazines Ruled the Earth|work=w:The New York Times|date=2025-06-27|url=https://www.nytimes.com/2025/06/27/business/media/conde-nast-magazines-vogue-vanity-fair.html|issn=0362-4331|passage=Magazines kept '''aristocrats''' on the payroll to facilitate access to jet-set playgrounds like Corfu and Mustique.|archiveurl=https://archive.ph/Bfhi8|archivedate=2025-06-27}}
+# A [[proponent]] of aristocracy; an [[advocate]] of aristocratic [[government]].
+#* '''1974''': [[w:Plato|Plato]] (author) and Desmond Lee (translator), ''[[w:The Republic (Plato)|The Republic]]'' (2nd edition, revised; Penguin Classics; {{ISBN|0140440488}}, Translator’s Introduction, pages 51 and 53:
+#*: Professor Fite, in ''The Platonic Legend'', deprecates earlier idealization, and finds Plato to be an '''aristocrat''', something of a snob, and the advocate of a restrictively organized society.
+#*: {{...}}
+#*: Plato was, as has so often been observed, temperamentally an '''aristocrat'''. And he believed that the qualities needed in his rulers were, in general, hereditary, and that given knowledge and opportunity you could deliberately breed for them.
+# {{lb|en|cryptography}} A [[cipher]] in which the original [[punctuation]] and [[spacing]] are retained.
+#: {{cot|en|patristocrat}}
+
+====Antonyms====
+* {{l|en|commoner}}
+* {{l|en|plebeian}}
+
+====Hyponyms====
+* See also [[Thesaurus:nobleman]]
+
+====Derived terms====
+{{col|en|antiaristocrat|aristocratess|aristocratical|aristocratisation|aristocratism|nonaristocrat}}
+
+====Related terms====
+* {{l|en|aristocracy}}
+* {{l|en|aristocratic}}
+
+====Translations====
+{{trans-top|one of the aristocracy}}
+* Albanian: {{t+|sq|fisnik}}, {{t+|sq|aristokrat}}
+* Arabic: {{t|ar|أَرِسْتُقْرَاطِيّ|m}}, {{t|ar|أَرِسْتُقْرَاطِيَّة|f}}
+* Belarusian: {{t|be|арыстакра́т|m}}, {{t|be|арыстакра́тка|f}}
+* Bulgarian: {{t+|bg|аристокра́т|m}}, {{t|bg|аристокра́тка|f}}
+* Catalan: {{t+|ca|aristòcrata|m|f}}
+* Chinese:
+*: Mandarin: {{t+|cmn|貴族|tr=guìzú}}
+* Czech: {{t+|cs|šlechtic|m}}, {{t+|cs|šlechtična|f}}
+* Danish: {{t|da|aristokrat|c}}
+* Dutch: {{t+|nl|aristocraat|m}}
+* Esperanto: {{t|eo|aristokrato}}
+* Finnish: {{t+|fi|aristokraatti}}, {{t+|fi|ylimys}}
+* French: {{t+|fr|aristocrate|m|f}}
+* Galician: {{t|gl|aristócrata|m|f}}
+... [truncated]

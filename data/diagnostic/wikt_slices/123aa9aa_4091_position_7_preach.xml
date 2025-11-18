@@ -1,0 +1,69 @@
+  <page>
+    <title>preach</title>
+    <ns>0</ns>
+    <id>81193</id>
+    <revision>
+      <id>87418318</id>
+      <parentid>87406473</parentid>
+      <timestamp>2025-10-13T05:02:07Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert English verb headwords using {{en-verb/old}} to new {{en-verb}} syntax; some cleanups of nouns and other terms, using abbr= and removing sporadic uses of Unicode apostrophes since there is no consistency in their use and general practice is not to use them; misc cleanups (manually assisted)</comment>
+      <origin>87418318</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6777" sha1="6tlow7vqswyccutnb69jcvso0wgbs6p" xml:space="preserve">{{also|preaçh|préach}}
+==English==
+
+===Etymology===
+{{root|en|ine-pro|*deyḱ-}}
+From {{inh|en|enm|prechen}}, from {{der|en|fro|prëechier}}, {{m|fro|precchier}} (Modern {{cog|fr|prêcher}}), from {{der|en|la|praedicō|t=to proclaim, announce|lit=to fore-assign, pre-dedicate}}. {{doublet|en|predicate}}.
+
+The Latin word is also the source of {{cog|ang|predician|t=to preach}}, {{cog|stq|preetje||to preach}}, {{cog|fy|preekje||to preach}}, {{cog|nl|preken||to preach}}, {{cog|nds-de|preken||to preach}}, {{cog|de|predigen|t=to preach}}, {{cog|da|prædike|t=to preach}}, {{cog|sv|predika|t=to preach}}, {{cog|is|prédika|t=to preach}}, {{cog|nn|preika|t=to preach}}.
+
+===Pronunciation===
+* {{IPA|en|/pɹiːt͡ʃ/}}
+* {{audio|en|LL-Q1860 (eng)-Vealhurl-preach.wav|a=Southern England}}
+* {{rhymes|en|iːtʃ|s=1}}
+
+===Verb===
+{{en-verb|+|+|+,praught&lt;l:nonstandard&gt;}}
+
+# {{lb|en|intransitive}} To give a [[sermon]].
+#: {{ux|en|The minister has just '''preached''' from the Book of Psalms.}}
+#* {{RQ:Maxwell Mirror and the Lamp|chapter=V|page=26|passage=One saint’s day in mid-term a certain newly-appointed suffragan-bishop came to the school chapel, and there '''preached''' on “The Inner Life.”&amp;nbsp; He at once secured attention by his informal method, and when presently the coughing of Jarvis {{...}} interrupted the sermon, he altogether captivated his audience with a remark about cough lozenges being cheap and easily procurable.}}
+# {{lb|en|transitive}} To [[proclaim]] by public discourse; to utter in a sermon or a formal religious harangue.
+#* {{RQ:Geneva Bible|Isaiah|LXI|1|304|column=1|The Spirit of the Lord God ''is'' vpon me, therefore hathe the Lord anointed me: he hathe ſent me to '''preache''' good tidings vnto the poore,{{...}}}}
+# {{lb|en|transitive}} To [[advise]] or [[recommend]] [[earnest]]ly.
+#* {{RQ:Shakespeare Comedy of Errors|V|i|98|1|passage=My M{{sup|r}} '''preaches''' patience to him,{{...}}}}
+# {{lb|en|transitive}} To teach or instruct by preaching; to inform by preaching.
+#* {{RQ:Southey Thalaba|II|149|The Spirits of the Dead, / Quitting their mortal mansion, enter not, / As falsely ye are '''preached''', their final seat / Of bliss, or bale;{{...}}}}
+# {{lb|en|intransitive}} To give [[advice]] in an [[offensive]] or [[obtrusive]] manner.
+
+====Derived terms====
+{{col3|en|preach water and drink wine|preacher|preach down|preach in the desert|preach to deaf ears|preach to the congregation|preach up|preachy|practice what one preaches,practise what one preaches|preaching band|preaching cross|preaching friar|preach to the choir|preach to the converted}}
+
+====Descendants====
+* {{desc|csb|préczowac|bor=1|qq=United States}}
+* {{desc|gv|preaçh|bor=1}}
+
+====Translations====
+{{trans-top|give a sermon}}
+* Arabic: {{t|ar|خَطَبَ}}, {{t|ar|وَعَظَ}}
+*: Moroccan Arabic: {{t|ary|خطب|tr=ḵṭab}}
+* Armenian: {{t+|hy|քարոզել}}
+* Bulgarian: {{t+|bg|проповя́двам|impf}}
+* Chinese:
+*: Mandarin: {{t+|cmn|講道|tr=jiǎngdào}}
+* Czech: {{t+|cs|kázat|impf}}
+* Dutch: {{t+|nl|verkondigen}}, {{t+|nl|preken}}, {{t+|nl|prediken}}
+* Esperanto: {{t+|eo|prediki}}
+* Finnish: {{t+|fi|saarnata}}
+* French: {{t+|fr|prêcher}}
+* Georgian: {{t|ka|ქადაგება|sc=Geor}}, {{t|ka|ქადაგებს|sc=Geor}}
+* German: {{t+|de|predigen}}
+* Gothic: {{t|got|𐌼𐌴𐍂𐌾𐌰𐌽}}
+... [truncated]

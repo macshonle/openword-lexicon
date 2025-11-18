@@ -1,0 +1,42 @@
+  <page>
+    <title>ubicación</title>
+    <ns>0</ns>
+    <id>92595</id>
+    <revision>
+      <id>84011610</id>
+      <parentid>83894130</parentid>
+      <timestamp>2025-02-23T01:39:33Z</timestamp>
+      <contributor>
+        <username>AutoDooz</username>
+        <id>3732454</id>
+      </contributor>
+      <minor />
+      <comment>/*Spanish:Noun:Related terms*/ converted to {{col}}</comment>
+      <origin>84011610</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="362" sha1="s15t80fu9ujbit8lc43clnawlkh96cn" xml:space="preserve">==Spanish==
+
+===Etymology===
+{{bor+|es|ML.|ubicatio|ubicātiōnem}}. {{etydate|1630}}.&lt;ref&gt;{{R:es:CP|donde|517|vol=Ce-F}}&lt;/ref&gt;
+
+===Pronunciation===
+{{es-pr}}
+
+===Noun===
+{{es-noun|f}}
+
+# [[position]], [[location]]
+#: {{syn|es|posición|localización}}
+
+====Related terms====
+{{col|es|ubicar}}
+
+===References===
+{{reflist}}
+
+===Further reading===
+* {{R:es:DRAE}}</text>
+      <sha1>s15t80fu9ujbit8lc43clnawlkh96cn</sha1>
+    </revision>
+  </page>

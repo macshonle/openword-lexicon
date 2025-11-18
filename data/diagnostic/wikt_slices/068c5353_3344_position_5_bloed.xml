@@ -1,0 +1,165 @@
+  <page>
+    <title>bloed</title>
+    <ns>0</ns>
+    <id>24966</id>
+    <revision>
+      <id>87247255</id>
+      <parentid>87204246</parentid>
+      <timestamp>2025-09-30T14:37:53Z</timestamp>
+      <contributor>
+        <username>Mnemosientje</username>
+        <id>1793585</id>
+      </contributor>
+      <comment>/* Derived terms */</comment>
+      <origin>87247255</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2732" sha1="h1uwtr431aq7xv1d1axjrjxetk7jo0a" xml:space="preserve">{{also|blöd|bloed-}}
+==Afrikaans==
+
+===Etymology===
+{{etymon|af|id=blood|:inh|nl:bloed&lt;id:blood&gt;|tree=1}}
+From {{inh|af|nl|bloed}}, from {{inh|af|dum|bloet}}, from {{inh|af|odt|bluot}}, from {{inh|af|gem-pro|*blōþą}}.
+
+===Pronunciation===
+* {{IPA|af|/blut/|[bluːt]|[blɯt]}}
+* {{audio|af|LL-Q14196 (afr)-Oesjaar-bloed.wav}}
+
+===Noun===
+{{af-noun|-}}
+
+# [[blood]]
+
+====Derived terms====
+* {{l|af|bloedgroep}}
+* {{l|af|bloedskande}}
+* {{l|af|bloedskenker}}
+* {{l|af|bloedsuier}}
+
+{{C|af|Anatomy|Bodily fluids}}
+
+==Dutch==
+
+===Pronunciation===
+* {{IPA|nl|/blut/}}
+* {{audio|nl|Nl-bloed.ogg}}
+* {{hyphenation|nl|bloed}}
+* {{rhymes|nl|ut|s=1}}
+
+===Etymology 1===
+{{etymon|nl|id=blood|:inh|dum:bloet&lt;id:blood&gt;|tree=1}}
+From {{inh|nl|dum|bloet}}, from {{inh|nl|odt|bluot}}, from {{inh|nl|gmw-pro|*blōd}}, from {{inh|nl|gem-pro|*blōþą}}. Cognate with {{cog|fy|bloed}}, {{cog|en|blood}}, {{cog|de|Blut}}, {{cog|da|blod}}.
+
+====Noun====
+{{nl-noun|n|-|-}}
+
+# [[blood]]
+#: {{uxi|nl|'''Bloed''' is rood.|'''Blood''' is red.}}
+# {{lb|nl|figuratively}} a grave consequence, a high price
+# {{lb|nl|metonymy}} a whole body; especially ''(plural also (archaic) '''[[bloeien]]''' in this sense)'' a (poor) person
+
+=====Derived terms=====
+{{col|nl
+|blauw bloed
+|bloed-
+|bloedarmoede
+|bloedbaan
+|bloedbad
+|bloedbank
+|bloedblaar
+|bloedcel
+|bloeddonatie
+|bloeddonor
+|bloeddoorlopen
+|bloeddorst
+|bloeddruk
+|bloedeloos
+|bloedeigen
+|bloeden
+|bloederig
+|bloedgang
+|bloedgeld
+|bloedgever
+|bloedgift
+|bloedgroep
+|bloedig
+|bloedje
+|bloedkanker
+|bloedkaros
+|bloedkoraal
+|bloedlaten
+|bloedloop
+|bloedlust
+|bloedplaatje
+|bloedplasma
+|bloedproduct
+|bloedrood
+|bloedsneeuw
+|bloedsomloop
+|bloedsprookje
+|bloedstollend
+|bloedstolling
+|bloedstroom
+|bloedtransfusie
+|bloedvat
+|bloedvergieten
+|bloedvergieting
+|bloedverlies
+|bloedverwant
+|bloedvlag
+|bloedworst
+|bloedwraak
+|bloedzuiger
+|bloedzuster
+|bloedzweer
+|drakenbloed
+|het bloed kruipt waar het niet gaan kan
+|het naaste bloed erft het goed
+|in koelen bloede
+|jong bloed
+|koelbloedig
+|kwaad bloed
+|nieuw bloed
+|warmbloedig
+}}
+
+=====Descendants=====
+* {{desc|af|bloed}}
+* {{desc|brc|blutu}}
+* {{desc|jvd|bloet}}
+* {{desc|skw|blut}}
+* {{desc|srn|brudu|bor=1|unc=1}}
+** {{desc|djk|buulu|bor=1}}
+** {{desc|srm|buúu|bor=1}}
+
+===Etymology 2===
+{{nonlemma}}
+
+====Verb====
+{{head|nl|verb form}}
+
+# {{infl of|nl|bloeden||bare-verb}}
+
+==West Frisian==
+
+===Etymology===
+{{etymon|fy|id=blood|:inh|ofs:blōd&lt;id:blood&gt;|tree=1}}
+From {{inh|fy|ofs|blōd}}, from {{inh|fy|gmw-pro|*blōd}}, from {{inh|fy|gem-pro|*blōþą}}.
+
+===Pronunciation===
+* {{IPA|fy|/bluə̯t/}}
+
+===Noun===
+{{fy-noun|n|-}}
+
+# [[blood]]
+
+====Derived terms====
+* {{l|fy|bloedearmoed}}
+* {{l|fy|bloedgroep}}
+
+====Further reading====
+* {{R:WFT|9722|I}}</text>
+      <sha1>h1uwtr431aq7xv1d1axjrjxetk7jo0a</sha1>
+    </revision>
+  </page>
