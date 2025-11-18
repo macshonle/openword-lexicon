@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "name": "Scrabble Words",
-  "description": "Single words suitable for Scrabble",
+  "description": "Single words suitable for Scrabble (no proper nouns)",
   "distribution": "en",
   "filters": {
     "phrase": {
@@ -9,6 +9,9 @@
     },
     "frequency": {
       "min_tier": "S"
+    },
+    "proper_noun": {
+      "require_common_usage": true
     }
   },
   "output": {

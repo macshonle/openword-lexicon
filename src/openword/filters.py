@@ -281,6 +281,67 @@ def matches_length(entry: dict, min_length: Optional[int] = None,
     return True
 
 
+def has_common_usage(entry: dict) -> bool:
+    """
+    Filter for words with common (non-proper-noun) usage.
+
+    SAFE DEFAULT: Missing metadata = assume pure proper noun (exclude).
+
+    This filter is ideal for:
+      - Scrabble and word games (allow words like "bill", "candy", but exclude "Aaron")
+      - Spelling practice games
+      - General vocabulary lists
+
+    Three word categories:
+      1. Pure common words: "candy", "chase" (only lowercase Wiktionary page)
+      2. Mixed usage: "bill" (money AND name), "sun" (celestial body AND deity)
+      3. Pure proper nouns: "aaron", "january", "japan" (only capitalized page)
+
+    This filter keeps categories 1 and 2, excludes category 3.
+
+    Args:
+        entry: Entry dict from schema
+
+    Returns:
+        True if word has common usage (categories 1 or 2)
+        False if word is pure proper noun (category 3)
+    """
+    # Check if word has common usage flag
+    # If flag is missing, assume it's a pure proper noun (safe default)
+    return entry.get('has_common_usage', False)
+
+
+def is_pure_common(entry: dict) -> bool:
+    """
+    Strict filter for pure common words only (no proper noun usage at all).
+
+    SAFE DEFAULT: Missing metadata = assume has proper usage (exclude).
+
+    This filter excludes words that have ANY proper noun usage, even if
+    they also have common usage (e.g., "Bill", "Sun").
+
+    Use this when you want:
+      - Only dictionary words (no names, places, organizations)
+      - Strict common word lists
+
+    Args:
+        entry: Entry dict from schema
+
+    Returns:
+        True if word has ONLY common usage (no proper noun usage)
+        False if word has any proper noun usage
+    """
+    # Must have common usage
+    if not entry.get('has_common_usage', False):
+        return False
+
+    # Must NOT have proper usage
+    if entry.get('has_proper_usage', False):
+        return False
+
+    return True
+
+
 def apply_filters(input_path: Path, output_path: Path,
                  filters: List[Callable[[dict], bool]],
                  verbose: bool = False):

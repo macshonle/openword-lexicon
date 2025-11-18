@@ -141,6 +141,21 @@ def merge_entries(entry1: dict, entry2: dict) -> dict:
     # Compute license_sources from merged sources
     merged['license_sources'] = compute_license_sources(merged_sources)
 
+    # Merge proper noun flags (OR logic - if ANY entry has it, keep it)
+    # These fields track whether a word has proper noun usage, common usage, or both
+    merged['is_proper_noun'] = (
+        entry1.get('is_proper_noun', False) or
+        entry2.get('is_proper_noun', False)
+    )
+    merged['has_proper_usage'] = (
+        entry1.get('has_proper_usage', False) or
+        entry2.get('has_proper_usage', False)
+    )
+    merged['has_common_usage'] = (
+        entry1.get('has_common_usage', False) or
+        entry2.get('has_common_usage', False)
+    )
+
     return merged
 
 
@@ -281,6 +296,15 @@ def main():
     # Load core entries (ENABLE + EOWL)
     core_path = intermediate_dir / "core_entries.jsonl"
     core_entries = load_entries(core_path)
+
+    # Initialize proper noun flags for core entries (they're all common words from game word lists)
+    for entry in core_entries.values():
+        if 'is_proper_noun' not in entry:
+            entry['is_proper_noun'] = False
+        if 'has_proper_usage' not in entry:
+            entry['has_proper_usage'] = False
+        if 'has_common_usage' not in entry:
+            entry['has_common_usage'] = True
 
     # Load Wiktionary entries
     wikt_path = intermediate_dir / "wikt_entries.jsonl"

@@ -112,6 +112,10 @@ class OwlexFilter:
         if not self._check_source_filters(entry, filters.get('sources', {})):
             return False
 
+        # Proper noun filters
+        if not self._check_proper_noun_filters(entry, filters.get('proper_noun', {})):
+            return False
+
         return True
 
     def _check_character_filters(self, entry: Dict, filters: Dict) -> bool:
@@ -305,6 +309,39 @@ class OwlexFilter:
             # Entry must not have any of the excluded sources
             exclude_set = set(filters['exclude'])
             if sources & exclude_set:
+                return False
+
+        return True
+
+    def _check_proper_noun_filters(self, entry: Dict, filters: Dict) -> bool:
+        """
+        Apply proper noun filters.
+
+        Filter options:
+          - exclude_pure_proper_nouns: true/false (exclude words with no common usage)
+          - require_common_usage: true/false (same as exclude_pure_proper_nouns)
+          - allow_proper_usage: true/false (if false, exclude ANY proper noun usage)
+
+        Examples:
+          Scrabble (allow "bill", "candy", exclude "Aaron"):
+            {"require_common_usage": true}
+
+          Strict common words only (exclude "Bill", "Sun"):
+            {"allow_proper_usage": false}
+        """
+        if not filters:
+            return True
+
+        # Check for common usage requirement (Scrabble-style filtering)
+        if filters.get('exclude_pure_proper_nouns') or filters.get('require_common_usage'):
+            # Must have common usage to pass
+            if not entry.get('has_common_usage', False):
+                return False
+
+        # Check for strict no-proper-usage filtering
+        if 'allow_proper_usage' in filters and not filters['allow_proper_usage']:
+            # Must NOT have any proper usage
+            if entry.get('has_proper_usage', False):
                 return False
 
         return True

@@ -256,6 +256,9 @@ def process_wikt_entry(wikt_entry: dict) -> Optional[dict]:
         elif isinstance(form_of, str):
             lemma = normalize_word(form_of)
 
+    # Get is_proper_noun flag from scanner parser (if present)
+    is_proper_noun = wikt_entry.get('is_proper_noun', False)
+
     # Create entry
     entry = {
         'word': normalized_word,
@@ -263,7 +266,8 @@ def process_wikt_entry(wikt_entry: dict) -> Optional[dict]:
         'labels': labels,
         'word_count': word_count,
         'lemma': lemma,
-        'sources': ['wikt']
+        'sources': ['wikt'],
+        'is_proper_noun': is_proper_noun
     }
 
     # Pass through syllables field if present (from scanner parser)
@@ -319,7 +323,24 @@ def read_wiktextract(filepath: Path) -> Dict[str, dict]:
                             # Keep syllables if present
                             if entry.get('syllables') and not entries[word].get('syllables'):
                                 entries[word]['syllables'] = entry['syllables']
+
+                            # Track proper noun usage
+                            # If any entry is proper noun, mark has_proper_usage
+                            if entry.get('is_proper_noun'):
+                                entries[word]['has_proper_usage'] = True
+                            # If any entry is NOT proper noun, mark has_common_usage
+                            if not entry.get('is_proper_noun'):
+                                entries[word]['has_common_usage'] = True
+
+                            # Keep is_proper_noun as True if any entry is proper
+                            entries[word]['is_proper_noun'] = (
+                                entries[word].get('is_proper_noun', False) or
+                                entry.get('is_proper_noun', False)
+                            )
                         else:
+                            # New entry - set usage flags based on is_proper_noun
+                            entry['has_proper_usage'] = entry.get('is_proper_noun', False)
+                            entry['has_common_usage'] = not entry.get('is_proper_noun', False)
                             entries[word] = entry
 
                     progress.update(Lines=line_num, Words=len(entries))
