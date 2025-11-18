@@ -1,0 +1,87 @@
+  <page>
+    <title>嫦</title>
+    <ns>0</ns>
+    <id>13955</id>
+    <revision>
+      <id>84547953</id>
+      <parentid>83537105</parentid>
+      <timestamp>2025-04-14T00:23:38Z</timestamp>
+      <contributor>
+        <username>350bot</username>
+        <id>3359239</id>
+      </contributor>
+      <minor />
+      <comment>Update Puxian Min pronunciation notation: yeng → yoeng, yong → yorng</comment>
+      <origin>84547953</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1043" sha1="gr03lcjns1eogb42s35w0guv69kmnna" xml:space="preserve">{{character info}}
+==Translingual==
+
+===Han character===
+{{Han char|rn=38|rad=女|as=11|sn=14|four=49427|canj=VFBB|ids=⿰女常}}
+
+====References====
+{{Han ref|kx=0270.080|dkj=06663|dj=0538.040|hdz=21077.020|uh=5AE6}}
+
+==Chinese==
+{{zh-forms}}
+
+===Glyph origin===
+{{Han etym}}
+{{Han compound|女|常|ls=psc|c1=s|c2=p|t1=woman}}
+
+===Pronunciation===
+{{zh-pron
+|m=cháng
+|c=soeng4
+|h=pfs=sòng;hrs=h:shong
+|md=siòng
+|mn=siông
+|mn-t=siang5
+|px=pt:syorng2/xy:syoeng2
+|w=
+|oc=y
+|cat=
+}}
+
+===Definitions===
+{{head|zh|hanzi}}
+
+# {{zh-only used in|嫦娥}}
+
+===References===
+* {{R:yue:Hanzi}}
+* {{R:cpx:PHMZ|27}}
+* {{R:nan:Campbell|pp=631}}
+
+==Japanese==
+
+===Kanji===
+{{ja-kanji|grade=|rs=女11}}
+
+# ''Used as a proper name''
+
+====Readings====
+{{ja-readings
+|goon=ごう, じょう&lt;じやう
+|kanon=こう, しょう&lt;しやう
+|nanori=つき
+}}
+
+==Korean==
+
+===Hanja===
+{{ko-hanja|hangeul=[[항]]|rv=hang|mr=hang}}
+
+# {{rfdef|ko|sort=女11}}
+
+==Vietnamese==
+
+===Han character===
+{{vi-readings|rs=女11|reading=thường}}
+
+# {{rfdef|vi|sort=女11}}</text>
+      <sha1>gr03lcjns1eogb42s35w0guv69kmnna</sha1>
+    </revision>
+  </page>

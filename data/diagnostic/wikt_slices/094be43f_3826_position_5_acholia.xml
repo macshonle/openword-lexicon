@@ -1,0 +1,85 @@
+  <page>
+    <title>acholia</title>
+    <ns>0</ns>
+    <id>37663</id>
+    <revision>
+      <id>87802966</id>
+      <parentid>82138003</parentid>
+      <timestamp>2025-10-31T22:57:28Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}; convert {{wp}} to new syntax</comment>
+      <origin>87802966</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3059" sha1="21of9m2qkzof023qtbr5s7eqxznj0mo" xml:space="preserve">{{also|acholią}}
+==English==
+{{wp}}
+
+===Etymology===
+From {{bor|en|NL.|acholia}}, from {{der|en|grc|ἀ-||not}} + {{m|grc|χολή||bile}}.
+
+===Noun===
+{{en-noun|-}}
+
+# {{senseid|en|Q8187550}} {{lb|en|medicine|pathology}} Deficiency or absence of [[bile]].
+#* {{quote-book|en|year=1875|author=Felix von Niemeyer|translators=Geoorge H. Humphreys; Charles E. Hackley|title=A Text-book of Practical Medicine, with Particular Reference to Physiology and Pathological Anatomy|pageurl=https://books.google.com.au/books?id=h2cMAwAAQBAJ&amp;pg=PA692&amp;dq=%22acholia%22%7C%22acholias%22&amp;hl=en&amp;sa=X&amp;ved=0ahUKEwi3s4HMwpXPAhVGkZQKHb04DfsQ6AEIiwEwFg#v=onepage&amp;q=%22acholia%22%7C%22acholias%22&amp;f=false|page=692
+|passage=The intensely bilious color of the liver shows that the discoloration of the contents of the intestines is not due to arrested production of bile, that is to '''acholia'''.}}
+#* {{quote-book|en|year=1884|title=The Journal of the American Medical Association|volume=2|pageurl=https://books.google.com.au/books?id=B_ZGAQAAMAAJ&amp;q=%22acholia%22%7C%22acholias%22&amp;dq=%22acholia%22%7C%22acholias%22&amp;hl=en&amp;sa=X&amp;ved=0ahUKEwi3s4HMwpXPAhVGkZQKHb04DfsQ6AEIWTAM|page=320
+|passage=This then illustrates '''acholia''' in the literal sense of the word, and explains the absence of icterus in spite of the complete obliteration of the ductus communis choledochus.}}
+#* {{quote-book|en|year=2012|author=Carmen Gallego Herrera; Enrique Medina Benítez|chapter=Case 1: Percutaneous Ultrasound-guided Liver Biopsy|editors=María I. Martínez-León; Antonio Martínez-Valverde; Luisa Ceres-Ruiz|title=Imaging for Pediatricians: 100 Key Cases|pageurl=https://books.google.com.au/books?id=1JjprTfHstAC&amp;pg=PA163&amp;dq=%22acholia%22%7C%22acholias%22&amp;hl=en&amp;sa=X&amp;ved=0ahUKEwi3s4HMwpXPAhVGkZQKHb04DfsQ6AEIbzAR#v=onepage&amp;q=%22acholia%22%7C%22acholias%22&amp;f=false|page=163
+|passage=A 1-month 3-week-old infant with a history of neonatal jaundice, cholestasis, and '''acholia''' is admitted to our hospital to rule out biliary atresia and further treatment.}}
+
+====Synonyms====
+* {{sense|deficiency of bile}} {{l|en|hypocholia}}
+
+====Antonyms====
+* {{antsense|deficiency of bile}} {{l|en|cholaemia}}, {{l|en|cholemia}}, {{l|en|hypercholia}}, {{l|en|icterus}}, {{l|en|jaundice}}
+
+====Related terms====
+* {{l|en|acholic}}
+
+====Translations====
+{{trans-top|deficiency of bile}}
+* Polish: {{t|pl|acholia|f}}
+* Portuguese: {{t|pt|acolia|f}}
+{{trans-bottom}}
+
+===See also===
+* {{l|en|cholestasis}}
+* {{l|en|choluria}}
+
+==Polish==
+{{wp|pl:}}
+
+===Etymology===
+From {{af|pl|a-|grc:χολή|-ia}}. {{etydate|1860}}.{{ref|{{cite-journal
+|journal=Tygodnik Lekarski
+|issue=R. 4, nr 46
+|url=https://polona.pl/item/tygodnik-lekarski-r-4-nr-46-15-listopada-1860-r-14,NjY2MzI1MjA/4/#info:search:acholia
+|year=1860
+|page=405}}}}
+
+===Pronunciation===
+{{pl-pr|a=LL-Q809 (pol)-ThineCupOverfloweth-acholia.wav}}
+
+===Noun===
+{{pl-noun|f}}
+
+# {{transclude sense|pl|acholia|id=Q8187550}}
+
+====Declension====
+{{pl-decl-noun-f|tantum=s}}
+
+===References===
+{{reflist}}
+
+===Further reading===
+* {{R:pl:PWN}}
+* {{R:pl:NFJP}}</text>
+      <sha1>21of9m2qkzof023qtbr5s7eqxznj0mo</sha1>
+    </revision>
+  </page>

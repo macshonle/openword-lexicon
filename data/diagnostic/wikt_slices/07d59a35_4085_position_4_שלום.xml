@@ -1,0 +1,72 @@
+  <page>
+    <title>שלום</title>
+    <ns>0</ns>
+    <id>33278</id>
+    <revision>
+      <id>83841819</id>
+      <parentid>83478297</parentid>
+      <timestamp>2025-02-04T01:04:47Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>{{given name}}: templatize some following names using xlit= or eq=; templatize some descriptions using addl=; remove extraneous brackets; etc. (manually assisted)</comment>
+      <origin>83841819</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6136" sha1="s25j8rrjxkw77ugakkcr40l7jqt3jw2" xml:space="preserve">==Hebrew==
+{{he-rootbox|שׁ־ל־ם}}
+
+===Etymology===
+Etymologically related to {{m|hbo|שָׁלָה
+|tr=šālâ|t=to be quiet, tranquil}}. Compare also {{m|hbo|שָׁלַו|tr=šālaw|t=to be quiet, at ease}}. Common {{cog|sem-nwe}}, {{cog|phn|𐤔𐤋𐤌|ts=šalōm}}, {{cog|arc|שְׁלָמָא|tr=šlāmā}} / {{m|syc|ܫܠܡܐ|tr=šlāmā}}, {{cog|uga|𐎌𐎍𐎎|ts=šalāmu}}. Cognate with {{cog|ar|سلام|tr=salām}}. 
+
+===Pronunciation===
+* {{IPA|he|/ʃaːˈloːm/|[ʃaːˈloːm]|a=hbo}}
+* {{IPA|he|/ʃɔˈlom/|[ʃɔːˈloːm]|a=Tiberian}}
+* {{IPA|he|/ʃɔˈloɪm/|/ˈʃɔ.loɪm/|a=Ashkenazi Hebrew}}
+* {{IPA|he|/ʃaˈlom/|a=IL}}
+* {{audio|he|He-Shalom.ogg}}
+* {{audio|he|LL-Q9288 (heb)-YaronSh-שלום.wav}}
+
+===Noun===
+{{he-noun|g=m|wv=שָׁלוֹם|tr=shalóm|pl=-|cons=שְׁלוֹם|pat=קָטוֹל}}
+
+# {{lb|he|uncountable}} {{tcl|he|peace|id=Q454|nogloss=1}}
+#* {{RQ:Tanach|3|26|6|tsrc=JPS
+|passage=[[נתן|וְנָתַתִּי]] '''שָׁלוֹם''' [[ב־|בָּ]][[אָרֶץ]] [[שכב|וּשְׁכַבְתֶּם]] [[ו־|וְ]][[אֵין]] [[החריד|מַחֲרִיד]] [[השבית|וְהִשְׁבַּתִּי]] [[חַיָּה]] [[רע|רָעָה]] [[מִן]]־[[ה־|הָ]][[אָרֶץ]] [[ו־|וְ]][[חֶרֶב]] [[לֹא]]־[[עבר|תַעֲבֹר]] [[ב־|בְּ]][[ארץ|אַרְצְכֶם]]׃
+|translation=And I will give '''peace''' in the land, and ye shall lie down, and none shall make you afraid; and I will cause evil beasts to cease out of the land, neither shall the sword go through your land.
+|transliteration=v'natatí '''shalóm''' ba'árets ush'khavtém v'én makharíd v'hisbatí khayá ra'á min-ha'árets v'khérev lo-ta'avór b'arts'khém.&lt;br/&gt;wənāṯattī '''šālōm''' bāʾā́reṣ ūšəḵaḇtem wəʾēn maḥărīḏ wəhišbattī ḥayyā rāʿā min-hāʾā́reṣ wəḥéreḇ lō-ṯaʿăḇōr bəʾarṣəḵem.}}
+#* {{quote-song|he|composer=w:Uzi Hitman|title={{l|he||נוֹלַדְתִּי לַשָּׁלוֹם|I Was Born for Peace}}|year=1977
+|passage=[[אני]] [[נולד|נולדתי]] '''לשלום''' [[ש־|ש]][[רק]] [[הגיע|יגיע]] / [[אני]] [[נולד|נולדתי]] '''לשלום''' [[ש־|ש]][[רק]] [[בא|יבוא]]
+|translation=I was born '''for peace''', that it may finally arrive / I was born '''for peace''', that it may finally come
+|tr=aní noládti '''lashalóm''' sherák yagía / aní noládti '''lashalóm''' sherák yavó}}
+# {{lb|he|uncountable}} [[rest]], [[quietude]]
+#: {{ux|he|שַׁבָּת שָׁלוֹם!|tr=shabát shalóm!|Peaceful Sabbath!|inline=1}}
+# {{lb|he|uncountable}} [[well-being]], [[welfare]]
+#: {{ux|he|מַה שְּׁלוֹמְךָ?|tr=má sh'lom'khá?|How are you?|inline=1}}
+#* {{RQ:Tanach|9b|4|26|tsrc=JPS
+|passage=[[עַתָּה]] [[רץ|רוּץ]]־[[נָא]] [[לקראת|לִקְרָאתָהּ]] [[ו־|וֶ]][[אֱמָר]]־[[ל־|לָהּ]] '''הֲשָׁלוֹם''' [[ל־|לָךְ]] '''הֲשָׁלוֹם''' [[ל־|לְ]][[איש|אִישֵׁךְ]] '''הֲשָׁלוֹם''' [[ל־|לַ]][[יָּלֶד]] [[אמר|וַתֹּאמֶ]] '''שָׁלוֹם'''׃
+|translation=Run, I pray thee, now to meet her, and say unto her: ‘'''Is it well''' with thee? '''is it well''' with thy husband? '''is it well''' with the child?’ And she answered: ‘'''It is well'''.’
+|transliteration=atá ruts-ná lik'ratáh ve'emor-láh '''ha-shalóm''' lákh '''ha-shalóm''' l'ishékh '''ha-shalóm''' layáled vatómer '''shalóm'''.&lt;br/&gt;ʿattā rūṣ-nā liqərāṯāh weʾĕmor-lāh '''hăšālōm''' lāḵ '''hăšālōm''' ləʾīšēḵ '''hăšālōm''' layyā́leḏ wattṓmer '''šālōm'''.}}
+
+====Declension====
+{{he-decl|שָׁלוֹם|שְׁלוֹם־}}
+
+====Derived terms====
+* {{l|he|אֲבִישָׁלוֹם|tr=avishalóm}}
+* {{l|he|חַס וְשָׁלוֹם|tr=khas v'shalóm}}
+
+===Interjection===
+{{he-interj|wv=שָׁלוֹם|tr=shalóm}}
+
+# [[hello]] {{gl|conventional greeting}}
+# [[goodbye]]
+
+====Derived terms====
+* {{l|he|שַׁבָּת שָׁלוֹם|tr=shabát shalóm}}
+* {{l|he|שָׁלוֹם עֲלֵיכֶם|tr=shalóm alekhém}}
+
+===Proper noun===
+... [truncated]
