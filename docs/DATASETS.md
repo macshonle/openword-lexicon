@@ -96,9 +96,10 @@ EOWL is derived from the UK Advanced Cryptics Dictionary, a crossword-puzzle dic
 
 **URL**: https://en.wiktionary.org/
 
-**Extraction Tool**: [wiktextract](https://github.com/tatuylonen/wiktextract)
+**Extraction Tool**: Custom scanner parser ([wiktionary_scanner_parser.py](../tools/wiktionary_scanner_parser.py))
+- Note: [wiktextract](https://github.com/tatuylonen/wiktextract) was initially considered but replaced with a custom solution for 10-100x better performance and greater control
 
-**Word Count**: 31 (sample for testing; full extraction TBD)
+**Word Count**: ~1.3M entries (full Wiktionary English extraction)
 
 **Description**:
 Wiktionary is a collaborative, multilingual dictionary with rich linguistic data including POS tags, definitions, etymology, pronunciation, usage labels, and regional variants.
@@ -108,14 +109,23 @@ Wiktionary is a collaborative, multilingual dictionary with rich linguistic data
 - Rich metadata: POS, labels, inflections
 - Regional variants (en-GB, en-US, etc.)
 - Usage labels (vulgar, archaic, slang, etc.)
+- Etymology data with morphological structure
+- Syllable counts from hyphenation templates
 - Continuously updated
 
 **Attribution Required**: Yes
 
 **Integration**:
-- Extracted via wiktextract to JSONL
+- Extracted via custom scanner parser (wiktionary_scanner_parser.py) to JSONL
+- Lightweight regex-based parser: 10-100x faster than wiktextract
 - Mapped to schema with label taxonomy
 - Provides: POS, register labels, regional labels, temporal labels
+- Provides: Syllable counts (~30-50% coverage)
+- Provides: Morphology data from etymology templates (~500k+ words)
+  - Derivation structure (prefix, suffix, affix templates)
+  - Compound word decomposition
+  - Base word and morpheme tracking
+  - Enables word family queries and morphological analysis
 - Source ID: `wikt`
 
 ---
@@ -258,14 +268,30 @@ Words appearing in multiple sources are merged with union of metadata:
 Example: "castle"
   - ENABLE: ✓ (no metadata)
   - EOWL: ✓ (no metadata)
-  - Wiktionary: ✓ (POS: noun, verb)
+  - Wiktionary: ✓ (POS: noun, verb; syllables: 2)
   - WordNet: ✓ (concreteness: mixed)
 
   Merged entry:
     word: "castle"
     pos: ["noun", "verb"]
     concreteness: "mixed"
+    syllables: 2
     sources: ["enable", "eowl", "wikt"]
+
+Example: "happiness" (with morphology)
+  - ENABLE: ✓ (no metadata)
+  - Wiktionary: ✓ (POS: noun; morphology: suffixed, base="happy", suffixes=["-ness"])
+
+  Merged entry:
+    word: "happiness"
+    pos: ["noun"]
+    morphology: {
+      type: "suffixed",
+      base: "happy",
+      components: ["happy", "-ness"],
+      suffixes: ["-ness"]
+    }
+    sources: ["enable", "wikt"]
 ```
 
 **Unique words:**

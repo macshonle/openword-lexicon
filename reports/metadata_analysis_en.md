@@ -108,8 +108,10 @@ This consolidated report analyzes metadata coverage, quality, and filtering capa
 | Domain labels | 43,209 | 3.3% |
 | Region labels | 25,222 | 1.9% |
 | Temporal labels | 65,867 | 5.1% |
+| Morphology | TBD | TBD% |
 
 *Note: POS tags are stored separately from labels in the metadata.*
+*Note: Morphology coverage statistics will be available after next full build with etymology extraction.*
 
 ### Part of Speech Tags
 
@@ -200,7 +202,10 @@ This section analyzes metadata coverage for word game filtering needs.
 | Frequency tier | 1,303,681 | 100.0% |
 | Labels | 146,589 | 11.2% |
 | Syllables | 53,174 | 4.1% |
+| Morphology | TBD | TBD% |
 | Gloss | 0 | 0.0% |
+
+*Note: Morphology data (derivation, compounds, affixes) extracted from Wiktionary etymology templates. Coverage statistics will be available after next full build.*
 
 ### Noun Analysis
 

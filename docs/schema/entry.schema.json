@@ -127,6 +127,56 @@
       "description": "Base form if this is an inflection (e.g., 'run' for 'running')",
       "default": null
     },
+    "morphology": {
+      "type": "object",
+      "description": "Morphological structure and derivation information extracted from etymology",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of morphological formation",
+          "enum": ["suffixed", "prefixed", "compound", "affixed", "circumfixed", "simple"]
+        },
+        "base": {
+          "type": "string",
+          "description": "Base word or root (e.g., 'happy' for 'happiness', 'break' for 'unbreakable')"
+        },
+        "components": {
+          "type": "array",
+          "description": "All morphological components in order (e.g., ['un-', 'break', '-able'])",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "prefixes": {
+          "type": "array",
+          "description": "Prefix morphemes (e.g., ['un-'] for 'unbreakable')",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "suffixes": {
+          "type": "array",
+          "description": "Suffix morphemes (e.g., ['-ness'] for 'happiness', ['-able'] for 'unbreakable')",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "is_compound": {
+          "type": "boolean",
+          "description": "True if formed by compounding two or more words (e.g., 'bartender' = 'bar' + 'tender')",
+          "default": false
+        },
+        "etymology_template": {
+          "type": "string",
+          "description": "Raw Wiktionary etymology template for reference (e.g., '{{suffix|en|happy|ness}}')"
+        }
+      },
+      "required": ["type", "components"]
+    },
     "concreteness": {
       "type": "string",
       "description": "Concreteness classification (nouns only): concrete (≥3.5), abstract (<2.5), or mixed (2.5-3.5). Source: Brysbaert et al. (2014) preferred, WordNet fallback.",

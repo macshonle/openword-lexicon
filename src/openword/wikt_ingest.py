@@ -3,17 +3,23 @@
 wikt_ingest.py — Parse Wiktionary extractions and normalize to schema.
 
 Reads:
-  - data/intermediate/plus/wikt.jsonl (from wiktextract)
+  - data/intermediate/en/wikt.jsonl (from custom scanner parser)
 
 Outputs:
-  - data/intermediate/plus/wikt_entries.jsonl
+  - data/intermediate/en/wikt_entries.jsonl
 
-Maps wiktextract output to our schema with:
+Maps scanner parser output to our schema with:
   - POS tags
   - Region labels (en-GB, en-US, etc.)
   - Register labels (vulgar, offensive, archaic, etc.)
   - Multi-word phrases (word_count > 1)
   - Lemmatization info
+  - Morphology data (derivation, compounds, affixes)
+  - Syllable counts
+
+Note: wiktextract was initially considered but replaced with a custom
+scanner parser (wiktionary_scanner_parser.py) for better performance
+and control. This module processes output from that custom parser.
 """
 
 import json
@@ -139,7 +145,7 @@ def normalize_word(word: str) -> str:
 
 
 def extract_pos(wikt_entry: dict) -> List[str]:
-    """Extract POS tags from wiktextract entry."""
+    """Extract POS tags from scanner parser entry."""
     pos_list = []
     pos_raw = wikt_entry.get('pos', '')
 
@@ -155,10 +161,13 @@ def extract_pos(wikt_entry: dict) -> List[str]:
 
 
 def extract_labels(wikt_entry: dict) -> dict:
-    """Extract and categorize labels from wiktextract entry or scanner parser format."""
+    """Extract and categorize labels from scanner parser entry.
 
-    # Support scanner parser format (pre-extracted labels)
-    # Scanner parser outputs labels in a 'labels' dict with keys: register, region, temporal, domain
+    Scanner parser outputs labels in a 'labels' dict with keys: register, region, temporal, domain.
+    Falls back to raw tags/topics format for compatibility with legacy data.
+    """
+
+    # Primary: scanner parser format (pre-extracted labels)
     if 'labels' in wikt_entry and isinstance(wikt_entry['labels'], dict):
         extracted_labels = {}
         for key in ['register', 'region', 'temporal', 'domain']:
@@ -169,7 +178,7 @@ def extract_labels(wikt_entry: dict) -> dict:
                     extracted_labels[key] = sorted(set(values))
         return extracted_labels
 
-    # Original code for wiktextract format (tags/topics)
+    # Fallback: raw tags/topics format (legacy compatibility)
     labels = {
         'register': [],
         'region': [],
@@ -226,7 +235,7 @@ def extract_labels(wikt_entry: dict) -> dict:
 
 
 def process_wikt_entry(wikt_entry: dict) -> Optional[dict]:
-    """Process a single wiktextract entry and map to our schema."""
+    """Process a single scanner parser entry and map to our schema."""
     # Get the word
     word = wikt_entry.get('word', '').strip()
     if not word:
@@ -274,18 +283,22 @@ def process_wikt_entry(wikt_entry: dict) -> Optional[dict]:
     if 'syllables' in wikt_entry:
         entry['syllables'] = wikt_entry['syllables']
 
+    # Pass through morphology field if present (from scanner parser)
+    if 'morphology' in wikt_entry:
+        entry['morphology'] = wikt_entry['morphology']
+
     return entry
 
 
-def read_wiktextract(filepath: Path) -> Dict[str, dict]:
-    """Read wiktextract JSONL and merge multiple senses per word."""
+def read_wiktionary_jsonl(filepath: Path) -> Dict[str, dict]:
+    """Read scanner parser JSONL output and merge multiple senses per word."""
     entries = {}
 
     if not filepath.exists():
         logger.warning(f"File not found: {filepath}")
         return entries
 
-    logger.info(f"Reading wiktextract data from {filepath}")
+    logger.info(f"Reading Wiktionary scanner parser data from {filepath}")
 
     with ProgressDisplay(f"Processing {filepath.name}", update_interval=1000) as progress:
         with open(filepath, 'r', encoding='utf-8') as f:
@@ -324,6 +337,10 @@ def read_wiktextract(filepath: Path) -> Dict[str, dict]:
                             if entry.get('syllables') and not entries[word].get('syllables'):
                                 entries[word]['syllables'] = entry['syllables']
 
+                            # Keep morphology if present
+                            if entry.get('morphology') and not entries[word].get('morphology'):
+                                entries[word]['morphology'] = entry['morphology']
+
                             # Track proper noun usage
                             # If any entry is proper noun, mark has_proper_usage
                             if entry.get('is_proper_noun'):
@@ -349,7 +366,7 @@ def read_wiktextract(filepath: Path) -> Dict[str, dict]:
                     logger.warning(f"Line {line_num}: JSON decode error: {e}")
                     continue
 
-    logger.info(f"  -> Loaded {len(entries):,} unique words from wiktextract")
+    logger.info(f"  -> Loaded {len(entries):,} unique words from scanner parser")
     return entries
 
 
@@ -377,11 +394,11 @@ def main():
 
     logger.info("Wiktionary ingestion (English)")
 
-    # Read wiktextract output
-    entries_dict = read_wiktextract(input_path)
+    # Read scanner parser output
+    entries_dict = read_wiktionary_jsonl(input_path)
 
     if not entries_dict:
-        logger.error("No entries found. Run wiktextract on the Wiktionary dump first.")
+        logger.error("No entries found. Run wiktionary_scanner_parser.py on the Wiktionary dump first.")
         sys.exit(1)
 
     # Convert to sorted list

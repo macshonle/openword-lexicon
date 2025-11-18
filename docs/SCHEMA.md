@@ -141,6 +141,166 @@ Base form if this is an inflection.
 - **Default**: `null`
 - **Example**: `"run"` for "running", `"good"` for "better"
 
+#### `morphology` (object)
+
+Morphological structure and derivation information extracted from Wiktionary etymology sections.
+
+- **Default**: Not present (only included when etymology data available)
+- **Source**: Wiktionary etymology templates (`{{suffix}}`, `{{prefix}}`, `{{affix}}`, `{{compound}}`)
+- **Required subfields**: `type`, `components`
+
+**What is morphology?**
+Morphology describes how words are formed from smaller meaningful units (morphemes). This field captures derivational relationships (e.g., "happiness" ← "happy" + "-ness") and compound structures (e.g., "bartender" ← "bar" + "tender").
+
+##### `morphology.type` (string)
+
+Type of morphological formation.
+
+- **Required**: Yes
+- **Values**: `suffixed`, `prefixed`, `compound`, `affixed`, `circumfixed`, `simple`
+
+**Formation Types:**
+- **`suffixed`**: Base word + suffix (e.g., "happiness" = "happy" + "-ness")
+- **`prefixed`**: Prefix + base word (e.g., "unhappy" = "un-" + "happy")
+- **`affixed`**: Prefix(es) + base + suffix(es) (e.g., "unbreakable" = "un-" + "break" + "-able")
+- **`compound`**: Two or more complete words (e.g., "bartender" = "bar" + "tender")
+- **`circumfixed`**: Prefix and suffix added together (e.g., "enlightenment" = "en-" + "light" + "-ment")
+- **`simple`**: Base form with no affixation (rare; usually not present)
+
+##### `morphology.base` (string)
+
+The base word or root.
+
+- **Required**: No (optional for compounds)
+- **Example**: `"happy"` for "happiness", `"break"` for "unbreakable"
+- **Notes**:
+  - For suffixed/prefixed/affixed: the core word
+  - For compounds: may be omitted (components tell the full story)
+
+##### `morphology.components` (array of strings)
+
+All morphological components in order.
+
+- **Required**: Yes (minimum 1 item)
+- **Format**: Prefixes with trailing hyphen (`un-`), suffixes with leading hyphen (`-ness`)
+- **Examples**:
+  - `["happy", "-ness"]` for "happiness"
+  - `["un-", "break", "-able"]` for "unbreakable"
+  - `["bar", "tender"]` for "bartender"
+
+##### `morphology.prefixes` (array of strings)
+
+Prefix morphemes only.
+
+- **Default**: `[]` (empty array)
+- **Format**: With trailing hyphen (`un-`, `re-`, `pre-`)
+- **Example**: `["un-"]` for "unbreakable", `["re-", "un-"]` for complex cases
+
+##### `morphology.suffixes` (array of strings)
+
+Suffix morphemes only.
+
+- **Default**: `[]` (empty array)
+- **Format**: With leading hyphen (`-ness`, `-able`, `-ly`)
+- **Example**: `["-able"]` for "unbreakable", `["-ness"]` for "happiness"
+
+##### `morphology.is_compound` (boolean)
+
+Whether the word is formed by compounding.
+
+- **Default**: `false`
+- **Example**: `true` for "bartender", `false` for "happiness"
+
+##### `morphology.etymology_template` (string)
+
+Raw Wiktionary template for reference.
+
+- **Required**: No
+- **Example**: `"{{suffix|en|happy|ness}}"`, `"{{compound|en|bar|tender}}"`
+- **Purpose**: Debugging, verification, tracing back to source data
+
+### Morphology Examples
+
+**Suffixed word (happiness)**:
+```json
+{
+  "morphology": {
+    "type": "suffixed",
+    "base": "happy",
+    "components": ["happy", "-ness"],
+    "prefixes": [],
+    "suffixes": ["-ness"],
+    "is_compound": false,
+    "etymology_template": "{{suffix|en|happy|ness}}"
+  }
+}
+```
+
+**Prefixed word (unhappy)**:
+```json
+{
+  "morphology": {
+    "type": "prefixed",
+    "base": "happy",
+    "components": ["un-", "happy"],
+    "prefixes": ["un-"],
+    "suffixes": [],
+    "is_compound": false,
+    "etymology_template": "{{prefix|en|un|happy}}"
+  }
+}
+```
+
+**Affixed word with prefix and suffix (unbreakable)**:
+```json
+{
+  "morphology": {
+    "type": "affixed",
+    "base": "break",
+    "components": ["un-", "break", "-able"],
+    "prefixes": ["un-"],
+    "suffixes": ["-able"],
+    "is_compound": false,
+    "etymology_template": "{{affix|en|un-|break|-able}}"
+  }
+}
+```
+
+**Compound word (bartender)**:
+```json
+{
+  "morphology": {
+    "type": "compound",
+    "components": ["bar", "tender"],
+    "prefixes": [],
+    "suffixes": [],
+    "is_compound": true,
+    "etymology_template": "{{compound|en|bar|tender}}"
+  }
+}
+```
+
+**Complex affixed word (ejector)**:
+```json
+{
+  "morphology": {
+    "type": "suffixed",
+    "base": "eject",
+    "components": ["eject", "-or"],
+    "prefixes": [],
+    "suffixes": ["-or"],
+    "is_compound": false,
+    "etymology_template": "{{suffix|en|eject|or}}"
+  }
+}
+```
+
+**Notes on morphology field:**
+- Only present for words with explicit etymology templates in Wiktionary
+- Coverage: Estimated ~500,000+ entries (derived and compound words)
+- Enables powerful queries: "Find all words with suffix -ness", "Show compounds", "Words from base 'happy'"
+- Useful for vocabulary learning, morphological analysis, word family grouping
+
 #### `concreteness` (string)
 
 Concreteness classification for nouns.
@@ -547,6 +707,78 @@ word_count > 1 and phrase_type not in ['proverb', 'idiom']
 }
 ```
 
+### Derived Word (Suffixed)
+
+```json
+{
+  "word": "happiness",
+  "pos": ["noun"],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "morphology": {
+    "type": "suffixed",
+    "base": "happy",
+    "components": ["happy", "-ness"],
+    "prefixes": [],
+    "suffixes": ["-ness"],
+    "is_compound": false,
+    "etymology_template": "{{suffix|en|happy|ness}}"
+  },
+  "concreteness": "abstract",
+  "concreteness_rating": 2.28,
+  "concreteness_sd": 1.12,
+  "frequency_tier": "N",
+  "sources": ["enable", "wikt", "brysbaert"]
+}
+```
+
+### Derived Word (Affixed)
+
+```json
+{
+  "word": "unbreakable",
+  "pos": ["adjective"],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "morphology": {
+    "type": "affixed",
+    "base": "break",
+    "components": ["un-", "break", "-able"],
+    "prefixes": ["un-"],
+    "suffixes": ["-able"],
+    "is_compound": false,
+    "etymology_template": "{{affix|en|un-|break|-able}}"
+  },
+  "frequency_tier": "Q",
+  "sources": ["enable", "wikt"]
+}
+```
+
+### Compound Word
+
+```json
+{
+  "word": "bartender",
+  "pos": ["noun"],
+  "labels": {},
+  "is_phrase": false,
+  "lemma": null,
+  "morphology": {
+    "type": "compound",
+    "components": ["bar", "tender"],
+    "prefixes": [],
+    "suffixes": [],
+    "is_compound": true,
+    "etymology_template": "{{compound|en|bar|tender}}"
+  },
+  "concreteness": "concrete",
+  "frequency_tier": "Q",
+  "sources": ["enable", "wikt"]
+}
+```
+
 ---
 
 ## Validation
@@ -592,13 +824,14 @@ echo '{"word":"test","sources":["enable"]}' | ajv validate -s docs/schema/entry.
 ### Version History
 
 - **v1.0 (2025-11-07)**: Initial schema for Phases 4-9
+- **v1.1 (2025-11-17)**: Added `morphology` field for derivation tracking and morpheme analysis
 
 ### Future Extensions
 
 Potential additions (not yet implemented):
 
 - `pronunciation`: IPA transcription
-- `etymology`: Word origin
+- `etymology_chain`: Full etymology history with language origins
 - `senses`: Multiple definitions per word
 - `relations`: Synonyms, antonyms, etc.
 - `examples`: Usage examples

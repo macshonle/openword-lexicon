@@ -122,6 +122,18 @@ RHYMES_SYLLABLE = re.compile(r'\{\{rhymes\|en\|[^}]*\|s=(\d+)', re.IGNORECASE)
 # Extract syllable count from category labels (e.g., "Category:English 3-syllable words")
 SYLLABLE_CATEGORY = re.compile(r'\[\[Category:English\s+(\d+)-syllable\s+words?\]\]', re.IGNORECASE)
 
+# Etymology section extraction (for morphology analysis)
+ETYMOLOGY_SECTION = re.compile(r'===+\s*Etymology\s*\d*\s*===+\s*\n(.+?)(?=\n===|\Z)', re.DOTALL | re.IGNORECASE)
+# Morphology templates for derivation tracking
+SUFFIX_TEMPLATE = re.compile(r'\{\{suffix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}', re.IGNORECASE)
+PREFIX_TEMPLATE = re.compile(r'\{\{prefix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}', re.IGNORECASE)
+AFFIX_TEMPLATE = re.compile(r'\{\{affix\|en\|([^}]+)\}\}', re.IGNORECASE)
+COMPOUND_TEMPLATE = re.compile(r'\{\{compound\|en\|([^}]+)\}\}', re.IGNORECASE)
+# Surface form template (alternative to affix template)
+SURF_TEMPLATE = re.compile(r'\{\{surf\|en\|([^}]+)\}\}', re.IGNORECASE)
+# Confix template (prefix + base + suffix together)
+CONFIX_TEMPLATE = re.compile(r'\{\{confix\|en\|([^}|]+)\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}', re.IGNORECASE)
+
 # Known language codes for hyphenation templates
 # This whitelist prevents false positives when filtering language codes from syllable segments
 KNOWN_LANG_CODES = {
@@ -477,6 +489,228 @@ def extract_syllable_count_from_categories(text: str) -> Optional[int]:
     match = SYLLABLE_CATEGORY.search(text)
     if match:
         return int(match.group(1))
+    return None
+
+
+def extract_morphology(text: str) -> Optional[Dict]:
+    """
+    Extract morphological structure from Wiktionary etymology sections.
+
+    Parses etymology templates to identify derivation relationships and compound structures.
+    Handles suffix, prefix, affix, compound, surf, and confix templates.
+
+    Templates parsed:
+    - {{suffix|en|happy|ness}} -> happiness = happy + -ness
+    - {{prefix|en|un|happy}} -> unhappy = un- + happy
+    - {{affix|en|un-|break|-able}} -> unbreakable = un- + break + -able
+    - {{compound|en|bar|tender}} -> bartender = bar + tender
+    - {{surf|en|dict|ion|ary}} -> dictionary = dict + ion + ary (surface form)
+    - {{confix|en|en-|light|ment}} -> enlightenment = en- + light + -ment
+
+    Args:
+        text: The English section of Wiktionary page text
+
+    Returns:
+        Dictionary with morphology structure, or None if no etymology data found.
+        Structure:
+        {
+            'type': 'suffixed' | 'prefixed' | 'affixed' | 'compound' | 'circumfixed',
+            'base': str (base word, optional for compounds),
+            'components': [str] (all morphological parts in order),
+            'prefixes': [str] (prefix morphemes with trailing hyphen),
+            'suffixes': [str] (suffix morphemes with leading hyphen),
+            'is_compound': bool,
+            'etymology_template': str (raw template for reference)
+        }
+    """
+    # Try to find etymology section
+    etym_match = ETYMOLOGY_SECTION.search(text)
+    if not etym_match:
+        return None
+
+    etymology_text = etym_match.group(1)
+
+    # Try each template type in priority order
+
+    # 1. Check for suffix template: {{suffix|en|base|suffix}}
+    suffix_match = SUFFIX_TEMPLATE.search(etymology_text)
+    if suffix_match:
+        base = suffix_match.group(1).strip()
+        suffix = suffix_match.group(2).strip()
+
+        # Normalize suffix format (add leading hyphen if missing)
+        if not suffix.startswith('-'):
+            suffix = f'-{suffix}'
+
+        return {
+            'type': 'suffixed',
+            'base': base,
+            'components': [base, suffix],
+            'prefixes': [],
+            'suffixes': [suffix],
+            'is_compound': False,
+            'etymology_template': suffix_match.group(0)
+        }
+
+    # 2. Check for prefix template: {{prefix|en|prefix|base}}
+    prefix_match = PREFIX_TEMPLATE.search(etymology_text)
+    if prefix_match:
+        prefix = prefix_match.group(1).strip()
+        base = prefix_match.group(2).strip()
+
+        # Normalize prefix format (add trailing hyphen if missing)
+        if not prefix.endswith('-'):
+            prefix = f'{prefix}-'
+
+        return {
+            'type': 'prefixed',
+            'base': base,
+            'components': [prefix, base],
+            'prefixes': [prefix],
+            'suffixes': [],
+            'is_compound': False,
+            'etymology_template': prefix_match.group(0)
+        }
+
+    # 3. Check for confix template: {{confix|en|prefix|base|suffix}}
+    confix_match = CONFIX_TEMPLATE.search(etymology_text)
+    if confix_match:
+        prefix = confix_match.group(1).strip()
+        base = confix_match.group(2).strip()
+        suffix = confix_match.group(3).strip()
+
+        # Normalize affix formats
+        if not prefix.endswith('-'):
+            prefix = f'{prefix}-'
+        if not suffix.startswith('-'):
+            suffix = f'-{suffix}'
+
+        return {
+            'type': 'circumfixed',
+            'base': base,
+            'components': [prefix, base, suffix],
+            'prefixes': [prefix],
+            'suffixes': [suffix],
+            'is_compound': False,
+            'etymology_template': confix_match.group(0)
+        }
+
+    # 4. Check for compound template: {{compound|en|word1|word2|...}}
+    compound_match = COMPOUND_TEMPLATE.search(etymology_text)
+    if compound_match:
+        # Split on | and get all components after 'en'
+        parts = [p.strip() for p in compound_match.group(1).split('|')]
+        # Filter out alt=, t=, gloss= parameters
+        components = [p for p in parts if not ('=' in p)]
+
+        if len(components) >= 2:
+            return {
+                'type': 'compound',
+                'components': components,
+                'prefixes': [],
+                'suffixes': [],
+                'is_compound': True,
+                'etymology_template': compound_match.group(0)
+            }
+
+    # 5. Check for affix template: {{affix|en|part1|part2|...}}
+    affix_match = AFFIX_TEMPLATE.search(etymology_text)
+    if affix_match:
+        # Split on | and parse components
+        parts = [p.strip() for p in affix_match.group(1).split('|')]
+        # Filter out parameters with = (like alt=, t=, etc.)
+        components = [p for p in parts if not ('=' in p)]
+
+        if len(components) >= 2:
+            # Analyze components to determine type
+            prefixes = []
+            suffixes = []
+            base = None
+
+            for comp in components:
+                if comp.endswith('-') and not comp.startswith('-'):
+                    # Prefix (has trailing hyphen, no leading hyphen)
+                    prefixes.append(comp)
+                elif comp.startswith('-') and not comp.endswith('-'):
+                    # Suffix (has leading hyphen, no trailing hyphen)
+                    suffixes.append(comp)
+                elif comp.startswith('-') and comp.endswith('-'):
+                    # Interfix or special case (both hyphens)
+                    # For now, treat as base
+                    if base is None:
+                        base = comp
+                else:
+                    # No hyphens - this is the base
+                    if base is None:
+                        base = comp
+
+            # Determine morphology type
+            if prefixes and suffixes:
+                morph_type = 'affixed'
+            elif prefixes:
+                morph_type = 'prefixed'
+            elif suffixes:
+                morph_type = 'suffixed'
+            else:
+                # All components are bases (compound)
+                morph_type = 'compound'
+
+            result = {
+                'type': morph_type,
+                'components': components,
+                'prefixes': prefixes,
+                'suffixes': suffixes,
+                'is_compound': (morph_type == 'compound'),
+                'etymology_template': affix_match.group(0)
+            }
+
+            # Add base if identified
+            if base:
+                result['base'] = base
+
+            return result
+
+    # 6. Check for surf template: {{surf|en|part1|part2|...}}
+    surf_match = SURF_TEMPLATE.search(etymology_text)
+    if surf_match:
+        # Similar to affix template but more lenient
+        parts = [p.strip() for p in surf_match.group(1).split('|')]
+        components = [p for p in parts if not ('=' in p)]
+
+        if len(components) >= 2:
+            # Analyze components similar to affix
+            prefixes = [c for c in components if c.endswith('-') and not c.startswith('-')]
+            suffixes = [c for c in components if c.startswith('-') and not c.endswith('-')]
+            bases = [c for c in components if not c.startswith('-') and not c.endswith('-')]
+
+            # Determine type
+            if prefixes and suffixes:
+                morph_type = 'affixed'
+                base = bases[0] if bases else None
+            elif prefixes:
+                morph_type = 'prefixed'
+                base = bases[0] if bases else None
+            elif suffixes:
+                morph_type = 'suffixed'
+                base = bases[0] if bases else None
+            else:
+                morph_type = 'compound'
+                base = None
+
+            result = {
+                'type': morph_type,
+                'components': components,
+                'prefixes': prefixes,
+                'suffixes': suffixes,
+                'is_compound': (morph_type == 'compound'),
+                'etymology_template': surf_match.group(0)
+            }
+
+            if base:
+                result['base'] = base
+
+            return result
+
     return None
 
 
@@ -984,6 +1218,9 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
             if cat_count is not None:
                 syllable_count = cat_count
 
+    # Extract morphology from etymology section
+    morphology = extract_morphology(english_text)
+
     # Detect boolean properties for filtering
     is_phrase = word_count > 1
     is_abbreviation = detect_abbreviation(english_text, pos_tags)
@@ -1024,6 +1261,10 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     # Leave unspecified (None) if data is missing or unreliable
     if syllable_count is not None:
         entry['syllables'] = syllable_count
+
+    # Add morphology if etymology data was successfully extracted
+    if morphology is not None:
+        entry['morphology'] = morphology
 
     return entry
 

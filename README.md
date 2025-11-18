@@ -116,6 +116,11 @@ uv run python -m openword.owlex wordlist-spec.json --verbose --output words.txt
   - Numeric: Precise 1-5 ratings for custom filtering and ranking
   - Confidence: Standard deviation for filtering ambiguous words
   - Use cases: children's apps, language learning, accessibility
+- **Morphology**: Derivation and compound word structure (Wiktionary only)
+  - Filter by formation type: suffixed, prefixed, compound, affixed
+  - Search by base word: find all words derived from "happy"
+  - Search by affix: find all words with suffix "-ness" or prefix "un-"
+  - Use cases: vocabulary learning, word families, morphological analysis
 - **Labels** (Plus only): register, domain, temporal, region (~3-11% coverage)
 - **Policy**: family-friendly, modern-only, no-jargon shortcuts
 
@@ -166,6 +171,7 @@ See [docs/planned/](docs/planned/) for future feature plans.
 - Safe defaults for child-appropriate filtering (concrete words for kids)
 - Runtime license filtering (filter to CC0+UKACD for permissive-only)
 - Syllable data from Wiktionary hyphenation (~30-50% coverage)
+- Morphology data from Wiktionary etymology (derivation, compounds, affixes - estimated ~500k+ words)
 
 ## Contributing
 
