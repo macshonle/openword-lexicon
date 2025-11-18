@@ -171,6 +171,203 @@ Coarse frequency ranking bucket.
 
 ---
 
+## Multi-word Entries and Phrase Types
+
+The lexicon includes multi-word expressions with detailed classification beyond the simple `is_phrase` boolean. This section explains how different types of phrases are identified and classified.
+
+### Word Count Classification
+
+#### `word_count` (integer)
+
+Number of words in the entry, determined by splitting on spaces.
+
+- **Calculation**: `len(word.split())`
+- **Example**: `"cat"` → 1, `"give up"` → 2, `"kick the bucket"` → 3
+
+**Single-word entries** (`word_count == 1`):
+- No spaces in the entry
+- May have hyphens (`self-aware`) or apostrophes (`don't`)
+- Examples: `cat`, `dictionary`, `run`, `beautiful`
+
+**Multi-word entries** (`word_count > 1`):
+- Multiple words separated by spaces
+- Further classified by `phrase_type`
+- Examples: `give up`, `Pope Julius`, `kick the bucket`
+
+### Phrase Type Classification
+
+#### `phrase_type` (string or null)
+
+Detailed classification for multi-word expressions.
+
+- **Default**: `null` (no specific type)
+- **Values**: `idiom`, `proverb`, `prepositional phrase`, `adverbial phrase`, `verb phrase`, `noun phrase`
+
+#### Phrase Type Taxonomy
+
+##### 1. **Generic Phrases** (`phrase_type == null`)
+
+Multi-word entries without specific classification.
+
+- **Characteristics**: Multiple words, no special type
+- **Examples**: `Pope Julius`, `red car`, `go to`
+- **Detection**: Has spaces but no idiom/proverb/etc. markers
+
+##### 2. **Idioms** (`phrase_type == 'idiom'`)
+
+Non-literal, figurative expressions.
+
+- **Characteristics**: Meaning not derivable from individual words
+- **Examples**: `kick the bucket`, `let the cat out of the bag`, `break the ice`
+- **Detection**:
+  - Section header: `===Idiom===`
+  - Template: `{{head|en|idiom}}`
+  - Category: `[[Category:English idioms]]`
+
+**Wiktionary markup example**:
+```wikitext
+===Idiom===
+{{head|en|idiom}}
+
+# {{lb|en|idiomatic}} To reveal a secret.
+
+[[Category:English idioms]]
+```
+
+##### 3. **Proverbs** (`phrase_type == 'proverb'`)
+
+Complete sentences expressing wisdom or advice.
+
+- **Characteristics**: Traditional sayings, often metaphorical
+- **Examples**: `a stitch in time saves nine`, `don't count your chickens before they hatch`
+- **Detection**:
+  - Section header: `===Proverb===`, `===Saying===`, `===Adage===`
+  - Template: `{{head|en|proverb}}`
+  - Category: `[[Category:English proverbs]]`, `[[Category:English sayings]]`
+
+##### 4. **Prepositional Phrases** (`phrase_type == 'prepositional phrase'`)
+
+Phrases starting with a preposition.
+
+- **Characteristics**: Functions as a modifier
+- **Examples**: `at least`, `on hold`, `in spite of`, `by right`
+- **Detection**:
+  - Section header: `===Prepositional phrase===`
+  - Template: `{{en-prepphr}}`
+  - Category: `[[Category:English prepositional phrases]]`
+
+##### 5. **Adverbial Phrases** (`phrase_type == 'adverbial phrase'`)
+
+Phrases functioning as adverbs.
+
+- **Characteristics**: Modifies verbs, adjectives, or other adverbs
+- **Examples**: `all of a sudden`, `step by step`, `little by little`
+- **Detection**:
+  - Section header: `===Adverbial phrase===`
+  - Template: `{{head|en|adverbial phrase}}`
+  - Category: `[[Category:English adverbial phrases]]`
+
+##### 6. **Verb Phrases** (`phrase_type == 'verb phrase'`)
+
+Multi-word verb expressions, often phrasal verbs.
+
+- **Characteristics**: Verb with particles or multiple words
+- **Examples**: `give up`, `take over`, `put up with`, `look forward to`
+- **Detection**:
+  - Section header: `===Verb phrase===`
+  - Template: `{{head|en|verb phrase}}`
+  - Category: `[[Category:English verb phrases]]`
+
+##### 7. **Noun Phrases** (`phrase_type == 'noun phrase'`)
+
+Multi-word expressions functioning as nouns.
+
+- **Characteristics**: Named entities, compound nouns
+- **Examples**: `red herring`, `sitting duck`, `white elephant`
+- **Detection**:
+  - Section header: `===Noun phrase===`
+  - Template: `{{head|en|noun phrase}}`
+  - Category: `[[Category:English noun phrases]]`
+
+### Detection Priority
+
+The phrase type extraction checks Wiktionary markup in this order:
+
+1. **Section headers** (`===Idiom===`, `===Proverb===`, etc.)
+   - Most reliable signal
+   - Explicitly defined by Wiktionary editors
+
+2. **Templates** (`{{head|en|idiom}}`, `{{en-prepphr}}`)
+   - Structured metadata
+   - Often present even without section headers
+
+3. **Categories** (`[[Category:English idioms]]`)
+   - Fallback signal
+   - Applied automatically by templates
+
+### Phrase Type Examples
+
+**Entry with phrase type**:
+```json
+{
+  "word": "kick the bucket",
+  "pos": ["phrase"],
+  "word_count": 3,
+  "phrase_type": "idiom",
+  "sources": ["wikt"]
+}
+```
+
+**Multi-word without phrase type**:
+```json
+{
+  "word": "Pope Julius",
+  "pos": ["noun"],
+  "word_count": 2,
+  "phrase_type": null,
+  "sources": ["wikt"]
+}
+```
+
+### Filtering by Phrase Type
+
+Applications can filter using phrase metadata:
+
+**Single words only**:
+```python
+word_count == 1
+```
+
+**Exclude proverbs**:
+```python
+phrase_type != 'proverb'
+```
+
+**Only idioms**:
+```python
+phrase_type == 'idiom'
+```
+
+**Phrases but not proverbs or idioms**:
+```python
+word_count > 1 and phrase_type not in ['proverb', 'idiom']
+```
+
+### Phrase Type Summary
+
+| Type | word_count | phrase_type | Example |
+|------|-----------|-------------|---------|
+| Word | 1 | - | `cat` |
+| Generic Phrase | >1 | `null` | `Pope Julius` |
+| Idiom | >1 | `idiom` | `kick the bucket` |
+| Proverb | >1 | `proverb` | `a stitch in time saves nine` |
+| Prep. Phrase | >1 | `prepositional phrase` | `by right` |
+| Adv. Phrase | >1 | `adverbial phrase` | `all of a sudden` |
+| Verb Phrase | >1 | `verb phrase` | `give up` |
+| Noun Phrase | >1 | `noun phrase` | `red herring` |
+
+---
+
 ## Examples
 
 ### Minimal Entry (Core)
