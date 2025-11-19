@@ -32,7 +32,12 @@ KNOWN_LANG_CODES = {
 
 
 def extract_syllable_count_from_hyphenation(text: str, word: str) -> Optional[int]:
-    """Extract syllable count from hyphenation template."""
+    """
+    Extract syllable count from hyphenation template.
+
+    The regex pattern already requires |en| so the captured content contains
+    only syllable segments (no need to filter language codes).
+    """
     match = HYPHENATION_TEMPLATE.search(text)
     if not match:
         return None
@@ -42,19 +47,21 @@ def extract_syllable_count_from_hyphenation(text: str, word: str) -> Optional[in
     first_alt = alternatives[0] if alternatives else content
     parts = first_alt.split('|')
 
+    # Filter syllables (exclude parameters and empty parts only)
+    # NOTE: No language code filtering needed - the regex already consumed |en|
     syllables = []
-    for i, part in enumerate(parts):
+    for part in parts:
         part = part.strip()
+
+        # Skip empty or parameter assignments
         if not part or '=' in part:
             continue
 
-        if i == 0:
-            if part in KNOWN_LANG_CODES and part.lower() != word.lower():
-                continue
-            if len(parts) == 1 and len(part) > 3:
-                return None
-
         syllables.append(part)
+
+    # Safety check: Single-part templates with long unseparated text are likely incomplete
+    if len(syllables) == 1 and len(syllables[0]) > 3:
+        return None
 
     return len(syllables) if syllables else None
 

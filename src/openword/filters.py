@@ -281,6 +281,78 @@ def matches_length(entry: dict, min_length: Optional[int] = None,
     return True
 
 
+def matches_syllables(entry: dict, min_syllables: Optional[int] = None,
+                      max_syllables: Optional[int] = None,
+                      exact_syllables: Optional[int] = None,
+                      require_syllables: bool = False) -> bool:
+    """
+    Filter by syllable count.
+
+    SAFE DEFAULT: Missing syllable data = exclude if any filter specified.
+
+    Syllable data comes from Wiktionary (hyphenation > rhymes > categories).
+    Coverage is ~2-3% of entries (~30k words), but these are high-quality,
+    human-curated counts.
+
+    Use cases:
+      - Children's word games: Find 2-syllable concrete nouns
+      - Poetry tools: Filter by syllable count for meter
+      - Pronunciation practice: Group words by syllable complexity
+      - Reading level: Shorter syllable counts = easier words
+
+    Args:
+        entry: Entry dict from schema
+        min_syllables: Minimum syllable count (inclusive)
+        max_syllables: Maximum syllable count (inclusive)
+        exact_syllables: Exact syllable count required
+        require_syllables: If True, exclude words without syllable data
+
+    Returns:
+        True if syllable count is within range (or no syllable filter active)
+
+    Examples:
+        # Two-syllable words only (with data)
+        matches_syllables(entry, exact_syllables=2, require_syllables=True)
+
+        # 1-3 syllables for simple words
+        matches_syllables(entry, min_syllables=1, max_syllables=3)
+
+        # At least 4 syllables for complex words
+        matches_syllables(entry, min_syllables=4)
+
+        # Words with syllable data (any count)
+        matches_syllables(entry, require_syllables=True)
+    """
+    syllable_count = entry.get('syllables')
+
+    # If requiring syllable data and it's missing, exclude
+    if require_syllables and syllable_count is None:
+        return False
+
+    # If any filter specified and no data, exclude (safe default)
+    if syllable_count is None and (min_syllables is not None or
+                                   max_syllables is not None or
+                                   exact_syllables is not None):
+        return False
+
+    # If no data and no filters specified, include (neutral)
+    if syllable_count is None:
+        return True
+
+    # Apply exact match filter (takes precedence)
+    if exact_syllables is not None:
+        return syllable_count == exact_syllables
+
+    # Apply range filters
+    if min_syllables is not None and syllable_count < min_syllables:
+        return False
+
+    if max_syllables is not None and syllable_count > max_syllables:
+        return False
+
+    return True
+
+
 def has_common_usage(entry: dict) -> bool:
     """
     Filter for words with common (non-proper-noun) usage.

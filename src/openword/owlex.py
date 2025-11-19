@@ -116,6 +116,10 @@ class OwlexFilter:
         if not self._check_proper_noun_filters(entry, filters.get('proper_noun', {})):
             return False
 
+        # Syllable filters
+        if not self._check_syllable_filters(entry, filters.get('syllables', {})):
+            return False
+
         return True
 
     def _check_character_filters(self, entry: Dict, filters: Dict) -> bool:
@@ -342,6 +346,62 @@ class OwlexFilter:
         if 'allow_proper_usage' in filters and not filters['allow_proper_usage']:
             # Must NOT have any proper usage
             if entry.get('has_proper_usage', False):
+                return False
+
+        return True
+
+    def _check_syllable_filters(self, entry: Dict, filters: Dict) -> bool:
+        """
+        Apply syllable count filters.
+
+        Filter options:
+          - min: Minimum syllable count (inclusive)
+          - max: Maximum syllable count (inclusive)
+          - exact: Exact syllable count required
+          - require_syllables: If true, exclude words without syllable data
+
+        Syllable data comes from Wiktionary (hyphenation > rhymes > categories).
+        Coverage is ~2-3% of entries (~30k words), but these are high-quality.
+
+        Examples:
+          Two-syllable words only:
+            {"exact": 2, "require_syllables": true}
+
+          Simple words (1-3 syllables):
+            {"min": 1, "max": 3}
+
+          Complex words (4+ syllables):
+            {"min": 4}
+        """
+        if not filters:
+            return True
+
+        syllable_count = entry.get('syllables')
+
+        # If requiring syllable data and it's missing, exclude
+        if filters.get('require_syllables', False) and syllable_count is None:
+            return False
+
+        # If any count filter specified and no data, exclude (safe default)
+        if syllable_count is None and ('min' in filters or 'max' in filters or 'exact' in filters):
+            return False
+
+        # If no syllable data and no filters active, include
+        if syllable_count is None:
+            return True
+
+        # Apply exact match filter (takes precedence)
+        if 'exact' in filters:
+            if syllable_count != filters['exact']:
+                return False
+
+        # Apply range filters
+        if 'min' in filters:
+            if syllable_count < filters['min']:
+                return False
+
+        if 'max' in filters:
+            if syllable_count > filters['max']:
                 return False
 
         return True
