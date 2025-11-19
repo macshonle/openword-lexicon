@@ -25,7 +25,7 @@ WORDLIST_TXT := $(BUILD_DIR)/wordlist.txt
 .PHONY: bootstrap venv deps fmt lint test clean scrub \
         fetch-en build-en build-wiktionary-json build-trie package check-limits \
         report-en analyze-all-reports analyze-local diagnose-scanner validate-enable \
-        wordlist-builder wordlist-builder-web owlex-filter help-builder
+        generate-build-stats wordlist-builder wordlist-builder-web owlex-filter help-builder
 
 # ===========================
 # Development Environment
@@ -275,18 +275,30 @@ help-builder:
 	@echo "  - docs/UNIFIED_BUILD_DESIGN.md - Architecture"
 	@echo ""
 
+# Generate build statistics for word list builder
+generate-build-stats: deps
+	@echo "=== Generating build statistics for word list builder ==="
+	@if [ ! -f data/intermediate/en/entries_merged.jsonl ]; then \
+		echo "Error: Merged entries not found. Please run 'make build-en' first."; \
+		exit 1; \
+	fi
+	$(UV) run python tools/generate_build_stats.py
+	@echo ""
+	@echo "=== Build statistics generated ==="
+	@echo "Statistics file: tools/wordlist-builder/build-statistics.json"
+
 # Open web builder in default browser
 wordlist-builder-web:
 	@echo "Opening web-based word list builder..."
 	@if command -v xdg-open >/dev/null 2>&1; then \
-		xdg-open tools/wordlist-builder/web-builder.html; \
+		xdg-open tools/wordlist-builder/index.html; \
 	elif command -v open >/dev/null 2>&1; then \
-		open tools/wordlist-builder/web-builder.html; \
+		open tools/wordlist-builder/index.html; \
 	elif command -v start >/dev/null 2>&1; then \
-		start tools/wordlist-builder/web-builder.html; \
+		start tools/wordlist-builder/index.html; \
 	else \
 		echo "Please open this file in your browser:"; \
-		echo "  file://$(shell pwd)/tools/wordlist-builder/web-builder.html"; \
+		echo "  file://$(shell pwd)/tools/wordlist-builder/index.html"; \
 	fi
 
 # Run owlex filter (requires SPEC parameter)

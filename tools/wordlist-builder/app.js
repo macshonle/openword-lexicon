@@ -19,17 +19,20 @@ const state = {
     nextFilterId: 1
 };
 
-// Statistics from metadata_analysis_en.md
-const STATS = {
-    totalWords: 1298737,
-    eowl: 128983,
+// Build statistics - loaded from build-statistics.json
+let BUILD_STATS = null;
+
+// Default fallback statistics (will be replaced by actual data)
+const DEFAULT_STATS = {
+    totalWords: 1303681,
+    eowl: 129037,
     wiktionary: 1294779,
     wordnet: 90931,
     brysbaert: 39558,
-    posAvailable: 0.988,      // 98.8%
-    labelsAvailable: 0.113,   // 11.3%
-    concretenessAvailable: 0.086,  // 8.6%
-    regionalAvailable: 0.019  // 1.9%
+    posAvailable: 0.984,
+    labelsAvailable: 0.112,
+    concretenessAvailable: 0.086,
+    regionalAvailable: 0.019
 };
 
 // ============================================================================
@@ -252,10 +255,92 @@ const DEMOS = {
 };
 
 // ============================================================================
+// STATISTICS LOADING
+// ============================================================================
+
+async function loadBuildStatistics() {
+    try {
+        const response = await fetch('build-statistics.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        BUILD_STATS = await response.json();
+        console.log('Build statistics loaded:', BUILD_STATS);
+
+        // Update source counts in UI
+        updateSourceCounts();
+    } catch (error) {
+        console.warn('Failed to load build-statistics.json, using defaults:', error);
+        BUILD_STATS = null;
+    }
+}
+
+function updateSourceCounts() {
+    if (!BUILD_STATS || !BUILD_STATS.sources) return;
+
+    // Update individual source counts
+    const sourceMapping = {
+        'eowl': 'eowl',
+        'wiktionary': 'wikt'
+    };
+
+    for (const [uiSource, dataSource] of Object.entries(sourceMapping)) {
+        const count = BUILD_STATS.sources[dataSource];
+        if (count !== undefined) {
+            const element = document.getElementById(`source-count-${uiSource}`);
+            if (element) {
+                element.textContent = `${count.toLocaleString()} words`;
+            }
+        }
+    }
+}
+
+function getStats() {
+    return BUILD_STATS || DEFAULT_STATS;
+}
+
+function estimateWordCount(selectedSources) {
+    // If we have detailed statistics, use them for accurate estimates
+    if (BUILD_STATS && BUILD_STATS.source_combinations) {
+        // Try to find exact match in source combinations
+        const sourcesKey = selectedSources.sort().join(',');
+
+        // Check each combination to see if it matches our selection
+        let totalWords = 0;
+        for (const [combo, count] of Object.entries(BUILD_STATS.source_combinations)) {
+            const comboSources = combo.split(',');
+
+            // Include this combination if all its sources are selected
+            const allSourcesSelected = comboSources.every(s => selectedSources.includes(s));
+            if (allSourcesSelected) {
+                totalWords += count;
+            }
+        }
+
+        return totalWords;
+    }
+
+    // Fallback to simple estimates
+    const stats = getStats();
+    if (selectedSources.includes('wiktionary')) {
+        return stats.wiktionary;
+    } else if (selectedSources.includes('eowl')) {
+        return stats.eowl;
+    } else if (selectedSources.includes('enable')) {
+        return stats.enable || 172823;
+    }
+
+    return 0;
+}
+
+// ============================================================================
 // INITIALIZATION
 // ============================================================================
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Load build statistics
+    await loadBuildStatistics();
+
     initializeSourceCheckboxes();
     initializeFilterButtons();
     initializeDemoSelector();
@@ -699,44 +784,55 @@ function updateUI() {
 
 function updateSourceSummary() {
     const activeSources = getActiveSources();
+    const stats = getStats();
 
-    // Calculate estimated word count
-    let estimatedWords = 0;
-    if (state.sources.eowl || state.sources.wiktionary) {
-        if (state.sources.eowl && state.sources.wiktionary) {
-            estimatedWords = STATS.totalWords;
-        } else if (state.sources.wiktionary) {
-            estimatedWords = STATS.wiktionary;
-        } else if (state.sources.eowl) {
-            estimatedWords = STATS.eowl;
-        }
-    }
+    // Map UI source names to data source names
+    const sourceMapping = {
+        'wiktionary': 'wikt',
+        'eowl': 'eowl',
+        'wordnet': 'wordnet',  // Not a primary source, enrichment only
+        'brysbaert': 'brysbaert',  // Not a primary source, enrichment only
+        'frequency': 'frequency'  // Not a primary source, enrichment only
+    };
+
+    // Get primary sources (enable, eowl, wikt)
+    const primarySources = activeSources
+        .filter(s => ['wiktionary', 'eowl'].includes(s))
+        .map(s => sourceMapping[s]);
+
+    // Calculate estimated word count using new function
+    const estimatedWords = estimateWordCount(primarySources);
 
     // Update stats
-    document.getElementById('total-words').textContent = `~${estimatedWords.toLocaleString()}`;
+    document.getElementById('total-words').textContent = estimatedWords > 0
+        ? `~${estimatedWords.toLocaleString()}`
+        : '0';
+
+    // Use actual metadata coverage from build statistics
+    const metadata = BUILD_STATS ? BUILD_STATS.metadata_coverage : null;
 
     // POS availability
     const posAvailable = (state.sources.wiktionary || state.sources.wordnet);
     document.getElementById('pos-available').textContent = posAvailable
-        ? `Yes (${(STATS.posAvailable * 100).toFixed(1)}%)`
+        ? (metadata ? `Yes (${metadata.pos_tags.percentage}%)` : `Yes (${(stats.posAvailable * 100).toFixed(1)}%)`)
         : 'No';
 
     // Labels availability
     const labelsAvailable = state.sources.wiktionary;
     document.getElementById('labels-available').textContent = labelsAvailable
-        ? `Yes (${(STATS.labelsAvailable * 100).toFixed(1)}%)`
+        ? (metadata ? `Yes (${metadata.any_labels.percentage}%)` : `Yes (${(stats.labelsAvailable * 100).toFixed(1)}%)`)
         : 'No';
 
     // Concreteness availability
     const concretenessAvailable = state.sources.wordnet || state.sources.brysbaert;
     document.getElementById('concreteness-available').textContent = concretenessAvailable
-        ? `Yes (${(STATS.concretenessAvailable * 100).toFixed(1)}%)`
+        ? (metadata ? `Yes (${metadata.concreteness.percentage}%)` : `Yes (${(stats.concretenessAvailable * 100).toFixed(1)}%)`)
         : 'No';
 
     // Regional availability
     const regionalAvailable = state.sources.wiktionary;
     document.getElementById('regional-available').textContent = regionalAvailable
-        ? `Yes (${(STATS.regionalAvailable * 100).toFixed(1)}%)`
+        ? (metadata ? `Yes (${metadata.region_labels.percentage}%)` : `Yes (${(stats.regionalAvailable * 100).toFixed(1)}%)`)
         : 'No';
 }
 
@@ -832,17 +928,19 @@ function updateFiltersList() {
 function updateResultsSummary() {
     const activeSources = getActiveSources();
 
-    // Calculate estimated word count (same as source summary)
-    let estimatedWords = 0;
-    if (state.sources.eowl || state.sources.wiktionary) {
-        if (state.sources.eowl && state.sources.wiktionary) {
-            estimatedWords = STATS.totalWords;
-        } else if (state.sources.wiktionary) {
-            estimatedWords = STATS.wiktionary;
-        } else if (state.sources.eowl) {
-            estimatedWords = STATS.eowl;
-        }
-    }
+    // Map UI source names to data source names
+    const sourceMapping = {
+        'wiktionary': 'wikt',
+        'eowl': 'eowl'
+    };
+
+    // Get primary sources
+    const primarySources = activeSources
+        .filter(s => ['wiktionary', 'eowl'].includes(s))
+        .map(s => sourceMapping[s]);
+
+    // Calculate estimated word count using new function
+    const estimatedWords = estimateWordCount(primarySources);
 
     // Determine license
     let license = 'CC BY 4.0';
@@ -850,6 +948,8 @@ function updateResultsSummary() {
         license = 'CC BY-SA 4.0';
     }
 
-    document.getElementById('result-word-count').textContent = `~${estimatedWords.toLocaleString()}`;
+    document.getElementById('result-word-count').textContent = estimatedWords > 0
+        ? `~${estimatedWords.toLocaleString()}`
+        : '0';
     document.getElementById('result-license').textContent = license;
 }
