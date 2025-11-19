@@ -1,0 +1,87 @@
+{
+  "total_words": 1303681,
+  "generated_at": "2025-11-19T09:59:28.092398",
+  "sources": {
+    "enable": 172823,
+    "eowl": 128983,
+    "wikt": 1294779
+  },
+  "source_combinations": {
+    "wikt": 1095480,
+    "enable,eowl,wikt": 92899,
+    "enable,wikt": 74274,
+    "eowl,wikt": 32126,
+    "enable": 4944,
+    "eowl": 3252,
+    "enable,eowl": 706
+  },
+  "license_combinations": {
+    "CC-BY-SA-4.0": 1095480,
+    "CC-BY-SA-4.0,CC0,UKACD": 92899,
+    "CC-BY-SA-4.0,CC0": 74274,
+    "CC-BY-SA-4.0,UKACD": 32126,
+    "CC0": 4944,
+    "UKACD": 3252,
+    "CC0,UKACD": 706
+  },
+  "metadata_coverage": {
+    "pos_tags": {
+      "count": 1282956,
+      "percentage": 98.4
+    },
+    "any_labels": {
+      "count": 146589,
+      "percentage": 11.2
+    },
+    "register_labels": {
+      "count": 41783,
+      "percentage": 3.2
+    },
+    "domain_labels": {
+      "count": 43209,
+      "percentage": 3.3
+    },
+    "region_labels": {
+      "count": 25222,
+      "percentage": 1.9
+    },
+    "temporal_labels": {
+      "count": 65867,
+      "percentage": 5.1
+    },
+    "concreteness": {
+      "count": 0,
+      "percentage": 0.0
+    },
+    "concreteness_nouns": {
+      "count": 0,
+      "total_nouns": 930385,
+      "percentage": 0.0
+    },
+    "frequency_tier": {
+      "count": 199299,
+      "percentage": 15.3
+    },
+    "multi_word_phrases": {
+      "count": 293849,
+      "percentage": 22.5
+    }
+  },
+  "pos_distribution": {
+    "noun": 930385,
+    "verb": 212699,
+    "adjective": 178390,
+    "adverb": 26803,
+    "interjection": 4400,
+    "pronoun": 860,
+    "preposition": 833,
+    "conjunction": 351,
+    "determiner": 308,
+    "particle": 91
+  },
+  "frequency_distribution": {
+    "Z": 199299
+  },
+  "concreteness_distribution": {},
+  "label_categories": {}
+}

@@ -29,10 +29,73 @@ python3 -m http.server 8000
 
 - **Interactive Source Selection**: Choose from EOWL, Wiktionary, WordNet, Brysbaert, and Frequency data
 - **Dynamic Filter System**: Add and remove filters on demand with include/exclude modes
-- **Real-time Statistics**: See word counts and metadata availability as you configure
+- **Real-time Statistics**: See accurate word counts and metadata availability based on actual build data
+- **Build Statistics Integration**: Uses `build-statistics.json` for precise estimates
 - **Quick Start Demos**: Pre-configured templates for common use cases (Wordle, Kids Nouns, Scrabble, Profanity, British English)
 - **JSON Export**: Generate specifications compatible with owlex filter tool
 - **License Tracking**: Automatic license calculation based on selected sources
+
+## Build Statistics
+
+The advanced builder uses `build-statistics.json` to provide accurate, real-time estimates of word counts and metadata coverage. This file is generated from the actual unified build data.
+
+### Generating Statistics
+
+Statistics are automatically generated during the build process:
+
+```bash
+# Build the lexicon (statistics generated automatically)
+make build-en
+```
+
+This creates/updates `tools/wordlist-builder/build-statistics.json` with:
+- **Total word counts** by source combination
+- **License requirements** distribution
+- **Metadata coverage** percentages (POS tags, labels, concreteness, etc.)
+- **Source distributions** (how words are shared across sources)
+
+### How Estimates Work
+
+The builder uses actual source combination data to calculate precise estimates:
+
+1. When you select "EOWL + Wiktionary", it sums:
+   - Words in `eowl` only
+   - Words in `wikt` only
+   - Words in `eowl,wikt`
+   - Any other combinations that include both
+
+2. Example from actual data:
+   ```
+   Wiktionary only:        1,095,480 words
+   EOWL + Wiktionary:      1,303,681 words (union of all combinations)
+   ```
+
+### Statistics File Format
+
+```json
+{
+  "total_words": 1303681,
+  "sources": {
+    "eowl": 129037,
+    "wikt": 1294779
+  },
+  "source_combinations": {
+    "wikt": 1095480,
+    "enable,eowl,wikt": 92899,
+    "enable,wikt": 74274,
+    ...
+  },
+  "metadata_coverage": {
+    "pos_tags": { "count": 1282956, "percentage": 98.4 },
+    "any_labels": { "count": 146589, "percentage": 11.2 },
+    ...
+  }
+}
+```
+
+### Fallback Behavior
+
+If `build-statistics.json` cannot be loaded (e.g., file not generated yet), the builder uses default estimates. Statistics are automatically generated during `make build-en`.
 
 ---
 

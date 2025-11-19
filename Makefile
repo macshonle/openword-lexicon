@@ -83,27 +83,14 @@ fetch-en:
 
 # Build English lexicon (unified pipeline)
 build-en: fetch-en build-wiktionary-json
-	@echo "=== Building English Lexicon ==="
-	@echo "Step 1: Ingest source data"
 	$(UV) run python src/openword/core_ingest.py
 	$(UV) run python src/openword/wikt_ingest.py
-	@echo ""
-	@echo "Step 2: Merge all sources"
 	$(UV) run python src/openword/merge_all.py
-	@echo ""
-	@echo "Step 3: Enrich with WordNet (POS tags, initial concreteness)"
 	$(UV) run python src/openword/wordnet_enrich.py --unified
-	@echo ""
-	@echo "Step 4: Enrich with Brysbaert (improved concreteness ratings)"
 	$(UV) run python src/openword/brysbaert_enrich.py --unified
-	@echo ""
-	@echo "Step 5: Assign frequency tiers"
 	$(UV) run python src/openword/frequency_tiers.py --unified
-	@echo ""
-	@echo "Step 6: Build trie"
 	$(UV) run python src/openword/trie_build.py --unified
-	@echo ""
-	@echo "=== English lexicon build complete ==="
+	@echo "✓ English lexicon build complete"
 
 # Build Wiktionary JSONL using lightweight scanner parser (file-based dependency)
 $(WIKTIONARY_JSON): $(WIKTIONARY_DUMP)
@@ -279,14 +266,14 @@ help-builder:
 wordlist-builder-web:
 	@echo "Opening web-based word list builder..."
 	@if command -v xdg-open >/dev/null 2>&1; then \
-		xdg-open tools/wordlist-builder/web-builder.html; \
+		xdg-open tools/wordlist-builder/index.html; \
 	elif command -v open >/dev/null 2>&1; then \
-		open tools/wordlist-builder/web-builder.html; \
+		open tools/wordlist-builder/index.html; \
 	elif command -v start >/dev/null 2>&1; then \
-		start tools/wordlist-builder/web-builder.html; \
+		start tools/wordlist-builder/index.html; \
 	else \
 		echo "Please open this file in your browser:"; \
-		echo "  file://$(shell pwd)/tools/wordlist-builder/web-builder.html"; \
+		echo "  file://$(shell pwd)/tools/wordlist-builder/index.html"; \
 	fi
 
 # Run owlex filter (requires SPEC parameter)
