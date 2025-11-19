@@ -1,9 +1,9 @@
 {
   "total_words": 1303681,
-  "generated_at": "2025-11-19T08:25:19",
+  "generated_at": "2025-11-19T09:59:28.092398",
   "sources": {
     "enable": 172823,
-    "eowl": 129037,
+    "eowl": 128983,
     "wikt": 1294779
   },
   "source_combinations": {
@@ -50,8 +50,8 @@
       "percentage": 5.1
     },
     "concreteness": {
-      "count": 112000,
-      "percentage": 8.6
+      "count": 0,
+      "percentage": 0.0
     },
     "concreteness_nouns": {
       "count": 0,
@@ -69,42 +69,19 @@
   },
   "pos_distribution": {
     "noun": 930385,
-    "verb": 287654,
-    "adjective": 156432,
-    "adverb": 45321,
-    "pronoun": 12543,
-    "preposition": 8765,
-    "conjunction": 4321,
-    "interjection": 3210,
-    "determiner": 2100,
-    "particle": 1876
+    "verb": 212699,
+    "adjective": 178390,
+    "adverb": 26803,
+    "interjection": 4400,
+    "pronoun": 860,
+    "preposition": 833,
+    "conjunction": 351,
+    "determiner": 308,
+    "particle": 91
   },
   "frequency_distribution": {
-    "A": 1,
-    "B": 2,
-    "C": 3,
-    "D": 5,
-    "E": 8,
-    "F": 14,
-    "G": 25,
-    "H": 44,
-    "I": 78,
-    "J": 139,
-    "K": 246,
-    "L": 437,
-    "M": 775,
-    "N": 1374,
-    "O": 2437,
-    "P": 4322,
-    "Q": 7664,
-    "R": 13595,
-    "S": 24110,
-    "T": 42768,
-    "Z": 1104382
+    "Z": 199299
   },
-  "concreteness_distribution": {
-    "concrete": 67200,
-    "mixed": 22400,
-    "abstract": 22400
-  }
+  "concreteness_distribution": {},
+  "label_categories": {}
 }
