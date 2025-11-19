@@ -1,53 +1,19 @@
 #!/usr/bin/env python3
 """
-generate_build_stats.py - Generate build statistics for the Advanced Word List Builder
+build_stats.py - Generate build statistics for the Advanced Word List Builder
 
-Reads the unified merged entries and generates a comprehensive statistics JSON file
-that can be used by the web-based word list builder to provide accurate estimates.
+Computes comprehensive statistics from unified entries and generates a JSON file
+for the web-based word list builder to provide accurate estimates.
 """
 
 import json
-import logging
+import datetime
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict
 from collections import defaultdict
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-logger = logging.getLogger(__name__)
 
-
-def load_entries(filepath: Path) -> List[dict]:
-    """Load entries from JSONL file."""
-    entries = []
-
-    if not filepath.exists():
-        logger.error(f"File not found: {filepath}")
-        return entries
-
-    logger.info(f"Loading {filepath}")
-
-    with open(filepath, 'r', encoding='utf-8') as f:
-        for line_num, line in enumerate(f, 1):
-            line = line.strip()
-            if not line:
-                continue
-
-            try:
-                entry = json.loads(line)
-                entries.append(entry)
-            except json.JSONDecodeError as e:
-                logger.warning(f"Line {line_num}: JSON decode error: {e}")
-                continue
-
-    logger.info(f"Loaded {len(entries):,} entries")
-    return entries
-
-
-def compute_statistics(entries: List[dict]) -> dict:
+def compute_statistics(entries: Dict[str, dict]) -> dict:
     """Compute comprehensive statistics from entries."""
     stats = {
         'total_words': len(entries),
@@ -82,8 +48,9 @@ def compute_statistics(entries: List[dict]) -> dict:
     nouns = 0
     nouns_with_concrete = 0
 
-    # Process each entry
-    for entry in entries:
+    # Process each entry (entries is a dict, iterate over values)
+    entries_list = entries.values() if isinstance(entries, dict) else entries
+    for entry in entries_list:
         # Source combinations
         sources = entry.get('sources', [])
         sources_key = ','.join(sorted(sources))
@@ -220,86 +187,26 @@ def compute_statistics(entries: List[dict]) -> dict:
     return stats
 
 
-def write_statistics(stats: dict, output_path: Path):
-    """Write statistics to JSON file."""
-    import datetime
+def generate_and_write_statistics(entries: Dict[str, dict], output_path: Path) -> dict:
+    """
+    Generate statistics from entries and write to JSON file.
+
+    Args:
+        entries: Dictionary of word entries (word -> entry dict)
+        output_path: Path to write JSON statistics file
+
+    Returns:
+        Statistics dictionary (same as what's written to file)
+    """
+    # Compute statistics
+    stats = compute_statistics(entries)
 
     # Add timestamp
     stats['generated_at'] = datetime.datetime.now().isoformat()
 
+    # Write to file
     output_path.parent.mkdir(parents=True, exist_ok=True)
-
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(stats, f, indent=2, sort_keys=False)
 
-    logger.info(f"Statistics written to: {output_path}")
-
-
-def print_summary(stats: dict):
-    """Print a summary of the statistics."""
-    logger.info("")
-    logger.info("=== Build Statistics Summary ===")
-    logger.info(f"Total unique words: {stats['total_words']:,}")
-    logger.info("")
-
-    logger.info("Source distribution:")
-    for source_combo, count in list(stats['source_combinations'].items())[:7]:
-        logger.info(f"  {source_combo}: {count:,} words")
-    logger.info("")
-
-    logger.info("License requirements:")
-    for license_combo, count in list(stats['license_combinations'].items())[:7]:
-        logger.info(f"  {license_combo}: {count:,} words")
-    logger.info("")
-
-    logger.info("Metadata coverage:")
-    mc = stats['metadata_coverage']
-    logger.info(f"  POS tags: {mc['pos_tags']['count']:,} ({mc['pos_tags']['percentage']}%)")
-    logger.info(f"  Any labels: {mc['any_labels']['count']:,} ({mc['any_labels']['percentage']}%)")
-    logger.info(f"    Register: {mc['register_labels']['count']:,} ({mc['register_labels']['percentage']}%)")
-    logger.info(f"    Domain: {mc['domain_labels']['count']:,} ({mc['domain_labels']['percentage']}%)")
-    logger.info(f"    Region: {mc['region_labels']['count']:,} ({mc['region_labels']['percentage']}%)")
-    logger.info(f"    Temporal: {mc['temporal_labels']['count']:,} ({mc['temporal_labels']['percentage']}%)")
-    logger.info(f"  Concreteness (nouns): {mc['concreteness_nouns']['count']:,}/{mc['concreteness_nouns']['total_nouns']:,} ({mc['concreteness_nouns']['percentage']}%)")
-    logger.info(f"  Frequency tier: {mc['frequency_tier']['count']:,} ({mc['frequency_tier']['percentage']}%)")
-    logger.info(f"  Multi-word phrases: {mc['multi_word_phrases']['count']:,} ({mc['multi_word_phrases']['percentage']}%)")
-
-
-def main():
-    """Main entry point."""
-    # Find the merged entries file
-    project_root = Path(__file__).parent.parent
-    merged_file = project_root / "data" / "intermediate" / "en" / "entries_merged.jsonl"
-
-    if not merged_file.exists():
-        logger.error(f"Merged entries file not found: {merged_file}")
-        logger.error("Please run 'make build-en' first to generate the merged data")
-        return 1
-
-    # Load entries
-    entries = load_entries(merged_file)
-    if not entries:
-        logger.error("No entries loaded")
-        return 1
-
-    # Compute statistics
-    logger.info("Computing statistics...")
-    stats = compute_statistics(entries)
-
-    # Write to file
-    output_file = project_root / "tools" / "wordlist-builder" / "build-statistics.json"
-    write_statistics(stats, output_file)
-
-    # Print summary
-    print_summary(stats)
-
-    logger.info("")
-    logger.info("=== Statistics generation complete ===")
-    logger.info(f"JSON file: {output_file}")
-
-    return 0
-
-
-if __name__ == '__main__':
-    import sys
-    sys.exit(main())
+    return stats

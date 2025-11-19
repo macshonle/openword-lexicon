@@ -41,14 +41,11 @@ The advanced builder uses `build-statistics.json` to provide accurate, real-time
 
 ### Generating Statistics
 
-After building the lexicon, generate updated statistics:
+Statistics are automatically generated during the build process:
 
 ```bash
-# Build the lexicon first (if not already done)
+# Build the lexicon (statistics generated automatically)
 make build-en
-
-# Generate statistics
-make generate-build-stats
 ```
 
 This creates/updates `tools/wordlist-builder/build-statistics.json` with:
@@ -98,7 +95,7 @@ The builder uses actual source combination data to calculate precise estimates:
 
 ### Fallback Behavior
 
-If `build-statistics.json` cannot be loaded (e.g., file not generated yet), the builder uses default estimates. To get accurate statistics, run `make generate-build-stats` after building the lexicon.
+If `build-statistics.json` cannot be loaded (e.g., file not generated yet), the builder uses default estimates. Statistics are automatically generated during `make build-en`.
 
 ---
 

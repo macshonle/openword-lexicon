@@ -25,7 +25,7 @@ WORDLIST_TXT := $(BUILD_DIR)/wordlist.txt
 .PHONY: bootstrap venv deps fmt lint test clean scrub \
         fetch-en build-en build-wiktionary-json build-trie package check-limits \
         report-en analyze-all-reports analyze-local diagnose-scanner validate-enable \
-        generate-build-stats wordlist-builder wordlist-builder-web owlex-filter help-builder
+        wordlist-builder wordlist-builder-web owlex-filter help-builder
 
 # ===========================
 # Development Environment
@@ -83,27 +83,14 @@ fetch-en:
 
 # Build English lexicon (unified pipeline)
 build-en: fetch-en build-wiktionary-json
-	@echo "=== Building English Lexicon ==="
-	@echo "Step 1: Ingest source data"
 	$(UV) run python src/openword/core_ingest.py
 	$(UV) run python src/openword/wikt_ingest.py
-	@echo ""
-	@echo "Step 2: Merge all sources"
 	$(UV) run python src/openword/merge_all.py
-	@echo ""
-	@echo "Step 3: Enrich with WordNet (POS tags, initial concreteness)"
 	$(UV) run python src/openword/wordnet_enrich.py --unified
-	@echo ""
-	@echo "Step 4: Enrich with Brysbaert (improved concreteness ratings)"
 	$(UV) run python src/openword/brysbaert_enrich.py --unified
-	@echo ""
-	@echo "Step 5: Assign frequency tiers"
 	$(UV) run python src/openword/frequency_tiers.py --unified
-	@echo ""
-	@echo "Step 6: Build trie"
 	$(UV) run python src/openword/trie_build.py --unified
-	@echo ""
-	@echo "=== English lexicon build complete ==="
+	@echo "✓ English lexicon build complete"
 
 # Build Wiktionary JSONL using lightweight scanner parser (file-based dependency)
 $(WIKTIONARY_JSON): $(WIKTIONARY_DUMP)
@@ -274,18 +261,6 @@ help-builder:
 	@echo "  - docs/FILTER_CAPABILITIES.md - Filter reference"
 	@echo "  - docs/UNIFIED_BUILD_DESIGN.md - Architecture"
 	@echo ""
-
-# Generate build statistics for word list builder
-generate-build-stats: deps
-	@echo "=== Generating build statistics for word list builder ==="
-	@if [ ! -f data/intermediate/en/entries_merged.jsonl ]; then \
-		echo "Error: Merged entries not found. Please run 'make build-en' first."; \
-		exit 1; \
-	fi
-	$(UV) run python tools/generate_build_stats.py
-	@echo ""
-	@echo "=== Build statistics generated ==="
-	@echo "Statistics file: tools/wordlist-builder/build-statistics.json"
 
 # Open web builder in default browser
 wordlist-builder-web:

@@ -30,6 +30,7 @@ from typing import Dict, List, Set
 import orjson
 
 from openword.progress_display import ProgressDisplay
+from openword import build_stats
 
 
 logging.basicConfig(
@@ -217,72 +218,21 @@ def write_merged(entries: Dict[str, dict], output_path: Path):
     logger.info(f"Written: {output_path}")
 
 
-def print_statistics(entries: Dict[str, dict]):
-    """Print detailed statistics about the unified build."""
+def generate_build_statistics(entries: Dict[str, dict]):
+    """Generate build statistics JSON file for word list builder."""
+    project_root = Path(__file__).parent.parent.parent
+    stats_output = project_root / "tools" / "wordlist-builder" / "build-statistics.json"
+
     logger.info("")
-    logger.info("=== Unified Build Statistics ===")
-    logger.info(f"Total unique words: {len(entries):,}")
+    logger.info("Generating build statistics...")
 
-    # Source distribution
+    stats = build_stats.generate_and_write_statistics(entries, stats_output)
+
+    # Print the JSON output to console (pretty-printed)
     logger.info("")
-    logger.info("Source distribution:")
-    source_counts = {}
-    for entry in entries.values():
-        sources_key = ','.join(sorted(entry.get('sources', [])))
-        source_counts[sources_key] = source_counts.get(sources_key, 0) + 1
-
-    for sources_key, count in sorted(source_counts.items(), key=lambda x: -x[1]):
-        logger.info(f"  {sources_key}: {count:,} words")
-
-    # License distribution
+    print(json.dumps(stats, indent=2))
     logger.info("")
-    logger.info("License requirements:")
-    license_counts = {}
-    for entry in entries.values():
-        licenses = entry.get('license_sources', {})
-        licenses_key = ','.join(sorted(licenses.keys()))
-        license_counts[licenses_key] = license_counts.get(licenses_key, 0) + 1
-
-    for licenses_key, count in sorted(license_counts.items(), key=lambda x: -x[1]):
-        logger.info(f"  {licenses_key}: {count:,} words")
-
-    # Coverage statistics
-    logger.info("")
-    logger.info("Metadata coverage:")
-
-    # POS coverage
-    pos_count = sum(1 for e in entries.values() if e.get('pos'))
-    logger.info(f"  POS tags: {pos_count:,} ({100 * pos_count / len(entries):.1f}%)")
-
-    # Labels coverage
-    any_labels = sum(1 for e in entries.values() if any(e.get('labels', {}).values()))
-    logger.info(f"  Any labels: {any_labels:,} ({100 * any_labels / len(entries):.1f}%)")
-
-    register_labels = sum(1 for e in entries.values() if e.get('labels', {}).get('register'))
-    logger.info(f"    Register: {register_labels:,} ({100 * register_labels / len(entries):.1f}%)")
-
-    domain_labels = sum(1 for e in entries.values() if e.get('labels', {}).get('domain'))
-    logger.info(f"    Domain: {domain_labels:,} ({100 * domain_labels / len(entries):.1f}%)")
-
-    region_labels = sum(1 for e in entries.values() if e.get('labels', {}).get('region'))
-    logger.info(f"    Region: {region_labels:,} ({100 * region_labels / len(entries):.1f}%)")
-
-    temporal_labels = sum(1 for e in entries.values() if e.get('labels', {}).get('temporal'))
-    logger.info(f"    Temporal: {temporal_labels:,} ({100 * temporal_labels / len(entries):.1f}%)")
-
-    # Concreteness (nouns only)
-    nouns = [e for e in entries.values() if 'noun' in e.get('pos', [])]
-    concrete_nouns = sum(1 for e in nouns if e.get('concreteness'))
-    if nouns:
-        logger.info(f"  Concreteness (nouns): {concrete_nouns:,}/{len(nouns):,} ({100 * concrete_nouns / len(nouns):.1f}%)")
-
-    # Frequency tiers
-    freq_count = sum(1 for e in entries.values() if e.get('frequency_tier'))
-    logger.info(f"  Frequency tier: {freq_count:,} ({100 * freq_count / len(entries):.1f}%)")
-
-    # Phrases
-    phrases = sum(1 for e in entries.values() if e.get('word_count', 1) > 1)
-    logger.info(f"  Multi-word phrases: {phrases:,} ({100 * phrases / len(entries):.1f}%)")
+    logger.info(f"Statistics written to: {stats_output}")
 
 
 def main():
@@ -326,8 +276,8 @@ def main():
     unified_output = intermediate_dir / "entries_merged.jsonl"
     write_merged(unified, unified_output)
 
-    # Print statistics
-    print_statistics(unified)
+    # Generate build statistics
+    generate_build_statistics(unified)
 
     logger.info("")
     logger.info("=== Unified merge complete ===")
