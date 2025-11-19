@@ -1,0 +1,75 @@
+{
+  "name": "Children's Word Game - 2 Syllable Nouns",
+  "description": "Two-syllable concrete nouns for children's word games. Filtered for child-safety, frequency, and excluding slang/profanity. Perfect for games like word matching, picture identification, or pronunciation practice.",
+  "version": "1.0",
+  "distribution": "en",
+  "filters": {
+    "syllables": {
+      "exact": 2,
+      "require_syllables": true
+    },
+    "pos": {
+      "include": ["noun"]
+    },
+    "concreteness": {
+      "values": ["concrete"]
+    },
+    "frequency": {
+      "min_tier": "A",
+      "max_tier": "N"
+    },
+    "labels": {
+      "register": {
+        "exclude": ["slang", "vulgar", "offensive", "derogatory"]
+      },
+      "temporal": {
+        "exclude": ["archaic", "obsolete"]
+      }
+    },
+    "phrase": {
+      "is_phrase": false
+    },
+    "policy": {
+      "family_friendly": true,
+      "modern_only": true
+    }
+  },
+  "output": {
+    "format": "wordlist",
+    "sort": "alphabetical"
+  },
+  "metadata": {
+    "target_audience": "Children ages 5-10",
+    "use_cases": [
+      "Word matching games",
+      "Picture-word association",
+      "Pronunciation practice",
+      "Spelling practice",
+      "Memory games"
+    ],
+    "expected_count": "200-500 words",
+    "examples": [
+      "apple",
+      "button",
+      "garden",
+      "kitten",
+      "magnet",
+      "ocean",
+      "pencil",
+      "rabbit",
+      "spider",
+      "table",
+      "tiger",
+      "window",
+      "yellow",
+      "zebra"
+    ],
+    "notes": [
+      "All words have exactly 2 syllables and syllable data from Wiktionary",
+      "Only concrete nouns (things children can visualize)",
+      "Frequency tiers A-N ensure common, familiar words",
+      "Family-friendly filtering excludes inappropriate content",
+      "Modern words only (no archaic/obsolete terms)"
+    ]
+  }
+}

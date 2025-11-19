@@ -116,6 +116,10 @@ class OwlexFilter:
         if not self._check_proper_noun_filters(entry, filters.get('proper_noun', {})):
             return False
 
+        # Syllable filters
+        if not self._check_syllable_filters(entry, filters.get('syllables', {})):
+            return False
+
         return True
 
     def _check_character_filters(self, entry: Dict, filters: Dict) -> bool:
@@ -345,6 +349,42 @@ class OwlexFilter:
                 return False
 
         return True
+
+    def _check_syllable_filters(self, entry: Dict, filters: Dict) -> bool:
+        """
+        Apply syllable count filters.
+
+        Filter options:
+          - min: Minimum syllable count (inclusive)
+          - max: Maximum syllable count (inclusive)
+          - exact: Exact syllable count required
+          - require_syllables: If true, exclude words without syllable data
+
+        Syllable data comes from Wiktionary (hyphenation > rhymes > categories).
+        Coverage is ~2-3% of entries (~30k words), but these are high-quality.
+
+        Examples:
+          Two-syllable words only:
+            {"exact": 2, "require_syllables": true}
+
+          Simple words (1-3 syllables):
+            {"min": 1, "max": 3}
+
+          Complex words (4+ syllables):
+            {"min": 4}
+        """
+        if not filters:
+            return True
+
+        # Delegate to filters module for consistency
+        from openword.filters import matches_syllables
+        return matches_syllables(
+            entry,
+            min_syllables=filters.get('min'),
+            max_syllables=filters.get('max'),
+            exact_syllables=filters.get('exact'),
+            require_syllables=filters.get('require_syllables', False)
+        )
 
     def calculate_score(self, entry: Dict) -> float:
         """Calculate score for an entry."""

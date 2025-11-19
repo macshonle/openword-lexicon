@@ -14,6 +14,7 @@ Usage:
 
 import bz2
 import json
+import logging
 import re
 import sys
 import time
@@ -25,6 +26,10 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.text import Text
 from rich import box
+
+# Setup logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
 
 
 class BZ2StreamReader:
@@ -392,29 +397,33 @@ def extract_labels(text: str) -> Dict[str, List[str]]:
 
 def extract_syllable_count_from_hyphenation(text: str, word: str) -> Optional[int]:
     """
-    Extract syllable count from {{hyphenation|...}} template.
+    Extract syllable count from {{hyphenation|en|...}} template.
 
-    Uses multiple strategies to avoid false positives:
-    1. Whitelist of known language codes (KNOWN_LANG_CODES)
-    2. Context-aware detection (don't filter if it matches the word being processed)
-    3. Only count properly separated syllable segments
+    The regex pattern already requires |en| so the captured content contains
+    only syllable segments (no need to filter language codes).
 
     Args:
         text: The Wiktionary page text
-        word: The word being processed (for context-aware filtering)
+        word: The word being processed (unused but kept for API compatibility)
 
     Returns:
         Number of syllables if reliably determined, None otherwise
 
     Handles complex formats:
-    - Language codes: {{hyphenation|en|dic|tion|a|ry}} -> 4 syllables
+    - Basic: {{hyphenation|en|dic|tion|a|ry}} -> 4 syllables
     - Alternatives: {{hyphenation|en|dic|tion|a|ry||dic|tion|ary}} -> 4 (uses first)
-    - Parameters: {{hyphenation|en|lang=en-US|dic|tion|a|ry}} -> 4
-    - Without lang code: {{hyphenation|art}} -> 1 syllable
+    - Parameters: {{hyphenation|en|lang=en-US|dic|tion|a|ry}} -> 4 (filters params)
+    - First syllable matches lang code: {{hyphenation|en|en|cy|clo|pe|di|a}} -> 6 syllables
 
     Returns None for unreliable cases:
-    - {{hyphenation|arad}} -> None (unseparated, data quality issue)
-    - {{hyphenation|}} -> None (empty)
+    - {{hyphenation|en|encyclopedia}} -> None (single unseparated part > 3 chars)
+    - {{hyphenation|en|}} -> None (empty)
+
+    Examples:
+    - "encyclopedia" with {{hyphenation|en|en|cy|clo|pe|di|a}} -> 6 (en-cy-clo-pe-di-a)
+    - "dictionary" with {{hyphenation|en|dic|tion|a|ry}} -> 4 (dic-tion-a-ry)
+    - "cat" with {{hyphenation|en|cat}} -> None (single part > 3 chars, likely incomplete)
+    - "it" with {{hyphenation|en|it}} -> 1 (short word, acceptable)
     """
     match = HYPHENATION_TEMPLATE.search(text)
     if not match:
@@ -429,12 +438,13 @@ def extract_syllable_count_from_hyphenation(text: str, word: str) -> Optional[in
     # Parse pipe-separated segments
     parts = first_alt.split('|')
 
-    # Filter syllables (exclude lang codes, parameters, empty)
+    # Filter syllables (exclude parameters and empty parts only)
+    # NOTE: No language code filtering needed - the regex already consumed |en|
     syllables = []
-    for i, part in enumerate(parts):
+    for part in parts:
         part = part.strip()
 
-        # Skip empty
+        # Skip empty parts
         if not part:
             continue
 
@@ -442,21 +452,13 @@ def extract_syllable_count_from_hyphenation(text: str, word: str) -> Optional[in
         if '=' in part:
             continue
 
-        # Skip known language codes at position 0
-        # Use whitelist for reliability + context-awareness
-        if i == 0:
-            # Check if it's a known language code (not the word itself)
-            if part in KNOWN_LANG_CODES and part.lower() != word.lower():
-                continue
-
-            # If there's only one part and it's unseparated (>3 chars), it's likely
-            # incomplete data (e.g., {{hyphenation|arad}} should be {{hyphenation|a|rad}})
-            # We only trust single-part templates for very short words (1-3 chars)
-            # Return None to indicate unreliable data for longer unseparated words
-            if len(parts) == 1 and len(part) > 3:
-                return None
-
         syllables.append(part)
+
+    # Safety check: Single-part templates with long unseparated text are likely
+    # incomplete data (e.g., {{hyphenation|en|encyclopedia}} instead of proper separation)
+    # We only trust single-part templates for very short words (1-3 chars)
+    if len(syllables) == 1 and len(syllables[0]) > 3:
+        return None
 
     # Return syllable count if we found any syllables
     return len(syllables) if syllables else None
@@ -1310,20 +1312,34 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     # Only set syllable count when we have reliable data - never guess
     syllable_count = None
 
-    # Priority 1: Hyphenation template (most reliable when properly formatted)
+    # Extract from all three sources
     hyph_count = extract_syllable_count_from_hyphenation(english_text, word)
+    rhymes_count = extract_syllable_count_from_rhymes(english_text)
+    cat_count = extract_syllable_count_from_categories(english_text)
+
+    # Check for conflicts between sources (data quality monitoring)
+    sources = []
+    if hyph_count is not None:
+        sources.append(('hyphenation', hyph_count))
+    if rhymes_count is not None:
+        sources.append(('rhymes', rhymes_count))
+    if cat_count is not None:
+        sources.append(('category', cat_count))
+
+    # Log conflicts if multiple sources disagree
+    if len(sources) > 1:
+        counts = [s[1] for s in sources]
+        if len(set(counts)) > 1:  # Disagreement detected
+            source_info = ', '.join(f'{name}={count}' for name, count in sources)
+            logger.debug(f"Syllable conflict in '{word}': {source_info}")
+
+    # Apply priority system: hyphenation > rhymes > categories
     if hyph_count is not None:
         syllable_count = hyph_count
-    else:
-        # Priority 2: Rhymes template (often has syllable count)
-        rhymes_count = extract_syllable_count_from_rhymes(english_text)
-        if rhymes_count is not None:
-            syllable_count = rhymes_count
-        else:
-            # Priority 3: Category labels (deprecated but sometimes available)
-            cat_count = extract_syllable_count_from_categories(english_text)
-            if cat_count is not None:
-                syllable_count = cat_count
+    elif rhymes_count is not None:
+        syllable_count = rhymes_count
+    elif cat_count is not None:
+        syllable_count = cat_count
 
     # Extract morphology from etymology section
     morphology = extract_morphology(english_text)

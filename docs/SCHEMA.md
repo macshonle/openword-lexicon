@@ -399,6 +399,59 @@ Standard deviation of Brysbaert concreteness ratings.
 - Lower SD indicates more reliable concreteness rating
 - Useful for distinguishing polysemous words from clear-cut cases
 
+#### `syllables` (integer)
+
+Number of syllables in the word.
+
+- **Source**: Wiktionary (hyphenation > rhymes > category labels)
+- **Range**: 1-15 (typical range 1-6)
+- **Coverage**: ~2-3% of entries (~30,000 words)
+- **Default**: Not present (only included when reliably sourced)
+- **Example**: 4 for "dictionary", 1 for "cat", 6 for "encyclopedia"
+
+**What is syllable count?**
+A syllable is a unit of pronunciation containing a vowel sound. Syllable count is useful for pronunciation practice, poetry meter, reading level assessment, and children's games.
+
+**Source Priority:**
+1. **Hyphenation template** (highest priority): `{{hyphenation|en|dic|tion|a|ry}}` → 4 syllables
+2. **Rhymes template**: `{{rhymes|en|ɪkʃənɛəɹi|s=4}}` → 4 syllables
+3. **Category labels** (lowest priority): `[[Category:English 4-syllable words]]` → 4 syllables
+
+**Examples:**
+- **1 syllable**: "cat", "dog", "run", "jump"
+- **2 syllables**: "table", "button", "happy", "window"
+- **3 syllables**: "elephant", "beautiful", "together"
+- **4 syllables**: "dictionary", "information", "elevator"
+- **6 syllables**: "encyclopedia", "telecommunications"
+
+**Philosophy:**
+- **Never guessed**: Only included when Wiktionary provides explicit syllable data
+- **Missing data is acceptable**: Absence indicates no reliable data, not incorrect data
+- **Quality over coverage**: 30k high-quality entries better than 1M estimated entries
+
+**Use Cases:**
+- **Children's word games**: Filter for 2-syllable concrete nouns
+  - Example spec: `{"syllables": {"exact": 2, "require_syllables": true}}`
+- **Poetry and meter**: Find words with specific syllable counts
+  - Example: 5-syllable words for haiku composition
+- **Reading level**: Shorter syllable counts correlate with easier words
+  - Example: 1-3 syllables for beginning readers
+- **Pronunciation practice**: Group words by syllable complexity
+  - Example: Multi-syllable words (4+) for advanced learners
+
+**Filtering Options:**
+- `min`: Minimum syllable count (inclusive)
+- `max`: Maximum syllable count (inclusive)
+- `exact`: Exact syllable count required
+- `require_syllables`: If true, exclude words without syllable data
+
+**Notes:**
+- Data extracted from Wiktionary hyphenation, rhymes, and category templates
+- Human-curated by Wiktionary editors (not algorithmic estimates)
+- Coverage is sparse but highly accurate
+- Use `require_syllables: true` in filters to ensure all results have data
+- Missing data does NOT mean the word is invalid for other use cases
+
 #### `frequency_tier` (string)
 
 Frequency rank code using logarithmic scale (A-Z).
