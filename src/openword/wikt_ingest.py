@@ -337,9 +337,19 @@ def read_wiktionary_jsonl(filepath: Path) -> Dict[str, dict]:
                             if entry.get('syllables') and not entries[word].get('syllables'):
                                 entries[word]['syllables'] = entry['syllables']
 
-                            # Keep morphology if present
-                            if entry.get('morphology') and not entries[word].get('morphology'):
-                                entries[word]['morphology'] = entry['morphology']
+                            # Keep morphology if present (merge if both exist)
+                            if entry.get('morphology'):
+                                if not entries[word].get('morphology'):
+                                    entries[word]['morphology'] = entry['morphology']
+                                else:
+                                    # Merge morphology fields if both entries have it
+                                    # Union interfixes if present in new entry
+                                    if 'interfixes' in entry['morphology']:
+                                        existing_interfixes = entries[word]['morphology'].get('interfixes', [])
+                                        new_interfixes = entry['morphology']['interfixes']
+                                        entries[word]['morphology']['interfixes'] = sorted(set(
+                                            existing_interfixes + new_interfixes
+                                        ))
 
                             # Track proper noun usage
                             # If any entry is proper noun, mark has_proper_usage
@@ -384,6 +394,144 @@ def write_jsonl(entries: List[dict], output_path: Path) -> None:
     logger.info(f"Written: {output_path}")
 
 
+def build_affix_index(entries: List[dict]) -> dict:
+    """
+    Build reverse affix index for efficient morphological queries.
+
+    Creates a mapping from each affix to the words that use it, along with
+    statistics like word count, POS distribution, and sample words.
+
+    Args:
+        entries: List of processed entry dictionaries
+
+    Returns:
+        Dictionary with affix index structure:
+        {
+            'prefixes': {
+                'un-': {
+                    'word_count': 11218,
+                    'sample_words': ['unhappy', 'unable', ...],
+                    'pos_distribution': {'adjective': 5234, ...}
+                }
+            },
+            'suffixes': {...},
+            'interfixes': {...},
+            'stats': {...}
+        }
+    """
+    from collections import defaultdict
+    import random
+
+    logger.info("Building affix index...")
+
+    # Track affix → words mapping
+    prefix_words = defaultdict(list)
+    suffix_words = defaultdict(list)
+    interfix_words = defaultdict(list)
+
+    # Track POS distribution for each affix
+    prefix_pos = defaultdict(lambda: defaultdict(int))
+    suffix_pos = defaultdict(lambda: defaultdict(int))
+
+    for entry in entries:
+        word = entry['word']
+        pos_tags = entry.get('pos', [])
+        morphology = entry.get('morphology', {})
+
+        if not morphology:
+            continue
+
+        # Track prefixes
+        for prefix in morphology.get('prefixes', []):
+            prefix_words[prefix].append(word)
+            for pos in pos_tags:
+                prefix_pos[prefix][pos] += 1
+
+        # Track suffixes
+        for suffix in morphology.get('suffixes', []):
+            suffix_words[suffix].append(word)
+            for pos in pos_tags:
+                suffix_pos[suffix][pos] += 1
+
+        # Track interfixes
+        for interfix in morphology.get('interfixes', []):
+            interfix_words[interfix].append(word)
+
+    # Build index with statistics and samples
+    def build_affix_entry(affix: str, words: List[str], pos_dist: dict) -> dict:
+        """Build entry for a single affix with statistics."""
+        # Select sample words (5-10 representative examples)
+        sample_size = min(10, len(words))
+        if len(words) <= sample_size:
+            samples = sorted(words)
+        else:
+            # Sample across the word list for diversity
+            step = len(words) // sample_size
+            samples = sorted([words[i * step] for i in range(sample_size)])
+
+        return {
+            'word_count': len(words),
+            'sample_words': samples,
+            'pos_distribution': dict(pos_dist) if pos_dist else {}
+        }
+
+    # Build prefix index
+    prefixes = {}
+    for prefix in sorted(prefix_words.keys()):
+        prefixes[prefix] = build_affix_entry(
+            prefix,
+            prefix_words[prefix],
+            prefix_pos[prefix]
+        )
+
+    # Build suffix index
+    suffixes = {}
+    for suffix in sorted(suffix_words.keys()):
+        suffixes[suffix] = build_affix_entry(
+            suffix,
+            suffix_words[suffix],
+            suffix_pos[suffix]
+        )
+
+    # Build interfix index
+    interfixes = {}
+    for interfix in sorted(interfix_words.keys()):
+        interfixes[interfix] = {
+            'word_count': len(interfix_words[interfix]),
+            'sample_words': sorted(interfix_words[interfix])[:10]
+        }
+
+    # Calculate overall statistics
+    words_with_prefixes = sum(1 for e in entries if e.get('morphology', {}).get('prefixes'))
+    words_with_suffixes = sum(1 for e in entries if e.get('morphology', {}).get('suffixes'))
+    words_with_both = sum(1 for e in entries
+                          if e.get('morphology', {}).get('prefixes') and
+                          e.get('morphology', {}).get('suffixes'))
+    words_with_interfixes = sum(1 for e in entries if e.get('morphology', {}).get('interfixes'))
+
+    affix_index = {
+        'prefixes': prefixes,
+        'suffixes': suffixes,
+        'interfixes': interfixes,
+        'stats': {
+            'total_prefixes': len(prefixes),
+            'total_suffixes': len(suffixes),
+            'total_interfixes': len(interfixes),
+            'words_with_prefixes': words_with_prefixes,
+            'words_with_suffixes': words_with_suffixes,
+            'words_with_both': words_with_both,
+            'words_with_interfixes': words_with_interfixes
+        }
+    }
+
+    logger.info(f"  Indexed {len(prefixes)} prefixes, {len(suffixes)} suffixes, {len(interfixes)} interfixes")
+    logger.info(f"  Words with prefixes: {words_with_prefixes:,}")
+    logger.info(f"  Words with suffixes: {words_with_suffixes:,}")
+    logger.info(f"  Words with both: {words_with_both:,}")
+
+    return affix_index
+
+
 def main():
     """Main wiktionary ingestion pipeline."""
     # Paths
@@ -407,6 +555,16 @@ def main():
     # Write output
     write_jsonl(entries, output_path)
 
+    # Build affix index
+    affix_index = build_affix_index(entries)
+
+    # Write affix index to JSON
+    affix_index_path = intermediate_dir / "wikt_affix_index.json"
+    logger.info(f"Writing affix index to {affix_index_path}")
+    with open(affix_index_path, 'w', encoding='utf-8') as f:
+        json.dump(affix_index, f, indent=2, ensure_ascii=False)
+    logger.info(f"Written: {affix_index_path}")
+
     # Stats
     logger.info("")
     logger.info("Statistics:")
@@ -415,6 +573,7 @@ def main():
     logger.info(f"  With POS tags: {sum(1 for e in entries if e['pos']):,}")
     logger.info(f"  With labels: {sum(1 for e in entries if e['labels']):,}")
     logger.info(f"  With lemma: {sum(1 for e in entries if e['lemma']):,}")
+    logger.info(f"  With morphology: {sum(1 for e in entries if e.get('morphology')):,}")
     logger.info("")
     logger.info("Wiktionary ingest complete")
 

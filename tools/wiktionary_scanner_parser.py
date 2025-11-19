@@ -134,6 +134,12 @@ SURF_TEMPLATE = re.compile(r'\{\{surf\|en\|([^}]+)\}\}', re.IGNORECASE)
 # Confix template (prefix + base + suffix together)
 CONFIX_TEMPLATE = re.compile(r'\{\{confix\|en\|([^}|]+)\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}', re.IGNORECASE)
 
+# Template parameter cleaning patterns (for morphology extraction)
+LANG_CODE_PREFIX = re.compile(r'^[a-z]{2,4}:', re.IGNORECASE)  # Language codes like grc:, la:, ang:
+WIKILINK_PATTERN = re.compile(r'\[\[([^\]|]+)(?:\|[^\]]+)?\]\]')  # [[word]] or [[word|display]]
+HTML_ENTITY_PATTERN = re.compile(r'<[^>]+>')  # <tag>, <id:...>, etc.
+PARAM_KEY_PATTERN = re.compile(r'^(t|gloss|pos|alt|id|lit|tr|ts|sc|nocap|nocat|notext)\d*=', re.IGNORECASE)  # Common parameter keys
+
 # Known language codes for hyphenation templates
 # This whitelist prevents false positives when filtering language codes from syllable segments
 KNOWN_LANG_CODES = {
@@ -492,6 +498,82 @@ def extract_syllable_count_from_categories(text: str) -> Optional[int]:
     return None
 
 
+def clean_template_components(parts: List[str], template_type: str = 'affix') -> List[str]:
+    """
+    Clean template parameters to extract only morphological components.
+
+    Filters out template metadata like gloss=, pos=, t=, alt=, language codes (grc:),
+    wikilink markup ([[...]]), HTML entities (<...>), and other non-morpheme content.
+
+    This addresses parameter pollution issues where template parameters get mixed with
+    actual morphological components (e.g., ['lexico-', 'pos1=prefix', '-graphy']).
+
+    Args:
+        parts: Raw component parts from template split
+        template_type: Type of template being cleaned ('affix', 'compound', etc.)
+
+    Returns:
+        List of clean morphological components only
+
+    Examples:
+        >>> clean_template_components(['lexico-', 'pos1=prefix meaning...', '-graphy'])
+        ['lexico-', '-graphy']
+
+        >>> clean_template_components(['grc:πλαγκτός', 't1=[[drifter]]', '-on'])
+        ['-on']  # Excludes non-English roots
+
+        >>> clean_template_components(['bi-', 'gloss1=two', '-illion'])
+        ['bi-', '-illion']
+    """
+    cleaned = []
+
+    for part in parts:
+        part = part.strip()
+
+        # Skip empty
+        if not part:
+            continue
+
+        # Skip key=value parameters (t=, gloss=, pos=, alt=, id=, etc.)
+        if '=' in part:
+            continue
+
+        # Skip language code prefixes (grc:, la:, ang:, etc.)
+        # These indicate non-English etymological roots
+        if LANG_CODE_PREFIX.match(part):
+            continue
+
+        # Clean wikilink markup [[word]] or [[word|display]]
+        # Extract the actual word from the markup
+        if '[[' in part or ']]' in part:
+            # Remove wikilinks but keep the text
+            cleaned_part = WIKILINK_PATTERN.sub(r'\1', part)
+            # If it's all markup (nothing left), skip
+            if not cleaned_part or cleaned_part in [']]', '[[', '|']:
+                continue
+            part = cleaned_part
+
+        # Remove HTML entities and tags <id:...>, <tag>, etc.
+        if '<' in part or '>' in part:
+            part = HTML_ENTITY_PATTERN.sub('', part)
+            # If nothing left after removing HTML, skip
+            if not part:
+                continue
+
+        # Skip if it's clearly a parameter assignment we missed
+        if PARAM_KEY_PATTERN.match(part):
+            continue
+
+        # Skip isolated punctuation or brackets
+        if part in ['-', '|', ']]', '[[', '<', '>']:
+            continue
+
+        # Valid component - add to cleaned list
+        cleaned.append(part)
+
+    return cleaned
+
+
 def extract_morphology(text: str) -> Optional[Dict]:
     """
     Extract morphological structure from Wiktionary etymology sections.
@@ -600,8 +682,8 @@ def extract_morphology(text: str) -> Optional[Dict]:
     if compound_match:
         # Split on | and get all components after 'en'
         parts = [p.strip() for p in compound_match.group(1).split('|')]
-        # Filter out alt=, t=, gloss= parameters
-        components = [p for p in parts if not ('=' in p)]
+        # Clean parameters using helper function
+        components = clean_template_components(parts, template_type='compound')
 
         if len(components) >= 2:
             return {
@@ -618,14 +700,15 @@ def extract_morphology(text: str) -> Optional[Dict]:
     if affix_match:
         # Split on | and parse components
         parts = [p.strip() for p in affix_match.group(1).split('|')]
-        # Filter out parameters with = (like alt=, t=, etc.)
-        components = [p for p in parts if not ('=' in p)]
+        # Clean parameters using helper function
+        components = clean_template_components(parts, template_type='affix')
 
         if len(components) >= 2:
             # Analyze components to determine type
             prefixes = []
             suffixes = []
-            base = None
+            interfixes = []
+            bases = []
 
             for comp in components:
                 if comp.endswith('-') and not comp.startswith('-'):
@@ -635,25 +718,33 @@ def extract_morphology(text: str) -> Optional[Dict]:
                     # Suffix (has leading hyphen, no trailing hyphen)
                     suffixes.append(comp)
                 elif comp.startswith('-') and comp.endswith('-'):
-                    # Interfix or special case (both hyphens)
-                    # For now, treat as base
-                    if base is None:
-                        base = comp
+                    # Interfix (both leading and trailing hyphens)
+                    # These are linking morphemes like -s- in "beeswax"
+                    interfixes.append(comp)
                 else:
-                    # No hyphens - this is the base
-                    if base is None:
-                        base = comp
+                    # No hyphens - this is a base word
+                    bases.append(comp)
 
-            # Determine morphology type
+            # Determine morphology type based on affixes
             if prefixes and suffixes:
                 morph_type = 'affixed'
             elif prefixes:
                 morph_type = 'prefixed'
             elif suffixes:
                 morph_type = 'suffixed'
-            else:
-                # All components are bases (compound)
+            elif interfixes and len(bases) >= 2:
+                # Compound with interfixes (e.g., "beeswax" = bee + -s- + wax)
                 morph_type = 'compound'
+            elif len(bases) >= 2:
+                # Simple compound
+                morph_type = 'compound'
+            else:
+                # Single base, no affixes - shouldn't happen but handle gracefully
+                morph_type = 'simple'
+
+            # Identify primary base word (first non-affix component for derived words)
+            # For compounds, base is None (all parts in 'bases' list)
+            base = bases[0] if bases and morph_type != 'compound' else None
 
             result = {
                 'type': morph_type,
@@ -664,9 +755,13 @@ def extract_morphology(text: str) -> Optional[Dict]:
                 'etymology_template': affix_match.group(0)
             }
 
-            # Add base if identified
+            # Add base if identified (single base for derivations, None for compounds)
             if base:
                 result['base'] = base
+
+            # Add interfixes if present
+            if interfixes:
+                result['interfixes'] = interfixes
 
             return result
 
@@ -675,12 +770,14 @@ def extract_morphology(text: str) -> Optional[Dict]:
     if surf_match:
         # Similar to affix template but more lenient
         parts = [p.strip() for p in surf_match.group(1).split('|')]
-        components = [p for p in parts if not ('=' in p)]
+        # Clean parameters using helper function
+        components = clean_template_components(parts, template_type='surf')
 
         if len(components) >= 2:
             # Analyze components similar to affix
             prefixes = [c for c in components if c.endswith('-') and not c.startswith('-')]
             suffixes = [c for c in components if c.startswith('-') and not c.endswith('-')]
+            interfixes = [c for c in components if c.startswith('-') and c.endswith('-')]
             bases = [c for c in components if not c.startswith('-') and not c.endswith('-')]
 
             # Determine type
@@ -693,9 +790,15 @@ def extract_morphology(text: str) -> Optional[Dict]:
             elif suffixes:
                 morph_type = 'suffixed'
                 base = bases[0] if bases else None
-            else:
+            elif interfixes and len(bases) >= 2:
                 morph_type = 'compound'
                 base = None
+            elif len(bases) >= 2:
+                morph_type = 'compound'
+                base = None
+            else:
+                morph_type = 'simple'
+                base = bases[0] if bases else None
 
             result = {
                 'type': morph_type,
@@ -708,6 +811,10 @@ def extract_morphology(text: str) -> Optional[Dict]:
 
             if base:
                 result['base'] = base
+
+            # Add interfixes if present
+            if interfixes:
+                result['interfixes'] = interfixes
 
             return result
 

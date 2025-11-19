@@ -124,14 +124,24 @@ def main():
     output_path = intermediate_dir / "core_entries.jsonl"
 
     logger.info("Core word list ingestion (English)")
+    logger.info("Note: ENABLE is optional (validation only). EOWL is the primary core source.")
+    logger.info("")
 
     # Read source lists
     enable_words = read_wordlist(enable_path, "ENABLE")
     eowl_words = read_wordlist(eowl_path, "EOWL")
 
     if not enable_words and not eowl_words:
-        logger.error("No source data found. Run 'make fetch-core' first.")
+        logger.error("No source data found. At minimum, EOWL is required.")
+        logger.error("Run 'make fetch-en' to fetch EOWL and other sources.")
         sys.exit(1)
+
+    # ENABLE is optional
+    if not enable_words:
+        logger.info("")
+        logger.info("ENABLE not present (this is OK - it's optional for validation only)")
+        logger.info("Continuing with EOWL as the primary core source.")
+        logger.info("")
 
     # Merge and track sources
     word_sources = merge_entries(enable_words, eowl_words)

@@ -340,6 +340,223 @@ print("Intermediate words:", len(learning_tiers['intermediate']))
 print("Advanced words:", len(learning_tiers['advanced']))
 ```
 
+### Morphology and Word Families
+
+The lexicon includes morphology data for ~240,000 words extracted from Wiktionary etymology templates, enabling word family exploration and affix-based queries.
+
+#### Word Family Exploration
+
+```python
+import json
+
+# Load metadata and affix index
+with open('plus.meta.json', 'r') as f:
+    metadata = json.load(f)
+
+with open('wikt_affix_index.json', 'r') as f:
+    affix_index = json.load(f)
+
+# Find all words derived from "happy"
+base = "happy"
+family = [
+    entry['word'] for entry in metadata
+    if entry.get('morphology', {}).get('base') == base
+]
+
+print(f"Words derived from '{base}':")
+for word in sorted(family):
+    morph = next(e['morphology'] for e in metadata if e['word'] == word)
+    print(f"  {word}: {morph['type']} - {' + '.join(morph['components'])}")
+
+# Output:
+#   happily: suffixed - happy + -ly
+#   happiness: suffixed - happy + -ness
+#   unhappily: affixed - un- + happy + -ly
+#   unhappiness: affixed - un- + happy + -ness
+#   unhappy: prefixed - un- + happy
+```
+
+#### Affix-Based Filtering
+
+```python
+# Find all words with suffix "-ness"
+suffix = "-ness"
+ness_words = affix_index['suffixes'][suffix]['sample_words']
+print(f"Sample words with suffix '{suffix}':")
+print(ness_words[:10])
+# ['darkness', 'happiness', 'kindness', 'sadness', 'weakness', ...]
+
+# Get count and POS distribution
+suffix_info = affix_index['suffixes'][suffix]
+print(f"\nTotal words: {suffix_info['word_count']}")
+print(f"POS distribution: {suffix_info['pos_distribution']}")
+# POS distribution: {'noun': 9727}
+
+# Find all words with prefix "un-"
+prefix = "un-"
+un_words = affix_index['prefixes'][prefix]['sample_words']
+print(f"\nSample words with prefix '{prefix}':")
+print(un_words[:10])
+# ['unable', 'unclear', 'uncomfortable', 'unhappy', 'unknown', ...]
+
+prefix_info = affix_index['prefixes'][prefix]
+print(f"Total words: {prefix_info['word_count']}")
+print(f"POS distribution: {prefix_info['pos_distribution']}")
+# POS distribution: {'adjective': 5234, 'verb': 3891, 'noun': 1543}
+```
+
+#### Formation Type Filtering
+
+```python
+# Find all compound words
+compounds = [
+    entry['word'] for entry in metadata
+    if entry.get('morphology', {}).get('type') == 'compound'
+]
+
+print(f"Compound words: {len(compounds)}")
+print("Examples:", compounds[:10])
+# Examples: ['bartender', 'firefighter', 'notebook', 'sunflower', ...]
+
+# Find words with both prefix and suffix (affixed)
+affixed = [
+    entry['word'] for entry in metadata
+    if entry.get('morphology', {}).get('type') == 'affixed'
+]
+
+print(f"\nAffixed words (prefix + suffix): {len(affixed)}")
+print("Examples:", affixed[:10])
+# Examples: ['unbreakable', 'uncomfortable', 'unfortunately', ...]
+
+# Analyze their structure
+for word in affixed[:3]:
+    morph = next(e['morphology'] for e in metadata if e['word'] == word)
+    print(f"  {word}: {' + '.join(morph['components'])}")
+# unbreakable: un- + break + -able
+# uncomfortable: un- + comfort + -able
+# unfortunately: un- + fortun + -ate + -ly
+```
+
+#### Most Productive Affixes
+
+```python
+# Find most productive prefixes
+top_prefixes = sorted(
+    affix_index['prefixes'].items(),
+    key=lambda x: x[1]['word_count'],
+    reverse=True
+)[:10]
+
+print("Most productive prefixes:")
+for prefix, info in top_prefixes:
+    print(f"  {prefix}: {info['word_count']} words")
+# un-: 11,218 words
+# non-: 10,003 words
+# anti-: 3,293 words
+# ...
+
+# Find most productive suffixes
+top_suffixes = sorted(
+    affix_index['suffixes'].items(),
+    key=lambda x: x[1]['word_count'],
+    reverse=True
+)[:10]
+
+print("\nMost productive suffixes:")
+for suffix, info in top_suffixes:
+    print(f"  {suffix}: {info['word_count']} words")
+# -ly: 12,686 words
+# -ness: 9,727 words
+# -er: 6,516 words
+# ...
+```
+
+#### Educational Use Case: Vocabulary Building
+
+```python
+# Build progressive vocabulary list by morphological complexity
+def create_morphology_tiers(metadata):
+    """Create learning tiers by morphological complexity."""
+    tiers = {
+        'simple': [],        # Base words, no affixes
+        'derived': [],       # Single prefix or suffix
+        'complex': []        # Multiple affixes or compounds
+    }
+
+    for entry in metadata:
+        morph = entry.get('morphology')
+        if not morph:
+            tiers['simple'].append(entry['word'])
+            continue
+
+        morph_type = morph.get('type')
+        if morph_type in ['suffixed', 'prefixed']:
+            tiers['derived'].append(entry['word'])
+        elif morph_type in ['affixed', 'compound', 'circumfixed']:
+            tiers['complex'].append(entry['word'])
+        else:
+            tiers['simple'].append(entry['word'])
+
+    return tiers
+
+morph_tiers = create_morphology_tiers(metadata)
+print("Simple words:", len(morph_tiers['simple']))
+print("Derived words:", len(morph_tiers['derived']))
+print("Complex words:", len(morph_tiers['complex']))
+```
+
+#### Linguistic Research: Affix Combinations
+
+```python
+# Find common prefix-suffix combinations
+from collections import Counter
+
+combinations = Counter()
+for entry in metadata:
+    morph = entry.get('morphology', {})
+    if morph.get('type') == 'affixed':
+        prefixes = tuple(morph.get('prefixes', []))
+        suffixes = tuple(morph.get('suffixes', []))
+        if prefixes and suffixes:
+            combinations[(prefixes, suffixes)] += 1
+
+print("Most common prefix-suffix combinations:")
+for (prefixes, suffixes), count in combinations.most_common(10):
+    prefix_str = ' + '.join(prefixes)
+    suffix_str = ' + '.join(suffixes)
+    print(f"  {prefix_str} + base + {suffix_str}: {count} words")
+# un- + base + -able: 234 words
+# un- + base + -ly: 189 words
+# re- + base + -ed: 156 words
+# ...
+```
+
+#### Compound Word Analysis
+
+```python
+# Find compounds with interfixes (linking morphemes)
+compounds_with_interfixes = [
+    entry for entry in metadata
+    if entry.get('morphology', {}).get('interfixes')
+]
+
+print(f"Compounds with interfixes: {len(compounds_with_interfixes)}")
+for entry in compounds_with_interfixes[:5]:
+    morph = entry['morphology']
+    print(f"  {entry['word']}: {' + '.join(morph['components'])}")
+# beeswax: bee + -s- + wax
+# craftsman: craft + -s- + man
+# kinsman: kin + -s- + man
+# ...
+
+# Analyze interfix inventory
+interfixes = affix_index['interfixes']
+print(f"\nTotal interfixes: {len(interfixes)}")
+for interfix, info in sorted(interfixes.items(), key=lambda x: x[1]['word_count'], reverse=True)[:5]:
+    print(f"  {interfix}: {info['word_count']} words")
+    print(f"    Examples: {', '.join(info['sample_words'][:3])}")
+```
+
 ---
 
 ## CLI Usage with owlex

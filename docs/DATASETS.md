@@ -28,7 +28,7 @@ The Openword Lexicon is built from multiple open-source word lists and linguisti
 
 ## Core Sources
 
-### ENABLE (Enhanced North American Benchmark LExicon)
+### ENABLE (Enhanced North American Benchmark LExicon) — **OPTIONAL**
 
 **Author**: Alan Beale et al.
 
@@ -38,8 +38,19 @@ The Openword Lexicon is built from multiple open-source word lists and linguisti
 
 **Word Count**: 172,823
 
+**Status**: **Optional - Validation Only**
+
 **Description**:
 ENABLE is a Public Domain word list originally created for word games. It contains common English words up to moderate length, with no proper nouns, hyphenated compounds, or diacritics.
+
+**Why Optional?**
+- Wiktionary provides far more comprehensive coverage (1.29M vs 172k words)
+- ENABLE contributes no metadata (POS tags, morphology, labels, etc.)
+- EOWL provides adequate permissive-licensed core vocabulary
+- Frequency data provides better filtering than ENABLE's scope
+- GitHub CDN reliability issues
+
+**Current Use**: Periodic validation baseline to verify we haven't regressed on classic word game vocabulary. Not required for builds.
 
 **Characteristics:**
 - Simple word list (one word per line)
@@ -50,9 +61,10 @@ ENABLE is a Public Domain word list originally created for word games. It contai
 **Attribution**: Not required (Public Domain), but we credit Alan Beale for his work.
 
 **Integration**:
-- Ingested as-is with NFKC normalization
-- POS tags backfilled via WordNet
-- Source ID: `enable`
+- **Optional fetch**: `make validate-enable` (not part of `make fetch-en`)
+- When present: Ingested alongside EOWL with NFKC normalization
+- When absent: Build proceeds successfully with EOWL + Wiktionary
+- Source ID: `enable` (when present)
 
 ---
 
@@ -121,10 +133,21 @@ Wiktionary is a collaborative, multilingual dictionary with rich linguistic data
 - Mapped to schema with label taxonomy
 - Provides: POS, register labels, regional labels, temporal labels
 - Provides: Syllable counts (~30-50% coverage)
-- Provides: Morphology data from etymology templates (~500k+ words)
-  - Derivation structure (prefix, suffix, affix templates)
-  - Compound word decomposition
-  - Base word and morpheme tracking
+- Provides: Morphology data from etymology templates (~240,000 words)
+  - **Derivation structure**: Prefix, suffix, affix, circumfix templates
+  - **Compound word decomposition**: Including interfixes
+  - **Base word and morpheme tracking**: Enables word family queries
+  - **Affix inventory**: ~450 prefixes, ~380 suffixes, ~12 interfixes
+  - **Coverage breakdown**:
+    - Suffixed words: ~107,000 (44.6%)
+    - Prefixed words: ~105,000 (43.6%)
+    - Compounds: ~25,000 (10.3%)
+    - Affixed (prefix+suffix): ~1,900 (0.8%)
+    - With interfixes: ~850 words
+  - **Phase 2 enhancements** (2025-11):
+    - Template parameter cleaning (fixes ~3,800 polluted entries)
+    - Interfix detection and classification
+    - Reverse affix index for efficient queries
   - Enables word family queries and morphological analysis
 - Source ID: `wikt`
 
@@ -311,6 +334,50 @@ All words normalized to **Unicode NFKC** for consistency:
 3. **Checksums**: SHA256 hashes for reproducibility
 4. **Smoke tests**: Sample words verified in each distribution
 
+### Morphology Statistics
+
+**Overall Coverage** (from Wiktionary etymology templates):
+- Total words with morphology: ~240,000
+- Coverage rate: ~18% of lexicon entries
+- Data source: Custom scanner parser of Wiktionary XML dumps
+
+**Formation Types:**
+| Type | Count | Percentage | Example |
+|------|------:|-----------:|---------|
+| Suffixed | ~107,000 | 44.6% | happiness (happy + -ness) |
+| Prefixed | ~105,000 | 43.6% | unhappy (un- + happy) |
+| Compound | ~25,000 | 10.3% | bartender (bar + tender) |
+| Affixed | ~1,900 | 0.8% | unbreakable (un- + break + -able) |
+| Circumfixed | ~1,600 | 0.7% | enlightenment (en- + light + -ment) |
+
+**Affix Inventory:**
+- Unique prefixes: ~450
+- Unique suffixes: ~380
+- Unique interfixes: ~12 (linking morphemes like -s- in "beeswax")
+
+**Most Productive Prefixes** (by word count):
+| Prefix | Words | Top POS | Examples |
+|--------|------:|---------|----------|
+| un- | ~11,200 | adjective | unhappy, unable, unclear |
+| non- | ~10,000 | adjective | nonexistent, nontrivial |
+| anti- | ~3,300 | noun | antibody, antibiotic |
+| re- | ~3,200 | verb | rebuild, return, rewrite |
+| pre- | ~2,800 | adjective | preview, prehistoric |
+
+**Most Productive Suffixes** (by word count):
+| Suffix | Words | Top POS | Examples |
+|--------|------:|---------|----------|
+| -ly | ~12,700 | adverb | quickly, happily, slowly |
+| -ness | ~9,700 | noun | happiness, darkness, kindness |
+| -er | ~6,500 | noun | teacher, builder, worker |
+| -ic | ~4,300 | adjective | historic, basic, magic |
+| -ism | ~3,400 | noun | capitalism, socialism |
+
+**Data Quality Improvements (Phase 2)**:
+- Template parameter cleaning: Fixed ~3,800 entries (1.6% of morphology data)
+- Interfix detection: Added ~850 compound words with linking morphemes
+- Reverse affix index: Enables efficient affix→words lookups
+
 ---
 
 ## Future Sources (Under Consideration)
@@ -337,18 +404,32 @@ All words normalized to **Unicode NFKC** for consistency:
 
 ## Fetching Sources
 
-All sources are fetched automatically via scripts in `scripts/fetch/`:
+All required sources are fetched automatically via `make fetch-en`:
 
 ```bash
-# Core sources
-bash scripts/fetch/fetch_enable.sh
-bash scripts/fetch/fetch_eowl.sh
+# Fetch all required sources
+make fetch-en
 
-# Plus sources
-bash scripts/fetch/fetch_wiktionary.sh  # Large download (2-3 GB)
-bash scripts/fetch/fetch_wordnet.sh     # Via NLTK
-bash scripts/fetch/fetch_brysbaert.sh   # Concreteness ratings
-bash scripts/fetch/fetch_frequency.sh
+# This runs:
+# - fetch_eowl.sh          # Core word list (required)
+# - fetch_wiktionary.sh    # Large download (2-3 GB)
+# - fetch_wordnet.sh       # Via NLTK
+# - fetch_brysbaert.sh     # Concreteness ratings
+# - fetch_frequency.sh     # Frequency data
+```
+
+### Optional: ENABLE Validation
+
+ENABLE is **no longer required** for builds. Use it only for optional validation:
+
+```bash
+# Optional: Validate against ENABLE baseline
+make validate-enable
+
+# This will:
+# 1. Fetch ENABLE (if not present)
+# 2. Compare lexicon coverage against ENABLE
+# 3. Report coverage statistics
 ```
 
 Each script:

@@ -22,9 +22,9 @@ UNIFIED_TRIE := $(BUILD_DIR)/$(LEXICON_LANG).trie
 UNIFIED_META := $(BUILD_DIR)/$(LEXICON_LANG).meta.json
 WORDLIST_TXT := $(BUILD_DIR)/wordlist.txt
 
-.PHONY: bootstrap venv deps fmt lint test clean clean-build clean-viewer scrub \
+.PHONY: bootstrap venv deps fmt lint test clean scrub \
         fetch-en build-en build-wiktionary-json build-trie package check-limits \
-        report-en analyze-all-reports analyze-local diagnose-scanner \
+        report-en analyze-all-reports analyze-local diagnose-scanner validate-enable \
         wordlist-builder wordlist-builder-web owlex-filter help-builder
 
 # ===========================
@@ -63,17 +63,19 @@ check-limits:
 # Data Fetching
 # ===========================
 
-# Fetch all English language sources
+# Fetch all English language sources (ENABLE removed - optional validation only)
 fetch-en:
 	@echo "=== Fetching English Language Sources ==="
-	@bash scripts/fetch/fetch_enable.sh
-	@bash scripts/fetch/fetch_eowl.sh
-	@bash scripts/fetch/fetch_wiktionary.sh
-	@bash scripts/fetch/fetch_wordnet.sh
-	@bash scripts/fetch/fetch_frequency.sh
-	@bash scripts/fetch/fetch_brysbaert.sh
-	@bash scripts/sys/limits.sh update
+	bash scripts/fetch/fetch_eowl.sh
+	bash scripts/fetch/fetch_wiktionary.sh
+	bash scripts/fetch/fetch_wordnet.sh
+	bash scripts/fetch/fetch_frequency.sh
+	bash scripts/fetch/fetch_brysbaert.sh
+	bash scripts/sys/limits.sh update
 	@echo "=== Fetch complete ==="
+	@echo ""
+	@echo "Note: ENABLE is now optional (validation only)."
+	@echo "Run 'make validate-enable' to fetch and validate against ENABLE."
 
 # ===========================
 # Build Pipeline
@@ -144,16 +146,12 @@ clean:
 	rm -rf build dist .pytest_cache .ruff_cache
 	find . -name '__pycache__' -type d -prune -exec rm -rf '{}' +
 	find . -name '*.egg-info' -type d -prune -exec rm -rf '{}' +
-
-clean-build:
 	rm -rf data/intermediate data/filtered data/build \
 		data/artifacts data/.limits-log.json \
 		ATTRIBUTION.md MANIFEST.json
-
-clean-viewer:
 	rm -rf viewer/node_modules viewer/pnpm-lock.yaml viewer/data viewer/dist
 
-scrub: clean clean-build
+scrub: clean
 	rm -rf .venv
 
 # ===========================
@@ -189,6 +187,27 @@ analyze-all-reports: deps
 analyze-local: build-wiktionary-json
 	@echo "Local analysis complete - Wiktionary data extracted"
 	@echo "Run 'make report-en' after building to generate comprehensive reports"
+
+# ===========================
+# Optional Validation
+# ===========================
+
+# Validate lexicon coverage against ENABLE word list (optional baseline check)
+validate-enable: deps
+	@echo "=== Validating against ENABLE word list ==="
+	@echo "Fetching ENABLE if not present..."
+	@bash scripts/fetch/fetch_enable.sh || echo "Warning: ENABLE fetch failed (GitHub CDN issue?)"
+	@if [ -f data/raw/en/enable1.txt ]; then \
+		echo ""; \
+		echo "Running validation..."; \
+		$(UV) run python tools/validate_enable_coverage.py; \
+	else \
+		echo ""; \
+		echo "Error: ENABLE not available for validation."; \
+		echo "This is expected if GitHub CDN is having issues."; \
+		echo "ENABLE is optional - the lexicon builds successfully without it."; \
+		exit 1; \
+	fi
 
 # Run scanner parser in diagnostic mode
 diagnose-scanner: deps $(WIKTIONARY_DUMP)

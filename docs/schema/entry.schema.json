@@ -165,6 +165,14 @@
           },
           "default": []
         },
+        "interfixes": {
+          "type": "array",
+          "description": "Interfix morphemes - linking elements between compound components (e.g., ['-s-'] for 'beeswax' = bee + -s- + wax)",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
         "is_compound": {
           "type": "boolean",
           "description": "True if formed by compounding two or more words (e.g., 'bartender' = 'bar' + 'tender')",

@@ -1,6 +1,6 @@
 # Openword Lexicon
 
-Permissively usable English lexicon for any application (games, NLP, education). Unified build integrates all sources (ENABLE, EOWL, Wiktionary, WordNet) with per-source licensing tracking, enabling flexible runtime filtering for your specific use case.
+Permissively usable English lexicon for any application (games, NLP, education). Unified build integrates all sources (EOWL, Wiktionary, WordNet, frequency data, Brysbaert concreteness) with per-source licensing tracking, enabling flexible runtime filtering for your specific use case.
 
 ## Approach
 
@@ -66,12 +66,14 @@ make build-en
 ```
 
 **Pipeline Steps (automated by `make build-en`):**
-1. **Fetch** English sources (ENABLE, EOWL, Wiktionary, WordNet, Brysbaert, frequency data)
-2. **Ingest** source data to normalized JSONL
+1. **Fetch** English sources (EOWL, Wiktionary, WordNet, Brysbaert, frequency data)
+2. **Ingest** source data to normalized JSONL with morphology extraction
 3. **Merge** all entries with license tracking
 4. **Enrich** with WordNet and Brysbaert (concreteness ratings + POS tags for ALL entries)
 5. **Tier** by frequency (A-Z logarithmic scale)
-6. **Build** trie + metadata sidecar
+6. **Build** trie + metadata sidecar + affix index
+
+**Note**: ENABLE is now optional (validation only). Run `make validate-enable` to check coverage.
 
 ## High-level pipeline
 1. **Fetch** English sources with checksums & provenance
@@ -116,11 +118,14 @@ uv run python -m openword.owlex wordlist-spec.json --verbose --output words.txt
   - Numeric: Precise 1-5 ratings for custom filtering and ranking
   - Confidence: Standard deviation for filtering ambiguous words
   - Use cases: children's apps, language learning, accessibility
-- **Morphology**: Derivation and compound word structure (Wiktionary only)
-  - Filter by formation type: suffixed, prefixed, compound, affixed
+- **Morphology**: Derivation and compound word structure (~240k words from Wiktionary)
+  - Filter by formation type: suffixed, prefixed, compound, affixed, circumfixed
   - Search by base word: find all words derived from "happy"
   - Search by affix: find all words with suffix "-ness" or prefix "un-"
-  - Use cases: vocabulary learning, word families, morphological analysis
+  - Reverse affix index: ~450 prefixes, ~380 suffixes, ~12 interfixes
+  - Interfix support: Compound linking morphemes (e.g., "-s-" in "beeswax")
+  - Clean component extraction: Template parameter pollution fixed (~3,800 entries)
+  - Use cases: vocabulary learning, word families, morphological analysis, linguistic research
 - **Labels** (Plus only): register, domain, temporal, region (~3-11% coverage)
 - **Policy**: family-friendly, modern-only, no-jargon shortcuts
 
@@ -171,7 +176,7 @@ See [docs/planned/](docs/planned/) for future feature plans.
 - Safe defaults for child-appropriate filtering (concrete words for kids)
 - Runtime license filtering (filter to CC0+UKACD for permissive-only)
 - Syllable data from Wiktionary hyphenation (~30-50% coverage)
-- Morphology data from Wiktionary etymology (derivation, compounds, affixes - estimated ~500k+ words)
+- Morphology data from Wiktionary etymology (~240k words: derivation, compounds, affixes with reverse index)
 
 ## Contributing
 

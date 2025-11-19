@@ -204,6 +204,18 @@ Suffix morphemes only.
 - **Format**: With leading hyphen (`-ness`, `-able`, `-ly`)
 - **Example**: `["-able"]` for "unbreakable", `["-ness"]` for "happiness"
 
+##### `morphology.interfixes` (array of strings)
+
+Interfix morphemes - linking elements between compound components.
+
+- **Default**: `[]` (empty array)
+- **Format**: With both leading and trailing hyphens (`-s-`, `-o-`, `-i-`)
+- **Example**: `["-s-"]` for "beeswax" (bee + -s- + wax), `["-o-"]` for "speedometer"
+- **Notes**:
+  - Interfixes are grammatical morphemes that join compound parts
+  - Rare in English but common in other languages
+  - Typically appear in loanwords or technical terms
+
 ##### `morphology.is_compound` (boolean)
 
 Whether the word is formed by compounding.
@@ -295,11 +307,27 @@ Raw Wiktionary template for reference.
 }
 ```
 
+**Compound word with interfix (beeswax)**:
+```json
+{
+  "morphology": {
+    "type": "compound",
+    "components": ["bee", "-s-", "wax"],
+    "prefixes": [],
+    "suffixes": [],
+    "interfixes": ["-s-"],
+    "is_compound": true,
+    "etymology_template": "{{affix|en|bee|-s-|wax}}"
+  }
+}
+```
+
 **Notes on morphology field:**
 - Only present for words with explicit etymology templates in Wiktionary
-- Coverage: Estimated ~500,000+ entries (derived and compound words)
+- Coverage: Estimated ~240,000+ entries (derived and compound words)
 - Enables powerful queries: "Find all words with suffix -ness", "Show compounds", "Words from base 'happy'"
 - Useful for vocabulary learning, morphological analysis, word family grouping
+- Phase 2 enhancements: Template parameter cleaning, interfix support, reverse affix index
 
 #### `concreteness` (string)
 
@@ -397,6 +425,110 @@ Frequency rank code using logarithmic scale (A-Z).
 - ~96.5% of entries are tier Z (not in frequency data)
 - Tiers A-T cover the top ~75,000 most frequent words
 - See [frequency_tiers.py](../src/openword/frequency_tiers.py) for complete tier definitions
+
+---
+
+## Affix Index (Reverse Morphology Lookup)
+
+The lexicon includes a precomputed **affix index** for efficient reverse morphological queries. This enables queries like "find all words with suffix `-ness`" or "show all words with prefix `un-`" without scanning the entire lexicon.
+
+### Structure
+
+The affix index is stored in `wikt_affix_index.json` and contains mappings from each affix to the words that use it.
+
+```json
+{
+  "prefixes": {
+    "un-": {
+      "word_count": 11218,
+      "sample_words": ["unable", "unclear", "unhappy", "unknown", "unusual"],
+      "pos_distribution": {
+        "adjective": 5234,
+        "verb": 3891,
+        "noun": 1543
+      }
+    }
+  },
+  "suffixes": {
+    "-ness": {
+      "word_count": 9727,
+      "sample_words": ["darkness", "happiness", "kindness", "sadness", "weakness"],
+      "pos_distribution": {
+        "noun": 9727
+      }
+    }
+  },
+  "interfixes": {
+    "-s-": {
+      "word_count": 234,
+      "sample_words": ["beeswax", "craftsman", "kinsman", "spokesman"]
+    }
+  },
+  "stats": {
+    "total_prefixes": 450,
+    "total_suffixes": 380,
+    "total_interfixes": 12,
+    "words_with_prefixes": 104752,
+    "words_with_suffixes": 107278,
+    "words_with_both": 1880,
+    "words_with_interfixes": 856
+  }
+}
+```
+
+### Fields
+
+#### `prefixes` / `suffixes` / `interfixes`
+
+Maps each affix to its statistics:
+
+- **`word_count`**: Total number of words using this affix
+- **`sample_words`**: Representative examples (up to 10 words, sampled across frequency spectrum)
+- **`pos_distribution`**: Count of words by part-of-speech (prefixes/suffixes only)
+
+#### `stats`
+
+Overall morphology statistics:
+
+- **`total_prefixes`**: Number of unique prefixes indexed (~450)
+- **`total_suffixes`**: Number of unique suffixes indexed (~380)
+- **`total_interfixes`**: Number of unique interfixes indexed (~12)
+- **`words_with_prefixes`**: Total words with at least one prefix
+- **`words_with_suffixes`**: Total words with at least one suffix
+- **`words_with_both`**: Total words with both prefix and suffix
+- **`words_with_interfixes`**: Total words with at least one interfix
+
+### Query Examples
+
+**Find all words with suffix `-able`:**
+```python
+affix_index['suffixes']['-able']['sample_words']
+# → ['agreeable', 'available', 'comfortable', 'doable', ...]
+```
+
+**Find most productive prefixes:**
+```python
+sorted(
+    affix_index['prefixes'].items(),
+    key=lambda x: x[1]['word_count'],
+    reverse=True
+)[:5]
+# → [('un-', {...}), ('non-', {...}), ('anti-', {...}), ...]
+```
+
+**Count adjectives with prefix `un-`:**
+```python
+affix_index['prefixes']['un-']['pos_distribution']['adjective']
+# → 5234
+```
+
+### Use Cases
+
+1. **Word Family Exploration**: Find all derivatives of a base word
+2. **Affix Pattern Analysis**: Discover productive affixes and morphological trends
+3. **Vocabulary Learning**: Generate word lists by morphological patterns for ESL
+4. **Linguistic Research**: Study affix productivity, POS patterns, and morphological combinations
+5. **Game Word Generation**: Create difficulty-graded word lists using morphology + frequency
 
 ---
 
