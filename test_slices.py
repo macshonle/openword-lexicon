@@ -90,8 +90,8 @@ def extract_page_content(page_xml: str):
     return (title, text)
 
 
-def test_slice(slice_path: Path):
-    """Test a single slice file."""
+def extract_slice(slice_path: Path):
+    """Extract and categorize content from a single slice file."""
     # Read the XML
     with open(slice_path, 'r', encoding='utf-8') as f:
         page_xml = f.read()
@@ -104,7 +104,7 @@ def test_slice(slice_path: Path):
     ns_match = NS_PATTERN.search(page_xml)
     namespace = int(ns_match.group(1)) if ns_match else None
 
-    # Test extract_page_content
+    # Extract page content
     result = extract_page_content(page_xml)
 
     return {
@@ -125,11 +125,11 @@ def main():
     print(f"Testing {len(slice_files)} slice files...")
     print()
 
-    # Test each slice
+    # Process each slice
     results = []
     for slice_path in slice_files:
         try:
-            result = test_slice(slice_path)
+            result = extract_slice(slice_path)
             results.append(result)
         except Exception as e:
             results.append({

@@ -376,35 +376,15 @@ class OwlexFilter:
         if not filters:
             return True
 
-        syllable_count = entry.get('syllables')
-
-        # If requiring syllable data and it's missing, exclude
-        if filters.get('require_syllables', False) and syllable_count is None:
-            return False
-
-        # If any count filter specified and no data, exclude (safe default)
-        if syllable_count is None and ('min' in filters or 'max' in filters or 'exact' in filters):
-            return False
-
-        # If no syllable data and no filters active, include
-        if syllable_count is None:
-            return True
-
-        # Apply exact match filter (takes precedence)
-        if 'exact' in filters:
-            if syllable_count != filters['exact']:
-                return False
-
-        # Apply range filters
-        if 'min' in filters:
-            if syllable_count < filters['min']:
-                return False
-
-        if 'max' in filters:
-            if syllable_count > filters['max']:
-                return False
-
-        return True
+        # Delegate to filters module for consistency
+        from openword.filters import matches_syllables
+        return matches_syllables(
+            entry,
+            min_syllables=filters.get('min'),
+            max_syllables=filters.get('max'),
+            exact_syllables=filters.get('exact'),
+            require_syllables=filters.get('require_syllables', False)
+        )
 
     def calculate_score(self, entry: Dict) -> float:
         """Calculate score for an entry."""
