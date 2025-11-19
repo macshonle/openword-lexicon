@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenWord Lexicon - Advanced Word List Builder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>OpenWord Lexicon</h1>
+                <p class="subtitle">Advanced Word List Builder</p>
+            </div>
+            <div class="header-actions">
+                <div class="demo-selector">
+                    <label for="demo-select">Quick Start:</label>
+                    <select id="demo-select">
+                        <option value="">Select a demo...</option>
+                        <option value="wordle">Wordle Words</option>
+                        <option value="kids-nouns">Kids Game (Concrete Nouns)</option>
+                        <option value="scrabble">Scrabble Words</option>
+                        <option value="profanity">Profanity Blocklist</option>
+                        <option value="british-common">British English Common Words</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Panel: Source Selection -->
+            <div class="left-panel">
+                <section class="panel-section">
+                    <h2>Licensed Sources</h2>
+                    <p class="hint">Select sources to include in your word list</p>
+
+                    <div class="source-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="source-eowl" checked>
+                            <span class="label-text">
+                                <strong>EOWL</strong>
+                                <span class="word-count">128,983 words</span>
+                            </span>
+                        </label>
+                        <p class="source-description">British English, up to 10 letters</p>
+                    </div>
+
+                    <div class="source-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="source-wiktionary" checked>
+                            <span class="label-text">
+                                <strong>Wiktionary</strong>
+                                <span class="word-count">1,294,779 words</span>
+                            </span>
+                        </label>
+                        <p class="source-description">Comprehensive multilingual dictionary</p>
+                    </div>
+
+                    <div class="source-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="source-wordnet" checked>
+                            <span class="label-text">
+                                <strong>WordNet</strong>
+                                <span class="word-count">90,931 enriched</span>
+                            </span>
+                        </label>
+                        <p class="source-description">POS tags, concreteness classification</p>
+                    </div>
+
+                    <div class="source-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="source-brysbaert">
+                            <span class="label-text">
+                                <strong>Brysbaert</strong>
+                                <span class="word-count">39,558 ratings</span>
+                            </span>
+                        </label>
+                        <p class="source-description">Empirical concreteness ratings (1-5 scale)</p>
+                    </div>
+
+                    <div class="source-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="source-frequency" checked>
+                            <span class="label-text">
+                                <strong>Frequency Data</strong>
+                                <span class="word-count">100% coverage</span>
+                            </span>
+                        </label>
+                        <p class="source-description">Logarithmic tiers A-Z from OpenSubtitles</p>
+                    </div>
+                </section>
+
+                <section class="panel-section">
+                    <h2>Selection Summary</h2>
+                    <div class="summary-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Estimated words:</span>
+                            <span class="stat-value" id="total-words">~1,298,737</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">POS tags available:</span>
+                            <span class="stat-value" id="pos-available">Yes (98.8%)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Labels available:</span>
+                            <span class="stat-value" id="labels-available">Yes (11.3%)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Concreteness available:</span>
+                            <span class="stat-value" id="concreteness-available">Yes (8.6%)</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Regional labels:</span>
+                            <span class="stat-value" id="regional-available">Yes (1.9%)</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel-section">
+                    <h2>License Information</h2>
+                    <div class="license-info">
+                        <div class="license-result" id="license-result">
+                            <strong>CC BY-SA 4.0</strong>
+                            <p class="license-description">Attribution + ShareAlike required</p>
+                        </div>
+                        <div class="license-details">
+                            <p><strong>Contributing sources:</strong></p>
+                            <ul id="license-sources">
+                                <li>Wiktionary (CC BY-SA 4.0)</li>
+                                <li>EOWL (UKACD License)</li>
+                                <li>WordNet (WordNet License)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Resize Handle -->
+            <div class="resize-handle" id="resize-handle"></div>
+
+            <!-- Right Panel: Filter Management -->
+            <div class="right-panel">
+                <!-- Active Filters Section -->
+                <section class="active-filters-section">
+                    <h2>Active Filters <span class="filter-count" id="filter-count">(0)</span></h2>
+
+                    <div class="empty-state" id="filters-empty">
+                        <p>No filters added yet. Add filters below to refine your word list.</p>
+                    </div>
+
+                    <div class="filters-list" id="filters-list">
+                        <!-- Filters will be added here dynamically -->
+                    </div>
+                </section>
+
+                <!-- Add Filter Section -->
+                <section class="add-filter-section">
+                    <h2>Add Filter</h2>
+                    <p class="hint">Build your word list by adding filters below. Each filter can include or exclude matching words.</p>
+
+                    <div class="filter-buttons">
+                        <button class="add-filter-btn" data-filter="character">
+                            <span class="btn-icon">🔤</span>
+                            <span class="btn-text">Character</span>
+                        </button>
+
+                        <button class="add-filter-btn" data-filter="phrase">
+                            <span class="btn-icon">💬</span>
+                            <span class="btn-text">Phrase</span>
+                        </button>
+
+                        <button class="add-filter-btn" data-filter="pos" data-requires="wiktionary,wordnet">
+                            <span class="btn-icon">📝</span>
+                            <span class="btn-text">Part of Speech</span>
+                        </button>
+
+                        <button class="add-filter-btn" data-filter="frequency" data-requires="frequency">
+                            <span class="btn-icon">📊</span>
+                            <span class="btn-text">Frequency</span>
+                        </button>
+
+                        <button class="add-filter-btn" data-filter="region" data-requires="wiktionary">
+                            <span class="btn-icon">🌍</span>
+                            <span class="btn-text">Region</span>
+                        </button>
+
+                        <button class="add-filter-btn" data-filter="concreteness" data-requires="wordnet,brysbaert">
+                            <span class="btn-icon">🎨</span>
+                            <span class="btn-text">Concreteness</span>
+                        </button>
+
+                        <button class="add-filter-btn" data-filter="labels" data-requires="wiktionary">
+                            <span class="btn-icon">🏷️</span>
+                            <span class="btn-text">Labels</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Results Section -->
+                <section class="results-section">
+                    <div class="result-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Estimated words:</span>
+                            <span class="stat-value" id="result-word-count">~1,298,737</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">License:</span>
+                            <span class="stat-value" id="result-license">CC BY-SA 4.0</span>
+                        </div>
+                    </div>
+
+                    <div class="export-actions">
+                        <button class="btn btn-primary" id="btn-view-spec">
+                            View JSON Specification
+                        </button>
+                        <button class="btn btn-secondary" id="btn-download-spec">
+                            Download as File
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Configuration Popup -->
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup-container">
+            <div class="popup-header">
+                <h3 id="popup-title">Configure Filter</h3>
+                <button class="popup-close" id="popup-close">&times;</button>
+            </div>
+            <div class="popup-body" id="popup-body">
+                <!-- Content will be dynamically generated -->
+            </div>
+            <div class="popup-footer">
+                <button class="btn btn-secondary" id="popup-cancel">Cancel</button>
+                <button class="btn btn-primary" id="popup-apply">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JSON Viewer Popup -->
+    <div class="popup-overlay" id="json-popup">
+        <div class="popup-container large">
+            <div class="popup-header">
+                <h3>JSON Specification</h3>
+                <button class="popup-close" id="json-popup-close">&times;</button>
+            </div>
+            <div class="popup-body">
+                <p class="hint">Use this specification with the OpenWord Lexicon filter tool:</p>
+                <pre id="json-output" class="json-output"></pre>
+                <div class="json-actions">
+                    <button class="btn btn-secondary" id="btn-copy-json">Copy to Clipboard</button>
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="btn btn-primary" id="json-popup-close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,43 +1,38 @@
-# OpenWord Lexicon - Interactive Word List Builder
+# OpenWord Lexicon - Advanced Word List Builder
 
-The Interactive Word List Builder provides a user-friendly way to create custom filtered word lists from the OpenWord Lexicon. Instead of manually writing filter criteria, you can use the web interface to build a JSON specification that describes exactly what words you want.
+An interactive web-based tool for building custom word lists from the OpenWord Lexicon. Create filtered word lists for games, educational apps, language learning tools, and more.
+
+This directory contains two web interfaces:
+- **[index.html](index.html)** - New advanced builder with dynamic filters and source selection (recommended)
+- **[web-builder.html](web-builder.html)** - Legacy builder with distribution-based architecture
 
 ---
 
-## Quick Start
+## Quick Start (New Advanced Builder)
 
-### Option 1: Web Interface
+1. **Open the builder**: Open [index.html](index.html) in a modern web browser
+2. **Select sources**: Choose word sources in the left panel (EOWL + Wiktionary checked by default)
+3. **Add filters**: Click filter type buttons to add filters dynamically
+4. **Configure filters**: Set each filter to "Must Include" or "Must Not Include" mode
+5. **Export**: View or download your JSON specification
 
 ```bash
-# Open web builder in browser
-make wordlist-builder-web
+# Open in browser
+open tools/wordlist-builder/index.html
 
-# Or manually open
-open tools/wordlist-builder/web-builder.html
+# Or use a local server
+python3 -m http.server 8000
+# Then visit: http://localhost:8000/tools/wordlist-builder/
 ```
 
-The web interface provides a visual form-based builder with immediate feedback and allows you to see all available options at once.
+## Features
 
-### Option 2: Manual JSON Specification
-
-Create a JSON file directly using the schema:
-
-```json
-{
-  "version": "1.0",
-  "name": "My Word List",
-  "distribution": "core",
-  "filters": {
-    "character": {
-      "min_length": 3,
-      "max_length": 10
-    },
-    "frequency": {
-      "tiers": ["top1k", "top3k", "top10k"]
-    }
-  }
-}
-```
+- **Interactive Source Selection**: Choose from EOWL, Wiktionary, WordNet, Brysbaert, and Frequency data
+- **Dynamic Filter System**: Add and remove filters on demand with include/exclude modes
+- **Real-time Statistics**: See word counts and metadata availability as you configure
+- **Quick Start Demos**: Pre-configured templates for common use cases (Wordle, Kids Nouns, Scrabble, Profanity, British English)
+- **JSON Export**: Generate specifications compatible with owlex filter tool
+- **License Tracking**: Automatic license calculation based on selected sources
 
 ---
 
@@ -77,45 +72,243 @@ wc -l my-words.txt
 
 ---
 
-## Available Presets
+## Word Sources (New Builder)
 
-The builder includes several pre-configured presets for common use cases:
+### Primary Sources
 
-### `wordle`
-**Distribution**: Core
-**Description**: 5-letter common words for Wordle-style games
-**Filters**: Exact length 5, top 10k frequency, single words only
+**EOWL (English Open Word List)** - 128,983 words
+- British English, up to 10 letters
+- No proper nouns, no hyphens
+- License: UKACD License (attribution required)
 
-### `kids-nouns`
-**Distribution**: Core
-**Description**: Concrete nouns appropriate for children
-**Filters**: 3-10 characters, top 1k-10k frequency, concrete nouns, family-friendly
+**Wiktionary** - 1,294,779 words
+- Comprehensive multilingual dictionary
+- Rich metadata: POS tags, labels, regional variants, morphology
+- License: CC BY-SA 4.0
 
-### `scrabble`
-**Distribution**: Core
-**Description**: Single words for Scrabble
-**Filters**: Single words only, top 100k frequency
+### Enrichment Sources
 
-### `profanity-blocklist`
-**Distribution**: Plus (requires Wiktionary)
-**Description**: Words flagged as vulgar, offensive, or derogatory
-**Filters**: Include vulgar/offensive/derogatory register labels
+**WordNet** - 90,931 enriched entries
+- POS tags and concreteness classification
+- License: WordNet License (permissive)
 
-### `crossword`
-**Distribution**: Plus
-**Description**: Words for crossword puzzles
-**Filters**: Single words only, minimum 3 characters
+**Brysbaert Concreteness Ratings** - 39,558 rated words
+- Empirical concreteness ratings on 1-5 scale
+- Excellent for children's apps and accessibility tools
+- License: Research/Educational Use
 
-To use a preset, open the web builder and select from the preset dropdown, or use the example specifications in `examples/wordlist-specs/`:
+**Frequency Data** - 100% coverage
+- Logarithmic tiers A-Z from OpenSubtitles 2018
+- Modern, conversational vocabulary
+- License: CC BY-SA 4.0
 
-```bash
-# Use an example preset specification
-make owlex-filter SPEC=examples/wordlist-specs/wordle.json
+## Filter Types (New Builder)
+
+### Character Filter 🔤
+Filter by word length, patterns, and character constraints.
+
+**Options:**
+- Minimum/maximum length
+- Regular expression pattern
+- Starts with, ends with, contains
+
+**Example:** 5-letter words for Wordle, words starting with "un-"
+
+### Phrase Filter 💬
+Filter by word count (single words vs multi-word phrases).
+
+**Options:**
+- Multi-word phrases only / Single words only
+- Minimum/maximum word count
+
+**Example:** Single words for Scrabble, exclude multi-word entries
+
+### Part of Speech Filter 📝
+Filter by grammatical category (requires Wiktionary or WordNet).
+
+**Options:** Nouns, verbs, adjectives, adverbs, pronouns, prepositions, etc.
+
+**Example:** Concrete nouns for kids' games, action verbs for learning
+
+### Frequency Filter 📊
+Filter by word frequency using logarithmic tiers (requires Frequency Data).
+
+**Options:** Tiers A (rank 1, most common) to Z (unranked)
+
+**Example:** Common words (A-E) for beginners, top 75k (A-T) for general vocab
+
+### Region Filter 🌍
+Filter by regional variants (requires Wiktionary).
+
+**Options:** en-GB, en-US, en-AU, en-CA, en-NZ, en-ZA, en-IE, en-IN
+
+**Example:** British English spelling, American English vocabulary
+
+### Concreteness Filter 🎨
+Filter by concreteness level (requires WordNet or Brysbaert).
+
+**Options:** Concrete (tangible), Mixed, Abstract (intangible)
+
+**Example:** Concrete nouns for children's games, abstract concepts for advanced learners
+
+### Labels Filter 🏷️
+Filter by usage labels and register (requires Wiktionary).
+
+**Options:** vulgar, offensive, slang, informal, formal, archaic, obsolete, dated, rare, colloquial, dialectal, technical, literary, humorous, derogatory, euphemistic
+
+**Examples:**
+- **Include vulgar**: Build profanity blocklist
+- **Exclude vulgar**: Family-friendly word games
+- **Include archaic**: Historical fiction vocabulary
+
+## Filter Modes
+
+Each filter can operate in two modes:
+
+### Must Include (Green Border)
+**Only show words that match this filter**
+
+Use for building specialized lists (e.g., only vulgar words for blocklist, only concrete nouns)
+
+### Must Not Include (Red Border)
+**Hide words that match this filter**
+
+Use for filtering out unwanted categories (e.g., exclude vulgar words, exclude multi-word phrases)
+
+## Demo Presets (New Builder)
+
+The advanced builder includes five pre-configured presets accessible from the "Quick Start" dropdown:
+
+### Wordle Words
+5-letter words, common frequency, single words only.
+
+**Sources:** EOWL, Wiktionary, WordNet, Frequency
+**Filters:**
+- Character: 5 letters exactly (Must Include)
+- Frequency: Common words A-H (Must Include)
+- Phrase: Single words only (Must Include)
+
+### Kids Game (Concrete Nouns)
+Concrete, tangible objects for children's educational apps.
+
+**Sources:** EOWL, Wiktionary, WordNet, Brysbaert, Frequency
+**Filters:**
+- POS: Nouns only (Must Include)
+- Concreteness: Concrete words, Brysbaert preferred (Must Include)
+- Character: 3-10 letters (Must Include)
+- Frequency: Common words A-G (Must Include)
+- Labels: No vulgar/offensive/slang (Must Not Include)
+
+### Scrabble Words
+Valid single words for word games.
+
+**Sources:** EOWL, Wiktionary, WordNet
+**Filters:**
+- Phrase: Single words only (Must Include)
+- Character: 2-15 letters (Must Include)
+
+### Profanity Blocklist
+Words marked as vulgar or offensive.
+
+**Sources:** Wiktionary only (for label data)
+**Filters:**
+- Labels: Vulgar or offensive (Must Include)
+
+### British English Common Words
+Common British English vocabulary.
+
+**Sources:** EOWL, Wiktionary, Frequency
+**Filters:**
+- Region: British English (en-GB) (Must Include)
+- Frequency: Common words A-E (Must Include)
+
+---
+
+## JSON Specification Format (New Builder)
+
+The advanced builder generates JSON specifications with this structure:
+
+```json
+{
+  "version": "1.0",
+  "sources": ["eowl", "wiktionary", "wordnet", "frequency"],
+  "filters": [
+    {
+      "type": "character",
+      "mode": "include",
+      "config": {
+        "minLength": 5,
+        "maxLength": 5
+      }
+    },
+    {
+      "type": "frequency",
+      "mode": "include",
+      "config": {
+        "minTier": "A",
+        "maxTier": "H"
+      }
+    },
+    {
+      "type": "labels",
+      "mode": "exclude",
+      "config": {
+        "labels": ["vulgar", "offensive"]
+      }
+    }
+  ]
+}
 ```
+
+### Fields
+
+- **version**: Specification format version (currently "1.0")
+- **sources**: Array of source IDs to include (`eowl`, `wiktionary`, `wordnet`, `brysbaert`, `frequency`)
+- **filters**: Array of filter objects, each with:
+  - **type**: Filter type (`character`, `phrase`, `pos`, `frequency`, `region`, `concreteness`, `labels`)
+  - **mode**: Filter mode (`include` or `exclude`)
+  - **config**: Filter-specific configuration object
+
+### License Calculation
+
+The builder automatically determines the license based on selected sources:
+
+- **CC BY-SA 4.0**: Wiktionary or Frequency Data included (ShareAlike required)
+- **CC BY 4.0**: EOWL only, or EOWL + permissive enrichments (WordNet, Brysbaert)
+
+### Metadata Coverage
+
+Statistics shown in the builder:
+
+- **POS Tags**: 98.8% coverage (from Wiktionary + WordNet)
+- **Labels**: 11.3% coverage (from Wiktionary)
+- **Concreteness**: 8.6% coverage (from WordNet + Brysbaert)
+- **Regional Labels**: 1.9% coverage (from Wiktionary)
 
 ---
 
 ## Architecture
+
+This directory contains two builder implementations:
+
+### New Advanced Builder (index.html, styles.css, app.js)
+
+**Features:**
+- Pure vanilla JavaScript (~850 lines total logic)
+- Client-side state management
+- Dynamic filter add/remove system
+- Real-time statistics updates
+- Source-based dependency tracking
+- Modern responsive design
+
+**Files:**
+- `index.html` - Main UI structure (~400 lines)
+- `styles.css` - Complete styling (~600 lines)
+- `app.js` - State management and logic (~850 lines)
+
+**Browser Requirements:** ES6+ support (Chrome 60+, Firefox 60+, Safari 12+, Edge 79+)
+
+### Legacy Builder (web-builder.html, spec-builder.js)
 
 The word list builder consists of three main components:
 
@@ -582,6 +775,40 @@ The word list builder tools are part of the openword-lexicon project and follow 
 Generated word lists follow the license of the source distribution:
 - **Core**: Ultra-permissive (Public Domain, UKACD)
 - **Plus**: CC BY-SA 4.0 (attribution required for Wiktionary content)
+
+---
+
+## Use Cases
+
+### Educational Apps
+- Children's vocabulary games (concrete nouns, common words)
+- Language learning tools (frequency-based progression)
+- Spelling bee word lists (length-based tiers)
+
+### Word Games
+- Wordle-style games (5-letter common words)
+- Scrabble word lists (single words, no proper nouns)
+- Crossword puzzle generators (frequency-filtered vocabulary)
+
+### Content Filtering
+- Profanity blocklists (vulgar/offensive labels)
+- Family-friendly word lists (exclude inappropriate content)
+- Age-appropriate vocabulary (frequency + concreteness)
+
+### NLP & Research
+- Concrete vs abstract word classification
+- Regional dialect comparison
+- Morphological analysis (word families)
+- Frequency-based vocabulary sampling
+
+---
+
+## See Also
+
+- **[DATASETS.md](../../docs/DATASETS.md)** - Detailed source dataset documentation
+- **[SCHEMA.md](../../docs/SCHEMA.md)** - Entry schema and field descriptions
+- **[labels.md](../../docs/labels.md)** - Complete label taxonomy
+- **[ATTRIBUTION.md](../../ATTRIBUTION.md)** - Full source credits
 
 ---
 
