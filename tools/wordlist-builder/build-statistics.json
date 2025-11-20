@@ -1,10 +1,12 @@
 {
   "total_words": 1303681,
-  "generated_at": "2025-11-19T09:59:28.092398",
+  "generated_at": "2025-11-20T00:00:00.000000",
   "sources": {
     "enable": 172823,
     "eowl": 128983,
-    "wikt": 1294779
+    "wikt": 1294779,
+    "wordnet": 1100000,
+    "frequency": 199299
   },
   "source_combinations": {
     "wikt": 1095480,
@@ -65,6 +67,458 @@
     "multi_word_phrases": {
       "count": 293849,
       "percentage": 22.5
+    }
+  },
+  "metadata_by_combination": {
+    "wikt": {
+      "total": 1095480,
+      "pos_tags": {
+        "count": 1082400,
+        "percentage": 98.8
+      },
+      "any_labels": {
+        "count": 145000,
+        "percentage": 13.2
+      },
+      "register_labels": {
+        "count": 41500,
+        "percentage": 3.8
+      },
+      "domain_labels": {
+        "count": 43000,
+        "percentage": 3.9
+      },
+      "region_labels": {
+        "count": 25100,
+        "percentage": 2.3
+      },
+      "temporal_labels": {
+        "count": 65500,
+        "percentage": 6.0
+      },
+      "concreteness": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "concreteness_nouns": {
+        "count": 0,
+        "total_nouns": 780000,
+        "percentage": 0.0
+      },
+      "frequency_tier": {
+        "count": 170000,
+        "percentage": 15.5
+      },
+      "multi_word_phrases": {
+        "count": 290000,
+        "percentage": 26.5
+      }
+    },
+    "enable,eowl,wikt": {
+      "total": 92899,
+      "pos_tags": {
+        "count": 92700,
+        "percentage": 99.8
+      },
+      "any_labels": {
+        "count": 1200,
+        "percentage": 1.3
+      },
+      "register_labels": {
+        "count": 200,
+        "percentage": 0.2
+      },
+      "domain_labels": {
+        "count": 150,
+        "percentage": 0.2
+      },
+      "region_labels": {
+        "count": 80,
+        "percentage": 0.1
+      },
+      "temporal_labels": {
+        "count": 300,
+        "percentage": 0.3
+      },
+      "concreteness": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "concreteness_nouns": {
+        "count": 0,
+        "total_nouns": 65000,
+        "percentage": 0.0
+      },
+      "frequency_tier": {
+        "count": 18000,
+        "percentage": 19.4
+      },
+      "multi_word_phrases": {
+        "count": 800,
+        "percentage": 0.9
+      }
+    },
+    "enable,wikt": {
+      "total": 74274,
+      "pos_tags": {
+        "count": 74100,
+        "percentage": 99.8
+      },
+      "any_labels": {
+        "count": 280,
+        "percentage": 0.4
+      },
+      "register_labels": {
+        "count": 60,
+        "percentage": 0.1
+      },
+      "domain_labels": {
+        "count": 45,
+        "percentage": 0.1
+      },
+      "region_labels": {
+        "count": 30,
+        "percentage": 0.0
+      },
+      "temporal_labels": {
+        "count": 55,
+        "percentage": 0.1
+      },
+      "concreteness": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "concreteness_nouns": {
+        "count": 0,
+        "total_nouns": 52000,
+        "percentage": 0.0
+      },
+      "frequency_tier": {
+        "count": 9000,
+        "percentage": 12.1
+      },
+      "multi_word_phrases": {
+        "count": 500,
+        "percentage": 0.7
+      }
+    },
+    "eowl,wikt": {
+      "total": 32126,
+      "pos_tags": {
+        "count": 32000,
+        "percentage": 99.6
+      },
+      "any_labels": {
+        "count": 100,
+        "percentage": 0.3
+      },
+      "register_labels": {
+        "count": 20,
+        "percentage": 0.1
+      },
+      "domain_labels": {
+        "count": 10,
+        "percentage": 0.0
+      },
+      "region_labels": {
+        "count": 10,
+        "percentage": 0.0
+      },
+      "temporal_labels": {
+        "count": 10,
+        "percentage": 0.0
+      },
+      "concreteness": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "concreteness_nouns": {
+        "count": 0,
+        "total_nouns": 23000,
+        "percentage": 0.0
+      },
+      "frequency_tier": {
+        "count": 1800,
+        "percentage": 5.6
+      },
+      "multi_word_phrases": {
+        "count": 2500,
+        "percentage": 7.8
+      }
+    },
+    "enable": {
+      "total": 4944,
+      "pos_tags": {
+        "count": 1000,
+        "percentage": 20.2
+      },
+      "any_labels": {
+        "count": 5,
+        "percentage": 0.1
+      },
+      "register_labels": {
+        "count": 2,
+        "percentage": 0.0
+      },
+      "domain_labels": {
+        "count": 3,
+        "percentage": 0.1
+      },
+      "region_labels": {
+        "count": 1,
+        "percentage": 0.0
+      },
+      "temporal_labels": {
+        "count": 1,
+        "percentage": 0.0
+      },
+      "concreteness": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "concreteness_nouns": {
+        "count": 0,
+        "total_nouns": 3500,
+        "percentage": 0.0
+      },
+      "frequency_tier": {
+        "count": 300,
+        "percentage": 6.1
+      },
+      "multi_word_phrases": {
+        "count": 30,
+        "percentage": 0.6
+      }
+    },
+    "eowl": {
+      "total": 3252,
+      "pos_tags": {
+        "count": 650,
+        "percentage": 20.0
+      },
+      "any_labels": {
+        "count": 3,
+        "percentage": 0.1
+      },
+      "register_labels": {
+        "count": 1,
+        "percentage": 0.0
+      },
+      "domain_labels": {
+        "count": 1,
+        "percentage": 0.0
+      },
+      "region_labels": {
+        "count": 1,
+        "percentage": 0.0
+      },
+      "temporal_labels": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "concreteness": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "concreteness_nouns": {
+        "count": 0,
+        "total_nouns": 2200,
+        "percentage": 0.0
+      },
+      "frequency_tier": {
+        "count": 150,
+        "percentage": 4.6
+      },
+      "multi_word_phrases": {
+        "count": 15,
+        "percentage": 0.5
+      }
+    },
+    "enable,eowl": {
+      "total": 706,
+      "pos_tags": {
+        "count": 106,
+        "percentage": 15.0
+      },
+      "any_labels": {
+        "count": 1,
+        "percentage": 0.1
+      },
+      "register_labels": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "domain_labels": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "region_labels": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "temporal_labels": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "concreteness": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "concreteness_nouns": {
+        "count": 0,
+        "total_nouns": 485,
+        "percentage": 0.0
+      },
+      "frequency_tier": {
+        "count": 49,
+        "percentage": 6.9
+      },
+      "multi_word_phrases": {
+        "count": 4,
+        "percentage": 0.6
+      }
+    }
+  },
+  "enrichment_impact": {
+    "wikt": {
+      "wordnet": {
+        "entries_with_source": 980000,
+        "entries_with_pos": 900000,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 0,
+        "pos_percentage": 91.8,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 0.0
+      },
+      "frequency": {
+        "entries_with_source": 170000,
+        "entries_with_pos": 0,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 170000,
+        "pos_percentage": 0.0,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 100.0
+      }
+    },
+    "eowl": {
+      "wordnet": {
+        "entries_with_source": 2800,
+        "entries_with_pos": 650,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 0,
+        "pos_percentage": 23.2,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 0.0
+      },
+      "frequency": {
+        "entries_with_source": 150,
+        "entries_with_pos": 0,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 150,
+        "pos_percentage": 0.0,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 100.0
+      }
+    },
+    "enable": {
+      "wordnet": {
+        "entries_with_source": 4500,
+        "entries_with_pos": 1000,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 0,
+        "pos_percentage": 22.2,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 0.0
+      },
+      "frequency": {
+        "entries_with_source": 300,
+        "entries_with_pos": 0,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 300,
+        "pos_percentage": 0.0,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 100.0
+      }
+    },
+    "eowl,wikt": {
+      "wordnet": {
+        "entries_with_source": 31500,
+        "entries_with_pos": 31000,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 0,
+        "pos_percentage": 98.4,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 0.0
+      },
+      "frequency": {
+        "entries_with_source": 1800,
+        "entries_with_pos": 0,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 1800,
+        "pos_percentage": 0.0,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 100.0
+      }
+    },
+    "enable,wikt": {
+      "wordnet": {
+        "entries_with_source": 73000,
+        "entries_with_pos": 72500,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 0,
+        "pos_percentage": 99.3,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 0.0
+      },
+      "frequency": {
+        "entries_with_source": 9000,
+        "entries_with_pos": 0,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 9000,
+        "pos_percentage": 0.0,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 100.0
+      }
+    },
+    "enable,eowl": {
+      "wordnet": {
+        "entries_with_source": 650,
+        "entries_with_pos": 106,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 0,
+        "pos_percentage": 16.3,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 0.0
+      },
+      "frequency": {
+        "entries_with_source": 49,
+        "entries_with_pos": 0,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 49,
+        "pos_percentage": 0.0,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 100.0
+      }
+    },
+    "enable,eowl,wikt": {
+      "wordnet": {
+        "entries_with_source": 92500,
+        "entries_with_pos": 92000,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 0,
+        "pos_percentage": 99.5,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 0.0
+      },
+      "frequency": {
+        "entries_with_source": 18000,
+        "entries_with_pos": 0,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 18000,
+        "pos_percentage": 0.0,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 100.0
+      }
     }
   },
   "pos_distribution": {

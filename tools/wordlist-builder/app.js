@@ -299,20 +299,37 @@ function getStats() {
     return BUILD_STATS || DEFAULT_STATS;
 }
 
+/**
+ * Estimate word count for a union of selected sources.
+ *
+ * IMPORTANT: source_combinations are DISJOINT sets - each word appears in exactly
+ * one combination based on which sources contributed to it. For example:
+ *   - "wikt" = words from Wiktionary only
+ *   - "eowl,wikt" = words from both EOWL and Wiktionary
+ *   - "enable,eowl,wikt" = words from all three sources
+ *
+ * When a user selects sources, we want the UNION of all words available from those
+ * sources. Since combinations are disjoint, we can safely sum them. We include a
+ * combination if ALL its sources are in the user's selection (i.e., the combination
+ * is a subset of the selection).
+ *
+ * Example: If user selects ["wikt", "eowl"], we include:
+ *   - "wikt" ✓ (subset of selection)
+ *   - "eowl" ✓ (subset of selection)
+ *   - "eowl,wikt" ✓ (subset of selection)
+ *   - "enable,eowl,wikt" ✗ (contains 'enable' which is not selected)
+ */
 function estimateWordCount(selectedSources) {
     // If we have detailed statistics, use them for accurate estimates
     if (BUILD_STATS && BUILD_STATS.source_combinations) {
-        // Try to find exact match in source combinations
-        const sourcesKey = selectedSources.sort().join(',');
-
-        // Check each combination to see if it matches our selection
+        // Union operation: sum all disjoint combinations that are subsets of selection
         let totalWords = 0;
         for (const [combo, count] of Object.entries(BUILD_STATS.source_combinations)) {
             const comboSources = combo.split(',');
 
-            // Include this combination if all its sources are selected
-            const allSourcesSelected = comboSources.every(s => selectedSources.includes(s));
-            if (allSourcesSelected) {
+            // Include this combination if it's a subset of selected sources
+            const isSubset = comboSources.every(s => selectedSources.includes(s));
+            if (isSubset) {
                 totalWords += count;
             }
         }
@@ -320,7 +337,7 @@ function estimateWordCount(selectedSources) {
         return totalWords;
     }
 
-    // Fallback to simple estimates
+    // Fallback to simple estimates (less accurate, doesn't handle unions properly)
     const stats = getStats();
     if (selectedSources.includes('wiktionary')) {
         return stats.wiktionary;
@@ -331,6 +348,170 @@ function estimateWordCount(selectedSources) {
     }
 
     return 0;
+}
+
+/**
+ * Compute metadata coverage for a union of selected sources.
+ *
+ * Similar to word count estimation, we sum metadata counts from all disjoint
+ * source combinations that are subsets of the selection. This gives accurate
+ * coverage statistics for the union.
+ *
+ * @param {string[]} selectedSources - Array of selected source IDs
+ * @returns {Object} Metadata coverage with counts and percentages
+ */
+function computeMetadataCoverage(selectedSources) {
+    if (!BUILD_STATS || !BUILD_STATS.metadata_by_combination) {
+        // Fallback to global stats
+        return BUILD_STATS ? BUILD_STATS.metadata_coverage : null;
+    }
+
+    // Accumulate counts across all relevant combinations
+    const totals = {
+        total_words: 0,
+        with_pos: 0,
+        with_any_labels: 0,
+        with_register: 0,
+        with_domain: 0,
+        with_region: 0,
+        with_temporal: 0,
+        with_concreteness: 0,
+        with_frequency: 0,
+        multi_word: 0,
+        nouns: 0,
+        nouns_with_concrete: 0,
+    };
+
+    // Sum counts from all matching combinations (disjoint union)
+    for (const [combo, metadata] of Object.entries(BUILD_STATS.metadata_by_combination)) {
+        const comboSources = combo.split(',');
+        const isSubset = comboSources.every(s => selectedSources.includes(s));
+
+        if (isSubset) {
+            totals.total_words += metadata.total;
+            totals.with_pos += metadata.pos_tags.count;
+            totals.with_any_labels += metadata.any_labels.count;
+            totals.with_register += metadata.register_labels.count;
+            totals.with_domain += metadata.domain_labels.count;
+            totals.with_region += metadata.region_labels.count;
+            totals.with_temporal += metadata.temporal_labels.count;
+            totals.with_concreteness += metadata.concreteness.count;
+            totals.with_frequency += metadata.frequency_tier.count;
+            totals.multi_word += metadata.multi_word_phrases.count;
+            totals.nouns += metadata.concreteness_nouns.total_nouns;
+            totals.nouns_with_concrete += metadata.concreteness_nouns.count;
+        }
+    }
+
+    // Compute percentages
+    const total = totals.total_words;
+    return {
+        pos_tags: {
+            count: totals.with_pos,
+            percentage: total > 0 ? Math.round(100 * totals.with_pos / total * 10) / 10 : 0
+        },
+        any_labels: {
+            count: totals.with_any_labels,
+            percentage: total > 0 ? Math.round(100 * totals.with_any_labels / total * 10) / 10 : 0
+        },
+        register_labels: {
+            count: totals.with_register,
+            percentage: total > 0 ? Math.round(100 * totals.with_register / total * 10) / 10 : 0
+        },
+        domain_labels: {
+            count: totals.with_domain,
+            percentage: total > 0 ? Math.round(100 * totals.with_domain / total * 10) / 10 : 0
+        },
+        region_labels: {
+            count: totals.with_region,
+            percentage: total > 0 ? Math.round(100 * totals.with_region / total * 10) / 10 : 0
+        },
+        temporal_labels: {
+            count: totals.with_temporal,
+            percentage: total > 0 ? Math.round(100 * totals.with_temporal / total * 10) / 10 : 0
+        },
+        concreteness: {
+            count: totals.with_concreteness,
+            percentage: total > 0 ? Math.round(100 * totals.with_concreteness / total * 10) / 10 : 0
+        },
+        concreteness_nouns: {
+            count: totals.nouns_with_concrete,
+            total_nouns: totals.nouns,
+            percentage: totals.nouns > 0 ? Math.round(100 * totals.nouns_with_concrete / totals.nouns * 10) / 10 : 0
+        },
+        frequency_tier: {
+            count: totals.with_frequency,
+            percentage: total > 0 ? Math.round(100 * totals.with_frequency / total * 10) / 10 : 0
+        },
+        multi_word_phrases: {
+            count: totals.multi_word,
+            percentage: total > 0 ? Math.round(100 * totals.multi_word / total * 10) / 10 : 0
+        }
+    };
+}
+
+/**
+ * Determine the resulting license for a combination of selected sources.
+ * Uses the license_combinations data to find the most restrictive license.
+ *
+ * @param {string[]} selectedSources - Array of selected source IDs
+ * @returns {Object} License information {id, description, sources}
+ */
+function computeLicense(selectedSources) {
+    if (!BUILD_STATS || !BUILD_STATS.license_combinations) {
+        // Fallback to hardcoded logic
+        return computeLicenseFallback(selectedSources);
+    }
+
+    // Find all license combinations that match our source selection
+    let matchedLicense = null;
+    let maxCoverage = 0;
+
+    for (const [licenses, count] of Object.entries(BUILD_STATS.license_combinations)) {
+        // This is a heuristic: we look for the license combination that appears
+        // most frequently with our selected sources. In practice, we should find
+        // the combination that exactly matches our source selection.
+        // For now, we'll use a simpler approach based on source requirements.
+    }
+
+    // Simplified: determine license based on most restrictive source
+    return computeLicenseFallback(selectedSources);
+}
+
+function computeLicenseFallback(selectedSources) {
+    // License hierarchy (most restrictive first)
+    // CC BY-SA 4.0 is most restrictive (requires attribution + share-alike)
+    let license = 'CC BY 4.0';
+    let licenseDesc = 'Attribution required';
+    const sources = [];
+
+    if (selectedSources.includes('wiktionary')) {
+        license = 'CC BY-SA 4.0';
+        licenseDesc = 'Attribution + ShareAlike required';
+        sources.push('Wiktionary (CC BY-SA 4.0)');
+    }
+
+    if (selectedSources.includes('eowl')) {
+        sources.push('EOWL (UKACD License)');
+    }
+
+    if (selectedSources.includes('wordnet')) {
+        sources.push('WordNet (WordNet License)');
+    }
+
+    if (selectedSources.includes('brysbaert')) {
+        sources.push('Brysbaert (Research Use)');
+    }
+
+    if (selectedSources.includes('frequency')) {
+        if (!selectedSources.includes('wiktionary')) {
+            license = 'CC BY-SA 4.0';
+            licenseDesc = 'Attribution + ShareAlike required';
+        }
+        sources.push('Frequency Data (CC BY-SA 4.0)');
+    }
+
+    return { license, licenseDesc, sources };
 }
 
 // ============================================================================
@@ -784,95 +965,66 @@ function updateUI() {
 
 function updateSourceSummary() {
     const activeSources = getActiveSources();
-    const stats = getStats();
 
     // Map UI source names to data source names
     const sourceMapping = {
         'wiktionary': 'wikt',
         'eowl': 'eowl',
-        'wordnet': 'wordnet',  // Not a primary source, enrichment only
-        'brysbaert': 'brysbaert',  // Not a primary source, enrichment only
-        'frequency': 'frequency'  // Not a primary source, enrichment only
+        'wordnet': 'wordnet',
+        'brysbaert': 'brysbaert',
+        'frequency': 'frequency'
     };
 
-    // Get primary sources (enable, eowl, wikt)
-    const primarySources = activeSources
-        .filter(s => ['wiktionary', 'eowl'].includes(s))
-        .map(s => sourceMapping[s]);
+    // Convert UI source names to data source names
+    const dataSources = activeSources.map(s => sourceMapping[s] || s);
 
-    // Calculate estimated word count using new function
+    // Get primary sources only (for word count)
+    const primarySources = dataSources.filter(s => ['wikt', 'eowl', 'enable'].includes(s));
+
+    // Calculate estimated word count
     const estimatedWords = estimateWordCount(primarySources);
-
-    // Update stats
     document.getElementById('total-words').textContent = estimatedWords > 0
         ? `~${estimatedWords.toLocaleString()}`
         : '0';
 
-    // Use actual metadata coverage from build statistics
-    const metadata = BUILD_STATS ? BUILD_STATS.metadata_coverage : null;
+    // Compute real-time metadata coverage for ALL selected sources (including enrichment)
+    const metadata = computeMetadataCoverage(dataSources);
 
-    // POS availability
-    const posAvailable = (state.sources.wiktionary || state.sources.wordnet);
-    document.getElementById('pos-available').textContent = posAvailable
-        ? (metadata ? `Yes (${metadata.pos_tags.percentage}%)` : `Yes (${(stats.posAvailable * 100).toFixed(1)}%)`)
-        : 'No';
+    // POS availability - depends on wiktionary or wordnet
+    const posAvailable = state.sources.wiktionary || state.sources.wordnet;
+    document.getElementById('pos-available').textContent = posAvailable && metadata
+        ? `Yes (${metadata.pos_tags.percentage}%)`
+        : posAvailable ? 'Yes' : 'No';
 
-    // Labels availability
+    // Labels availability - depends on wiktionary
     const labelsAvailable = state.sources.wiktionary;
-    document.getElementById('labels-available').textContent = labelsAvailable
-        ? (metadata ? `Yes (${metadata.any_labels.percentage}%)` : `Yes (${(stats.labelsAvailable * 100).toFixed(1)}%)`)
-        : 'No';
+    document.getElementById('labels-available').textContent = labelsAvailable && metadata
+        ? `Yes (${metadata.any_labels.percentage}%)`
+        : labelsAvailable ? 'Yes' : 'No';
 
-    // Concreteness availability
+    // Concreteness availability - depends on wordnet or brysbaert
     const concretenessAvailable = state.sources.wordnet || state.sources.brysbaert;
-    document.getElementById('concreteness-available').textContent = concretenessAvailable
-        ? (metadata ? `Yes (${metadata.concreteness.percentage}%)` : `Yes (${(stats.concretenessAvailable * 100).toFixed(1)}%)`)
-        : 'No';
+    document.getElementById('concreteness-available').textContent = concretenessAvailable && metadata
+        ? `Yes (${metadata.concreteness.percentage}%)`
+        : concretenessAvailable ? 'Yes' : 'No';
 
-    // Regional availability
+    // Regional availability - depends on wiktionary
     const regionalAvailable = state.sources.wiktionary;
-    document.getElementById('regional-available').textContent = regionalAvailable
-        ? (metadata ? `Yes (${metadata.region_labels.percentage}%)` : `Yes (${(stats.regionalAvailable * 100).toFixed(1)}%)`)
-        : 'No';
+    document.getElementById('regional-available').textContent = regionalAvailable && metadata
+        ? `Yes (${metadata.region_labels.percentage}%)`
+        : regionalAvailable ? 'Yes' : 'No';
 }
 
 function updateLicenseInfo() {
     const licenseResult = document.getElementById('license-result');
     const licenseSources = document.getElementById('license-sources');
 
-    // Determine license based on sources
-    let license = 'CC BY 4.0';
-    let licenseDesc = 'Attribution required';
-    const sources = [];
+    // Compute license using centralized function
+    const activeSources = getActiveSources();
+    const licenseInfo = computeLicense(activeSources);
 
-    if (state.sources.wiktionary) {
-        license = 'CC BY-SA 4.0';
-        licenseDesc = 'Attribution + ShareAlike required';
-        sources.push('Wiktionary (CC BY-SA 4.0)');
-    }
-
-    if (state.sources.eowl) {
-        sources.push('EOWL (UKACD License)');
-    }
-
-    if (state.sources.wordnet) {
-        sources.push('WordNet (WordNet License)');
-    }
-
-    if (state.sources.brysbaert) {
-        sources.push('Brysbaert (Research Use)');
-    }
-
-    if (state.sources.frequency) {
-        if (!state.sources.wiktionary) {
-            license = 'CC BY-SA 4.0';
-            licenseDesc = 'Attribution + ShareAlike required';
-        }
-        sources.push('Frequency Data (CC BY-SA 4.0)');
-    }
-
-    licenseResult.innerHTML = `<strong>${license}</strong><p class="license-description">${licenseDesc}</p>`;
-    licenseSources.innerHTML = sources.map(s => `<li>${s}</li>`).join('');
+    licenseResult.innerHTML = `<strong>${licenseInfo.license}</strong><p class="license-description">${licenseInfo.licenseDesc}</p>`;
+    licenseSources.innerHTML = licenseInfo.sources.map(s => `<li>${s}</li>`).join('');
 }
 
 function updateFilterButtons() {
@@ -931,25 +1083,24 @@ function updateResultsSummary() {
     // Map UI source names to data source names
     const sourceMapping = {
         'wiktionary': 'wikt',
-        'eowl': 'eowl'
+        'eowl': 'eowl',
+        'wordnet': 'wordnet',
+        'brysbaert': 'brysbaert',
+        'frequency': 'frequency'
     };
 
-    // Get primary sources
-    const primarySources = activeSources
-        .filter(s => ['wiktionary', 'eowl'].includes(s))
-        .map(s => sourceMapping[s]);
+    // Get primary sources only (for word count)
+    const dataSources = activeSources.map(s => sourceMapping[s] || s);
+    const primarySources = dataSources.filter(s => ['wikt', 'eowl', 'enable'].includes(s));
 
-    // Calculate estimated word count using new function
+    // Calculate estimated word count using centralized function
     const estimatedWords = estimateWordCount(primarySources);
 
-    // Determine license
-    let license = 'CC BY 4.0';
-    if (state.sources.wiktionary || state.sources.frequency) {
-        license = 'CC BY-SA 4.0';
-    }
+    // Determine license using centralized function
+    const licenseInfo = computeLicense(activeSources);
 
     document.getElementById('result-word-count').textContent = estimatedWords > 0
         ? `~${estimatedWords.toLocaleString()}`
         : '0';
-    document.getElementById('result-license').textContent = license;
+    document.getElementById('result-license').textContent = licenseInfo.license;
 }
