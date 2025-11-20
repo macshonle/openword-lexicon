@@ -25,7 +25,8 @@ WORDLIST_TXT := $(BUILD_DIR)/wordlist.txt
 .PHONY: bootstrap venv deps fmt lint test clean scrub \
         fetch-en build-en build-wiktionary-json build-trie package check-limits \
         report-en analyze-all-reports analyze-local diagnose-scanner validate-enable \
-        wordlist-builder wordlist-builder-web owlex-filter help-builder
+        wordlist-builder wordlist-builder-web owlex-filter help-builder \
+        viewer-web help-viewer
 
 # ===========================
 # Development Environment
@@ -114,7 +115,8 @@ build-trie: $(WORDLIST_TXT)
 		echo "Installing viewer dependencies..."; \
 		cd viewer && pnpm install; \
 	fi
-	@cd viewer && pnpm run build-trie
+	@echo "Building binary trie from $(WORDLIST_TXT)..."
+	@cd viewer && pnpm run build-trie -- ../$(WORDLIST_TXT) data/$(LEXICON_LANG).trie.bin
 
 # Export trie to plain text wordlist
 $(WORDLIST_TXT): $(UNIFIED_TRIE)
@@ -262,19 +264,26 @@ help-builder:
 	@echo "  - docs/UNIFIED_BUILD_DESIGN.md - Architecture"
 	@echo ""
 
-# Open web builder in default browser
+# Start web builder server
 wordlist-builder-web:
-	@echo "Opening web-based word list builder..."
-	@if command -v xdg-open >/dev/null 2>&1; then \
-		xdg-open tools/wordlist-builder/index.html; \
-	elif command -v open >/dev/null 2>&1; then \
-		open tools/wordlist-builder/index.html; \
-	elif command -v start >/dev/null 2>&1; then \
-		start tools/wordlist-builder/index.html; \
-	else \
-		echo "Please open this file in your browser:"; \
-		echo "  file://$(shell pwd)/tools/wordlist-builder/index.html"; \
+	@echo "Starting web-based word list builder..."
+	@if ! command -v pnpm &> /dev/null; then \
+		echo "Error: pnpm not found. Install with: npm install -g pnpm"; \
+		exit 1; \
 	fi
+	@if [ ! -d "tools/wordlist-builder/node_modules" ]; then \
+		echo "Installing wordlist-builder dependencies..."; \
+		cd tools/wordlist-builder && pnpm install; \
+	fi
+	@echo ""
+	@echo "=========================================="
+	@echo "  Word List Builder Server"
+	@echo "=========================================="
+	@echo ""
+	@echo "  Server will start at: http://localhost:8000"
+	@echo "  Press Ctrl+C to stop the server"
+	@echo ""
+	@cd tools/wordlist-builder && pnpm start
 
 # Run owlex filter (requires SPEC parameter)
 owlex-filter: deps
@@ -295,6 +304,70 @@ owlex-filter: deps
 
 # Convenience target: Combined CLI builder workflow
 wordlist-builder: help-builder
+
+# ===========================
+# Interactive Trie Viewer
+# ===========================
+
+# Display help for trie viewer
+help-viewer:
+	@echo ""
+	@echo "═══════════════════════════════════════════════════════════"
+	@echo "  OpenWord Lexicon - Interactive Trie Viewer"
+	@echo "═══════════════════════════════════════════════════════════"
+	@echo ""
+	@echo "The trie viewer provides interactive visualization of the"
+	@echo "lexicon's trie data structure."
+	@echo ""
+	@echo "Available Versions:"
+	@echo ""
+	@echo "  index.html         - Build trie from wordlist in browser"
+	@echo "  index-binary.html  - Load pre-built binary trie (faster)"
+	@echo ""
+	@echo "Usage:"
+	@echo ""
+	@echo "  make viewer-web"
+	@echo "      Start the viewer server (http://localhost:8080)"
+	@echo ""
+	@echo "  make build-trie"
+	@echo "      Build binary trie for fast loading"
+	@echo ""
+	@echo "Note: Run 'make build-en' first to generate wordlist data"
+	@echo ""
+
+# Start trie viewer server
+viewer-web:
+	@echo "Starting interactive trie viewer..."
+	@if ! command -v pnpm &> /dev/null; then \
+		echo "Error: pnpm not found. Install with: npm install -g pnpm"; \
+		exit 1; \
+	fi
+	@if [ ! -d "viewer/node_modules" ]; then \
+		echo "Installing viewer dependencies..."; \
+		cd viewer && pnpm install; \
+	fi
+	@if [ ! -f "$(WORDLIST_TXT)" ]; then \
+		echo ""; \
+		echo "Warning: Wordlist not found at $(WORDLIST_TXT)"; \
+		echo "Run 'make build-en' first to generate the lexicon."; \
+		echo ""; \
+		echo "The viewer will start, but data will not be available until you build."; \
+		echo ""; \
+		sleep 2; \
+	fi
+	@echo ""
+	@echo "=========================================="
+	@echo "  Trie Viewer Server"
+	@echo "=========================================="
+	@echo ""
+	@echo "  Server will start at: http://localhost:8080"
+	@echo "  Press Ctrl+C to stop the server"
+	@echo ""
+	@echo "  Available pages:"
+	@echo "    /index.html        - Dynamic trie builder"
+	@echo "    /index-binary.html - Binary trie loader"
+	@echo ""
+	@cd viewer && pnpm start
 
 # ===========================
 # Example Specifications

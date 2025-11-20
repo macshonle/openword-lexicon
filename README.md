@@ -89,13 +89,17 @@ make build-en
 - `entries_tiered.jsonl` (intermediate with all metadata)
 - `ATTRIBUTION.md` (generated per build)
 
-## Interactive Word List Builder
+## Interactive Web Tools
 
-Create custom filtered word lists using the web interface:
+### Word List Builder
+
+Create custom filtered word lists using the interactive web interface:
 
 ```bash
-# Open web-based builder
+# Start web-based builder (opens browser at http://localhost:8000)
 make wordlist-builder-web
+
+# Requires: pnpm (install with: npm install -g pnpm)
 ```
 
 The builder creates JSON specifications that describe filtering criteria:
@@ -139,6 +143,31 @@ Pre-built examples in `examples/wordlist-specs/`:
 - `profanity-blocklist.json` - Flagged inappropriate words
 
 See `tools/wordlist-builder/README.md` for complete documentation.
+
+### Trie Viewer
+
+Visualize and explore the lexicon's trie data structure interactively:
+
+```bash
+# Start trie viewer server (opens browser at http://localhost:8080)
+make viewer-web
+
+# Build binary trie for faster loading (optional)
+make build-trie
+
+# Requires: pnpm (install with: npm install -g pnpm)
+# Requires: Run 'make build-en' first to generate wordlist data
+```
+
+Two viewing modes available:
+- **index.html** - Builds trie from wordlist dynamically in browser
+- **index-binary.html** - Loads pre-built binary trie (faster, requires `make build-trie`)
+
+Features:
+- Real-time prefix search and word validation
+- Random word generation with prefix filtering
+- Trie statistics (nodes, compression ratio, etc.)
+- Interactive exploration of word structure
 
 ## Status
 

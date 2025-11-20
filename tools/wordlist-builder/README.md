@@ -10,20 +10,21 @@ This directory contains two web interfaces:
 
 ## Quick Start (New Advanced Builder)
 
-1. **Open the builder**: Open [index.html](index.html) in a modern web browser
+1. **Start the server**: Run `make wordlist-builder-web` from the project root
 2. **Select sources**: Choose word sources in the left panel (EOWL + Wiktionary checked by default)
 3. **Add filters**: Click filter type buttons to add filters dynamically
 4. **Configure filters**: Set each filter to "Must Include" or "Must Not Include" mode
 5. **Export**: View or download your JSON specification
 
 ```bash
-# Open in browser
-open tools/wordlist-builder/index.html
+# Start the web server (from project root)
+make wordlist-builder-web
 
-# Or use a local server
-python3 -m http.server 8000
-# Then visit: http://localhost:8000/tools/wordlist-builder/
+# Server will start at: http://localhost:8000
+# Requires: pnpm (install with: npm install -g pnpm)
 ```
+
+**Why a server?** The builder needs to fetch `build-statistics.json` via HTTP. Opening the HTML file directly (`file://`) causes CORS errors that prevent data loading.
 
 ## Features
 

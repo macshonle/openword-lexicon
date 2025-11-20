@@ -136,6 +136,17 @@ const FILTER_TYPES = {
                 'humorous', 'derogatory', 'euphemistic'
             ]}
         ]
+    },
+    syllable: {
+        title: 'Syllable Filter',
+        icon: '🔢',
+        requires: ['wiktionary'],
+        configFields: [
+            { type: 'number', name: 'minSyllables', label: 'Minimum Syllables', min: 1, placeholder: 'e.g., 1' },
+            { type: 'number', name: 'maxSyllables', label: 'Maximum Syllables', min: 1, placeholder: 'e.g., 3' },
+            { type: 'number', name: 'exact', label: 'Exact Syllables', min: 1, placeholder: 'e.g., 2 (overrides min/max)' },
+            { type: 'checkbox', name: 'requireSyllables', label: 'Require syllable data (exclude words without syllable info)', defaultChecked: false }
+        ]
     }
 };
 
@@ -251,6 +262,42 @@ const DEMOS = {
                 summary: 'Common words (A-E)'
             }
         ]
+    },
+    'childrens-reading': {
+        name: "Children's Reading",
+        sources: { eowl: true, wiktionary: true, wordnet: true, brysbaert: true, frequency: true },
+        filters: [
+            {
+                type: 'syllable',
+                mode: 'include',
+                config: { minSyllables: 1, maxSyllables: 2 },
+                summary: '1-2 syllables'
+            },
+            {
+                type: 'character',
+                mode: 'include',
+                config: { minLength: 3, maxLength: 8 },
+                summary: '3-8 letters'
+            },
+            {
+                type: 'frequency',
+                mode: 'include',
+                config: { minTier: 'A', maxTier: 'F' },
+                summary: 'Common words (A-F)'
+            },
+            {
+                type: 'phrase',
+                mode: 'include',
+                config: { singleWord: true },
+                summary: 'Single words only'
+            },
+            {
+                type: 'labels',
+                mode: 'exclude',
+                config: { labels: ['vulgar', 'offensive', 'slang'] },
+                summary: 'No vulgar/offensive/slang'
+            }
+        ]
     }
 };
 
@@ -299,20 +346,43 @@ function getStats() {
     return BUILD_STATS || DEFAULT_STATS;
 }
 
+/**
+ * Estimate word count for a union of selected sources.
+ *
+ * BACKGROUND: source_combinations partition the lexicon into DISJOINT sets based on
+ * which sources contributed to each word. Think of it like a Venn diagram where each
+ * region is labeled with which circles it's in:
+ *   - "wikt": 1,095,480 = words ONLY in Wiktionary (not in eowl)
+ *   - "eowl": 3,252 = words ONLY in EOWL (not in wikt)
+ *   - "eowl,wikt": 32,126 = words in BOTH eowl AND wikt
+ *
+ * WHY WE CAN'T JUST USE TOTALS: When a user selects sources, they want a UNION
+ * (all words from ANY selected source). We can't precompute all possible unions
+ * because with N sources there are 2^N possibilities. Instead, we compute unions
+ * on-the-fly using the subset principle:
+ *
+ * SUBSET PRINCIPLE: Include a combination if ALL its sources are selected.
+ *   User selects ["wikt", "eowl"]:
+ *     - "wikt" ✓ (wikt ⊆ {wikt, eowl})
+ *     - "eowl" ✓ (eowl ⊆ {wikt, eowl})
+ *     - "eowl,wikt" ✓ (both ⊆ {wikt, eowl})
+ *     - "enable,eowl,wikt" ✗ (enable ∉ {wikt, eowl})
+ *   Total: 1,095,480 + 3,252 + 32,126 = 1,130,858 words
+ *
+ * WHY ADDITION WORKS: Since combinations are disjoint (no word appears in multiple
+ * combinations), summing them gives the exact union count.
+ */
 function estimateWordCount(selectedSources) {
     // If we have detailed statistics, use them for accurate estimates
     if (BUILD_STATS && BUILD_STATS.source_combinations) {
-        // Try to find exact match in source combinations
-        const sourcesKey = selectedSources.sort().join(',');
-
-        // Check each combination to see if it matches our selection
+        // Union operation: sum all disjoint combinations that are subsets of selection
         let totalWords = 0;
         for (const [combo, count] of Object.entries(BUILD_STATS.source_combinations)) {
             const comboSources = combo.split(',');
 
-            // Include this combination if all its sources are selected
-            const allSourcesSelected = comboSources.every(s => selectedSources.includes(s));
-            if (allSourcesSelected) {
+            // Include this combination if it's a subset of selected sources
+            const isSubset = comboSources.every(s => selectedSources.includes(s));
+            if (isSubset) {
                 totalWords += count;
             }
         }
@@ -320,7 +390,7 @@ function estimateWordCount(selectedSources) {
         return totalWords;
     }
 
-    // Fallback to simple estimates
+    // Fallback to simple estimates (less accurate, doesn't handle unions properly)
     const stats = getStats();
     if (selectedSources.includes('wiktionary')) {
         return stats.wiktionary;
@@ -331,6 +401,170 @@ function estimateWordCount(selectedSources) {
     }
 
     return 0;
+}
+
+/**
+ * Compute metadata coverage for a union of selected sources.
+ *
+ * Similar to word count estimation, we sum metadata counts from all disjoint
+ * source combinations that are subsets of the selection. This gives accurate
+ * coverage statistics for the union.
+ *
+ * @param {string[]} selectedSources - Array of selected source IDs
+ * @returns {Object} Metadata coverage with counts and percentages
+ */
+function computeMetadataCoverage(selectedSources) {
+    if (!BUILD_STATS || !BUILD_STATS.metadata_by_combination) {
+        // Fallback to global stats
+        return BUILD_STATS ? BUILD_STATS.metadata_coverage : null;
+    }
+
+    // Accumulate counts across all relevant combinations
+    const totals = {
+        total_words: 0,
+        with_pos: 0,
+        with_any_labels: 0,
+        with_register: 0,
+        with_domain: 0,
+        with_region: 0,
+        with_temporal: 0,
+        with_concreteness: 0,
+        with_frequency: 0,
+        multi_word: 0,
+        nouns: 0,
+        nouns_with_concrete: 0,
+    };
+
+    // Sum counts from all matching combinations (disjoint union)
+    for (const [combo, metadata] of Object.entries(BUILD_STATS.metadata_by_combination)) {
+        const comboSources = combo.split(',');
+        const isSubset = comboSources.every(s => selectedSources.includes(s));
+
+        if (isSubset) {
+            totals.total_words += metadata.total;
+            totals.with_pos += metadata.pos_tags.count;
+            totals.with_any_labels += metadata.any_labels.count;
+            totals.with_register += metadata.register_labels.count;
+            totals.with_domain += metadata.domain_labels.count;
+            totals.with_region += metadata.region_labels.count;
+            totals.with_temporal += metadata.temporal_labels.count;
+            totals.with_concreteness += metadata.concreteness.count;
+            totals.with_frequency += metadata.frequency_tier.count;
+            totals.multi_word += metadata.multi_word_phrases.count;
+            totals.nouns += metadata.concreteness_nouns.total_nouns;
+            totals.nouns_with_concrete += metadata.concreteness_nouns.count;
+        }
+    }
+
+    // Compute percentages
+    const total = totals.total_words;
+    return {
+        pos_tags: {
+            count: totals.with_pos,
+            percentage: total > 0 ? Math.round(100 * totals.with_pos / total * 10) / 10 : 0
+        },
+        any_labels: {
+            count: totals.with_any_labels,
+            percentage: total > 0 ? Math.round(100 * totals.with_any_labels / total * 10) / 10 : 0
+        },
+        register_labels: {
+            count: totals.with_register,
+            percentage: total > 0 ? Math.round(100 * totals.with_register / total * 10) / 10 : 0
+        },
+        domain_labels: {
+            count: totals.with_domain,
+            percentage: total > 0 ? Math.round(100 * totals.with_domain / total * 10) / 10 : 0
+        },
+        region_labels: {
+            count: totals.with_region,
+            percentage: total > 0 ? Math.round(100 * totals.with_region / total * 10) / 10 : 0
+        },
+        temporal_labels: {
+            count: totals.with_temporal,
+            percentage: total > 0 ? Math.round(100 * totals.with_temporal / total * 10) / 10 : 0
+        },
+        concreteness: {
+            count: totals.with_concreteness,
+            percentage: total > 0 ? Math.round(100 * totals.with_concreteness / total * 10) / 10 : 0
+        },
+        concreteness_nouns: {
+            count: totals.nouns_with_concrete,
+            total_nouns: totals.nouns,
+            percentage: totals.nouns > 0 ? Math.round(100 * totals.nouns_with_concrete / totals.nouns * 10) / 10 : 0
+        },
+        frequency_tier: {
+            count: totals.with_frequency,
+            percentage: total > 0 ? Math.round(100 * totals.with_frequency / total * 10) / 10 : 0
+        },
+        multi_word_phrases: {
+            count: totals.multi_word,
+            percentage: total > 0 ? Math.round(100 * totals.multi_word / total * 10) / 10 : 0
+        }
+    };
+}
+
+/**
+ * Determine the resulting license for a combination of selected sources.
+ * Uses the license_combinations data to find the most restrictive license.
+ *
+ * @param {string[]} selectedSources - Array of selected source IDs
+ * @returns {Object} License information {id, description, sources}
+ */
+function computeLicense(selectedSources) {
+    if (!BUILD_STATS || !BUILD_STATS.license_combinations) {
+        // Fallback to hardcoded logic
+        return computeLicenseFallback(selectedSources);
+    }
+
+    // Find all license combinations that match our source selection
+    let matchedLicense = null;
+    let maxCoverage = 0;
+
+    for (const [licenses, count] of Object.entries(BUILD_STATS.license_combinations)) {
+        // This is a heuristic: we look for the license combination that appears
+        // most frequently with our selected sources. In practice, we should find
+        // the combination that exactly matches our source selection.
+        // For now, we'll use a simpler approach based on source requirements.
+    }
+
+    // Simplified: determine license based on most restrictive source
+    return computeLicenseFallback(selectedSources);
+}
+
+function computeLicenseFallback(selectedSources) {
+    // License hierarchy (most restrictive first)
+    // CC BY-SA 4.0 is most restrictive (requires attribution + share-alike)
+    let license = 'CC BY 4.0';
+    let licenseDesc = 'Attribution required';
+    const sources = [];
+
+    if (selectedSources.includes('wiktionary')) {
+        license = 'CC BY-SA 4.0';
+        licenseDesc = 'Attribution + ShareAlike required';
+        sources.push('Wiktionary (CC BY-SA 4.0)');
+    }
+
+    if (selectedSources.includes('eowl')) {
+        sources.push('EOWL (UKACD License)');
+    }
+
+    if (selectedSources.includes('wordnet')) {
+        sources.push('WordNet (WordNet License)');
+    }
+
+    if (selectedSources.includes('brysbaert')) {
+        sources.push('Brysbaert (Research Use)');
+    }
+
+    if (selectedSources.includes('frequency')) {
+        if (!selectedSources.includes('wiktionary')) {
+            license = 'CC BY-SA 4.0';
+            licenseDesc = 'Attribution + ShareAlike required';
+        }
+        sources.push('Frequency Data (CC BY-SA 4.0)');
+    }
+
+    return { license, licenseDesc, sources };
 }
 
 // ============================================================================
@@ -453,7 +687,7 @@ function addFilter(filterType, mode, config, summary) {
         type: filterType,
         mode: mode || 'include',  // 'include' or 'exclude'
         config: config || {},
-        summary: summary || generateFilterSummary(filterType, config)
+        summary: summary || generateFilterSummary(filterType, config, mode || 'include')
     };
 
     state.filters.push(filter);
@@ -465,14 +699,14 @@ function removeFilter(filterId) {
     updateUI();
 }
 
-function generateFilterSummary(filterType, config) {
+function generateFilterSummary(filterType, config, mode = 'include') {
     const parts = [];
 
     switch (filterType) {
         case 'character':
             if (config.minLength || config.maxLength) {
                 if (config.minLength && config.maxLength && config.minLength === config.maxLength) {
-                    parts.push(`${config.minLength} letters`);
+                    parts.push(config.minLength === 5 ? '5 letters exactly' : `${config.minLength} letters`);
                 } else if (config.minLength && config.maxLength) {
                     parts.push(`${config.minLength}-${config.maxLength} letters`);
                 } else if (config.minLength) {
@@ -488,8 +722,13 @@ function generateFilterSummary(filterType, config) {
             break;
 
         case 'phrase':
-            if (config.multiWord) parts.push('Multi-word');
-            if (config.singleWord) parts.push('Single word');
+            if (config.multiWord && !config.singleWord) {
+                parts.push('Multi-word phrases only');
+            } else if (config.singleWord && !config.multiWord) {
+                parts.push('Single words only');
+            } else if (config.singleWord && config.multiWord) {
+                parts.push('All word counts');
+            }
             if (config.minWords || config.maxWords) {
                 if (config.minWords && config.maxWords) {
                     parts.push(`${config.minWords}-${config.maxWords} words`);
@@ -503,13 +742,38 @@ function generateFilterSummary(filterType, config) {
 
         case 'pos':
             if (config.pos && config.pos.length > 0) {
-                parts.push(config.pos.join(', '));
+                if (config.pos.length === 1) {
+                    // Capitalize and pluralize for single selection
+                    const pos = config.pos[0];
+                    const friendly = {
+                        'noun': 'Nouns only',
+                        'verb': 'Verbs only',
+                        'adjective': 'Adjectives only',
+                        'adverb': 'Adverbs only',
+                        'pronoun': 'Pronouns only',
+                        'preposition': 'Prepositions only',
+                        'conjunction': 'Conjunctions only',
+                        'interjection': 'Interjections only',
+                        'determiner': 'Determiners only',
+                        'particle': 'Particles only',
+                        'numeral': 'Numerals only',
+                        'article': 'Articles only',
+                        'postposition': 'Postpositions only'
+                    };
+                    parts.push(friendly[pos] || pos);
+                } else {
+                    // For multiple, just capitalize each
+                    const capitalized = config.pos.map(p => p.charAt(0).toUpperCase() + p.slice(1));
+                    parts.push(capitalized.join(', '));
+                }
             }
             break;
 
         case 'frequency':
             if (config.minTier && config.maxTier) {
-                parts.push(`${config.minTier} to ${config.maxTier}`);
+                // Friendly range descriptions
+                const rangeDesc = `Common words (${config.minTier}-${config.maxTier})`;
+                parts.push(rangeDesc);
             } else if (config.minTier) {
                 parts.push(`≥${config.minTier}`);
             } else if (config.maxTier) {
@@ -519,20 +783,61 @@ function generateFilterSummary(filterType, config) {
 
         case 'region':
             if (config.regions && config.regions.length > 0) {
-                parts.push(config.regions.join(', '));
+                if (config.regions.length === 1 && config.regions[0] === 'en-GB') {
+                    parts.push('British English');
+                } else if (config.regions.length === 1 && config.regions[0] === 'en-US') {
+                    parts.push('American English');
+                } else {
+                    parts.push(config.regions.join(', '));
+                }
             }
             break;
 
         case 'concreteness':
             if (config.concreteness && config.concreteness.length > 0) {
-                parts.push(config.concreteness.join(', '));
+                if (config.concreteness.length === 1 && config.concreteness[0] === 'concrete') {
+                    parts.push('Concrete words');
+                } else if (config.concreteness.length === 1 && config.concreteness[0] === 'abstract') {
+                    parts.push('Abstract words');
+                } else {
+                    // Capitalize each
+                    const capitalized = config.concreteness.map(c => c.charAt(0).toUpperCase() + c.slice(1));
+                    parts.push(capitalized.join(', '));
+                }
             }
-            if (config.preferBrysbaert) parts.push('(Brysbaert preferred)');
+            // Don't show Brysbaert preference in summary - it's a technical detail
             break;
 
         case 'labels':
             if (config.labels && config.labels.length > 0) {
-                parts.push(config.labels.join(', '));
+                if (mode === 'exclude') {
+                    // For exclude mode, add "No" prefix
+                    parts.push('No ' + config.labels.join('/'));
+                } else {
+                    // For include mode, just list them or make it friendly
+                    if (config.labels.length === 1) {
+                        const label = config.labels[0];
+                        parts.push(label.charAt(0).toUpperCase() + label.slice(1) + ' words');
+                    } else {
+                        parts.push(config.labels.join(', '));
+                    }
+                }
+            }
+            break;
+
+        case 'syllable':
+            if (config.exact) {
+                parts.push(config.exact === 1 ? '1 syllable' : `${config.exact} syllables`);
+            } else if (config.minSyllables && config.maxSyllables) {
+                if (config.minSyllables === config.maxSyllables) {
+                    parts.push(config.minSyllables === 1 ? '1 syllable' : `${config.minSyllables} syllables`);
+                } else {
+                    parts.push(`${config.minSyllables}-${config.maxSyllables} syllables`);
+                }
+            } else if (config.minSyllables) {
+                parts.push(`≥${config.minSyllables} syllables`);
+            } else if (config.maxSyllables) {
+                parts.push(`≤${config.maxSyllables} syllables`);
             }
             break;
     }
@@ -580,17 +885,21 @@ function loadDemo(demoId) {
 // ============================================================================
 
 let currentPopupFilterType = null;
+let currentPopupFilterId = null;  // null = adding new, number = editing existing
 
-function openFilterConfigPopup(filterType) {
+function openFilterConfigPopup(filterType, existingFilter = null) {
     currentPopupFilterType = filterType;
+    currentPopupFilterId = existingFilter ? existingFilter.id : null;
     const filterDef = FILTER_TYPES[filterType];
 
     const popup = document.getElementById('popup-overlay');
     const title = document.getElementById('popup-title');
     const body = document.getElementById('popup-body');
 
-    title.textContent = filterDef.title;
-    body.innerHTML = generateFilterConfigHTML(filterDef);
+    title.textContent = existingFilter
+        ? `Edit ${filterDef.title}`
+        : filterDef.title;
+    body.innerHTML = generateFilterConfigHTML(filterDef, existingFilter);
 
     popup.classList.add('active');
 }
@@ -599,6 +908,7 @@ function closeFilterConfigPopup() {
     const popup = document.getElementById('popup-overlay');
     popup.classList.remove('active');
     currentPopupFilterType = null;
+    currentPopupFilterId = null;
 }
 
 function applyFilterConfig() {
@@ -624,12 +934,28 @@ function applyFilterConfig() {
     const modeRadio = document.querySelector('input[name="filter-mode"]:checked');
     const mode = modeRadio ? modeRadio.value : 'include';
 
-    addFilter(currentPopupFilterType, mode, config);
+    if (currentPopupFilterId !== null) {
+        // Editing existing filter
+        const filter = state.filters.find(f => f.id === currentPopupFilterId);
+        if (filter) {
+            filter.mode = mode;
+            filter.config = config;
+            filter.summary = generateFilterSummary(currentPopupFilterType, config, mode);
+        }
+    } else {
+        // Adding new filter
+        addFilter(currentPopupFilterType, mode, config);
+    }
+
     closeFilterConfigPopup();
+    updateUI();
 }
 
-function generateFilterConfigHTML(filterDef) {
+function generateFilterConfigHTML(filterDef, existingFilter = null) {
     let html = '<div class="filter-config-form">';
+
+    const mode = existingFilter ? existingFilter.mode : 'include';
+    const config = existingFilter ? existingFilter.config : {};
 
     // Mode selection (include/exclude)
     html += `
@@ -637,11 +963,11 @@ function generateFilterConfigHTML(filterDef) {
             <label class="form-label">Filter Mode</label>
             <div class="radio-group">
                 <label class="radio-label">
-                    <input type="radio" name="filter-mode" value="include" checked>
+                    <input type="radio" name="filter-mode" value="include" ${mode === 'include' ? 'checked' : ''}>
                     <span class="mode-include">Must Include</span> - Only show words matching this filter
                 </label>
                 <label class="radio-label">
-                    <input type="radio" name="filter-mode" value="exclude">
+                    <input type="radio" name="filter-mode" value="exclude" ${mode === 'exclude' ? 'checked' : ''}>
                     <span class="mode-exclude">Must Not Include</span> - Hide words matching this filter
                 </label>
             </div>
@@ -653,10 +979,13 @@ function generateFilterConfigHTML(filterDef) {
         html += '<div class="form-group">';
         html += `<label class="form-label" for="filter-${field.name}">${field.label}</label>`;
 
+        const fieldValue = config[field.name];
+
         if (field.type === 'checkbox') {
+            const checked = fieldValue !== undefined ? fieldValue : (field.defaultChecked || false);
             html += `
                 <label class="checkbox-label">
-                    <input type="checkbox" id="filter-${field.name}" ${field.defaultChecked ? 'checked' : ''}>
+                    <input type="checkbox" id="filter-${field.name}" ${checked ? 'checked' : ''}>
                     <span>${field.label}</span>
                 </label>
             `;
@@ -666,23 +995,30 @@ function generateFilterConfigHTML(filterDef) {
             field.options.forEach(opt => {
                 const value = typeof opt === 'string' ? opt : opt.value;
                 const label = typeof opt === 'string' ? opt : opt.label;
-                html += `<option value="${value}">${label}</option>`;
+                const selected = fieldValue === value ? 'selected' : '';
+                html += `<option value="${value}" ${selected}>${label}</option>`;
             });
             html += '</select>';
         } else if (field.type === 'multiselect') {
             html += `<select id="filter-${field.name}" class="form-select" multiple size="6">`;
+            const selectedValues = fieldValue || [];
             field.options.forEach(opt => {
-                html += `<option value="${opt}">${opt}</option>`;
+                const selected = selectedValues.includes(opt) ? 'selected' : '';
+                html += `<option value="${opt}" ${selected}>${opt}</option>`;
             });
             html += '</select>';
             html += '<p class="hint">Hold Ctrl/Cmd to select multiple</p>';
         } else if (field.type === 'number') {
+            const value = fieldValue !== undefined ? fieldValue : '';
             html += `<input type="number" id="filter-${field.name}" class="form-input"
                      placeholder="${field.placeholder || ''}"
-                     min="${field.min || 0}">`;
+                     min="${field.min || 0}"
+                     value="${value}">`;
         } else if (field.type === 'text') {
+            const value = fieldValue !== undefined ? fieldValue : '';
             html += `<input type="text" id="filter-${field.name}" class="form-input"
-                     placeholder="${field.placeholder || ''}">`;
+                     placeholder="${field.placeholder || ''}"
+                     value="${value}">`;
         }
 
         html += '</div>';
@@ -784,95 +1120,67 @@ function updateUI() {
 
 function updateSourceSummary() {
     const activeSources = getActiveSources();
-    const stats = getStats();
 
     // Map UI source names to data source names
     const sourceMapping = {
         'wiktionary': 'wikt',
         'eowl': 'eowl',
-        'wordnet': 'wordnet',  // Not a primary source, enrichment only
-        'brysbaert': 'brysbaert',  // Not a primary source, enrichment only
-        'frequency': 'frequency'  // Not a primary source, enrichment only
+        'wordnet': 'wordnet',
+        'brysbaert': 'brysbaert',
+        'frequency': 'frequency'
     };
 
-    // Get primary sources (enable, eowl, wikt)
-    const primarySources = activeSources
-        .filter(s => ['wiktionary', 'eowl'].includes(s))
-        .map(s => sourceMapping[s]);
+    // Convert UI source names to data source names
+    const dataSources = activeSources.map(s => sourceMapping[s] || s);
 
-    // Calculate estimated word count using new function
+    // Get primary sources only (for word count)
+    // Note: 'enable' is validation-only, not a primary source
+    const primarySources = dataSources.filter(s => ['wikt', 'eowl'].includes(s));
+
+    // Calculate estimated word count
     const estimatedWords = estimateWordCount(primarySources);
-
-    // Update stats
     document.getElementById('total-words').textContent = estimatedWords > 0
         ? `~${estimatedWords.toLocaleString()}`
         : '0';
 
-    // Use actual metadata coverage from build statistics
-    const metadata = BUILD_STATS ? BUILD_STATS.metadata_coverage : null;
+    // Compute real-time metadata coverage for ALL selected sources (including enrichment)
+    const metadata = computeMetadataCoverage(dataSources);
 
-    // POS availability
-    const posAvailable = (state.sources.wiktionary || state.sources.wordnet);
-    document.getElementById('pos-available').textContent = posAvailable
-        ? (metadata ? `Yes (${metadata.pos_tags.percentage}%)` : `Yes (${(stats.posAvailable * 100).toFixed(1)}%)`)
-        : 'No';
+    // POS availability - depends on wiktionary or wordnet
+    const posAvailable = state.sources.wiktionary || state.sources.wordnet;
+    document.getElementById('pos-available').textContent = posAvailable && metadata
+        ? `Yes (${metadata.pos_tags.percentage}%)`
+        : posAvailable ? 'Yes' : 'No';
 
-    // Labels availability
+    // Labels availability - depends on wiktionary
     const labelsAvailable = state.sources.wiktionary;
-    document.getElementById('labels-available').textContent = labelsAvailable
-        ? (metadata ? `Yes (${metadata.any_labels.percentage}%)` : `Yes (${(stats.labelsAvailable * 100).toFixed(1)}%)`)
-        : 'No';
+    document.getElementById('labels-available').textContent = labelsAvailable && metadata
+        ? `Yes (${metadata.any_labels.percentage}%)`
+        : labelsAvailable ? 'Yes' : 'No';
 
-    // Concreteness availability
+    // Concreteness availability - depends on wordnet or brysbaert
     const concretenessAvailable = state.sources.wordnet || state.sources.brysbaert;
-    document.getElementById('concreteness-available').textContent = concretenessAvailable
-        ? (metadata ? `Yes (${metadata.concreteness.percentage}%)` : `Yes (${(stats.concretenessAvailable * 100).toFixed(1)}%)`)
-        : 'No';
+    document.getElementById('concreteness-available').textContent = concretenessAvailable && metadata
+        ? `Yes (${metadata.concreteness.percentage}%)`
+        : concretenessAvailable ? 'Yes' : 'No';
 
-    // Regional availability
+    // Regional availability - depends on wiktionary
     const regionalAvailable = state.sources.wiktionary;
-    document.getElementById('regional-available').textContent = regionalAvailable
-        ? (metadata ? `Yes (${metadata.region_labels.percentage}%)` : `Yes (${(stats.regionalAvailable * 100).toFixed(1)}%)`)
-        : 'No';
+    document.getElementById('regional-available').textContent = regionalAvailable && metadata
+        ? `Yes (${metadata.region_labels.percentage}%)`
+        : regionalAvailable ? 'Yes' : 'No';
 }
 
 function updateLicenseInfo() {
     const licenseResult = document.getElementById('license-result');
     const licenseSources = document.getElementById('license-sources');
 
-    // Determine license based on sources
-    let license = 'CC BY 4.0';
-    let licenseDesc = 'Attribution required';
-    const sources = [];
+    // Compute license using centralized function
+    const activeSources = getActiveSources();
+    const licenseInfo = computeLicense(activeSources);
 
-    if (state.sources.wiktionary) {
-        license = 'CC BY-SA 4.0';
-        licenseDesc = 'Attribution + ShareAlike required';
-        sources.push('Wiktionary (CC BY-SA 4.0)');
-    }
-
-    if (state.sources.eowl) {
-        sources.push('EOWL (UKACD License)');
-    }
-
-    if (state.sources.wordnet) {
-        sources.push('WordNet (WordNet License)');
-    }
-
-    if (state.sources.brysbaert) {
-        sources.push('Brysbaert (Research Use)');
-    }
-
-    if (state.sources.frequency) {
-        if (!state.sources.wiktionary) {
-            license = 'CC BY-SA 4.0';
-            licenseDesc = 'Attribution + ShareAlike required';
-        }
-        sources.push('Frequency Data (CC BY-SA 4.0)');
-    }
-
-    licenseResult.innerHTML = `<strong>${license}</strong><p class="license-description">${licenseDesc}</p>`;
-    licenseSources.innerHTML = sources.map(s => `<li>${s}</li>`).join('');
+    licenseResult.innerHTML = `<strong>${licenseInfo.license}</strong><p class="license-description">${licenseInfo.licenseDesc}</p>`;
+    licenseSources.innerHTML = licenseInfo.sources.map(s => `<li>${s}</li>`).join('');
 }
 
 function updateFilterButtons() {
@@ -905,16 +1213,32 @@ function updateFiltersList() {
 
         return `
             <div class="filter-item ${modeClass}">
-                <div class="filter-header">
-                    <span class="filter-icon">${filterDef.icon}</span>
-                    <span class="filter-title">${filterDef.title}</span>
-                    <span class="filter-mode ${modeClass}">${modeLabel}</span>
-                    <button class="filter-remove" data-id="${filter.id}" title="Remove filter">×</button>
+                <div class="filter-main">
+                    <div class="filter-info">
+                        <span class="filter-icon">${filterDef.icon}</span>
+                        <span class="filter-title">${filterDef.title}</span>
+                        <span class="filter-mode ${modeClass}">${modeLabel}</span>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="filter-edit" data-id="${filter.id}" title="Edit filter">Edit</button>
+                        <button class="filter-remove" data-id="${filter.id}" title="Remove filter">×</button>
+                    </div>
                 </div>
                 <div class="filter-summary">${filter.summary}</div>
             </div>
         `;
     }).join('');
+
+    // Attach edit handlers
+    filtersList.querySelectorAll('.filter-edit').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const filterId = parseInt(btn.dataset.id);
+            const filter = state.filters.find(f => f.id === filterId);
+            if (filter) {
+                openFilterConfigPopup(filter.type, filter);
+            }
+        });
+    });
 
     // Attach remove handlers
     filtersList.querySelectorAll('.filter-remove').forEach(btn => {
@@ -931,25 +1255,25 @@ function updateResultsSummary() {
     // Map UI source names to data source names
     const sourceMapping = {
         'wiktionary': 'wikt',
-        'eowl': 'eowl'
+        'eowl': 'eowl',
+        'wordnet': 'wordnet',
+        'brysbaert': 'brysbaert',
+        'frequency': 'frequency'
     };
 
-    // Get primary sources
-    const primarySources = activeSources
-        .filter(s => ['wiktionary', 'eowl'].includes(s))
-        .map(s => sourceMapping[s]);
+    // Get primary sources only (for word count)
+    const dataSources = activeSources.map(s => sourceMapping[s] || s);
+    // Note: 'enable' is validation-only, not a primary source
+    const primarySources = dataSources.filter(s => ['wikt', 'eowl'].includes(s));
 
-    // Calculate estimated word count using new function
+    // Calculate estimated word count using centralized function
     const estimatedWords = estimateWordCount(primarySources);
 
-    // Determine license
-    let license = 'CC BY 4.0';
-    if (state.sources.wiktionary || state.sources.frequency) {
-        license = 'CC BY-SA 4.0';
-    }
+    // Determine license using centralized function
+    const licenseInfo = computeLicense(activeSources);
 
     document.getElementById('result-word-count').textContent = estimatedWords > 0
         ? `~${estimatedWords.toLocaleString()}`
         : '0';
-    document.getElementById('result-license').textContent = license;
+    document.getElementById('result-license').textContent = licenseInfo.license;
 }

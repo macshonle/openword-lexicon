@@ -1,0 +1,13 @@
+{
+  "name": "openword-wordlist-builder",
+  "version": "1.0.0",
+  "description": "Interactive web-based word list builder for OpenWord Lexicon",
+  "type": "module",
+  "scripts": {
+    "start": "http-server . -p 8000 -o /index.html --cors"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "private": true
+}
