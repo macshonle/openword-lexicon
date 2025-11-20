@@ -245,7 +245,7 @@
             try {
                 statusEl.textContent = 'Downloading binary trie...';
 
-                const response = await fetch('/data/core.trie.bin');
+                const response = await fetch('/data/en.trie.bin');
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
