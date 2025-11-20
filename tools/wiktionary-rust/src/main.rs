@@ -479,7 +479,14 @@ fn main() -> std::io::Result<()> {
             .unwrap()
     );
 
+    let limit_reached = std::cell::Cell::new(false);
+
     scan_pages(reader, |page_xml| {
+        // Check if limit already reached
+        if limit_reached.get() {
+            return;
+        }
+
         stats.processed += 1;
 
         if stats.processed % 1000 == 0 {
@@ -556,8 +563,7 @@ fn main() -> std::io::Result<()> {
 
                     if let Some(limit) = args.limit {
                         if stats.written >= limit {
-                            pb.finish_with_message(format!("Reached limit of {} entries", limit));
-                            std::process::exit(0);
+                            limit_reached.set(true);
                         }
                     }
                 }
@@ -568,8 +574,14 @@ fn main() -> std::io::Result<()> {
         }
     })?;
 
+    // Flush writer before finishing
     writer.flush()?;
-    pb.finish_and_clear();
+
+    if limit_reached.get() {
+        pb.finish_with_message(format!("Reached limit of {} entries", args.limit.unwrap()));
+    } else {
+        pb.finish_and_clear();
+    }
 
     let elapsed = start_time.elapsed();
     println!();
