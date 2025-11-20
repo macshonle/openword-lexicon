@@ -7,22 +7,34 @@
     "wikt": 1294779
   },
   "source_combinations": {
-    "wikt": 1095480,
-    "enable,eowl,wikt": 92899,
-    "enable,wikt": 74274,
-    "eowl,wikt": 32126,
-    "enable": 4944,
-    "eowl": 3252,
-    "enable,eowl": 706
-  },
-  "license_combinations": {
-    "CC-BY-SA-4.0": 1095480,
-    "CC-BY-SA-4.0,CC0,UKACD": 92899,
-    "CC-BY-SA-4.0,CC0": 74274,
-    "CC-BY-SA-4.0,UKACD": 32126,
-    "CC0": 4944,
-    "UKACD": 3252,
-    "CC0,UKACD": 706
+    "wikt": {
+      "count": 1095480,
+      "licenses": "CC-BY-SA-4.0"
+    },
+    "enable,eowl,wikt": {
+      "count": 92899,
+      "licenses": "CC-BY-SA-4.0,CC0,UKACD"
+    },
+    "enable,wikt": {
+      "count": 74274,
+      "licenses": "CC-BY-SA-4.0,CC0"
+    },
+    "eowl,wikt": {
+      "count": 32126,
+      "licenses": "CC-BY-SA-4.0,UKACD"
+    },
+    "enable": {
+      "count": 4944,
+      "licenses": "CC0"
+    },
+    "eowl": {
+      "count": 3252,
+      "licenses": "UKACD"
+    },
+    "enable,eowl": {
+      "count": 706,
+      "licenses": "CC0,UKACD"
+    }
   },
   "metadata_coverage": {
     "pos_tags": {

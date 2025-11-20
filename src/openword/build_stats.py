@@ -20,7 +20,6 @@ def compute_statistics(entries: Dict[str, dict]) -> dict:
         'generated_at': None,  # Will be set when writing
         'sources': {},
         'source_combinations': {},
-        'license_combinations': {},
         'metadata_coverage': {},
         'metadata_by_combination': {},
         'enrichment_impact': {},
@@ -31,8 +30,8 @@ def compute_statistics(entries: Dict[str, dict]) -> dict:
     }
 
     # Initialize counters
-    source_counts = defaultdict(int)
-    license_counts = defaultdict(int)
+    # Store both count and licenses for each source combination
+    source_combo_data = defaultdict(lambda: {'count': 0, 'licenses': None})
     pos_counts = defaultdict(int)
     freq_counts = defaultdict(int)
     concrete_counts = defaultdict(int)
@@ -77,21 +76,24 @@ def compute_statistics(entries: Dict[str, dict]) -> dict:
     # Process each entry (entries is a dict, iterate over values)
     entries_list = entries.values() if isinstance(entries, dict) else entries
     for entry in entries_list:
-        # Source combinations
+        # Source combinations with licenses
         sources = entry.get('sources', [])
         sources_key = ','.join(sorted(sources))
-        source_counts[sources_key] += 1
+
+        # Get licenses for this combination
+        licenses = entry.get('license_sources', {})
+        licenses_key = ','.join(sorted(licenses.keys()))
+
+        # Store combined data
+        combo_data = source_combo_data[sources_key]
+        combo_data['count'] += 1
+        combo_data['licenses'] = licenses_key
 
         # Individual source tracking
         for source in sources:
             if source not in stats['sources']:
                 stats['sources'][source] = 0
             stats['sources'][source] += 1
-
-        # License combinations
-        licenses = entry.get('license_sources', {})
-        licenses_key = ','.join(sorted(licenses.keys()))
-        license_counts[licenses_key] += 1
 
         # Separate primary sources from enrichment sources
         # Note: 'enable' is validation-only, not a primary source
@@ -207,14 +209,12 @@ def compute_statistics(entries: Dict[str, dict]) -> dict:
                 if has_frequency:
                     impact['entries_with_frequency'] += 1
 
-    # Store source combinations
+    # Store source combinations with licenses (sorted by count descending)
     stats['source_combinations'] = {
-        k: v for k, v in sorted(source_counts.items(), key=lambda x: -x[1])
-    }
-
-    # Store license combinations
-    stats['license_combinations'] = {
-        k: v for k, v in sorted(license_counts.items(), key=lambda x: -x[1])
+        k: v for k, v in sorted(
+            source_combo_data.items(),
+            key=lambda x: -x[1]['count']
+        )
     }
 
     # Metadata coverage (global stats)
