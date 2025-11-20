@@ -640,7 +640,7 @@ function addFilter(filterType, mode, config, summary) {
         type: filterType,
         mode: mode || 'include',  // 'include' or 'exclude'
         config: config || {},
-        summary: summary || generateFilterSummary(filterType, config)
+        summary: summary || generateFilterSummary(filterType, config, mode || 'include')
     };
 
     state.filters.push(filter);
@@ -652,14 +652,14 @@ function removeFilter(filterId) {
     updateUI();
 }
 
-function generateFilterSummary(filterType, config) {
+function generateFilterSummary(filterType, config, mode = 'include') {
     const parts = [];
 
     switch (filterType) {
         case 'character':
             if (config.minLength || config.maxLength) {
                 if (config.minLength && config.maxLength && config.minLength === config.maxLength) {
-                    parts.push(`${config.minLength} letters`);
+                    parts.push(config.minLength === 5 ? '5 letters exactly' : `${config.minLength} letters`);
                 } else if (config.minLength && config.maxLength) {
                     parts.push(`${config.minLength}-${config.maxLength} letters`);
                 } else if (config.minLength) {
@@ -675,8 +675,13 @@ function generateFilterSummary(filterType, config) {
             break;
 
         case 'phrase':
-            if (config.multiWord) parts.push('Multi-word');
-            if (config.singleWord) parts.push('Single word');
+            if (config.multiWord && !config.singleWord) {
+                parts.push('Multi-word phrases only');
+            } else if (config.singleWord && !config.multiWord) {
+                parts.push('Single words only');
+            } else if (config.singleWord && config.multiWord) {
+                parts.push('All word counts');
+            }
             if (config.minWords || config.maxWords) {
                 if (config.minWords && config.maxWords) {
                     parts.push(`${config.minWords}-${config.maxWords} words`);
@@ -690,13 +695,38 @@ function generateFilterSummary(filterType, config) {
 
         case 'pos':
             if (config.pos && config.pos.length > 0) {
-                parts.push(config.pos.join(', '));
+                if (config.pos.length === 1) {
+                    // Capitalize and pluralize for single selection
+                    const pos = config.pos[0];
+                    const friendly = {
+                        'noun': 'Nouns only',
+                        'verb': 'Verbs only',
+                        'adjective': 'Adjectives only',
+                        'adverb': 'Adverbs only',
+                        'pronoun': 'Pronouns only',
+                        'preposition': 'Prepositions only',
+                        'conjunction': 'Conjunctions only',
+                        'interjection': 'Interjections only',
+                        'determiner': 'Determiners only',
+                        'particle': 'Particles only',
+                        'numeral': 'Numerals only',
+                        'article': 'Articles only',
+                        'postposition': 'Postpositions only'
+                    };
+                    parts.push(friendly[pos] || pos);
+                } else {
+                    // For multiple, just capitalize each
+                    const capitalized = config.pos.map(p => p.charAt(0).toUpperCase() + p.slice(1));
+                    parts.push(capitalized.join(', '));
+                }
             }
             break;
 
         case 'frequency':
             if (config.minTier && config.maxTier) {
-                parts.push(`${config.minTier} to ${config.maxTier}`);
+                // Friendly range descriptions
+                const rangeDesc = `Common words (${config.minTier}-${config.maxTier})`;
+                parts.push(rangeDesc);
             } else if (config.minTier) {
                 parts.push(`≥${config.minTier}`);
             } else if (config.maxTier) {
@@ -706,20 +736,45 @@ function generateFilterSummary(filterType, config) {
 
         case 'region':
             if (config.regions && config.regions.length > 0) {
-                parts.push(config.regions.join(', '));
+                if (config.regions.length === 1 && config.regions[0] === 'en-GB') {
+                    parts.push('British English');
+                } else if (config.regions.length === 1 && config.regions[0] === 'en-US') {
+                    parts.push('American English');
+                } else {
+                    parts.push(config.regions.join(', '));
+                }
             }
             break;
 
         case 'concreteness':
             if (config.concreteness && config.concreteness.length > 0) {
-                parts.push(config.concreteness.join(', '));
+                if (config.concreteness.length === 1 && config.concreteness[0] === 'concrete') {
+                    parts.push('Concrete words');
+                } else if (config.concreteness.length === 1 && config.concreteness[0] === 'abstract') {
+                    parts.push('Abstract words');
+                } else {
+                    // Capitalize each
+                    const capitalized = config.concreteness.map(c => c.charAt(0).toUpperCase() + c.slice(1));
+                    parts.push(capitalized.join(', '));
+                }
             }
-            if (config.preferBrysbaert) parts.push('(Brysbaert preferred)');
+            // Don't show Brysbaert preference in summary - it's a technical detail
             break;
 
         case 'labels':
             if (config.labels && config.labels.length > 0) {
-                parts.push(config.labels.join(', '));
+                if (mode === 'exclude') {
+                    // For exclude mode, add "No" prefix
+                    parts.push('No ' + config.labels.join('/'));
+                } else {
+                    // For include mode, just list them or make it friendly
+                    if (config.labels.length === 1) {
+                        const label = config.labels[0];
+                        parts.push(label.charAt(0).toUpperCase() + label.slice(1) + ' words');
+                    } else {
+                        parts.push(config.labels.join(', '));
+                    }
+                }
             }
             break;
     }
@@ -822,7 +877,7 @@ function applyFilterConfig() {
         if (filter) {
             filter.mode = mode;
             filter.config = config;
-            filter.summary = generateFilterSummary(currentPopupFilterType, config);
+            filter.summary = generateFilterSummary(currentPopupFilterType, config, mode);
         }
     } else {
         // Adding new filter
