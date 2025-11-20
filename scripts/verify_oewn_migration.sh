@@ -18,7 +18,7 @@ echo "2. WordNet words in final lexicon"
 echo "----------------------------------------"
 uv run python -c "
 import orjson
-with open('data/build/en/unified_lexicon.jsonl', 'rb') as f:
+with open('data/intermediate/en/entries_tiered.jsonl', 'rb') as f:
     entries = [orjson.loads(line) for line in f]
     wordnet_sourced = [e for e in entries if 'wordnet' in e.get('sources', [])]
     print(f'Total entries: {len(entries):,}')
@@ -31,7 +31,7 @@ echo "3. Modern vocabulary test"
 echo "----------------------------------------"
 uv run python -c "
 import orjson
-with open('data/build/en/unified_lexicon.jsonl', 'rb') as f:
+with open('data/intermediate/en/entries_tiered.jsonl', 'rb') as f:
     entries = {orjson.loads(line)['word']: orjson.loads(line) for line in f}
     test_words = ['selfie', 'cryptocurrency', 'hashtag', 'emoji', 'blog']
     for word in test_words:
@@ -48,7 +48,7 @@ echo "4. Accent normalization test"
 echo "----------------------------------------"
 uv run python -c "
 import orjson
-with open('data/build/en/unified_lexicon.jsonl', 'rb') as f:
+with open('data/intermediate/en/entries_tiered.jsonl', 'rb') as f:
     entries = {orjson.loads(line)['word']: orjson.loads(line) for line in f}
     test_words = ['café', 'naïve', 'résumé']
     for word in test_words:
@@ -70,7 +70,7 @@ uv run python -c "
 import orjson
 from collections import Counter
 
-with open('data/build/en/unified_lexicon.jsonl', 'rb') as f:
+with open('data/intermediate/en/entries_tiered.jsonl', 'rb') as f:
     entries = [orjson.loads(line) for line in f]
 
 # Count by source
