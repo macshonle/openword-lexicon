@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """
-core_ingest.py — Parse core word lists (ENABLE, EOWL) and normalize to schema.
+core_ingest.py — Parse EOWL word list and normalize to schema.
 
 Reads:
-  - data/raw/core/enable1.txt
-  - data/raw/core/eowl.txt
+  - data/raw/en/eowl.txt
 
 Outputs:
-  - data/intermediate/core/core_entries.jsonl
+  - data/intermediate/en/core_entries.jsonl
 
 Each entry has:
   - word (NFKC normalized)
@@ -15,7 +14,10 @@ Each entry has:
   - labels: {} (empty; no labels in source)
   - word_count: 1 (single words from these sources)
   - lemma: null
-  - sources: ["enable"] or ["eowl"] or both
+  - sources: ["eowl"]
+
+Note: ENABLE is NOT ingested here. It's only used for optional validation
+via 'make validate-enable'. See tools/validate_enable_coverage.py.
 """
 
 import json
@@ -71,17 +73,14 @@ def read_wordlist(filepath: Path, source_id: str) -> Set[str]:
     return words
 
 
-def merge_entries(enable_words: Set[str], eowl_words: Set[str]) -> Dict[str, list]:
-    """Merge word sets and track sources."""
+def create_word_sources(eowl_words: Set[str]) -> Dict[str, list]:
+    """Create word source dict from EOWL words."""
     word_sources = {}
 
-    for word in enable_words:
-        word_sources.setdefault(word, []).append("enable")
-
     for word in eowl_words:
-        word_sources.setdefault(word, []).append("eowl")
+        word_sources[word] = ["eowl"]
 
-    logger.info(f"Merged entries: {len(word_sources):,} unique words")
+    logger.info(f"Total entries: {len(word_sources):,} unique words")
     return word_sources
 
 
@@ -119,32 +118,23 @@ def main():
     raw_dir = data_root / "raw" / "en"
     intermediate_dir = data_root / "intermediate" / "en"
 
-    enable_path = raw_dir / "enable1.txt"
     eowl_path = raw_dir / "eowl.txt"
     output_path = intermediate_dir / "core_entries.jsonl"
 
-    logger.info("Core word list ingestion (English)")
-    logger.info("Note: ENABLE is optional (validation only). EOWL is the primary core source.")
+    logger.info("EOWL word list ingestion (English)")
+    logger.info("Note: ENABLE is NOT ingested - use 'make validate-enable' for validation")
     logger.info("")
 
-    # Read source lists
-    enable_words = read_wordlist(enable_path, "ENABLE")
+    # Read EOWL
     eowl_words = read_wordlist(eowl_path, "EOWL")
 
-    if not enable_words and not eowl_words:
-        logger.error("No source data found. At minimum, EOWL is required.")
+    if not eowl_words:
+        logger.error("EOWL not found. This is required for the build.")
         logger.error("Run 'make fetch-en' to fetch EOWL and other sources.")
         sys.exit(1)
 
-    # ENABLE is optional
-    if not enable_words:
-        logger.info("")
-        logger.info("ENABLE not present (this is OK - it's optional for validation only)")
-        logger.info("Continuing with EOWL as the primary core source.")
-        logger.info("")
-
-    # Merge and track sources
-    word_sources = merge_entries(enable_words, eowl_words)
+    # Create word sources dict
+    word_sources = create_word_sources(eowl_words)
 
     # Create entries
     entries = [
@@ -159,9 +149,7 @@ def main():
     logger.info("")
     logger.info("Statistics:")
     logger.info(f"  Total unique words: {len(entries):,}")
-    logger.info(f"  ENABLE only: {sum(1 for e in entries if e['sources'] == ['enable']):,}")
-    logger.info(f"  EOWL only: {sum(1 for e in entries if e['sources'] == ['eowl']):,}")
-    logger.info(f"  Both sources: {sum(1 for e in entries if len(e['sources']) == 2):,}")
+    logger.info(f"  All from EOWL")
     logger.info("")
     logger.info("Core ingest complete")
 

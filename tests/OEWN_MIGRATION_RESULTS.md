@@ -60,12 +60,12 @@ All accented words found! ✅
 | Source | Count | Percentage |
 |--------|-------|------------|
 | wikt | 1,294,779 | 99.3% |
-| enable | 172,823 | 13.3% |
 | eowl | 128,983 | 9.9% |
 | **wordnet** | **92,259** | **7.1%** |
 | brysbaert | 39,561 | 3.0% |
 
 *Note: Percentages sum to >100% because words can have multiple sources*
+*Note: ENABLE (172k words) removed from build pipeline - now used only for validation*
 
 **Enrichment Coverage**:
 - **POS tags**: 1,284,660 (98.5%) ✅ **Major improvement!**

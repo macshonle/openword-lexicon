@@ -50,9 +50,8 @@ Quick reference for all Makefile targets in the openword-lexicon project.
 
 | Command | Description | Download Size |
 |---------|-------------|---------------|
-| `make fetch` | Fetch all data (core + plus) | ~3-4 GB |
-| `make fetch-core` | Fetch core sources (ENABLE, EOWL) | ~5 MB |
-| `make fetch-plus` | Fetch plus sources (Wiktionary, WordNet, frequency) | ~3-4 GB |
+| `make fetch-en` | Fetch English sources (EOWL, Wiktionary, WordNet, frequency) | ~3-4 GB |
+| `make validate-enable` | Optional: Fetch ENABLE for validation checks | ~2 MB |
 
 ### Building Distributions
 
@@ -153,16 +152,16 @@ Quick reference for all Makefile targets in the openword-lexicon project.
 ### Quick Start
 ```bash
 make bootstrap          # Set up environment
-make fetch-core         # Download core data (5 MB)
-make build-core         # Build core distribution (~5 min)
-make reports            # Generate inspection reports
+make fetch-en           # Download English sources (~3-4 GB)
+make build-en           # Build English lexicon (~60 min)
+make report-en          # Generate inspection reports
 ```
 
 ### Complete Build
 ```bash
 make bootstrap          # Set up environment
-make fetch-plus         # Download all data (~3-4 GB)
-make build-plus         # Build plus distribution (~60 min)
+make fetch-en           # Download all data (~3-4 GB)
+make build-en           # Build English lexicon (~60 min)
 make analyze-all-reports  # Generate all reports (~10 min)
 ```
 
@@ -214,8 +213,8 @@ reports/
 ```
 data/
 ├── raw/
-│   ├── core/         # ENABLE, EOWL
-│   └── plus/         # Wiktionary, WordNet, frequency
+│   ├── en/           # EOWL, Wiktionary, WordNet, frequency (ENABLE optional)
+│   └── diagnostic/   # Test/diagnostic data
 ├── intermediate/     # Pipeline stages (JSONL)
 ├── filtered/         # Policy-filtered views
 ├── build/            # Final artifacts

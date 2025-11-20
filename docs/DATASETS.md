@@ -61,10 +61,10 @@ ENABLE is a Public Domain word list originally created for word games. It contai
 **Attribution**: Not required (Public Domain), but we credit Alan Beale for his work.
 
 **Integration**:
-- **Optional fetch**: `make validate-enable` (not part of `make fetch-en`)
-- When present: Ingested alongside EOWL with NFKC normalization
-- When absent: Build proceeds successfully with EOWL + Wiktionary
-- Source ID: `enable` (when present)
+- **Validation only**: `make validate-enable` (not part of `make build-en`)
+- **NOT ingested**: ENABLE is not part of the lexicon build pipeline
+- Used only for optional coverage validation and sanity checks
+- Primary sources: EOWL (core), Wiktionary (comprehensive), WordNet (semantic)
 
 ---
 
@@ -337,7 +337,7 @@ Word frequency data compiled from movie and TV subtitles corpus. Used to assign 
 
 | Source | License | Distribution | Words | Attribution | ShareAlike |
 |--------|---------|--------------|-------|-------------|------------|
-| ENABLE | Public Domain (CC0) | Core | 172,823 | Optional | No |
+| ENABLE | Public Domain (CC0) | Validation only | 172,823 | Optional | No |
 | EOWL | UKACD License | Core | 128,983 | Required | No |
 | Wiktionary | CC BY-SA 4.0 | Plus | Sample | Required | Yes |
 | WordNet | WordNet License | Plus | (enrichment) | Required | No |
@@ -358,21 +358,20 @@ Words appearing in multiple sources are merged with union of metadata:
 
 ```
 Example: "castle"
-  - ENABLE: ✓ (no metadata)
   - EOWL: ✓ (no metadata)
   - Wiktionary: ✓ (POS: noun, verb; syllables: 2)
-  - WordNet: ✓ (concreteness: mixed)
+  - WordNet: ✓ (POS: noun, verb; semantic data)
 
   Merged entry:
     word: "castle"
     pos: ["noun", "verb"]
-    concreteness: "mixed"
+    concreteness: null  # deprecated from WordNet, use Brysbaert
     syllables: 2
-    sources: ["enable", "eowl", "wikt"]
+    sources: ["eowl", "wikt", "wordnet"]
 
 Example: "happiness" (with morphology)
-  - ENABLE: ✓ (no metadata)
   - Wiktionary: ✓ (POS: noun; morphology: suffixed, base="happy", suffixes=["-ness"])
+  - WordNet: ✓ (POS: noun)
 
   Merged entry:
     word: "happiness"
@@ -383,7 +382,7 @@ Example: "happiness" (with morphology)
       components: ["happy", "-ness"],
       suffixes: ["-ness"]
     }
-    sources: ["enable", "wikt"]
+    sources: ["wikt", "wordnet"]
 ```
 
 **Unique words:**
