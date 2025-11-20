@@ -241,9 +241,10 @@ def main():
     intermediate_dir = data_root / "intermediate" / "en"
 
     logger.info("=== Unified Merge Pipeline (English) ===")
-    logger.info("Merging all sources: ENABLE + EOWL + Wiktionary")
+    logger.info("Merging all sources: EOWL + Wiktionary + WordNet")
+    logger.info("(ENABLE optional - validation only)")
 
-    # Load core entries (ENABLE + EOWL)
+    # Load core entries (EOWL + optional ENABLE)
     core_path = intermediate_dir / "core_entries.jsonl"
     core_entries = load_entries(core_path)
 
@@ -260,13 +261,31 @@ def main():
     wikt_path = intermediate_dir / "wikt_entries.jsonl"
     wikt_entries = load_entries(wikt_path)
 
+    # Load WordNet entries (NEW!)
+    wordnet_path = intermediate_dir / "wordnet_entries.jsonl"
+    if wordnet_path.exists():
+        wordnet_entries = load_entries(wordnet_path)
+        logger.info(f"  Loaded WordNet: {len(wordnet_entries):,} entries")
+    else:
+        wordnet_entries = {}
+        logger.warning(f"  WordNet entries not found at {wordnet_path}")
+        logger.warning("  Continuing without WordNet word source")
+
     # --- Unified merge ---
     logger.info("")
     logger.info("Merging all sources...")
 
     unified = dict(core_entries)  # Start with core
 
+    # Merge Wiktionary
     for word, entry in wikt_entries.items():
+        if word in unified:
+            unified[word] = merge_entries(unified[word], entry)
+        else:
+            unified[word] = entry
+
+    # Merge WordNet
+    for word, entry in wordnet_entries.items():
         if word in unified:
             unified[word] = merge_entries(unified[word], entry)
         else:

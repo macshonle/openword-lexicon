@@ -98,6 +98,72 @@ EOWL is derived from the UK Advanced Cryptics Dictionary, a crossword-puzzle dic
 
 ---
 
+### Open English WordNet (OEWN)
+
+**Author**: Global WordNet Association (originally Princeton University)
+
+**License**: CC BY 4.0
+
+**URL**: https://en-word.net/ | https://github.com/globalwordnet/english-wordnet
+
+**Word Count**: 161,705 (2024 Edition)
+
+**Status**: **Both Word Source AND Enrichment Source**
+
+**Description**:
+Open English WordNet is a community-maintained fork of Princeton WordNet with ongoing updates. It provides both vocabulary coverage AND rich semantic data including POS tags, definitions, and semantic relationships.
+
+**Why Added as Word Source:**
+- **Modern vocabulary**: Includes words added since 2011 (Princeton WordNet's last release)
+- **Active maintenance**: Annual releases with community contributions
+- **18,500+ improvements** over Princeton WordNet 3.1
+- **Rich metadata**: Every word comes with POS tags and semantic relationships
+- **Better coverage**: 161k words vs 159k in Princeton 3.1
+
+**Characteristics:**
+- Words up to unlimited length (vs EOWL's 10-letter limit)
+- Includes multi-word phrases and idioms
+- Modern neologisms (selfie, cryptocurrency, etc.)
+- Comprehensive POS tagging
+- Semantic network with hypernyms, hyponyms, etc.
+- Both American and British English
+
+**License**: CC BY 4.0 (permissive, attribution required)
+
+**Integration**:
+- **As word source**: Parsed from YAML files via `wordnet_source.py`
+  - Extracts all lemmas with POS tags
+  - Provides ~161k words with guaranteed POS data
+  - Merged with EOWL and Wiktionary
+- **As enrichment**: POS backfilling via `wordnet_enrich.py`
+  - Uses NLTK interface for backward compatibility
+  - Backfills missing POS tags (100% accuracy on tests)
+  - ~~Concreteness classification~~ (DEPRECATED - use Brysbaert instead)
+- **Accent normalization**: Handles accented characters (café → cafe lookup)
+- Source ID: `wordnet`
+
+**Technical Details**:
+- **Format**: YAML source files compiled from Git repository
+- **Parser**: Custom `wordnet_yaml_parser.py` (no external dependencies)
+- **Data structure**:
+  - 161,705 words
+  - 120,630 synsets
+  - 212,418 senses
+  - Rich semantic relationships
+- **Performance**: Lazy loading with caching for efficiency
+
+**Comparison with Princeton WordNet 3.1:**
+| Feature | Princeton 3.1 (2011) | OEWN 2024 |
+|---------|---------------------|-----------|
+| Words | 159,015 | 161,705 |
+| Synsets | 117,791 | 120,630 |
+| Last updated | 2011 | 2024 (annual) |
+| Modern words | ❌ No | ✅ Yes |
+| Community updates | ❌ No | ✅ Yes |
+| License | WordNet (restrictive) | CC BY 4.0 (permissive) |
+
+---
+
 ## Plus Sources
 
 ### Wiktionary (English)
@@ -153,33 +219,36 @@ Wiktionary is a collaborative, multilingual dictionary with rich linguistic data
 
 ---
 
-### WordNet (Princeton)
+### WordNet Enrichment (via NLTK)
 
-**Author**: Princeton University
+**Note**: WordNet is now primarily used as a **word source** (see Core Sources above). This section describes legacy enrichment functionality.
 
-**License**: WordNet License (BSD-style, permissive)
+**Author**: Princeton University / Open English WordNet
 
-**URL**: https://wordnet.princeton.edu/
+**License**: WordNet License / CC BY 4.0
 
-**Word Count**: Used for enrichment (not direct word source)
+**URL**: https://wordnet.princeton.edu/ | https://en-word.net/
+
+**Status**: **POS backfilling only** (concreteness deprecated)
 
 **Description**:
-WordNet is a lexical database grouping words into synsets (sets of cognitive synonyms). Used for:
-- **Concreteness classification**: Distinguishes concrete vs. abstract nouns
-- **POS backfilling**: Adds POS tags where missing
+WordNet enrichment via NLTK is used for POS tag backfilling only. Concreteness classification has been deprecated in favor of Brysbaert ratings (see below).
 
-**Characteristics:**
-- Hierarchical semantic network
-- Focus on nouns, verbs, adjectives, adverbs
-- Sense distinctions (polysemy)
-- Lexical relations (synonymy, hypernymy, etc.)
+**Current Use**:
+- **POS backfilling**: Adds POS tags where missing (100% accuracy on tests)
+- **Accent normalization**: Handles accented characters (café → cafe)
+- ~~**Concreteness**~~: **DEPRECATED** - Use Brysbaert instead (see tests/WORDNET_BASELINE_FINDINGS.md)
 
-**Attribution Required**: Yes (for academic use)
+**Known Issues Fixed**:
+- ~~WordNet concreteness heuristic~~ (45% accuracy) → Replaced with Brysbaert (primary)
+- ~~Missing modern vocabulary~~ → Fixed by using OEWN as word source
+- ~~Accented characters not found~~ → Fixed with accent normalization
 
 **Integration**:
-- Accessed via NLTK
-- Enriches existing entries with `concreteness` and `pos`
-- Does not add new words to lexicon
+- Accessed via NLTK (backward compatibility)
+- Enriches existing entries with `pos` only
+- **Does NOT add concreteness** (Brysbaert does this)
+- Run AFTER Brysbaert in pipeline
 - Source ID: `wordnet` (in provenance metadata)
 
 ---

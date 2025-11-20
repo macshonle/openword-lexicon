@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-wordnet_enrich.py — Enrich entries with WordNet data (concreteness, POS backfill).
+wordnet_enrich.py — Enrich entries with WordNet data (POS backfill).
+
+IMPORTANT: Concreteness enrichment is deprecated in this module!
+Use brysbaert_enrich.py INSTEAD for concreteness data (more accurate, better coverage).
+WordNet's concreteness heuristic has known issues (see tests/WORDNET_BASELINE_FINDINGS.md).
 
 UNIFIED BUILD MODE:
 Reads:
@@ -17,11 +21,17 @@ Outputs:
   - data/intermediate/{core,plus}/*_entries_enriched.jsonl
 
 Enrichment:
-  - Adds 'concreteness' field for nouns: concrete|abstract|mixed
-  - Backfills POS tags where confident and missing
+  - Backfills POS tags where confident and missing (highly accurate)
+  - [DEPRECATED] Concreteness for nouns (use Brysbaert instead!)
   - Tracks 'wordnet' source when enrichment is applied
   - Updates license_sources to include WordNet license
   - Uses NLTK's WordNet interface
+
+Recommended pipeline order:
+  1. merge_all.py - Combine word sources
+  2. brysbaert_enrich.py - Add concreteness (PRIMARY SOURCE)
+  3. wordnet_enrich.py - Backfill POS only
+  4. frequency_tiers.py - Add frequency data
 """
 
 import json
@@ -73,13 +83,67 @@ def ensure_wordnet_data():
         logger.info("WordNet data downloaded")
 
 
+def normalize_for_lookup(word: str) -> str:
+    """
+    Normalize word for dictionary lookup.
+
+    Handles:
+    - Unicode NFKC normalization (café -> café)
+    - Lowercase conversion
+    - Accent stripping for fallback lookups
+
+    Returns normalized word suitable for WordNet lookup.
+    """
+    # NFKC normalization (canonical decomposition + compatibility composition)
+    normalized = unicodedata.normalize('NFKC', word)
+    # Lowercase
+    normalized = normalized.lower()
+    return normalized
+
+
+def strip_accents(word: str) -> str:
+    """
+    Strip accents from word for fallback lookups.
+
+    Example: café -> cafe, naïve -> naive
+
+    Used when direct lookup fails, to find English equivalents.
+    """
+    # NFD normalization splits accents from base characters
+    nfd = unicodedata.normalize('NFD', word)
+    # Filter out combining diacritical marks
+    without_accents = ''.join(
+        char for char in nfd
+        if not unicodedata.combining(char)
+    )
+    # Re-normalize to NFC
+    return unicodedata.normalize('NFC', without_accents)
+
+
 def get_concreteness(word: str) -> Optional[str]:
     """
     Determine concreteness for a noun using WordNet.
 
+    **DEPRECATED**: This heuristic has accuracy issues (~45% on test data).
+    Use Brysbaert concreteness ratings instead (brysbaert_enrich.py).
+
+    Known issues:
+    - Over-classifies as "mixed" (castle, dog, hammer → mixed, should be concrete)
+    - Under-estimates concrete/abstract distinctions
+
+    See tests/WORDNET_BASELINE_FINDINGS.md for details.
+
     Returns: 'concrete', 'abstract', 'mixed', or None
     """
-    synsets = wn.synsets(word, pos=wn.NOUN)
+    # Normalize word for lookup
+    normalized = normalize_for_lookup(word)
+
+    # Try direct lookup first
+    synsets = wn.synsets(normalized, pos=wn.NOUN)
+
+    # If no results and word has accents, try without accents
+    if not synsets and normalized != strip_accents(normalized):
+        synsets = wn.synsets(strip_accents(normalized), pos=wn.NOUN)
 
     if not synsets:
         return None
@@ -135,18 +199,39 @@ def get_concreteness(word: str) -> Optional[str]:
 
 
 def get_wordnet_pos(word: str) -> List[str]:
-    """Get POS tags from WordNet for a word."""
+    """
+    Get POS tags from WordNet for a word.
+
+    Handles accent normalization automatically (café -> cafe for lookup).
+    This function has high accuracy (100% on test data).
+    """
     pos_tags = set()
 
-    # Check each WordNet POS
-    if wn.synsets(word, pos=wn.NOUN):
+    # Normalize word for lookup
+    normalized = normalize_for_lookup(word)
+
+    # Try direct lookup first
+    if wn.synsets(normalized, pos=wn.NOUN):
         pos_tags.add('noun')
-    if wn.synsets(word, pos=wn.VERB):
+    if wn.synsets(normalized, pos=wn.VERB):
         pos_tags.add('verb')
-    if wn.synsets(word, pos=wn.ADJ):
+    if wn.synsets(normalized, pos=wn.ADJ):
         pos_tags.add('adjective')
-    if wn.synsets(word, pos=wn.ADV):
+    if wn.synsets(normalized, pos=wn.ADV):
         pos_tags.add('adverb')
+
+    # If no results and word has accents, try without accents
+    if not pos_tags and normalized != strip_accents(normalized):
+        normalized_no_accent = strip_accents(normalized)
+
+        if wn.synsets(normalized_no_accent, pos=wn.NOUN):
+            pos_tags.add('noun')
+        if wn.synsets(normalized_no_accent, pos=wn.VERB):
+            pos_tags.add('verb')
+        if wn.synsets(normalized_no_accent, pos=wn.ADJ):
+            pos_tags.add('adjective')
+        if wn.synsets(normalized_no_accent, pos=wn.ADV):
+            pos_tags.add('adverb')
 
     return sorted(pos_tags)
 
