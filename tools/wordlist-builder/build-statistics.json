@@ -1,57 +1,57 @@
 {
-  "total_words": 1303681,
-  "generated_at": "2025-11-19T16:19:51.487214",
+  "total_words": 1352901,
+  "generated_at": "2025-11-20T15:18:45.909182",
   "sources": {
-    "enable": 172823,
     "eowl": 128983,
-    "wikt": 1294779
+    "wikt": 1294779,
+    "wordnet": 152345
   },
   "source_combinations": {
     "wikt": {
-      "count": 1095480,
+      "count": 1113372,
       "licenses": "CC-BY-SA-4.0"
     },
-    "enable,eowl,wikt": {
-      "count": 92899,
-      "licenses": "CC-BY-SA-4.0,CC0,UKACD"
-    },
-    "enable,wikt": {
-      "count": 74274,
-      "licenses": "CC-BY-SA-4.0,CC0"
-    },
     "eowl,wikt": {
-      "count": 32126,
+      "count": 83308,
       "licenses": "CC-BY-SA-4.0,UKACD"
     },
-    "enable": {
-      "count": 4944,
-      "licenses": "CC0"
+    "wikt,wordnet": {
+      "count": 56382,
+      "licenses": "CC-BY-SA-4.0,WordNet"
+    },
+    "wordnet": {
+      "count": 54164,
+      "licenses": "WordNet"
+    },
+    "eowl,wikt,wordnet": {
+      "count": 41717,
+      "licenses": "CC-BY-SA-4.0,UKACD,WordNet"
     },
     "eowl": {
-      "count": 3252,
+      "count": 3876,
       "licenses": "UKACD"
     },
-    "enable,eowl": {
-      "count": 706,
-      "licenses": "CC0,UKACD"
+    "eowl,wordnet": {
+      "count": 82,
+      "licenses": "UKACD,WordNet"
     }
   },
   "metadata_coverage": {
     "pos_tags": {
-      "count": 1282956,
-      "percentage": 98.4
+      "count": 1337606,
+      "percentage": 98.9
     },
     "any_labels": {
-      "count": 146589,
-      "percentage": 11.2
+      "count": 146791,
+      "percentage": 10.9
     },
     "register_labels": {
-      "count": 41783,
-      "percentage": 3.2
+      "count": 42034,
+      "percentage": 3.1
     },
     "domain_labels": {
       "count": 43209,
-      "percentage": 3.3
+      "percentage": 3.2
     },
     "region_labels": {
       "count": 25222,
@@ -59,7 +59,7 @@
     },
     "temporal_labels": {
       "count": 65867,
-      "percentage": 5.1
+      "percentage": 4.9
     },
     "concreteness": {
       "count": 0,
@@ -67,176 +67,44 @@
     },
     "concreteness_nouns": {
       "count": 0,
-      "total_nouns": 930385,
+      "total_nouns": 982295,
       "percentage": 0.0
     },
     "frequency_tier": {
-      "count": 199299,
-      "percentage": 15.3
+      "count": 181489,
+      "percentage": 13.4
     },
     "multi_word_phrases": {
       "count": 293849,
-      "percentage": 22.5
+      "percentage": 21.7
     }
   },
   "metadata_by_combination": {
     "wikt": {
-      "total": 1095480,
+      "total": 1113372,
       "pos_tags": {
-        "count": 1083688,
-        "percentage": 98.9
+        "count": 1101958,
+        "percentage": 99.0
       },
       "any_labels": {
-        "count": 114403,
-        "percentage": 10.4
+        "count": 110066,
+        "percentage": 9.9
       },
       "register_labels": {
-        "count": 32952,
-        "percentage": 3.0
-      },
-      "domain_labels": {
-        "count": 33165,
-        "percentage": 3.0
-      },
-      "region_labels": {
-        "count": 18234,
-        "percentage": 1.7
-      },
-      "temporal_labels": {
-        "count": 47331,
-        "percentage": 4.3
-      },
-      "concreteness": {
-        "count": 0,
-        "percentage": 0.0
-      },
-      "concreteness_nouns": {
-        "count": 0,
-        "total_nouns": 797314,
-        "percentage": 0.0
-      },
-      "frequency_tier": {
-        "count": 0,
-        "percentage": 0.0
-      },
-      "multi_word_phrases": {
-        "count": 293849,
-        "percentage": 26.8
-      }
-    },
-    "enable,eowl,wikt": {
-      "total": 92899,
-      "pos_tags": {
-        "count": 92881,
-        "percentage": 100.0
-      },
-      "any_labels": {
-        "count": 20096,
-        "percentage": 21.6
-      },
-      "register_labels": {
-        "count": 6796,
-        "percentage": 7.3
-      },
-      "domain_labels": {
-        "count": 6579,
-        "percentage": 7.1
-      },
-      "region_labels": {
-        "count": 4966,
-        "percentage": 5.3
-      },
-      "temporal_labels": {
-        "count": 11768,
-        "percentage": 12.7
-      },
-      "concreteness": {
-        "count": 0,
-        "percentage": 0.0
-      },
-      "concreteness_nouns": {
-        "count": 0,
-        "total_nouns": 63417,
-        "percentage": 0.0
-      },
-      "frequency_tier": {
-        "count": 92899,
-        "percentage": 100.0
-      },
-      "multi_word_phrases": {
-        "count": 0,
-        "percentage": 0.0
-      }
-    },
-    "enable,wikt": {
-      "total": 74274,
-      "pos_tags": {
-        "count": 74264,
-        "percentage": 100.0
-      },
-      "any_labels": {
-        "count": 5717,
-        "percentage": 7.7
-      },
-      "register_labels": {
-        "count": 1084,
-        "percentage": 1.5
-      },
-      "domain_labels": {
-        "count": 2522,
-        "percentage": 3.4
-      },
-      "region_labels": {
-        "count": 969,
-        "percentage": 1.3
-      },
-      "temporal_labels": {
-        "count": 2093,
+        "count": 31497,
         "percentage": 2.8
       },
-      "concreteness": {
-        "count": 0,
-        "percentage": 0.0
-      },
-      "concreteness_nouns": {
-        "count": 0,
-        "total_nouns": 48603,
-        "percentage": 0.0
-      },
-      "frequency_tier": {
-        "count": 74274,
-        "percentage": 100.0
-      },
-      "multi_word_phrases": {
-        "count": 0,
-        "percentage": 0.0
-      }
-    },
-    "eowl,wikt": {
-      "total": 32126,
-      "pos_tags": {
-        "count": 32123,
-        "percentage": 100.0
-      },
-      "any_labels": {
-        "count": 6373,
-        "percentage": 19.8
-      },
-      "register_labels": {
-        "count": 951,
-        "percentage": 3.0
-      },
       "domain_labels": {
-        "count": 943,
+        "count": 31753,
         "percentage": 2.9
       },
       "region_labels": {
-        "count": 1053,
-        "percentage": 3.3
+        "count": 16739,
+        "percentage": 1.5
       },
       "temporal_labels": {
-        "count": 4675,
-        "percentage": 14.6
+        "count": 46066,
+        "percentage": 4.1
       },
       "concreteness": {
         "count": 0,
@@ -244,11 +112,55 @@
       },
       "concreteness_nouns": {
         "count": 0,
-        "total_nouns": 21051,
+        "total_nouns": 801270,
         "percentage": 0.0
       },
       "frequency_tier": {
-        "count": 32126,
+        "count": 0,
+        "percentage": 0.0
+      },
+      "multi_word_phrases": {
+        "count": 270697,
+        "percentage": 24.3
+      }
+    },
+    "eowl,wikt": {
+      "total": 83308,
+      "pos_tags": {
+        "count": 83303,
+        "percentage": 100.0
+      },
+      "any_labels": {
+        "count": 10742,
+        "percentage": 12.9
+      },
+      "register_labels": {
+        "count": 2096,
+        "percentage": 2.5
+      },
+      "domain_labels": {
+        "count": 1867,
+        "percentage": 2.2
+      },
+      "region_labels": {
+        "count": 1904,
+        "percentage": 2.3
+      },
+      "temporal_labels": {
+        "count": 7161,
+        "percentage": 8.6
+      },
+      "concreteness": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "concreteness_nouns": {
+        "count": 0,
+        "total_nouns": 53833,
+        "percentage": 0.0
+      },
+      "frequency_tier": {
+        "count": 83308,
         "percentage": 100.0
       },
       "multi_word_phrases": {
@@ -256,11 +168,55 @@
         "percentage": 0.0
       }
     },
-    "enable": {
-      "total": 4944,
+    "wikt,wordnet": {
+      "total": 56382,
       "pos_tags": {
+        "count": 56382,
+        "percentage": 100.0
+      },
+      "any_labels": {
+        "count": 10241,
+        "percentage": 18.2
+      },
+      "register_labels": {
+        "count": 2764,
+        "percentage": 4.9
+      },
+      "domain_labels": {
+        "count": 3934,
+        "percentage": 7.0
+      },
+      "region_labels": {
+        "count": 2464,
+        "percentage": 4.4
+      },
+      "temporal_labels": {
+        "count": 3358,
+        "percentage": 6.0
+      },
+      "concreteness": {
         "count": 0,
         "percentage": 0.0
+      },
+      "concreteness_nouns": {
+        "count": 0,
+        "total_nouns": 45051,
+        "percentage": 0.0
+      },
+      "frequency_tier": {
+        "count": 56382,
+        "percentage": 100.0
+      },
+      "multi_word_phrases": {
+        "count": 23152,
+        "percentage": 41.1
+      }
+    },
+    "wordnet": {
+      "total": 54164,
+      "pos_tags": {
+        "count": 54164,
+        "percentage": 100.0
       },
       "any_labels": {
         "count": 0,
@@ -288,12 +244,56 @@
       },
       "concreteness_nouns": {
         "count": 0,
-        "total_nouns": 0,
-        "percentage": 0
+        "total_nouns": 51254,
+        "percentage": 0.0
       },
       "frequency_tier": {
         "count": 0,
         "percentage": 0.0
+      },
+      "multi_word_phrases": {
+        "count": 0,
+        "percentage": 0.0
+      }
+    },
+    "eowl,wikt,wordnet": {
+      "total": 41717,
+      "pos_tags": {
+        "count": 41717,
+        "percentage": 100.0
+      },
+      "any_labels": {
+        "count": 15742,
+        "percentage": 37.7
+      },
+      "register_labels": {
+        "count": 5677,
+        "percentage": 13.6
+      },
+      "domain_labels": {
+        "count": 5655,
+        "percentage": 13.6
+      },
+      "region_labels": {
+        "count": 4115,
+        "percentage": 9.9
+      },
+      "temporal_labels": {
+        "count": 9282,
+        "percentage": 22.2
+      },
+      "concreteness": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "concreteness_nouns": {
+        "count": 0,
+        "total_nouns": 30819,
+        "percentage": 0.0
+      },
+      "frequency_tier": {
+        "count": 41717,
+        "percentage": 100.0
       },
       "multi_word_phrases": {
         "count": 0,
@@ -301,7 +301,7 @@
       }
     },
     "eowl": {
-      "total": 3252,
+      "total": 3876,
       "pos_tags": {
         "count": 0,
         "percentage": 0.0
@@ -344,11 +344,11 @@
         "percentage": 0.0
       }
     },
-    "enable,eowl": {
-      "total": 706,
+    "eowl,wordnet": {
+      "total": 82,
       "pos_tags": {
-        "count": 0,
-        "percentage": 0.0
+        "count": 82,
+        "percentage": 100.0
       },
       "any_labels": {
         "count": 0,
@@ -376,12 +376,12 @@
       },
       "concreteness_nouns": {
         "count": 0,
-        "total_nouns": 0,
-        "percentage": 0
+        "total_nouns": 68,
+        "percentage": 0.0
       },
       "frequency_tier": {
-        "count": 0,
-        "percentage": 0.0
+        "count": 82,
+        "percentage": 100.0
       },
       "multi_word_phrases": {
         "count": 0,
@@ -389,12 +389,57 @@
       }
     }
   },
-  "enrichment_impact": {},
+  "enrichment_impact": {
+    "eowl": {
+      "wordnet": {
+        "entries_with_source": 82,
+        "entries_with_pos": 82,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 0,
+        "pos_percentage": 100.0,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 0.0
+      }
+    },
+    "eowl,wikt": {
+      "wordnet": {
+        "entries_with_source": 41717,
+        "entries_with_pos": 41717,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 0,
+        "pos_percentage": 100.0,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 0.0
+      }
+    },
+    "none": {
+      "wordnet": {
+        "entries_with_source": 54164,
+        "entries_with_pos": 54164,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 0,
+        "pos_percentage": 100.0,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 0.0
+      }
+    },
+    "wikt": {
+      "wordnet": {
+        "entries_with_source": 56382,
+        "entries_with_pos": 56382,
+        "entries_with_concreteness": 0,
+        "entries_with_frequency": 0,
+        "pos_percentage": 100.0,
+        "concreteness_percentage": 0.0,
+        "frequency_percentage": 0.0
+      }
+    }
+  },
   "pos_distribution": {
-    "noun": 930385,
-    "verb": 212699,
-    "adjective": 178390,
-    "adverb": 26803,
+    "noun": 982295,
+    "verb": 213671,
+    "adjective": 181761,
+    "adverb": 27383,
     "interjection": 4400,
     "pronoun": 860,
     "preposition": 833,
@@ -403,7 +448,7 @@
     "particle": 91
   },
   "frequency_distribution": {
-    "Z": 199299
+    "Z": 181489
   },
   "concreteness_distribution": {},
   "label_categories": {}
