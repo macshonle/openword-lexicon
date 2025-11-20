@@ -14,15 +14,20 @@ This is a spike/proof-of-concept implementation to explore potential performance
 - ✅ Compatible JSONL output format
 - ✅ Cross-platform (macOS and Linux)
 
-## Not Implemented (Simplified for Spike)
+## Features - ✅ Full Parity with Python Version
 
-- ❌ Syllable count extraction
-- ❌ Morphology parsing (etymology)
-- ❌ Phrase type detection
-- ❌ Regional variants
-- ❌ Advanced Unicode normalization
+All features from the Python version are now implemented:
 
-These features can be added if the spike shows sufficient performance gains.
+- ✅ Syllable count extraction (hyphenation, rhymes, categories)
+- ✅ Morphology parsing (etymology) - prefix, suffix, affix, compound, confix
+- ✅ Phrase type detection (idiom, proverb, prepositional phrase, etc.)
+- ✅ Regional variant extraction (en-GB, en-US, en-CA, en-AU, etc.)
+- ✅ Complete label extraction (register, temporal, domain, region)
+- ✅ Unicode normalization (Latin Extended support: 0x00C0-0x024F)
+
+**Note:** The Rust implementation accepts a wider range of punctuation (including commas)
+than the Python version, which results in ~0.1% more entries (primarily English proverbs
+and idioms with commas).
 
 ## Installation
 
