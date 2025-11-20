@@ -136,6 +136,17 @@ const FILTER_TYPES = {
                 'humorous', 'derogatory', 'euphemistic'
             ]}
         ]
+    },
+    syllable: {
+        title: 'Syllable Filter',
+        icon: '🔢',
+        requires: ['wiktionary'],
+        configFields: [
+            { type: 'number', name: 'minSyllables', label: 'Minimum Syllables', min: 1, placeholder: 'e.g., 1' },
+            { type: 'number', name: 'maxSyllables', label: 'Maximum Syllables', min: 1, placeholder: 'e.g., 3' },
+            { type: 'number', name: 'exact', label: 'Exact Syllables', min: 1, placeholder: 'e.g., 2 (overrides min/max)' },
+            { type: 'checkbox', name: 'requireSyllables', label: 'Require syllable data (exclude words without syllable info)', defaultChecked: false }
+        ]
     }
 };
 
@@ -249,6 +260,42 @@ const DEMOS = {
                 mode: 'include',
                 config: { minTier: 'A', maxTier: 'E' },
                 summary: 'Common words (A-E)'
+            }
+        ]
+    },
+    'childrens-reading': {
+        name: "Children's Reading",
+        sources: { eowl: true, wiktionary: true, wordnet: true, brysbaert: true, frequency: true },
+        filters: [
+            {
+                type: 'syllable',
+                mode: 'include',
+                config: { minSyllables: 1, maxSyllables: 2 },
+                summary: '1-2 syllables'
+            },
+            {
+                type: 'character',
+                mode: 'include',
+                config: { minLength: 3, maxLength: 8 },
+                summary: '3-8 letters'
+            },
+            {
+                type: 'frequency',
+                mode: 'include',
+                config: { minTier: 'A', maxTier: 'F' },
+                summary: 'Common words (A-F)'
+            },
+            {
+                type: 'phrase',
+                mode: 'include',
+                config: { singleWord: true },
+                summary: 'Single words only'
+            },
+            {
+                type: 'labels',
+                mode: 'exclude',
+                config: { labels: ['vulgar', 'offensive', 'slang'] },
+                summary: 'No vulgar/offensive/slang'
             }
         ]
     }
@@ -775,6 +822,22 @@ function generateFilterSummary(filterType, config, mode = 'include') {
                         parts.push(config.labels.join(', '));
                     }
                 }
+            }
+            break;
+
+        case 'syllable':
+            if (config.exact) {
+                parts.push(config.exact === 1 ? '1 syllable' : `${config.exact} syllables`);
+            } else if (config.minSyllables && config.maxSyllables) {
+                if (config.minSyllables === config.maxSyllables) {
+                    parts.push(config.minSyllables === 1 ? '1 syllable' : `${config.minSyllables} syllables`);
+                } else {
+                    parts.push(`${config.minSyllables}-${config.maxSyllables} syllables`);
+                }
+            } else if (config.minSyllables) {
+                parts.push(`≥${config.minSyllables} syllables`);
+            } else if (config.maxSyllables) {
+                parts.push(`≤${config.maxSyllables} syllables`);
             }
             break;
     }

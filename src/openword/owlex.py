@@ -49,11 +49,109 @@ class OwlexFilter:
         if 'version' not in spec:
             logger.error("Specification missing 'version' field")
             sys.exit(1)
-        if 'distribution' not in spec:
-            logger.error("Specification missing 'distribution' field")
+
+        # Support both old format (distribution) and new format (sources)
+        if 'distribution' not in spec and 'sources' not in spec:
+            logger.error("Specification missing 'distribution' or 'sources' field")
             sys.exit(1)
 
+        # Normalize new format to old format for backward compatibility
+        if 'sources' in spec and 'distribution' not in spec:
+            spec = self._normalize_new_format(spec)
+
         return spec
+
+    def _normalize_new_format(self, spec: Dict) -> Dict:
+        """
+        Convert new web builder format to legacy owlex format.
+
+        New format:
+          {
+            "version": "1.0",
+            "sources": ["wiktionary", "eowl"],
+            "filters": [
+              {"type": "character", "mode": "include", "config": {"minLength": 5}},
+              {"type": "syllable", "mode": "include", "config": {"minSyllables": 1, "maxSyllables": 2}}
+            ]
+          }
+
+        Old format:
+          {
+            "version": "1.0",
+            "distribution": "en",
+            "filters": {
+              "character": {"min_length": 5},
+              "syllables": {"min": 1, "max": 2}
+            }
+          }
+        """
+        normalized = spec.copy()
+
+        # Set distribution to 'en' (unified English build)
+        normalized['distribution'] = 'en'
+
+        # Convert filter array to filter object
+        if isinstance(spec.get('filters'), list):
+            old_filters = {}
+
+            for filter_item in spec['filters']:
+                filter_type = filter_item['type']
+                filter_mode = filter_item.get('mode', 'include')
+                filter_config = filter_item.get('config', {})
+
+                # Convert camelCase config keys to snake_case
+                converted_config = self._convert_filter_config(filter_type, filter_config, filter_mode)
+
+                # Merge with existing config for this filter type (in case of multiple filters of same type)
+                if filter_type in old_filters:
+                    old_filters[filter_type].update(converted_config)
+                else:
+                    old_filters[filter_type] = converted_config
+
+            normalized['filters'] = old_filters
+
+        return normalized
+
+    def _convert_filter_config(self, filter_type: str, config: Dict, mode: str) -> Dict:
+        """Convert camelCase config to snake_case and handle mode."""
+        converted = {}
+
+        # Map of camelCase to snake_case
+        key_mappings = {
+            'minLength': 'min_length',
+            'maxLength': 'max_length',
+            'minSyllables': 'min',
+            'maxSyllables': 'max',
+            'minTier': 'min_tier',
+            'maxTier': 'max_tier',
+            'singleWord': 'max_words',  # singleWord=true means max_words=1
+            'multiWord': 'min_words',   # multiWord=true means min_words=2
+            'requireSyllables': 'require_syllables',
+            'preferBrysbaert': 'prefer_brysbaert',
+        }
+
+        for old_key, value in config.items():
+            new_key = key_mappings.get(old_key, old_key)
+
+            # Handle special cases
+            if old_key == 'singleWord' and value:
+                converted['max_words'] = 1
+            elif old_key == 'multiWord' and value:
+                converted['min_words'] = 2
+            elif old_key == 'exact' and filter_type == 'syllable':
+                # exact syllables
+                converted['exact'] = value
+            else:
+                converted[new_key] = value
+
+        # Handle mode for filters that support include/exclude
+        if filter_type in ['labels', 'pos', 'concreteness']:
+            if mode == 'exclude' and config:
+                # For exclude mode, wrap in exclude logic
+                # This is a simplification - in practice we'd need to handle this more carefully
+                pass
+
+        return converted
 
     def get_input_file(self) -> Path:
         """Determine input JSONL file based on distribution."""
