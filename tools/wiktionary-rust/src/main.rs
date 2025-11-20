@@ -55,7 +55,7 @@ lazy_static! {
     // Basic XML patterns
     static ref TITLE_PATTERN: Regex = Regex::new(r"<title>([^<]+)</title>").unwrap();
     static ref NS_PATTERN: Regex = Regex::new(r"<ns>(\d+)</ns>").unwrap();
-    static ref TEXT_PATTERN: Regex = Regex::new(r"<text[^>]*>(.+?)</text>").unwrap();
+    static ref TEXT_PATTERN: Regex = Regex::new(r"(?s)<text[^>]*>(.+?)</text>").unwrap();
     static ref REDIRECT_PATTERN: Regex = Regex::new(r#"<redirect\s+title="[^"]+""#).unwrap();
 
     // English section
