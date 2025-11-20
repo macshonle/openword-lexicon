@@ -190,11 +190,9 @@ fn is_englishlike(token: &str) -> bool {
     let forbidden = ['&', ';', '<', '>'];
 
     let mut saw_latin_letter = false;
-    let mut prev_base_is_latin = false;
 
     for ch in normalized.chars() {
         if ch == ' ' {
-            prev_base_is_latin = false;
             continue;
         }
 
@@ -202,31 +200,29 @@ fn is_englishlike(token: &str) -> bool {
             return false;
         }
 
-        // Check for combining marks - simplified check
+        // Simplified character validation for spike
         if ch.is_ascii() {
             if ch.is_alphabetic() {
                 saw_latin_letter = true;
-                prev_base_is_latin = true;
             } else if ch.is_numeric() {
-                prev_base_is_latin = false;
+                // Allow numbers
             } else if allowed_punct.contains(&ch) {
-                prev_base_is_latin = false;
+                // Allow specific punctuation
             } else if ch.is_whitespace() {
-                prev_base_is_latin = false;
+                // Allow whitespace
             }
         } else {
             // Non-ASCII character - check if it's Latin-based
             // This is a simplified check - for spike purposes
             if ch.is_alphabetic() {
-                // Accept common Latin diacritics
+                // Accept common Latin diacritics (À-ɏ range)
                 if ch as u32 >= 0x00C0 && ch as u32 <= 0x024F {
                     saw_latin_letter = true;
-                    prev_base_is_latin = true;
                 } else {
                     return false;
                 }
             } else if allowed_punct.contains(&ch) {
-                prev_base_is_latin = false;
+                // Allow punctuation
             }
         }
     }
