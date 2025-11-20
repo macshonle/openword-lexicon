@@ -27,6 +27,18 @@ struct Args {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+struct Morphology {
+    #[serde(rename = "type")]
+    morph_type: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    base: Option<String>,
+    components: Vec<String>,
+    prefixes: Vec<String>,
+    suffixes: Vec<String>,
+    is_compound: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 struct Entry {
     word: String,
     pos: Vec<String>,
@@ -49,6 +61,8 @@ struct Entry {
     phrase_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     syllables: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    morphology: Option<Morphology>,
 }
 
 lazy_static! {
@@ -74,6 +88,23 @@ lazy_static! {
     // Other patterns
     static ref ABBREVIATION_TEMPLATE: Regex = Regex::new(r"(?i)\{\{(?:abbreviation of|abbrev of|abbr of|initialism of)\|en\|").unwrap();
     static ref DICT_ONLY: Regex = Regex::new(r"(?i)\{\{no entry\|en").unwrap();
+
+    // Syllable extraction patterns
+    static ref HYPHENATION_TEMPLATE: Regex = Regex::new(r"(?i)\{\{(?:hyphenation|hyph)\|en\|([^}]+)\}\}").unwrap();
+    static ref RHYMES_SYLLABLE: Regex = Regex::new(r"(?i)\{\{rhymes\|en\|[^}]*\|s=(\d+)").unwrap();
+    static ref SYLLABLE_CATEGORY: Regex = Regex::new(r"(?i)\[\[Category:English\s+(\d+)-syllable\s+words?\]\]").unwrap();
+
+    // Phrase type patterns
+    static ref PREP_PHRASE_TEMPLATE: Regex = Regex::new(r"(?i)\{\{en-prepphr\b").unwrap();
+
+    // Morphology/etymology patterns
+    static ref ETYMOLOGY_SECTION: Regex = Regex::new(r"(?i)===+\s*Etymology\s*\d*\s*===+\s*\n(.+?)(?=\n===|\z)").unwrap();
+    static ref SUFFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{suffix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
+    static ref PREFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{prefix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
+    static ref AFFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{affix\|en\|([^}]+)\}\}").unwrap();
+    static ref COMPOUND_TEMPLATE: Regex = Regex::new(r"(?i)\{\{compound\|en\|([^}]+)\}\}").unwrap();
+    static ref SURF_TEMPLATE: Regex = Regex::new(r"(?i)\{\{surf\|en\|([^}]+)\}\}").unwrap();
+    static ref CONFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{confix\|en\|([^}|]+)\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
 
     // POS mapping
     static ref POS_MAP: HashMap<&'static str, &'static str> = {
@@ -171,6 +202,25 @@ lazy_static! {
         "Unsupported titles/",
         "Category:",
     ];
+
+    // Regional label patterns
+    static ref REGION_LABELS: HashMap<&'static str, &'static str> = {
+        let mut m = HashMap::new();
+        m.insert("british", "en-GB");
+        m.insert("uk", "en-GB");
+        m.insert("us", "en-US");
+        m.insert("american", "en-US");
+        m.insert("canadian", "en-CA");
+        m.insert("australia", "en-AU");
+        m.insert("australian", "en-AU");
+        m.insert("new zealand", "en-NZ");
+        m.insert("ireland", "en-IE");
+        m.insert("irish", "en-IE");
+        m.insert("south africa", "en-ZA");
+        m.insert("india", "en-IN");
+        m.insert("indian", "en-IN");
+        m
+    };
 }
 
 fn is_englishlike(token: &str) -> bool {
@@ -310,6 +360,8 @@ fn extract_labels(text: &str) -> HashMap<String, Vec<String>> {
                 labels.entry("temporal".to_string()).or_default().insert(label);
             } else if DOMAIN_LABELS.contains(label.as_str()) {
                 labels.entry("domain".to_string()).or_default().insert(label);
+            } else if let Some(&region_code) = REGION_LABELS.get(label.as_str()) {
+                labels.entry("region".to_string()).or_default().insert(region_code.to_string());
             }
         }
     }
@@ -336,6 +388,14 @@ fn extract_labels(text: &str) -> HashMap<String, Vec<String>> {
         if cat.contains("archaic") {
             labels.entry("temporal".to_string()).or_default().insert("archaic".to_string());
         }
+
+        // Extract regional labels from categories
+        for (region_key, region_code) in REGION_LABELS.iter() {
+            if cat.contains(region_key) {
+                labels.entry("region".to_string()).or_default().insert(region_code.to_string());
+                break;
+            }
+        }
     }
 
     // Convert to sorted vectors
@@ -346,6 +406,271 @@ fn extract_labels(text: &str) -> HashMap<String, Vec<String>> {
             (k, vec)
         })
         .collect()
+}
+
+fn extract_syllable_count_from_hyphenation(text: &str) -> Option<usize> {
+    let cap = HYPHENATION_TEMPLATE.captures(text)?;
+    let content = cap[1].to_string();
+
+    // Handle alternatives (||) - use first alternative
+    let first_alt = content.split("||").next()?;
+
+    // Parse pipe-separated segments
+    let parts: Vec<&str> = first_alt.split('|').collect();
+
+    // Filter syllables (exclude parameters and empty parts)
+    let syllables: Vec<String> = parts
+        .iter()
+        .filter_map(|&part| {
+            let part = part.trim();
+            // Skip empty parts or parameter assignments
+            if part.is_empty() || part.contains('=') {
+                None
+            } else {
+                Some(part.to_string())
+            }
+        })
+        .collect();
+
+    // Single-part templates with long unseparated text are likely incomplete
+    // Only trust single-part templates for very short words (1-3 chars)
+    if syllables.len() == 1 && syllables[0].len() > 3 {
+        return None;
+    }
+
+    if syllables.is_empty() {
+        None
+    } else {
+        Some(syllables.len())
+    }
+}
+
+fn extract_syllable_count_from_rhymes(text: &str) -> Option<usize> {
+    RHYMES_SYLLABLE
+        .captures(text)
+        .and_then(|cap| cap[1].parse::<usize>().ok())
+}
+
+fn extract_syllable_count_from_categories(text: &str) -> Option<usize> {
+    SYLLABLE_CATEGORY
+        .captures(text)
+        .and_then(|cap| cap[1].parse::<usize>().ok())
+}
+
+fn extract_phrase_type(text: &str) -> Option<String> {
+    // Check section headers for specific phrase types
+    for cap in POS_HEADER.captures_iter(text) {
+        let header = cap[1].to_lowercase().trim().to_string();
+        let header = header.split_whitespace().collect::<Vec<_>>().join(" ");
+
+        match header.as_str() {
+            "idiom" | "proverb" | "prepositional phrase" | "adverbial phrase" |
+            "verb phrase" | "verb phrase form" | "noun phrase" => {
+                return Some(header);
+            }
+            "saying" | "adage" => {
+                return Some("proverb".to_string());
+            }
+            _ => {}
+        }
+    }
+
+    // Check {{head}} templates
+    for cap in HEAD_TEMPLATE.captures_iter(text) {
+        let pos = cap[1].to_lowercase().trim().to_string();
+        match pos.as_str() {
+            "idiom" | "proverb" | "prepositional phrase" | "adverbial phrase" |
+            "verb phrase" | "noun phrase" => {
+                return Some(pos);
+            }
+            "saying" | "adage" => {
+                return Some("proverb".to_string());
+            }
+            _ => {}
+        }
+    }
+
+    // Check for phrase-specific templates
+    if PREP_PHRASE_TEMPLATE.is_match(text) {
+        return Some("prepositional phrase".to_string());
+    }
+
+    // Check categories
+    let category_patterns = [
+        ("Category:English idioms", "idiom"),
+        ("Category:English proverbs", "proverb"),
+        ("Category:English prepositional phrases", "prepositional phrase"),
+        ("Category:English adverbial phrases", "adverbial phrase"),
+        ("Category:English verb phrases", "verb phrase"),
+        ("Category:English noun phrases", "noun phrase"),
+        ("Category:English sayings", "proverb"),
+    ];
+
+    for (pattern, phrase_type) in &category_patterns {
+        if text.contains(pattern) {
+            return Some(phrase_type.to_string());
+        }
+    }
+
+    None
+}
+
+fn clean_template_components(parts: &[&str]) -> Vec<String> {
+    parts
+        .iter()
+        .filter_map(|part| {
+            let part = part.trim();
+            // Skip empty parts or parameter assignments
+            if part.is_empty() || part.contains('=') {
+                return None;
+            }
+            // Skip language code prefixes (grc:, la:, etc.)
+            if part.contains(':') && part.len() > 2 && part.chars().take(4).all(|c| c.is_ascii_lowercase() || c == ':') {
+                return None;
+            }
+            Some(part.to_string())
+        })
+        .collect()
+}
+
+fn extract_morphology(text: &str) -> Option<Morphology> {
+    // Try to find etymology section
+    let etym_match = ETYMOLOGY_SECTION.captures(text)?;
+    let etymology_text = &etym_match[1];
+
+    // Try suffix template: {{suffix|en|base|suffix}}
+    if let Some(cap) = SUFFIX_TEMPLATE.captures(etymology_text) {
+        let base = cap[1].trim().to_string();
+        let mut suffix = cap[2].trim().to_string();
+
+        // Normalize suffix format
+        if !suffix.starts_with('-') {
+            suffix = format!("-{}", suffix);
+        }
+
+        return Some(Morphology {
+            morph_type: "suffixed".to_string(),
+            base: Some(base.clone()),
+            components: vec![base, suffix.clone()],
+            prefixes: vec![],
+            suffixes: vec![suffix],
+            is_compound: false,
+        });
+    }
+
+    // Try prefix template: {{prefix|en|prefix|base}}
+    if let Some(cap) = PREFIX_TEMPLATE.captures(etymology_text) {
+        let mut prefix = cap[1].trim().to_string();
+        let base = cap[2].trim().to_string();
+
+        // Normalize prefix format
+        if !prefix.ends_with('-') {
+            prefix = format!("{}-", prefix);
+        }
+
+        return Some(Morphology {
+            morph_type: "prefixed".to_string(),
+            base: Some(base.clone()),
+            components: vec![prefix.clone(), base],
+            prefixes: vec![prefix],
+            suffixes: vec![],
+            is_compound: false,
+        });
+    }
+
+    // Try confix template: {{confix|en|prefix|base|suffix}}
+    if let Some(cap) = CONFIX_TEMPLATE.captures(etymology_text) {
+        let mut prefix = cap[1].trim().to_string();
+        let base = cap[2].trim().to_string();
+        let mut suffix = cap[3].trim().to_string();
+
+        // Normalize formats
+        if !prefix.ends_with('-') {
+            prefix = format!("{}-", prefix);
+        }
+        if !suffix.starts_with('-') {
+            suffix = format!("-{}", suffix);
+        }
+
+        return Some(Morphology {
+            morph_type: "circumfixed".to_string(),
+            base: Some(base.clone()),
+            components: vec![prefix.clone(), base, suffix.clone()],
+            prefixes: vec![prefix],
+            suffixes: vec![suffix],
+            is_compound: false,
+        });
+    }
+
+    // Try compound template: {{compound|en|word1|word2|...}}
+    if let Some(cap) = COMPOUND_TEMPLATE.captures(etymology_text) {
+        let parts: Vec<&str> = cap[1].split('|').collect();
+        let components = clean_template_components(&parts);
+
+        if components.len() >= 2 {
+            return Some(Morphology {
+                morph_type: "compound".to_string(),
+                base: None,
+                components,
+                prefixes: vec![],
+                suffixes: vec![],
+                is_compound: true,
+            });
+        }
+    }
+
+    // Try affix or surf templates
+    for (template_re, _template_name) in [(&*AFFIX_TEMPLATE, "affix"), (&*SURF_TEMPLATE, "surf")] {
+        if let Some(cap) = template_re.captures(etymology_text) {
+            let parts: Vec<&str> = cap[1].split('|').collect();
+            let components = clean_template_components(&parts);
+
+            if components.len() >= 2 {
+                // Analyze components
+                let prefixes: Vec<String> = components
+                    .iter()
+                    .filter(|c| c.ends_with('-') && !c.starts_with('-'))
+                    .cloned()
+                    .collect();
+
+                let suffixes: Vec<String> = components
+                    .iter()
+                    .filter(|c| c.starts_with('-') && !c.ends_with('-'))
+                    .cloned()
+                    .collect();
+
+                let bases: Vec<String> = components
+                    .iter()
+                    .filter(|c| !c.starts_with('-') && !c.ends_with('-'))
+                    .cloned()
+                    .collect();
+
+                // Determine morphology type
+                let (morph_type, is_compound, base) = if !prefixes.is_empty() && !suffixes.is_empty() {
+                    ("affixed", false, bases.first().cloned())
+                } else if !prefixes.is_empty() {
+                    ("prefixed", false, bases.first().cloned())
+                } else if !suffixes.is_empty() {
+                    ("suffixed", false, bases.first().cloned())
+                } else if bases.len() >= 2 {
+                    ("compound", true, None)
+                } else {
+                    continue;
+                };
+
+                return Some(Morphology {
+                    morph_type: morph_type.to_string(),
+                    base,
+                    components,
+                    prefixes,
+                    suffixes,
+                    is_compound,
+                });
+            }
+        }
+    }
+
+    None
 }
 
 fn parse_entry(title: &str, text: &str) -> Option<Entry> {
@@ -370,6 +695,21 @@ fn parse_entry(title: &str, text: &str) -> Option<Entry> {
 
     let labels = extract_labels(&english_text);
     let word_count = word.split_whitespace().count();
+
+    // Extract phrase type for multi-word entries
+    let phrase_type = if word_count > 1 {
+        extract_phrase_type(&english_text)
+    } else {
+        None
+    };
+
+    // Extract syllable count from multiple sources (priority: hyphenation > rhymes > categories)
+    let syllable_count = extract_syllable_count_from_hyphenation(&english_text)
+        .or_else(|| extract_syllable_count_from_rhymes(&english_text))
+        .or_else(|| extract_syllable_count_from_categories(&english_text));
+
+    // Extract morphology from etymology section
+    let morphology = extract_morphology(&english_text);
 
     // Extract boolean flags
     let is_abbreviation = ABBREVIATION_TEMPLATE.is_match(&english_text);
@@ -406,8 +746,9 @@ fn parse_entry(title: &str, text: &str) -> Option<Entry> {
         is_inflected,
         is_dated,
         sources: vec!["wikt".to_string()],
-        phrase_type: None,
-        syllables: None,
+        phrase_type,
+        syllables: syllable_count,
+        morphology,
     })
 }
 
