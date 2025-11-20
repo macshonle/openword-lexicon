@@ -83,7 +83,14 @@ def load_censor_text_list(file_path: Path) -> Set[str]:
 
 
 def load_dsojevic_list(file_path: Path) -> Dict[str, dict]:
-    """Load dsojevic profanity list (JSON with severity)."""
+    """Load dsojevic profanity list (JSON with severity).
+
+    Format: Array of objects with 'id', 'match', 'severity', 'tags'.
+    - 'id': Unique identifier (use as word)
+    - 'match': Pattern with pipes for alternatives (e.g., "word|alternate")
+    - 'severity': 1-4 (Mild, Medium, Strong, Severe)
+    - 'tags': Categories like "general", "sexual", "racial"
+    """
     if not file_path.exists():
         logger.warning(f"dsojevic list not found: {file_path}")
         logger.warning("Run 'bash scripts/fetch/fetch_profanity_lists.sh' to download")
@@ -96,13 +103,36 @@ def load_dsojevic_list(file_path: Path) -> Dict[str, dict]:
 
     # Convert to dict keyed by word
     profanity_dict = {}
-    for entry in data:
-        word = entry.get('word', '').lower()
-        if word:
-            profanity_dict[word] = {
-                'severity': entry.get('severity', 'unknown'),
-                'categories': entry.get('categories', []),
+
+    # Handle array format
+    if isinstance(data, list):
+        for entry in data:
+            # Use 'id' as the primary word identifier
+            word_id = entry.get('id', '').lower()
+            if not word_id:
+                continue
+
+            # Map severity numbers to labels
+            severity_map = {1: 'mild', 2: 'medium', 3: 'strong', 4: 'severe'}
+            severity_num = entry.get('severity', 0)
+            severity = severity_map.get(severity_num, 'unknown')
+
+            profanity_dict[word_id] = {
+                'severity': severity,
+                'categories': entry.get('tags', []),
             }
+
+            # Also add any alternatives from 'match' field
+            match = entry.get('match', '')
+            if match and '|' in match:
+                # Split on pipe to get alternatives
+                alternatives = [alt.strip().lower() for alt in match.split('|')]
+                for alt in alternatives:
+                    if alt and alt not in profanity_dict:
+                        profanity_dict[alt] = {
+                            'severity': severity,
+                            'categories': entry.get('tags', []),
+                        }
 
     logger.info(f"  Loaded {len(profanity_dict):,} profanity terms with metadata")
     return profanity_dict

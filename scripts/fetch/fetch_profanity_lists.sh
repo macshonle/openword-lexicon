@@ -48,7 +48,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "Fetching censor-text/profanity-list..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-CENSOR_TEXT_URL="https://raw.githubusercontent.com/censor-text/profanity-list/main/profanity-list.txt"
+CENSOR_TEXT_URL="https://raw.githubusercontent.com/censor-text/profanity-list/main/list/en.txt"
 CENSOR_TEXT_FILE="censor-text-profanity-list.txt"
 
 if [ -f "$CENSOR_TEXT_FILE" ]; then
@@ -60,6 +60,7 @@ else
         wc -l "$CENSOR_TEXT_FILE"
     else
         echo -e "${RED}✗ Failed to download censor-text list${NC}"
+        echo "  Note: Repository was archived November 2024"
         echo "  URL may have changed or network issue"
     fi
 fi
