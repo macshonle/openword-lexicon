@@ -767,17 +767,21 @@ function loadDemo(demoId) {
 // ============================================================================
 
 let currentPopupFilterType = null;
+let currentPopupFilterId = null;  // null = adding new, number = editing existing
 
-function openFilterConfigPopup(filterType) {
+function openFilterConfigPopup(filterType, existingFilter = null) {
     currentPopupFilterType = filterType;
+    currentPopupFilterId = existingFilter ? existingFilter.id : null;
     const filterDef = FILTER_TYPES[filterType];
 
     const popup = document.getElementById('popup-overlay');
     const title = document.getElementById('popup-title');
     const body = document.getElementById('popup-body');
 
-    title.textContent = filterDef.title;
-    body.innerHTML = generateFilterConfigHTML(filterDef);
+    title.textContent = existingFilter
+        ? `Edit ${filterDef.title}`
+        : filterDef.title;
+    body.innerHTML = generateFilterConfigHTML(filterDef, existingFilter);
 
     popup.classList.add('active');
 }
@@ -786,6 +790,7 @@ function closeFilterConfigPopup() {
     const popup = document.getElementById('popup-overlay');
     popup.classList.remove('active');
     currentPopupFilterType = null;
+    currentPopupFilterId = null;
 }
 
 function applyFilterConfig() {
@@ -811,12 +816,28 @@ function applyFilterConfig() {
     const modeRadio = document.querySelector('input[name="filter-mode"]:checked');
     const mode = modeRadio ? modeRadio.value : 'include';
 
-    addFilter(currentPopupFilterType, mode, config);
+    if (currentPopupFilterId !== null) {
+        // Editing existing filter
+        const filter = state.filters.find(f => f.id === currentPopupFilterId);
+        if (filter) {
+            filter.mode = mode;
+            filter.config = config;
+            filter.summary = generateFilterSummary(currentPopupFilterType, config);
+        }
+    } else {
+        // Adding new filter
+        addFilter(currentPopupFilterType, mode, config);
+    }
+
     closeFilterConfigPopup();
+    updateUI();
 }
 
-function generateFilterConfigHTML(filterDef) {
+function generateFilterConfigHTML(filterDef, existingFilter = null) {
     let html = '<div class="filter-config-form">';
+
+    const mode = existingFilter ? existingFilter.mode : 'include';
+    const config = existingFilter ? existingFilter.config : {};
 
     // Mode selection (include/exclude)
     html += `
@@ -824,11 +845,11 @@ function generateFilterConfigHTML(filterDef) {
             <label class="form-label">Filter Mode</label>
             <div class="radio-group">
                 <label class="radio-label">
-                    <input type="radio" name="filter-mode" value="include" checked>
+                    <input type="radio" name="filter-mode" value="include" ${mode === 'include' ? 'checked' : ''}>
                     <span class="mode-include">Must Include</span> - Only show words matching this filter
                 </label>
                 <label class="radio-label">
-                    <input type="radio" name="filter-mode" value="exclude">
+                    <input type="radio" name="filter-mode" value="exclude" ${mode === 'exclude' ? 'checked' : ''}>
                     <span class="mode-exclude">Must Not Include</span> - Hide words matching this filter
                 </label>
             </div>
@@ -840,10 +861,13 @@ function generateFilterConfigHTML(filterDef) {
         html += '<div class="form-group">';
         html += `<label class="form-label" for="filter-${field.name}">${field.label}</label>`;
 
+        const fieldValue = config[field.name];
+
         if (field.type === 'checkbox') {
+            const checked = fieldValue !== undefined ? fieldValue : (field.defaultChecked || false);
             html += `
                 <label class="checkbox-label">
-                    <input type="checkbox" id="filter-${field.name}" ${field.defaultChecked ? 'checked' : ''}>
+                    <input type="checkbox" id="filter-${field.name}" ${checked ? 'checked' : ''}>
                     <span>${field.label}</span>
                 </label>
             `;
@@ -853,23 +877,30 @@ function generateFilterConfigHTML(filterDef) {
             field.options.forEach(opt => {
                 const value = typeof opt === 'string' ? opt : opt.value;
                 const label = typeof opt === 'string' ? opt : opt.label;
-                html += `<option value="${value}">${label}</option>`;
+                const selected = fieldValue === value ? 'selected' : '';
+                html += `<option value="${value}" ${selected}>${label}</option>`;
             });
             html += '</select>';
         } else if (field.type === 'multiselect') {
             html += `<select id="filter-${field.name}" class="form-select" multiple size="6">`;
+            const selectedValues = fieldValue || [];
             field.options.forEach(opt => {
-                html += `<option value="${opt}">${opt}</option>`;
+                const selected = selectedValues.includes(opt) ? 'selected' : '';
+                html += `<option value="${opt}" ${selected}>${opt}</option>`;
             });
             html += '</select>';
             html += '<p class="hint">Hold Ctrl/Cmd to select multiple</p>';
         } else if (field.type === 'number') {
+            const value = fieldValue !== undefined ? fieldValue : '';
             html += `<input type="number" id="filter-${field.name}" class="form-input"
                      placeholder="${field.placeholder || ''}"
-                     min="${field.min || 0}">`;
+                     min="${field.min || 0}"
+                     value="${value}">`;
         } else if (field.type === 'text') {
+            const value = fieldValue !== undefined ? fieldValue : '';
             html += `<input type="text" id="filter-${field.name}" class="form-input"
-                     placeholder="${field.placeholder || ''}">`;
+                     placeholder="${field.placeholder || ''}"
+                     value="${value}">`;
         }
 
         html += '</div>';
@@ -1064,16 +1095,32 @@ function updateFiltersList() {
 
         return `
             <div class="filter-item ${modeClass}">
-                <div class="filter-header">
-                    <span class="filter-icon">${filterDef.icon}</span>
-                    <span class="filter-title">${filterDef.title}</span>
-                    <span class="filter-mode ${modeClass}">${modeLabel}</span>
-                    <button class="filter-remove" data-id="${filter.id}" title="Remove filter">×</button>
+                <div class="filter-main">
+                    <div class="filter-info">
+                        <span class="filter-icon">${filterDef.icon}</span>
+                        <span class="filter-title">${filterDef.title}</span>
+                        <span class="filter-mode ${modeClass}">${modeLabel}</span>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="filter-edit" data-id="${filter.id}" title="Edit filter">Edit</button>
+                        <button class="filter-remove" data-id="${filter.id}" title="Remove filter">×</button>
+                    </div>
                 </div>
                 <div class="filter-summary">${filter.summary}</div>
             </div>
         `;
     }).join('');
+
+    // Attach edit handlers
+    filtersList.querySelectorAll('.filter-edit').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const filterId = parseInt(btn.dataset.id);
+            const filter = state.filters.find(f => f.id === filterId);
+            if (filter) {
+                openFilterConfigPopup(filter.type, filter);
+            }
+        });
+    });
 
     // Attach remove handlers
     filtersList.querySelectorAll('.filter-remove').forEach(btn => {
