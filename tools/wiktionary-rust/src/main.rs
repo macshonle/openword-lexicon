@@ -411,7 +411,7 @@ fn parse_entry(title: &str, text: &str) -> Option<Entry> {
     })
 }
 
-fn scan_pages(mut reader: impl BufRead, mut callback: impl FnMut(String)) -> std::io::Result<()> {
+fn scan_pages(mut reader: impl BufRead, mut callback: impl FnMut(String) -> bool) -> std::io::Result<()> {
     let mut buffer = String::new();
     let mut chunk = vec![0u8; 1024 * 1024]; // 1MB chunks
 
@@ -429,7 +429,11 @@ fn scan_pages(mut reader: impl BufRead, mut callback: impl FnMut(String)) -> std
                 let end = start + end_offset + "</page>".len();
                 let page_xml = buffer[start..end].to_string();
                 buffer.drain(..end);
-                callback(page_xml);
+
+                // Callback returns false to signal early termination
+                if !callback(page_xml) {
+                    return Ok(());
+                }
             } else {
                 // Incomplete page, keep in buffer
                 buffer.drain(..start);
@@ -484,7 +488,7 @@ fn main() -> std::io::Result<()> {
     scan_pages(reader, |page_xml| {
         // Check if limit already reached
         if limit_reached.get() {
-            return;
+            return false; // Stop scanning
         }
 
         stats.processed += 1;
@@ -503,7 +507,7 @@ fn main() -> std::io::Result<()> {
             Some(cap) => cap[1].to_string(),
             None => {
                 stats.skipped += 1;
-                return;
+                return true; // Continue scanning
             }
         };
 
@@ -511,20 +515,20 @@ fn main() -> std::io::Result<()> {
         if let Some(cap) = NS_PATTERN.captures(&page_xml) {
             if &cap[1] != "0" {
                 stats.special += 1;
-                return;
+                return true; // Continue scanning
             }
         }
 
         // Check for special prefixes
         if SPECIAL_PREFIXES.iter().any(|prefix| title.starts_with(prefix)) {
             stats.special += 1;
-            return;
+            return true; // Continue scanning
         }
 
         // Check for redirects
         if REDIRECT_PATTERN.is_match(&page_xml) {
             stats.redirects += 1;
-            return;
+            return true; // Continue scanning
         }
 
         // Extract text
@@ -532,26 +536,26 @@ fn main() -> std::io::Result<()> {
             Some(cap) => cap[1].to_string(),
             None => {
                 stats.skipped += 1;
-                return;
+                return true; // Continue scanning
             }
         };
 
         // Check for English section
         if !ENGLISH_SECTION.is_match(&text) {
             stats.non_english += 1;
-            return;
+            return true; // Continue scanning
         }
 
         // Check for dict-only
         if DICT_ONLY.is_match(&text) {
             stats.dict_only += 1;
-            return;
+            return true; // Continue scanning
         }
 
         // Check if English-like
         if !is_englishlike(&title) {
             stats.non_latin += 1;
-            return;
+            return true; // Continue scanning
         }
 
         // Parse entry
@@ -564,6 +568,7 @@ fn main() -> std::io::Result<()> {
                     if let Some(limit) = args.limit {
                         if stats.written >= limit {
                             limit_reached.set(true);
+                            return false; // Stop scanning - limit reached!
                         }
                     }
                 }
@@ -572,6 +577,8 @@ fn main() -> std::io::Result<()> {
                 stats.skipped += 1;
             }
         }
+
+        true // Continue scanning
     })?;
 
     // Flush writer before finishing
