@@ -206,6 +206,38 @@ validate-enable: deps
 		exit 1; \
 	fi
 
+# Validate profanity/offensive term labeling (optional validation)
+# ⚠️  WARNING: Downloads and analyzes lists with explicit/offensive content ⚠️
+validate-profanity: deps
+	@echo ""
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	@echo "⚠️  WARNING: PROFANITY VALIDATION - EXPLICIT CONTENT  ⚠️"
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	@echo ""
+	@echo "This validation compares our lexicon's vulgar/offensive labels"
+	@echo "against external profanity lists."
+	@echo ""
+	@bash scripts/fetch/fetch_profanity_lists.sh
+	@echo ""
+	@echo "Running validation..."
+	@$(UV) run python tools/validate_profanity_coverage.py
+
+# Validate childish term labeling (optional validation)
+validate-childish: deps
+	@echo "=== Validating childish term labeling ==="
+	@echo "This shows words labeled 'childish' in Wiktionary"
+	@echo "Useful for filtering in family games and educational apps"
+	@echo ""
+	@$(UV) run python tools/validate_childish_terms.py
+
+# Run all validation checks (ENABLE, profanity, childish)
+validate-all: validate-enable validate-profanity validate-childish
+	@echo ""
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	@echo "✓ All validation checks complete"
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+
 # Run scanner parser in diagnostic mode
 diagnose-scanner: deps $(WIKTIONARY_DUMP)
 	@mkdir -p $(REPORTS_DIR)
