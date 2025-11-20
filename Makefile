@@ -83,11 +83,11 @@ fetch-en:
 # ===========================
 
 # Build English lexicon (unified pipeline)
-# Pipeline order optimized for accuracy:
+# Pipeline order:
 #   1. Ingest word sources (EOWL, Wiktionary, WordNet)
 #   2. Merge all sources
-#   3. Brysbaert concreteness (PRIMARY - most accurate)
-#   4. WordNet POS backfill only (concreteness deprecated)
+#   3. WordNet POS backfill (concreteness deprecated)
+#   4. Brysbaert concreteness enrichment (PRIMARY source for concreteness)
 #   5. Frequency tiers
 #   6. Build trie
 build-en: fetch-en build-wiktionary-json
@@ -95,8 +95,8 @@ build-en: fetch-en build-wiktionary-json
 	$(UV) run python src/openword/wikt_ingest.py
 	$(UV) run python src/openword/wordnet_source.py
 	$(UV) run python src/openword/merge_all.py
-	$(UV) run python src/openword/brysbaert_enrich.py --unified
 	$(UV) run python src/openword/wordnet_enrich.py --unified
+	$(UV) run python src/openword/brysbaert_enrich.py --unified
 	$(UV) run python src/openword/frequency_tiers.py --unified
 	$(UV) run python src/openword/trie_build.py --unified
 	@echo "✓ English lexicon build complete"
