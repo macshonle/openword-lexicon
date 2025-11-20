@@ -302,22 +302,28 @@ function getStats() {
 /**
  * Estimate word count for a union of selected sources.
  *
- * IMPORTANT: source_combinations are DISJOINT sets - each word appears in exactly
- * one combination based on which sources contributed to it. For example:
- *   - "wikt" = words from Wiktionary only
- *   - "eowl,wikt" = words from both EOWL and Wiktionary
- *   - "enable,eowl,wikt" = words from all three sources
+ * BACKGROUND: source_combinations partition the lexicon into DISJOINT sets based on
+ * which sources contributed to each word. Think of it like a Venn diagram where each
+ * region is labeled with which circles it's in:
+ *   - "wikt": 1,095,480 = words ONLY in Wiktionary (not in eowl)
+ *   - "eowl": 3,252 = words ONLY in EOWL (not in wikt)
+ *   - "eowl,wikt": 32,126 = words in BOTH eowl AND wikt
  *
- * When a user selects sources, we want the UNION of all words available from those
- * sources. Since combinations are disjoint, we can safely sum them. We include a
- * combination if ALL its sources are in the user's selection (i.e., the combination
- * is a subset of the selection).
+ * WHY WE CAN'T JUST USE TOTALS: When a user selects sources, they want a UNION
+ * (all words from ANY selected source). We can't precompute all possible unions
+ * because with N sources there are 2^N possibilities. Instead, we compute unions
+ * on-the-fly using the subset principle:
  *
- * Example: If user selects ["wikt", "eowl"], we include:
- *   - "wikt" ✓ (subset of selection)
- *   - "eowl" ✓ (subset of selection)
- *   - "eowl,wikt" ✓ (subset of selection)
- *   - "enable,eowl,wikt" ✗ (contains 'enable' which is not selected)
+ * SUBSET PRINCIPLE: Include a combination if ALL its sources are selected.
+ *   User selects ["wikt", "eowl"]:
+ *     - "wikt" ✓ (wikt ⊆ {wikt, eowl})
+ *     - "eowl" ✓ (eowl ⊆ {wikt, eowl})
+ *     - "eowl,wikt" ✓ (both ⊆ {wikt, eowl})
+ *     - "enable,eowl,wikt" ✗ (enable ∉ {wikt, eowl})
+ *   Total: 1,095,480 + 3,252 + 32,126 = 1,130,858 words
+ *
+ * WHY ADDITION WORKS: Since combinations are disjoint (no word appears in multiple
+ * combinations), summing them gives the exact union count.
  */
 function estimateWordCount(selectedSources) {
     // If we have detailed statistics, use them for accurate estimates
@@ -979,7 +985,8 @@ function updateSourceSummary() {
     const dataSources = activeSources.map(s => sourceMapping[s] || s);
 
     // Get primary sources only (for word count)
-    const primarySources = dataSources.filter(s => ['wikt', 'eowl', 'enable'].includes(s));
+    // Note: 'enable' is validation-only, not a primary source
+    const primarySources = dataSources.filter(s => ['wikt', 'eowl'].includes(s));
 
     // Calculate estimated word count
     const estimatedWords = estimateWordCount(primarySources);
@@ -1091,7 +1098,8 @@ function updateResultsSummary() {
 
     // Get primary sources only (for word count)
     const dataSources = activeSources.map(s => sourceMapping[s] || s);
-    const primarySources = dataSources.filter(s => ['wikt', 'eowl', 'enable'].includes(s));
+    // Note: 'enable' is validation-only, not a primary source
+    const primarySources = dataSources.filter(s => ['wikt', 'eowl'].includes(s));
 
     // Calculate estimated word count using centralized function
     const estimatedWords = estimateWordCount(primarySources);

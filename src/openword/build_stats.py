@@ -94,7 +94,8 @@ def compute_statistics(entries: Dict[str, dict]) -> dict:
         license_counts[licenses_key] += 1
 
         # Separate primary sources from enrichment sources
-        primary_sources = [s for s in sources if s in ('enable', 'eowl', 'wikt')]
+        # Note: 'enable' is validation-only, not a primary source
+        primary_sources = [s for s in sources if s in ('eowl', 'wikt')]
         enrichment_sources = [s for s in sources if s in ('wordnet', 'brysbaert', 'frequency')]
         primary_key = ','.join(sorted(primary_sources)) if primary_sources else 'none'
 
