@@ -1207,6 +1207,21 @@ def detect_dated(labels: Dict) -> bool:
     return 'dated' in temporal
 
 
+def detect_derogatory(labels: Dict) -> bool:
+    """
+    Detect if entry is derogatory (disparaging or offensive in certain contexts).
+
+    Different from vulgar - derogatory terms may be offensive due to context
+    rather than profanity. Especially important for ethnic slurs, demeaning terms.
+    Examples: taffy (UK derogatory term for Welsh), various ethnic slurs
+
+    Useful for: Content filtering, especially for educational or public-facing
+    applications where context-dependent offensive terms need separate handling.
+    """
+    register = labels.get('register', [])
+    return 'derogatory' in register
+
+
 def has_english_categories(text: str) -> bool:
     """
     Check if the text contains English POS categories.
@@ -1356,6 +1371,7 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     is_regional = detect_regional(labels)
     is_inflected = detect_inflected_form(english_text, pos_tags)
     is_dated = detect_dated(labels)
+    is_derogatory = detect_derogatory(labels)
 
     entry = {
         'word': word,
@@ -1373,6 +1389,7 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
         'is_regional': is_regional,
         'is_inflected': is_inflected,
         'is_dated': is_dated,
+        'is_derogatory': is_derogatory,
         'sources': ['wikt'],
     }
 

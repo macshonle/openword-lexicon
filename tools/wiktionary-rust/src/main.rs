@@ -57,6 +57,7 @@ struct Entry {
     is_regional: bool,
     is_inflected: bool,
     is_dated: bool,
+    is_derogatory: bool,
     sources: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     phrase_type: Option<String>,
@@ -744,6 +745,7 @@ fn parse_entry(title: &str, text: &str) -> Option<Entry> {
     let is_technical = !domain.is_empty();
     let is_regional = labels.contains_key("region");
     let is_dated = temporal.contains(&"dated".to_string());
+    let is_derogatory = register.contains(&"derogatory".to_string());
     let is_inflected = text.contains("{{plural of|en|")
         || text.contains("{{past tense of|en|")
         || text.contains("{{past participle of|en|")
@@ -773,6 +775,7 @@ fn parse_entry(title: &str, text: &str) -> Option<Entry> {
         is_regional,
         is_inflected,
         is_dated,
+        is_derogatory,
         sources: vec!["wikt".to_string()],
         phrase_type,
         syllables: syllable_count,
