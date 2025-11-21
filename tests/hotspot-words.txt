@@ -29,6 +29,19 @@ footfucker
 indaba
 piss-easy
 
+# === EDGE CASES - is_derogatory ===
+taffy
+
+# === EDGE CASES - Polysemy (multiple entries per word) ===
+sat
+sun
+may
+march
+turkey
+polish
+bat
+bank
+
 # === NON-ENGLISH - Should be excluded (non-Latin scripts) ===
 # Greek
 λ
