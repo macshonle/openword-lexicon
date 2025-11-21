@@ -157,6 +157,33 @@
                     </div>
                 </section>
 
+                <!-- Quick Filters Section -->
+                <section class="quick-filters-section">
+                    <h2>Quick Filters</h2>
+                    <p class="hint">Instant toggles for common filters. Changes are applied immediately.</p>
+
+                    <div class="quick-filters-grid">
+                        <!-- Word Type -->
+                        <div class="quick-filter-item">
+                            <label class="quick-filter-label">Word Type:</label>
+                            <div class="quick-filter-buttons" data-filter-type="word-type">
+                                <button class="quick-filter-btn active" data-value="any">Any</button>
+                                <button class="quick-filter-btn" data-value="single">Single words</button>
+                                <button class="quick-filter-btn" data-value="phrases">Phrases only</button>
+                            </div>
+                        </div>
+
+                        <!-- Syllable Data -->
+                        <div class="quick-filter-item" data-requires="wiktionary">
+                            <label class="quick-filter-label">Syllable Data:</label>
+                            <div class="quick-filter-buttons" data-filter-type="syllable-data">
+                                <button class="quick-filter-btn active" data-value="any">Any</button>
+                                <button class="quick-filter-btn" data-value="required">Required</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Add Filter Section -->
                 <section class="add-filter-section">
                     <h2>Add Filter</h2>

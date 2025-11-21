@@ -277,6 +277,89 @@ body {
     padding-bottom: 0;  /* Remove bottom padding - footer handles it */
 }
 
+/* Quick Filters Section */
+.quick-filters-section {
+    margin: 1rem 0;
+    padding: 1.5rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+}
+
+.quick-filters-section h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.quick-filters-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.quick-filter-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.quick-filter-item[data-requires]:not([data-requires=""]) {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.quick-filter-item[data-requires].available {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.quick-filter-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    min-width: 140px;
+    flex-shrink: 0;
+}
+
+.quick-filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.quick-filter-btn {
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.quick-filter-btn:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-color);
+    color: var(--text-primary);
+}
+
+.quick-filter-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.quick-filter-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
 /* Add Filter Section */
 .add-filter-section {
     margin: 1rem 0;

@@ -604,6 +604,83 @@ function computeLicenseFallback(selectedSources) {
 }
 
 // ============================================================================
+// QUICK FILTERS
+// ============================================================================
+
+function initializeQuickFilters() {
+    // Handle quick filter button clicks
+    document.querySelectorAll('.quick-filter-buttons').forEach(buttonGroup => {
+        const filterType = buttonGroup.dataset.filterType;
+
+        buttonGroup.querySelectorAll('.quick-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Deactivate siblings
+                buttonGroup.querySelectorAll('.quick-filter-btn').forEach(b => b.classList.remove('active'));
+                // Activate clicked button
+                btn.classList.add('active');
+
+                // Apply quick filter
+                applyQuickFilter(filterType, btn.dataset.value);
+            });
+        });
+    });
+}
+
+function applyQuickFilter(filterType, value) {
+    // Remove any existing quick filters of this type
+    const existingFilterIds = state.filters
+        .filter(f => f.quickFilter === filterType)
+        .map(f => f.id);
+
+    existingFilterIds.forEach(id => {
+        state.filters = state.filters.filter(f => f.id !== id);
+    });
+
+    // If not "any", add the corresponding filter
+    if (value !== 'any') {
+        let filterConfig = null;
+        let filterMode = 'include';
+        let filterKind = null;
+        let summary = '';
+
+        switch (filterType) {
+            case 'word-type':
+                filterKind = 'phrase';
+                if (value === 'single') {
+                    filterConfig = { singleWord: true };
+                    summary = 'Single words only';
+                } else if (value === 'phrases') {
+                    filterConfig = { multiWord: true };
+                    summary = 'Phrases only';
+                }
+                break;
+
+            case 'syllable-data':
+                filterKind = 'syllable';
+                if (value === 'required') {
+                    filterConfig = { requireSyllables: true };
+                    summary = 'Syllable data required';
+                }
+                break;
+        }
+
+        if (filterKind && filterConfig) {
+            const filter = {
+                id: state.nextFilterId++,
+                type: filterKind,
+                mode: filterMode,
+                config: filterConfig,
+                summary: summary,
+                quickFilter: filterType  // Mark as quick filter
+            };
+            state.filters.push(filter);
+        }
+    }
+
+    updateUI();
+}
+
+// ============================================================================
 // INITIALIZATION
 // ============================================================================
 
@@ -613,6 +690,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     initializeSourceCheckboxes();
     initializeFilterButtons();
+    initializeQuickFilters();
     initializeDemoSelector();
     initializeExportButtons();
     initializeResizeHandle();
@@ -1150,6 +1228,7 @@ function updateUI() {
     updateSourceSummary();
     updateLicenseInfo();
     updateFilterButtons();
+    updateQuickFilters();
     updateFiltersList();
     updateResultsSummary();
 }
@@ -1224,6 +1303,20 @@ function updateFilterButtons() {
         const requires = btn.dataset.requires ? btn.dataset.requires.split(',') : [];
         const isAvailable = hasRequiredSources(requires);
         btn.disabled = !isAvailable;
+    });
+}
+
+function updateQuickFilters() {
+    // Update availability based on selected sources
+    document.querySelectorAll('.quick-filter-item[data-requires]').forEach(item => {
+        const requires = item.dataset.requires.split(',');
+        const isAvailable = hasRequiredSources(requires);
+
+        if (isAvailable) {
+            item.classList.add('available');
+        } else {
+            item.classList.remove('available');
+        }
     });
 }
 
