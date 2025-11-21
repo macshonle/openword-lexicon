@@ -738,7 +738,9 @@ fn parse_entry(title: &str, text: &str) -> Option<Entry> {
     let is_vulgar = register.contains(&"vulgar".to_string()) || register.contains(&"offensive".to_string());
     let is_archaic = temporal.contains(&"archaic".to_string()) || temporal.contains(&"obsolete".to_string());
     let is_rare = temporal.contains(&"rare".to_string());
-    let is_informal = register.contains(&"informal".to_string()) || register.contains(&"slang".to_string());
+    let is_informal = register.contains(&"informal".to_string())
+        || register.contains(&"slang".to_string())
+        || register.contains(&"colloquial".to_string());
     let is_technical = !domain.is_empty();
     let is_regional = labels.contains_key("region");
     let is_dated = temporal.contains(&"dated".to_string());
