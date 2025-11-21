@@ -99,7 +99,9 @@ lazy_static! {
     static ref PREP_PHRASE_TEMPLATE: Regex = Regex::new(r"(?i)\{\{en-prepphr\b").unwrap();
 
     // Morphology/etymology patterns
-    static ref ETYMOLOGY_SECTION: Regex = Regex::new(r"(?si)===+\s*Etymology\s*\d*\s*===+\s*\n(.+?)(?=\n===|\z)").unwrap();
+    // Note: Rust regex doesn't support lookahead, so we match everything and trim in code
+    static ref ETYMOLOGY_SECTION: Regex = Regex::new(r"(?si)===+\s*Etymology\s*\d*\s*===+\s*\n(.+)").unwrap();
+    static ref NEXT_SECTION: Regex = Regex::new(r"\n===").unwrap();
     static ref SUFFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{suffix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
     static ref PREFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{prefix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
     static ref AFFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{affix\|en\|([^}]+)\}\}").unwrap();
@@ -537,7 +539,14 @@ fn clean_template_components(parts: &[&str]) -> Vec<String> {
 fn extract_morphology(text: &str) -> Option<Morphology> {
     // Try to find etymology section
     let etym_match = ETYMOLOGY_SECTION.captures(text)?;
-    let etymology_text = &etym_match[1];
+    let mut etymology_text = etym_match[1].to_string();
+
+    // Trim at next section header (since Rust regex doesn't support lookahead)
+    if let Some(next_section) = NEXT_SECTION.find(&etymology_text) {
+        etymology_text = etymology_text[..next_section.start()].to_string();
+    }
+
+    let etymology_text = etymology_text.as_str();
 
     // Try suffix template: {{suffix|en|base|suffix}}
     if let Some(cap) = SUFFIX_TEMPLATE.captures(etymology_text) {
