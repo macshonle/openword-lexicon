@@ -1,0 +1,38 @@
+# Hotspot words for validation and testing
+# One word per line, comments start with #
+# These are words that appear in tests, docs, or have shown edge cases
+
+# Edge cases from recent testing (is_abbreviation)
+acronym
+
+# Edge cases from recent testing (is_informal with colloquial)
+dialect
+four
+hell
+poppycock
+slushpile
+
+# Morphology test cases from earlier comparison
+dimorphemic
+footfucker
+
+# Regional label test cases from earlier comparison
+indaba
+piss-easy
+
+# Common documentation examples
+dictionary
+encyclopedia
+cat
+it
+hello
+world
+
+# Common English words for sanity checks
+the
+a
+an
+run
+running
+happy
+happiness
