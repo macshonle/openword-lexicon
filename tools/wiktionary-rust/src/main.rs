@@ -164,6 +164,10 @@ lazy_static! {
         s.insert("euphemistic");
         s.insert("humorous");
         s.insert("literary");
+        s.insert("childish");
+        s.insert("baby talk");
+        s.insert("infantile");
+        s.insert("puerile");
         s
     };
 
@@ -385,6 +389,9 @@ fn extract_labels(text: &str) -> HashMap<String, Vec<String>> {
         }
         if cat.contains("offensive") || cat.contains("derogatory") {
             labels.entry("register".to_string()).or_default().insert("offensive".to_string());
+        }
+        if cat.contains("childish") || cat.contains("baby talk") || cat.contains("infantile") {
+            labels.entry("register".to_string()).or_default().insert("childish".to_string());
         }
         if cat.contains("obsolete") {
             labels.entry("temporal".to_string()).or_default().insert("obsolete".to_string());
