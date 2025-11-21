@@ -1,0 +1,596 @@
+<page>
+    <title>march</title>
+    <ns>0</ns>
+    <id>112</id>
+    <revision>
+      <id>87561007</id>
+      <parentid>87506352</parentid>
+      <timestamp>2025-10-24T02:02:12Z</timestamp>
+      <contributor>
+        <username>SaphBot</username>
+        <id>4234890</id>
+      </contributor>
+      <minor />
+      <comment>replace {{[[Template:l|l]]}} with {{[[Template:alt|alt]]}} in alternative forms sections</comment>
+      <origin>87561007</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="20059" sha1="7pk3oowak8ua4d0r86oqcafxtxed3wz" xml:space="preserve">{{also|March|Märch|marc'h}}
+==English==
+
+===Pronunciation===
+* {{IPA|en|/mɑːtʃ/|a=UK}}
+* {{enPR|märch|a=US}}, {{IPA|en|/mɑɹt͡ʃ/}}
+* {{audio|en|en-us-March.ogg|a=US}}
+* {{rhymes|en|ɑː(ɹ)tʃ|s=1}}
+* {{hmp|en|March}}
+
+===Etymology 1===
+{{dercat|en|ine-pro}}
+From {{inh|en|enm|marchen}}, from {{der|en|frm|marcher|t=to march, walk}}, from {{der|en|fro|marchier|t=to stride, to march, to trample}}, from {{der|en|frk|*markōn|t=to mark, mark out, to press with the foot}}, from {{der|en|gem-pro|*markōną|t=to mark}}. Akin to {{cog|ang|mearc}}, {{m|ang|ġemearc|t=mark, boundary}}. Compare {{m|en|mark}}, from {{inh|en|ang|mearcian}}.
+
+====Noun====
+{{en-noun}}
+[[File:Trooping the Colour form march past.JPG|thumb|Soldiers marching in the UK.]]
+
+# {{senseid|en|formal, rhythmic way of walking}} A [[formal]], [[rhythmic]] way of [[walk]]ing, used especially by [[soldier]]s, by [[band]]s{{,}} and in [[ceremony|ceremonies]].
+# {{senseid|en|journey made by marching style of walking}} A [[journey#Noun|journey]] so walked.
+#: {{hyper|en|journey#Noun}}
+# A [[political]] [[rally]] or [[parade]].
+#: {{syn|en|protest|parade|rally}}
+#* {{quote-journal|en|date=2009-10-21|author=Dennis Hevesi|title=Jack Nelson, Journalist, Dies at 80|titleurl=http://www.nytimes.com/2009/10/22/business/media/22nelson.html?pagewanted=all&amp;_r=0|journal=w:The New York Times|accessdate=12 June 2014
+|passage=Mr. Nelson covered the Selma-to-Montgomery freedom '''marches''', including Bloody Sunday, on March 7, 1965, when 600 marchers were attacked with billy clubs and tear gas.}}
+# Any [[song]] in the [[genre]] of [[music]] written for marching (see [[w:March (music)|Wikipedia's article on this type of music]])
+# Steady forward movement or progression.
+#: {{syn|en|process|advancement|progression}}
+#: {{ux|en|the '''march''' of time}}
+# {{lb|en|[[euchre]]}} The feat of taking all the [[trick]]s of a [[hand]].
+
+=====Derived terms=====
+{{col|en|marchlike|marchy
+|countermarch
+|dead march
+|death march
+|double march
+|forced march
+|force-march
+|freedom march
+|frog-march,frog march,frog's march
+|funeral march
+|gain a march on,get a march on
+|grand march| march music|March to the Sea
+|hour of march
+|in a full march
+|in march
+|Jacksonian march
+|Jarvis march
+|line of march|march-movement
+|make a march
+|march haemoglobinuria,march hemoglobinuria
+|march-on
+|march-order
+|march out
+|march-past
+|march-time&lt;!--music term--&gt;
+|march to a different drummer
+|march tumor,march tumour
+|minute of march
+|on a march
+|on the march
+|outmarch&lt;!--noun--&gt;
+|quick march
+|rogue's march
+|route march,route-march,routemarch
+|slow march
+|snowball marches
+|steal a march
+|wedding march
+|loaded march}}
+
+=====Related terms=====
+* {{l|en|démarche}}
+* {{l|en|volksmarch}}
+
+=====Translations=====
+{{trans-top|formal, rhythmic way of walking}}
+* Afrikaans: {{t+|af|mars}}, {{t|af|marsjering}}
+* Arabic: {{t|ar|مَسِيرَة|f}}
+* Armenian: {{t+|hy|քայլերթ}}
+* Azerbaijani: {{t+|az|marş}}
+* Belarusian: {{t|be|марш|m}}
+* Bulgarian: {{t|bg|марширо́вка|f}}
+* Catalan: {{t+|ca|marxa|f}}
+* Chinese:
+*: Mandarin: {{t+|cmn|行進|tr=xíngjìn}}
+* Czech: {{t+|cs|pochod|m}}
+* Danish: {{t+|da|march|c}}
+* Dutch: {{t+|nl|mars|m}}
+* Estonian: {{t|et|marss}}
+* Finnish: {{t+|fi|marssi}}
+* French: {{t+|fr|marche|f}}
+* German: {{t+|de|Marsch|m}}
+* Hebrew: {{t|he|צעידה|f|tr=tseidá}}
+* Hindi: {{t+|hi|मार्च|m}}, {{t+|hi|पदयात्रा|m}}
+* Hungarian: {{t+|hu|menetelés}}, {{t+|hu|menet}}
+* Icelandic: {{t|is|marsering|f}}
+* Italian: {{t+|it|marcia|f}}
+* Japanese: {{t+|ja|行進|tr=kōshin}}
+* Korean: {{t+|ko|행진}}
+* Latvian: {{t|lv|maršs|m}}
+* Lithuanian: {{t|lt|maršas|m}}
+* Maori: {{t|mi|rangatū}}
+* Norwegian: {{t|no|marsj|m}}
+* Persian: {{t+|fa|مارش|tr=mârš}}, {{t|fa|راه پیمایی|tr=râh-peymâyi}}
+* Polish: {{t+|pl|marsz|m-in}}, {{t+|pl|pochód}}
+* Portuguese: {{t+|pt|marcha|f}}
+* Romanian: {{t+|ro|marș|n}}
+* Russian: {{t+|ru|марш|m}}
+* Scots: {{t|sco|mairch}}
+* Scottish Gaelic: {{t|gd|màrsail|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{t|sh|ма̏рш|m}}
+*: Roman: {{t+|sh|mȁrš|m}}
+* Slovak: {{t|sk|pochod|m}}
+* Slovene: {{t|sl|marš|m}}
+* Spanish: {{t+|es|marcha|f}}
+* Swahili: {{t+|sw|machi|9/10}}
+* Swedish: {{t+|sv|marsch|c}}
+* Tagalog: {{t|tl|martsa}}
+* Turkish: {{t+|tr|yürüyüş}}, {{t+|tr|geçit}}, {{t+|tr|alay}}, {{t+|tr|marş}}, {{t|tr|yortuş}}
+* Ukrainian: {{t|uk|марш|m}}
+* Uyghur: {{t|ug|مارش}}
+* Vietnamese: {{t|vi|hành khúc}}, {{t|vi|hành tiến}}
+* Walloon: {{t+|wa|måtche|f}}
+* Welsh: {{t|cy|ymdaith|f}}
+* Yiddish: {{t|yi|מאַרש|m}}
+{{trans-bottom}}
+
+{{trans-top|political rally or parade}}
+* Afrikaans: {{t|af|optog}}, {{t|af|parade}}
+* Armenian: {{t+|hy|երթ}}
+* Bulgarian: {{t+|bg|манифестация|f}}
+* Catalan: {{t+|ca|manifestació|f}}
+* Czech: {{t+|cs|pochod|m}}
+* Danish: {{t+|da|march|c}}
+* Dutch: {{t+|nl|mars|m}}
+* Estonian: {{t|et|marss}}
+* Finnish: {{t+|fi|marssi}}
+* French: {{t+|fr|défilé|m}}, {{t+|fr|manifestation|f}}
+* German: {{t+|de|Parade|f}}
+* Hebrew: {{t+|he|מצעד|m|tr=mits'ád}}, {{t|he|צעדה|f|tr=tseadá}}
+* Hindi: {{t+|hi|मार्च|m}}, {{t+|hi|पदयात्रा|m}}
+* Hungarian: {{t+|hu|felvonulás}}
+* Icelandic: {{t+|is|ganga|f}}, {{t|is|kröfuganga|f}}
+* Italian: {{t+|it|marcia|f}}
+* Norwegian: {{t|no|marsj|m}}
+* Polish: {{t+|pl|marsz|m-in}}, {{t+|pl|pochód}}
+* Portuguese: {{t|pt|passeata|f}}, {{t+|pt|marcha|f}}
+* Russian: {{t+|ru|марш|m}}
+* Scots: {{t|sco|mairch}}
+* Scottish Gaelic: {{t|gd|màrsail|f}}
+* Slovak: {{t|sk|pochod|m}}
+* Spanish: {{t+|es|marcha|f}}, {{t+|es|manifestación|f}}
+* Swedish: {{t+|sv|marsch|c}}, {{t+|sv|tåg|n}}
+* Tagalog: {{t|tl|martsa}}
+* Turkish: {{t+|tr|yürüyüş}}
+{{trans-bottom}}
+
+{{trans-top|song in the genre of music written for marching}}
+* Afrikaans: {{t+|af|mars}}
+* Armenian: {{t+|hy|քայլերգ}}
+* Azerbaijani: {{t+|az|marş}}
+* Bulgarian: {{t|bg|марш|m}}
+* Catalan: {{t+|ca|marxa|f}}
+* Chinese:
+*: Mandarin: {{t+|cmn|進行曲|tr=jìnxíngqū}}
+* Czech: {{t+|cs|pochod|m}}
+* Danish: {{t+|da|march|c}}
+* Dutch: {{t+|nl|mars|m}}
+* Estonian: {{t|et|marss}}
+* Finnish: {{t+|fi|marssi}}
+* French: {{t+|fr|marche|f}}
+* German: {{t+|de|Marsch|m}}, {{t+|de|Marschmusik|f}}
+* Greek: {{t+|el|εμβατήριο|n}}
+* Hebrew: {{t|he|מארש|m|tr=marsh}}
+* Hungarian: {{t+|hu|induló}}
+* Icelandic: {{t+|is|mars|m}}
+* Irish: {{t|ga|máirseáil|f}}
+* Italian: {{t+|it|marcia|f}}
+* Japanese: {{t+|ja|行進曲|tr=kōshinkyoku}}
+* Korean: {{t|ko|행진곡(行進曲)}}
+* Latvian: {{t|lv|maršs|m}}
+* Lithuanian: {{t|lt|maršas|m}}
+* Maori: {{t|mi|puoro rangatū}}
+* Norwegian: {{t|no|marsj|m}}
+* Persian: {{t+|fa|مارش|tr=mârš}}
+* Polish: {{t+|pl|marsz|m-an}}
+* Portuguese: {{t+|pt|marcha|f}}
+* Romanian: {{t+|ro|marș|n}}
+* Russian: {{t+|ru|марш|m}}
+* Scots: {{t|sco|mairch}}
+* Scottish Gaelic: {{t|gd|màrsail|f}}, {{t|gd|caismeachd|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{t|sh|ма̏рш|m}}
+*: Roman: {{t+|sh|mȁrš|m}}
+* Slovak: {{t|sk|pochod|m}}
+* Slovene: {{t|sl|marš|m}}
+* Spanish: {{t+|es|marcha|f}}
+* Swedish: {{t+|sv|marsch|c}}
+* Tagalog: {{t|tl|martsa}}
+* Turkish: {{t+|tr|marş}}, {{t|tr|coşturu}}
+* Walloon: {{t+|wa|måtche|f}}
+* Welsh: {{t|cy|ymdeithgan|f}}
+* Yiddish: {{t|yi|מאַרש|m}}
+{{trans-bottom}}
+
+{{trans-top|steady forward movement or progression}}
+* Afrikaans: {{t|af|optog}}, {{t|af|opmars}}
+* Bulgarian: {{t|bg|марш|m}}
+* Catalan: {{t+|ca|pas|m}}
+* Danish: {{t+|da|gang|c}}, {{t+|da|udvikling|c}}
+* Estonian: {{t|et|marss}}
+* Finnish: {{t+|fi|marssi}}
+* German: {{t+|de|Fortgang|m}}, {{t+|de|Lauf|m}}
+* Hungarian: {{t+|hu|haladás}}, {{t+|hu|előrehaladás}}
+* Icelandic: {{t|is|gangur|m}}
+* Italian: {{t+|it|marcia|f}}
+* Norwegian: {{t+|no|gang|m}}, {{t+|no|forløp|m}}
+* Polish: {{t+|pl|marsz|m-in}}
+* Portuguese: {{t+|pt|marcha|f}}
+* Russian: {{t+|ru|ход|m}}, {{t+|ru|тече́ние|n}}
+* Scots: {{t|sco|mairch}}
+* Swahili: {{t+|sw|machi|9/10}}
+* Swedish: {{t|sv|fortgång|c}}, {{t+|sv|framsteg|n}}, {{t+|sv|framåtskridande|n}}, {{t+|sv|utveckling|c}}
+* Tagalog: {{t|tl|martsa}}
+* Turkish: {{t+|tr|ilerleyiş}}, {{t+|tr|yürüyüş}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Breton: {{t-check|br|kan-bale|m}}, {{t-check|br|kanoù-bale|p}}
+* Neapolitan: {{t-check|nap|ammarcia|f}}
+* Old English: {{t-check|ang|faru}} {{q|1}}
+* Sanskrit: {{t-check|sa|पदयात्रा}}
+{{trans-bottom}}
+
+====Verb====
+{{en-verb}}
+
+# {{lb|en|intransitive}} To walk with long, regular strides, as a soldier does.
+#* {{quote-book|en|year=1864|author=United States War Department|title=The 1864 Field Artillery Tactics|pageurl=http://books.google.com/books?id=xiKdwlGeBPUC&amp;pg=PA120&amp;dq=double-file|page=120|publisher=Stackpole Books|year_published=2005|isbn=978-0-8117-0131-0
+|passage=The column '''marching''' in double file, the instructor commands: {{...}}}}
+# {{lb|en|transitive}} To cause someone to walk somewhere.
+#* {{quote-book
+|en
+|year=1967
+|author=w:Barbara Sleigh
+|title=w:Jessamy
+|year_published=1993
+|location=Sevenoaks, Kent
+|publisher=Bloomsbury
+|isbn=0 340 19547 9
+|page=84
+|url=
+|passage=The old man heaved himself from the chair, seized Jessamy by her pinafore frill and '''marched''' her to the house.
+}}
+# To go to [[war]]; to make [[military]] [[advance]]s.
+#* {{quote-book|en|year=1746|author=Charles Pinot Duclos|title=The history of Lewis xi. king of France. Transl|page=169|passage=The armies drawing constantly nearer to each other, the king advised with his council, whether he should '''march''' against the Britons, or sall upon the count of Gharolois.}}
+# {{lb|en|figurative}} To make steady progress.
+#* {{quote-journal|en|date=1981-12-27|volume=9|number=23|journal=w:Gay Community News|page=5|author=Wade Nichols|title=Victorian Imperialism|text=Some say history repeats itself, that time is cyclical. Others cling to the notion of progress and change over time. Apparently Nancy Walker '''marches''' to a different drummer — '''marches''' backwards, that is. Her ideas on art and society seem quaint and odd on the one hand and, on the other, petty and regressive.}}
+
+=====Derived terms=====
+{{col3|en
+|dismarch
+|marcher
+|marching&lt;!--noun, adjective--&gt;
+|march off
+|march on
+|march to the beat of a different drum
+|outmarch&lt;!--verb--&gt;
+|overmarch
+|remarch
+|slow-march
+|march past|march to a different beat|march to a different drum|march to one's own drum|march to one's own drummer|march to the beat of a different drummer|march to the beat of one's own drum|march to the beat of one's own drummer|an army marches on its stomach|march to the beat of a different drum
+}}
+
+=====Translations=====
+{{trans-top|walk with long, regular strides}}
+* Afrikaans: {{t|af|marsjeer}}
+* Arabic: {{t+|ar|سَارَ}}
+* Bulgarian: {{t|bg|марширувам}}
+* Catalan: {{t+|ca|marxar}}
+* Chinese:
+*: Mandarin: {{t+|cmn|行軍|tr=xíngjūn}}, {{t+|cmn|行進|tr=xíngjìn}}
+* Czech: {{t+|cs|pochodovat}}
+* Danish: {{t|da|marchere}}, {{t|da|udvikle sig}} {{qualifier|figuratively}}
+* Dutch: {{t+|nl|marcheren}}
+* Esperanto: {{t+|eo|marŝi}}
+* Estonian: {{t+|et|marssima}}
+* Finnish: {{t+|fi|marssia}}
+* French: {{t+|fr|marcher}}
+* German: {{t+|de|marschieren}}
+* Hungarian: {{t+|hu|menetel}}, {{t+|hu|masíroz}}, {{t+|hu|vonul}}
+* Icelandic: {{t|is|marsera|f}}
+* Irish: {{t|ga|máirseáil}}
+* Italian: {{t+|it|marciare}}
+* Japanese: {{t+|ja|行軍|tr=こうぐんする, kōgun-suru|alt=行軍する}}
+* Korean: {{t|ko|행군|alt=행군-하다}}
+* Latin: {{t+|la|duco}}
+* Maori: {{t|mi|rangatū}}, {{t|mi|tāwhaiwhai}}, {{t|mi|hīkoikoi}}
+* Norman: {{t|nrf|marchi}}
+* Norwegian: {{t|no|marsjere|m}}
+* Polish: {{t+|pl|maszerować}}
+* Portuguese: {{t+|pt|marchar}}
+* Romanian: {{t+|ro|mărșălui}}, {{t+|ro|mărșui}}
+* Russian: {{t+|ru|марширова́ть}}
+* Scots: {{t|sco|mairch}}
+* Scottish Gaelic: {{t|gd|dèan màrsail|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{t|sh|кора̀чати|impf}}
+*: Roman: {{t+|sh|koràčati|impf}}
+* Slovak: {{t|sk|pochodovať|m}}
+* Slovene: {{t|sl|korakati}}
+* Spanish: {{t+|es|marchar}}
+* Swedish: {{t+|sv|marschera}}, {{t+|sv|tåga}}
+* Turkish: {{t+|tr|yortmak}}, {{t+|tr|koşmak}}
+* Tuvan: {{t|tyv|марштаар}}
+* Vietnamese: {{t+|vi|hành quân}}
+* Yakut: {{t|sah|марштаа}}
+{{trans-bottom}}
+
+{{trans-top|go to war; make military advances}}
+* Afrikaans: {{t|af|marsjeer}}
+* Catalan: {{t+|ca|marxar}}
+* Czech: {{t+|cs|pochodovat}}
+* Danish: {{t|da|marchere}}, {{t|da|rykke frem}}
+* Dutch: {{t|nl|ten strijde trekken}}
+* Finnish: {{t+|fi|marssia}}
+* German: {{t|de|in den Krieg ziehen}}
+* Hungarian: {{t|hu|hadba vonul}}
+* Norwegian: {{t|no|rykke frem}}
+* Portuguese: {{t+|pt|marchar}}
+* Russian: {{t+|ru|марширова́ть}}
+* Scots: {{t|sco|mairch}}
+* Scottish Gaelic: {{t|gd|dèan màrsail|f}}
+* Slovak: {{t|sk|pochodovať|m}}
+* Spanish: {{t+|es|marchar}}
+* Turkish: {{t+|tr|yürümek}}
+* Tuvan: {{t|tyv|марштаар}}
+* Yakut: {{t|sah|марштаа}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Breton: {{qualifier|1}} {{t+check|br|bale}}, {{qualifier|2}} {{t+check|br|bale|alt=bale war}} {{attention|br|2=was &quot;[[bale]] war&quot; - assumed inflected form or vocalised spelling; please verify if linking is acceptable. see [[User:Kephir/gadgets/xte#Translation_fixing]]}}
+* Lithuanian: {{qualifier|1,2}} {{t-check|lt|žygiuoti}}, {{qualifier|1}} {{t-check|lt|maršuoti}}
+* Romanian: {{t+check|ro|marșa}}
+* Tagalog: {{t-check|tl|martsa}}
+{{trans-bottom}}
+
+===Etymology 2===
+{{etymid|en|borderland}}
+From {{inh|en|enm|marche|t=tract of land along a country's border}}, from {{der|en|fro|marche|t=boundary, frontier}}, from {{der|en|frk|*marku}}, from {{der|en|gem-pro|*markō}}, from {{der|en|ine-pro|*mórǵs|t=edge, boundary}}.
+
+====Noun====
+{{en-noun}}
+
+# {{senseid|en|border region}} {{lb|en|now|_|archaic|historical|often plural}} A border region, especially one originally set up to defend a [[boundary]].
+#: {{syn|en|frontier|marchland|borderland}}
+#: {{cot|en|county palatinate|county palatine}}
+#* {{quote-book|en|year=1819|author=w:Lord Byron|title={{w|Don Juan (Byron)|Don Juan}}|section=IV|passage=Juan's companion was a Romagnole, / But bred within the '''March''' of old Ancona{{nb...}}.}}
+# {{senseid|en|border region governed by a marquess}} {{lb|en|historical}} A region at a frontier governed by a [[marquess]].
+
+=====Usage notes=====
+Both ''march'' (noun) and ''[[land]]'' (noun) are predisposed [[idiom#Noun|idiomatically]] to be used in the plural such that a single region is conceived as a collection of smaller locales; thus, ''in the [[marches#Noun|marches]]'', ''in the [[borderlands]]'', and ''in the [[badlands]]'' are often not different [[Appendix:Glossary#denotation|denotationally]] from ''in the march'', ''in the [[borderland]]'', and ''in the [[badland]]'' although they are [[trivial]]ly different [[grammar#Noun|grammatically]] and [[Appendix:Glossary#connotation|connotatively]].
+
+=====Derived terms=====
+{{col|en|marchman|marchmount
+|[[w:Lord Warden of the Marches|Lord Warden of the Marches]]
+|marcher&lt;!--sic--&gt;
+|march-gat
+|march-land
+|march-man
+|march parts,march-party
+|[[w:March Pursuivant|March Pursuivant of Arms Extraordinary]]
+|march stone
+|march-ward
+|[[w:Welsh Marches|Welsh Marches]]
+}}
+
+=====Related terms=====
+{{col4|en
+|[[w:Marche|Marche]]
+|marquee
+|marquess
+|marchion
+|marchionat
+|marchioness
+|marquis
+|marquisate
+|stanmarch
+}}
+
+=====Translations=====
+{{trans-top|border region}}
+* Bulgarian: {{t+|bg|марка|f}}
+* Catalan: {{t+|ca|marca|f}}
+* Czech: {{t|cs|pomezí|n}}, {{t+|cs|marka|f}}
+* Danish: {{t+|da|mark|c}} {{qualifier|Holy Roman Empire}}, {{t|da|grænsemark|c}} {{qualifier|Holy Roman Empire}}, {{t|da|grænseland|n}}
+* Dutch: {{t|nl|grensmark}}
+* Finnish: {{t+|fi|rajamaa}}
+* French:
+*: Old French: {{t|fro|marche|f}}
+* German: {{t+|de|Mark|f}}
+* Italian: {{t+|it|marca|f}}
+* Latin: {{t|la|margo|m}}
+* Middle English: {{t|enm|marche}}
+* Norwegian: {{t|no|grenseland|n}}
+* Old English: {{t|ang|mearc|f}}
+* Old High German: {{t|goh|marha}}
+* Polish: {{t+|pl|rubież|f}}
+* Portuguese: {{t+|pt|fronteira|f}}
+* Romanian: {{t+|ro|marcă|f}}
+* Russian: {{t+|ru|марка}}
+* Scottish Gaelic: {{t|gd|crìoch|f}}
+* Spanish: {{t+|es|marca|f}}
+* Swedish: {{t+|sv|gränsland|n}}
+* Ukrainian: {{t|uk|марка|f}}
+* Walloon: {{t+|wa|måtche}}
+{{trans-bottom}}
+
+{{trans-top|region at a frontier governed by a marquess}}
+* Breton: {{t+|br|marz|m}}, {{t|br|marzoù|p}}
+* Bulgarian: {{t+|bg|марка|f}}
+* Catalan: {{t+|ca|marca|f}}
+* Czech: {{t|cs|pomezí|n}}, {{t+|cs|marka|f}}
+* Danish: {{t+|da|mark|c}}
+* Dutch: {{t+|nl|mark|n}}
+* Estonian: {{t+|et|mark}}
+* Finnish: {{t|fi|markiisikunta}}
+* French: {{t+|fr|marche|f}}
+*: Old French: {{t|fro|marche|f}}
+* German: {{t+|de|Mark|f}}
+* Italian: {{t+|it|marca|f}}
+* Latin: {{t|la|margo|m}}
+* Lithuanian: {{t+|lt|marka|f}}
+* Middle English: {{t|enm|marche}}
+* Old English: {{t|ang|mearc|f}}
+* Old High German: {{t|goh|marha}}
+* Polish: {{t+|pl|marchia|f}}
+* Portuguese: {{t|pt|marquesado|m}}
+* Russian: {{t+|ru|марка|f}}
+* Scottish Gaelic: {{t|gd|crìoch|f}}
+* Spanish: {{t+|es|marca|f}}
+* Swedish: {{t+|sv|mark|c}}
+* Ukrainian: {{t|uk|марка|f}}
+* Walloon: {{t+|wa|måtche}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Neapolitan: {{qualifier|1,2}} {{t-check|nap|mierco|m}}
+* Romanian: {{t+check|ro|marș|n}}
+* Slovak: {{t-check|sk|pomedzie|n}}
+{{trans-bottom}}
+
+====Verb====
+{{en-verb}}
+
+# {{lb|en|intransitive}} To have common [[border]]s or [[frontier]]s
+
+=====Translations=====
+{{trans-top|to have common borders or frontiers}}
+* Bulgarian: {{t+|bg|гранича}}
+* Danish: {{t|da|grænse til}}
+* Finnish: {{t+|fi|rajoittua}}
+* Swedish: {{t|sv|gränsa till}}
+{{trans-bottom}}
+
+===Etymology 3===
+From {{inh|en|enm|merche}}, from {{inh|en|ang|merċe}}, {{m|ang|mereċe}}, from {{inh|en|gmw-pro|*marik}}, from {{der|en|ine-pro|*móri|t=sea}}. Cognate {{cog|gml|merk}}, {{cog|goh|merc}}, {{cog|non|merki|t=celery}}. Compare also obsolete or regional {{m|en|more#Etymology2|t=carrot or parsnip}},&lt;ref&gt;{{R:OED Online|march|n.1|113950|September 2000}}&lt;/ref&gt; from {{cog|ine-pro|*mork-|t=edible herb, tuber}}.
+
+====Noun====
+{{en-noun}}
+
+# {{lb|en|obsolete}} [[smallage|Smallage]].
+
+=====Translations=====
+{{trans-see|smallage}}
+
+=====See also=====
+* {{l|en|stanmarch|t={{taxlink|Smyrnium olusatrum|species}}, alexanders}}
+
+====References====
+&lt;references/&gt;
+
+===Anagrams===
+* {{anagrams|en|a=achmr|charm}}
+
+{{cln|en|ergative verbs}}
+{{C|en|Apieae tribe plants|Gaits}}
+
+==Atong (India)==
+
+===Alternative forms===
+* {{alt|aot|mars}}
+
+===Etymology===
+From {{bor|aot|en|March}}.
+
+===Pronunciation===
+* {{IPA|aot|/mart͡ɕ/}}
+
+===Noun===
+{{aot-noun|মার্চ}}
+
+# [[March]]
+
+====Synonyms====
+* {{l|aot|choi•etja}}
+
+===References===
+* {{R:aot:Breugel}} Stated in Appendix 5.
+
+==Danish==
+
+===Etymology===
+{{dercat|da|fro|frk|gem-pro}}
+From {{bor|da|fr|marche}}, derived from the verb {{m|fr|marcher||to march}}. The interjection is borrowed from the French imperative of this verb.
+
+===Pronunciation===
+* {{IPA|da|[ˈmɑːɕ]}}
+
+===Noun===
+{{da-noun|en|er}}
+
+# {{l|en|march}}
+
+===Interjection===
+{{head|da|intj}}
+
+# {{l|en|march}}! {{q|an order}}
+
+==Welsh==
+
+===Etymology===
+From {{inh|cy|wlm|march}}, from {{inh|cy|cel-bry-pro|*marx}}, from {{inh|cy|cel-pro|*markos}}.
+
+===Pronunciation===
+* {{IPA|cy|/marχ/}}
+
+===Noun===
+{{cy-noun|m|meirch|f=caseg}}
+
+# [[horse]], [[steed]], [[stallion]]
+
+====Derived terms====
+{{col|cy
+|blodyn y meirch&lt;t:red campion&gt;
+|cacwn meirch&lt;t:hornets&gt;
+|cloch y march&lt;t:yellow rattle&gt;
+|cadfarch&lt;t:steed&gt;
+|corfarch&lt;t:pony&gt;
+|gwenyn meirch&lt;t:wasps&gt;
+|dynfarch&lt;t:centaur&gt;
+|marchalan&lt;t:elecampane&gt;
+|marchddanhadlen&lt;t:horse nettle&gt;
+|marchfacrell&lt;t:horse mackerel&gt;
+|marchfieri&lt;t:dogroses&gt;
+|marchfisglen&lt;t:horse mussel&gt;
+|marchog&lt;t:knight, horserider&gt;
+|marchrawn&lt;t:horsetails&gt;
+|marchredyn&lt;t:male-ferns&gt;
+|marchwellt&lt;t:couchgrass&gt;
+|marchysgall&lt;t:spear thistles&gt;
+|mintys y meirch,marchfintys&lt;t:horsemint&gt;
+}}
+
+===Mutation===
+{{cy-mut}}
+
+===Further reading===
+* {{R:cy:GyrA|2=horse}}
+* {{R:cy:Gweiadur}}
+* {{R:cy:GPC}}
+
+{{c|cy|Horses|Male animals}}</text>
+      <sha1>7pk3oowak8ua4d0r86oqcafxtxed3wz</sha1>
+    </revision>
+  </page>
