@@ -458,14 +458,19 @@ function getStats() {
  * WHY WE CAN'T JUST USE TOTALS: When a user selects sources, they want a UNION
  * (all words from ANY selected source). We can't precompute all possible unions
  * because with N sources there are 2^N possibilities. Instead, we compute unions
- * on-the-fly using the subset principle:
+ * on-the-fly using the intersection principle:
  *
- * SUBSET PRINCIPLE: Include a combination if ALL its sources are selected.
+ * INTERSECTION PRINCIPLE: Include a combination if ANY of its sources are selected.
+ *   User selects ["eowl"]:
+ *     - "wikt" ✗ (no overlap with {eowl})
+ *     - "eowl" ✓ (eowl ∈ {eowl})
+ *     - "eowl,wikt" ✓ (eowl ∈ {eowl})  ← words from EOWL that are also in wikt
+ *   Total: 3,252 + 32,126 = ~35,378 words (placeholder numbers)
+ *
  *   User selects ["wikt", "eowl"]:
- *     - "wikt" ✓ (wikt ⊆ {wikt, eowl})
- *     - "eowl" ✓ (eowl ⊆ {wikt, eowl})
- *     - "eowl,wikt" ✓ (both ⊆ {wikt, eowl})
- *     - "enable,eowl,wikt" ✗ (enable ∉ {wikt, eowl})
+ *     - "wikt" ✓ (wikt ∈ {wikt, eowl})
+ *     - "eowl" ✓ (eowl ∈ {wikt, eowl})
+ *     - "eowl,wikt" ✓ (both sources in {wikt, eowl})
  *   Total: 1,095,480 + 3,252 + 32,126 = 1,130,858 words
  *
  * WHY ADDITION WORKS: Since combinations are disjoint (no word appears in multiple
@@ -474,14 +479,14 @@ function getStats() {
 function estimateWordCount(selectedSources) {
     // If we have detailed statistics, use them for accurate estimates
     if (BUILD_STATS && BUILD_STATS.source_combinations) {
-        // Union operation: sum all disjoint combinations that are subsets of selection
+        // Union operation: sum all disjoint combinations that have any overlap with selection
         let totalWords = 0;
         for (const [combo, data] of Object.entries(BUILD_STATS.source_combinations)) {
             const comboSources = combo.split(',');
 
-            // Include this combination if it's a subset of selected sources
-            const isSubset = comboSources.every(s => selectedSources.includes(s));
-            if (isSubset) {
+            // Include this combination if ANY of its sources are in the selected sources
+            const hasOverlap = comboSources.some(s => selectedSources.includes(s));
+            if (hasOverlap) {
                 const count = data.count;
                 totalWords += count;
             }
@@ -538,9 +543,9 @@ function computeMetadataCoverage(selectedSources) {
     // Sum counts from all matching combinations (disjoint union)
     for (const [combo, metadata] of Object.entries(BUILD_STATS.metadata_by_combination)) {
         const comboSources = combo.split(',');
-        const isSubset = comboSources.every(s => selectedSources.includes(s));
+        const hasOverlap = comboSources.some(s => selectedSources.includes(s));
 
-        if (isSubset) {
+        if (hasOverlap) {
             totals.total_words += metadata.total;
             totals.with_pos += metadata.pos_tags.count;
             totals.with_any_labels += metadata.any_labels.count;
@@ -631,9 +636,9 @@ function computeLicense(selectedSources) {
     const allLicenses = new Set();
     for (const [combo, data] of Object.entries(BUILD_STATS.source_combinations)) {
         const comboSources = combo.split(',');
-        // Include this combination if it's a subset of selected sources
-        const isSubset = comboSources.every(s => normalizedSources.includes(s));
-        if (isSubset && data.licenses) {
+        // Include this combination if ANY of its sources are selected
+        const hasOverlap = comboSources.some(s => normalizedSources.includes(s));
+        if (hasOverlap && data.licenses) {
             // Add all licenses from this combination
             data.licenses.split(',').forEach(lic => allLicenses.add(lic));
         }
