@@ -1,0 +1,326 @@
+<page>
+    <title>dialect</title>
+    <ns>0</ns>
+    <id>149</id>
+    <revision>
+      <id>87673363</id>
+      <parentid>87505347</parentid>
+      <timestamp>2025-10-31T19:29:12Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87673363</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="16383" sha1="76luyd1dfwfsbtdsrlvisygkjaqaqif" xml:space="preserve">==English==
+{{wp}}
+
+===Etymology===
+{{root|en|ine-pro|*leǵ-}}
+From {{der|en|frm|dialecte}}, from {{der|en|la|dialectos}}, {{m|la|dialectus}}, from {{der|en|grc|διάλεκτος||conversation, the language of a country or a place or a nation, the local idiom which derives from a dominant language}}, from {{m|grc|διαλέγομαι||I participate in a dialogue}}, from {{m|grc|διά||inter, through}} + {{m|grc|λέγω||I speak}}; {{surf|en|dia-|-lect|nocap=1}}.
+
+===Pronunciation===
+* {{IPA|en|/ˈdaɪ.əˌlɛkt/}}
+* {{audio|en|En-us-dialect.ogg|a=US}}
+
+===Noun===
+{{en-noun}}
+
+# {{lb|en|linguistics|strict sense}} A [[lect]] (often a {{l|en|regional}} or {{l|en|minority}} language) as part of a group or family of languages, especially if they are viewed as a single language, or if contrasted with a [[standardized]] [[idiom]] that is considered the 'true' form of the language (for example, [[Bavarian]] as contrasted with [[Standard German]]).
+#: {{syn|en|patois|q1=often derogatory}}
+#* {{quote-book|en|year=1995 |title=The German language in a changing Europe |author= Michael [G.] Clyne |publisher=Cambridge University Press |page=117 |ISBN=0521499704 |passage=The question could be put: 'Is there anything inherent in a '''dialect''' which gives it a negative stigma or is it that the status of the majority of the speakers is transferred to the '''dialect'''?' — something that occurs in many regions in different countries.}}
+#* {{quote-web|en|author=Roger Blench|title=The Ayere and Ahan languages of Central Nigeria and their affinities|url=https://www.rogerblench.info/Language/Niger-Congo/VN/Ayere/Ayere%20wordlist%20paper.pdf|date=2007-02-05|page=25|work=rogerblench.info|passage=Comparative wordlists of two '''dialects''' of Yoruba with Igala.}}
+#* {{quote-book|en|year=2010|title=Variation and Change: Pragmatic perspectives |series=Handbook of Pragmatics Highlights|seriesvolume=6|editors=Mirjam Fried; Jan-Ola Östman; Jef Verschueren |publisher=John Benjamins Publishing Company |section=''Dialect'', by Ronald Macaulay|page=61 |ISBN=9027289174 |passage=Bloomfield, for example, noted that “local '''dialects''' are spoken by the peasants and the poorest people of the towns” (1933: 50) though he also thought that the lower middle class spoke 'sub-standard' speech.}}
+#* {{quote-book|en|year=2014 |title=Rustic Speech and Folk-Lore |author=Elizabeth Mary Wright (died 1958) |page= |ISBN= |passage=Among common errors still persisting in the minds of educated people, one error which dies very hard is the theory that a '''dialect''' is an arbitrary distortion of the mother tongue, a wilful mispronunciation of the sounds, and disregard of the syntax of a standard language.}}
+# {{lb|en|linguistics|broad sense}} A [[variety]] of a [[language]] that is characteristic of a particular [[area]], [[community]]{{,}} or [[social group]], differing from other varieties of the same language in relatively minor ways as regards [[grammar]], [[phonology]], and [[lexicon]].
+#: {{hypo|en|sociolect|ethnolect|genderlect|regiolect|topolect|geolect|vernacular}}
+#* {{quote-book|en|year=1988|author=Andrew Radford|title=Transformational Grammar: A First Course|location=Cambridge, UK|publisher=Cambridge University Press|page=139|passage=And in addition, many '''dialects''' of English make no morphological distinction between Adjectives and Adverbs, and thus use Adjectives in contexts where the standard language requires ''-ly'' Adverbs}}
+# {{lb|en|pejorative}} Language that is perceived as substandard or wrong.
+#* {{quote-book|en|year=1975|title=Linguistic Perspectives on Black English|author=H. Carl|page=219|passage=Well, those children don't speak '''dialect''', not in this school. Maybe in the public schools, but not here.}}
+#* {{quote-book|en|year=1994|author=H. Nigel Thomas|title=Spirits in the Dark|publisher=Heinemann|page=11|passage={{...}} on the second day, Miss Anderson gave the school a lecture on why it was wrong to speak '''dialect'''. She had ended by saying &quot;Respectable people don't speak '''dialect'''.&quot;}}
+#* {{quote-book|en|year=1967|author=Roger W. Shuy|title=Discovering American Dialects|publisher=National Council of Teachers of English|page=1|passage=Many even deny it and say something like this: &quot;No, we don't speak a '''dialect''' around here.}}
+# {{lb|en|colloquial|offensive}} A language existing only in an oral or non-standardized form, especially a language spoken in a developing country or an isolated region.
+#: {{syn|en|vernacular}}
+# {{lb|en|computing|programming}} A [[variant]] of a non-[[standardize]]d [[programming language]].
+#: {{ux|en|Home computers in the 1980s had many incompatible '''dialects''' of BASIC.}}
+# {{lb|en|ornithology}} A variant form of the [[vocalizations]] of a bird species restricted to a certain area or population.
+#* {{quote-book|1=en|year=1896|author=w:Alfred Newton|title=A Dictionary of Birds|page=893|passage=A curious question, which has as yet attracted but little attention, is whether the notes of the same species of Bird are in all countries alike. From my own observation I am inclined to think that they are not, and that there exist &quot;'''dialects''',&quot; so to speak, of the song.}}
+
+====Usage notes====
+* In some linguistic traditions, the term &quot;dialect&quot; is restricted to [[nonstandard]] [[lect]]s. In scholarly English usage, it refers to both standardized and [[vernacular]] forms of language.&lt;ref&gt;{{cite-book|last=McGregor|first=William|title=Linguistics: An Introduction|publisher=A&amp;C Black|year=2009|isbn=9781847063670|page=160}}&lt;/ref&gt;
+* The difference between a language and a dialect is not always clear, and often has more to do with political boundaries than with linguistic differences. It is generally considered that people who speak different dialects of the same language can understand each other, while people who speak different languages cannot, however, in some cases, people who speak different dialects of the same language are mutually unintelligible. Compare '''[[species]]''' in the biological sense.
+
+====Hyponyms====
+{{col4|en
+|dialect chain
+|dialect continuum
+|eye dialect
+|Kansai dialect
+|nondialect
+|nonstandard dialect
+|regional dialect
+|social dialect
+|standard dialect
+|subdialect
+|superdialect
+|supradialect
+|Urtsun dialect
+|transdialect
+|vernacular dialect
+}}
+
+====Derived terms====
+{{col|en|dialecticism|dialectometrics|grapholect|interdialect|intradialect|microdialect|regionalect
+|dialectal
+|dialectic
+|dialectical
+|dialecting
+|dialect island
+|dialectism
+|dialectless
+|dialect levelling
+|dialectologist
+|dialectology
+|dialectometry
+|-lect
+}}
+
+====Related terms====
+{{col4|en
+|dialectally
+|dialectical
+|dialectician
+|dialectics
+}}
+{{col4|en|title=other [[lect]]s (cp. [[-lect]])
+|chronolect
+|cryptolect
+|familect
+|idiolect
+|ecolect
+|ethnolect
+|geolect
+|regiolect
+|sociolect
+|topolect
+}}
+
+====Translations====
+{{trans-top|particular variety of a language}}
+* Acehnese: {{t|ace|lugat}}
+* Afrikaans: {{t+|af|dialek}}
+* Albanian: {{t+|sq|dialekt|m}}
+* Amharic: {{t|am|ዘዬ}}
+* Arabic: {{t+|ar|لَهْجَة|f}}, {{t|ar|الْعَامِّيَّة|f}} {{q|Colloquial Arabic, eastern dialects}}, {{t|ar|الدَّارِجَة|f}} {{q|Colloquial Arabic, western dialects}}
+*: Egyptian Arabic: {{t|arz|لهجة|tr=lahja}}
+*: South Levantine Arabic: {{t|ajp|لهجة|tr=lahje}}
+* Armenian: {{t+|hy|բարբառ}}
+* Assamese: {{t|as|উপভাষা}}
+* Asturian: {{t|ast|dialeutu|m}}, {{t|ast|dialectu|m}}
+* Azerbaijani: {{t+|az|ləhcə}}, {{t+|az|dialekt}}, {{t+|az|şivə}}
+* Bashkir: {{t|ba|диалект}}
+* Belarusian: {{t|be|дыяле́кт|m}}, {{t|be|гаво́рка|f}}
+* Bengali: {{t+|bn|উপভাষা}}
+* Bulgarian: {{t+|bg|диале́кт|m}}, {{t+|bg|наре́чие|n}}, {{t+|bg|го́вор|m}}
+* Burmese: {{t+|my|ဒေသိယစကား}}, {{t|my|ဒေသန္တရစကား}}
+* Carpathian Rusyn: {{t|rue|діале́кт|m}}
+* Catalan: {{t+|ca|dialecte|m}}
+* Cebuano: {{t|ceb|pinulongan}}, {{t|ceb|sinultihan}}
+* Chinese:
+*: Cantonese: {{t|yue|方言}}, {{t|yue|地方話}}, {{t|yue|話|tr=waa2}} {{qualifier|suffix}}, {{t|yue|土話|tr=tou2 waa6}} {{qualifier|local dialect}}
+*: Dungan: {{t|dng|фон-ян}}
+*: Eastern Min: {{t|cdo|方言}}
+*: Hakka: {{t|hak|方言|tr=fông-ngiàn}}
+*: Hokkien: {{t+|nan-hbl|方言|tr=hong-giân}}, {{t|nan-hbl|土話|tr=thó͘-ōe}} {{qualifier|local dialect}}
+*: Mandarin: {{t+|cmn|方言}}, {{t|cmn|地方話}}, {{t+|cmn|話|tr=huà}} {{qualifier|suffix}}, {{t+|cmn|土話}} {{qualifier|local dialect}}
+*: Wu: {{t|wuu|方言}}
+* Crimean Tatar: {{t|crh|şive}}
+* Czech: {{t+|cs|nářečí|n}}, {{t+|cs|dialekt|m}}
+* Danish: {{t|da|dialekt|c}}
+* Dutch: {{t+|nl|dialect|n}}, {{t|nl|mondaard|f}}, {{t+|nl|streektaal|f}}
+* Esperanto: {{t|eo|dialekto}}
+* Estonian: {{t+|et|murre}}
+* Faroese: {{t|fo|málføri|n}}
+* Finnish: {{t+|fi|murre}}, {{t|fi|aluemurre}}
+* French: {{t+|fr|dialecte|m}}, {{t+|fr|patois|m}}
+* Galician: {{t+|gl|dialecto|m}}
+* Georgian: {{t|ka|დიალექტი}}, {{t|ka|კილო}}, {{t|ka|კილოკავი}}, {{t|ka|ენაკავი}}
+* German: {{t+|de|Dialekt|m}}, {{t+|de|Mundart|f}}
+*: Alemannic German: {{t|gsw|Mundart|f}}, {{t|gsw|Dialäkt|m}}
+*: Luxembourgish: {{t|lb|Mondaart}}
+*: Rhine Franconian: {{t|gmw-rfr|Dialegde}} {{qualifier|Palatine}}
+* Greek: {{t+|el|διάλεκτος|f}}
+*: Ancient: {{t|grc|διάλεκτος|f}}
+* Gujarati: {{t|gu|બોલી|f}}
+* Hebrew: {{t+|he|נִיב|m|tr=niv}}, {{t+|he|לַהַג|m|tr=láhag}}, {{t+|he|עָגָה|f|tr=agá}}
+* Hindi: {{t+|hi|उपभाषा|f}}, {{t+|hi|बोली|f}}
+* Hungarian: {{t+|hu|nyelvjárás}}, {{t+|hu|dialektus}}, {{t+|hu|tájnyelv}}, {{t+|hu|tájszólás}}
+* Icelandic: {{t+|is|mállýska|f}}
+* Ido: {{t+|io|dialekto}}
+* Indonesian: {{t+|id|dialek}}, {{t+|id|logat}}
+* Irish: {{t+|ga|canúint|f}}
+* Istriot: {{t|ist|gialìto|m}}
+* Italian: {{t+|it|dialetto|m}}
+* Japanese: {{t+|ja|方言|tr=ほうげん, hōgen}}, {{qualifier|suffix}} {{t+|ja|弁|alt=-弁|tr=-べん, -ben}}
+* Kalmyk: {{t|xal|айлһ}}
+* Kannada: {{t+|kn|ಉಪಭಾಷೆ}}
+* Kazakh: {{t|kk|диалект}}
+* Khmer: {{t+|km|ប្រាក្រឹត}}, {{t|km|គ្រាមភាសា}}
+* Komi-Zyrian: {{t|kpv|сёрнисикас}}, {{t|kpv|диалект}}
+* Korean: {{t+|ko|방언(方言)}}, {{t+|ko|사투리}}
+* Kurdish:
+*: Central Kurdish: {{t|ckb|شێوەزار}}
+*: Northern Kurdish: {{t+|kmr|zarawa}}
+* Kyrgyz: {{t+|ky|оогон}}, {{t+|ky|диалект}}
+* Lao: {{t|lo|ພາສາທ້ອງຖິ່ນ}}
+* Latin: {{t|la|dialectos|f}}, {{t|la|dialectus|f}}
+* Latvian: {{t+|lv|dialekts|m}}
+* Lithuanian: {{t|lt|tarmė|f}}, {{t|lt|dialektas|m}}
+* Low German:
+*: German Low German: {{t|nds-de|Mundort}}, {{t|nds-de|Mundaart}}, {{t|nds-de|Mundart}}; {{t|nds-de|Dialekt|m}}, {{t|nds-de|Diälekt|m}} {{q|Westphalian, regional}}
+* Macedonian: {{t|mk|дијале́кт|m}}, {{t|mk|на́речје|n}}, {{t+|mk|го́вор|m}}
+* Malay: {{t+|ms|loghat}}, {{t|ms|dialek}}
+* Malayalam: {{t+|ml|ഉപഭാഷ}}
+* Maltese: {{t|mt|djalett|m}}
+* Maori: {{t|mi|reo-ā-iwi}}, {{t|mi|tūreo}}
+* Marathi: {{t|mr|बोली|f}}, {{t|mr|पोटभाषा|f}}
+* Mari:
+*: Eastern Mari: {{t|mhr|наречий}}
+* Mirandese: {{t|mwl|dialeto}}
+* Mongolian:
+*: Cyrillic: {{t+|mn|аялгуу}}, {{t+|mn|аялга}}
+* Nepali: {{t|ne|बोली}}, {{t|ne|भाषिका}}
+* Norman: {{t|nrf|dgialecte|m}}
+* Norwegian:
+*: Bokmål: {{t+|nb|dialekt|m}}, {{t|nb|målføre|n}}, {{t+|nb|mål|n}}
+*: Nynorsk: {{t|nn|dialekt|m|f}}, {{t|nn|målføre|n}}, {{t|nn|mål|n}}
+* Occitan: {{t+|oc|dialècte|m}}
+* Odia: {{t|or|ଉପଭାଷା}}
+* Oromo: {{t|om|loqoda}}
+* Ossetian: {{t|os|диалект}}
+* Ottoman Turkish: {{t|ota|لهجه|tr=lehce}}
+* Pashto: {{t|ps|ګړدود|m|tr=gëṛdod}}, {{t|ps|لهجه|f|tr=lahja}}
+* Persian:
+*: Classical Persian: {{t|fa-cls|لَهْجَه}}, {{t|fa-cls|گویِش}}
+*: Dari: {{t|prs|لَهْجَه}}, {{t|prs|گویِش}}
+*: Iranian Persian: {{t|fa-ira|لَهْجِه}}, {{t|fa-ira|گویِش}}
+* Polish: {{t+|pl|dialekt|m-in}}, {{t+|pl|gwara|f}}, {{t+|pl|narzecze|n}}
+* Portuguese: {{t+|pt|dialeto|m}} {{qualifier|Brazil}}, {{t+|pt|dialecto|m}} {{qualifier|Portugal}}
+* Punjabi: {{t+|pa|ਉਪਭਾਸ਼ਾ}}
+* Romanian: {{t+|ro|dialect|n}}
+* Russian: {{t+|ru|диале́кт|m}}, {{t+|ru|наре́чие|n}}, {{t+|ru|го́вор|m}}
+* Sanskrit: {{t+|sa|उपभाषा|f}}
+* Santali: {{t|sat|ᱵᱳᱞᱤ}}
+* Scots: {{t|sco|byleid}}
+* Scottish Gaelic: {{t|gd|dualchainnt|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{t|sh|на́речје|n}}, {{t|sh|на́рјечје|n}}, {{t|sh|дија̀лект|m}}, {{t|sh|дија̀лекат|m}}
+*: Roman: {{t+|sh|nárečje|n}}, {{t+|sh|nárječje|n}}, {{t+|sh|dijàlekt|m}}, {{t|sh|dijàlekat|m}}
+* Silesian: {{t|szl|djalekt|m}}
+* Sinhalese: {{t|si|උපභාෂාව}}
+* Slovak: {{t|sk|nárečie|n}}, {{t+|sk|dialekt|m}}
+* Slovene: {{t+|sl|naréčje|n}}
+* Spanish: {{t+|es|dialecto|m}}
+* Swabian: {{t|swg|Dialäggd}}
+* Swahili: {{t|sw|lahaja}}
+* Swedish: {{t+|sv|dialekt|c}}, {{t+|sv|mål|n}}
+* Tagalog: {{t|tl|wikain}}, {{t|tl|diyalekto}}
+* Tajik: {{t|tg|лаҳҷа}}, {{t|tg|шева}}, {{t|tg|гӯиш}}
+* Tamil: {{t|ta|பேச்சுவழக்கு}}
+* Tatar: {{t+|tt|сөйләм}}
+* Telugu: {{t+|te|యాస}}, {{t+|te|మాండలికము}}
+* Thai: {{t+|th|ภาษาถิ่น}}
+* Tibetan: {{t|bo|ཡུལ་སྐད}}
+* Tigrinya: {{t|ti|ላህጃ}}
+* Turkish: {{t+|tr|diyalekt}}, {{t+|tr|ağız}}, {{t+|tr|şive}}, {{t+|tr|lehçe}} {{qualifier|dated}}
+* Turkmen: {{t|tk|dialekt}}, {{t|tk|şiwe}}
+* Udmurt: {{t|udm|диалект}}, {{t|udm|наречие}}
+* Ukrainian: {{t+|uk|діале́кт|m}}, {{t|uk|нарі́ччя|n}}, {{t|uk|го́вір|m}}
+* Urdu: {{t|ur|بولی|f}}, {{t|ur|لَہْجَہ|m}}
+* Uyghur: {{t|ug|دىئالېكت}}, {{t|ug|شېۋە}}, {{t|ug|لەھجە}}
+* Uzbek: {{t+|uz|dialekt}}, {{t+|uz|sheva}}, {{t+|uz|lahja}}
+* Vietnamese: {{t+|vi|thổ ngữ}} ({{t|vi|土語}}), {{t+|vi|phương ngữ}} ({{t|vi|方語}}), {{t+|vi|phương ngôn}} ({{t+|vi|方言}})
+* Volapük: {{t+|vo|dialeg}}
+* Welsh: {{t+|cy|tafodiaith|f}}
+* White Hmong: {{t|mww|hom lus}}
+* Yiddish: {{t|yi|דיאַלעקט|m}}
+{{trans-bottom}}
+
+===See also===
+{{col4|en
+|dialogue
+}}
+
+===References===
+&lt;references/&gt;
+
+===Further reading===
+* {{R:Keywords|page=105}}
+* {{cite-book|chapter=dialect|last=Crystal|first= David |title=A Dictionary of Linguistics and Phonetics |publisher=Blackwell Publishing |edition=6 |year=2008 |isbn=978-1-4051-5296-9}}
+* {{cite-book|last= Fodde Melis|first=Luisanna; |title= Race, Ethnicity and Dialects: Language Policy and Ethnic Minorities in the United States |year= 2002 |isbn = 9788846439123 |publisher= FrancoAngeli}}
+
+===Anagrams===
+* {{anagrams|en|a=acdeilt|citadel|dactile|deltaic|edictal|lactide}}
+
+{{C|en|Sociolinguistics}}
+
+==Dutch==
+
+===Etymology===
+From {{der|nl|frm|dialecte}}, from {{der|nl|la|dialectos}}, {{m|la|dialectus}}, from {{der|nl|grc|διάλεκτος||conversation, the language of a country or a place or a nation, the local idiom which derives from a dominant language}}, from {{m|grc|διαλέγομαι||I participate in a dialogue}}, from {{m|grc|διά||inter, through}} + {{m|grc|λέγω||I speak}}.
+
+===Pronunciation===
+* {{IPA|nl|/ˌdijaːˈlɛkt/}}
+* {{audio|nl|Nl-dialect.ogg}}
+* {{hyphenation|nl|di|a|lect}}
+* {{rhyme|nl|ɛkt}}
+
+===Noun===
+{{nl-noun|n|-en|+}}
+
+# {{lb|nl|linguistics}} {{l|en|dialect}} {{gloss|language variety}}
+# [[non-standard]] {{l|en|dialect}}; [[vernacular]]
+#: {{syn|nl|streektaal|mondaard}}
+
+====Derived terms====
+* {{l|nl|dialectgroep}}
+
+====Descendants====
+* {{desc|af|dialek}}
+* {{desc|id|dialek|bor=1}}
+* {{desc|pap|dialèkt|bor=1}}
+
+===Anagrams===
+* {{l|nl|citadel}}
+
+==Romanian==
+
+===Etymology===
+{{bor+|ro|fr|dialecte}}.
+
+===Pronunciation===
+* {{IPA|ro|/di.aˈlekt/}}
+
+===Noun===
+{{ro-noun|n|e}}
+
+# {{lb|ro|linguistics}} language socially subordinate to a regional or national standard language, often historically cognate to the standard, but not a variety of it or in any other sense derived from it
+# {{label|ro|colloquial}} {{l|en|dialect}}
+
+====Declension====
+{{ro-noun-n}}
+
+====Derived terms====
+* {{l|ro|subdialect}}
+
+====See also====
+* {{l|ro|idiom}}, {{l|ro|grai}}, {{l|ro|limbaj}}, {{l|ro|limbă}}
+
+===Further reading===
+* {{R:DEX}}</text>
+      <sha1>76luyd1dfwfsbtdsrlvisygkjaqaqif</sha1>
+    </revision>
+  </page>

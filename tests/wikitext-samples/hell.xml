@@ -1,0 +1,777 @@
+<page>
+    <title>hell</title>
+    <ns>0</ns>
+    <id>2016</id>
+    <revision>
+      <id>87680416</id>
+      <parentid>87652334</parentid>
+      <timestamp>2025-10-31T19:41:02Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87680416</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="31338" sha1="hs0iqtjjhqryh60cdzsa2w26yz9eoaq" xml:space="preserve">{{also|he'll|Hell|héll}}
+==English==
+{{wp}}
+
+===Alternative forms===
+* {{alt|en|Hell||proper noun}}
+* {{alt|en|hel|helle||obsolete}}
+
+===Pronunciation===
+* {{enPR|hĕl}}, {{IPA|en|/hɛl/}}
+* {{audio|en|en-us-hell.ogg|a=US}}
+* {{audio|en|En-uk-hell.ogg|a=UK}}
+* {{rhymes|en|ɛl|s=1}}
+
+===Etymology 1===
+{{root|en|ine-pro|*ḱel- (cover)}}
+From {{inh|en|enm|helle}}, from {{inh|en|ang|hell}}, from {{inh|en|gmw-pro|*hallju}}, from {{inh|en|gem-pro|*haljō|t=concealed place, netherworld}}, from {{der|en|ine-pro|*ḱel-|t=to cover, conceal, save}}.
+
+Cognate with {{cog|stq|Hälle|t=hell}}, {{cog|fy|hel|t=hell}}, {{cog|nl|hel|t=hell}}, {{cog|nds-de|Hell|t=hell}}, {{cog|de|Hölle|t=hell}}, {{cog|no|helvete|t=hell}}, {{cog|is|hel|t=the abode of the dead, death}}. Also related to the {{m|en|Hel}} of [[Germanic]] [[mythology]]. See also {{m|en|hele}}.
+
+====Proper noun====
+{{en-proper noun}}
+
+# {{lb|en|in many religions|uncountable}} A place of [[torment]] where some or all [[sinner]]s are believed to go after [[death]] and [[evil]] [[spirit]]s are believed to be.
+#: {{ant|en|heaven}}
+#: {{ux|en|May you rot in '''hell'''!}}
+#* {{RQ:KJV|Proverbs|23|14|text=Thou shalt beat him with the rod, and shalt deliver his soul from '''hell'''.}}
+#* {{quote-book|en|year=1667|author=John Milton|title=Paradise Lost|passage=Better to reign in '''Hell''' than serve in '''Heaven'''.}}
+#* {{RQ:Congreve Mourning Bride|page=39|passage=Heav'n has no Rage, like Love to Hatred turn'd, / Nor '''Hell''' a Fury, like a Woman ſcorn'd.}}
+#* {{quote-book|en|year=1916|author=James Joyce|title=Portrait of the Artist as a Young Man|passage='''Hell''' is a strait and dark and foul-smelling prison, an abode of demons and lost souls, filled with fire and smoke.}}
+
+=====Synonyms=====
+* ''See'' '''[[Thesaurus:afterlife]]'''
+
+=====Descendants=====
+* {{desc|ko|헬|bor=1}}
+
+=====Translations=====
+{{trans-top|abode for the condemned}}{{multitrans|data=
+* Abkhaz: {{t|ab|џьаҳаным}}
+* Afrikaans: {{tt|af|hel}}
+* Aghwan: {{tt|xag|𐔲𐔴𐕆𐔴𐕎𐔰}}
+* Akkadian: {{t-needed|akk}}
+* Albanian: {{tt+|sq|ferr|m}}, {{tt+|sq|skëterrë|f}}
+* Amharic: {{tt|am|ገሀነም}}
+* Arabic: {{tt|ar|جَهَنَّم|f}}, {{tt|ar|جَحِيم|m}}, {{tt|ar|النَّار|f|lit=the Fire}}
+*: Egyptian Arabic: {{tt|arz|جهنّم|f|tr=gahannam}}
+* Aramaic:
+*: Classical Syriac: {{tt|syc|ܓܝܗܢܐ|f|tr=gêhannā}}
+* Armenian: {{tt+|hy|դժոխք}}
+* Assamese: {{tt|as|নৰক}}
+* Asturian: {{tt|ast|infiernu|m}}
+* Avar: {{tt|av|жужахӏ}}
+* Avestan: {{tt|ae|𐬛𐬀𐬊𐬲𐬀𐬢𐬵}}, {{tt|ae|𐬛𐬀𐬊𐬲𐬀𐬎𐬎𐬀}}
+* Azerbaijani: {{tt+|az|cəhənnəm}}
+*: Cyrillic: {{tt|az|ҹәһәннәм}}
+* Baluchi: {{tt|bal|دوزه|tr=dōzē}}
+* Bashkir: {{tt|ba|тамуҡ}}, {{tt|ba|йәһәннәм}}
+* Basque: {{tt|eu|infernu}}
+* Belarusian: {{tt|be|ад|m}}, {{tt|be|пе́кла|n}}, {{tt|be|[[гее́на]] [[вогненны|во́гненная]]|f}}
+* Bengali: {{tt+|bn|নরক}}, {{tt+|bn|জাহান্নাম}}
+* Breton: {{tt+|br|ifern}}
+* Bulgarian: {{tt+|bg|ад|m}}, {{tt+|bg|пъ́къл|m}}, {{t+|bg|дженде́м|m}} {{qualifier|archaic}}
+* Burmese: {{tt+|my|နရက်}}, {{tt+|my|ငရဲ}}
+* Buryat: {{tt|bua|тама}}
+* Catalan: {{tt+|ca|infern|m}}
+* Chechen: {{tt|ce|жоьжахати}}
+* Cherokee: {{tt|chr|ᏨᏍᎩᏃ}}
+* Chinese:
+*: Cantonese: {{tt|yue|地獄}}
+*: Hakka: {{tt|hak|地獄|tr=thi-ngiu̍k}}
+*: Hokkien: {{tt+|nan-hbl|地獄|tr=tē-ga̍k}}
+*: Mandarin: {{tt+|cmn|地獄}}
+* Chuvash: {{tt|cv|тамӑк}}
+* Crimean Tatar: {{t|crh|cehennem}}, {{t|crh|ceennem}}
+* Czech: {{tt+|cs|peklo|n}}
+* Dalmatian: {{tt|dlm|infiarn|m}}
+* Danish: {{tt|da|helvede|n}}
+* Divehi: {{tt|dv|ނަރަކަ}}
+* Dongxiang: {{tt|sce|dozohei}}
+* Dutch: {{tt+|nl|hel|f}}
+* Esperanto: {{tt|eo|infero}}
+* Estonian: {{tt+|et|põrgu}}
+* Faroese: {{tt|fo|helviti|n}}
+* Finnish: {{tt+|fi|helvetti}}, {{tt+|fi|horna}}
+* French: {{tt+|fr|enfer|m}}
+* Friulian: {{tt|fur|infiêr|m}}
+* Gagauz: {{t|gag|cendem}}
+* Galician: {{tt+|gl|inferno|m}}
+* Georgian: {{tt|ka|ჯოჯოხეთი}}
+* German: {{tt+|de|Hölle|f}}, {{tt+|de|Fegefeuer|n}}, {{tt+|de|Brand|m}}
+* Greek: {{tt|el|Κόλαση|f}}, {{tt+|el|κόλαση|f}}, {{t+|el|γέεννα|f}}
+*: Ancient: {{tt|grc|γέεννα|f}}
+* Greenlandic: {{tt|kl|anniarfik}}
+* Guaraní: {{tt|gn|añaretã}}
+* Gujarati: {{tt|gu|નરક|n}}, {{t|gu|જહન્નમ|n}}
+* Hawaiian: {{tt|haw|kehena}}
+* Hebrew: {{tt+|he|גֵּיהִנּוֹם|m|f|tr=gehinóm}}
+* Hindi: {{tt+|hi|नरक|m}}, {{tt+|hi|जहन्नम|m}}, {{tt+|hi|यमलोक|m}}
+* Hittite: {{tt|hit|𒋼𒂊𒈾𒌋𒉿𒀸|tr=tēnawaš|c}}
+* Hungarian: {{tt+|hu|pokol}}
+* Icelandic: {{tt+|is|helvíti|n}}
+* Ido: {{tt+|io|inferno}}
+* Igbo: {{tt|ig|ọkụ mmụọ}}
+* Indonesian: {{tt+|id|neraka}}, {{t+|id|jahanam}}
+* Ingrian: {{tt|izh|helvetti}}, {{tt|izh|aada}}, {{tt|izh|vaadu}}
+* Ingush: {{tt|inh|жожагӀате}}
+* Interlingua: {{tt|ia|inferno}}
+* Inuktitut: {{tt|iu|ᐃᑯᒪᐊᓗᒃ}}
+* Irish: {{tt+|ga|ifreann}}
+*: Old Irish: {{tt|sga|ifernn|m}}
+* Italian: {{tt+|it|inferno|m}}
+* Japanese: {{tt+|ja|地獄|tr=じごく, jigoku}}, {{tt+|ja|魔界|tr=まかい, makai}}, {{tt+|ja|奈落|tr=ならく, naraku}}
+* Kalmyk: {{tt|xal|там}}
+* Kannada: {{tt+|kn|ನರಕ}}
+* Kazakh: {{tt|kk|жаһаннам}}, {{tt|kk|тозақ}}, {{t|kk|тамұқ}}
+* Khmer: {{tt|km|ឋាននរក}}, {{tt+|km|នរក}}, {{tt+|km|នរកកុណ្ឌ}}, {{tt|km|និរៃ}}
+* Korean: {{tt+|ko|지옥(地獄)}}, {{tt|ko|마계(魔界)}}, {{tt+|ko|나락(奈落)}}
+* Kurdish:
+*: Central Kurdish: {{tt|ckb|جەھەنەم}}, {{tt|ckb|دۆزەخ}}, {{t|ckb|دۆژە}}
+*: Northern Kurdish: {{tt+|kmr|dûjeh}}, {{tt+|kmr|cehnem}}
+* Kyrgyz: {{tt+|ky|тозок}}, {{tt|ky|жаанам}}, {{tt+|ky|жаханнам}} {{qualifier|rare}}
+* Ladino: {{t|lad|inferno}}, {{t|lad|geinam}}
+* Lao: {{tt|lo|ນະລົກ}}, {{tt|lo|ນະຣົກ}}
+* Latgalian: {{tt|ltg|eļne}}
+* Latin: {{tt|la|infernum|n}}, {{tt+|la|Tartarus|m}}; {{tt|la|gehenna}}
+* Latvian: {{tt+|lv|elle|f}}, {{tt|lv|pekle|f}}
+* Lithuanian: {{tt|lt|pragaras|m}}
+* Low German: {{tt|nds|Helle|f}}
+* Lutuv: {{t|clt|athiykhy}}
+* Luxembourgish: {{tt|lb|Häll|f}}
+* Macedonian: {{tt|mk|пекол|m}}, {{t|mk|џенем|m}} {{qualifier|archaic}}
+* Maguindanao: {{tt|mdh|naraka}}
+* Malay: {{tt|ms|neraka}}, {{t|ms|jahanam}}
+* Malayalam: {{tt+|ml|നരകം}}, {{t+|ml|ജഹന്നം}}
+* Maltese: {{tt|mt|infern|m}}
+* Manchu: {{tt|mnc|ᡳᠯᠮᡠᠨ}}
+* Maore Comorian: {{tt|swb|moro|c3}}
+* Maranao: {{tt|mrw|narka'}}
+* Marathi: {{tt|mr|नर्क}}
+* Middle English: {{tt|enm|helle}}
+* Middle Persian: {{tt|pal|𐭣𐭥𐭱𐭧𐭥𐭩|tr=dušox}}
+* Mongolian:
+*: Cyrillic: {{tt+|mn|там}}
+*: Mongolian: {{tt|mn|ᠲᠠᠮᠤ}}
+* Mwali Comorian: {{tt|wlc|moro|c3}}
+* Navajo: {{tt|nv|chʼį́įdiitah}}
+* Nepali: {{tt|ne|नरक}}
+* Newar: {{tt|new|नर्क}}
+* Norman: {{tt|nrf|enfé|m}}
+* Northern Sami: {{tt|se|helvet}}
+* Norwegian:
+*: Bokmål: {{tt+|nb|helvete|n}}
+*: Nynorsk: {{tt|nn|helvete|n}}
+* Occitan: {{tt+|oc|infèrn|m}}
+* Odia: {{tt+|or|ନର୍କ}}
+* Old Church Slavonic:
+*: Cyrillic: {{tt|cu|адъ|m}}
+* Old East Slavic: {{tt|orv|адъ|m}}, {{tt|orv|пекло|n}}
+* Old English: {{tt+|ang|hell|f}}
+* Old Norse: {{tt|non|helviti|n}}
+* Old Occitan: {{tt|pro|enfern|m}}
+* Old Saxon: {{tt|osx|hel}}
+* Old Tupi: {{t|tpw|anhanga ratá}}, {{t|tpw|Anhanga retama}}
+* Ottoman Turkish: {{t|ota|جهنم|tr=cehennem}}, {{t|ota|طامو|tr=tamu}}
+* Pali: {{tt|pi|naraka|m}}
+* Pashto: {{tt+|ps|دوزخ|m|tr=dozax}}, {{tt|ps|دوږخ|m|tr=doẓax}}, {{tt|ps|دوژخ|m|tr=dožax}}, {{tt+|ps|جوغاش|m|tr=joǧāš}}, {{tt+|ps|جاندم|m|tr=jāndam}}, {{tt|ps|اورګړ|m|tr=orgaṛ}}
+* Persian: {{tt+|fa|جَهَنَّم|tr=jahannam}}, {{tt+|fa|دوزَخ|tr=duzax}}
+* Plautdietsch: {{tt|pdt|Hal|f}}
+* Polish: {{tt+|pl|piekło|n}}
+* Portuguese: {{tt+|pt|inferno|m}}
+* Punjabi: {{tt|pa|ਨਰਕ}}, {{tt|pa|ਜਹੰਨਮ}}
+* Romanian: {{tt+|ro|iad|n}}, {{tt+|ro|gheenă|f}}, {{tt+|ro|infern|n}}
+* Romansch: {{tt|rm|enfiern}}
+* Russian: {{tt+|ru|ад|m}}, {{tt+|ru|преиспо́дняя|f}}, {{tt+|ru|пе́кло|n}}, {{tt|ru|[[гее́нна]] [[огненный|о́гненная]]|f}}
+* Sanskrit: {{tt+|sa|नरक|m}}
+* Sardinian: {{tt|sc|iferru}}
+* Saterland Frisian: {{tt|stq|Hälle|f}}
+* Scottish Gaelic: {{tt|gd|ifrinn|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{tt|sh|па̀као|m}}, {{tt|sh|ад|m}}, {{tt|sh|џехѐнем|m}}
+*: Roman: {{tt+|sh|pàkao|m}}, {{tt|sh|ad|m}}, {{tt+|sh|džehènem|m}}
+* Sicilian: {{tt+|scn|nfernu|m}}
+* Sinhalese: {{tt|si|නිරය}}
+* Slovak: {{tt|sk|peklo|n}}
+* Slovene: {{tt+|sl|pekel|m}}
+* Sorbian:
+*: Lower Sorbian: {{tt|dsb|hela|f}}, {{tt|dsb|pjakło|n}}
+*: Upper Sorbian: {{tt|hsb|hela|f}}
+* Southern Altai: {{tt|alt|таамы}}, {{tt|alt|тамы}}
+* Spanish: {{tt+|es|infierno|m}}
+* Sranan Tongo: {{t|srn|didibrikondre}}
+* Sumerian: {{tt|sux|𒆳|tr=KUR}}
+* Swahili: {{tt|sw|jahanamu|cn}}, {{tt+|sw|kuzimu|cku}}
+* Swedish: {{tt+|sv|helvete|n}}
+* Tabasaran: {{tt|tab|жегьеннем}}
+* Tagalog: {{tt|tl|impiyerno}}
+* Tajik: {{tt+|tg|дӯзах}}, {{tt+|tg|ҷаҳаннам}}
+* Tamil: {{tt+|ta|நரகம்}}, {{t|ta|ஜஹன்னம்}}
+* Tatar: {{tt+|tt|җәһәннәм}}
+* Telugu: {{tt+|te|నరకం}}
+* Thai: {{tt+|th|นรก}}, {{t+|th|อบาย}}
+* Tibetan: {{tt|bo|དམྱལ་བ}}
+* Tigrinya: {{tt|ti|ገሃነም}}
+* Tocharian B: {{tt|txb|nrai}}
+* Turkish: {{tt+|tr|cehennem}}, {{tt+|tr|tamu}}
+* Turkmen: {{tt|tk|dowzah}}, {{tt+|tk|jähennem}}
+* Udi: {{tt|udi|джаьгьаьннаьм}}
+* Udmurt: {{tt|udm|ад}}, {{tt|udm|тамуг}}
+* Ugaritic: {{t-needed|uga}}
+* Ukrainian: {{tt+|uk|ад|m}}, {{tt|uk|пе́кло|n}}, {{tt|uk|[[геє́на]] [[вогненний|вогне́нна]]|f}}
+* Urdu: {{tt|ur|دوزَخ|m}}, {{tt|ur|جَہَنَّم|m}}, {{tt|ur|نَرَک|m}}
+* Uyghur: {{tt|ug|دوزاخ}}, {{tt|ug|جەھەننەم}}
+* Uzbek: {{tt+|uz|doʻzax}}, {{tt+|uz|jahannam}}
+* Vietnamese: {{tt+|vi|địa ngục}} ({{tt|vi|地獄}})
+* Volapük: {{tt+|vo|höl}}
+* Welsh: {{tt|cy|uffern|f}}
+* West Frisian: {{tt|fy|hel|f}}
+* White Hmong: {{tt|mww|ntuj raug txim}}
+* Yakut: {{tt|sah|үөдэн}}
+* Yiddish: {{tt|yi|גיהנום|n|tr=genem}}, {{tt|yi|גענעם|n}}
+* Yoruba: {{tt|yo|ọ̀run àpáàdì}}
+* Zazaki: {{tt|zza|doze|m}}, {{tt+|zza|cahnım|m}}
+}}&lt;!-- close {{multitrans}} --&gt;
+{{trans-bottom}}
+
+====Noun====
+{{en-noun|~}}
+
+# {{lb|en|countable|hyperbole|figuratively}} A place or situation of great suffering in life.
+#: {{ux|en|My new boss is making my job a '''hell'''.}}
+#: {{ux|en|I went through '''hell''' to get home today.}}
+#: {{ux|en|[[callback]] '''hell'''; &lt;code&gt;&lt;&lt;nowiki/&gt;[[w:HTML table|table]]&gt;&lt;/code&gt; '''hell'''; &lt;code&gt;&lt;&lt;nowiki/&gt;[[w:span and div|div]]&gt;&lt;/code&gt; '''hell'''|q=computer programming}}
+#* '''1879''', General William T. Sherman, commencement address at the Michigan Military Academy
+#*: {{quote|en|There is many a boy here today who looks on war as all glory, but, boys, it is all '''hell'''.}}
+#* {{quote-song|en|year=1986|composer=Metallica|title=Disposable Heroes|album=Master of Puppets|passage=Why, am I dying? / Kill, have no fear / Lie, live off lying / '''Hell''', '''hell''' is here}}
+#* {{quote-journal|en|date=May 08 2024|author=Damian Carrington|title=‘Hopeless and broken’: why the world’s top climate scientists are in despair.   World’s top climate scientists expect global heating to blast past 1.5C target|journal=The Guardian|location=UK|passage=So how do the scientists cope with their work being ignored for decades, and living in a world their findings indicate is on a “highway to '''hell'''”?.}}
+# {{lb|en|countable}} A [[place#Noun|place]] for [[gambling#Noun|gambling]].
+#* {{RQ:Thackeray Pendennis||passage=Here’s five-and-twenty for you. Don’t be losing it at the '''hells''' now.|61}}
+#* {{quote-text|en|year=1877|author={{w|William Black (novelist)|William Black}}|title=Green Pastures and Piccadilly
+|passage=a convenient little gambling '''hell''' for those who had grown reckless}}
+#* {{RQ:Conrad Secret Agent|edition=copyright|chapter=II|page=15|passage=But there was also about him an indescribable air which no mechanic could have acquired in the practice of his handicraft however dishonestly exercised: [...] the air of moral nihilism common to keepers of gambling '''hells''' and disorderly houses; [...]}}
+# {{lb|en|figuratively}} An [[extremely]] [[hot]] place.
+#: {{ux|en|You don’t have a [[snowball's chance in hell|snowball's chance in '''hell''']].}}
+# {{lb|en|sometimes|vulgar}} {{non-gloss|Used as an {{glossary|intensifier}} in phrases grammatically requiring a noun.}}
+#* {{quote-text|en
+|year=1992
+|author=w:Neal Stephenson
+|title=Snow Crash
+|page=321
+|passage=She's got her arms down to her side, defiant. But just for the '''hell''' of it, she leans into him, wraps her arms around his neck, puts her head on his shoulder, and hangs on tight.
+}}
+#: {{ux|en|I’m as mad as '''hell''' and I’m not going to take it anymore.}}
+#: {{ux|en|[[what the hell|What the '''hell''']] is wrong with you?!}}
+#: {{ux|en|He says he’s going home early? [[like hell|Like '''hell''']] he is.}}
+# {{lb|en|obsolete}} A place into which a [[tailor]] [[throw#Verb|throws]] [[shred#Noun|shreds]], or a [[printer]] [[discard#Verb|discards]] [[broken]] [[type#Noun|type]].
+#* {{RQ:Butler Hudibras|year=1905|passage=This sturdy Squire, he had, as well &lt;br&gt;As the bold Trojan Knight, seen '''Hell'''.}}
+# In certain [[game]]s of [[chase]], a place to which those who are caught are carried for [[detention]]. &lt;!--Webster 1913--&gt;
+# {{lb|en|colloquial|usually with ''[[on]]''}} Something extremely painful or harmful (to)
+#: {{ux|en|That steep staircase is '''hell''' on my knees.}}
+
+=====Derived terms=====
+{{col3|en|Chinaman's chance in hell|snowball in hell
+|as hell|silver hell|behell|hellacious|cat's chance in hell|hellban|hellbilly|hellborn|hellbound|hellbox|hellbrew|hellbroth|helldesk|hellektro|hellfare|hellfire|hellhound|hellhouse|hellify|hellkite|hellman|hellproof|hellraising|hellride|hellscape|hellsite|hellsome|hellstorm|hellstrip|Helltown|hellwards|helly|hizzle|Israhell|Israhelli|McHell
+|catch hell|hell has no fury like a woman scorned|hell-bent-for-leather|scare the hell out of|to hell
+|dependency hell
+|forty minutes of hell|go-to-hell|hell-roaring|hound of hell|not worth hell room
+|go through hell| gambling hell
+|go to hell|hell bride
+|hell and half of Georgia
+|hella
+|hellagood
+|hellbender|hell around|hell from above|in hell|play hell with
+|hell-bent
+|hellburner|Solavellan Hell
+|hellcat
+|Hell Corner
+|hell-fire
+|hell for leather
+|hell hath no fury like a woman scorned
+|hellish
+|hellmouth
+|hell of a|hell ship
+|hell on earth
+|hell on wheels
+|hell's delight
+|hellraiser
+|hell pig|Harrowing of Hell
+|hellspawn
+|hell to pay
+|hell week|hell realm|production hell|to hell and back
+|like hell
+|living hell
+|no screaming hell
+|personal hell
+|rot in hell
+|the hell
+|the hell out of
+|the hell with it|the hairy hell
+|the hell you say
+|to hell with
+|what the hell
+|burn in hell|hell no|give someone hell|hell yeah|hell if I know|hell if I care|who the hell|where the hell|hell's bells|hell knows|how the hell|like hell you say||hell yes|hot hell|welcome to hell| all hell breaks loose|as all hell|bastard operator from hell|bleeding hell|bloody hell|blooming hell|bullet hell|by hell|callback hell|chuffing hell|come hell or high water|chicken from hell|dammit to hell|development hell|DLL hell|Elo hell|for the hell of it|fresh hell|from hell|fucking hell|gate of hell|harrowing of hell|harrying of hell|hell and Tommy|hell chicken|hell gate|hell hole|hell hound|hell house|hell mend someone|hell money|hell night|hell or high water|hell strip|hell to the naw|hell to the no|hell west and crooked|hell-bent for leather|hell-born|hell-brewed|hell-diver|hell-for-leather|hell-hole|hell-hound|hell-raiser|hell-rake|holy hell|hot as hell|I'm going to hell for this|in the hell|JAR hell|king-hell|like a bat out of hell|like merry hell|match made in hell|no hell|oh my hell|pave the road to hell|play merry hell with|raise hell|raise unshirted hell|rake-hell|see you in hell|snowball's chance in hell|snowflake's chance in hell|sodding hell|the road to hell is paved with good intentions|to hell and gone|to hell in a handbasket|to hell in a handcart|until hell freezes over|war is hell|why the hell|damn you all to hell|oh, hell|when the hell|Hell's Kitchen|hell's teeth|hell's yes|hell's yeah|Hellfire Club|Hellward|hellward|hell is full of good meanings, but heaven is full of good works|dammit all to hell}}
+
+=====Translations=====
+{{trans-top|place of suffering in life}}
+{{multitrans|data=
+* Albanian: {{tt+|sq|skëterrë}}
+* Arabic: {{tt|ar|جَحِيم}}, {{tt|ar|جَهَنَّم|f}}
+* Armenian: {{tt+|hy|դժոխք}}
+* Asturian: {{tt|ast|infiernu|m}}
+* Atong (India): {{t|aot|norok}}
+* Azerbaijani: {{tt+|az|cəhənnəm}}
+*: Cyrillic: {{tt|az|ҹәһәннәм}}
+* Bashkir: {{tt|ba|тамуҡ}}, {{tt|ba|йәһәннәм}}
+* Belarusian: {{tt|be|пе́кла|n}}, {{tt|be|ад|m}}
+* Bengali: {{tt+|bn|নরক}}, {{tt+|bn|জাহান্নাম}}
+* Bulgarian: {{tt+|bg|ад|m}}, {{tt+|bg|пъ́къл|m}}, {{t+|bg|дженде́м|m}} {{qualifier|archaic}}
+* Burmese: {{tt+|my|နရက်}}, {{tt+|my|ငရဲ}}
+* Chinese:
+*: Cantonese: {{tt|yue|地獄}}
+*: Hakka: {{tt|hak|地獄|tr=thi-ngiu̍k}}
+*: Hokkien: {{tt+|nan-hbl|地獄|tr=tē-ga̍k}}
+*: Mandarin: {{tt+|cmn|地獄}}
+* Chuvash: {{tt|cv|тамӑк}}
+* Czech: {{tt+|cs|peklo|n}}
+* Danish: {{tt|da|helvede|n}}
+* Dutch: {{tt+|nl|hel|f}}
+* Esperanto: {{tt|eo|infero}}
+* Estonian: {{tt+|et|põrgu}}
+* Finnish: {{tt+|fi|helvetti}}
+* French: {{tt+|fr|enfer|m}}
+* Georgian: {{tt|ka|ჯოჯოხეთი}}
+* German: {{tt+|de|Hölle|f}}
+* Greek: {{tt+|el|κόλαση|f}}
+* Hebrew: {{tt+|he|גֵּיהִנּוֹם|m|f|tr=gehinóm}}
+* Hindi: {{tt+|hi|नरक|m}}, {{tt+|hi|जहन्नम|m}}, {{tt+|hi|यमलोक|m}}
+* Hungarian: {{tt+|hu|pokol}}
+* Icelandic: {{tt+|is|helvíti|n}}
+* Indonesian: {{tt+|id|neraka}}, {{t+|id|jahanam}}
+* Interlingua: {{tt|ia|inferno}}
+* Irish: {{tt+|ga|ifreann|m}}
+* Italian: {{tt+|it|inferno|m}}
+* Japanese: {{tt+|ja|地獄|tr=じごく, jigoku}}
+* Kazakh: {{tt|kk|тамұқ}}, {{tt|kk|жаһаннам}}, {{tt|kk|тозақ}}
+* Khmer: {{tt|km|ឋាននរក}}, {{tt+|km|នរក}}, {{tt+|km|នរកកុណ្ឌ}}, {{tt|km|និរៃ}}
+* Korean: {{tt+|ko|지옥(地獄)}}
+* Kyrgyz: {{tt+|ky|тозок}}, {{tt|ky|жаанам}}, {{tt+|ky|жаханнам}} {{qualifier|rare}}
+* Lao: {{tt|lo|ນະລົກ}}, {{tt|lo|ນະຣົກ}}
+* Latvian: {{tt+|lv|elle|f}}
+* Lithuanian: {{tt|lt|pragaras|m}}
+* Macedonian: {{tt|mk|пекол|m}}, {{t|mk|џенем|m}} {{qualifier|archaic}}
+* Malay: {{tt|ms|neraka}}, {{t|ms|jahanam}}
+* Mongolian:
+*: Cyrillic: {{tt+|mn|там}}
+*: Mongolian: {{tt|mn|ᠲᠠᠮᠤ}}
+* Northern Sami: {{tt|se|helvet}}
+* Norwegian:
+*: Bokmål: {{tt+|nb|helvete|n}}
+*: Nynorsk: {{tt|nn|helvete|n}}
+* Old English: {{tt+|ang|hell|f}}
+* Oromo: {{t|om|jaannama}}
+* Ottoman Turkish: {{t|ota|جهنم|tr=cehennem}}, {{t|ota|طامو|tr=tamu}}
+* Persian: {{tt+|fa|جَهَنَّم|tr=jahannam}}, {{tt+|fa|دوزَخ|tr=duzax}}
+* Polish: {{tt+|pl|piekło|n}}
+* Portuguese: {{tt+|pt|inferno|m}}
+* Russian: {{tt+|ru|ад|m}}
+* Saterland Frisian: {{tt|stq|Hälle|f}}
+* Scottish Gaelic: {{tt|gd|Ifrinn|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{tt|sh|па̀као|m}}, {{tt|sh|ад|m}}, {{tt|sh|џехѐнем|m}}
+*: Roman: {{tt+|sh|pàkao|m}}, {{tt|sh|ad|m}}, {{tt+|sh|džehènem|m}}
+* Sicilian: {{tt+|scn|nfernu|m}}
+* Slovak: {{tt|sk|peklo|n}}
+* Slovene: {{tt+|sl|pekel|m}}
+* Southern Altai: {{t|alt|тамы}}
+* Spanish: {{tt+|es|infierno|m}}
+* Swahili: {{t|sw|motoni}}, {{t|sw|jahanamu}}
+* Swedish: {{tt+|sv|helvete|n}}
+* Tajik: {{tt+|tg|дӯзах}}, {{tt+|tg|ҷаҳаннам}}
+* Tatar: {{tt+|tt|җәһәннәм}}
+* Telugu: {{tt+|te|నరకం}}
+* Thai: {{tt+|th|นรก}}
+* Turkish: {{tt+|tr|cehennem}}, {{tt+|tr|tamu}}
+* Turkmen: {{tt|tk|dowzah}}, {{tt+|tk|jähennem}}
+* Ukrainian: {{tt|uk|пе́кло|n}}, {{tt+|uk|ад|m}}
+* Urdu: {{tt|ur|دوزَخ|m}}, {{tt|ur|جَہَنَّم|m}}, {{tt|ur|نَرَک|m}}
+* Uyghur: {{tt|ug|دوزاخ}}, {{tt|ug|جەھەننەم}}
+* Uzbek: {{tt+|uz|doʻzax}}, {{tt+|uz|jahannam}}
+* Volapük: {{tt+|vo|höl}}
+* West Frisian: {{tt|fy|Hel|f}}
+* Yiddish: {{tt|yi|גיהנום|n|tr=genem}}, {{tt|yi|גענעם|n}}
+{{trans-bottom}}
+
+{{trans-top|extremely hot place}}
+* Arabic: {{tt|ar|جَحِيم|m}}
+* Finnish: {{tt+|fi|pätsi}}
+* Portuguese: {{tt+|pt|inferno|m}}
+* Russian: {{tt+|ru|пе́кло|n}}
+}}&lt;!-- close {{multitrans}} --&gt;
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Woiwurrung: {{t-check|wyi|nilimjak-yelim}}
+{{trans-bottom}}
+
+====Interjection====
+{{en-intj}} {{tlb|en|colloquial|sometimes|vulgar}}
+
+# {{non-gloss|Used to express discontent, unhappiness, or anger.}}
+#: {{ux|en|Oh, '''hell'''! I got another parking ticket.}}
+#* {{RQ:Shakespeare Merchant of Venice|II|7|text=O '''hell'''! what have we here?&lt;br&gt;A carrion Death, within whose empty eye&lt;br&gt;There is a written scroll! {{...}}}}
+# {{lb|en|non-productive}} {{non-gloss|Used to emphasize.}}
+#: {{ux|en|[[hell yeah|'''Hell''' yeah]]!}}
+# {{non-gloss|Used to introduce an intensified statement following an understated one}}; nay; not only that, but.
+#: {{ux|en|Do it, or, rest assured, there will be no more Middle Eastern crisis – '''hell''', there will be no more Middle East!}}
+
+=====Derived terms=====
+* {{l|en|hell's bells}}
+* {{l|en|hell no}}
+* {{l|en|hells}}
+* {{l|en|hell yes}}, {{l|en|hell yeah}}, {{l|en|hells yeah}}
+* {{l|en|oh hell}}
+
+=====Translations=====
+{{trans-top|hell!}}
+* Albanian : {{t+|sq|drreqin}}
+* Danish: {{t|da|helvede!}}
+* Finnish: {{t+|fi|helvetti!}}
+* French: {{t+|fr|merde}}
+* German: {{t|de|zur Hölle!}}, {{t+|de|Himmel!|m}}, {{t+|de|Teufel!|m}}
+* Hebrew: {{t+|he|לעזאזל!|tr=la'azazél}}
+* Icelandic: {{t|is|helvítis!}}
+* Japanese: {{t+|ja|畜生|tr=ちくしょう, chikushō}}, {{t+|ja|糞|tr=くそ, kuso}}
+* Northern Sami: {{t|se|helvet!}}
+* Norwegian: {{t+|no|helvete!}}
+* Russian: {{t+|ru|чёрт}}
+* Scottish Gaelic: {{t|gd|murt}}
+* Spanish: {{t+|es|carajo!}}, {{t+|es|mierda!}}, {{t+|es|diablos!}}, {{t+|es|joder!}}
+* Swedish: {{t+|sv|helvete!}}
+{{trans-bottom}}
+
+=====See also=====
+* {{l|en|damn}}
+* {{l|en|heck}}
+
+====Adverb====
+{{en-adv|-}}
+
+# {{lb|en|postpositional}} {{alt form|en|the hell}} ''or'' '''{{l|en|like hell}}'''.
+#* '''1990''', ''Mama's Family'' (television sitcom), &quot;Look Who's Breathing&quot; (season 6, episode 18)
+#*: - Oh, aren't they sweet?&lt;br&gt;- Sweet, '''hell'''. They look like Tweedledum and Tweedledumber.
+#* {{RQ:Fry Liar|page=24|passage=‘{{...|nospace=1}} I know whether a boy is telling me the truth or not.’&lt;br&gt;‘Thank you, sir.’&lt;br&gt;Did he '''hell'''. They never bloody did.}}
+# {{lb|en|Australia|NZ|colloquial|sometimes|vulgar}} {{cap|very}}; {{n-g|used to emphasize strongly.}}
+#: {{syn|en|hella}}
+#: {{ux|en|That was '''hell''' good!}}
+#: {{ux|en|They're '''hell''' sexy.}}
+
+====Verb====
+{{en-verb}}
+
+# To make [[hellish]]; to [[place]] (someone) in hell; to make (a place) into a hell. {{defdate|from 17th c.}}
+# To [[hurry]], [[rush]]. {{defdate|from 19th c.}}
+#* {{quote-text|en|year=1929|author=w:William Faulkner|title=The Sound and the Fury
+|passage=I had already lost thirteen points, all because she had to come '''helling''' in there at twelve, worrying me about that letter.}}
+# {{lb|en|intransitive}} To move quickly and loudly; to [[raise hell]] as part of motion.
+#: {{ux|en|He was '''helling''' down the road with his radio blaring.}}
+
+===Etymology 2===
+From {{der|en|de|hellen||to brighten, burnish}}. Related to {{cog|nl|hel||clear, bright}} and {{cog|de|hell||clear, bright}}.
+
+====Verb====
+{{en-verb}}
+
+# {{lb|en|rare|metal-working}} To add [[luster]] to; to [[burnish]] ([[silver]] or [[gold]]).
+#* {{quote-text|en|year=1770|author=Godfrey Smith|title=The Laboratory: Or, School of Arts
+|passage=To '''hell''' gold or gilt workː take two ounces of tartar, two ounces of sulfur.. and it will give it a fine luster.}}
+
+===Etymology 3===
+From {{inh|en|enm|hellen}}, from {{der|en|non|hella|t=to pour}}, from {{der|en|gem-pro|*halþijaną|t=to incline, tip; to pour out, empty}}, from {{der|en|ine-pro|*ḱel-|t=to lean, incline}}. Cognate with {{cog|is|hella|t=to pour}}, {{cog|no|helle|t=to pour}}, {{cog|sv|hälla|t=to pour}}. See also {{m+|en|hield}}.
+
+====Verb====
+{{en-verb}}
+
+# {{lb|en|rare}} To [[pour]].
+#* '''18th century''', [[wikipedia:Josiah Relph|Josiah Relph]], ''The Harvest; or Bashful Shepherd''
+#*: Gosh, the sickle went into me handː Down '''hell'd''' the bluid.
+
+{{cln|en|intensifiers|swear words|calculator words}}
+{{C|en|Afterlife|Death|Hell}}
+
+==Albanian==
+
+===Etymology===
+From {{der|sq|sqj-pro|*skōla}}, from {{der|sq|ine-pro|*(s)kol-|t=stake}}; compare {{cog|lt|kuõlas}}, {{cog|pl|kół}}, {{cog|grc|σκύλος}}.
+
+===Noun===
+{{sq-noun|m|heje|helli|hejet}}
+
+# [[skewer]]
+# [[spear]]
+# [[icicle]]
+# {{lb|sq|adverb}} standing straight without moving
+
+==Cornish==
+
+===Noun===
+{{head|kw|mutated noun}}
+
+# {{aspirate mutation of|kw|kell}}
+
+==Estonian==
+
+===Etymology===
+From {{inh|et|urj-fin-pro|*hellä}}. Cognate to {{cog|fi|hellä}} and {{cog|vot|elle}}.
+
+===Adjective===
+{{et-adj|hella|hella|c=hellem}}
+
+# [[tender]], [[gentle]]
+
+====Declension====
+{{et-decl-külm|hel|l|l|a}}
+
+==German==
+{{was fwotd|de|2014|September|3}}
+
+===Etymology===
+From {{inh|de|gmh|hel||resounding, loud, shining, bright}}, from {{inh|de|goh|hel||resounding}}, from {{inh|de|gem-pro|*halliz||resounding}}, from {{der|de|gem-pro|*hellaną||to resound, make a sound}}, from {{der|de|ine-pro|*kelh₁-||to call, make noise}}. Cognate with {{cog|nl|hel}}.
+
+===Pronunciation===
+* {{IPA|de|/hɛl/}}
+* {{audio|de|De-hell.ogg|a=Germany}}
+* {{audio|de|De-at-hell.ogg|a=Austria}}
+* {{audio|de|De-hell2.ogg|a=&lt;&lt;Germany&gt;&gt; (&lt;&lt;Berlin&gt;&gt;)}}
+
+===Adjective===
+{{de-adj|comp}}
+
+# [[clear]], [[bright]], [[light]]
+#: {{ant|de|dunkel}}
+#* '''1918''', [[w:de:Elisabeth von Heyking|Elisabeth von Heyking]], ''[[s:de:Die Orgelpfeifen|Die Orgelpfeifen]]'', in: Zwei Erzählungen, Phillipp Reclam jun. Verlag, page 9:
+#*: {{quote|de|So dunkel und schauerlich die Gruft aussah, wenn man durch die blinden, bestaubten Scheibchen der kleinen Fenster hineinblickte, so '''hell''' und freundlich war oben die Kirche.|Just as dark and eerie the crypt looked like, if one looked in it through the cloudy, dusted little panes of the small windows, as '''bright''' and friendly was the church above.}}
+
+====Declension====
+{{de-adecl|comp}}
+
+====Derived terms====
+* {{l|de|hellhörig}}
+* {{l|de|hellsichtig}}
+* {{l|de|hellwach}}
+
+====Related terms====
+* {{l|de|sternenhell}}
+* {{l|de|taghell}}
+
+===Further reading===
+* {{R:de:DWDS}}
+* {{R:de:UniLeipzig}}
+* {{R:de:Duden}}
+
+==Luxembourgish==
+
+===Etymology===
+From {{der|lb|goh|hel}}, related to the verb {{m|goh|hellan}}, from {{der|lb|gem-pro|*hellaną|t=to resound}}. Cognate with {{cog|de|helle}}, {{cog|nl|hel}}.
+
+===Pronunciation===
+* {{IPA|lb|/hæl/}}
+* {{rhymes|lb|æl|s=1}}
+* {{homophones|lb|Häll}}
+
+===Adjective===
+{{lb-adj}}
+
+# [[clear]], [[bright]]
+# [[light]], [[pale]]
+
+====Declension====
+{{lb-decl-adj}}
+
+==Middle English==
+
+===Proper noun===
+{{head|enm|proper noun|altform=1}}
+
+# {{alt form|enm|helle}}
+
+===Noun===
+{{head|enm|noun|altform=1}}
+
+# {{alt form|enm|helle}}
+
+==Norwegian Bokmål==
+
+===Etymology 1===
+From {{der|nb|non|heill}}.
+
+====Noun====
+{{nb-noun-n1}}
+
+# [[luck]]
+
+===Etymology 2===
+{{nonlemma}}
+
+====Verb====
+{{head|nb|verb form}}
+
+# {{inflection of|nb|helle||imp}}
+
+===Further reading===
+* {{R:The Bokmål Dictionary}}
+
+==Norwegian Nynorsk==
+
+===Etymology 1===
+Ultimately from {{der|nn|non|heill}}.
+
+====Noun====
+{{nn-noun-n1}}
+
+# [[luck]]
+
+===Etymology 2===
+From {{der|nn|non|heldr}}.
+
+====Adverb====
+{{head|nn|adverb}}
+
+# {{lb|nn|non-standard|or|dialectal}} {{alt form|nn|heller|t=rather, either; neither}}
+#* {{quote-text|nn|year=1951|author=w:Olav H. Hauge|title=Din veg
+|passage=Og ikkje vardar du vegen, du '''hell'''. &lt;br&gt;Og vinden stryk ut ditt far i aude fjell.
+|translation=And you don't mark out the road '''either'''. &lt;br&gt;And the wind wipes away your trail amid empty mountains.}}
+
+===Further reading===
+* {{R:The Nynorsk Dictionary}}
+* {{R:NO|heller}}
+* {{R:Aasen|helder}}
+
+==Old English==
+
+===Alternative forms===
+* {{alter|ang|hel}}
+
+===Etymology===
+From {{inh|ang|gmw-pro|*hallju}}, from {{inh|ang|gem-pro|*haljō}}, ultimately from {{der|ang|ine-pro|*ḱel-||to cover, hide, conceal}}.
+
+Compare {{cog|de|hell||light}}.
+
+===Pronunciation===
+* {{ang-IPA|hell}}
+
+===Noun===
+{{ang-noun|f}}
+
+# {{l|en|hell}}
+#* ''[https://books.google.com/books?id=m2hVAAAAcAAJ&amp;pg=PA86#v=onepage&amp;q&amp;f=false Homilies of the Anglo-Saxon Church, 1uoting &quot;''Circumdederunt me gemitus''&quot;]
+#*: {{quote|ang|Dēaþes ġeōmerunga mē beēodon, and '''helle''' sārnyssa mē beēodon, and iċ on mīnre ġedrefednysse Drihten clypode, and hē of his hālgan temple mīne stemne ġehyrde.|The moaning of death surrounded me, and the pains of '''hell''' surrounded me, and in my distress I called out to the Lord, and from his holy temple he heard my voice.}}
+
+====Declension====
+{{ang-decl-noun-o-f|hell}}
+
+====Derived terms====
+{{col|ang
+|hellbend
+|hellcniht
+|hellcræft
+|hellcund
+|hellcwalu
+|hellebealu
+|hellebrōga
+|hellebryne
+|hellecǣġe
+|helleċeafl
+|helleclām
+|hellecynn
+|helledeofol
+|helldor&lt;t:gate of hell&gt;
+|helleduru
+|helleflōr
+|hellefȳr&lt;t:hellfire&gt;
+|helleġeat
+|hellegāst
+|hellegod
+|hellegrund
+|hellegrut
+|hellehæft
+|hellehæftling
+|hellehēof
+|hellehinca
+|hellehūs
+|hellelīċ
+|helleloc
+|hellemæġen
+|hellemere
+|hellenīþ
+|hellrūn&lt;t:sorceress&gt;
+|hellesċealc
+|hellesċeaþa
+|hellewīte
+|hellehund&lt;t:hellhound&gt;
+}}
+
+====Descendants====
+* {{desctree|enm|helle}}
+
+{{topics|ang|Hell}}
+
+==Swedish==
+
+===Etymology===
+From {{inh|sv|gmq-osw|heel}}, from {{inh|sv|non|heill|t=good omen, luck|lit=whole, healthy}}. {{doublet|sv|hel}}.
+
+===Interjection===
+{{head|sv|interjection}}
+
+# {{lb|sv|archaic}} [[hail]] (exclamation or greeting)
+
+====Derived terms====
+* {{l|sv|hell seger||Sieg Heil}}
+
+===References===
+* {{R:svenska.se|so}}
+* {{R:svenska.se|saol}}
+* {{R:svenska.se|saob}}
+* {{R:runeberg.org|svetym|0320.html hell}}
+
+{{cln|sv|greetings}}
+
+==Welsh==
+
+===Pronunciation===
+* {{IPA|cy|/hɛɬ/}}
+
+===Etymology 1===
+
+====Adjective====
+{{cy-adjective form}}
+
+# {{lb|cy|neologism|literary}} {{feminine singular of|cy|hyll}}
+
+=====Usage notes=====
+This is a rare term formed by analogy with {{m|cy|cref}}, {{m|cy|gwen}} etc. as feminine forms of {{m|cy|cryf||strong}}, {{m|cy|gwyn||white}} etc., rather than inherited.
+
+=====Quotations=====
+* {{quote-book|cy|author=Ellis Humphrey Evans (Hedd Wyn)|translator=Gillian Clarke|authorlink=Hedd Wyn|title=Rhyfel|trans-title=War|year=1918|url=https://www.poetrybyheart.org.uk/poems/rhyfel-war|text=''{{…}} O'i ôl mae dyn, yn deyrn a gwreng, / Yn codi ei awdurdod '''hell'''.''|t={{…}} Instead, man, king or peasantry, / Raises his '''gross''' authority.}}
+
+===Etymology 2===
+
+====Noun====
+{{cy-noun form}}
+
+# {{h-prothesis of|cy|ell}}
+
+===Further reading===
+* {{R:cy:Gweiadur}}
+* {{R:cy:GPC}}</text>
+      <sha1>hs0iqtjjhqryh60cdzsa2w26yz9eoaq</sha1>
+    </revision>
+  </page>

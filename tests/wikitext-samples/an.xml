@@ -1,0 +1,2444 @@
+<page>
+    <title>an</title>
+    <ns>0</ns>
+    <id>3971</id>
+    <revision>
+      <id>87697766</id>
+      <parentid>87651443</parentid>
+      <timestamp>2025-10-31T20:09:49Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax (2); convert {{wikipedia}} to {{wp}} (2); convert {{wp}} to new syntax</comment>
+      <origin>87697766</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="77600" sha1="4j8ucj3w5hr2fuisd7eygrney783095" xml:space="preserve">{{also|Appendix:Variations of &quot;an&quot;}}
+{{minitoc}}
+==Translingual==
+
+===Symbol===
+{{mul-symbol}}
+
+# {{ISO 639|1}}
+
+==English==
+{{wp}}
+
+===Pronunciation===
+* {{IPA|en|/ˈæn/|a=stressed}}
+** {{IPA|en|[ˈæn]|a=RP,AU}}
+*** {{audio|en|LL-Q1860 (eng)-Back ache-an.wav|a=UK,stressed}}
+** {{IPA|en|[ˈan]|a=SSB}}
+** {{IPA|en|[ˈeən]|[ˈɛən]|a=US}}
+*** {{audio|en|en-us-an.ogg|a=US,stressed,æ-tensing}}
+** {{IPA|en|[ˈɛən]|[ˈæ(ː)n]|a=CA}}
+* {{IPA|en|/ən/|a=unstressed}}
+** {{audio|en|LL-Q1860 (eng)-Pvanp7-an (unstressed).wav|a=UK,unstressed}}
+** {{audio|en|en-us-an-unstressed.ogg|a=US,unstressed|text=an egg}}
+* {{rhymes|en|æn|s=1}}&lt;!--No ən rhyme: can't rhyme an unstressed word.--&gt;
+* {{homophones|en|and|qq1=unstressed form|in|qq2=unstressed form}}
+
+===Etymology 1===
+From {{inh|en|enm|an}}, from {{inh|en|ang|an|ān|a, an|lit=one}}. More at {{m|en|one}}.
+
+====Article====
+{{head|en|articles|indefinite}}
+
+# {{form of|en|Form|a#Article|a}} {{q|all article senses}}.
+## {{n-g|Used before a [[vowel]] sound.}}
+##: {{ux|en|I'll be there in [[half an hour|half '''an''' hour]].}}
+##: {{ux|en|'E's staying at '''an''' 'otel. ''(compare'' He's staying at a hotel.'')''}}
+##* {{RQ:Churchill Celebrity|chapter=2|passage=Sunning himself on the board steps, I saw for the first time Mr. Farquhar Fenelon Cooke. He was dressed out in broad gaiters and bright tweeds, like '''an''' English tourist, and his face might have belonged to Dagon, idol of the Philistines.}}
+##* {{quote-book
+|en
+|year=1971
+|author=w:Lyndon Johnson
+|chapter=The Beginning
+|title=w:The Vantage Point
+|url=https://archive.org/details/vantagepointpers00john/
+|publisher=w:Holt, Reinhart &amp; Winston
+|ISBN=0-03-084492-4
+|LCCN=74-102146
+|OCLC=1067880747
+|page=12
+|pageurl=https://archive.org/details/vantagepointpers00john/page/12/
+|text=I was catapulted without preparation into the most difficult job any mortal man can hold. My duties would not wait a week, or a day, or even '''an''' hour.}}
+## &lt;!-- {{lb|en|nonstandard}}--&gt; {{n-g|Used before {{IPAfont|/h/}} in a stressed or unstressed syllable.}}
+##* {{RQ:King James Version|Psalms|40|1|2|passage=1 I waited patiently for the Lord, and he inclined vnto me, and heard my crie.&lt;br&gt;2 He brought me vp also out of '''an''' horrible pit, out of the mirie clay, and set my feete vpon a rock, and established my goings.}}
+##* {{quote-book
+|en
+|year=1693
+|author=w:Robert Morden
+|chapter=Of China
+|title=Geography Rectified; or a Description of the World
+|url=https://archive.org/details/geographyrectifi00mord/
+|edition=3rd
+|OCLC=1206333845
+|page=441
+|pageurl=https://archive.org/details/geographyrectifi00mord/page/441/
+|text=The Province of ''Nanking'', by the ''Tartars'' called ''Kiangnan'', is the ſecond in honour, in magnitude and fertility in all ''China'' : It is divided into 14 great Territories, having Cities and Towns '''an''' hundred and ten; ''Nanking'', or ''Kiangning'' being the ''Metropolis''; a City, that if ſhe did not exceed moſt Cities on the Earth in bigneſs and beauty, yet ſhe was inferior to few, for her Pagodes, her Temples, her Porcelane Towers, her Palaces and Triumphal Arches. ''Fungiang'', ''Sucheu'', ''Sunkiang'', ''Leucheu'', ''Hoaigan'', ''Ganking'', ''Ningue'', ''Hoeicheu'', are alſo eminent places, and of great Note and Trade.}}
+##* {{quote-book
+|en
+|year=1953
+|author=w:Mao Tse-tung
+|chapter=Mao Tse-tung's Tribute to Stalin
+|title=Current Soviet Policies
+|url=https://archive.org/details/in.ernet.dli.2015.71946/
+|location=New York
+|publisher=w:Frederick A. Praeger
+|issn=0590-3890
+|LCCN=53-6440
+|OCLC=1060568967
+|page=254
+|pageurl=https://archive.org/details/in.ernet.dli.2015.71946/page/n266/
+|text=Following the doctrine of Lenin and Stalin, relying on the support of the great Soviet state and all the revolutionary forces of all countries, the Chinese Communist Party and the Chinese people gained '''an''' historic victory a few years ago.}}
+##* {{quote-av
+|en
+|date=May 28, 1972
+|role=w:Richard Nixon
+|title=President Nixon addresses the Soviet People live from the Kremlin
+|archiveurl=https://web.archive.org/web/20151222231740/https://www.youtube.com/watch?v=oantwy7crzk
+|archivedate=22 December 2015
+|time=3:30
+|text=We have agreed on joint ventures in space. We have agreed on ways of working together to protect the environment, to advance health, to cooperate in science and technology. We have agreed on means of preventing incidents at sea. We have established a commission to expand trade between our two nations. Most important, we have taken '''an''' historic first step in the limitation of nuclear strategic arms.}}
+##* {{quote-av
+|en
+|date=June 29, 2022
+|author=w:David Pakman
+|title=Trump Assaulted Secret Service Agent, Smeared Ketchup on Wall
+|archiveurl=https://web.archive.org/web/20220630001744/https://www.youtube.com/watch?v=L3kYDNBKAbs
+|archivedate=30 June 2022
+|time=0:00
+|text=Well yesterday was '''an''' historic day. Uh, there was last minute testimony scheduled in the January 6th committee from a former aide to Trump chief of staff Mark Meadows.}}
+##* {{quote-av
+|en
+|date=May 26, 2025
+|author=w:Mark Carney
+|title=King Charles in Canada: Why this isn't just any royal visit
+|publisher=w:CBC
+|url=https://www.youtube.com/watch?v=g08ymFG4GtU
+|time=0:21
+|text=This is '''an''' historic honor which matches the weight of our times.}}
+##* {{see more citations|en}}
+## {{lb|en|now quite|_|rare}} {{n-g|Used before {{m|en|one}} and words with initial {{angbr|u}}, {{angbr|eu}} when pronounced {{IPAfont|/ju/}}.}}
+##* {{RQ:KJV|Numbers|24|8|passage=God brought him forth out of Egypt; he hath as it were the strength of '''an''' unicorn: he shall eat up the nations his enemies, and shall break their bones, and pierce them through with his arrows.}}
+##* {{quote-book
+|en
+|author=w:John Mackay Wilson
+|title=Wilson's Tales of the Borders; Historical, Traditionary, and Imaginative
+|url=https://archive.org/details/wilsonshistorica0003wils_f1k6/
+|OCLC=41719251
+|page=84
+|pageurl=https://archive.org/details/wilsonshistorica0003wils_f1k6/page/84/
+|text=My hopes, from my earliest years, have been hopes of celebrity as a writer- not of wealth, or of influence, or of accomplishing any of the thousand aims which furnish the great bulk of mankind with motives. You will laugh at me. There is something so emphatically shadowy and unreal in the object of this ambition, that even the full attainment of its provokes a smile. For who does not know&lt;br&gt;'How vain that second life in others' breath,&lt;br&gt;The estate which wits inherit after death!'&lt;br&gt;And what can be more fraught with the ludicrous than '''an''' union of this shadowy ambition with ''mediocre'' parts and attainments! But I digress.}}
+##* {{quote-journal
+|en
+|date=March 22, 2010
+|author=Paul Taylor
+|title=Greece Debates Revive Old European Fears and Resentments
+|journal=w:The New York Times
+|archiveurl=https://web.archive.org/web/20100403043731/https://www.nytimes.com/2010/03/23/business/global/23inside.html
+|issn=0362-4331
+|oclc=1645522
+|section=Inside Europe
+|text=President Nicolas Sarkozy of France is open to '''an''' European monetary fund but would want it to raise money cheaply on capital markets and lend it to needy euro-zone countries before they faced possible default.}}
+##* {{quote-journal
+|en
+|date=April 13, 2021
+|first=Neil
+|last=Vigdor
+|title=Hank Aaron’s Name Will Replace a Confederate General’s on an Atlanta School
+|journal=w:The New York Times
+|archiveurl=https://web.archive.org/web/20210414000228/https://www.nytimes.com/2021/04/13/us/hank-aaron-high-school-atlanta.html
+|archivedate=April 14, 2021
+|url=https://www.nytimes.com/2021/04/13/us/hank-aaron-high-school-atlanta.html
+|issn=0362-4331
+|oclc=1645522
+|section=U.S.
+|url2=https://archive.ph/lTPqZ
+|text=In '''an''' unanimous vote on Monday, the city’s school board approved removing the name of Gen. Nathan Bedford Forrest from Forrest Hill Academy and calling the alternative school the Hank Aaron New Beginnings Academy.}}
+##* {{quote-av
+|en
+|date=February 14, 2024
+|author=w:Lawrence O'Donnell
+|title=Lawrence: Jack Smith asks SCOTUS to move fast on Trump. Nixon case is proof they can.
+|archiveurl=https://web.archive.org/web/20240215053757/https://www.youtube.com/watch?v=rqF9evPkJ1M
+|archivedate=February 15, 2024
+|publisher=w:MSNBC
+|time=0:29
+|text=Having been given seven full days, Jack Smith took exactly one day to file a forty-page response in opposition, to the Supreme Court, making the argument that there was no reason for the Supreme Court to hear Donald Trump's appeal of '''an''' unanimous opinion by the second most important court in the country, the Washington, D.C., Federal Court of Appeals, which supported the trial judge's ruling that there is no such thing as immunity from criminal prosecution for former presidents.}}
+##* {{see more citations|en}}
+## {{lb|en|nonstandard|British|West Country}} {{n-g|Used before all consonants.}}
+
+=====Usage notes=====
+{{mainapp|English articles#Indefinite articles}}
+* In standard English, the article {{m|en|an}} is used before vowel sounds, while {{m|en|a}} is used before consonant sounds. Alternatively, ''an'' can be found before an unstressed syllable beginning with {{IPAfont|/h/}}, as in &quot;an historic&quot;. The {{IPAfont|/h/}} may then become silent or is at least very weakly articulated. This usage is favoured by only 6% of British speakers, and is only slightly more common in writing.&lt;ref&gt;''Fowler's Dictionary of Modern English Usage'' (2015, {{ISBN|0199661359}}, page 2: &quot;Before words beginning with ''h'' [...] the standard modern approach is to use ''a'' (never ''an'') together with an aspirated ''h'' [...], but not to demur if others use ''an'' with minimal or nil aspiration given to the following ''h'' (''an historic'' /әn (h)ɪsˈtɒrɪk/, ''an horrific'' /әn (h)ɒˈrɪfɪk/, etc.).&quot; ''Fowler's'' goes on to source the 6% figure to Wells (third edition, 2008).&lt;/ref&gt;
+* Historically, {{m|en|an}} could also be found before {{m|en|one}} and before many words with initial {{angbr|u}}, {{angbr|eu}} (now pronounced with initial {{IPAchar|/juː/|/jʊ/|/jə/}}), such as {{m|en|eunuch}}, {{m|en|unique}}, and {{m|en|utility}}. This is because those initial letters were pronounced as vowels. In writing, ''an'' remained usual before such words until the 19th century -- long after these words acquired initial consonant sounds in standard English. This is still occasionally seen.&lt;ref&gt;{{R:OED Online|a|adj|4|June 2008}}&lt;/ref&gt;
+* In the other direction, ''a'' often occurs before a vowel in nonstandard and dialectal speech and in its written representations.&lt;ref&gt;{{R:en:McDavid:1979|57|375}}&lt;/ref&gt; Example: &quot;ain't this a innerestin sitchation&quot; (Moira Young, ''Blood Red Road'').
+* The various article senses of {{m|en|a}} are all senses of {{m|en|an}}.
+
+=====Derived terms=====
+{{col2|en|another}}
+
+=====Translations=====
+{{see translation subpage|Article}}
+
+====Numeral====
+{{head|en|numerals}}
+
+# {{lb|en|nonstandard|British|West Country}} {{cln|en|cardinal numbers}} [[one]]
+
+====References====
+&lt;references/&gt;
+
+===Etymology 2===
+{{etymid|en|conj}}From {{inh|en|enm|an|t=and, if}}. {{dbt|en|and}}.
+
+====Conjunction====
+{{en-head|conj}}
+
+# {{lb|en|archaic}} [[if|If]]
+#* {{RQ:Shakespeare Merchant of Venice|I|2|text={{...}} '''An''' the worst fall that ever fell, I hope I shall make shift to go without him.}}
+#* {{RQ:R. F. Burton Arabian Nights|passage=Thereupon, quoth he, &quot;O woman, for sundry days I have seen thee attend the levée sans a word said; so tell me '''an''' thou have any requirement I may grant.&quot;|supp=1}}
+# {{lb|en|archaic}} So long as.
+#: {{ux|en|'''An''' it harm none, do what ye will.}}
+# {{lb|en|archaic}} As if; as though.
+#* {{RQ:Wordsworth Coleridge Lyrical Ballads|poem=The Rime of the Ancyent Marinere}} (original version), lines 61–64:
+#*: {{quote|en|At length did cross an Albatross, &lt;br&gt; Thorough the Fog it came; &lt;br&gt; And '''an''' it were a Christian Soul, &lt;br&gt; We hail'd it in God's Name.}}
+
+=====Derived terms=====
+{{col2|en|ifs and ans}}
+
+=====Translations=====
+{{trans-top|if; so long as}}{{multitrans|data=
+* Esperanto: {{tt+|eo|se}}
+* Fijian: {{tt+|fj|e dua na}}
+* Finnish: {{tt+|fi|mikäli}}
+* German: {{tt+|de|so}}
+* Italian: {{tt+|it|se}}
+}}
+* Latin: {{t+|la|si}}
+{{trans-bottom}}
+
+===Etymology 3===
+Borrowed from {{bor|en|ka|ან}}.
+
+====Noun====
+{{en-noun}}
+
+# The first [[letter]] of the [[Georgian]] [[alphabet]], [[ა]] ([[Mkhedruli]]), [[Ⴀ]] ([[Asomtavruli]]) or [[ⴀ]] ([[Nuskhuri]]).
+
+===Etymology 4===
+From the {{inh|en|ang|an}}, {{m|ang|on|pos=preposition}}.
+
+====Preposition====
+{{en-head|prep}}
+
+# In each; to or for each; [[per]].
+#: {{ux|en|I was only going twenty miles '''an''' hour.}}
+
+=====Usage notes=====
+* This is the same as the word ''a'' in such contexts, modified because of preceding a vowel sound (after an unpronounced ''h''). ''The train was speeding along at a mile '''a''' minute.''
+
+=====Synonyms=====
+* {{l|en|per}}
+
+=====Translations=====
+{{trans-top|in each; to or for each; per}}{{multitrans|data=
+* Danish: {{tt|da|pr.}}, {{tt+|da|om}}
+* Finnish: ''(use the inessive case for the word after)''
+* German: {{tt+|de|pro}}, {{tt+|de|den|m}}, {{tt+|de|das|n}}, {{tt+|de|die|f}}
+* Hungarian: {{tt+|hu|per}}, {{tt+|hu|-ként}}
+* Italian: {{tt+|it|al}}, {{tt+|it|allo}}, {{tt+|it|alla}}, {{tt|it|all'}}
+* Macedonian: {{tt|mk|по}}
+* Portuguese: {{tt+|pt|o|m}}, {{tt+|pt|a|f}}, {{tt+|pt|por}}
+* Serbo-Croatian:
+*: Cyrillic: {{tt|sh|по}}
+*: Latin: {{tt+|sh|po}}
+}}
+{{trans-bottom}}
+
+====References====
+* {{R:Webster 1913}}
+
+===Anagrams===
+* {{anagrams|en|a=an|n.a.|NA|-na|N/A|N.A.|n/a|Na|na}}
+
+{{cln|en|2-letter words}}
+{{C|en|Georgian letter names}}
+
+==Abau==
+
+===Pronunciation===
+* {{IPA|aau|/an/}}
+
+===Noun===
+{{head|aau|noun}} {{aau-noun|?|mf}}
+
+# {{n-g|a type of freshwater fish with four sharp points, similar to a catfish}}
+# anything with a [[sharp]] [[point]]
+
+====Usage notes====
+* Sense 1 (type of fish): class 2, feminine
+* Sense 2 (pointy/sharp thing): class 5, masculine
+
+===References===
+* Lock, Arnold Hugo. 2011. ''Abau Grammar''. Data Papers on Papua New Guinea Languages 57. Ukarumpa, Papua New Guinea: SIL-PNG Academic Publications. [https://www.sil.org/system/files/reapdata/33/13/86/33138664671583783026160672477079448010/DPv57_Abau_Grammar_final_%28pdfA%29.pdf Available online].
+** p.68, Table 21 (listed under Class 7, Feminine)
+* {{cite-web|en
+|author=SIL International
+|title=Abau Dictionary
+|url=https://www.webonary.org/abau/
+|work=Webonary.org
+|year=2020}}
+
+==Afrikaans==
+
+===Pronunciation===
+* {{IPA|af|/an/}}
+
+===Preposition===
+{{head|af|prepositions}}
+
+# {{lb|af|Western Cape}} {{alternative form of|af|aan}}
+
+==Ainu==
+
+===Pronunciation===
+* {{IPA|ain|/an/}}
+
+===Etymology 1===
+Possibly a [[shortened]] form of [[anihi]]. It may also have come directly from the verb [[an]] (to [[be]], to [[exist]]).
+
+===Pronoun===
+{{ain-pron|l|{{ain-kana-conv|アン}}}}
+
+# {{lb|ain|[[indefinite]] [[pronoun]]}}  [[someone]], [[somebody]]. An undetermined or unspecified [[person]] or [[thing]]. It can also refer to someone whose identity is clear from the context.
+#: {{syn|ain|a|sinuma|asinuma|anihi}}
+#: {{usex|ain|Cis-'''an'''.|'''Someone''' is crying.}}
+#: {{usex|ain|Asinuma akar sinot-'''an'''.|'''We'''’re playing.}} 
+#: {{usex|ain|Pirka-'''an'''.|'''You’re''' beautiful.}}
+#: {{usex|ain|Aynu ray-an.|'''The person''' is dying.}}
+
+===Usage notes===
+*'''-an''', no matter the context, is only used with [[intransitive]] verbs.
+*'''-an''' may act as an [[emphasizing]] pronoun, emphasizing what is doing the action. This may lead to situations where the context is ambiguous, since the verb could be in the passive voice. In example four, it can mean “'''The person''' is dying” or “'''The person is being killed'''.”
+* '''-an''' may be often used as an [[inclusive]] first-person pronoun ([[we]]) as well as a [[respectful]] second-person pronoun. See examples two and three.
+
+===Etymology 2===
+Similar to {{cog|ja|-}} {{ja-r|ある}}.
+
+===Verb===
+{{ain-verb|l|{{ain-kana-conv|アン}}}}
+
+# {{lb|ain|intransitive|copulative}} to [[exist]], [[be]] (somewhere); [[there is]]
+#: {{usex|ain|Aynu '''an''' [[ruwe ne]].|'''There is''' an Ainu.}}
+
+===Particle===
+{{ain-verb|l|{{ain-kana-conv|アン}}}}
+
+# (Emphatic [[particle]]) A final particle used to emphasize or reinforce a statement.; it is equivalent to Japanese [[よ]].
+#: {{usex|ain|Poronno opotuyep ki okake, k-askeikre arka humi '''an'''.|My fingers '''really''' hurt after typing a lot.}}
+
+====See also====
+* {{l|ain|ne||to be}}
+
+==Albanian==
+
+===Etymology===
+Possibly a metaphorical use of {{m|sq|anë||vessel}}.
+
+===Noun===
+{{sq-noun|m||ani}}
+
+# {{lb|sq|anatomy}} [[womb]], [[caul]]
+#: {{syn|sq|mitër}}
+# {{lb|sq|anatomy}} [[joint]]
+# {{lb|sq|dialectal}} [[room]], [[vessel]]
+# {{lb|sq|dialectal|Italy}} [[ship]]
+
+====Declension====
+{{sq-noun-m-unc}}
+
+====Related terms====
+* {{l|sq|anë}}
+
+===Further reading===
+* {{R:sq:FGJSSH:1980}}
+* {{R:sq:FGJSH:2006}}
+
+==Antigua and Barbuda Creole English==
+
+===Alternative forms===
+* {{alt|aig|an'}}
+
+===Etymology===
+From {{der|aig|en|and}}.
+
+===Conjunction===
+{{head|aig|conj}}
+
+# [[and]]
+
+===References===
+* Jerene Joseph, ''Antigua and Barbuda Dictionary'' (2019)
+* Joy Lawrence, ''The Way We Talk and Other Antiguan Folkways'' (2003)
+
+==Arin==
+
+===Noun===
+{{head|xrn|nouns}}
+
+# [[haunch]]
+
+==Aromanian==
+
+===Etymology===
+From {{inh|rup|la|annus}}. Compare {{cog|ro|an}}.
+
+===Pronunciation===
+* {{IPA|rup|[an]}}
+
+===Noun===
+{{head|rup|nouns|g=n|plural|anj|or|enj}}
+
+# [[year]]
+
+====Related terms====
+* {{l|rup|antsãrtsu}} / {{l|rup|antserts}}
+
+==Asturian==
+
+===Etymology===
+From a contraction of the preposition {{m|ast|en||in}} + preposition {{m|ast|a||to}}.
+
+===Contraction===
+{{head|ast|contraction}}
+
+# (''optional'') [[towards]] inside
+#: {{ux|ast|Voi an ca Catuxa|I'm going inside Catuxa's house}}
+#: {{ux|ast|Voi p'an ca Xepe|I'm going towards Xepe's house}}
+
+====Usage notes====
+* Generally used when referring to someone's house.
+
+===Further reading===
+* {{R:ast:DALLA}}
+
+==Azerbaijani==
+
+===Etymology===
+From {{bor|az|ar|آن}}. {{root|az|ar|ء ن ي}}
+
+===Pronunciation===
+* {{IPA|az|/ɑn/}}
+* {{audio|az|LL-Q9292 (aze)-Zardabi Bakuvi-an.wav|a=Baku}}
+
+===Noun===
+{{az-noun}}
+
+# [[moment]]
+
+====Declension====
+{{az-decl-noun|a|c}}
+
+====Derived terms====
+* {{l|az|hər anda}}
+* {{l|az|anlıq}}
+
+==Bambara==
+
+===Pronunciation===
+* {{IPA|bm|[án]}}
+
+===Pronoun===
+{{head|bm|pronouns}}
+
+# [[we]]
+
+==Bikol Central==
+
+===Alternative forms===
+* {{alt|bcl|ang}}
+
+===Pronunciation===
+* {{bcl-IPA}}
+
+===Etymology 1===
+From Proto-Central Philippine ''*aŋ''. Cognate with {{cog|ceb|ang}}, {{cog|hil|ang}}, {{cog|tl|ang}}, {{cog|war|an}}.
+
+Further etymology is debated; some have theorized a relationship to {{cog|poz-pro|*a||direct marker}}, from {{cog|map-pro|*a||direct marker}} with the addition of an unclear nasal suffix. Compare {{cog|pam|ing}}.
+
+====Particle====
+{{bcl-head|particle|b=+}}
+
+# {{n-g|direct marker for all general nouns other than personal proper nouns}}
+#: {{ux|bcl|Nagdalagan '''an''' lalaki pasiring sa baybayon.|'''The''' man ran towards the shore.}}
+#: {{ux|bcl|Kinakan kan ikos '''an''' sira. (Naga)|-}} {{ux|bcl|Kinaon kan ikos '''an''' sira. (Legazpi)|The cat ate '''the''' fish.}}
+
+=====Usage notes=====
+* This particle is analyzed as the definite article (i.e., ''the'') when used alone, and the indefinite article (i.e., ''a'' or ''an'') when used with the numeral &quot;''[[saro]]''&quot;.
+*: {{ux|bcl|'''An''' saldang. (Naga)|-}}
+*: {{ux|bcl|'''An''' aldaw. (Legazpi)|'''The''' sun.}}
+*: {{ux|bcl|'''An sarong''' tawo.|'''A''' person.}}
+* Specific nouns are marked with &quot;[[si]]&quot; or &quot;[[su]]&quot;.
+* Direct personal proper nouns (''primarily names'') are marked with &quot;[[si]]&quot;.
+
+===Etymology 2===
+
+====Pronoun====
+{{bcl-head|pronoun|'an|b=+}}
+
+# {{clip of|bcl|iyan}}
+
+==Blin==
+{{byn-variant|l=an|a=ኣን}}
+
+===Etymology===
+From Proto-Agaw ''*ʔän/ʔan'', from {{der|byn|cus-pro|*ʔani}}, from {{der|byn|afa-pro|*yi|*ʔan-ʔyi|t=me}}. Cognate with {{cog|xan|ኣን|tr=an}}, {{cog|awn|ኣን|tr=an}}, {{cog|so|aniga}}, {{cog|bej|ani}}, {{cog|irk|aning}}.
+
+===Pronoun===
+{{head|byn|pronoun|plural|yén}}
+
+# [[I]] (''first-person singular personal pronoun'')
+
+====See also====
+{{byn-personal pronouns}}
+
+===References===
+* Reinisch, L. (1883). ''Die Blin-Sprache''. (In German), page 32
+
+==Bourguignon==
+
+===Etymology 1===
+From {{inh|roa-brg|la|annus}}.
+
+====Noun====
+{{head|roa-brg|nouns|g=m|plural|ans}}
+
+# [[year]]
+
+=====Derived terms=====
+{{col3|roa-brg|annaie}}
+
+===Etymology 2===
+From {{inh|roa-brg|la|in}}.
+
+====Preposition====
+{{head|roa-brg|prepositions}}
+
+# [[in]]
+
+=====Synonyms=====
+{{col3|roa-brg|an-dians|dans}}
+
+===Etymology 3===
+From {{inh|roa-brg|la|inde}}.
+
+====Pronoun====
+{{head|roa-brg|pronouns}}
+
+# ''used to indicate an indefinite quantity'', [[of]] [[it]], [[of]] [[them]]
+#: ''J''''an''' veus deus''
+#:: I want two '''of them'''
+#: ''J''''an''' seus seur''
+#:: I am sure '''of it'''
+
+==Breton==
+
+===Alternative forms===
+* {{l|br|ar}}
+* {{l|br|al}}
+
+===Article===
+{{head|br|articles}}
+
+# [[the]]
+
+==Chuukese==
+
+===Determiner===
+{{head|chk|determiners}}
+
+# third person singular possessive; [[his]], [[hers]], [[its]] (used with general-class objects)
+
+====Related terms====
+{{chk-possessive adjectives}}
+
+===Noun===
+{{head|chk|nouns}}
+
+# [[path]], [[road]]
+
+==Cimbrian==
+
+===Alternative forms===
+* {{alter|cim|a||Luserna}}
+
+===Etymology===
+From {{inh|cim|gmh|ein}}, from {{inh|cim|goh|ein}}, from {{inh|cim|gem-pro|*ainaz}}. Cognate with {{cog|de|ein}}, {{cog|nl|een}}, {{cog|en|one}}, {{cog|is|einn}}.
+
+===Article===
+{{head|cim|articles|cat2=article forms}} &lt;!--/an/--&gt;
+
+# {{lb|cim|7}} [[a]], [[#English|an]]
+#: {{ux|inline=1|cim|'''an''' gamègalndar mann|'''a''' married man}}
+# {{lb|cim|Luserna}} {{infl of|cim|a||obl|m}}
+#: {{ux|inline=1|cim|I hån '''an''' pruadar un a sbestar.|I have '''a''' brother and a sister.}}
+
+====Declension====
+{{cim-decl-indefinite article}}
+
+====Derived terms====
+* {{l|cim|vònname}}
+* {{l|cim|vònnara}}
+
+===Conjunction===
+{{head|cim|conjunctions}}
+
+# {{lb|cim|7}} [[that]] {{gloss|introduces a subordinate clause}}
+#: {{ux|cim|Khömme '''an''' dar sbaighe.|Tell him '''that''' he needs to shut up.}}
+
+===References===
+* {{R:Martalar1974}}
+* {{R:Patuzzi}}
+
+==Cornish==
+
+===Etymology===
+From {{inh|kw|cel-pro|*sindos}}.
+
+===Article===
+{{head|kw|articles}}
+
+# {{l|en|the}} {{gloss|definite article}}
+
+==Crimean Tatar==
+
+===Etymology===
+Ultimately from {{der|crh|ar|آن}}.
+
+===Noun===
+{{head|crh|nouns}}
+
+# [[moment]]
+
+====Declension====
+{{crh-latin-noun|niñ|ge|ni|de|den}}
+
+===References===
+* {{R:Useinov-Mireev 2002}}
+
+==Czech==
+
+===Etymology===
+{{inh+|cs|zlw-ocs|an}}. {{surf|+univ|cs|a|on}}.
+
+===Pronunciation===
+* {{cs-IPA}}
+
+===Pronoun===
+{{head|cs|pronoun}}
+
+# {{lb|cs|relative|archaic}} [[which]], [[who]], [[as]]
+#: {{syn|cs|který|jenž|jak|když}}
+#: {{ux|inline=1|cs|Bělá se tam, bělá žena, '''ana''' malé dítě nese.|A white form can be seen there, a white woman '''who''' is carrying a child.}}
+#: {{ux|inline=1|cs|Vidíš-li poutníka, '''an''' dlouhou lučinou spěchá ku cíli, než červánky pohynou?|Do you see a traveller hastening ere the twilight passes away across the long meadows towards a destination?}}
+
+====Declension====
+{{cs-decl-pron-adj
+|snomma=an
+|snomm=an
+|snomf=ana
+|snomn=ano
+|pnomma=ani
+|pnomm=any
+|pnomf=any
+|pnomn=ana
+}}
+
+===Conjunction===
+{{head|cs|conjunction}}
+
+# {{lb|cs|archaic}} [[when]], [[while]]
+#: {{ux|inline=1|cs|'''An''' tak mluvili, ruce se jim chvěly.|'''As''' they were speaking, their hands quivered.}}
+# {{lb|cs|archaic}} [[because]]
+#: {{ux|inline=1|cs|Ulehčilo se mi, '''an''' jsem byla uspokojena, že sama trpím.|I was relieved, '''for''' it satisfied me that I myself do suffer.}}
+
+===Further reading===
+* {{R:cs:PSJC}}
+* {{R:cs:SSJC}}
+
+==Danish==
+
+===Etymology 1===
+Borrowed from {{bor|da|gml|an}} and {{bor|da|de|an}}, from {{der|da|gem-pro|*ana||on, at}}, cognate with {{cog|en|on}} and doublet of {{cog|da|å}}, {{cog|da|på}}.
+
+====Pronunciation====
+* {{IPA|da|[ˈan]}}
+
+====Adverb====
+{{da-adv}}
+
+# [[on]] {{q|only used in lexicalized expressions}}
+
+===Etymology 2===
+{{nonlemma}}
+
+====Pronunciation====
+* {{IPA|da|[ˈæˀn]}}
+
+====Verb====
+{{head|da|verb form}}
+
+# {{inflection of|da|ane||imp}}
+
+==Egyptian==
+
+===Romanization===
+{{head|egy|romanization}}
+
+# {{egy-alt tr|ꜥn|type=Manuel de Codage}}
+
+==Elfdalian==
+
+===Etymology===
+From {{inh|ovd|non|hann}}. Cognate with {{cog|sv|han}}.
+
+===Pronoun===
+{{head|ovd|pronoun|cat2=personal pronouns|g=m}}
+
+# [[he]]
+
+==Emilian==
+{{wp|eml:}}
+
+===Pronunciation===
+* {{IPA|egl|/ˈaŋ/}}
+
+===Etymology 1===
+
+====Verb====
+{{head|egl|verb form}}
+
+# {{inflection of|egl|avair||3|p|pres|indc}}
+
+===Etymology 2===
+From {{inh|egl|la|annus}}.
+
+===Noun===
+{{head|egl|noun|g=m}}
+
+# [[year]]
+
+==Fordata==
+
+===Etymology===
+From {{inh|frd|poz-pro|*kaən}}, from {{inh|frd|map-pro|*kaən}}.
+
+===Verb===
+{{head|frd|verb}}
+
+# to [[eat]]
+
+===References===
+* Drabbe, Peter (1932). ''Woordenboek der Fordaatsche Taal''. Bandoeng: A.C. Nix &amp; Co., p. 9.
+
+==Franco-Provençal==
+{{wp|frp:}}
+
+===Etymology===
+{{inh+|frp|la|annus}}.
+
+===Noun===
+{{frp-noun|m}} {{tlb|frp|orbl}}
+
+# [[year]]
+
+====Derived terms====
+* {{l|frp|anâ}}
+
+===References===
+* {{R:frp:DFP}}
+* {{R:frp:LTA|12646}}
+
+{{topic|frp|Calendar}}
+
+==French==
+
+===Etymology===
+From {{inh|fr|fro|-}}, from {{inh|fr|la|annus}}, from {{inh|fr|itc-pro|*atnos}}, from {{der|fr|ine-pro|*h₂et-no-}}, probably from {{m|ine-pro|*h₂et-||to go}}.
+
+===Pronunciation===
+* {{fr-IPA}}
+** {{audio|fr|Fr-an.ogg|text=l'an}}
+** {{audio|fr|LL-Q150 (fra)-GrandCelinien-an.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Paris&gt;&gt;)}}
+** {{audio|fr|LL-Q150 (fra)-Lepticed7-an.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Toulouse&gt;&gt;)}}
+** {{audio|fr|LL-Q150 (fra)-LoquaxFR-an.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Vosges&gt;&gt;)}}
+** {{audio|fr|LL-Q150 (fra)-Mecanautes-an.wav|a=France}}
+** {{audio|fr|LL-Q150 (fra)-Opsylac-an.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Grenoble&gt;&gt;)}}
+** {{audio|fr|LL-Q150 (fra)-Poslovitch-an.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Vosges&gt;&gt;)}}
+** {{audio|fr|LL-Q150 (fra)-T. Le Berre-an.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Hérault&gt;&gt;)}}
+** {{audio|fr|LL-Q150 (fra)-WikiLucas00-an.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Lyon&gt;&gt;)}}
+** {{audio|fr|LL-Q150 (fra)-X-Javier-an.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Massy&gt;&gt;)}}
+* {{hmp|fr|en|ans}}
+
+===Noun===
+{{fr-noun|m}}
+
+# [[year]]
+
+====Derived terms====
+{{col3|fr
+|se ficher comme de l'an quarante de
+|se branler comme de l'an quarante de
+|se soucier comme de l'an quarante de
+|cent sept ans
+|an de grâce
+|bon an mal an
+|jour de l'an
+|se foutre comme de l'an quarante de
+|se moquer comme de l'an quarante de}}
+
+====Related terms====
+* {{l|fr|année}}
+
+===Further reading===
+* {{R:fr:TLFi}}
+
+===Anagrams===
+* {{l|fr|n'a}}
+
+{{C|fr|Time}}
+
+==Friulian==
+
+===Etymology===
+From {{inh|fur|la|annus}}.
+
+===Noun===
+{{fur-noun|m|pl=agns}}
+
+# [[year]]
+
+==Fula==
+
+===Etymology 1===
+
+====Determiner====
+{{head|ff|determiner|cat2=possessive determiners|singular}}
+
+# {{lb|ff|possessive}} {{alternative form of|ff|am}} {{gloss|[[my]]}}
+
+=====Usage notes=====
+* {{U:ff:fuf}}
+
+===Etymology 2===
+
+====Pronoun====
+{{head|ff|pronoun}}
+
+# {{ng|second person singular emphatic pronoun}} [[you]]
+
+=====Usage notes=====
+* {{U:ff:fuf}}
+
+====Dialectal variants====
+* {{l|ff|aan}} ''(Pulaar)''
+
+====References====
+* {{R:Bah 2014}}
+* {{cite-journal|title=A Study of Fula Dialects : Examining the Continuous/Stative Constructions|author=Ritsuko Miyamoto|url=https://minpaku.repo.nii.ac.jp/?action=repository_action_common_download&amp;item_id=3075&amp;item_no=1&amp;attribute_id=18&amp;file_no=1|journal=Senri Ethnological Studies|volume=35|pages=215-230|doi=10.15021/00003067|year=1993}}
+
+==Fuyug==
+
+===Noun===
+{{head|fuy|noun|plural|aning}}
+
+# [[man]]
+
+===References===
+* Robert L. Bradshaw, ''Fuyug grammar sketch'' (2007)
+
+==German==
+
+===Etymology===
+From {{inh|de|gmh|ane|an(e)}}, from {{inh|de|goh|ana}}, from {{inh|de|gmw-pro|*ana}}, from {{inh|de|gem-pro|*ana}}.
+
+===Pronunciation===
+* {{IPA|de|/an/|[ʔan]}}
+** {{audio|de|De-an2.ogg|a=&lt;&lt;Germany&gt;&gt; (&lt;&lt;Berlin&gt;&gt;)}}
+** {{audio|de|De-an.ogg}}
+** {{rhymes|de|an|s=1}}
+* A lengthened form {{IPAchar|/aːn/}} is possible in non-prepositional uses, e.g. in the prefix {{m|de|an-}} or the adverb {{m|de|daran}}. This was formerly widespread, but is now chiefly restricted to Austria and Switzerland (where it is optional). Compare similarly the distinction between {{m|de|in}} and {{m|de|ein-}}.
+&lt;!--Claim in DWB that this has always been restricted to Upper German is wrong. See RhWb for Rhenish, WestfWb for Low German, Adelung for EastCG.--&gt;
+
+===Preposition===
+{{head|de|preposition}} {{+obj|de|dat}}
+
+# {{lb|de|local}} [[on]], [[upon]], [[at]], [[in]], [[against]]
+#: {{ux|inline=1|de|Das Bild hängt '''an''' der Wand.|The picture hangs '''on''' the wall.}}
+# [[by]], [[near]], [[close]] to, [[next]] to
+# {{lb|de|temporal|with days or times of day}} [[on]]; [[in]]; [[at]]
+#: {{ux|de|Wir treffen uns am ('''an''' dem) Dienstag.|We're meeting '''on''' Tuesday.}}
+#: {{ux|de|Ich werde sie am ('''an''' dem) Abend sehen.|I will see her '''in''' the evening.}}
+# {{lb|de|temporal}} [[a]], [[per]], {{ng|only used with the word {{m|de|Tag||day}}, otherwise use {{m|de|in}}}}
+#: {{ux|inline=1|de|zweimal '''am''' Tag|twice '''a''' day}}
+
+{{head|de|preposition}} {{+obj|de|acc}}
+
+# [[on]], [[onto]]
+#: {{ux|inline=1|de|Ich hänge das Bild '''an''' die Wand.|I hang the picture '''on''' the wall.}}
+# [[at]], [[against]]
+#: {{ux|inline=1|de|Schauen Sie '''an''' die Tafel.|Look '''at''' the blackboard.}}
+# [[to]], [[for]]
+#: {{ux|inline=1|de|Ein Brief '''an''' Anna.|A letter '''for''' Anna.}}
+
+{{head|de|preposition}} {{+obj|de|dat/acc}}
+
+# {{lb|de|any relation to an object or attribute regardless of time and space}} [[of]], [[on]], [[in]], [[for]], [[about]]
+#: {{ux|inline=1|de|'''an''' einem Roman schreiben|to write '''on''' a novel}}
+#: {{ux|inline=1|de|Mangel '''an''' Lebensmitteln|lack '''of''' food}}
+#: {{ux|inline=1|de|Alle Menschen sind frei und gleich '''an''' Würde und Rechten geboren|All human beings are born free and equal '''in''' dignity and rights.}}
+#: {{ux|inline=1|de|Er ist schuld '''an''' dem Unglück|He is responsible '''for''' the misfortune}}
+#: {{ux|inline=1|de|Das mag ich nicht '''an''' ihm|I don't like that '''about''' him}}
+
+====Usage notes====
+* Usually used to refer to something being on a vertical surface, as opposed to {{m|de|auf}}, which usually points to a horizontal surface.
+* When followed by the masculine/neuter definite article in the dative case (i.e. {{m|de|dem||the}}), the two words generally contract to {{m|de|am||on the}} if not emphasized.
+* When followed by the neuter definite article in the accusative case (i.e. {{m|de|das||the}}), the two words generally contract to {{m|de|ans||on the}} if not emphasized.
+
+====Inflection====
+{{de-pronadv-table|an|prep=an}}
+
+===Adverb===
+{{de-adv}}
+
+# [[onward]]; [[on]]
+#: {{ux|inline=1|de|von heute '''an'''|from today '''on'''}}
+
+===Adjective===
+{{de-adj|indecl.predonly}}
+
+# {{lb|de|predicative|_|only}} [[on]]
+#: {{syn|de|angeschaltet|ein|eingeschaltet}}
+#: {{ant|de|aus|ausgeschaltet}}
+#: {{ux|de|Ist der Schalter '''an''' oder aus? [&amp;equals; Ist der Schalter an- oder ausgeschaltet?]|Is the switch '''on''' or off? [Is the switch switched on or off?]
+}}
+#: {{uxi|de|Dein Mikro ist nicht '''an'''.|Your microphone is not '''on'''.}}
+
+====Declension====
+{{de-adecl|indecl.predonly}}
+
+====Derived terms====
+* {{l|de|an-}} {{q|prefix}}
+* ('''''an''' + dem'') {{l|de|am}}
+* ('''''an''' + das'') {{l|de|ans}}
+* {{l|de|anhin}}
+* {{l|de|wohlan}}, {{l|de|wolan}}
+
+===Anagrams===
+* {{l|de|na}}
+
+==Girawa==
+
+===Noun===
+{{head|bbr|nouns}}
+
+# [[water]]
+
+===Further reading===
+* Patricia Lillie, ''Girawa Dictionary''
+
+==Gothic==
+
+===Romanization===
+{{got-rom}}
+
+# {{romanization of|got|𐌰𐌽}}
+
+==Haitian Creole==
+
+===Pronunciation===
+* {{IPA|ht|/ã/}}
+
+===Etymology 1===
+From {{der|ht|fr|un}}.
+
+====Article====
+{{head|ht|articles}}
+
+# [[the]] ([[definite article]])
+
+=====Usage notes=====
+Use this word when:
+
+* It modifies a singular noun, and
+* It is preceded by a word that ends with either:
+** A [[nasal]] vowel, or
+** A [[nasal]] consonant and an [[oral]] (non-[[nasal]]) vowel, in that order.
+
+=====See also=====
+{{col3|ht|a|la|lan|nan|yo|yon}}
+
+===Etymology 2===
+From {{der|ht|fr|an||year}}.
+
+====Noun====
+{{head|ht|nouns}}
+
+# [[year]]
+
+=====Synonyms=====
+* {{l|ht|lane}}
+
+{{C|ht|Time}}
+
+==Iberian==
+
+===Etymology===
+Compare {{cog|eu|handi|t = big, large}}, certainly connected to {{cog|euq-pro|*(h)andi}}.
+
+===Adjective===
+{{head|xib|adj}}
+
+# [[big]], [[large]]
+#: {{ux|xib| '''an''' beḿs i bems ku tun |A '''large''' proliferation leads to total slavery }}
+# [[great]]
+#: {{ux|xib| adin belauŕ '''an''' talskar |An excellent daughter and a '''great''' mother}}
+
+===References===
+* Villamor, Fernando (2020) A basic dictionary and grammar of the Iberian language
+
+==Ido==
+
+===Etymology===
+{{io-bor|on||an}} {{progreso|759|vol=5|p=659}}
+
+===Pronunciation===
+{{io-IPA}}
+
+===Preposition===
+{{head|io|prepositions}}
+
+# [[at]], [[on]] {{gloss|indicates contiguity, juxtaposition}}
+#: {{ux|io|Me pendis pikturi '''an''' la parieto.|I hung paintings '''on''' the wall.|inline=1}}
+
+====Derived terms====
+* {{l|io|dorso an dorso||back to back}}
+* {{l|io|an-}}
+
+===References===
+* {{R:io:Progreso|4|p=409|p2=523|p3=591|p4=622}}
+* {{R:io:Progreso|5|p=659}}
+
+==Irish==
+
+===Etymology 1===
+{{etymid|ga|the}}
+From {{inh|ga|sga|in}}, from {{inh|ga|cel-pro|*sindos}}.
+
+====Pronunciation====
+* {{IPA|ga|/ənˠ/|/ə/|/ə.n̪ˠ-/|/ə.n̠ʲ-/|q2=between consonants|q3=before ''a/á, o/ó, u/ú''|q4=before ''e/é'', ''i/í''}}
+
+====Article====
+{{head|ga|articles}}
+
+# [[the]]
+#: {{ux|ga|'''an''' t-uisce|the water|inline=1}}
+#: {{ux|ga|'''an''' bhean|the woman|inline=1}}
+#: {{ux|ga|'''an''' pháiste|of the child|inline=1}}
+#: {{ux|ga|ag '''an''' gcailín/chailín|at the girl|inline=1}}
+
+=====Declension=====
+{| class=wikitable
+! Case
+! Masculine singular
+! Feminine singular
+! Plural
+|-
+! Nominative
+| {{l-self|ga|an}}{{sup|T}}
+| {{l-self|ga|an}}{{sup|L}}
+| {{l-self|ga|na}}{{sup|H}}
+|-
+! Genitive
+| {{l-self|ga|an}}{{sup|L}}
+| {{l-self|ga|na}}{{sup|H}}
+| {{l-self|ga|na}}{{sup|E}}
+|-
+! Dative
+| {{l-self|ga|an}}{{sup|D}}
+| {{l-self|ga|an}}{{sup|D}}
+| {{l-self|ga|na}}{{sup|H}}
+|-
+| colspan=4| D: Triggers {{ga-mut-link|l}} after {{m|ga|de}}, {{m|ga|do}}, and {{m|ga|i}} (except of ''d, t''), no mutation with {{m|ga|idir}}, and {{ga-mut-link|e}} otherwise (varies by dialect);&lt;br&gt;''s'' lenites to ''ts''; ''s'' always lenites with feminine nouns, even with prepositions that normally trigger eclipsis, but does&lt;br&gt;not lenite at all with masculine nouns&lt;br/&gt;E: Triggers {{ga-mut-link|e}}&lt;br/&gt;H: Triggers {{ga-mut-link|h}}&lt;br/&gt;L: Triggers {{ga-mut-link|l}} (except of ''d, t''; ''s'' lenites to ''ts'')&lt;br/&gt;T: Triggers {{ga-mut-link|t}}
+|}
+
+===Etymology 2===
+{{etymid|ga|interrogative}}
+From {{inh|ga|sga|in}}.
+
+====Pronunciation====
+* {{sense|preverbal particle}} {{IPA|ga|/ə/|/ə.nˠ-/|/ə.n̠ʲ-/|q1=before a consonant|q2=before ''a/á, o/ó, u/ú''|q3=before ''e/é'', ''i/í''}}
+* {{sense|copular particle}} {{IPA|ga|/ənˠ/|/ə.n̠ʲ-/|q2=before {{m|ga|é}}, {{m|ga|ea}}, {{m|ga|í}}, {{m|ga|iad}}}}
+
+====Particle====
+{{head|ga|particle|cat2=interrogative particles}} {{qualifier|triggers {{ga-mut-link|e}}; takes the dependent form of irregular verbs if available; not used in the past tense except of some irregular verbs}}
+
+# {{n-g|Used to form direct and indirect questions}}
+#: {{ux|ga|'''An''' bhfuil tú ag éisteacht?|inline=1|Are you listening?}}
+#: {{ux|ga|Níl a fhios agam '''an''' bhfuil sé anseo.|inline=1|I don’t know if/whether he is here.}}
+
+=====Related terms=====
+* {{l|ga|ar}} {{qualifier|used with the past tense of regular and some irregular verbs}}
+
+====Particle====
+{{head|ga|particle|cat2=interrogative particles}}
+
+# {{n-g|used to introduce copular questions, both direct and indirect, in the present/future tense}}
+#: {{ux|ga|'''An''' maith leat bainne?|inline=1|Do you like milk?}}
+#: {{ux|ga|Níl a fhios agam '''an''' é Conchúr a chonaic mé.|inline=1|I don’t know if it’s Connor whom I saw.}}
+
+=====Related terms=====
+{{ga-copular forms}}
+
+===Etymology 3===
+{{etymid|ga|stay}}
+
+====Verb====
+{{ga-verb|pres=~ann|fut=~faidh|vn=anacht|pp=~ta}}
+
+# {{lb|ga|ambitransitive}} {{alternative form of|ga|fan|t=stay, wait, remain}}
+
+=====Conjugation=====
+{{ga-conj-1a|a||n|broad|vn=anacht}}
+
+===Etymology 4===
+{{etymid|ga|number}}
+
+====Particle====
+{{head|ga|particles}}
+
+# {{alternative form of|ga|a}} {{q|used before numbers when counting}}
+
+===Mutation===
+{{ga-mut}}
+
+===Further reading===
+* {{R:ga:Ó Dónaill}}
+* {{R:DIL|28194|head=in}}
+* {{R:ga:EID}}
+* {{R:ga:NEID}}
+
+==Jamaican Creole==
+
+===Etymology 1===
+{{der+|jam|en|hand}}.
+
+====Noun====
+{{jam-noun}}
+
+# {{lb|jam|anatomy}} [[hand]]
+#* {{RQ:jam:DJNT|Mark|3|5|So im se tu di man se, “Chrech out yu '''an'''.” Di man chrech out im '''an''', an im '''an''' get beta.|Then he told the man, “Hold out your '''hand'''.” The man held out his '''hand''', and his '''hand''' was healed.}}
+
+===Etymology 2===
+{{der+|jam|en|and}}.
+
+====Conjunction====
+{{head|jam|conjunction}}
+
+# [[and]]
+#* {{RQ:jam:DJNT|Acts|15|35|Bot Paal '''an''' Baanabas tan a Antiyak '''an''' tiich '''an''' priich Gad wod. '''An''' nof muor tiicha '''an''' priicha did iina di choch.|But Paul '''and''' Barnabas stayed in Antioch, '''and''' taught '''and''' proclaimed the word of God along with many others.}}
+
+===Further reading===
+* {{R:jam:majstro.com}}
+
+==Japanese==
+
+===Romanization===
+{{ja-romaji}}
+
+# {{ja-romanization of|あん}}
+
+==Juǀ'hoan==
+
+===Pronunciation===
+* {{IPA|ktz|/ã/}}
+
+===Letter===
+{{head|ktz|letter|upper case|An}}
+
+# {{Latn-def|ktz|letter|indef=a}}
+
+==Ladin==
+
+===Etymology===
+From {{inh|lld|la|annus}}.
+
+===Noun===
+{{lld-noun|m|ani}}
+
+# [[year]]
+
+==Latin==
+
+===Etymology===
+From {{inh|la|itc-pro|*an}}, from {{inh|la|ine-pro|*h₂en}}. Cognate with {{cog|lt|angu||or}}, {{cog|got|𐌰𐌽||so? now?}}. May also be related to {{cog|grc|ἄν|pos=particle}}, {{cog|sa|अना|tr=anā́}}, {{cog|ae|𐬀𐬥𐬁}}, {{cog|lt|anas|anàs}}, {{cog|sq|a}}, {{cog|sla-pro|*onъ}}.&lt;ref&gt;{{R:itc:EDL}}&lt;/ref&gt;
+
+===Pronunciation===
+* {{la-IPA}}
+
+===Conjunction===
+{{head|la|conjunction}}
+
+# {{l|en|or}}, or {{l|en|whether}} ({{n-g|A conjunction that introduces the second part of a disjunctive interrogation, or a phrase implying doubt.}})
+## {{n-g|in disjunctive interrogations}}
+### {{n-g|direct}}
+#### {{lb|la|introduced by {{m|la|utrum||whether}}}}
+#### {{lb|la|introduced by {{m|la|-ne|pos=interrogative enclitic}}}}
+#### {{lb|la|introduced by {{m|la|nonne||[is it] not}}}}
+#### {{lb|la|introduced by {{m|la|num|pos=interrogative particle}}}}
+#### {{lb|la|without an introductory particle}}
+### {{n-g|indirect}}
+#### {{lb|la|introduced by {{m|la|utrum||whether}}}}
+#### {{lb|la|introduced by {{m|la|-ne}}, interrogative enclitic}}
+#### {{lb|la|introduced by {{m|la|an}}}}
+#### {{lb|la|without an introductory particle}}
+### or {{l|en|rather}}, or on the {{l|en|contrary}} ({{n-g|where the opinion of the speaker or the probability inclines to the second interrogative clause, and this is made emphatic, as a corrective of the former}})
+#### {{n-g|hence, in the comic poets, as {{m|la|an potius}}}}
+### or, or rather, or {{l|en|indeed}}, or {{l|en|perhaps}} ({{n-g|where, as is frequent, the first part of the interrogation is not expressed, but is to be supplied from the context, {{m|la|an}} begins the interrogation, but it does not begin an absolute – ''i.e.'', non-disjunctive – interrogation}})
+### {{lb|la|in the phrase {{m|la|an non|an nōn}}}} or {{l|en|not}}
+#### {{n-g|in direct questions}}
+#### {{n-g|in indirect questions}}
+### {{lb|la|in the phrase {{m|la|an ne}}}} {{n-g|{{l|en|pleonasm|pleonastic usage}} for {{m|la|an}}}}
+#### {{n-g|in direct questions}}
+#### {{n-g|in indirect questions}}
+## {{lb|la|in disjunctive clauses that express doubt}} {{l|en|or}}
+### ?
+### {{n-g|denoting uncertainty by itself, without a verb of doubting}}
+### {{lb|la|chiefly in and after the {{l|en|Augustan}} period}} {{n-g|standing for {{m|la|sive|sīve}}}}
+### {{n-g|where the first disjunctive clause is to be supplied from the general idea or where {{m|la|an}} stands for {{m|la|utrum}} or {{m|la|necne}}}}
+### {{n-g|Since in such distributive sentences expressive of doubt, the opinion of the speaker or the probability usually inclines to the second, ''i.e.'' to the clause beginning with {{m|la|an}}, the expressions {{m|la|haud scio an|haud sciō an}}, {{m|la|nescio an|nesciō an}}, and {{m|la|dubito an|dubitō an}} incline to an affirmative signification, “I almost know”, “I am inclined to think”, “I almost think”, “I might say”, “I might assert that”, etc., for “perhaps”, “probably”.}}
+### {{n-g|Sometimes the distributive clause beginning with {{m|la|an}} designates directly the opposite, the more improbable, the negative; in which case {{m|la|nescio an|nesciō an}}, {{m|la|haud scio an|haud sciō an}}, etc., like the English ''{{lang|en|I know not whether}}'', signify “I think that not”, “I believe that not”, etc.}}{{attention|la|Could someone who is able merge the following into the above sense structure, please?}}&lt;!--
+# {{context|introduces questions expecting negative answer or further question|lang=la}} can it be that
+#: {{ux|la|'''An''' refert, ubi et in qua arrigas?|'''Does it''' make any difference to me who made you horny, or when?}}
+# [[or]], [[either]]
+#: {{ux|la|Vide utrum vis '''an'''...|Consider whether you want to '''or'''...}}
+
+--&gt;
+
+====Usage notes====
+* Used with {{m|la|utrum||whether}} in the construction {{m|la||utrum...'''an'''|whether...'''or'''}}:
+*: ''Nescio quid intersit, utrum nunc veniam, '''an''' ad decem annos.''
+*:: I know not what matter it is, whether I come now '''or''' after ten years.
+
+====Derived terms====
+{{col3|la|albus an āter sit
+|annōn
+|dubitō an
+|haud sciō an
+|nesciō an
+}}
+
+===References===
+* [http://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.04.0059:entry=an1 ăn] in {{cite-book|author=Charlton T. Lewis and Charles Short|title=[[w:A Latin Dictionary|A Latin Dictionary]]|publisher=Clarendon Press|location=Oxford|year=1879}}
+* {{R:Gaffiot}}
+* {{R:M&amp;A}}
+&lt;references/&gt;
+
+==Loniu==
+
+===Noun===
+{{head|los|nouns}}
+
+# [[fresh water]]
+
+===References===
+* Malcolm Ross, Andrew Pawley, Meredith Osmond, ''The Lexicon of Proto-Oceanic'' {{ISBN|1921313196}}, 2007)
+* Blust's ''Austronesian Comparative Dictionary'' (as ''ʔan'')
+
+==Low German==
+
+===Etymology===
+From {{inh|nds|gml|an}}, from {{inh|nds|osx|an}}, {{m|osx|ana}}, from {{inh|nds|gem-pro|*an}}, {{m|gem-pro|*ana}}.
+
+===Pronunciation===
+* {{rhymes|nds|an}}
+* {{IPA|nds|/an/|/aːn/|/ɒːn/|/ɔːn/}}
+
+===Preposition===
+{{head|nds|prepositions}}
+
+# [[on]]
+# [[to]], [[at]]
+
+====Inflection====
+{{nds-pronadv-table-r|an|ran}}
+Neither the spelling nor grammar of these forms applies to all, or even necessarily the majority, of dialects.
+
+===Adverb===
+{{head|nds|adverbs}}
+
+# [[on]]
+
+===See also===
+* {{l|nds|an't}}
+
+==Luxembourgish==
+
+===Pronunciation===
+* {{IPA|lb|/an/|[ɑn]}}
+* {{rhymes|lb|ɑn|s=1}}
+
+===Etymology 1===
+From {{inh|lb|goh|indi}}.
+
+====Conjunction====
+{{head|lb|conjunction}}
+
+# [[and]]
+
+===Etymology 2===
+From {{inh|lb|gem-pro|*in}}.
+
+====Preposition====
+{{head|lb|prepositions}}
+
+# [[in]]
+
+==Mandarin==
+
+===Romanization===
+{{cmn-pinyin|notr=1}}
+
+# {{nonstandard spelling of|cmn|ān}}
+# {{nonstandard spelling of|cmn|án}}
+# {{nonstandard spelling of|cmn|ǎn}}
+# {{nonstandard spelling of|cmn|àn}}
+
+====Usage notes====
+* {{cmn-toneless-note}}
+
+==Middle Dutch==
+
+===Pronunciation===
+* {{IPA|dum|/an/}}
+
+===Preposition===
+{{head|dum|prepositions}}
+
+# {{alternative form of|dum|āne}}
+
+==Middle English==
+
+===Alternative forms===
+* {{alter|enm|a|ane|o|on}} {{q|see usage notes}}
+
+===Pronunciation===
+* {{IPA|enm|/a(n)/}} {{q|see usage notes}}
+
+===Etymology 1===
+{{etymon|enm|id=article|:inh|ang:ān&lt;id:one&gt;}}
+An unstressed form of {{m|enm|on||one}}, from the occasional use of {{inh|enm|ang|an|ān|one}} as an article.
+
+====Article====
+{{head|enm|articles}}
+
+# [[a]], {{l|en|an}} {{gloss|[[indefinite]] [[article]]}}:
+#* {{RQ:Peterborough Chronicle|c|1137|89|verso=yes|Þu myhteſ faren al '''a''' dæiſ fare ſculdeſt thu neure finden man in tun ſittende · ne land tiled.|translation=You could go '''a''' whole day's journey, but you'd never find anyone in town or any tilled fields.}}
+#* {{RQ:Chaucer Canterbury Tales|version=Hg|Wife of Bath's Prologue|63|verso=yes|lines=438-440|url=https://viewer.library.wales/4628556#?c=&amp;m=&amp;s=&amp;cv=137|And but ye do / c[er]teyn we shal yow teche / that it is fair / to han '''a''' wyf in pees / Oon of vs two / moſte bowen doutelees|And unless you do, we'll certainly teach you / that it's fair to have '''a''' wife in peace; / one of the two of us must without doubt submit.}}
+## Any [[example]] or [[instance]] of a [[thing]].
+## A [[certain]] or [[particular]] thing.
+## Any, [[every]]; [[several]] or all [[instance]]s of a thing.
+# Used in conjunction with [[numeral]]s {{gloss|especially {{m|enm|hundred}}, {{m|enm|thousend}}}}
+
+=====Usage notes=====
+* In later non-Northern Middle English, {{m|enm|a}} is usually found before consonants other than {{IPAfont|/h/}}, while ''an'' is usually found preceding vowels and {{IPAfont|/h/}}. However, ''an'' often occurs before any consonant in earlier Middle English.
+* In early Middle English, the indefinite article is often omitted; occasional omission persists into later Middle English.
+* Inflected forms of the indefinite article are sometimes found in early Middle English; see the inflection table below.
+
+=====Declension=====
+{{inflection-table-top|title=Declension of ''an'' (early)|palette=grey|tall=yes}}
+!
+![[masculine]]
+![[feminine]]
+![[neuter]]
+|-
+![[nominative case|nominative]]
+| {{l|enm|a}}({{l|enm|an|n}})
+| {{l|enm|a}}({{l|enm|an|n}})
+| {{l|enm|a}}({{l|enm|an|n}})
+|-
+![[accusative case|accusative]]
+| {{l|ang|enne}}, {{l|enm|ane}}, {{l|enm|a}}({{l|enm|an|n}})
+| {{l|enm|ane}}, {{l|enm|a}}({{l|enm|an|n}})
+| {{l|enm|ane}}, {{l|enm|a}}({{l|enm|an|n}})
+|-
+![[genitive case|genitive]]
+| {{l|enm|anes}}, {{l|enm|ane}}, {{l|enm|a}}({{l|enm|an|n}})
+| {{l|enm|are}}, {{l|enm|anes}}, {{l|enm|ane}}, {{l|enm|a}}({{l|enm|an|n}})
+| {{l|enm|anes}}, {{l|enm|ane}}, {{l|enm|a}}({{l|enm|an|n}})
+|-
+![[dative case|dative]]
+| {{l|enm|ane}}, {{l|enm|a}}({{l|enm|an|n}})
+| {{l|enm|are}}, {{l|enm|a}}({{l|enm|an|n}})
+| {{l|enm|ane}}, {{l|enm|a}}({{l|enm|an|n}})
+{{inflection-table-bottom}}
+
+=====Descendants=====
+* {{desc|en|an|a}}
+* {{desc|sco|a}}
+* {{desc|yol|a|e}}
+
+=====References=====
+* {{R:MED Online|a|indef. art|MED3}}
+
+===Etymology 2===
+
+====Preposition====
+{{head|enm|prepositions|altform=1}} 
+
+# {{alt form|enm|in}}
+
+===Etymology 3===
+
+====Conjunction====
+{{head|enm|conjunction|altform=1}} 
+
+# {{alt form|enm|and}}
+
+===Etymology 4===
+
+====Numeral====
+{{head|enm|numerals|altform=1}} 
+
+# {{alt form|enm|on|id=one|t=one}}
+
+===Etymology 5===
+
+====Verb====
+{{head|enm|verb|altform=1}} 
+
+# {{alt form|enm|haven}}
+
+==Middle French==
+
+===Etymology===
+From {{inh|frm|fro|an}}, from {{inh|frm|la|annus}}.
+
+===Noun===
+{{frm-noun|m}}
+
+# [[year]]
+
+====Descendants====
+* {{desc|fr|an}}
+
+==Middle Welsh==
+
+===Pronunciation===
+* {{IPA|wlm|/ən/}}
+
+===Determiner===
+{{head|wlm|determiner|cat2=possessive determiners}}
+
+# {{alternative form of|wlm|yn}}
+
+==Mirandese==
+
+===Etymology===
+From {{inh|mwl|la|in}}.
+
+===Preposition===
+{{head|mwl|prepositions}}
+
+# [[in]]
+# [[on]]
+
+==Mizo==
+
+===Etymology 1===
+{{etymid|lus|they}}
+
+====Pronoun====
+{{head|lus|pronoun|singular|a}}
+
+# [[they]], [[their]] (third-person plural clitic pronoun)
+
+=====See also=====
+{{lus-pronouns}}
+
+===Etymology 2===
+{{etymid|lus|greens}}
+From {{inh|lus|tbq-kuk-pro|*ʔan|t=greens, brassica}}.
+
+====Noun====
+{{head|lus|noun}}
+
+# [[greens]]
+
+=====Derived terms=====
+{{col|lus
+|bâwng an
+|maian
+}}
+
+==Mòcheno==
+
+===Article===
+{{head|mhn|article forms}}
+
+# {{infl of|mhn|a||obl|m}}
+
+====Derived terms====
+* {{l|mhn|van}}
+
+===References===
+* {{R:CLM}}
+
+==Norman==
+
+===Etymology===
+From {{inh|nrf|fro|an}}, from {{inh|nrf|la|annus}}.
+
+===Pronunciation===
+* {{audio|nrf|Jer-an.ogg|a=Jersey}}
+
+===Noun===
+{{nrf-noun|m}}
+
+# {{lb|nrf|Guernsey|Jersey}} [[year]]
+
+====Synonyms====
+* {{l|nrf|année}}
+
+====Derived terms====
+* {{l|nrf|Jour dé l'An||New Year's Day}}
+* {{l|nrf|Nouvel An||New Year}}
+* {{l|nrf|tchu d'l'an||last day of the year}}
+
+{{C|nrf|Time}}
+
+==Northern Kurdish==
+
+===Etymology===
+Confer {{cog|fa|یا|tr=yâ}}.
+
+===Pronunciation===
+* {{kmr-IPA}}
+
+===Conjunction===
+{{head|kmr|conjunction|Arabic spelling|f1sc=ku-Arab|ئان}}
+
+# [[or]]
+#: {{syn|kmr|yan|q1=after a word ending in a vowel}}
+
+===References===
+* {{R:kmr:Chyet:2020|an|vol=2|page=8}}
+
+==Norwegian Bokmål==
+
+===Etymology 1===
+Borrowed from {{bor|nb|gml|an}} and {{bor|nb|de|an}}, from {{der|nb|gem-pro|*ana||on, at}}, cognate with {{cog|en|on}} and doublet of {{cog|nb|å}}, {{cog|nb|på}}.
+
+====Adverb====
+{{nb-adv}}
+
+# [[on]] {{q|only used in lexicalized expressions}}
+
+===Etymology 2===
+{{nonlemma}}
+
+====Pronunciation====
+* {{IPA|nb|/ɑːn/}}
+* {{audio|nb|Nb-an.ogg}}
+* {{rhymes|nb|ɑːn}}
+* {{hyph|nb|an}}
+
+====Verb====
+{{head|nb|verb form}}
+
+# {{inflection of|nb|ane||imp}}
+
+===Anagrams===
+* {{anagrams|nb|a=AB|Na|na}}
+
+==Norwegian Nynorsk==
+
+===Etymology===
+Borrowed from {{bor|nn|gml|an}} and {{bor|nn|de|an}}, from {{der|nn|gem-pro|*ana||on, at}}, cognate with {{cog|en|on}} and doublet of {{cog|nn|å}}, {{cog|nn|på}}.
+
+===Adverb===
+{{nn-adv}}
+
+# [[on]] {{q|only used in lexicalized expressions}}
+
+==Occitan==
+
+===Pronunciation===
+* {{audio|oc|LL-Q14185 (oci)-Davidgrosclaude-an.wav|a=Béarn}}
+
+===Etymology 1===
+From {{inh|oc|pro|an}}, from {{inh|oc|la|annus}}.
+
+====Noun====
+{{oc-noun|m}}
+
+# [[year]]
+
+=====Usage notes=====
+* Also used with the verb {{m|oc|aver||to have}} to indicate age
+
+=====Derived terms=====
+* {{l|oc|annada}}
+
+===Etymology 2===
+{{nonlemma}}
+
+====Verb====
+{{head|oc|verb form}}
+
+# {{inflection of|oc|aver||3|p|pres|ind}}
+
+{{topics|oc|Time}}
+
+==Old Czech==
+
+===Etymology===
+{{univ|zlw-ocs|a|on}}.
+
+===Pronunciation===
+* {{zlw-ocs-IPA}}
+
+===Conjunction===
+{{head|zlw-ocs|conjunction}}
+
+# {{n-g|connects clauses}}; [[and]] [[that]]/[[he]]
+# {{n-g|connects contrastive clauses}}; [[but]] [[that]]/[[he]]
+# {{n-g|introduces a temporal clause of recency}}; [[as]] [[he]] [[just]] ([[was]])
+
+====Declension====
+{{zlw-ocs-adecl-manual|nom_m=an|nom_f=ana|nom_n=ano|nom_md=ana|nom_fnd=aně|nom_mp=ani|nom_fp=any|nom_np=ana|acc_m_in=—|acc_n=—|acc_md=—|acc_fnd=—|acc_mfp=—|acc_np=—}}
+
+====Derived terms====
+{{col|zlw-ocs|ano|anobrže}}
+
+===Further reading===
+* {{R:zlw-ocs:Gebauer}}
+
+==Old English==
+{{number box|ang|1}}
+
+===Etymology 1===
+{{etymon|ang|id=one|:inh|gmw-pro:*ain&lt;id:one&gt;}}
+{{dercat|ang|gem-pro|ine-pro}}
+From {{inh|ang|gmw-pro|*ain}}, from {{inh|ang|gem-pro|*ainaz}}.
+
+Germanic cognates include {{cog|ofs|an|ān}}, {{cog|osx|en|ēn}}, {{cog|goh|ein}}, {{cog|non|einn}}, {{cog|got|𐌰𐌹𐌽𐍃}}. The Indo-European root is also the source of {{cog|la|unus|ūnus}}, {{cog|grc|οἶος}}, {{cog|sga|oen}}.
+
+====Pronunciation====
+* {{ang-IPA|ān}}
+
+====Numeral====
+{{head|ang|numeral|head=ān}}
+
+# {{cln|ang|cardinal numbers}} [[one]]
+#* [https://archive.org/details/gospelsaintjohn00unkngoog/page/n102/mode/2up &quot;Gospel of Saint John&quot;], chapter 10, verse 30
+#*: {{quote|ang|''Ic and Fæder synt '''ān'''.''|I and Father are '''one'''.}}
+#* '''c. 973''', [[w:Æthelwold of Winchester|Æthelwold's]] [https://books.google.com/books?id=b8wUAAAAQAAJ&amp;pg=PA13 translation] of the {{w|Rule of Saint Benedict}}, quoting {{w|Galatians 3:28}}
+#*: {{quote|ang|Ġe þēo ġe frēo, eall wē sind on Criste '''ān'''.|Slave or free, we are all '''one''' in Christ.}}
+#* '''c. 990''', ''{{w|Wessex Gospels}}'', [https://en.wikisource.org/wiki/The_Gospel_of_Saint_Mark_in_West-Saxon Mark 14:37]
+#*: {{quote|ang|Þā cōm hē and fand hīe slǣpende, and cwæþ tō Petre, &quot;Simon, slǣpst þū? Ne meahtest þū '''āne''' tīd wacian?&quot;|Then he came and found them asleep, and said to Peter, &quot;Simon, are you asleep? Couldn't you stay awake for '''one''' hour?&quot;}}
+#* '''early 12th century''', ''[[w:Peterborough Chronicle|the Peterborough Chronicle]]'', [https://books.google.com/books?id=_FUJAAAAQAAJ&amp;pg=PA235 year 1100]
+#*: {{quote|ang|''On morgen æfter Hlāfmæssedæġe wearþ sē cyning Willelm on huntoþe fram his '''ānum''' menn mid āne flāne ofsċoten.''
+|translation=On the morning after Lammas day, King William was out hunting when he was shot with an arrow by '''one''' of his servants.}}
+
+=====Declension=====
+{{rfc|ang|manual inflection table should be moved to a template}}
+&lt;div class=&quot;NavFrame&quot; style=&quot;width: 50em;&quot;&gt;
+&lt;div class=&quot;NavHead&quot; style=&quot;background:var(--wikt-palette-lighterblue,#EFF7FF)&quot; &gt;Declension of ān&lt;/div&gt;
+&lt;div class=&quot;NavContent&quot;&gt;
+{| style=&quot;background: var(--wikt-palette-grey-0,#F9F9F9); text-align:center; width:100%; line-height: 125%; border: 1px solid var(--wikt-palette-indigo-4,#CCCCFF);&quot; cellpadding=&quot;3&quot; cellspacing=&quot;1&quot; class=&quot;inflection-table&quot;
+! style=&quot;width: 16%; background: var(--wikt-palette-grey-indigo-2,#EFEFFF);&quot; |[[singular|Singular]]
+! style=&quot;width: 16%; background: var(--wikt-palette-grey-indigo-2,#EFEFFF); font-size: 90%;&quot;|[[masculine|Masculine]]
+! style=&quot;width: 16%; background: var(--wikt-palette-grey-indigo-2,#EFEFFF); font-size: 90%;&quot;|[[feminine|Feminine]]
+! style=&quot;width: 16%; background: var(--wikt-palette-grey-indigo-2,#EFEFFF); font-size: 90%;&quot;|[[neuter|Neuter]]
+|-
+! style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF); text-align: left; font-size: 90%;&quot;|[[nominative case|Nominative]]
+| {{l|ang|an|ān}}
+| {{l|ang|an|ān}}
+| {{l|ang|an|ān}}
+|-
+! style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF); text-align: left; font-size: 90%;&quot;|[[accusative case|Accusative]]
+| {{l|ang|anne|ānne}}, {{l|ang|ænne|ǣnne}}
+| {{l|ang|ane|āne}}
+| {{l|ang|an|ān}}
+|-
+! style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF); text-align: left; font-size: 90%;&quot;|[[genitive case|Genitive]]
+| {{l|ang|anes|ānes}}
+| {{l|ang|anre|ānre}}
+| {{l|ang|anes|ānes}}
+|-
+! style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF); text-align: left; font-size: 90%;&quot;|[[dative case|Dative]]
+| {{l|ang|anum|ānum}}
+| {{l|ang|anre|ānre}}
+| {{l|ang|anum|ānum}}
+|-
+! style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF); text-align: left; font-size: 90%;&quot;|[[instrumental case|Instrumental]]
+| {{l|ang|ane|āne}}
+| {{l|ang|anre|ānre}}
+| {{l|ang|ane|āne}}
+|-
+! colspan=1 style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF);&quot; |
+! colspan=3 style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF);&quot; |[[plural|Plural]]
+|-
+! style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF); text-align: left; font-size: 90%;&quot;|[[nominative case|Nominative]]
+| colspan=3 | {{l|ang|ane|āne}}
+|-
+! style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF); text-align: left; font-size: 90%;&quot;|[[accusative case|Accusative]]
+| colspan=3 | {{l|ang|ane|āne}}
+|-
+! style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF); text-align: left; font-size: 90%;&quot;|[[genitive case|Genitive]]
+| colspan=3 | {{l|ang|anra|ānra}}
+|-
+! style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF); text-align: left; font-size: 90%;&quot;|[[dative case|Dative]]
+| colspan=3 | {{l|ang|anum|ānum}}
+|-
+! style=&quot;background: var(--wikt-palette-grey-indigo-2,#EFEFFF); text-align: left; font-size: 90%;&quot;|[[instrumental case|Instrumental]]
+| colspan=3 | {{l|ang|anum|ānum}}
+|}&lt;/div&gt;&lt;/div&gt;
+
+====Article====
+{{head|ang|article|head=ān}}
+
+# a [[certain]]
+# {{lb|ang|uncommon}} [[a]], {{l|en|an}} (indefinite article)
+
+====Adjective====
+{{ang-adj|ān}}
+
+# [[only]]
+#: {{ux|ang|Ne bēoþ wē ġeboren ūs selfum '''ānum'''.|We aren't born for ourselves '''alone'''.}}
+#: {{ux|ang|Mæġ man sprecan be rīmum ġif þing '''ān''' sind?|Can we speak of numbers if there are '''only''' things?}}
+#* '''11th century''', {{w|Durham Proverbs}}, [https://www.google.com/books/edition/The_Cambridge_Old_English_Reader/eDdECgAAQBAJ?hl=en&amp;gbpv=1&amp;dq=%22Earh+m%C3%A6g%22&amp;pg=PA354&amp;printsec=frontcover no. 22]
+#*: {{quote|ang|Earg mæġ þæt '''ān''' þæt hē him ondrǣde.|A coward can '''only''' do one thing: fear.}}
+#* '''c. 995''', [[w:Ælfric of Eynsham|Ælfric]], ''[https://archive.org/stream/grammatik00aelfuoft#page/n167/mode/2up Extracts on Grammar in English]''
+#*: {{quote|ang|'''Āne''' twā word sind þǣre fēorðan ġeþīednesse: eō (&quot;iċ gange&quot;), īs (&quot;þū gǣst&quot;); queō (&quot;iċ mæġ&quot;), quīs (&quot;þū meaht&quot;).|'''Only''' two words follow the fourth declension: ''eo'' (&quot;I go&quot;), ''is'' (&quot;you go&quot;); ''queo'' (&quot;I can&quot;), ''quis'' (&quot;you can&quot;).}}
+#* '''c. 990''', ''{{w|Wessex Gospels}}'', [https://archive.org/stream/dahalgangodspelo00thor#page/n199/mode/2up John 5:18]
+#*: {{quote|ang|Þæs þe mā þā Iudēiscan sōhton hine tō ofslēanne, næs nā for þon '''āne''' þe hē þone ræstedæġ bræc, ac for þon þe hē cwæþ þæt God wǣre his fæder, and hine selfne dyde Gode ġelīcne.|That made the Jews try even harder to kill him, not '''just''' for breaking the Sabbath, but for saying God was his father, and making himself equal to God.}}
+#* '''c. 1000''', [[w:The Battle of Maldon|&quot;The Battle of Maldon&quot;]], [https://books.google.com/books?id=14OOwv3jbXIC&amp;pg=PA5 lines 94-95]
+#*: {{quote|ang|God '''āna''' wāt hwā þǣre wælstōwe wealdan mōte.|'''Only''' God knows who is destined to control the battlefield.}}
+#* [[w:The Fortunes of Men|&quot;The Fortunes of Men&quot;]], [https://books.google.com/books?id=fmZ37yrQcakC&amp;pg=PA148 lines 8-9]
+#*: {{quote|ang|God '''āna''' wāt hwæt him weaxendum wintra bringaþ.|God '''only''' knows what the years will bring to the growing child.}}
+# [[alone]]
+#: {{ux|ang|Neart þū ġenōg eald þæt þū '''āna''' on sund gā.|You're not old enough to go swimming '''by yourself'''.}}
+#: {{ux|ang|Iċ slǣpe '''āna'''.|I sleep '''alone'''.}}
+#* '''c. 992''', [[w:Ælfric of Eynsham|Ælfric]], [https://books.google.com/books?id=m2hVAAAAcAAJ&amp;pg=PA184 &quot;St. Benedict, Abbot&quot;]
+#*: {{quote|ang|Gang nū tō mynstre ġif þū mæġe, and mē '''āna''' forlǣt.|Now go to the monastery if you can, and leave me '''alone'''.}}
+#* '''c. 995''', [[w:Ælfric of Eynsham|Ælfric]], ''[https://archive.org/stream/grammatik00aelfuoft#page/n285/mode/2up Extracts on Grammar in English]''
+#*: {{quote|ang|Foresetnessa ne bēoþ nāhwǣr '''āna''', ac bēoþ ǣfre tō sumum ōðrum worde ġefēġeda.|Prepositions never occur '''by themselves''': they are always attached to some other word.}}
+#* '''c. 992''', [[w:Ælfric of Eynsham|Ælfric]], &quot;[https://en.wikisource.org/wiki/The_Homilies_of_the_Anglo-Saxon_Church/XXVII The Nativity of St. Paul the Apostle]&quot;
+#*: {{quote|ang|Petrus '''āna''' spræc for ealne þone hēap.|Peter '''by himself''' spoke for the whole group.}}
+
+=====Usage notes=====
+In the above senses (&quot;only&quot; and &quot;alone&quot;), this word was often used in the weak declension, often indeclinably as ''āna''.
+
+=====Declension=====
+{{ang-adecl|ān}}
+
+====Adverb====
+{{ang-adv|ān}}
+
+# [[only]]
+#* '''995'''. Anglo-Saxon Gospels, [https://archive.org/details/gothicandanglos00ulfigoog/page/34/mode/2up Translation], Gospel of Saint Matthew, chapter 8, verse 8.
+#*: {{quote|ang|''Ðā andswarode sē hundredes ealdor and ðus cwæþ, Drihten, ne eom ic wyrðe, ðæt ðū ingange under mīne þecene; ac cweþ ðīn '''ān''' word, and mīn cnapa biþ ġehǣled.''|Then answered the centurion, and said thus, Lord, I am not worthy, that you enter under my roof; but say your word '''only''', and my boy will be healed.}}
+
+====Noun====
+{{ang-noun|n|head=ān}}
+
+# [[one]] (digit or figure)
+
+=====Declension=====
+{{ang-decl-noun-a-n|ān}}
+
+=====Derived terms=====
+* {{l|ang|angenga|āngenġa}}
+* {{l|ang|anhaga|ānhaga}}
+* {{l|ang|antid|āntīd}}
+
+=====Descendants=====
+* {{desctree|enm|on|id=one}}
+
+=====See also=====
+* {{l|ang|for an}}
+* {{l|ang|on an}}
+* {{l|ang|þæt an}}
+
+===Etymology 2===
+
+====Pronunciation====
+* {{ang-IPA|an}}
+
+====Preposition====
+{{ang-prep}}
+
+# {{alternative form of|ang|on}}
+
+===References===
+* {{R:ang:BT|an|ref=001605}}
+
+==Old French==
+
+===Etymology===
+From {{inh|fro|la|annus}}.
+
+===Noun===
+{{fro-noun|m|anz|anz}}
+
+# [[year]]
+
+====Related terms====
+* {{l|fro|anee}}
+
+====Descendants====
+{{top3}}
+* {{desc|fr|an|année|der2=1}}
+** {{desc|gcf|lanné|der=1}}
+* {{desc|roa-gal|anné|der=1}}
+* {{desc|nrf|aun|an|annaée|année|onnaïe|der3=1}}
+* {{desc|wa|anêye|der=1}}
+{{bottom}}
+
+==Old Frisian==
+
+===Pronunciation===
+* {{IPA|ofs|/ˈaːn/}}
+
+===Numeral===
+{{head|ofs|numeral|head=ān}}
+
+# {{alternative form of|ofs|ēn}}
+
+====References====
+* {{R:ofs:Bremmer:2009}}
+
+==Old Irish==
+
+===Pronunciation===
+* {{sga-IPA}}
+
+===Pronoun===
+{{head|sga|pronoun|cat2=relative pronouns|triggers [[eclipsis]], takes a leniting relative clause}}
+
+# {{alternative form of|sga|a}}
+#* {{RQ:sga-gloss|Ml|112|b|13}}
+#*: {{quote|sga|Is demniu liunn a n-ad·chiam hua sulib ol·daas '''an''' ro·chluinemmar hua chluasaib.|What we see with the eyes is more certain for us than '''what''' we hear with the ears.}}
+
+===Verb===
+{{head|sga|verb form|head=·an}}
+
+# {{infl of|sga|anaid||3s|pret|conjunct}}
+
+===Verb===
+{{head|sga|verb form|head=an}}
+
+# {{infl of|sga|anaid||2s|impr}}
+
+===Mutation===
+{{sga-mutation}}
+
+==Old Norse==
+
+===Etymology===
+Ultimately from {{inh|non|gem-pro|*þan}}, possibly through {{m|gem-pro|*þannai}}, whence cognate with {{cog|ang|þonne||than}}. For similar loss of ''þ-'' compare {{m|non|at|id=that}} from earlier {{ncog|gmq-pro|ᚦᚨᛏ}}, {{m|non|ᚦᛡᛏ}}.
+
+===Conjunction===
+{{head|non|conjunction}}
+
+# {{senseid|non|than}} [[than]]
+
+====Descendants====
+* {{desctree|non|en|der=1|id=than}}
+
+==Old Occitan==
+
+===Etymology===
+From {{inh|pro|la|annus||year}}.
+
+===Noun===
+{{pro-noun|m}}
+
+# [[year]]
+
+====Descendants====
+* {{desc|oc|an}}
+
+==Old Polish==
+
+===Etymology===
+{{univ|zlw-opl|a|on}}.&lt;ref&gt;{{R:pl:SJP1900|an|33|1}}&lt;/ref&gt; {{etydate|1388}}.
+
+===Pronunciation===
+* {{zlw-opl-IPA}}
+
+===Conjunction===
+{{head|zlw-opl|conjunction}}
+
+# {{lb|zlw-opl|attested in|Greater Poland}} {{ng|connects clauses}}; [[and]] [[that]]
+#* {{RQ:zlw-opl:HubeZb|5|1388|Wlost umouil Swenthoslauem rok, '''an''' gi na tem rocze ianl|Włost umówił z Świętosławem rok, '''an''' ji na tem roce jął|-}}
+# {{lb|zlw-opl|attested in|Greater Poland}} {{ng|connects contrastive clauses}}; [[but]] [[that]]
+#* {{RQ:zlw-opl:Leksz|I|1014|1391|Pani Helska Vøczenczovim ludzem czinila zaplaczena podlug vgednana, '''ani''' gey ne chczeli przyøcz|Pani Helżka Więcencowym ludziem czyniła zapłacenia podług ujednania, '''ani''' jej nie chcieli przyjąć|-}}
+# {{lb|zlw-opl|attested in|Masovia}} {{ng|introduces a temporal clause of recency}}; [[as]] [[it]] [[just]] ([[was]])
+#* {{RQ:zlw-opl:Czrs|178|1417|Wanczlaw wszal voli Yanowi na ych dzedzine, '''an''' czski berze|Więcław wziął woły Janowi na ich dziedzinie, '''an''' cki bierze|-}}
+
+===References===
+&lt;references/&gt;
+* {{R:zlw-opl:SPJSP||76}}
+
+==Old Saxon==
+
+===Alternative forms===
+* {{alter|osx|ana}}
+
+===Etymology===
+From {{inh|osx|gem-pro|*an}}.
+
+===Preposition===
+{{head|osx|prepositions}}
+
+# [[on]], [[in]]
+#* '''9th c.''' ''{{w|Heliand}}'', verse 4455
+#*: {{quote|osx|...ja hwō siu '''an''' themu endie skal teglīden endi tegangen.|...and how it must glide away and dissolve '''in''' the end.}}
+
+====References====
+{{R:osx:Kobler}}
+
+==Proto-Norse==
+
+===Romanization===
+{{gmq-rom|head=an}}
+
+# {{romanization of|gmq-pro|ᚨᚾ}}
+
+==Romanian==
+
+===Etymology===
+From {{inh|ro|la|annus||year}}, from {{inh|ro|itc-pro|*atnos}}, from {{der|ro|ine-pro|*h₂et-no-}}, probably from {{m|ine-pro|*h₂et-||to go}}. Compare {{cog|ruq|an}} and {{cog|rup|an}}.
+
+===Pronunciation===
+* {{IPA|ro|/an/}}
+* {{audio|ro|De-an.ogg}}
+* {{audio|ro|LL-Q7913 (ron)-Andreea Teodoraa-an.wav}}
+* {{rhymes|ro|an|s=1}}
+
+===Noun===
+{{ro-noun|m|ani|pl2=ai|pl2_qual=obsolete}}
+
+# [[year]]
+
+====Declension====
+{{ro-noun-m}}
+
+====Derived terms====
+* {{l|ro|anual}}
+* {{l|ro|anotimp}}
+* {{l|ro|cei șapte ani de acasă}}
+
+===References===
+* {{R:DEX}}
+
+{{C|ro|Time}}
+
+==Romansch==
+
+===Alternative forms===
+* {{qualifier|Rumantsch Grischun|Sursilvan|Surmiran}} {{l|rm|onn}}
+* {{qualifier|Sutsilvan|Vallader}} {{l|rm|on}}
+
+===Etymology===
+From {{inh|rm|la|annus}}.
+
+===Noun===
+{{rm-noun|m}}
+
+# {{lb|rm|Puter}} [[year]]
+
+{{C|rm|Time}}
+
+==Sardinian==
+
+===Pronunciation===
+* {{IPA|sc|/an/}} 
+
+===Preposition===
+{{head|sc|preposition}}
+
+# {{lb|sc|Nuorese}} {{altform|sc|a}}, {{ng|used before words starting with ''d-''}}
+#* {{quote-book
+|sc
+|year=1896
+|author=Egidio Bellorini
+|title=Canti popolari amorosi raccolti a Nuoro
+|location=Bergamo
+|chapter=Non temere; io torno e ti sposo
+|section=153
+|page=79
+|pageurl=https://archive.org/details/bellorinicantipopolariamorosi/page/n76/mode/1up
+|lines=1–4
+|text=Sette calonicheḍḍos&lt;/br&gt;Falan a Ffiniscole&lt;/br&gt;A ffacher ẓibbileu&lt;/br&gt;'''An''' dommo de una monẓa.
+|t=Seven priests go down to {{w|Siniscola}}, to have a jubilee '''at''' a nun's house.
+}}
+
+===References===
+* {{R:sc:WagnerDES|a&lt;sup&gt;2&lt;/sup&gt;}}
+
+==Saterland Frisian==
+
+===Etymology===
+{{dercat|stq|ine-pro}}
+From {{inh|stq|ofs|an}}, from {{inh|stq|gmw-pro|*an}}, from {{inh|stq|gem-pro|*an}}. Cognates include {{cog|fy|oan}} and {{cog|de|an}}.
+
+===Pronunciation===
+* {{IPA|stq|/an/}}
+* {{hyph|stq|an}}
+* {{rhymes|stq|an|s=1}}
+
+===Preposition===
+{{stq-prep}}
+
+# [[on]]
+#: {{ux|inline=1|stq|Mien Jasse honget '''an''' dän Hoake.|My jacket is hanging '''on''' the hook.}}
+# [[at]]
+#: {{ux|inline=1|stq|Iek sitte '''an''' dän Disk.|I'm sitting '''at''' the table.}}
+# [[next to]]
+#: {{ux|inline=1|stq|Iek sitte '''an''' mien Suster.|I'm sitting '''next to''' my sister.}}
+# [[towards]], [[to]]
+#: {{ux|inline=1|stq|Dät Boot is '''an''' Lound kemen.|The boat came ashore|lit=The boat has come '''to''' land.}}
+# [[of]], [[from]]
+#: {{ux|inline=1|stq|Mien Bääsje is '''an''' Kanker stúurven.|My grandmother died '''of''' cancer.}}
+# [[about]], [[circa]]
+#: {{ux|inline=1|stq|Iek häbe '''an''' do fjautig Ljudene blouked.|I have seen '''about''' forty people.}}
+
+===Adjective===
+{{head|stq|adjectives}}
+
+# [[on]], [[switched on]], [[burning]]
+#: {{ux|inline=1|stq|Dät Fjúur is '''an'''.|The fire is '''burning'''.}}
+#: {{ux|inline=1|stq|Ju Laampe is '''an'''.|The lamp is '''switched on'''.}}
+
+===References===
+* {{R:stq:SW}}
+
+==Scots==
+
+===Etymology 1===
+From {{inh|sco|ang|and}}, {{m|ang|ond}}, {{m|ang|end||and}}, from {{inh|sco|gem-pro|*andi}}, {{m|gem-pro|*anþi}}, {{m|gem-pro|*undi}}, {{m|gem-pro|*unþi||and, furthermore}}, from {{inh|sco|ine-pro|*h₂énti||facing opposite, near, in front of, before}}.
+
+====Alternative forms====
+* {{l|sco|an'}}
+* {{l|sco|and}}
+
+====Pronunciation====
+* {{IPA|sco|[ɑn]|a=stressed}}
+* {{IPA|sco|[ən]|a=unstressed}}
+
+====Conjunction====
+{{sco-conj}}
+
+# [[and]]
+
+=====Derived terms=====
+* {{l|sco|an a'}}
+
+===Etymology 2===
+From {{inh|sco|enm|oon}}, from {{inh|sco|ang|an|ān|one}}, from {{inh|sco|gem-pro|*ainaz}}, from {{inh|sco|ine-pro|*óynos}}. Cognate to {{cog|en|an}}.
+
+====Pronunciation====
+* {{IPA|sco|[ən]}}
+
+====Article====
+{{head|sco|articles}}
+
+# {{qualifier|before a vowel}} [[a]], {{l|en|an}}
+
+=====Usage notes=====
+* In colloquial usage mostly replaced by {{m|sco|a}}. However, still widely used in literature, probably due to English influence. &lt;ref&gt; https://dsl.ac.uk/entry/snd/a_indef_art &lt;/ref&gt;
+
+=====Synonyms=====
+* {{l|sco|a}}
+
+====References====
+* {{R:DSL|pos=indef. art}}
+&lt;references /&gt;
+
+==Scottish Gaelic==
+
+===Etymology 1===
+{{dercat|gd|cel-pro|ine-pro|inh=2}}
+From {{inh|gd|sga|in}}. Cognates include {{cog|ga|an}} and {{cog|gv|yn}}.
+
+====Pronunciation====
+* {{IPA|gd|/ən̪ˠ/|q1=before ''a'', ''o'', ''u'' or a broad consonant|/əŋ/|q2=before broad ''g'' or ''k''|/əɲ/|q3=before ''e'', ''i'' or a slender consonant|/ə/|q4=colloquial before a consonant}}
+* {{hyph|gd|an}}
+
+====Article====
+{{head|gd|articles}}
+
+# [[the]]
+
+=====Declension=====
+{{gd-decl-article}}
+
+===Etymology 2===
+{{dercat|gd|cel-pro|ine-pro|inh=2}}
+From {{der|gd|sga|a}}. Cognates include {{cog|ga|a}}.
+
+====Pronunciation====
+* {{IPA|gd|/ən/}}
+
+====Determiner====
+{{head|gd|determiners|cat2=possessive determiners}}
+
+# [[their]]
+
+=====See also=====
+{{gd-possessive determiners}}
+
+===Etymology 3===
+{{dercat|gd|cel-pro|ine-pro|inh=2}}
+From {{inh|gd|sga|i}}. Cognates include {{cog|ga|i}} and {{cog|gv|ayns}}.
+
+====Pronunciation====
+* {{IPA|gd|/ən̪ˠ/|q1=before ''a'', ''o'', ''u'' or a broad consonant|/əŋ/|q2=before broad ''g'' or ''k''|/əɲ/|q3=before ''e'', ''i'' or a slender consonant}}
+
+====Preposition====
+{{gd-prep|dat|-|def=anns|def2=[[san]], [[sa]]|def3=sna}}
+
+# [[in]]
+
+=====Usage notes=====
+* This form is ''not'' used before nouns beginning with '''b''', '''f''', '''m''' or '''p''', where {{m|gd|am}} and {{m|gd|ann am}} are used instead.
+
+=====Inflection=====
+{{gd-prep-infl|1sg=annam|2sg=annad|3sgm=ann|3sgf=innte|1pl=annainn|2pl=annaibh|3pl=annta}}
+{{gd-prep-poss|nam|nad|na|na|nar|nur|nan|nam}}
+
+=====Synonyms=====
+* {{l|gd|ann an}}
+
+=====Derived terms=====
+{{col4|gd
+|an siud|an seo|an sin}}
+
+===Etymology 4===
+From {{inh|gd|sga|in}}. Cognates include {{cog|ga|an}}.
+
+====Pronunciation====
+* {{IPA|gd|/ən̪ˠ/|q1=before ''a'', ''o'', ''u'' or a broad consonant|/əŋ/|q2=before broad ''g'' or ''k''|/əɲ/|q3=before ''e'', ''i'' or a slender consonant|/ə/|q4=colloquial before a consonant}}
+
+====Particle====
+{{head|gd|particles}}
+
+# {{n-g|Used together with a dependent form of a verb to form the interrogative.}}
+
+=====Usage notes=====
+* Before verbs beginning with '''b''', '''f''', '''m''' or '''p''', the form {{m|gd|am}} is used. Before {{m|gd|bheil||am, is, are}}, the form {{m|gd|a}} is also used.
+
+====Verb====
+{{head|gd|verbs}}
+
+# {{form of|gd|Present interrogative form|is}} {{n-g|(the copula).}}
+
+=====Usage notes=====
+* Before words beginning with '''b''', '''f''', '''m''' or '''p''', the form {{m|gd|am}} is used.
+
+=====Inflection=====
+{{gd-conj-is}}
+
+===References===
+* {{R:Dwelly}}
+* {{R:DIL|3|head=2 a}}
+* {{R:DIL|26891|head=i}}
+* {{R:DIL|28194|head=in}}
+* {{R:gd:Mark:2003|pages=34-35}}
+
+==Siraya==
+
+===Etymology===
+From {{der|fos|map-pro|*-an}}.
+
+===Noun===
+{{head|fos|nouns}}
+
+# [[place]]
+
+==Southwestern Dinka==
+
+===Pronoun===
+{{head|dik|pronoun}}
+
+# [[I]]
+
+===References===
+* {{cite-web|url=http://www.rogerblench.info/Language/Nilo-Saharan/Nilotic/Comparative%20Dinka%20lexicon%20converted.pdf|work=Dinka-English Dictionary|year=2005}}
+
+==Sumerian==
+
+===Romanization===
+{{sux-rom}}
+
+# {{romanization of|sux|𒀭|tr=an}}
+
+==Swedish==
+
+===Etymology===
+Borrowed from {{bor|sv|gml|an}} and {{bor|sv|de|an}}, and less commonly from {{bor|sv|en|on}}, from {{der|sv|gem-pro|*ana||on, at}}, cognate with {{cog|en|on}} and doublet of {{cog|sv|å}}, {{cog|sv|på}}.
+
+===Adverb===
+{{head|sv|adverbs}}
+
+# used as a verb particle, similar to German preposition {{m|de|an||at, in, on, to}}
+
+====Related terms====
+* {{l|sv|gå an}}
+* {{l|sv|komma an}}
+* {{l|sv|lägga an}}
+* {{l|sv|ta sig an}}
+
+===Preposition===
+{{head|sv|prepositions}}
+
+# {{lb|sv|accounting}} [[to]]
+
+===Anagrams===
+* {{anagrams|sv|a=an|-na|na}}
+
+==Tày==
+
+===Pronunciation===
+* {{tyz-IPA}}
+
+===Etymology 1===
+From {{bor|tyz|zh|安|tr=ān}}.
+
+====Adjective====
+{{tyz-adj}} ({{l|tyz|安}})
+
+# [[peaceful]]; [[undisturbed]]
+#: {{ux|inline=1|tyz|dú bấu '''an'''|to live un'''peacefully'''}}
+#: {{ux|tyz|Mí đảy '''an''' slắc vằn.|I can't have a single '''peaceful''' day.}}
+
+=====Derived terms=====
+{{col3|tyz|an phận|Tàng An}}
+
+===Etymology 2===
+
+====Verb====
+{{tyz-verb}}
+
+# to [[manage]] to do something; to [[fend for oneself]]
+#: {{ux|inline=1|tyz|'''An''' ý ngòi.|'''Manage''' it.}}
+
+===Etymology 3===
+From {{inh|tyz|tai-pro|*ʔaːnᴬ||[[saddle]]}}. Cognate with {{cog|th|อาน|tr=aan}}, {{cog|lo|ອານ}}, {{cog|shn|ဢၢၼ်}}, {{cog|aho|𑜒𑜃𑜫}}, {{cog|za|an}}. Compare {{der|tyz|zh|-}} {{och-l|鞍|tr=*[ʔ]ˤa[n] or *qaːn|saddle}}.
+
+====Noun====
+{{tyz-noun}}
+
+# [[saddle]]; [[howdah]]
+#: {{uxi|tyz|'''an''' chạng|howdah}}
+#: {{uxi|tyz|'''an''' năng đây|good leather '''saddle'''}}
+
+===References===
+*{{R:Lương Bèn}}
+*{{R:tyz:tdcnt}}
+* {{R:Tày-Annamite-Français}}
+
+==Tedim Chin==
+
+===Etymology===
+From {{inh|ctd|tbq-kuk-pro|*ʔan||vegetables}}, from {{inh|ctd|sit-pro|*h(y)an}}.
+
+===Noun===
+{{head|ctd|nouns}}
+
+# [[food]]
+
+===References===
+* ''Zomi Ordbog'' based on the work of D.L. Haokip
+
+==Torres Strait Creole==
+
+===Etymology===
+From {{der|tcs|en|hand}}.
+
+===Noun===
+{{head|tcs|nouns}}
+
+# [[hand]], [[lower arm]]
+# [[flipper]]
+
+{{C|tcs|Anatomy}}
+
+==Turkish==
+
+===Pronunciation===
+* {{IPA|tr|/ɑn/|[ɑn̪]}}
+
+===Etymology 1===
+From {{inh|tr|ota|آن|tr=an}}, from {{der|tr|ar|آن}}.
+
+====Noun====
+{{tr-noun|ı|lar}}
+
+# [[moment]]
+#* {{quote-journal|tr|date=February 14, 1939|journal=Aydin|page=1|title=Acaba İspanyada Krallık iade edilecek mi!|passage=İnglitere Fransa ile Frankoyu tanımak üzeredir.  Bu kararı iki hükümet bir '''anda''' ilan edecektir.}}
+
+=====Declension=====
+{{tr-infl-noun-c|a|poss=1}}
+
+=====See also=====
+* [[şu anda]]
+
+====References====
+* {{R:ota:Kelekian|آن|page=38}}
+* {{R:tr:Nishanyan|an}}
+
+===Etymology 2===
+
+====Verb====
+{{head|tr|verb forms}}
+
+# {{tr-verb form of|anmak}}
+
+==Vietnamese==
+
+===Etymology===
+{{vi-etym-sino|安|tranquil}}. The character can also be read as {{m|vi|yên}}, a form of probable Northern origin.
+&lt;!-- While place names with Yên are not common outside of Northern Vietnam and adjacent areas, An still has significant presence in Northern Vietnam. It's possible that yên was a local innovation within Northern Vietnam and went on to co-exist with the preexisting an. Place names in Yên in Central and Southern might be contributed to Northern immigrants or new formations influenced by Northern placenames. --&gt;
+
+===Pronunciation===
+{{vi-IPA}}
+
+===Adjective===
+{{vi-adj}}
+
+# {{lb|vi|chiefly in compounds}} [[calm]]; [[peaceful]]; [[comfortable]]; [[at ease]]; [[safe]]
+
+===Romanization===
+{{head|vi|romanization}}
+
+# {{sino-vietnamese reading of|安}}
+
+====Derived terms====
+{{col4|vi|an bình|an lành|an nhàn|an nhiên|an ninh|an sinh|an toạ|an toàn|an vui|bảo an|bất an|bình an|cầu an|công an|trấn an|trị an|an nghỉ|an vui|an ủi|an lạc|An Nam|an trí|an dân|quốc thái dân an|an dưỡng}}
+
+===Anagrams===
+* {{anagrams|vi|na}}
+
+==Vilamovian==
+{{cardinalbox|wym||1|2||cwe}}
+
+===Pronunciation===
+* {{IPA|wym|/an/}}
+* {{audio|wym|Wym-an (wersja Józefa Gary).ogg}}
+
+===Etymology 1===
+From {{der|wym|goh|ein}}, from {{der|wym|gem-pro|*ainaz}}, from {{der|wym|ine-pro|*óynos}}.
+
+====Numeral====
+{{head|wym|numerals|head=ān}}
+
+# {{cln|wym|cardinal numbers}} [[one]]
+
+=====Related terms=====
+* {{l|wym|alf}}
+
+===Etymology 2===
+From {{der|wym|goh|unti||and}}, from {{der|wym|gem-pro|*andi||and}}, from {{der|wym|ine-pro|*h₂énti}}. Cognates include {{cog|de|und}}.
+
+====Alternative forms====
+* {{l|wym|ana}}
+
+====Conjunction====
+{{head|wym|conjunctions}}
+
+# [[and]]
+
+==Waray-Waray==
+
+===Etymology===
+From Proto-Central Philippine ''*aŋ''. Cognate with {{cog|ceb|ang}}, {{cog|hil|ang}}, {{cog|tl|ang}}, {{cog|bcl|an}}.
+
+Further etymology is debated; some have theorized a relationship to {{cog|poz-pro|*a||direct marker}}, from {{cog|map-pro|*a||direct marker}} with the addition of an unclear nasal suffix. Compare {{cog|pam|ing}}.
+
+===Pronunciation===
+* {{war-IPA}}
+
+===Particle===
+{{head|war|particle}}
+
+# {{n-g|direct marker for all general nouns other than personal proper nouns}}
+#: {{ux|war|Midalagan '''an''' lalaki paingon ha baybayon.|'''The''' man ran towards the shore.}}
+#: {{ux|war|Gikaon han iring '''an''' isda.|The cat ate '''the''' fish.}}
+
+====Usage notes====
+* This particle is analyzed as the definite article (i.e., ''the'') when used alone, and the indefinite article (i.e., ''a'' or ''an'') when used with the numeral &quot;''[[usa]]''&quot; plus &quot;ka&quot; that quantifies an object/object that it modifies.
+*: {{ux|war|'''An''' adlaw.|'''The''' sun.}}
+*: {{ux|war|'''An usa''' ka tawo.|'''A''' person.}}
+* Specific nouns are marked with &quot;[[si]]&quot;.
+* Direct personal proper nouns (''primarily names'') are marked with &quot;[[si]]&quot;.
+
+==Yola==
+
+===Etymology 1===
+From {{inh|yol|enm|and|an}}, from {{inh|yol|ang|and}}, {{m|ang|ond}}, {{m|ang|end}}, from {{inh|yol|gem-pro|*andi}}, {{m|gem-pro|*anþi}}.
+
+====Alternative forms====
+* {{alter|yol|an'|and}}
+
+====Pronunciation====
+* {{IPA|yol|/an/|/and/}}
+
+====Conjunction====
+{{head|yol|conjunctions}}
+
+# [[and]]
+#* {{quote-book|yol|year=1867|page=31|title=GLOSSARY OF THE DIALECT OF FORTH AND BARGY|passage=Coardhed '''an''' recoardhed.|translation=Searched '''and''' researched.}}
+
+===Etymology 2===
+
+====Preposition====
+{{head|yol|prepositions}}
+
+# {{alt form|yol|on}}
+#* {{quote-book|yol|year=1867|chapter=A YOLA ZONG|number=1|page=84|title=SONGS, ETC. IN THE DIALECT OF FORTH AND BARGY|passage=Lidge w'ouse '''an''' a milagh, tis gaay an louthee:|translation=Lie with us '''on''' the clover, 'tis fair and sheltered:}}
+
+===References===
+* {{R:Poole 1867}}
+
+==Yoruba==
+
+===Pronunciation===
+* {{sense|mid-tone}} {{yo-IPA|an}}
+* {{sense|high-tone}} {{yo-IPA|án}}
+
+===Pronoun===
+{{yo-pos|pronoun|an}}
+
+# [[him]], [[her]], [[it]] {{gl|third-person singular non-honorific object pronoun following a [[monosyllabic]] verb with a high-tone /ã/}}
+
+===Pronoun===
+{{yo-pos|pronoun|án}}
+
+# [[him]], [[her]], [[it]] {{gl|third-person singular non-honorific object pronoun following a [[monosyllabic]] verb with a low- or mid-tone /ã/}}
+
+===See also===
+{{yo-personal pronouns}}</text>
+      <sha1>4j8ucj3w5hr2fuisd7eygrney783095</sha1>
+    </revision>
+  </page>

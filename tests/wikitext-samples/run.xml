@@ -1,0 +1,1667 @@
+<page>
+    <title>run</title>
+    <ns>0</ns>
+    <id>7532</id>
+    <revision>
+      <id>87773704</id>
+      <parentid>87489039</parentid>
+      <timestamp>2025-10-31T22:10:05Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{slim-wikipedia}} to new syntax; convert {{slim-wikipedia}} to {{swp}}</comment>
+      <origin>87773704</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="83182" sha1="o2av7d9nwkr3w1oymqw2mgl5x62y88m" xml:space="preserve">{{also|Appendix:Variations of &quot;run&quot;}}
+==Translingual==
+
+===Etymology===
+{{abbrev|mul|-}} {{der|mul|en|Ki'''run'''di}}.
+
+===Symbol===
+{{mul-symbol}}
+
+# {{ISO 639|2&amp;3|Kirundi}}
+
+==English==
+{{swp}}
+
+===Alternative forms===
+* {{alter|en|rin|ren||dialectal}}
+
+===Etymology===
+{{root|en|ine-pro|*h₃er-}}
+From {{inh|en|enm|runnen}}, {{m|enm|rennen|t=to run}}, alteration (due to the past participle {{m|enm|runne}}, {{m|enm|runnen}},
+{{m|enm|yronne}}) of {{cog|enm|rinnen|t=to run}}, from {{inh|en|ang|rinnan}}, {{m|ang|iernan|t=to run}} and {{der|en|non|rinna|t=to run}}, both from {{inh|en|gem-pro|*rinnaną|t=to run}} (compare also {{m|gem-pro|*rannijaną|t=to make run}}), from {{der|en|ine-pro|*h₃reyH-|t=to boil, churn}}.
+
+Cognate with {{cog|sco|rin||to run}}, {{cog|fy|rinne||to walk, march}}, {{cog|nl|rennen||to run, race}}, {{cog|gsw|ränne|t=to run}}, {{cog|de|rennen||to run, race}}, {{m|de|rinnen||to flow}}, {{cog|da|rende||to run}}, {{cog|sv|ränna||to run}}, {{cog|sv|rinna||to flow}}, {{cog|is|renna||to flow}}. Non-Germanic cognates include {{cog|sq|rend||to run, run after}}. See {{m|en|random}}.
+
+===Pronunciation===
+* {{IPA|en|/ɹʌn/|a=GA,UK}}
+** {{audio|en|en-us-run.ogg|a=US}}
+** {{audio|en|En-run.ogg}}
+** {{audio|en|en-au-run.ogg|a=AU}}
+* {{IPA|en|/ɹʊn/|a=North England,Ireland}}
+* {{rhymes|en|ʌn|s=1}}
+
+===Verb===
+[[File:Flickr cc runner wisconsin u.jpg|thumb|A runner running ({{senseno|en|race}})]]
+[[File:100 m female Athletissima 2012.ogv|thumb|Women running ({{senseno|en|race}}) in a 100-meter foot race]]
+{{en-verb|run&lt;,,ran,run:ran[nonstandard, colloquial]&gt;}}
+
+# To move swiftly.
+## {{lb|en|intransitive}} To [[move]] forward [[quickly]] upon [[two]] [[feet]] by alternately making a short [[jump]] off either foot.
+##: {{cot|en|walk}}
+##: {{ux|en|'''Run''', and you might still catch the train!}}
+##* {{quote-book|en|year=1967|author=w:Barbara Sleigh|title=w:Jessamy| year_published=1993| location=Sevenoaks, Kent| publisher=Bloomsbury |isbn=0 340 19547 9| page=122| passage=Through the open front door '''ran''' Jessamy, down the steps to where Kitto was sitting at the bottom with the pram beside him.}}
+##* {{see more citations|en}}&lt;!-- Please no more than 3–4 quotes here, further quotes only in 'Citations' (see [[WT:QUOTE]])--&gt;
+## {{lb|en|intransitive}} To [[go]] at a [[fast]] pace; to move [[quickly]].
+##: {{ux|en|I have been '''running''' all over the building looking for him.}}
+##: {{ux|en|Sorry, I've got to '''run'''; my house is on fire!}}
+##* {{quote-song|en|author=w:Ed Cobb|authorlabel=no|title=w:Tainted Love|album=w:Non-Stop Erotic Cabaret|year=1965|year_published=1981|artist=w:Soft Cell|url=https://www.youtube.com/watch?v=XZVpR3Pk-r8|text=Once I '''ran''' to you (I ran) / Now I '''run''' from you / This tainted love you've given / I give you all a boy could give you}}
+## {{lb|en|transitive}} To cover (a course or a distance) by running.
+##: {{ux|en|I can '''run''' a mile, but I can't '''run''' the cross-country course.}}
+## {{lb|en|transitive}} To complete a running course or event in (a given time).
+##: {{ux|en|I was hoping to make the team, but I didn't '''run''' the qualifying time.}}
+## {{lb|en|intransitive}} To move briskly or smoothly with a motion of sliding, rolling, sweeping etc.
+##: {{ux|en|The shuttle '''runs''' back and forth on these rollers.}}
+##: {{ux|en|As its name suggests, the monorail '''runs''' on a single rail.}}
+##: {{ux|en|I felt her fingers '''running''' over my cheek.}}
+## {{lb|en|transitive}} To [[cause]] to move [[quickly]] or [[lightly]].
+##: {{ux|en|Every day I '''run''' my dog across the field and back.}}
+##: {{ux|en|I'll just '''run''' the vacuum cleaner over the carpet.}}
+##: {{ux|en|'''Run''' your fingers through my hair.}}
+##: {{ux|en|'''Run''' a flag up (the pole/mast)}}
+##* {{RQ:Doyle Lost World|passage=Challenger and I '''ran''' Summerlee along, one at each of his elbows, while Lord John covered our retreat, firing again and again as savage heads snarled at us out of the bushes.}}
+## {{senseid|en|race}} {{lb|en|transitive|or|intransitive}} To [[compete]] in a [[race]].
+##: {{ux|en|The horse will '''run''' in the Preakness next year.}}
+##: {{ux|en|I'm not ready to '''run''' a marathon.}}
+##: {{ux|en|The car could not be repaired in time for the race and did not '''run'''. }}
+## {{lb|en|transitive}} To [[transport]] (someone or something), notionally at a brisk pace.
+##: {{ux|en|Could you '''run''' me over to the store?}}
+##: {{ux|en|Please '''run''' this report upstairs to director's office.}}
+## {{lb|en|transitive|intransitive}} Of a means of transportation: to [[travel]] (a [[route]]).
+##: {{ux|en|The bus (train, plane, ferry boat, etc) '''runs''' between Newport and Riverside.}}
+##* {{quote-book|en|year=1997|author=Karl-Heinz Reger; Nelles Verlag Staff|title=Malaysia - Singapore - Brunei| publisher=Hunter Publishing, Inc| isbn=9783886189021| page=91| text=Small planes '''run''' between Alor and Langkawi. BUS: Express busses leave the bus terminal on the corner of Jl. Langgar and Jl. Stesyen for K. Kedah, {{nb...}}}}
+##* {{quote-book|en|date=2013-04-15|author=Mary Ann Sternberg|title=Along the River Road: Past and Present on Louisiana's Historic Byway| publisher=LSU Press| isbn=9780807150634| page=62| text=The first steam ferry or tug, the Little Minnie, '''ran''' the river in the 1870s. When vehicles were to cross, a barge was affixed to the Minnie to carry them.}}
+## {{lb|en|transitive}} To cause (a  vehicle) to  travel a route.
+##* {{quote-journal|en|year=2024|month=11|journal=Lackawanna Coalition Railgram|author=David Peter Alan|title=NJ Transit Runs Special Trains to “Railroad Museum [for a day]”|url=https://lackawannacoalition.org/2024/11/25/nj-transit-runs-special-trains-to-railroad-museum-for-a-day/|text=This year, NJ Transit allowed nonmotorists {{…}} to reach the event by '''running''' special trains every 2 hours 4 round trips). The location was the old Lackawanna Railroad freight house, about a 10-minute walk from the Boonton Station, which normally has service only during peak-commuting hours on weekdays.}}
+## {{lb|en|transitive}} To [[transit]] (a length of a river), as in [[whitewater rafting]].
+##* {{quote-book|en|year=1979|author=United States. Forest Service. Rocky Mountain Region|title=Piedra River: Final Environmental Impact Statement &amp; Wild &amp; Scenic River Study| page=74| text=To put it frankly, if you people had to hire others to run the river and survey it for you, if, in short, you can't even '''run''' it yourself, why do think you can decide who is and who is not competent? River running, as has been{{nb...}}}}
+## {{lb|en|intransitive}} Of fish, to [[migrate]] for [[spawning]].
+## {{lb|en|American football|transitive|or|intransitive}} To carry (a [[football]]) down the field, as opposed to passing or kicking.
+##* {{quote-journal|en|date=December 29, 2019|journal=Boston Globe|author=Chad Finn| title=24 thoughts on the Patriots’ loss to the Dolphins| url=https://www.boston.com/sports/new-england-patriots/2019/12/29/patriots-dolphins-recap-thoughts-analysis| passage=Then, on their second possession, Isaiah Ford '''ran''' for 11 yards after abandoning a flea flicker.  [...] The Patriots '''ran''' the ball just 27 times despite averaging 5 yards per carry.}}
+## {{lb|en|intransitive}} To [[flee]] from a [[danger]] or towards help.
+##: {{ux|en|Whenever things get tough, she cuts and '''runs'''.}}
+##: {{ux|en|When he's broke, he '''runs''' to me for money.}}
+##: {{ux|en|When the alarm went off, the thief dropped the booty and '''ran'''.}}
+## {{lb|en|figurative|transitive}} To [[pass]] (without [[stop]]ping), typically a stop [[signal]], [[stop sign]]{{,}} or [[duty]] to [[yield]] the [[right of way]].
+##: {{ux|en|The car in front just '''ran''' a red light.}}
+##: {{ux|en|If you have a collision with a vehicle oncoming from the right, after having '''run''' priority to the right, you are at fault.}}
+## {{lb|en|transitive|juggling|colloquial}} To juggle a pattern [[continuously]], as opposed to starting and stopping quickly.
+# {{lb|en|fluids}} To flow.
+## {{lb|en|intransitive}} Of a [[liquid]], to [[flow]].
+##: {{ux|en|The river '''runs''' through the forest into the North Sea.}}
+##: {{ux|en|There's blood '''running''' down your leg.}}
+## {{lb|en|intransitive|figuratively}} To move or [[spread]] quickly.
+##: {{ux|en|There's a strange story '''running''' around the neighborhood that you had a miscarriage last year.}}
+##: {{ux|en|The flu is '''running''' through my daughter's kindergarten.}}
+## {{lb|en|intransitive}} Of an object, to have a liquid [[flow]]ing from it.
+##: {{ux|en|Your nose is '''running''' and your forehead is '''run'''ning with sweat.}} 
+##: {{ux|en|Why is the hose still '''running'''?}}
+##: {{ux|en|I got tears '''run'''ning down my cheeks because he smoke of cigars makes my eyes '''run'''.}}
+## {{lb|en|transitive}} To make a liquid flow; to make liquid flow from or into an object.
+##: {{ux|en|I can't stop my nose from '''run'''ning snot down into my mouth.}}
+##: {{ux|en|Could you '''run''' a bath for me, please? You'll have to '''run''' the water a while before it gets hot.}}
+## {{lb|en|intransitive}} To become [[liquid]]; to [[melt]].
+##* {{quote-book|en|year=1717|author=Ovid|title=Ovid's Metamorphoses in fifteen books. Translated by the most eminent hands. Adorn'd with sculptures|section=Book the Third, The Story of ''Narcissus''|page=92|translator=w:Joseph Addison|origyear=a. 18 {{CE}}|passage=As Wax dissolves, as Ice begins to '''run''',|url=https://quod.lib.umich.edu/cgi/t/text/pageviewer-idx?cc=ecco;c=ecco;idno=004871123.0001.000;node=004871123.0001.000:6;seq=125;}}
+##* {{quote-book|en|year=1729|author={{w|John Woodward (naturalist)|John Woodward}}|title=An Attempt Towards a Natural History of the Fossils of England|page=223|text=The ''Sussex'' ores '''run''' pretty freely in the Fire for Iron-Ores; otherwise they would hardly be worth working.|section=Tome I}}
+## {{lb|en|intransitive}} To [[leak]] or [[spread]] in an undesirable fashion; to [[bleed]] (especially used of [[dye]] or [[paint]]).
+##: {{ux|en|During washing, the red from the rug '''ran''' onto the white sheet, staining it pink.}}
+## To [[fuse]]; to [[shape]]; to [[mould]]; to [[cast]].
+##: {{ux|en|to '''run''' bullets}}
+##* {{quote-book|en|year=1718|author=w:Henry Felton|title=A Dissertation on Reading the Classics, and Forming a Just Style|page=6|text=But, my Lord, the fairest Diamonds are rough till they are polished, and the purest Gold must be '''run''' and washed, and sifted in the Oar.|url=https://books.google.com/books?id=Z5oDAAAAQAAJ&amp;pg=PA6}}
+# {{lb|en|nautical|of a vessel}} To sail before the wind, in distinction from [[reach]]ing or sailing [[close-hauled]].
+# {{lb|en|transitive}} To [[control]] or [[manage]]; to be in [[charge]] of.
+#: {{ux|en|My uncle '''ran''' a corner store for forty years.}}
+#: {{ux|en|She '''runs''' the fundraising.}}
+#: {{ux|en|My parents think they '''run''' my life.}}
+#: {{ux|en|He is '''running''' the candidate's expensive campaign.}}
+#* {{quote-journal|en|date=1972-12-29|title=Masterpieces underrated and overlooked|author=Richard Schickel|magazine={{w|Life (magazine)|Life}}|volume=73|issue=25|page=22|pageurl=https://books.google.ro/books?id=R1cEAAAAMBAJ&amp;pg=PA22&amp;dq=runs|passage=A friend of mine who '''runs''' an intellectual magazine was grousing about his movie critic, complaining that though the fellow had liked ''The Godfather'' (page 58), he had neglected to label it clearly as a masterpiece.}}
+#* {{quote-journal|en|date=2013-05-11|volume=407|issue=8835|page=12|magazine=w:The Economist
+|title=[http://www.economist.com/news/leaders/21577372-how-india-throwing-away-worlds-biggest-economic-opportunity-what-waste What a waste]
+|passage=India is '''run''' by gerontocrats and epigones: grey hairs and groomed heirs.}}
+#* {{see more citations|en}}&lt;!-- Please no more than 3–4 quotes here, further quotes only in 'Citations' (see [[WT:QUOTE]])--&gt;
+# {{senseid|en|be candidate}}{{lb|en|intransitive}} To be a [[candidate]] in an [[election]].
+#: {{ux|en|I have decided to '''run''' for governor of California.}}
+#: {{ux|en|We're trying to find somebody to '''run''' against him next year.}}
+# To make participate in certain kinds of competitions.
+## {{lb|en|transitive}} To make enter a race.
+##: {{ux|en|He '''ran''' his best horse in the Derby.}}
+##: {{ux|en|We're '''running''' two cars in today's rally.}}
+## {{lb|en|transitive}} To make stand in an election.
+##: {{ux|en|The Green Party is '''running''' twenty candidates in this election.}}
+# To exert continuous activity; to proceed.
+#: {{ux|en|to '''run''' through life; to '''run''' in a circle}}
+# {{lb|en|intransitive}} To be [[present]]ed in the [[media]].
+#: {{ux|en|The story will '''run''' on the 6-o'clock news.}}
+#: {{ux|en|The latest Robin Williams movie is '''running''' at the Silver City theatre.}}
+#: {{ux|en|Her picture '''ran''' on the front page of the newspaper.}}
+# {{lb|en|transitive}} To [[print]] or [[broadcast]] in the media.
+#: {{ux|en|'''run''' a story; '''run''' an ad}}
+# {{lb|en|transitive}} To [[smuggle]] ([[illegal]] goods).
+#: {{ux|en|They are '''run'''ning guns to the rebels.}}
+#* {{quote-book|en|year=1728|author=Jonathan Swift|title=The Works of Dr. Jonathan Swift|page=175|text=[...]whereas in the business of laying heavy impositions two and two never made more than one ; which happens by lessening the import, and the strong temptation of '''running''' such goods as paid high duties|chapter=An answer to a paper, called ''A memorial of the poor inhabitants, tradesmen, and labourers of the kingdom of Ireland''|year_published=1757}}
+# {{lb|en|transitive|agriculture}} To [[sort]] through a large volume of [[produce]] in [[quality control]].
+#: {{ux|en|Looks like we're gonna have to '''run''' the tomatoes again.}}
+# To extend or persist, statically or dynamically, through space or time.
+## {{lb|en|intransitive}} To [[extend]] in [[space]] or through a [[range]] (often with a measure phrase).
+##: {{ux|en|The border '''runs''' for 3000 miles.}}
+##: {{ux|en|The leash '''runs''' along a wire.}}
+##: {{ux|en|The grain of the wood '''runs''' to the right on this table.}}
+##: {{ux|en|It '''ran''' in quality from excellent to substandard.}}
+## {{lb|en|intransitive}} To [[extend]] in [[time]], to [[last]], to [[continue]] (usually with a measure phrase).
+##: {{ux|en|The sale will '''run''' for ten days.}}
+##: {{ux|en|The contract '''runs''' through 2008.}}
+##: {{ux|en|The meeting '''ran''' late.}}
+##: {{ux|en|The book '''runs''' 655 pages.}}
+##: {{ux|en|The speech '''runs''' as follows: …}}
+## {{lb|en|transitive}} To make (something) extend in space.
+##: {{ux|en|I need to '''run''' this wire along the wall.}}
+## {{lb|en|intransitive}} Of a [[machine]], including computer [[program]]s, to be [[operate|operating]] or [[work]]ing normally.
+##: {{ux|en|My car stopped '''running'''.}}
+##: {{ux|en|That computer '''runs''' twenty-four hours a day.}}
+##: {{ux|en|The buses don't '''run''' on Sundays.}}
+## {{lb|en|transitive}} To make a machine [[operate]].
+##: {{ux|en|It's full. You can '''run''' the dishwasher now.}}
+##: {{ux|en|Don't '''run''' the engine so fast.}}
+# {{lb|en|transitive}} To [[execute]] or [[carry out]] a [[plan]], [[procedure]]{{,}} or [[program]].
+#: {{ux|en|They '''ran''' twenty blood tests on me and they still don't know what's wrong.}}
+#: {{ux|en|Our coach had us '''running''' plays for the whole practice.}}
+#: {{ux|en|I will '''run''' the sample.}}
+#: {{ux|en|Don't '''run''' that software unless you have permission.}}
+#: {{ux|en|My computer is too old to '''run''' the new OS.}}
+# To pass or go quickly in thought or conversation.
+#: {{ux|en|to '''run''' from one subject to another}}
+#* {{quote-book|en|year=1697|author=Joseph Addison|title=The Works of Virgil: Containing His Pastorals, Georgics, and Aeneis|chapter=An essay on the Georgics|other=by {{w|John Dryden}}|passage=''Virgil'' was so well acquainted with this Secret, that to set off his first ''Georgic'', he has '''run''' into a set of Precepts, which are almost foreign to his Subject,|url=https://books.google.com/books?id=K3peAAAAcAAJ&amp;pg=PA44-IA13}}
+# {{lb|en|copulative}} To become [[different]] in a way mentioned (usually to become [[worse]]).
+#: {{ux|en|Our food supplies are [[run low|'''running''' low]] because money is [[run short|'''run'''ning short]].}}
+#: {{ux|en|They frequently overspent and soon '''ran''' into debt.}}
+#: {{ux|en|[[tap water|Tap water]] always '''run'''s [[freezing cold]] before [[run dry|'''run'''ning dry]].}}
+#* {{quote-book|en|year=1712|author=Joseph Addison|title=w:Cato, a Tragedy|section=act IV, scene i|passage=Have I not cause to rave, and beat my breast, / To rend my heart with grief and '''run''' distracted?}}
+#* {{quote-song|en|year=1968|author=w:Paul Simon|title=The Boxer
+|passage=I was no more than a boy / In the company of strangers / In the quiet of the railway station / '''Running''' scared.}}
+#* {{see more citations|en}}&lt;!-- Please no more than 3–4 quotes here, further quotes only in 'Citations' (see [[WT:QUOTE]])--&gt;
+# {{lb|en|transitive}} To [[cost]] an amount of money.
+#: {{ux|en|Buying a new laptop will '''run''' you a thousand dollars.}}
+#: {{ux|en|Laptops '''run''' about a thousand dollars apiece.}}
+# {{lb|en|intransitive}} Of [[stitches]] or stitched clothing, to [[unravel]].
+#: {{ux|en|My stocking is '''running'''.}}
+# {{lb|en|transitive}} To cause stitched clothing to unravel.
+#* '''1977-1980''', [[w:Lou Sullivan|Lou Sullivan]], personal diary, quoted in '''2019''', Ellis Martin, Zach Ozma (editors), ''We Both Laughed In Pleasure''
+#*: He took off the nylons &amp; had '''runned''' one. He said &quot;now I ''really'' look like a street whore!&quot;
+# To pursue in thought; to carry in contemplation.
+#* {{quote-book|en|year=1692|author=w:Robert South|title=Discourses on Various Subjects and Occasions|page=1|text=To '''run''' the world back to its first original and infancy, and, as it were, to view nature in its cradle,|chapter=Discourse I. The creation of man in God’s image|year_published=1827|url=https://books.google.com/?id=-BIwAAAAYAAJ&amp;pg=PA1}}
+#* {{quote-book|en|year=1695|author=w:Jeremy Collier|title=Miscellanies upon Moral Subjects by Jeremy Collier|page=88|text=Methinks, if it might be, I would gladly understand the Formation of a Soul, '''run''' it up to its ''Punctum Saliens'', and see it beat the first ''conscious'' Pulse.|chapter=A Thought|url=https://quod.lib.umich.edu/e/eebo/A33913.0001.001/1:11?rgn=div1;view=fulltext}}
+# To cause to enter; to thrust.
+#: {{ux|en|to '''run''' a sword into or through the body; to '''run''' a nail into one's foot}}
+#* {{quote-book|en|year=1814|author=Sir {{w|Walter Scott}}|title={{w|Waverley (novel)|Waverley}}|passage=“You '''run''' your head into the lion's mouth,” answered Mac-Ivor.}}
+#* {{quote-book|en|year=1844|author=w:Charles Dickens|title={{w|Martin Chuzzlewit|The Life and Adventures of Martin Chuzzlewit}}|passage=With that he took off his great-coat, and having '''run''' his fingers through his hair, thrust one hand gently in the bosom of his waistcoat}}
+#* {{RQ:Christie Autobiography|II|4|passage=There was also hairdressing: hairdressing, too, really was hairdressing in those times — no '''running''' a comb through it and that was that. It was curled, frizzed, waved, put in curlers overnight, waved with hot tongs;{{nb...}}.}}
+#* {{see more citations|en}}&lt;!-- Please no more than 3–4 quotes here, further quotes only in 'Citations' (see [[WT:QUOTE]])--&gt;
+# To drive or force; to cause, or permit, to be driven.
+#* {{RQ:KJV|Acts|27|41|passage=They '''ran''' the ship aground.}}
+#* {{quote-book|en|year=1691|author=w:John Ray|title=The Wisdom of God Manifested in the Works of the Creation|passage=[...]besides all this, a talkative person must needs be impertinent, and speak many idle words, and so render himself burdensome and odious to Company, and may perchance '''run''' himself upon great Inconveniences, by blabbing out his own or other’s Secrets;}}
+#* {{quote-book|en|year=1706|author=w:John Locke|title=Of the Conduct of the Understanding|url=https://en.wikisource.org/wiki/Of_the_Conduct_of_the_Understanding|section=Section 24. Partiality|passage=[...]and others, accustomed to retired speculations, '''run''' natural philosophy into metaphysical notions and the abstract generalities of logic ;}}
+# To cause to be drawn; to mark out; to indicate; to determine.
+#: {{ux|en|to '''run''' a line}}
+# {{lb|en|transitive}} To encounter or incur (a danger or risk).
+#: {{ux|en|to '''run''' the risk of losing one's life}}
+#* {{RQ:Bacon Essayes|chapter=Of Friendship|passage=He '''runneth''' two dangers.}}
+# {{lb|en|transitive|obsolete}} To put at hazard; to venture; to risk.
+#* {{RQ:Clarendon History
+|passage=He would himself be in the Highlands to receive them, and '''run''' his fortune with them.}}
+# {{lb|en|transitive|obsolete}} To tease with sarcasms and ridicule.
+# To sew (a seam) by passing the needle through material in a continuous line, generally taking a series of stitches on the needle at the same time.
+# To control or have precedence in a card game. &lt;!--is this used only with &quot;table&quot;?--&gt;
+#: {{ux|en|Every three or four hands he would '''run''' the table.}}
+# To be in form thus, as a combination of words.
+#* {{quote-book|en|year=1722|author={{w|Robert Sanderson (theologian)|Robert Sanderson}}|title=A Preservative Against Schism and Rebellion, in the Most Trying Times|page=355|text=Which Sovereignty, with us, ſo undoubtedly reſideth in the Perſon of the King, that his ordinary Style '''runneth''' — ''Our Sovereign Lord the King:'' {{...}}|url=https://books.google.com/books?id=_VjK40EN_4kC&amp;pg=RA1-PA355|volume=1|translator=Thomas Lewis|origyear=1647|original=De juramenti promissorii obligatione}}
+#* {{RQ:Travers Cuckoo in the Nest|chapter=5|passage=The departure was not unduly prolonged. In the road Mr. Love and the driver favoured the company with a brief chanty '''running''': “Got it?—No, I ain't, 'old on,—Got it? Got it?—No, 'old on sir.”}}
+#* {{see more citations|en}}&lt;!-- Please no more than 3–4 quotes here, further quotes only in 'Citations' (see [[WT:QUOTE]])--&gt;
+# {{lb|en|archaic}} To be popularly known; to be generally received.
+#* {{quote-book|en|year=c. 1685|author={{w|Sir William Temple, 1st Baronet|William Temple}}|title=Upon the Gardens of Epicurus|url=https://archive.org/details/sirwilliamtempl00tempuoft/page/26/mode/2up/|page=27|text=[...]great captains, and even consular men, who first brought them over, took pride in giving them their own names (by which they '''run''' a great while in Rome)|year_published=1908}}
+#* {{RQ:Knolles Turkes
+|passage=Neither was he ignorant what report '''ran''' of himselfe.}}
+# To have growth or development.
+#: {{ux|en|Boys and girls '''run''' up rapidly.}}
+#* {{RQ:Mortimer Husbandry
+|passage=or the Richness of the Ground cause them [turnips] to '''run''' too much to Leaves}}
+# To tend, as to an effect or consequence; to incline.
+#* {{RQ:Bacon Essayes|chapter=Of Nature in Men|passage=A man's nature '''runs''' either to herbs or weeds.}}
+#* {{quote-book|en|year=1708|author=Jonathan Swift|title=The Works of Dr. Jonathan Swift|page=235|text=It hath been observed, that the temperate climates usually '''run''' into moderate governments, and the extremes into despotic power.|chapter=The Sentiments of a Church-of-England Man with respect to Religion and Government|year_published=1757}}
+# To have a legal course; to be attached; to continue in force, effect, or operation; to follow; to go in company.
+#: {{ux|en|Certain covenants '''run''' with the land.}}
+#* {{quote-text|en|year=c. 1665|author=w:Josiah Child|title=Discourse on Trade
+|passage=Customs '''run''' only upon our goods imported or exported, and that but once for all; whereas interest '''runs''' as well upon our ships as goods, and must be yearly paid.}}
+# To [[encounter]] or [[suffer]] (a particular, usually bad, [[fate]] or [[misfortune]]).
+#* {{RQ:Richardson Clarissa|I|8|text=Don't let me '''run''' the fate of all who show indulgence to your sex […].}}
+# {{lb|en|golf}} To strike (the ball) in such a way as to cause it to run along the ground, as when approaching a hole.
+# {{label|en|video games|rare}} To {{l|en|speedrun}}.
+# {{lb|en|sports|especially|baseball}} To [[eject]] from a game or match.
+#: {{ux|en|Jackson got himself '''run''' in the top of the sixth for arguing a borderline strike three call.}}
+# To press (a bank, etc.) with immediate demands for payment.
+
+====Conjugation====
+{{en-conj|past=ran|past_ptc=run|stem=runn|old=1|past_2sg_old2=rannest}}
+
+====Derived terms====
+{{col4|en|title=single words and hyphenated compounds
+|also-ran
+|hit-and-run
+|overrun
+|re-run
+|runaround
+|runaway
+|run-down
+|run-in
+|runner
+|runner-up
+|runny
+|run-off
+|run-of-the-mill
+|runtime
+|run-up
+|runway
+|uprun|jayrun
+|well-run|robin-run-in-the-hedge|bank-run
+}}
+
+{{col4|en|title=multiword phrases
+|look like who did it and ran|run nowhere|run out of road
+|lose the run of oneself|run up in|run from the tongue|run off the tongue|run sheep run
+|run someone ragged
+|someone's blood runs cold|run against|run before|run in with|run it up|run off on|run one on|run up in it
+|front runner|run the gantlope|run the gauntlope
+|hit the ground running
+|hold with the hare and run with the hounds
+|in the running|run the whole show
+|make someone's blood run cold
+|marble run|milk run|mole run|monkey run|Naruto run
+|off and running|a lie can run around the world before the truth can get its boots on
+|one can run but one can't hide
+|out of the running
+|re-run|run for cover|push-and-run
+|run a bath
+|run a fever|bump and run|family-run|hit-run|robin-run-in-the-grass|robin-run-the-hedge
+|run a risk|run about with|run away from|run away together|stop and run
+|run a temperature
+|run a train
+|run across|run and repeat
+|run after
+|run aground
+|run along
+|run amok
+|run amuck| run to the hills| eat and run
+|run an errand
+|run around
+|run away
+|run by
+|run circles around
+|run, don't walk
+|run down
+|run for the exercise
+|run for the hills
+|run for the roses
+|run high
+|run hot
+|run hot and cold
+|run in
+|run in the family
+|run into
+|run into the ground
+|run like a dry creek
+|run low
+|run of the mill
+|run off
+|run on
+|run out
+|run out of steam
+|run over
+|run past
+|run rampant
+|run rate
+|run scared
+|run someone off their feet
+|run the gamut
+|run the gauntlet
+|run the show
+|run through
+|run time
+|run to
+|run up
+|run up against
+|scud run
+|up and running
+|one's blood runs cold|still water runs deep|you don't miss the water till the well runs dry|you never miss the water till the well runs dry|you never miss the water until the well runs dry| close-run|cut and run|end run|front run|grab and run|hard-run|hit and run|jump and run|knock and run|know how to walk before one can run|learn to walk before one can run|make the blood run cold|no horse run|one's race is run|pay run|pick up the ball and run with it|proverbs run in pairs|run a mile|run a muck|run a red light|run about|run adrift|run afoul|run afoul of|run ahead|run and gun|run around after|run around in circles|run around like a chicken with its head cut off|run around with|run around with one's hair on fire|run at|run at the mouth|run away with|run back|run barefoot through|run batted in|run behind|run circles round|run counter|run deep|run down the clock|run dry|run errands|run for it|run for one's life|run for one's money|run game on|run hands|run in circles|run interference|run into a brick wall|run into one|run its course|run late|run like a top|run lines|run mad|run off at the mouth|run off one's mouth|run off with|run on empty|run on fumes|run one's face|run one's mouth|run one's mouth off|run one's name|run someone's file|run out of gas|run out of town|run out on|run out the clock|run rings around|run rings round|run riot|run roughshod over|run round in circles|run short|run something up the flagpole|run the clock down|run the guard|run the risk|run the rule over|run the table|run thin|run through the garden|run to earth|run to fat|run to ground|run to seed|run to the ground|run to waste|run up on|run up the score|run upon sorts|run wild|run with|run with scissors|run with the hare and hunt with the hounds|run-and-gun|run-walk|snatch and run|scoop and run|state-run|still waters run deep|take the ball and run with it|that dog don't run|the course of true love never did run smooth|way to run a railroad|you can't run with the hare and hunt with the hounds|start a hare running|clock is running|never change a running system}}
+
+====Translations====
+{{trans-top|to move quickly on two feet}}{{multitrans|data=
+* Abkhaz: {{t|ab|аҩра}}
+* Afar: {{tt|aa|erde}}
+* Ainu: {{t|ain|ホユプ|tr=hoyupu}}
+* Albanian: {{tt+|sq|vrapoj}}
+* American Sign Language: {{tt|ase|S@SideChesthigh-S@SideChesthigh CirclesMidline-CirclesMidline}}
+* Arabic: {{tt+|ar|رَكَضَ}}, {{tt+|ar|جَرَى}}
+*: Egyptian Arabic: {{tt|arz|جري|tr=gerī}}
+*: Hijazi Arabic: {{tt|acw|جري|tr=jiri}}
+*: Moroccan Arabic: {{tt|ary|جْرى|tr=jra}}
+*: South Levantine Arabic: {{tt|ajp|ركض|tr=rakaḍ}}
+* Armenian: {{tt+|hy|վազել}}
+* Aromanian: {{tt|rup|fug}}, {{tt|rup|alag}}
+* Assamese: {{tt|as|দৌৰা}}
+* Assyrian Neo-Aramaic: {{tt|aii|ܪܵܚܹܛ|tr=raḳeṭ}}
+* Asturian: {{tt+|ast|correr}}
+* Avar: {{tt|av|рекеризе}}
+* Azerbaijani: {{tt|az|yüyürmək}}
+* Bashkir: {{tt|ba|йүгереү}}
+* Basque: {{tt+|eu|korrika egin}}, {{tt+|eu|lasterka egin}}
+* Belarusian: {{tt|be|бе́гаць|impf}}, {{tt|be|пабе́гаць|pf}} {{qualifier|abstract}}, {{tt|be|бе́гчы|impf}} {{qualifier|concrete}}, {{tt|be|пабе́гчы|pf}}
+* Bengali: {{tt+|bn|দৌড়ানো}}
+* Bikol Central: {{tt+|bcl|dalagan}}
+* Breton: {{tt+|br|redek}}
+* Bulgarian: {{tt+|bg|бя́гам|impf}} {{qualifier|abstract}}, {{tt+|bg|ти́чам|impf}}
+* Burmese: {{tt+|my|ပြေး}}
+* Catalan: {{tt+|ca|córrer}}
+* Cebuano: {{tt|ceb|dagan}}
+* Chechen: {{tt|ce|дада}}, {{tt|ce|ида}}
+* Cherokee: {{tt|chr|ᎠᏟ}}
+* Cheyenne: {{tt|chy|-ameméohe}}
+* Chinese:
+*: Cantonese: {{tt|yue|走|tr=zau2}}, {{tt|yue|跑|tr=paau2}}
+*: Dungan: {{tt|dng|по}}
+*: Eastern Min: {{t|cdo|䟛}}
+*: Gan: {{t|gan|跑}}
+*: Hakka: {{tt|hak|走|tr=chéu}}
+*: Hokkien: {{tt+|nan-hbl|走|tr=cháu}}
+*: Jin: {{t|cjy|跑|tr=pau2}}
+*: Mandarin: {{tt+|cmn|跑|tr=pǎo}}, {{tt+|cmn|奔跑|tr=bēnpǎo}}, {{tt+|cmn|走|tr=zǒu}} {{qualifier|literary}}
+*: Northern Min: {{t|mnp|走}}
+*: Wu: {{tt|wuu|奔}}, {{tt|wuu|跑}}
+*: Xiang: {{t|hsn|跑}}
+* Chuvash: {{tt|cv|чуп}}
+* Crimean Tatar: {{tt|crh|çapmaq}}, {{qualifier|northern dialect}} {{tt|crh|cuvurmaq}}
+* Czech: {{tt+|cs|běhat|impf}} {{qualifier|abstract}}, {{tt+|cs|běžet|impf}} {{qualifier|concrete}}
+* Dalmatian: {{tt|dlm|cuar}}
+* Danish: {{tt+|da|løbe}}
+* Dutch: {{tt+|nl|rennen}}, {{tt+|nl|lopen}}
+* Esperanto: {{tt+|eo|kuri}}
+* Estonian: {{tt+|et|jooksma}}
+* Even: {{tt|eve|тут-}}
+* Evenki: {{tt|evn|тукса-}}
+* Ewe: {{tt|ee|ƒu du}}
+* Faroese: {{tt+|fo|renna}}
+* Finnish: {{tt+|fi|juosta}}
+* French: {{tt+|fr|courir}}
+* Friulian: {{tt|fur|cori}}
+* Galician: {{tt+|gl|correr}}
+* Georgian: {{tt|ka|სირბილი}}
+* German: {{tt+|de|rennen}}, {{tt+|de|laufen}}
+*: Alemannic German: {{tt|gsw|lauffe}}
+* Gothic: {{tt|got|𐌸𐍂𐌰𐌲𐌾𐌰𐌽}}, {{tt|got|𐍂𐌹𐌽𐌽𐌰𐌽}}
+* Greek: {{tt+|el|τρέχω}}
+*: Ancient: {{tt|grc|τρέχω}}, {{tt|grc|θέω}}
+* Guaraní: {{tt|gn|ñani}}
+* Gujarati: {{tt|gu|દોડવું}}
+* Haitian Creole: {{tt|ht|kouri}}
+* Hawaiian: {{tt|haw|holo}}
+* Hebrew: {{tt+|he|רָץ|tr=rats}}
+* Higaonon: {{tt|mba|pulaguy}}
+* Hindi: {{tt+|hi|दौड़ना}}
+* Hungarian: {{tt+|hu|fut}}, {{tt+|hu|szalad}}
+* Icelandic: {{tt+|is|hlaupa}}
+* Ido: {{tt+|io|kurar}}, {{tt+|io|hastar}}
+* Indonesian: {{tt+|id|lari}}, {{tt+|id|lari|alt=berlari}}, {{tt+|id|jalan|alt=menjalankan}}
+* Ingrian: {{tt|izh|joossa}}
+* Ingush: {{tt|inh|вада}}
+* Irish: {{tt|ga|rith}}
+* Isan:  {{t-needed|tts}}
+* Isoko: {{tt|iso|dhẹ}}
+* Italian: {{tt+|it|correre}}
+* Japanese: {{tt+|ja|走る|tr=はしる, hashiru}}
+* Javanese: {{tt+|jv|mlayu}}
+* Kabyle: {{tt|kab|azzel}}
+* Kannada: {{tt+|kn|ಓಡು}}
+* Kazakh: {{tt|kk|жүгіру}}
+* Khmer: {{tt+|km|រត់}}
+* Korean: {{tt+|ko|달리다}}, {{tt+|ko|뛰다}}
+* Kurdish:
+*: Central Kurdish: {{tt|ckb|ڕاکردن}}
+*: Northern Kurdish: {{tt+|kmr|bezîn}}, {{tt+|kmr|revîn}}, {{tt+|kmr|bazdan}}
+* Kyrgyz: {{tt+|ky|жүгүрүү}}
+* Lao: {{tt|lo|ແລ່ນ}}
+* Latgalian: {{tt|ltg|skrīt}}
+* Latin: {{tt+|la|currō}}
+* Latvian: {{tt+|lv|skriet}}
+* Lingala: {{t|ln|pota}}, {{t|ln|kopota}}
+* Lithuanian: {{tt+|lt|bėgti}}
+* Lombard: {{tt|lmo|cór}}
+* Lü:  {{t-needed|khb}}
+* Luxembourgish: {{tt|lb|lafen}}, {{tt|lb|rennen}}
+* Macedonian: {{tt|mk|т́рча|impf}}, {{tt|mk|истрча|pf}}
+* Malay: {{tt|ms|berlari}}, {{tt+|ms|lari}}
+* Malayalam: {{tt+|ml|ഓടുക}}
+* Maltese: {{tt|mt|ġera}}
+* Manchu: {{tt|mnc|ᡶᡝᡴᠰᡳᠮᠪᡳ}}
+* Manx: {{tt|gv|roie}}
+* Maori: {{tt|mi|horo}}, {{tt|mi|oma}}
+* Maranao: {{tt|mrw|palalagoy}}
+* Mizo: {{t|lus|tlân}}
+* Mongolian:
+*: Cyrillic: {{tt+|mn|гүйх}}
+*: Mongolian: {{tt|mn|ᠭᠦᠶᠦᠬᠦ}}
+* Nanai: {{tt|gld|туту-}}
+* Nepali: {{tt+|ne|दगुर्नु|tr=dagurnu}}, {{tt|ne|दौडनु|tr=dauṛanu}}
+* North Frisian: {{qualifier|Föhr-Amrum}} {{tt|frr|luup}}, {{tt|frr|laap}} {{qualifier|Sylt}}
+* Northern Altai: {{tt|atv|чӱгӱрер}}
+* Northern Ohlone: {{tt|cst|othemhimah}}
+* Northern Thai:  {{t-needed|nod}}
+* Norwegian:
+*: Bokmål: {{tt+|nb|løpe}}, {{tt+|nb|springe}}
+* Occitan: {{tt+|oc|córrer}}
+* Odia: {{tt+|or|ଦଉଡ଼ିବା}},{{tt|or|ଦୌଡ଼ିବା}},{{tt+|or|ଧାଇଁବା}},{{tt+|or|ନର୍ଦିବା}},{{tt|or|ନରର୍ଦ୍ଦିବା}},{{tt|or|ଘଟକିବା}},{{tt+|or|ଧୁପିବା}},{{tt+|or|ଭେଡ଼ିବା}},{{tt+|or|ଧପଡ଼ିବା}},{{tt+|or|ଧପାଲିବା}},{{tt+|or|ଧବୁଡ଼ିବା}}
+* Old Church Slavonic:
+*: Cyrillic: {{tt|cu|бѣгати|impf}} {{qualifier|abstract}}, {{tt|cu|бѣжати|impf}} {{qualifier|concrete}}
+*: Glagolitic: {{tt|cu|ⰱⱑⰳⰰⱅⰹ|impf}} {{qualifier|abstract}}, {{tt|cu|ⰱⱑⰶⰰⱅⰹ|impf}} {{qualifier|concrete}}
+* Old East Slavic: {{tt|orv|бѣгати|impf}} {{qualifier|abstract}}, {{tt|orv|бѣжати|impf}} {{qualifier|concrete}}
+* Old English: {{tt|ang|rinnan}}
+* Old Javanese: {{tt|kaw|layu}}
+* Oromo: {{tt|om|fiiguu}}
+* Ossetian: {{t|os|згъорын}}
+* Ottoman Turkish: {{tt|ota|قوشمق|tr=koşmak}}, {{tt|ota|یلمك|tr=yelmek}}
+* Pannonian Rusyn: {{tt|rsk|бегац|impf}} {{qualifier|abstract}}, {{tt|rsk|бежац|impf}} {{qualifier|concrete}}
+* Pashto: {{tt|ps|الاکول|tr=alākawəl}}
+* Persian:
+*: Dari: {{tt|prs|دَوِیدَن}}
+*: Iranian Persian: {{tt|fa-ira|دَویدَن}}
+* Polabian: {{tt|pox|bezăt|impf}} {{qualifier|concrete}}
+* Polish: {{tt+|pl|biegać|impf}} {{qualifier|abstract}}, {{tt+|pl|biec|impf}} {{qualifier|concrete}}
+* Portuguese: {{tt+|pt|correr}}
+* Punjabi: {{t|pa|ਦੌੜਣਾ}}
+* Quechua: {{tt|qu|qurriy}}
+* Romanian: {{tt+|ro|alerga}}, {{tt+|ro|fugi}}
+* Romansch: {{tt|rm|currer}}, {{tt|rm|cuorer}}, {{tt|rm|curer}}, {{tt|rm|curir}}, {{tt|rm|correr}}, {{tt|rm|cuorrer}}
+* Russian: {{tt+|ru|бе́гать|impf}}, {{tt+|ru|побе́гать|pf}} {{qualifier|abstract}}, {{tt+|ru|бежа́ть|impf}}, {{tt+|ru|побежа́ть|pf}} {{qualifier|concrete}}
+* Sanskrit: {{tt+|sa|द्रवति}}, {{tt+|sa|धावति}}
+* Sardinian: {{tt|sc|cúrrere}}, {{tt|sc|curri}}, {{tt|sc|cúrriri}}
+* Scots: {{tt|sco|rin}}
+* Scottish Gaelic: {{tt|gd|ruith}}
+* Serbo-Croatian:
+*: Cyrillic: {{tt|sh|тр̀чати|impf}}
+*: Roman: {{tt+|sh|tr̀čati|impf}}
+* Shan:  {{t-needed|shn}}
+* Sicilian: {{tt+|scn|cùrriri}}
+* Sindhi: {{tt|sd|ڊڪڻ}}
+* Sinhalese: {{tt|si|දුවනවා}}
+* Slovak: {{tt|sk|behať|impf}} {{qualifier|abstract}}, {{tt|sk|bežať|impf}} {{qualifier|concrete}}
+* Slovene: {{tt+|sl|teči|impf}}
+* Slovincian: {{tt|zlw-slv|bjêgac|impf}}
+* Somali: {{tt|so|ordid}}
+* Sorbian:
+*: Lower Sorbian: {{tt|dsb|běgaś|impf}} {{qualifier|abstract}}, {{tt|dsb|běžaś|impf}} {{qualifier|concrete}}
+*: Upper Sorbian: {{tt|dsb|běhać|impf}} {{qualifier|abstract}}, {{tt|hsb|běžeć|impf}} {{qualifier|concrete}}
+* Southern Altai: {{tt|alt|јӱгӱрер}}
+* Southern Thai:  {{t-needed|sou}}
+* Spanish: {{tt+|es|correr}}, {{t+|es|apeonar}} {{q|of a bird}}
+* Swahili: {{tt|sw|kukimbia}}
+* Swedish: {{tt+|sv|springa}}, {{tt+|sv|löpa}}
+* Tagalog: {{tt|tl|takbo}}, {{tt|tl|tumakbo}}
+* Tajik: {{tt+|tg|давидан}}
+* Tamil: {{tt+|ta|ஓடு}}
+* Tatar: {{tt+|tt|йөгерергә}}
+* Tausug: {{tt|tsg|dagan}}, {{tt|tsg|dumagan}}
+* Telugu: {{tt+|te|పరుగెత్తు}}
+* Tetum: {{tt|tet|halai}}
+* Thai: {{tt+|th|วิ่ง}}
+* Turkish: {{tt+|tr|koşmak}}
+* Turkmen: {{tt|tk|çapmak}}
+* Tuvan: {{tt|tyv|маңнаар}}, {{tt|tyv|чүгүрер}}
+* Ukrainian: {{tt+|uk|бі́гати|impf}} {{qualifier|abstract}}, {{tt+|uk|бі́гти|impf}} {{qualifier|concrete}}
+* Urdu: {{tt|ur|دَوڑْنا}}
+* Uyghur: {{tt|ug|يۈگۈرمەك}}
+* Uzbek: {{tt+|uz|yugurmoq}}
+* Venetan: {{tt|vec|córar}}, {{tt|vec|córer}}, {{tt|vec|córare}}, {{tt+|vec|corer}}
+* Vietnamese: {{tt+|vi|chạy}}
+* Walloon: {{tt+|wa|cori}}
+* Waray-Waray: {{tt|war|dalagan}}, {{t|war|dagan}}
+* Welsh: {{tt+|cy|rhedeg}}
+* Western Bukidnon Manobo: {{tt|mbb|pelelaɣuy}}
+* Yaghnobi: {{tt|yai|давак}}
+* Yiddish: {{tt|yi|לויפֿן}}
+{{trans-bottom}}
+
+{{trans-top|to move quickly}}
+* Catalan: {{tt+|ca|córrer}}
+* Finnish: {{tt+|fi|juosta}}, {{tt+|fi|rientää}}, {{tt+|fi|rynnätä}}
+* Galician: {{tt+|gl|correr}}
+* German: {{tt+|de|laufen}}
+* Japanese: {{tt+|ja|走る|tr=はしる, hashiru}}
+* Polish: {{tt+|pl|biec|impf}}, {{tt+|pl|biegać|impf}}
+* Portuguese: {{tt+|pt|correr}}
+* Quechua: {{tt|qu|rumpiy}}
+* Russian: {{tt+|ru|бе́гать|impf}}, {{tt+|ru|побе́гать|pf}} {{qualifier|abstract}}, {{tt+|ru|бежа́ть|impf}}, {{tt+|ru|побежа́ть|pf}} {{qualifier|concrete}}
+* Venetan: {{tt+|vec|corer}}, {{tt|vec|córar}}, {{tt|vec|córer}}, {{tt|vec|córare}}
+{{trans-bottom}}
+
+{{trans-top|to move or spread quickly}}
+* Catalan: {{tt+|ca|córrer}}
+* Finnish: {{tt+|fi|kiertää}}, {{tt|fi|[[olla]] [[liikkeellä]]}}, {{tt+|fi|juosta}}
+* German: {{tt+|de|umlaufen}}, {{tt+|de|umgehen}}
+* Portuguese: {{tt+|pt|correr}}
+{{trans-bottom}}
+
+{{trans-top|to cause to move quickly}}
+* Catalan: {{tt|ca|[[fer]] [[córrer]]}}
+* Czech: {{tt|cs|prohánět}}, {{tt|cs|prohnat}}
+* Finnish: {{tt+|fi|juoksuttaa}}, {{tt+|fi|ajaa}}
+* German: {{tt|de|laufen lassen}}
+* Russian: {{tt+|ru|гнать}}, {{tt+|ru|гоня́ть|impf}} {{q|abstract}}; {{tt+|ru|погоня́ть|impf}} {{q|especially cattle}}; {{tt+|ru|вести́|impf}}; {{tt+|ru|води́ть|impf}} ''(abstract)''; {{tt+|ru|проводи́ть|impf}}, {{tt+|ru|провести́|pf}};
+{{trans-bottom}}
+
+{{trans-top|to be in charge of}}
+* Chinese:
+*: Mandarin: {{tt+|cmn|經營|tr=jīngyíng}}, {{tt+|cmn|管理|tr=guǎnlǐ}}
+* Czech: {{tt+|cs|řídit}}
+* Finnish: {{tt+|fi|vetää}}, {{tt+|fi|vastata}} {{q|+ elative}}, {{tt+|fi|hallita}}, {{tt+|fi|johtaa}}, {{tt+|fi|pyörittää}} {{q|colloquial}}
+* German: {{tt+|de|leiten}}, {{tt+|de|schmeißen}} {{qualifier|slang}}
+* Hebrew: {{tt+|he|נִהֵל|tr=niheil}}
+* Icelandic: {{tt+|is|reka}}, {{tt|is|leiða}}, {{tt+|is|stýra}}
+* Indonesian: {{tt+|id|menjalankan}}
+* Italian: {{tt+|it|condurre}}
+* Korean: {{tt+|ko|맡다}}
+* Old English: {{tt|ang|wealdan}}
+* Persian:
+*: Iranian Persian: {{tt|fa-ira|اِدارِه کَرْدَن}}
+* Portuguese: {{tt+|pt|dirigir}}, {{t+|pt|gerir}}
+* Romanian: {{tt+|ro|conduce}}
+* Russian: {{tt+|ru|управля́ть|impf}}, {{tt+|ru|руководи́ть|impf}}
+* Spanish: {{t+|es|dirigir}}, {{t+|es|gestionar}}
+* Swedish: {{tt+|sv|driva}}, {{tt+|sv|leda}}, {{tt+|sv|styra}}
+{{trans-bottom}}
+
+{{trans-top|to flow}}
+* Bulgarian: {{tt+|bg|тека́|impf}}
+* Catalan: {{tt+|ca|fluir}}, {{tt+|ca|escolar-se}}
+* Chinese:
+*: Mandarin: {{tt+|cmn|流|tr=liú}}
+* Czech: {{tt+|cs|téct}}, {{tt+|cs|téci}}
+* Danish: {{tt+|da|løbe}}, {{qualifier|about tears, poetic}} {{tt|da|trille}}, {{tt|da|rulle}}
+* Finnish: {{tt+|fi|virrata}}, {{tt+|fi|juosta}}
+* French: {{tt+|fr|écouler|alt=s'écouler}}, {{tt+|fr|couler}}
+* Galician: {{tt+|gl|correr}}, {{tt+|gl|fluír}}
+* German: {{tt+|de|fließen}}, {{tt+|de|rinnen}}
+* Greek: {{tt+|el|τρέχω}}, {{tt+|el|ρέω}}, {{tt+|el|κυλώ}}
+* Indonesian: {{tt+|id|mengalir}}
+* Irish: {{tt|ga|sil}}
+* Italian: {{tt+|it|fluire}}
+* Kazakh:
+*: Arabic: {{tt|kk|اعۋ}}
+* Korean: {{tt+|ko|흐르다}}
+* Macedonian: {{tt|mk|тече}}
+* Malay: {{tt+|ms|mengalir}}
+* Manx: {{tt|gv|sheel}}
+* Old English: {{tt|ang|rinnan}}
+* Polish: {{tt+|pl|cieknąć}}, {{tt+|pl|biec|impf}}
+* Portuguese: {{tt+|pt|correr}}, {{tt+|pt|manar}}, {{tt+|pt|fluir}}
+* Russian: {{tt+|ru|течь|impf}},
+* Scots: {{tt|sco|rin}}
+* Scottish Gaelic: {{tt|gd|ruith}}
+* Serbo-Croatian: {{tt+|sh|proticati}}, {{tt|sh|strujati}}
+* Sorbian:
+*: Lower Sorbian: {{tt|dsb|běžaś|impf}}
+* Spanish: {{tt+|es|fluir}}, {{tt+|es|afluir}}, {{tt+|es|correr}}
+* Swedish: {{tt+|sv|rinna}}
+* Tuvan: {{tt|tyv|агар}}
+* Vietnamese: {{tt+|vi|chảy}}
+{{trans-bottom}}
+
+{{trans-top|to have a liquid flowing from}}
+* Finnish: {{tt+|fi|valua}}
+* German: {{tt+|de|laufen}}, {{tt+|de|rinnen}} {{qualifier|less}}, {{tt+|de|tropfen}} {{qualifier|least}}
+* Swedish: {{tt+|sv|rinna}}
+{{trans-bottom}}
+
+{{trans-top|to make a liquid flow}}
+* Catalan: {{tt|ca|fer fluir}}
+* Finnish: {{tt+|fi|juoksuttaa}}, {{tt+|fi|valuttaa}}
+* German: {{tt|de|laufen lassen}}
+* Portuguese: {{tt+|pt|escorrer}}
+{{trans-bottom}}
+
+{{trans-top|to extend in space or through a range}}
+* Finnish: {{tt+|fi|ulottua}}, {{tt+|fi|yltää}}, {{tt+|fi|kulkea}}
+* German: {{tt+|de|gehen}}, {{tt+|de|verlaufen}}
+* Polish: {{tt+|pl|biec|impf}}
+* Russian: {{tt+|ru|простира́ться|impf}}, {{tt+|ru|тяну́ться|impf}}
+{{trans-bottom}}
+
+{{trans-top|to sail a boat with the wind coming from behind}}
+* Finnish: {{tt|fi|[[purjehtia]] [[myötätuuli|myötätuuleen]]}}, {{tt|fi|lenssata}}
+* Maori: {{tt|mi|whakaheke}}, {{tt|mi|aronui}}
+{{trans-bottom}}
+
+{{trans-top|to extend in time, to last, to continue}}
+* Czech: {{tt+|cs|trvat}}, {{tt+|cs|zabírat}}
+* Finnish: {{tt+|fi|kestää}} {{qualifier|to last}}, {{tt|fi|[[olla]] [[myöhässä]]}}, {{tt+|fi|myöhästyä}} {{qualifier|to run late}}, {{tt+|fi|jatkua}} {{qualifier|to continue}}
+* German: {{tt+|de|laufen}}
+* Polish: {{tt+|pl|biec|impf}}
+* Russian: {{tt+|ru|продолжа́ться|impf}}, {{tt+|ru|тяну́ться|impf}}, {{tt+|ru|проходи́ть|impf}}
+{{trans-bottom}}
+
+{{trans-top|to make something extend in space}}
+* Finnish: {{tt+|fi|vetää}}
+* German: {{tt+|de|führen}}, {{tt|de|verlaufen lassen}}
+* Russian: {{tt+|ru|простира́ть|impf}}; {{tt+|ru|протя́гивать|impf}}; {{tt+|ru|проводи́ть|impf}}, {{tt+|ru|провести́|pf}}; {{tt+|ru|протя́гивать|impf}}, {{tt+|ru|протяну́ть|pf}}
+{{trans-bottom}}
+
+{{trans-top|of a machine, to be operating normally}}
+* Catalan: {{tt+|ca|funcionar}}
+* Chinese:
+*: Mandarin: {{tt+|cmn|工作|tr=gōngzuò}}, {{tt+|cmn|運行|tr=yùnxíng}}, {{tt+|cmn|運轉|tr=yùnzhuǎn}}
+* Czech: {{tt+|cs|fungovat|impf}}
+* Finnish: {{tt+|fi|toimia}}, {{tt+|fi|käydä}}, {{tt+|fi|kulkea}} {{qualifier|of means of transport}}, {{tt+|fi|pyöriä}}
+* French: {{tt+|fr|marcher}}
+* German: {{tt+|de|laufen}}
+* Italian: {{tt+|it|funzionare}}
+* Japanese: {{tt+|ja|作動|tr=さどうする, sadō suru|alt=作動する}}, {{tt+|ja|機能|tr=きのうする, kinō suru|alt=機能する}}, {{tt+|ja|作用|tr=さようする, sayō suru|alt=作用する}}, {{tt+|ja|動く|tr=うごく, ugoku}}
+* Korean: {{tt+|ko|작동하다}}, {{tt+|ko|작용하다}}
+* Macedonian: {{tt|mk|работи|impf}}
+* Norwegian:
+*: Bokmål: {{tt+|nb|gå}}
+* Portuguese: {{tt+|pt|rodar}}, {{tt+|pt|funcionar}}, {{tt+|pt|operar}}
+* Russian: {{tt+|ru|рабо́тать|impf}}, {{tt+|ru|функциони́ровать|impf}} {{q|formal}}, {{tt+|ru|идти́|impf}} {{qualifier|clock, watch}}
+* Spanish: {{t+|es|andar}}, {{t+|es|marchar}}, {{t+|es|rular}}, {{t+|es|carburar}}, {{t|es|carrular}}, {{t|es|en marcha}} {{q|running}}, {{t+|es|circular}} {{q|transport}}
+* Tuvaluan: {{tt|tvl|tele}}
+{{trans-bottom}}
+
+{{trans-top|to make a machine operate}}
+* Catalan: {{tt|ca|fer funcionar}}
+* Finnish: {{tt+|fi|käynnistää}}, {{tt+|fi|käyttää}}, {{tt+|fi|ajaa}}, {{tt+|fi|pyörittää}}
+* German: {{tt|de|anwerfen}} {{qualifier|start up; informal}}, {{tt+|de|betreiben}} {{qualifier|continuous}}
+* Indonesian: {{tt+|id|menjalankan}}
+* Khmer: {{tt+|km|ដើរ}}
+* Portuguese: {{tt+|pt|rodar}}, {{tt+|pt|operar}}
+* Russian: {{tt+|ru|рабо́тать|impf}}; {{tt+|ru|управля́ть|impf}}
+* Tuvaluan: {{tt|tvl|fakatele}}
+{{trans-bottom}}
+
+{{trans-top|to execute or carry out a plan, procedure or program}}
+* Catalan: {{tt+|ca|executar}}, {{tt+|ca|arrancar}}
+* Finnish: {{tt+|fi|tehdä}}, {{tt+|fi|ajaa}}, {{tt+|fi|suorittaa}}, {{tt+|fi|pyörittää}}
+* German: {{tt+|de|ausführen}}
+* Hungarian: {{tt+|hu|futtat}}
+* Indonesian: {{tt+|id|menjalankan}}
+* Italian: {{tt+|it|lanciare}}
+* Korean: {{tt+|ko|실행하다}}
+* Norwegian:
+*: Bokmål: {{t+|nb|kjøre}}
+*: Nynorsk: {{t|nn|køyra}}
+* Russian: {{tt+|ru|выполня́ть|impf}}, {{tt+|ru|вы́полнить|pf}}
+* Spanish: {{tt+|es|ejecutar}}, {{tt+|es|arrancar}}
+{{trans-bottom}}
+
+{{trans-top|to compete in a race}}
+* Finnish: {{tt+|fi|juosta}}, {{tt+|fi|kilpailla}}
+* German: {{tt+|de|antreten}} {{qualifier|inceptive}}, {{tt+|de|laufen}} {{qualifier|continuous}}
+* Portuguese: {{tt+|pt|correr}}
+* Romanian: {{tt+|ro|concura}} {{qualifier|literally}}
+{{trans-bottom}}
+
+{{trans-top|to be a candidate in an election|id=be candidate}}
+* Belarusian: {{t|be|балаці́равацца|impf}}
+* Czech: {{tt|cs|kandidovat}}
+* Danish: {{tt|da|stille op}}
+* Dutch: {{tt+|nl|kandideren}}
+* Finnish: {{tt|fi|[[olla]] [[ehto|ehdolla]]}}, {{tt+|fi|pyrkiä}}
+* German: {{tt+|de|kandidieren}}, {{tt+|de|antreten}}
+* Hungarian: {{t+|hu|indul}}
+* Japanese: {{tt+|ja|出馬|tr=しゅつばする, shutsuba suru|alt=出馬する}}
+* Korean: {{tt|ko|출마하다}}
+* Macedonian: {{tt|mk|се кандиди́ра}}
+* Navajo: {{tt|nv|yishwoł}}
+* Portuguese: {{tt+|pt|concorrer}}
+* Russian: {{tt+|ru|баллоти́роваться|impf}}
+* Spanish: {{tt+|es|postularse}}, {{t+|es|concurrir}}, {{t+|es|candidatear}}, {{t+|es|candidatearse}}, {{t|es|candidatizarse}}, {{t|es|[[aspirar]] [[a]]}}
+* Swedish: {{tt+|sv|kandidera}}
+* Ukrainian: {{t+|uk|балотува́тися|impf}}
+{{trans-bottom}}
+
+{{trans-top|to make run in a race}}
+* Finnish: {{tt+|fi|kilpailuttaa}}, {{tt+|fi|asettaa}}
+* German: {{tt|de|ins Rennen schicken}}, {{tt+|de|antreten}} + {{tt|de|[[mit]] (etwas, jemandem)}}
+{{trans-bottom}}
+
+{{trans-top|to make run in an election}}
+* Finnish: {{tt|fi|[[asettaa]] [[ehto|ehdolle]]}}, {{tt+|fi|asettaa}}
+* German: {{tt+|de|antreten}} + {{tt|de|[[mit]] (etwas, jemandem)}}, {{tt|de|ins Rennen schicken}} {{q|informal}}
+* Portuguese: {{tt+|pt|candidatar}} {{qualifier|election}}
+* Spanish: {{t+|es|postular}}, {{t+|es|candidatear}}, {{t|es|candidatizar}}
+{{trans-bottom}}
+
+{{trans-top|to be presented in the media}}
+* Finnish: {{tt+|fi|tulla}} {{qualifier|of TV and radio}}, {{tt+|fi|olla}} {{qualifier|of print}}
+* German: {{tt+|de|laufen}}
+* Korean: {{tt+|ko|나오다}}
+* Portuguese: {{tt+|pt|passar}}
+{{trans-bottom}}
+
+{{trans-top|to print or broadcast in the media}}
+* Finnish: {{tt+|fi|julkaista}} {{qualifier|to publish}}
+* German: {{tt+|de|bringen}}
+* Portuguese: {{tt+|pt|exibir}}
+{{trans-bottom}}
+
+{{trans-top|to leak, spread or bleed in an undesirable fashion}}
+* Finnish: {{tt+|fi|värjätä}}, {{tt|fi|[[päästää]] [[väri]]ä}}
+* German: {{tt+|de|auslaufen}}
+* Korean: {{tt+|ko|새다}}, {{tt+|ko|흘러나오다}}
+* Russian: {{tt+|ru|линя́ть|impf}}, {{tt+|ru|полиня́ть|pf}}; {{tt+|ru|располза́ться|impf}}, {{tt+|ru|расползти́сь|pf}}
+{{trans-bottom}}
+
+{{trans-top|to become different, usually worse}}
+* Finnish: {{tt+|fi|käydä}}, {{tt+|fi|muuttua}}, {{tt+|fi|joutua}} {{q|run into + illative}}
+* German: {{tt+|de|gehen}}, {{tt+|de|werden}}
+* Portuguese: {{tt+|pt|ficar}}
+{{trans-bottom}}
+
+{{trans-top|to pass without stopping or yielding}}
+* Finnish: {{tt|fi|[[ajaa]] [[läpi]]}}, {{tt|fi|[[ajaa]] [[ohi]]}}
+* French: {{tt+|fr|griller}}
+* German: {{tt+|de|überfahren}} {{qualifier|red light}}
+* Korean: {{tt+|ko|나아가다}}
+* Portuguese: {{tt+|pt|atravessar}}
+* Swedish: {{tt+|sv|missa}} {{qualifier|generally}}
+{{trans-bottom}}
+
+{{trans-top|to transport someone or something}}
+* Finnish: {{tt+|fi|ajaa}}, {{tt+|fi|viedä}}
+* German: {{tt+|de|schaffen}}
+* Russian: {{tt+|ru|вози́ть|impf}}, {{tt+|ru|везти́|impf}} {{q|abstract}}
+{{trans-bottom}}
+
+{{trans-see|to smuggle illegal goods|smuggle}}
+
+{{trans-top|to cost a certain amount of money}}
+* Finnish: {{tt+|fi|maksaa}}, {{tt|fi|[[saada]] [[pulittaa]]}}, {{tt|fi|[[joutua]] [[pulittaa|pulittamaan]]}}
+* Italian: {{tt+|it|venire}}
+{{trans-bottom}}
+
+{{trans-top|of fish, to migrate for spawning}}
+* Finnish: {{tt+|fi|vaeltaa}}
+* German: {{tt+|de|wandern}}
+{{trans-bottom}}
+
+{{trans-top|soccer: to carry a football down the field}}
+* Finnish: {{tt+|fi|kuljettaa}}
+{{trans-bottom}}
+
+{{trans-top|of stitches, to unravel}}
+* Czech: {{tt|cs|párat se}}, {{tt+|cs|utíkat}}
+* Finnish: {{tt+|fi|juosta}}, {{tt+|fi|purkautua}}
+* German: {{tt+|de|aufgehen}}
+{{trans-bottom}}
+
+{{trans-top|to flee away from a danger or towards help}}
+* Czech: {{tt+|cs|prchat}}
+* Finnish: {{tt|fi|[[juosta]] [[karkuun]]}}, {{tt+|fi|paeta}}
+* Korean: {{tt+|ko|도망가다}}, {{tt+|ko|도망치다}}
+* Russian: {{tt+|ru|бежа́ть|impf}}, {{tt+|ru|убега́ть|impf}}, {{tt+|ru|убежа́ть|pf}}
+{{trans-bottom}}
+
+{{trans-top|agriculture: to sort through}}
+* Finnish: {{tt+|fi|lajitella}}
+* Russian: {{tt+|ru|перебира́ть|impf}}, {{tt+|ru|перебра́ть|pf}}
+{{trans-bottom}}
+
+{{trans-top|to control or have precedence in a card game}}
+* Finnish: {{tt|fi|[[putsata]] [[pöytä]]}}
+* German: {{tt+|de|übernehmen}}
+{{trans-bottom}}
+
+{{trans-top|juggling: to juggle a pattern continuously}}
+* Finnish: {{tt+|fi|pyörittää}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Woiwurrung: {{t-check|wyi|worree wee}}
+{{trans-bottom}}
+}}
+
+===Noun===
+[[File:Stairway Measurements.svg|thumb|diagram of stairs, showing the ''run'' ({{senseno|en|stair}})]]
+[[File:Stocking run.jpg|thumb|upright=0.5|Stockings with a '''run''' ({{senseno|en|knit}}) in them]]
+{{en-noun}}
+
+# Act or instance of running, of moving rapidly using the feet.
+#: {{ux|en|I just got back from my morning '''run'''.}}
+#* {{quote-web|en|date=June 9, 2012|author=Owen Phillips| title=Euro 2012: Netherlands 0-1 Denmark| work=BBC Sport| url=http://www.bbc.co.uk/sport/0/football/18138777| passage=Krohn-Dehli took advantage of a lucky bounce of the ball after a battling '''run''' on the left flank by Simon Poulsen, dummied two defenders and shot low through goalkeeper Maarten Stekelenburg's legs after 24 minutes.}}
+# Act or instance of [[hurry]]ing (to or from a place) {{qualifier|not necessarily on foot}}; [[dash]] or [[errand]], [[trip]].
+#: {{ux|en|I need to make a '''run''' to the store.}}
+#* '''1759''', N. Tindal, ''The Continuation of Mr Rapin's History of England'', volume 21 (continuation volume 9), page 92:
+#*: {{...}} and on the 18th of January this squadron put to sea. The first place of rendezvous was the boy of port St. Julian, upon the coast of Patagonia, and all accidents were provided against with admirable foresight. Their '''run''' to port St. Julian was dangerous {{...}}
+#* {{quote-journal|en|date=25 Apr 87|journal=Gay Community News|page=1|author=Kim Westheimer|title=A Black Gay Fireman's Story|text=Jackson said the white firefighters attempted to make him and other Black firefighters miss '''runs''' by not waking them up along with everyone else.}}
+# A pleasure trip.
+#: {{ux|en|Let's go for a '''run''' in the car.}}
+#* {{RQ:Dickens Martin Chuzzlewit|30
+|passage=And I think of giving her a '''run''' in London for a change.}}
+# [[flight|Flight]], instance or [[period]] of [[flee]]ing.
+#* {{quote-book|en|year=2006|author=Tsirk Susej|title=The Demonic Bible|isbn=1411690737|page=41|passage=During his '''run''' from the police, he claimed to have a metaphysical experience which can only be described as “having passed through an abyss.”}}
+# [[migration|Migration]] of [[fish]].
+# A group of fish that migrate, or ascend a river for the purpose of spawning.
+# A literal or figurative path or course for movement relating to:
+## A (regular) [[trip]] or [[route]].
+##: {{ux|en|The bus on the Cherry Street '''run''' is always crowded.}}
+##* '''1977''', ''Star Wars'' (film)
+##*: You've never heard of the Millennium Falcon? It's the ship that made the Kessel '''Run''' in less than twelve parsecs.
+## The [[route]] taken while running or skiing.
+##: {{ux|en|Which '''run''' did you do today?}}
+## {{lb|en|skiing|bobsledding}} A single trip down a hill, as in [[skiing]] and [[bobsledding]].
+## The distance sailed by a ship.
+##: {{ux|en|a good '''run'''; a '''run''' of fifty miles}}
+## A [[voyage]].
+##: {{ux|en|a '''run''' to China}}
+## A [[trial]].
+##: {{ux|en|The data got lost, so I'll have to perform another '''run''' of the experiment.}}
+## {{lb|en|maths|computing}} The [[execution]] of a [[program]] or [[model]]
+##: {{ux|en|This morning's '''run''' of the SHIPS statistical model gave Hurricane Priscilla a 74% chance of gaining at least 30 knots of intensity in 24 hours, reconfirmed by the HMON and GFS dynamical models.}}
+## {{lb|en|video games|speedrunning}} A [[playthrough]], or attempted playthrough; a session of play.
+##: {{ux|en|This was my first successful '''run''' without losing any health.}}
+##: {{ux|en|That NPC bugged out and killed my '''run'''.}}
+# Unrestricted use. {{only used in|en|have the run of}}. &lt;!--and &quot;given&quot; the run of, etc.--&gt;
+#: {{ux|en|He can have the '''run''' of the house.}}
+# An [[enclosure]] for an animal; a [[track]] or [[path]] along which something can travel.
+#: {{ux|en|He set up a rabbit '''run'''.}}
+# {{senseid|en|landholding}}{{lb|en|Australia|New Zealand}} A [[rural#Adjective|rural]] [[landholding]] for [[farm#Verb|farming]], usually for [[run#Verb|running]] [[sheep]], and [[operate]]d by a [[runholder]].
+# State of being current; currency; popularity.
+#* {{RQ:Addison Freeholder|45|May 25, 1715|passage=It is impossible for detached papers[...] to have a general '''run''', or long continuance, if they are not diversified[...].}}
+# Something continuous or sequential.
+## A continuous period (of time) marked by a trend; a period marked by a continuing trend.
+##: {{ux|en|I’m having a '''run''' of bad luck.}}
+##* '''1782''' {{smallcaps|{{w|Frances Burney}}}} ''{{w|Cecilia (Burney novel)|Cecilia}}''
+##*: “{{...}}had had the preceding night an uncommon '''''run''' of luck''”.
+##: {{ux|en|He went to Las Vegas and spent all his money over a three-day '''run'''.}}
+##* {{RQ:Burke Regicide Peace
+|passage=They who made their arrangements in the first '''run''' of misadventure [...] put a seal on their calamities.}}
+##* {{quote-journal|en|date=June 28, 2011| author=Piers Newbery| title=Wimbledon 2011: Sabine Lisicki beats Marion Bartoli| work=BBC Sport| url=http://news.bbc.co.uk/sport2/hi/tennis/13946420.stm| passage=German wildcard Sabine Lisicki conquered her nerves to defeat France's Marion Bartoli and take her amazing Wimbledon '''run''' into the semi-finals.}}
+## A series of tries in a game that were successful.
+##: {{ux|en|If our team can keep up their strong defense, expect them to make a '''run''' in this tournament.}}
+## A production quantity (such as in a factory).
+##: {{ux|en|Yesterday we did a '''run''' of 12,000 units.}}
+##: {{ux|en|The book’s initial press '''run''' will be 5,000 copies.}}
+## The period of showing of a play, film, TV series, etc.
+##: {{ux|en|The '''run''' of the show lasted two weeks, and we sold out every night.}}
+##: {{ux|en|It is the last week of our French cinema '''run'''.}}
+##* {{RQ:Macaulay Goldsmith|passage=A canting, mawkish play [...] had an immense '''run'''.}}
+## {{lb|en|slang}} A period of extended (usually [[daily]]) drug use.
+##* {{quote-text|en|year=1964|title=Heroin|author=w:The Velvet Underground
+|passage=And I'll tell ya, things aren't quite the same / When I'm rushing on my '''run'''.}}
+##* {{quote-text|en|year=1975|author=Lloyd Y. Young; Mary Anne Koda-Kimble; Brian S. Katcher|title=Applied Therapeutics for Clinical Pharmacists
+|passage=Frank Fixwell, a 25 year-old male, has been on a heroin &quot;'''run'''&quot; (daily use) for the past two years.}}
+##* '''1977''', Richard P. Rettig, Manual J. Torres, Gerald R. Garrett, ''Manny: a criminal-addict's story'', Houghton Mifflin Harcourt (HMH) {{ISBN|9780395248386}}
+##*: I was hooked on dope, and hooked bad, during this whole period, but I was also hooked behind robbery. When you&amp;#39;re on a heroin '''run''', you stay loaded so long as you can score.
+##* {{quote-book|en|year=2001|author=Robin J. Harman|title=Handbook of Pharmacy Health Education|publisher=Pharmaceutical Press|isbn=9780853694717|page=172
+|passage=This can develop quite quickly (over a matter of hours) during a cocaine '''run''' or when cocaine use becomes a daily habit.}}
+##* {{quote-book|en|year=2010|author=Robert DuPont|title=The Selfish Brain: Learning from Addiction|publisher=Hazelden Publishing|isbn=9781592859535|page=158
+|passage=DA depletion leads to the crash that characteristically ends a cocaine '''run'''.}}
+## {{lb|en|card games}} A sequence of [[cards]] in a [[suit]] in a card game.
+## {{lb|en|music}} A [[rapid]] [[passage]] in [[music]], especially along a [[scale]].
+# {{senseid|en|liquid}}A flow of [[liquid]]; a [[leak]].
+#: {{ux|en|The constant '''run''' of water from the faucet annoys me.}}
+#: {{ux|en|a '''run''' of must in wine-making}}
+#: {{ux|en|the first '''run''' of sap in a maple orchard}}
+# {{lb|en|chiefly|eastern|_|North Midland US|especially|Ohio|Pennsylvania|West Virginia}} A small [[creek]] or part thereof. {{qualifier|Compare Southern US ''[[branch]]'' and New York and New England ''[[brook]]''.}}
+#: {{ux|en|The military campaign near that creek was known as &quot;The battle of Bull '''Run'''&quot;.}}
+# A [[quick]] [[pace]], faster than a [[walk]].
+#: {{ux|en|He broke into a '''run'''.}}
+## {{lb|en|of horses}} A fast [[gallop]].
+# {{lb|en|banking}} A sudden series of demands on a [[bank]] or other financial institution, especially characterised by great withdrawals.
+#: {{ux|en|Financial insecurity led to a '''run''' on the banks, as customers feared for the security of their savings.}}
+# Any sudden large [[demand]] for something.
+#: {{ux|en|There was a '''run''' on Christmas presents.}}
+# Various horizontal dimensions or surfaces
+## The top of a [[step]] on a [[staircase]], also called a [[tread]], as opposed to the [[rise]].
+## {{senseid|en|stair}} The horizontal length of a set of stairs
+## {{lb|en|construction}} [[horizontal|Horizontal]] [[dimension]] of a [[slope]].
+# A standard or unexceptional group or category.
+#: {{ux|en|He stood out from the usual '''run''' of applicants.}}
+# {{n-g|In sports}}
+## {{lb|en|baseball}} A [[score]] when a [[runner]] touches all [[base]]s legally; the act of a runner scoring.
+## {{lb|en|cricket}} The act of passing from one [[wicket]] to another; the [[point]] scored for this.
+## {{lb|en|American football}} A running play.
+##: [...] ''one of the greatest '''runs''' of all time.''
+##* {{quote-book|en|year=2003|author=Jack Seibold|title=Spartan Sports Encyclopedia|page=592|passage=Aaron Roberts added an insurance touchdown on a one-yard '''run'''.}}
+## {{lb|en|golf}} The movement communicated to a golf ball by running it. &lt;!--see verb--&gt;
+## {{lb|en|golf}} The distance a ball travels after touching the ground from a stroke.
+## The distance drilled with a [[bit]], in oil drilling.
+##* {{quote-text|en|year=1832|title=Records and Briefs of the United States Supreme Court|page=21
+|passage=Well, when you compare the cone type with the cross roller bit, you get a longer '''run''', there is less tendency of the bit to go flat while running in various formations. It cleans itself better.}}
+# {{senseid|en|knit}} A line of [[knit]] [[stitches]] that have [[unravelled]], particularly in a [[nylon]] [[stocking]].
+#: {{ux|en|I have a '''run''' in my stocking.}}
+#* {{quote-song|en|year=1975|title=The Boho Dance|author=w:Joni Mitchell|album=The Hissing of Summer Lawns|passage=A camera pans the cocktail hour / Behind a blind of potted palms / And finds a lady in a Paris dress / With '''runs''' in her nylons}}
+# {{lb|en|nautical}} The [[stern]] of the underwater body of a [[ship]] from where it begins to curve upward and inward.
+# {{lb|en|mining}} The horizontal distance to which a [[drift]] may be carried, either by licence of the [[proprietor]] of a [[mine]] or by the nature of the formation; also, the direction which a [[vein]] of [[ore]] or other substance takes.
+# A pair or set of [[millstone]]s.
+# One’s [[gait]] while running; the way one runs.
+#: {{ux|en|I think they only have a weird '''run''' because their leg hurts.}}
+
+====Synonyms====
+* {{sense|horizontal part of a step}} {{l|en|tread}}
+* {{sense|unravelling}} {{l|en|ladder}} {{qualifier|British}}
+* {{sense|computing}} {{l|en|execute}}, {{l|en|start}}
+* See also [[Thesaurus:walk]]
+
+====Antonyms====
+* {{antsense|horizontal part of a step}} {{l|en|rise}}, {{l|en|riser}}
+* {{antsense|horizontal distance of a set of stairs}} {{l|en|rise}}
+
+====Derived terms====
+{{col3|en|have the run of
+|take a run at|run of station|challenge run
+|cannonball rune|run for the money|short run|short-run
+|chicken run
+|dry run|first-run|strafing run
+|hacking run|midnight run|net run rate|required run rate
+|home run
+|maiden run
+|mud run
+|rat run
+|river run
+|Rock Run
+|runholder
+|runout
+|runpast
+|ski run|cannonball run
+|a run for one's money
+|in the long run
+|in the short run
+|on the run
+|make a run for it
+|shuttle run|soup run
+|the run of
+|the runs
+|ultrarun
+|tippity runs|captain's run|free run|good run|land run|mill run|run on the bank|run on the banks|run point|showrun
+| against the run of play|all-run four|at a run|bank run|beer run|bombing run|break into a run|bull run|common run|corpse run|dead run|dice run|dog run|drink run|drug run|dummy run|earned run|hen run|end run|fowl-run|fun run|get a run on|hash run|hen run|horizontal run|ice run|let go by the run|long run|long run for a short slide|marble run|milk run|mole run|monkey run|Naruto run|nude run|nudie run|payrun|pig run|poker run|practice run|pressrun|print run|rise over run|run book|run chase|run feast|run game|run of house|run of paper|run of week|run of year|run of month|run of play|run of press|run of the ball|run of the balls|run sheet|run tee|run year|run-flat|run-length encoding|run-of-the-river|run-on|run-through|school run|sheep-run|solo run|speed run|test run|thunder run|trial run|undie run|visa run
+}}
+
+====Translations====
+{{trans-top|act of running}}{{multitrans|data=
+* Afrikaans: {{tt|af|hardloop}}
+* American Sign Language: {{tt|ase|S@SideChesthigh-S@SideChesthigh CirclesMidline-CirclesMidline}}
+* Amharic: {{tt|am|ሩጫ}}
+* Armenian: {{tt+|hy|վազք}}
+* Azerbaijani: {{tt|az|qaçma}}, {{tt+|az|qaçış}}
+* Breton: {{tt+|br|redek}}
+* Bulgarian: {{tt+|bg|бя́гане|n}}, {{tt+|bg|ти́чане}}
+* Catalan: {{tt+|ca|córrer}}
+* Czech: {{tt+|cs|běh|m}}
+* Danish: {{tt+|da|løb|n}}
+* Dutch: {{tt+|nl|loop|m}}
+* Finnish: {{tt+|fi|juoksu}}
+* French: {{tt+|fr|courir}}
+* German: {{tt+|de|Lauf|m}}, {{t+|de|Rennen|n}}
+* Greek: {{tt+|el|τρέξιμο}}
+* Hebrew: {{tt+|he|ריצה}}
+* Hungarian: {{tt+|hu|futás}}
+* Ingrian: {{t|izh|jooksu}}
+* Irish: {{tt|ga|ruthag|m}}
+* Italian: {{tt+|it|corsa}}
+* Japanese: {{tt+|ja|走る|tr=hashiru}}
+* Korean: {{tt|ko|뜀}}
+* Kurdish:
+*: Central Kurdish: {{tt|ckb|ڕاکردن}}
+*: Northern Kurdish: {{tt+|kmr|bez}}
+* Latgalian: {{tt|ltg|skriejīņs}}
+* Latvian: {{tt|lv|skrējiens}}, {{tt+|lv|skriet}}
+* Lithuanian: {{tt|lt|bėgimas|m}}
+* Macedonian: {{tt|mk|трчање|n}}, {{tt|mk|трк|m}}
+* Malay: {{tt+|ms|larian}}
+* Maori: {{tt|mi|omanga}}
+* Ottoman Turkish: {{t|ota|قوشی|tr=koşu}}
+* Persian: {{tt+|fa|دو|tr=dow}}
+* Polish: {{tt+|pl|bieg|m}}
+* Portuguese: {{tt+|pt|corrida|f}}
+* Romanian: {{tt+|ro|fugă}}
+* Russian: {{tt+|ru|бег|m}}, {{tt+|ru|пробе́жка|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{tt|sh|трчати}}
+*: Roman: {{tt+|sh|trčati}}
+* Sotho: {{tt+|st|matha}}
+* Turkish: {{tt+|tr|koşu}}, {{tt+|tr|koşma}}
+* Ukrainian: {{tt+|uk|біг|m}}, {{tt|uk|пробі́жка|f}}
+* Vietnamese: {{tt+|vi|chạy}}
+* Welsh: {{tt+|cy|rhedeg}}
+{{trans-bottom}}
+
+{{trans-top|act or instance of hurrying to or from a place}}
+* Finnish: {{tt|fi|kaahaus}}
+* German: {{t+|de|Spurt|m}}
+* Ottoman Turkish: {{t|ota|قوشی|tr=koşu}}
+{{trans-bottom}}
+
+{{trans-top|pleasure trip}}
+* Finnish: {{tt+|fi|ajelu}}
+* German: {{t|de|Lustreise (ironisch)|f}}
+{{trans-bottom}}
+
+{{trans-top|instance or period of fleeing}}
+* Finnish: {{tt+|fi|pako}}, {{tt+|fi|pakomatka}}
+* German: {{t+|de|Flucht|f}}
+{{trans-bottom}}
+
+{{trans-top|migration of fish}}
+* Finnish: {{tt+|fi|vaellus}}
+{{trans-bottom}}
+
+{{trans-top|group of fish that migrate}}
+* German: {{t+|de|Schwarm|m}}
+{{trans-bottom}}
+
+{{trans-top|regular trip or route}}
+* Finnish: {{tt+|fi|reitti}}
+* German: {{t|de|üblicher Weg|m}}
+{{trans-bottom}}
+
+{{trans-top|route taken while running}}
+* Bulgarian: {{tt+|bg|път|m}}
+* Catalan: {{tt+|ca|recorregut|m}}, {{tt+|ca|ruta|f}}
+* Danish: {{tt|da|rute|c}}
+* Finnish: {{tt+|fi|reitti}}, {{tt+|fi|lenkki}}
+* French: {{tt+|fr|parcours|m}}
+* German: {{tt+|de|Kurs|m}}, {{tt+|de|Runde|f}}, {{t|de|(Lauf-)Route|f}}, {{t|de|Marschroute|f}}
+* Italian: {{tt+|it|percorso|m}}
+* Japanese: {{tt+|ja|ルート|tr=rūto}}, {{tt+|ja|経路|tr=keiro}}
+* Romanian: {{tt+|ro|rută}}
+* Russian: {{tt+|ru|бег|m}}, {{tt+|ru|путь|f}}, {{tt+|ru|маршру́т|m}}
+* Swedish: {{tt+|sv|runda|c}}
+{{trans-bottom}}
+
+{{trans-top|single trip down a hill}}
+* Finnish: {{tt+|fi|lasku}}
+* German: {{t+|de|Abstieg|m}}
+{{trans-bottom}}
+
+{{trans-top|distance sailed by a ship}}
+* Finnish: {{tt+|fi|legi}}
+{{trans-bottom}}
+
+{{trans-see|voyage}}
+
+{{trans-see|trial}}
+
+{{trans-top|computing: execution of a program or model}}
+* Finnish: {{tt+|fi|ajo}}
+* German: {{t+|de|Durchlauf|m}}
+{{trans-bottom}}
+
+{{trans-top|video games: playthrough, session of play}}
+* German: {{t+|de|Partie|f}}
+* Spanish: {{tt+|es|partida|f}}
+{{trans-bottom}}
+
+{{trans-top|unrestricted use}}
+* Finnish: {{tt|fi|[[vapaa]] [[käyttö]]}}
+* German: {{t|de|Dauergebrauch|m}}
+{{trans-bottom}}
+
+{{trans-top|enclosure for animals}}
+* Finnish: {{tt+|fi|aitaus}}, {{tt+|fi|haka}} {{q|enclosure}}; {{tt+|fi|rata}} {{q|track or path}}
+* German: {{tt+|de|Auslauf|m}}
+* Italian: {{tt+|it|recinto|m}}, {{tt+|it|stabbio|m}}, {{tt+|it|addiaccio|m}}, {{tt+|it|stazzo|m}}
+* Japanese: {{tt+|ja|ラン|tr=ran}}
+* Maori: {{tt|mi|rāihe}}
+* Ottoman Turkish: {{t|ota|كومس|tr=kümes}}, {{t|ota|طاوقلق|tr=tavukluk}} {{qualifier|for chickens}}
+* Polish: {{tt+|pl|wybieg|m}}
+* Romanian: {{tt+|ro|țarc}}
+{{trans-bottom}}
+
+{{trans-top|rural landholding for keeping sheep}}
+* Finnish: {{tt+|fi|laidun}}
+{{trans-bottom}}
+
+{{trans-top|state of being popular}}
+* Finnish: {{tt+|fi|suosio}}
+{{trans-bottom}}
+
+{{trans-top-see|continuous period of time marked by a trend|streak}}
+* Finnish: {{tt+|fi|putki}}
+* Spanish: {{t+|es|carrera|f}}
+{{trans-bottom}}
+
+{{trans-top|successful series of tries in a game}}
+* Finnish: {{tt+|fi|voittoputki}}
+{{trans-bottom}}
+
+{{trans-top|production quantity}}
+* Bulgarian: {{tt+|bg|тира́ж|m}}
+* Finnish: {{tt+|fi|erä}}, {{tt|fi|tuotantoerä}}; {{tt+|fi|painos}} {{q|printing}}
+* German: {{tt+|de|Reihe|f}}, {{tt+|de|Satz|m}}, {{tt+|de|Stange|f}}
+* Italian: {{tt+|it|mandata|f}}, {{tt+|it|uscita|f}}, {{tt+|it|quantitativo|m}}, {{tt+|it|tiratura|f}}
+* Japanese: {{tt+|ja|量|tr=ryō}}
+* Macedonian: {{tt|mk|тира́ж|m}}, {{tt|mk|траење|n}}
+* Portuguese: {{tt+|pt|tiragem|f}}
+* Romanian: {{tt+|ro|tiraj}} {{q|for magazines}}
+* Russian: {{tt+|ru|тира́ж}}, {{tt+|ru|па́ртия}}
+{{trans-bottom}}
+
+{{trans-top|period of showing of a play, film, TV series, etc.}}
+{{trans-bottom}}
+
+{{trans-top|period of extended drug use}}
+* Finnish: {{tt+|fi|putki}}
+{{trans-bottom}}
+
+{{trans-top|card games: sequence of cards in a suit}}
+* Finnish: {{tt+|fi|väri}}
+{{trans-bottom}}
+
+{{trans-top|music: rapid passage along a scale}}
+* Finnish: {{tt+|fi|juoksutus}}
+* Irish: {{tt|ga|ruthag|m}}
+* Polish: {{tt|pl|biegnik|m}}
+{{trans-bottom}}
+
+{{trans-top|flow of liquid}}
+* Bulgarian: {{tt+|bg|тече́ние}}, {{tt+|bg|пото́к}}
+* Finnish: {{tt+|fi|virtaus}}, {{tt+|fi|juoksutus}}
+* French: {{tt+|fr|flot|m}}, {{tt+|fr|flux|m}}
+* German: {{tt+|de|Ausfluss|m}}, {{t+|de|Fluß|m}}
+* Italian: {{tt+|it|scorrere|m}}, {{tt+|it|flusso|m}}, {{tt|it|sgocciolamento|m}}, {{tt|it|sgocciolio|m}}
+* Japanese: {{tt+|ja|流れ|tr=nagare}}
+* Latgalian: {{tt|ltg|tekme|f}}, {{tt|ltg|straume}}
+* Latvian: {{tt|lv|tecējums}}, {{tt+|lv|straume|f}}
+* Lithuanian: {{tt|lt|srovė|f}}, {{tt|lt|tėkmė|f}}
+* Macedonian: {{tt|mk|тек|m}}
+* Maori: {{tt|mi|rere}}
+* Polish: {{tt+|pl|bieg|m}}
+* Portuguese: {{tt|pt|escorrimento|m}}
+* Romanian: {{tt+|ro|flux}}
+* Russian: {{tt+|ru|пото́к|m}}, {{tt+|ru|ток|m}}, {{tt+|ru|тече́ние|n}}
+* Swedish: {{tt+|sv|flöde|n}}, {{tt+|sv|ström|c}}, {{tt+|sv|rinnande|n}}
+{{trans-bottom}}
+
+{{trans-top|creek}}
+* Bulgarian: {{tt+|bg|пото́к}}, {{tt+|bg|руче́й|m}}
+* Finnish: {{tt+|fi|puro}}
+* French: {{tt+|fr|cours d'eau|m}}
+* German: {{tt+|de|Bach|m}}, {{tt+|de|Wasserlauf|m}}
+* Italian: {{tt|it|corso d'acqua|m}}
+* Japanese: {{tt+|ja|小川|tr=ogawa}}
+* Lithuanian: {{tt+|lt|upelis|m}}
+* Macedonian: {{tt+|mk|по́ток|m}}
+* Norwegian: {{tt|no|Løpe}}
+* Portuguese: {{tt+|pt|riacho|m}}
+* Romanian: {{tt+|ro|golf}}
+* Swedish: {{tt+|sv|bäck|c}}
+{{trans-bottom}}
+
+{{trans-top|quick pace}}
+* Azerbaijani: {{tt+|az|qaçış}}
+* Bulgarian: {{tt+|bg|бяг|m}}
+* Finnish: {{tt+|fi|juoksu}}
+* French: {{tt+|fr|course|f}}
+* German: {{t|de|Schnellgang|m}}
+* Italian: {{tt|it|corsetta|f}}
+* Japanese: {{tt|ja|早歩き|tr=hayaaruki}}
+* Macedonian: {{tt|mk|трк|m}}
+* Maori: {{tt|mi|oma}}
+* Romanian: {{tt+|ro|pas}}
+* Russian: {{tt+|ru|бег|m}}
+{{trans-bottom}}
+
+{{trans-top|fast gallop}}
+* Bulgarian: {{tt+|bg|бяг|m}}
+* Catalan: {{tt+|ca|galopar}}
+* Finnish: {{tt+|fi|kiitolaukka}}
+* French: {{tt+|fr|galoper}}
+* Italian: {{tt|it|galoppata|f}}, {{tt|it|trotterellata|f}}
+* Japanese: {{tt+|ja|襲歩|tr=shūho}} {{q|for horse riding}}
+* Macedonian: {{tt|mk|трк|m}}
+* Portuguese: {{tt+|pt|galopar}}
+* Romanian: {{tt+|ro|trap}}
+{{trans-bottom}}
+
+{{trans-top|sudden series of demands on a financial institution}}
+* Finnish: {{tt|fi|nostoryntäys}}
+{{trans-bottom}}
+
+{{trans-top|sudden large demand for something}}
+* Finnish: {{tt+|fi|ryntäys}}
+* German: {{t|de|Spitzenbedarf|m}}
+{{trans-bottom}}
+
+{{trans-top|top of a step on a staircase}}
+* Finnish: {{tt+|fi|askelma}}
+* German: {{t|de|Trittfläche|f}}
+{{trans-bottom}}
+
+{{trans-top|horizontal length of a set of stairs}}
+* Finnish: {{tt+|fi|etenemä}}
+{{trans-bottom}}
+
+{{trans-top|construction: horizontal dimension of a slope}}
+* German: {{t|de|Grundweite|f}}
+{{trans-bottom}}
+
+{{trans-top|standard or unexceptional group or category}}
+* Finnish: {{tt+|fi|massa}}, {{tt+|fi|joukko}}
+* German: {{t|de|Normalmaß|n}}
+{{trans-bottom}}
+
+{{trans-top|point scored in baseball, cricket or similar games}}
+* Finnish: {{tt+|fi|juoksu}}
+* Gujarati: {{t|gu|રન|m}}
+* Maori: {{tt|mi|paina}}
+* Spanish: {{tt+|es|carrera|f}}
+{{trans-bottom}}
+
+{{trans-top|American football: running play}}
+* Finnish: {{tt|fi|juoksupeli}}
+{{trans-bottom}}
+
+{{trans-top|golf: movement communicated to a golf ball by running it}}
+* Finnish: {{tt+|fi|juoksutus}}
+{{trans-bottom}}
+
+{{trans-top|golf: distance a ball travels after touching the ground from a stroke}}
+* Finnish: {{tt+|fi|rulli}}
+{{trans-bottom}}
+
+{{trans-top|distance drilled with a bit}}
+* German: {{t+|de|Tiefe|f}}
+{{trans-bottom}}
+
+{{trans-top|line of unravelled stitches}}
+* Catalan: {{tt+|ca|carrera|f}}, {{tt+|ca|rega|f}}
+* Dutch: {{tt+|nl|ladder|f}}
+* Finnish: {{tt+|fi|silmäpako}}
+* Galician: {{tt+|gl|carreira|f}}
+* German: {{tt+|de|Laufmasche|f}}
+* Italian: {{tt+|it|smagliatura|f}}
+* Japanese: {{tt+|ja|伝線|tr=densen}}
+* Macedonian: {{tt|mk|процеп|m}}, {{tt|mk|скинатица|f}}
+* Polish: {{tt+|pl|oczko|n}}
+* Russian: {{tt+|ru|стре́лка|f}}
+* Spanish: {{tt+|es|carrera|f}}
+{{trans-bottom}}
+
+{{trans-top|stern of the underwater body of a ship}}
+* Romanian: {{tt+|ro|cârmă}}
+{{trans-bottom}}
+
+{{trans-top|mining: horizontal distance to which a drift may be carried}}
+{{trans-bottom}}
+
+{{trans-top|pair or set of millstone}}
+* Finnish: {{tt+|fi|myllynkivi|alt=myllynkivet|p}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Bulgarian: {{tt+|bg|про́бег|m}} &lt;!-- was under definition &quot;interval of distance or time&quot; --&gt;
+* Ewe: {{tt-check|ee|duƒuƒu|n}}, {{tt-check|ee|dusisi|n}} (1)
+* French: {{tt+|fr|période|f}} &lt;!-- was under definition &quot;interval of distance or time&quot; --&gt;
+* German: {{tt+|de|Etappe|f}} {{qualifier|distance}}, {{tt+|de|Streckenabschnitt|m}} {{qualifier|distance}}, {{tt+|de|Phase|f}} {{qualifier|time}} &lt;!-- were under definition &quot;interval of distance or time&quot; --&gt;
+* Italian: {{tt+|it|periodo|m}}, {{tt+|it|distacco|m}}, {{tt+|it|giro|m}} &lt;!-- were under definition &quot;interval of distance or time&quot; --&gt;
+* Italian: {{tt+check|it|corsa|f}} (1), {{tt+check|it|smagliatura|f}}, {{tt+check|it|giro|m}} (14)
+* Japanese: {{qualifier|for distance}}{{tt+|ja|道程|tr=dōtei}}, {{tt+|ja|区間|tr=kukan}}, {{qualifier|for time}}{{tt+|ja|時間|tr=jikan}}, {{tt+|ja|期間|tr=kikan}} &lt;!-- were under definition &quot;interval of distance or time&quot; --&gt;
+* Lithuanian: {{tt-check|lt|bėgimas|m}}
+* Polish: {{tt+|pl|bieg|m}} &lt;!-- was under definition &quot;interval of distance or time&quot; --&gt;
+* Telugu: {{tt+check|te|పరుగు}}
+{{trans-bottom}}
+}}
+
+====See also====
+* {{sense|computer science}} {{l|en|trajectory}}
+
+===Adjective===
+{{en-adj|-}}
+
+# In a [[liquid]] state; [[melted]] or [[molten]].
+#: {{ux|en|Put some '''run''' butter on the vegetables.}}
+#* {{quote-book|en|year=1921|author=L. W. Ferris; H. W. Redfield; W. R. North|chapter=The Volatile Acids and the Volatile Oxidizable Substances of Cream and Experimental Butter|title=Journal of Dairy Science|volume=4|page=522
+|passage=Samples of the regular '''run''' butter were sealed in 1 pound tins and sent to Washington, where the butter was scored and examined.}}
+# [[cast|Cast]] in a [[mould]].
+#* {{quote-book|en|year=1735|author=Thomas Frankz|title=A tour through France, Flanders, and Germany: in a letter to Robert Savil|page=18|passage=[...] the Sides are generally made of Holland's Tiles, or Plates of '''run''' Iron, ornamented variously as Fancy dictates, [...]}}
+#* '''1833''', ''The Cabinet Cyclopaedia: A treatise on the progressive improvement and present state of the Manufactures in Metal'', volume 2, ''Iron and Steel'' (printed in London), page 314:
+#*: Vast quantities are cast in sand moulds, with that kind of '''run''' steel which is so largely used in the production of common table-knives and forks.
+#* {{circa|1839}}, (Richard of Raindale, ''The Plan of my House vindicated'', quoted by) T. T. B. in the ''Dwelling of Richard of Raindale, King of the Moors'', published in ''The Mirror'', number 966, 7 September 1839, page 153:
+#*: For making tea I have a kettle,
+#*: Besides a pan made of '''run''' metal;
+#*: An old arm-chair, in which I sit well —
+#*: The back is round.
+# [[exhaust|Exhausted]]; [[deplete]]d {{qualifier|especially with &quot;down&quot; or &quot;out&quot;}}.
+# {{lb|en|of a|fish}} [[travelled|Travelled]], [[migrated]]; having made a [[migration]] or a spawning [[#Noun|run]].
+#* {{quote-text|en|year=1889|author=Henry Cholmondeley-Pennell|title=Fishing: Salmon and Trout|section=fifth edition, page 185
+|passage=The temperature of the water is consequently much higher than in either England or Scotland, and many newly '''run''' salmon will be found in early spring in the upper waters of Irish rivers where obstructions exist.}}
+#* {{quote-book|en|year=1986|author=Arthur Oglesby|title=Fly fishing for salmon and sea trout|page=15|passage=It may be very much a metallic appearance as opposed to the silver freshness of a recently '''run''' salmon.}}
+#* {{quote-text|en|year=2005|author=Rod Sutterby; Malcolm Greenhalgh|title=Atlantic Salmon: An Illustrated Natural History|page=86
+|passage=Thus, on almost any day of the year, a fresh-'''run''' salmon may be caught legally somewhere in the British Isles.}}
+# [[smuggled|Smuggled]].
+#: '''''run''' brandy''
+
+===Verb===
+{{head|en|verb forms}}
+
+# {{past participle of|en|rin}}
+
+===Anagrams===
+* {{anagrams|en|a=nru|Nur|URN|nur|urn}}
+
+{{cln|en|strong verbs|ergative verbs|irregular past participles|irregular verbs|verb forms using redundant wikisyntax}}
+{{C|en|Collectives|Fish|Ichthyology|Gaits|Water}}
+
+==Dutch==
+
+===Pronunciation===
+* {{audio|nl|Nl-run.ogg}}
+
+===Verb===
+{{head|nl|verb forms}}
+
+# {{infl of|nl|runnen||bare-verb}}
+
+==Gothic==
+
+===Romanization===
+{{got-rom}}
+
+# {{romanization of|got|𐍂𐌿𐌽}}
+
+==Mandarin==
+
+===Romanization===
+{{cmn-pinyin|notr=1}}
+
+# {{nonstandard spelling of|cmn|sc=Latn|rún}}
+# {{nonstandard spelling of|cmn|sc=Latn|rùn}}
+
+====Usage notes====
+* {{cmn-toneless-note}}
+
+==Norman==
+
+===Etymology===
+{{rfe|nrf}}
+
+===Noun===
+{{nrf-noun|m}}
+
+# {{lb|nrf|nautical}} [[beam]] {{qualifier|of a ship}}
+
+==Norwegian Nynorsk==
+
+===Alternative forms===
+* {{alt|nn|[[ron|rón]] {{g|f}}, [[rjon|rjón]] {{g|n}}||dialectal}}
+
+===Etymology===
+From {{inh|nn|non|rún|g=f||rune, secret}}, from {{inh|nn|gmq-pro|ᚱᚢᚾᛟ|*ᚱᚢᚾᚢ|ts=rūnu}}, from {{inh|nn|gem-pro|*rūnō}}. Akin to {{cog|en|roun||secret; rune}}.
+
+===Pronunciation===
+* {{IPA|nn|/rʉːn/}}
+
+===Noun===
+{{nn-noun-f1}}
+
+# [[witchcraft]]
+#: {{uxi|nn|taka '''run''' på ein|use '''witchcraft''' on someone}}
+#* {{quote-book|nn|year=1911|author=Torkell Mauland|title=Trolldom|trans-title=Witchcraft|page=147|pageurl=https://www.nb.no/items/33bf1df79dc1f8a7c19f0725c534a954?page=152|text=Han [Johan] hadde den hausten lege i trætta med Omund Horpestad um ein kvernastad, og daa hadde han truga med at han skulde taka '''run''' paa Omund. So sa i minsto Omund Horpestad daa han bad lensmannen, Mons Øksnavad, stemna Johans til Haugs-tinget ²⁷/₁₁ 1650.|t=He [Johans] had that autumn been in a quarrel with Omund Horpestad about a milling place, and had then threatened with using '''witchcraft''' on Omund. This is at least what Omund Horpestad told when he asked the sheriff, Mons Øksnavad, to subpoena Johans to the Haugating at 27th November 1650.}}
+# {{lb|nn|chiefly|in the plural}}:
+## secret or magic aids
+## [[rune]] {{q|a letter of runic alphabet}}
+##: {{syn|nn|rune|g1=f}}
+
+====Derived terms====
+{{col3|nn
+|bergeruner
+|fjetringruner
+|runa
+|runeblad
+|runebokstav
+|runebok
+|runebumme,runebomme&lt;t:Sámi drum&gt;
+|runebøn
+|runedropar&lt;t:love potion&gt;
+|runeeple
+|runefinn&lt;t:Sámi person that practices wizardry&gt;
+|runefolk
+|runegransking
+|runeinnskrift&lt;t:rune inscription&gt;
+|runekall,runekar&lt;t:wizard&gt;
+|runekjend
+|runekjerring
+|runekjevle&lt;t:rolling pin with rune inscriptions&gt;
+|runekone
+|runekonge
+|runekunst
+|runekvad
+|runekvedar
+|runelærdom
+|runemann
+|runemeister
+|runemål
+|runeord
+|runerekkje&lt;t:rune alphabet&gt;
+|runering
+|runeristar
+|runeråd
+|runeskrift&lt;t:rune writing&gt;
+|runespegel
+|runestav
+|runestein&lt;t:rune stone&gt;
+|runesvevn
+|runeteikn
+|runetull
+|runevers
+|runevise
+|runing,runeri
+}}
+
+====Related terms====
+Female given names:
+{{col3|nn
+|Alvrun
+|Dagrun
+|Fastrun
+|Gudrun
+|Kristrun
+|Myrun
+|Oddrun
+|Olrun
+|Runa
+|Runbjørg
+|Runfrid
+|Runhild
+|Sigrun
+|Solrun
+|Svanrun
+|Trudrun
+|Ulvrun
+|Vardrun
+|Verun
+|Øyrun
+}}
+Male given names:
+{{col3|nn
+|Runalv
+|Runar
+|Runbjørn
+|Rune
+|Runfast
+|Rungisl
+|Runing,Ryning
+|Runke
+|Runolv,Runulv
+|Runstein
+|Runvid
+}}
+
+===References===
+* {{R:Aasen|Runer}}
+
+==Old English==
+
+===Etymology===
+{{dercat|ang|gem-pro|inh=1}}
+From {{inh|ang|gmw-pro|*rūnu}}. Cognate with the {{cog|osx|rūna}}, {{cog|goh|rūna}} ({{cog|de|Raun}}), {{cog|non|rún}}, and {{cog|got|𐍂𐌿𐌽𐌰}}.
+
+===Pronunciation===
+* {{ang-IPA|rūn}}
+
+===Noun===
+{{ang-noun|head=rūn|f}}
+
+# [[whisper]], [[counsel]], [[consultation]]
+#* {{quote-book|ang|text=''Swā cwæð snottor on mōde, · ġesæt him sundor æt '''rūne'''.''|t=So said the wise in mind, sat alone with '''speech''' to himself.|title=The Wanderer|year=10th century}}
+# [[rune]], [[letter]]
+# [[mystery]], [[secret]]
+# [[advice]]
+# [[writing]]
+
+====Declension====
+{{ang-decl-noun-o-f|rūn}}
+
+====Derived terms====
+* {{l|ang|ġerȳne}}
+* {{l|ang|rūnere}}
+* {{l|ang|rūnian}}
+
+====Descendants====
+* {{desc|enm|roun}}
+** {{desc|sco|rune|roun|round}}
+** {{desc|en|roun|round}}
+
+===See also===
+* {{l|ang|dierne|pos=a}}
+
+==Polish==
+
+===Pronunciation===
+{{pl-pr}}
+
+===Noun===
+{{head|pl|noun forms|g=n}}
+
+# {{inflection of|pl|runo||gen|p}}
+
+===Noun===
+{{head|pl|noun forms|g=f}}
+
+# {{inflection of|pl|runa||gen|p}}
+
+===Anagrams===
+* {{l|pl|urn}}
+
+==Spanish==
+
+===Noun===
+{{es-noun|m}}
+
+# {{lb|es|Honduras}} [[armadillo]]
+
+===Further reading===
+* {{R:es:DRAE}}
+
+==Vietnamese==
+
+===Etymology===
+From {{inh|vi|mkh-vie-pro|*-ruːn}}.
+
+===Pronunciation===
+{{vi-IPA}}
+* {{audio|vi|LL-Q9199 (vie)-Penn Zero MSSJ-run.wav|a=Hanoi}}
+
+===Verb===
+{{vi-verb|[[惇]], [[慵]], [[敦]], [[𢹈]]}}
+
+# to [[tremble]], to [[shiver]] (due to cold)
+
+====Derived terms====
+{{col|vi|run rẩy|run sợ|rét run}}
+
+====Related terms====
+* {{l|vi|rung||to shake}}
+
+==Yoruba==
+
+===Etymology 1===
+
+====Pronunciation====
+* {{yo-IPA|rùn}}
+
+====Verb====
+{{yo-verb|rùn}}
+
+# to [[smell]]; to [[stink]]
+
+===Etymology 2===
+
+====Pronunciation====
+* {{yo-IPA|rún}}
+
+====Verb====
+{{yo-verb|rún}}
+
+# to [[crumble]]; to [[shatter]]
+#: {{uxi|yo|Ó ti '''rún''' wómúwómú|It has completely '''crumbled'''}}
+# to [[chew]]
+#: {{uxi|yo|Mo fẹ́ '''rún''' obì|I want to '''chew''' a kola nut}}
+# to [[crinkle]]; to be [[wrinkled]]
+#: {{uxi|yo|Ṣé ẹ̀wù mi ti '''rún'''?|Are my clothes '''creased'''?}}
+
+=====Derived terms=====
+* {{l|yo|èérún|t=crumb}}
+
+===Etymology 3===
+
+====Pronunciation====
+* {{yo-IPA|rún}}
+
+====Verb====
+{{yo-verb|rún}}
+
+# to [[tan]] {{gl|leather}}
+
+===Etymology 4===
+
+====Pronunciation====
+* {{yo-IPA|run}}
+
+====Verb====
+{{yo-verb|run}}
+
+# to [[destroy]]; to [[ruin]]
+# to [[perish]]
+
+=====Derived terms=====
+{{col2|yo
+|runlé-rùnnà
+|ìparun &lt;t:destruction&gt;
+|àkúrun &lt;t:extinction&gt;
+}}
+
+===Etymology 5===
+
+====Pronunciation====
+* {{yo-IPA|run}}
+
+====Verb====
+{{yo-verb|run}}
+
+# {{lb|yo|with [[inú]]}} to [[ache]]
+#: {{uxi|yo|Inú ń '''rún''' un.|Her stomach is '''aching'''.}}</text>
+      <sha1>o2av7d9nwkr3w1oymqw2mgl5x62y88m</sha1>
+    </revision>
+  </page>

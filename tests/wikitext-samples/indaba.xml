@@ -1,0 +1,146 @@
+<page>
+    <title>indaba</title>
+    <ns>0</ns>
+    <id>236766</id>
+    <revision>
+      <id>87297197</id>
+      <parentid>87294024</parentid>
+      <timestamp>2025-10-05T05:52:21Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>rename {{R:EH}} to {{R:eu:EH}}; rename {{R:OEH}} to {{R:eu:OEH}}</comment>
+      <origin>87297197</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2833" sha1="rsxd6jdsf3dbvo2zv2gsie41rq64p7q" xml:space="preserve">==English==
+{{was wotd|2021|May|21}}
+
+===Etymology===
+Borrowed from {{bor|en|zu|índaba|t=affair, issue, matter; piece of news; story}}, from {{m|zu|ín-|pos=class 9 {{glossary|noun}} {{glossary|prefix}}}} + {{m|zu|-daɓa|pos={{glossary|stem}} meaning ‘affair, matter’}}.&lt;ref&gt;{{R:OED Online|pos=n|id=94180|date=March 2019|nodot=1}}; {{R:Lexico|pos=n}}&lt;/ref&gt;&lt;ref&gt;{{R:TheFreeDictionary|source=AHD}}&lt;/ref&gt;
+
+===Pronunciation===
+* {{IPA|en|/ɪnˈdɑːbə/|a=RP}}
+* {{audio|en|LL-Q1860 (eng)-Vealhurl-indaba.wav|a=Southern England}}
+* {{IPA|en|/ɪnˈdɑbə/|a=GA}}
+* {{hyphenation|en|in|da|ba}}
+
+===Noun===
+{{en-noun}}
+
+# {{lb|en|South Africa}}
+## A [[tribal]] [[conference#Noun|conference]] [[hold#Verb|held]] by [[Nguni]] [[leader]]s.
+## {{lb|en|by extension}} Any conference, [[discussion]], or [[meeting#Noun|meeting]].
+## ''Chiefly in'' '''one's own''' ''or'' '''someone's indaba''': a [[concern#Noun|concern]], [[matter#Noun|matter]], or [[problem#Noun|problem]]. {{rfex|en}}
+# {{lb|en|by extension|Scouting}} An [[international#Adjective|international]] conference of [[Scout]] leaders.
+
+====Translations====
+{{trans-top|tribal conference held by Nguni leaders}}
+* Spanish: {{t+|es|indaba}}
+{{trans-bottom}}
+
+{{trans-top|(''South Africa'') any conference, discussion, or meeting}}
+{{trans-bottom}}
+
+{{trans-top|(''South Africa'') concern, matter, or problem}}
+* Southern Ndebele: {{t|nr|índaba}}
+* Xhosa: {{t|xh|índaba|c9}}
+* Zulu: {{t+|zu|índaba|c9}}
+{{trans-bottom}}
+
+{{trans-top|international conference of Scout leaders}}
+{{trans-bottom}}
+
+===References===
+&lt;references/&gt;
+
+===Further reading===
+* {{pedia}}
+* {{R:Collins English Dictionary}}
+* {{R:DSAE|pos=n|id=e03254}}
+* {{R:Merriam-Webster Online}}
+
+===Anagrams===
+* {{anagrams|en|a=aabdin|badian|Ibadan|Badian}}
+
+==Basque==
+
+===Etymology===
+{{blend|eu|India|baba}}. Compare the dialectal form {{m|eu|indibaba}}.&lt;ref&gt;{{R:EHHA|alubia}}&lt;/ref&gt;
+
+===Pronunciation===
+{{eu-pr}}
+
+===Noun===
+{{eu-noun|in}}
+
+# [[bean]], [[green bean]]
+
+====Declension====
+{{eu-ndecl|in}}
+
+===References===
+&lt;references/&gt;
+
+===Further reading===
+* {{R:eu:EH}}
+* {{R:eu:OEH}}
+
+{{C|eu|Legumes}}
+
+==Southern Ndebele==
+
+===Noun===
+{{nr-noun|índaba|9|10|iíndaba}}
+
+# [[matter]], [[issue]]
+
+====Inflection====
+{{rfinfl|nr|noun}}
+
+==Xhosa==
+
+===Etymology===
+{{rfe|xh}}
+
+===Pronunciation===
+* {{IPA|xh|[íⁿd̥a̤ːɓa]}}
+
+===Noun===
+{{xh-noun|índaba|9|10|iíndaba}}
+
+# [[matter]]
+# piece of [[news]]
+
+====Inflection====
+{{rfinfl|xh|noun}}
+
+==Zulu==
+
+===Etymology===
+{{rfe|zu}}
+
+===Pronunciation===
+* {{zu-IPA|índaba}}
+
+===Noun===
+{{zu-noun|índaba|9|10|izíndaba}}
+
+# [[matter]], [[issue]], [[affair]]
+# piece of [[news]]
+# [[story]]
+#: {{syn|zu|inganekwane}}
+
+====Inflection====
+{{zu-infl-noun|LL|9|10|izindaba}}
+
+====Related terms====
+* {{l|zu|udaba}}
+
+===References===
+* {{R:zu:ZED|-daɓa|2.9.9}}</text>
+      <sha1>rsxd6jdsf3dbvo2zv2gsie41rq64p7q</sha1>
+    </revision>
+  </page>

@@ -1,0 +1,278 @@
+<page>
+    <title>running</title>
+    <ns>0</ns>
+    <id>74913</id>
+    <revision>
+      <id>87941877</id>
+      <parentid>87656584</parentid>
+      <timestamp>2025-11-01T02:47:49Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87941877</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="10132" sha1="tixq8s3konl5k74us77kl2eh9383tvq" xml:space="preserve">{{also|Running}}
+==English==
+
+===Etymology===
+{{surf|en|run|-ing}}.
+
+===Pronunciation===
+* {{IPA|en|/ˈɹʌniŋ/|a=UK,US}}
+* {{audio|en|en-us-running.ogg|a=US}}
+* {{audio|en|LL-Q1860 (eng)-Back ache-running.wav|a=UK}}
+* {{rhymes|en|ʌnɪŋ|s=2}}
+
+===Verb===
+{{head|en|verb form}}
+
+# {{infl of|en|run||ing-form}}
+
+===Adjective===
+{{en-adj|-}}
+
+# Moving or advancing at a run.
+## Of a horse, having a running gait; not a [[trotter]] or [[pacer]].
+# [[present|Present]], [[current]].
+#: {{ux|en|'''running''' month}}
+# [[flowing|Flowing]]; [[easy]]; [[cursive]].
+#: {{ux|en|'''running''' handwriting}}
+# [[continuous|Continuous]]; [[ongoing]]; keeping along step by step.
+#: {{ux|en|a '''running''' commentary, a '''running''' explanation, my '''running''' theory}}
+#* {{quote-book|en|year=1778|author=John Hamilton Moore|title=A New and Complete Collection of Voyages and Travels|passage=Thus a constant '''running''' fire was kept up, and no interval allowed for the enemy to stand to their guns in safety {{...}}}}
+#* {{RQ:Milton History|passage=a '''running''' conquest}}
+#* {{RQ:Hare Guesses|passage=What are art and science if not a '''running''' commentary on Nature?}}
+# Having a continuous design or pattern.
+#: '''''running''' bond; '''running''' ornament''
+# [[consecutive|Consecutive]] {{q|much more commonly expressed by an adverb; see below}}.
+#: {{ux|en|He won the title for three '''running''' years.}}
+# {{lb|en|botany}} Extending by a slender climbing or trailing stem.
+#: {{ux|en|a '''running''' vine}}
+# {{lb|en|medicine}} Discharging [[pus]].
+#: {{ux|en|a '''running''' sore}}
+# {{lb|en|medicine|of a nose}} [[discharge|Discharging]] [[snot]] or [[mucus]].
+#: {{syn|en|runny}}
+#: {{ux|en|a '''running''' nose}}
+
+====Derived terms====
+{{col|en|free-running|long-running|running sand|smooth-running|non-running|running hyena|running room|take a running jump}}
+
+====Translations====
+{{trans-top|moving by running}}
+* Bengali: {{t+|bn|ছুটন্ত|tr=chuṭôntô}}, {{t+|bn|চলন্ত|tr=côlôntô}}, {{t+|bn|চলতি}}, {{t+|bn|ধাবমান|tr=dhabôman}}
+* Bulgarian: {{t+|bg|бягащ}}, {{t+|bg|тичащ}}
+* Finnish: {{t+|fi|juokseva}}
+* Galician: {{t+|gl|corrente}}
+* Manchu: {{t|mnc|ᠰᡠᠵᡠᡵᡝ}}
+* Nyunga: {{t|nys|baardanginy}}
+{{trans-bottom}}
+
+{{trans-top|present, current}}
+* Bengali: {{t+|bn|চলতি}}
+* Bulgarian: {{t+|bg|текущ}}
+* Finnish: {{t+|fi|kuluva}}
+* Galician: {{t+|gl|corrente}}
+* German: {{t+|de|laufend}}
+* Italian: {{t+|it|corrente}}, {{t+|it|attuale}}
+{{trans-bottom}}
+
+{{trans-top|easy, cursive}}
+* Finnish: {{t+|fi|sujuva}}
+{{trans-bottom}}
+
+{{trans-top|continuous, keeping along step by step}}
+* Bulgarian: {{t+|bg|плавен}}, {{t+|bg|непрекъснат}}
+* Finnish: {{t+|fi|jatkuva}}
+{{trans-bottom}}
+
+{{trans-top|botany: extending by slender stem}}
+* Bulgarian: {{t+|bg|пълзящ}}
+* Finnish: {{t+|fi|kiipeävä}}
+{{trans-bottom}}
+
+{{trans-top|discharging pus}}
+* Finnish: {{t+|fi|vuotava}}
+* German: {{t+|de|eiternd}}, {{t+|de|nässend}}
+* Irish: {{t|ga|silidh}}, {{t|ga|reatha}}
+{{trans-bottom}}
+
+{{trans-top|discharging snot or mucus}}
+* Bulgarian: {{t+|bg|сълзящ}}
+* Finnish: {{t+|fi|vuotava}}
+* German: {{t+|de|laufend}}
+{{trans-bottom}}
+
+===Adverb===
+{{en-adv|-}}
+
+# {{lb|en|informal}} [[consecutively|Consecutively]]; [[in a row]].
+#: {{ux|en|Mom's strawberry jam won the blue ribbon at the Holland County Fair three years '''running'''.}}
+
+====Translations====
+{{trans-top|consecutively}}
+* Bulgarian: {{t+|bg|последователно}}
+* Finnish: {{t+|fi|peräkkäin}}
+* French: {{t+|fr|à la suite}} {{t+|fr|consécutivement}} {{t+|fr|de suite}}
+* Portuguese: {{t|pt|consecutivamente}}
+* Russian: {{t+|ru|подря́д}}
+* Spanish: {{t+|es|consecutivo}}
+{{trans-bottom}}
+
+===Noun===
+{{wp}}
+{{en-noun|~}}
+
+# The action of the verb {{m|en|to [[run]]}}.
+#: {{ux|en|His '''running''' of the business leaves something to be desired.}}
+#* {{quote-journal|en|date=2022 January 12|title=Network News: Trading of Go-Ahead Group shares halted|journal=RAIL|issue=948|page=7|text=The train operating company owning group warned in early December that it was unable to publish its results for the year to July 3 2021, following an investigation into the '''running''' of Southeastern, which was stripped of its franchise in October [...].}}
+# The activity of running as a form of [[exercise]], as a [[sport]], or for any other reason.
+#: {{ux|en|'''Running''' is good exercise.}}
+# That which runs or flows; the quantity of a liquid which flows in a certain time or during a certain operation.
+#: {{ux|en|the first '''running''' of a still}}
+# The [[discharge]] from an [[ulcer]] or other [[sore]].
+# {{lb|en|colloquial}} The act of [[run errands|running errands]].
+#: {{ux|en|I'm gonna go out and do my '''running'''.}}
+# {{senseid|en|physics}}{{lb|en|physics}} The dependence of measured value, typically a coupling constant, on the energy scale at which it is probed due to higher-order interaction terms and associated [[renormalization]] issues becoming relevant; metaphorically, the &quot;running&quot; of the measurement from its limiting macroscopic value.
+
+====Derived terms====
+{{col|en|free running,freerunning|make all the running|make the running|tunnel running|river running|running coupling|running lights|running stroller|running game}}
+
+====Translations====
+{{trans-top|the action of the verb to run}}
+* American Sign Language: {{t|ase|S@SideChesthigh-PalmAcross-S@SideTrunkhigh-PalmAcross CirclesMidline-CirclesMidline}}
+* Arabic: {{t+|ar|رَكْض|m}}
+* Belarusian: {{t|be|бег|m}}, {{t|be|бе́ганне|n}}
+* Bulgarian: {{t+|bg|бяг|m}}, {{t+|bg|бя́гане|n}}
+* Buryat: {{t|bua|гүйлгэ}}
+* Chinese:
+*: Mandarin: {{t+|cmn|跑|tr=pǎo}}
+* Czech: {{t+|cs|běh|m}}
+* Dutch: {{t+|nl|lopen|n}}
+* Finnish: {{t+|fi|juoksu}}, {{t+|fi|juokseminen}}
+* French: {{t+|fr|course|f}}, {{t+|fr|course à pied|f}}
+* German: {{t+|de|Rennen|n}}, {{t+|de|Laufen|n}}
+* Hungarian: {{t+|hu|futás}}
+* Japanese: {{t+|ja|走る|tr=はしる, hashiru}}, {{t+|ja|走り|tr=はしり, hashiri}}, {{t+|ja|ランニング|tr=ranningu}}
+* Kazakh:
+*: Arabic: {{t|kk|جۇگىرۋ}}, {{t|kk|جۇگىرىس}}
+*: Cyrillic: {{t|kk|жүгіру}}, {{t|kk|жүгіріс}}
+* Korean: {{t+|ko|달리기}}
+* Macedonian: {{t|mk|трчање|n}}
+* Malayalam: {{t+|ml|ഓട്ടം}}
+* Manchu: {{t|mnc|ᠰᡠᠵᡠᡵᡝᠩᡤᡝ}}, {{t|mnc|ᠰᡠᠵᡠᡥᡝᠩᡤᡝ}} {{q|past}}
+* Mongolian: {{t|mn|ᠭᠦᠶᠦᠳᠡᠯ}}
+*: Cyrillic: {{t|mn|гүйдэл}}
+* Norwegian:
+*: Bokmål: {{t+|nb|løping|m|f}}
+* Old English: {{t|ang|ryne|m}}
+* Polish: {{t+|pl|bieg|m}}, {{t+|pl|bieganie|n}}
+* Portuguese: {{t+|pt|correr}}
+* Russian: {{t+|ru|бег|m}}, {{t+|ru|беготня́|f}} {{qualifier|scurry, running about}}, {{t+|ru|бе́гание|n}}
+* Serbo-Croatian:
+*: Cyrillic: {{t|sh|трчање|n}}
+*: Roman: {{t+|sh|trčanje|n}}
+* Slovak: {{t|sk|beh|m}}, {{t|sk|behanie|n}}
+* Slovene: {{t+|sl|tek|m}}
+* Spanish: {{t+|es|administración|f}}, {{t+|es|control|m}}, {{t+|es|dirección|f}}, {{t+|es|manejo|m}}, {{t+|es|organización|f}},
+* Swedish: {{t+|sv|löpning|c}}
+* Telugu: {{t+|te|పరుగెత్తుట}}
+* Turkish: {{t+|tr|koşma}}, {{t+|tr|koşu}}
+* Tuvan: {{t|tyv|маңнаары}}
+* Ukrainian: {{t+|uk|біг|m}}, {{t+|uk|бі́гання|n}}
+* Volapük: {{t+|vo|vifagol}}, {{t|vo|gol vifik}}
+* Yakut: {{t|sah|сүүрүү}}
+{{trans-bottom}}
+
+{{trans-top|sport}}
+* Belarusian: {{t|be|бег|m}}
+* Bulgarian: {{t+|bg|бягане|n}}
+* Chinese:
+*: Mandarin: {{t+|cmn|賽跑|tr=sàipǎo}}
+* Finnish: {{t+|fi|juoksu}}
+* German: {{t|de|Laufsport|m}}, {{t+|de|Laufen|n}}
+* Hungarian: {{t+|hu|futás}}
+* Italian: {{t+|it|corsa|f}}
+* Polish: {{t+|pl|bieg|m}}
+* Portuguese: {{t+|pt|correr}}
+* Russian: {{t+|ru|бег|m}}
+* Spanish: {{t|es|''footing''|m}} {{q|''fútin''}}, {{t|es|''jogging''|m}} {{q|''yóguin''}}, {{t|es|aerobismo|m}}, {{t+|es|corrida|f}}, {{t|es|peregueta|f}}, {{t|es|pedestrismo|m}}
+* Ukrainian: {{t+|uk|біг|m}}
+{{trans-bottom}}
+
+{{trans-top|quantity of liquid which flows in a certain time}}
+* Bulgarian: {{t+|bg|дебит|m}}
+* Chinese:
+*: Mandarin: {{t+|cmn|流量}}
+* Finnish: {{t+|fi|juoksutus}} {{q|regulated}}; {{t|fi|valuma}}, {{t+|fi|virtaama}} {{q|nonregulated}}
+{{trans-bottom}}
+
+{{trans-top|discharge from a sore}}
+* Bulgarian: {{t|bg|сълзене|n}}
+* Finnish: {{t+|fi|vuoto}}
+{{trans-bottom}}
+
+===Preposition===
+{{en-head|prep}}
+
+# {{lb|en|colloquial}} Approaching; [[about]]; [[roughly]]. {{rfex|en}} &lt;!--Chambers 1908--&gt;
+
+====Derived terms====
+{{col3|en|title=Terms derived from ''running'' (all parts of speech)
+|bungee running
+|come running
+|drug running
+|free running|make good one's running|running light|running rein|take up the running
+|front running
+|hand running
+|hit the ground running
+|hitting and running
+|in the running
+|in running order
+|off and running
+|out of the running
+|rat running
+|retro running
+|running costs
+|running dictation
+|running joke
+|running line
+|running powers
+|running rail
+|running shed
+|running sore
+|running track
+|running water
+|up and running
+|bull-running|fell running|front-running|running and racing|running back|running battle|running block|running board|running commentary|running day|running dog|running fight|running fire|running flush|running gag|running gear|running hand|running head|running heading|running headline|running in|running iron|running knot|running lane|running load|running madness|running man|running mate|running meter|running of the bulls|running order|running rigging|running script|running serviceberry|running shoe|running shoes|running speech|running stationer|running stitch|running target|running text|running the gauntlet|running therapy|running thrush|running time|running title|running trap|running W}}
+
+===References===
+* {{R:Lexico}}
+
+{{cln|en|verbal nouns}}
+
+==French==
+
+===Etymology===
+{{ellipsis|fr|-}} {{bor|fr|en|running shoe}}.
+
+===Pronunciation===
+* {{fr-IPA|roning}}
+
+===Noun===
+{{fr-noun|m}}
+
+# {{lb|fr|Canada}} [[running shoe]]
+
+==Spanish==
+
+===Noun===
+{{es-noun|m|-}}
+
+# {{l|en|running}}, [[jogging]]</text>
+      <sha1>tixq8s3konl5k74us77kl2eh9383tvq</sha1>
+    </revision>
+  </page>
