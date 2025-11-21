@@ -17,7 +17,7 @@ readonly SOURCE_FILE="${OUTPUT_DIR}/brysbaert.SOURCE.json"
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
 
-echo "→ Fetching Brysbaert concreteness ratings..."
+echo "Fetching Brysbaert concreteness ratings..."
 echo "  URL: $BRYSBAERT_URL"
 
 # Download with wget or curl

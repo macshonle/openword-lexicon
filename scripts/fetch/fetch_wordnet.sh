@@ -16,7 +16,7 @@ readonly SOURCE_FILE="${OUTPUT_DIR}/wordnet.SOURCE.json"
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
 
-echo "→ Fetching Open English WordNet (2024 Edition)..."
+echo "Fetching Open English WordNet (2024 Edition)..."
 echo "  Repository: $WORDNET_REPO"
 
 # Check if archive already exists

@@ -57,9 +57,6 @@ lint:
 test:
 	$(UV) run pytest -q || true
 
-check-limits:
-	@bash scripts/sys/limits.sh check
-
 # ===========================
 # Data Fetching
 # ===========================
@@ -72,7 +69,6 @@ fetch-en:
 	bash scripts/fetch/fetch_wordnet.sh
 	bash scripts/fetch/fetch_frequency.sh
 	bash scripts/fetch/fetch_brysbaert.sh
-	bash scripts/sys/limits.sh update
 
 # ===========================
 # Frontend Dependencies
@@ -109,7 +105,6 @@ build-en: fetch-en build-wiktionary-json
 	$(UV) run python src/openword/brysbaert_enrich.py --unified
 	$(UV) run python src/openword/frequency_tiers.py --unified
 	$(UV) run python src/openword/trie_build.py --unified
-	@echo "✓ English lexicon build complete"
 
 # Build Wiktionary JSONL using lightweight scanner parser (file-based dependency)
 $(WIKTIONARY_JSON): $(WIKTIONARY_DUMP)
@@ -144,8 +139,7 @@ clean:
 	rm -rf build dist .pytest_cache .ruff_cache
 	find . -name '__pycache__' -type d -prune -exec rm -rf '{}' +
 	find . -name '*.egg-info' -type d -prune -exec rm -rf '{}' +
-	rm -rf data/intermediate data/filtered data/build \
-		data/artifacts data/.limits-log.json \
+	rm -rf data/intermediate data/filtered data/build data/artifacts \
 		ATTRIBUTION.md MANIFEST.json
 	rm -rf viewer/node_modules viewer/pnpm-lock.yaml viewer/data viewer/dist
 

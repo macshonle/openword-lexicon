@@ -14,7 +14,7 @@ readonly SOURCE_FILE="${OUTPUT_DIR}/enable1.SOURCE.json"
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
 
-echo "→ Fetching ENABLE word list..."
+echo "Fetching ENABLE word list..."
 echo "  URL: $ENABLE_URL"
 
 # Download with wget or curl

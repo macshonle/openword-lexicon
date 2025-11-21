@@ -21,7 +21,6 @@
 /data/game_words/
 /data/core/
 /data/plus/
-/data/.limits-log.json
 
 # Exception: Track diagnostic slices for analysis
 !/data/diagnostic/

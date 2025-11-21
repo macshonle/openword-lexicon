@@ -15,8 +15,8 @@ readonly SOURCE_FILE="${OUTPUT_DIR}/wiktionary.SOURCE.json"
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
 
-echo "→ Fetching Wiktionary English dump..."
-echo "  Note: This is a large file (~2-3 GB compressed)"
+echo "Fetching Wiktionary English dump..."
+echo "  Note: This is a large file (~1.5 GB compressed)"
 echo "  URL: ${WIKTIONARY_BASE}/latest/${DUMP_FILE}"
 
 # Check if file already exists and is recent (less than 30 days old)

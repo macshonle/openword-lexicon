@@ -6,42 +6,8 @@ This directory contains utility scripts for the Openword Lexicon build pipeline.
 
 ```
 scripts/
-├── sys/          # System utilities (limits, monitoring)
 └── fetch/        # Data source fetch scripts
 ```
-
-## System Scripts (`sys/`)
-
-### `limits.sh`
-
-Resource monitoring and enforcement script. Ensures the project stays within constraints:
-- **Download cap:** ≤ 100 GB total
-- **RAM cap:** ≤ 2 GB peak RSS per step
-
-**Usage:**
-```bash
-# Check if limits are exceeded (exit 1 if violated)
-./scripts/sys/limits.sh check
-
-# Run a command with memory tracking
-./scripts/sys/limits.sh track "step-name" command args...
-
-# Update download size log
-./scripts/sys/limits.sh update
-
-# Reset logs (for testing)
-./scripts/sys/limits.sh reset
-```
-
-**Integration:**
-```bash
-make check-limits    # Runs limits check
-```
-
-The script maintains `data/.limits-log.json` tracking:
-- Total download bytes (from `data/raw/`)
-- Per-step peak RSS measurements
-- Execution timestamps and status
 
 ## Fetch Scripts (`fetch/`)
 
