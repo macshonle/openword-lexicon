@@ -1,0 +1,92 @@
+<page>
+    <title>Łódź</title>
+    <ns>0</ns>
+    <id>184245</id>
+    <revision>
+      <id>87754579</id>
+      <parentid>85775214</parentid>
+      <timestamp>2025-10-31T21:39:58Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{swp}} to new syntax; convert {{wp}} to new syntax</comment>
+      <origin>87754579</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2692" sha1="3mxv8zcxwea6yan36qddgyz17ksch5o" xml:space="preserve">{{also|Lodz|Lodž|Łodz|łódź}}
+==English==
+
+===Proper noun===
+{{en-proper noun}}
+
+# {{alternative form of|en|Lodz}}.
+
+====Related terms====
+*[[Łódź East]]
+
+==Hungarian==
+{{swp|hu:}}
+
+===Etymology===
+From {{bor|hu|pl|Łódź}}.
+
+===Pronunciation===
+* {{hu-IPA|loddzs|vuddzs|vucs}}&lt;ref&gt;For transcription, [lodzs] is given in {{R:OsirisHelyes 2006}}. Word-final {{m|hu||dzs}} is always pronounced long (unless it follows another consonant in the same syllable). The second and the third variants may reflect the original pronunciation more faithfully but are likely to cause non-Polish-speakers more difficulty when trying to recognize the name.&lt;/ref&gt; &lt;!-- some other sources in Hungarian:
+https://www.nyest.hu/hirek/az-eb-es-a-penz-kerdesek
+https://idegennyelvor.blog.hu/2009/10/18/to_vee_or_not_to_vee
+https://www.gyakorikerdesek.hu/kultura-es-kozosseg__nyelvek__1754130-hogy-ejtjuk-ezeket-lengyelul
+https://kiejtes.hu/az-eszt-a-finn-a-lengyel-es-a-torok-kiejtesrol-diohejban/a-lengyel-szavak-kiejteserol-nagyon-roviden
+https://myadventures.blog.hu/2013/01/10/_od_821
+http://www.humsirc.hu/content/lodz
+https://idokikoto.hu/lodz-lengyel-kor-1/
+background to the transcription in OsirisHelyes: https://forum.index.hu/Article/jumpTree?a=102948900&amp;t=9068873 --&gt;
+* {{hyphenation|hu|Łódź}}
+* {{rhymes|hu|od͡ʒː|ud͡ʒː|ut͡ʃ|s1=1}} {{q|the latter two forms may interfere with listening comprehension, except among Polish speakers}}
+
+===Proper noun===
+{{head|hu|proper noun}}
+
+# {{place|hu|major city|country/en:Poland|t1=Lodz}}
+
+====Declension====
+{{hu-infl-nom|Łódźo|o|n=sg|v=dzs}}{{hu-pos-otok|Łódź||ai|n=sg}}
+
+====Derived terms====
+* {{l|hu|łódźi}}
+
+===References===
+&lt;references/&gt;
+
+==Polish==
+{{wp|pl:}}
+
+===Alternative forms===
+* {{alt|pl|Łodzia||Middle Polish}}
+
+===Etymology===
+{{inh+|pl|zlw-opl|Łodzia}}, from {{m|zlw-opl|łódź//łodzia}} with the modern form existing since the 18th century. The city is by the {{m|pl|Łódka}} river.&lt;ref&gt;{{R:pl:NMP|+|380|6}}&lt;/ref&gt;
+
+===Pronunciation===
+{{pl-pr|a=Pl-Łódź.ogg;Pl-Łódź-2.ogg;LL-Q809 (pol)-Olaf-Łódź.wav|hh=łódź,łudź}}
+
+===Proper noun===
+{{pl-proper noun|f|adj=łódzki|dem=łodzianin|fdem=łodzianka}}
+
+# {{place|pl|capital city|voi/Łódź Voivodeship|in southeastern|c/Poland|t=Lodz}}
+# {{place|pl|village|voi/Greater Poland Voivodeship|administrative district/Gmina Piaski|co/Gostyń County|in west-central|c/Poland|t=Lodz}}
+# {{place|pl|village|voi/Greater Poland Voivodeship|administrative district/Gmina Stęszew|co/Poznań County|in west-central|c/Poland|t=Lodz}}
+
+====Declension====
+{{pl-decl-noun-f|tantum=s}}
+
+===References===
+{{reflist}}
+
+===Further reading===
+* {{R:pl:WSJP}}
+* {{R:pl:PWN}}</text>
+      <sha1>3mxv8zcxwea6yan36qddgyz17ksch5o</sha1>
+    </revision>
+  </page>

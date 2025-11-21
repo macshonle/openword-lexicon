@@ -1,0 +1,43 @@
+<page>
+    <title>üdvözlet</title>
+    <ns>0</ns>
+    <id>1402098</id>
+    <revision>
+      <id>82792975</id>
+      <parentid>64258325</parentid>
+      <timestamp>2024-11-29T12:41:59Z</timestamp>
+      <contributor>
+        <username>Adam78</username>
+        <id>3172</id>
+      </contributor>
+      <minor />
+      <comment>/* Etymology */</comment>
+      <origin>82792975</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="468" sha1="i593cpdcskrtz0wvc1xyuywzih1gqg4" xml:space="preserve">==Hungarian==
+
+===Etymology===
+From the {{m|hu||üdvözl-}} stem of {{affix|hu|üdvözöl|t1=to greet someone|-et#Hungarian: noun-forming|pos2=noun-forming suffix|pos=noun}}.
+
+===Pronunciation===
+* {{hu-IPA}}
+* {{hyphenation|hu|üd|vöz|let}}
+* {{rhymes|hu|ɛt|s=3}}
+
+===Noun===
+{{hu-noun|ek}}
+
+# [[greeting]]
+
+====Declension====
+{{hu-infl-nom|üdvözlete|e}}{{hu-pos-etek|üdvözlet||ei}}
+
+====Synonyms====
+* {{l|hu|köszöntés}}
+
+===Further reading===
+* {{R:ErtSz}}</text>
+      <sha1>i593cpdcskrtz0wvc1xyuywzih1gqg4</sha1>
+    </revision>
+  </page>

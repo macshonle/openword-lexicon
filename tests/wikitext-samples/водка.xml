@@ -1,0 +1,143 @@
+<page>
+    <title>водка</title>
+    <ns>0</ns>
+    <id>34102</id>
+    <revision>
+      <id>87781703</id>
+      <parentid>87471025</parentid>
+      <timestamp>2025-10-31T22:23:27Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}; convert {{slim-wikipedia}} to new syntax; convert {{slim-wikipedia}} to {{swp}}</comment>
+      <origin>87781703</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4359" sha1="8a0h4aisdkwp2efeykroqxe3xf6ics2" xml:space="preserve">==Belarusian==
+
+===Pronunciation===
+* {{be-IPA|во́дка}}
+
+===Noun===
+{{be-noun|во́дка&lt;*&gt;}}
+
+# [[vodka]]
+#: {{syn|be|гарэ́лка|q1=common term}}
+#* {{quote-text|be|year=1968|title=Іван Пташнікаў: Тартак
+|passage=А нам, татарам, усіраўно: ці '''водка''', ці пулямёт... Ліжба з ног ш-шыбала...}}
+#* {{quote-text|be|year=1975|title=Алесь Адамовіч, Уладзімер Калесьнік, Янка Брыль: Я з вогненнай вёскі...
+|passage=Яны ўвайшлі да нас, у іх былі гранаты такія, з дзеравянымі ручкамі, і '''водка''' руская, вот такія сотачкі.
+|t=They came in, holding grenades with wooden handles and Russian vodka, in quarter pints.}}
+#* {{quote-text|be|year=1980|title=Кастусь Акула: Гараватка
+|passage=Адно Янук закашляўся й зморшчыўся, калі '''водка''' забрала яму дыханьне.
+|t=Only Yanook coughed and made a wry face once vodka tightened his throat.}}
+
+====Declension====
+{{be-ndecl|во́дка&lt;*&gt;}}
+
+===References===
+* {{R:be:slounik.org}}
+
+{{topics|be|Alcoholic beverages}}
+
+==Bulgarian==
+{{wp|bg:}}
+
+===Pronunciation===
+{{bg-pr|во́дка|a=[KK]}}
+
+===Noun===
+{{bg-noun|во́дка|f|dim=во́дчица}}
+
+# {{lb|bg|uncountable}} {{tcl|bg|vodka|id=Q374}}
+# {{lb|bg|countable}} a (portion of) [[vodka]]
+
+====Declension====
+{{bg-ndecl|во́дка&lt;&gt;}}
+
+{{C|bg|Distilled beverages}}
+
+==Russian==
+{{swp|ru:}}
+
+===Etymology===
+From {{af|ru|вода́&lt;t:water&gt;|-ка&lt;pos:diminutive suffix&gt;}}. {{etydate|1533}}, at first only in medical context; the beverage sense appeared in the 17th century and became widespread in the 19th, displacing {{m|ru|хле́бное вино́|lit=grain wine}} by the early 20th century. The beverage sense is probably a {{semantic loan|ru|pl|wódka|nocap=1}}, which, per Brückner, in turn may be a {{semantic loan|ru|ML.|aqua vitae|nocap=1}}.
+
+===Pronunciation===
+* {{ru-IPA|во́дка}}
+* {{audio|ru|Ru-водка.ogg}}
+* {{audio|ru|LL-Q7737 (rus)-Tatiana Kerbush-водка.wav|a=Saint Petersburg}}
+
+===Noun===
+{{ru-noun+|во́дка|*|adj=во́дочный|dim=во́донька,во́дочка}}
+
+# {{lb|ru|usually|uncountable}} [[vodka]]
+#: {{uxi|ru|[[палёный|палёная]] '''во́дка'''|unlicensed vodka}}
+# {{lb|ru|dated}} [[flavored]] [[liquor]], [[liqueur]]
+#: {{uxi|ru|[[анисовый|ани́совая]] '''во́дка'''|[[anisette]]}}
+#: {{uxi|ru|[[можжевеловый|можжеве́ловая]] '''во́дка'''|[[gin]] (liquor)}}
+#: {{uxi|ru|[[яблочный|я́блочная]] '''во́дка'''|[[applejack]]}}
+# {{lb|ru|pharmacology|obsolete}} [[tincture]] {{gl|a solution of some substance in alcohol for use in medicine or cosmetics}}
+# {{lb|ru|chemistry|archaic}} [[aqua]], [[acid]]
+#: {{uxi|ru|[[царский|ца́рская]] '''во́дка'''|[[aqua regia]]}}
+
+====Declension====
+{{ru-noun-table|во́дка|*}}
+{{ru-noun-table|во́дка|*|old=1}}
+
+====Derived terms====
+* {{l|ru|ликёро-во́дочный}}
+
+====Descendants====
+* {{desc|ain|ヴォッカ|bor=1}}
+* {{desctree|en|vodka|bor=1}}
+* {{desc|fr|vodka|bor=1}}
+* {{desc|ka|ოტკა|lb1=Adjara,Meskheti,Guria|ვოტკა|lb2=Guria|bor=1}}
+* {{desc|de|Wodka|bor=1}}
+* {{desc|he|ווֹדְקָה|tr=vódka|bor=1}}
+* {{desc|izh|votka|bor=1}}
+* {{desc|ja|-|bor=1}} {{ja-r|ウォッカ}}, {{ja-r|ヴォートカ}}
+* {{desc|ko|보드카|bor=1}}
+* Kurdish:
+*: {{desc|ckb|ڤۆدکا|ڤۆدگا|bor=1}}
+* {{desc|lzz|ონტკა|ვოტკა|bor=1}}
+* {{desc|xmf|ონტკა|bor=1}}
+* {{desc|pt|vodka|bor=1}}
+* {{desc|th|วอดก้า|bor=1}}
+* {{desc|uk|во́дка|bor=1}}
+* {{desc|ug|ۋوتكا|bor=1}}
+
+====See also====
+* {{l|ru|хле́бное вино́|g=n}}
+
+===References===
+* {{R:ru:ESRJa|водка|124|3}}
+
+{{topics|ru|Distilled beverages}}
+
+==Ukrainian==
+
+===Etymology===
+{{bor+|uk|ru|во́дка}}.
+
+===Pronunciation===
+* {{uk-IPA|во́дка}}
+
+===Noun===
+{{uk-noun|во́дка&lt;*&gt;}}
+
+# {{lb|uk|rare}} [[vodka]]
+#: {{syn|uk|горі́лка|q1=common term}}
+
+====Declension====
+{{uk-ndecl|во́дка&lt;*&gt;}}
+
+===References===
+* {{R:uk:Horokh}}
+
+{{topics|uk|Alcoholic beverages}}</text>
+      <sha1>8a0h4aisdkwp2efeykroqxe3xf6ics2</sha1>
+    </revision>
+  </page>

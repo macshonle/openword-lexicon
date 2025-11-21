@@ -1,0 +1,369 @@
+<page>
+    <title>billion</title>
+    <ns>0</ns>
+    <id>1975</id>
+    <revision>
+      <id>87680004</id>
+      <parentid>86503472</parentid>
+      <timestamp>2025-10-31T19:40:24Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wp}} to new syntax</comment>
+      <origin>87680004</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="15874" sha1="teqms6viojv58zwscgvrkw3upqxjqsv" xml:space="preserve">{{also|Billion}}
+==English==
+{{wp|Long and short scales}}
+{{number box|en|1000000000}}
+{{number box|en|1000000000000}}
+
+===Etymology===
+From {{borrowed|en|fr|billion}}, from {{confix|en|bi|gloss1=two|illion}}.
+
+===Pronunciation===
+* {{enPR|bĭl'yən}}, {{IPA|en|/ˈbɪljən/}}
+* {{audio|en|en-us-billion.ogg|a=US}}
+* {{hyphenation|en|bil|lion}}
+* {{rhymes|en|ɪljən|s=2}}
+
+===Numeral===
+{{head|en|numeral|plural|billions}}
+
+{{enum|en|million|trillion|cardinal number|10&lt;sup&gt;9&lt;/sup&gt;}}
+{{enum|en|milliard|billiard|cardinal number|10&lt;sup&gt;12&lt;/sup&gt;}}
+
+# {{senseid|en|Q12535449}} Either of two large amounts:
+## {{senseid|en|Q16021}} {{lb|en|US|modern British &amp; Australian|short scale}} a [[thousand million]] ({{w|Long and short scales#Comparison|logic: 1,000 × 1,000&lt;sup&gt;2&lt;/sup&gt;}}): 1 followed by nine zeros, 10&lt;sup&gt;9&lt;/sup&gt;.
+##: {{syn|en|milliard&lt;id:Q16021&gt;|thousand million&lt;id:Q16021&gt;}}
+##* {{quote-journal|en|title=National Finances
+|date=1921-01-24|work=Devon and Exeter Gazette|page=5
+|passage=At the last assessment it [the national debt] amounts to seven '''billion''' pounds (£7,000,000,000).}}
+##* {{quote-journal|en|title=No hiding place
+|date=2013-05-25|volume=407|issue=8837|page=74|magazine=w:The Economist
+|url=http://www.economist.com/news/science-and-technology/21578357-plan-assess-peoples-personal-characteristics-their-twitter-streams-no
+|passage=In America alone, people spent $170 '''billion''' on “direct marketing”—junk mail of both the physical and electronic varieties—last year. Yet of those who received unsolicited adverts through the post, only 3% bought anything as a result.}}
+##* {{quote-journal|en|year=2019|month=October|author=Dan Harvey|title=HS2 costs rise as schedule slips|journal=Modern Railways|page=9|text=However, despite the prospect of HS2 being curtailed and the revelation that the programme is late and '''billions''' over budget, for now, at least, work on the scheme appears to be business as usual}}
+##* {{quote-journal|en|author=Reuters|title=Chipmakers look to Japan as worries about China grow|magazine=w:CNN Business|url=https://www.cnn.com/2023/05/18/tech/chipmaking-japan-china-g7|date=2023-05-18|passage=Micron said in a statement that it would bring extreme ultraviolet (EUV) technology to Japan, becoming the first semiconductor company to do so, and expected to invest up to 500 '''billion''' yen ($3.6 billion) with support from the Japanese government.}}
+##* {{quote-journal|en|date=2023-10-30|journal= Scientific Reports|volume=13|author=Herbold et al.|title=A large-scale comparison of human-written versus ChatGPT-generated essays|page=1|title_plain=18617|text=The ChatGPT service which serves as Web front-end to GPT-3.5 and GPT-4 was the fastest-growing service in history to break the 100 million user milestone in January and had 1 '''billion''' visits by February 2023.}}
+##* {{quote-web|en|title=COMPLAINT FOR DECLARATORY AND INJUNCTIVE RELIEF|url=https://www.justsecurity.org/wp-content/uploads/2025/02/new-york-v-trump-doge-treasury-feb-7-2025.pdf|date=2025-02-08|page=2|work=w:United States District Court for the Southern District of New York|passage=Plaintiff States also receive '''billions''' of dollars in funds every year directly from Treasury through BFS under federal grant programs.}}
+## {{senseid|en|Q862978}} {{lb|en|dated|British &amp; Australian|long scale}} A [[million]] (times a) [[million]] ({{w|Long and short scales#Comparison|logic: 1,000,000&lt;sup&gt;2&lt;/sup&gt;}}): a 1 followed by twelve zeros (10&lt;sup&gt;12&lt;/sup&gt;); a thousand milliard.
+##: {{syn|en|trillion&lt;id:Q862978&gt;&lt;qq:[[short scale]]&gt;}}
+##* {{quote-journal|en|title=A Method of Finding, by the Help of Sir Isaac Newton's Binomial Theorem, a Near Value of the very Slowly Converging Infinite Series [...] |author=Francis Maseres|work=Philosophical Transactions of the Royal Society |year=1778 |volume=lxviii  |issue=xli
+|passage=''n'' = 1,000,000,000,000, that is, = a '''billion''', or the square of a million
+|url=https://archive.org/details/philosophicaltra14royarich/page/452/mode/2up}}
+##* {{quote-journal |en |work=Hansard |date=2000-11-08 |author=Stephen Ladyman |title=[Speech to the House of Commons]
+|passage=There is a bill to be picked up for cleaning the former Soviet countries of £1 '''billion'''. By that I mean a British '''billion''', because when I was little I was told that a '''billion''' was a million million and then the Americans said that it was a thousand million. Well, I am talking about a million million pounds worth of clean-up to be done.
+|url=https://hansard.parliament.uk/Commons/2000-11-08/debates/d6ed870b-be63-43fb-aead-8d1ae18eb568/CommonsChamber#contribution-746507c2-9e31-49a8-ba61-482a48eb884e}}
+# {{senseid|en|huge amount, not further quantified}} {{lb|en|colloquial|hyperbole}} An unspecified very large number.
+#: {{nearsyn|en|gazillion|Thesaurus:zillion}}
+#: {{ux|en|There were '''billions''' of people at the concert.}}
+
+{{col|en|title=abbreviations|
+|bil,bil.
+|bln,bln.
+|bn,bn.
+|B,b,B.,b.
+}}
+
+====Coordinate terms====
+{{col|en|sort=0&lt;!-- numeric --&gt;
+|thousand
+|million
+|milliard
+|thousand million
+|trillion
+|quadrillion
+|quintillion
+|sextillion
+}}
+
+====Derived terms====
+{{col|en|multibillions|Boring Billion|centibillion|megabillion|multibillion
+|Barbillion
+|billionaire|billion-dollar grass
+|billion-dollar question
+|billion laughs
+|golden billion
+|multi-billion}}
+
+====Related terms====
+* {{l|en|trillion}}, coined at same time
+* {{l|en|zillion}}, coined after the series million, billion, trillion, quadrillion (modern slang)
+* {{l|en|gazillion}}, from same origin
+* {{l|en|-illion}}, from same origin
+
+====Descendants====
+{{top2}}
+* {{desc|ny|biliyoni|bor=1}}
+* {{desc|ha|biliyan|bor=1}}
+* {{desc|haw|piliona|bor=1}}
+* {{desc|mi|piriona|bor=1}}
+* {{desc|niu|piliona|bor=1}}
+* {{desc|sm|piliona|bor=1}}
+* {{desc|sn|bhiriyoni|bor=1}}
+* {{desc|so|bilyan|bor=1}}
+* {{desc|sw|bilioni|bor=1}}
+* {{desc|to|piliona|bor=1}}
+* {{desc|cy|biliwn|bor=1}}
+* {{desc|xh|ibhiliyoni|bor=1}}
+* {{desc|zu|ibhiliyoni|bor=1}}
+{{bottom}}
+
+====Translations====
+{{trans-top|a thousand million (1,000,000,000); a milliard}}
+* Afrikaans: {{t+|af|miljard}}
+* Albanian: {{t|sq|miliardë}}, {{t+|sq|miliard}}
+* Arabic: {{t|ar|مِلْيَار|m}}
+* Armenian: {{t+|hy|միլիարդ}}, {{t+|hy|միլիառ}}, {{t|hy|հազար միլիոն}}
+* Azerbaijani: {{t|az|milyard}}
+* Basque: {{t|eu|miliar}}, {{t|eu|mila milioi}}
+* Belarusian: {{t+|be|мілья́рд|m}}
+* Bengali: {{t+|bn|বিলিয়ন}}
+* Breton: {{t+|br|miliard}}
+* Bulgarian: {{t|bg|милиа́рд|m}}
+* Burmese: {{t+|my|ပကောဋိ|sc=Mymr}}, {{t|my|ဘီလီယံ}}
+* Catalan: {{t|ca|mil milió}} {{qualifier|usual}}, {{t+|ca|miliard|m}} {{qualifier|rare}}, {{t|ca|mil milions|m}}
+* Cebuano: {{t|ceb|wakat}}, {{t|ceb|bilyon}}
+* Chichewa: {{t|ny|biliyoni}}
+* Chinese:
+*: Cantonese: {{t|yue|十億|tr=sap6 jik1}}
+*: Hokkien: {{t|nan-hbl|十億|tr=cha̍p ek}}
+*: Mandarin: {{t+|cmn|十億|tr=shíyì}}
+* Crimean Tatar: {{t|crh|milliard}}
+* Czech: {{t+|cs|miliarda|f}}
+* Danish: {{t+|da|milliard|c}}
+* Dutch: {{t+|nl|miljard|n}}
+* East Frisian Low Saxon: {{t|frs|miljâard|f}}
+* Esperanto: {{t+|eo|miliardo}}
+* Estonian: {{t|et|miljard}}
+* Faroese: {{t|fo|milliard|f}}
+* Fijian: {{t|fj|bilioni}}
+* Finnish: {{t+|fi|miljardi}}
+* French: {{t+|fr|milliard|m}}, {{qualifier|obsolete}} {{t+|fr|billion|m}}, {{t+|fr|mille milliards}}
+* Galician: {{t+|gl|mil millóns}}
+* Georgian: {{t|ka|მილიარდი|sc=Geor}}
+* German: {{t+|de|Milliarde|f}}
+* Greek: {{t+|el|δισεκατομμύριο|n}}
+* Hausa: {{t|ha|biliyan}}
+* Hawaiian: {{t|haw|piliona}}
+* Hebrew: {{t+|he|מִילְיַארְד|tr=milyárd|sc=Hebr}}
+* Hindi: {{t+|hi|अरब}}, {{t+|hi|अर्बुद|m}}, {{t+|hi|अब्ज|m}}
+* Hungarian: {{t+|hu|milliárd}}, {{t|hu|ezermillió}}
+* Icelandic: {{t|is|milljarða}}
+* Ido: {{t+|io|miliardo}}
+* Indonesian: {{t+|id|miliar}}
+* Interlingua: {{t|ia|milliardo}}
+* Irish: {{t|ga|billiún}}
+* Italian: {{t+|it|miliardo}}
+* Japanese: {{t+|ja|十億|tr=じゅうおく, jūoku|sc=Jpan}}
+* Javanese: {{t|jv|ꦒꦸꦭ꧀ꦩ}}
+* Kalmyk: {{t|xal|тербум}}
+* Kazakh: {{t+|kk|миллиард|sc=Cyrl}}
+* Khmer: {{t|km|រយកោដិ|tr=rɔɔy kaot|sc=Khmr}}, {{t|km|ពាន់លាន}}
+* Korean: {{t+|ko|십억(十億)}}
+* Kurdish:
+*: Northern Kurdish: {{t+|kmr|milyar}}
+* Kyrgyz: {{t|ky|миллиард|sc=Cyrl}}, {{t+|ky|чоку}}
+* Ladino: {{t|lad|milyarda}}
+* Lao: {{t|lo|ຕື້}}, {{t|lo|ພັນລ້ານ}}
+* Latin: {{t+|la|milliardum}}
+* Latvian: {{t|lv|miljards|m}}
+* Lithuanian: {{t+|lt|milijardas|m}}
+* Luxembourgish: {{t|lb|Milliard}}
+* Macedonian: {{t|mk|милија́рда|f}}
+* Malay: {{t|ms|seribu juta}}, {{t+|ms|bilion}}, {{t|ms|ribu juta}}, {{t+|ms|miliar}}
+* Malayalam: {{t|ml|നൂറ് കോടി}}, {{t+|ml|ശതകോടി}}, {{t+|ml|അറബ്}}, {{t+|ml|ബില്ല്യൺ}}
+* Maltese: {{t|mt|biljun}}, {{t|mt|miljard|m}}
+* Manchu: {{t|mnc|ᠵᡠᠸᠠᠨ ᠪᡠᠨᠠᡳ}}
+* Maori: {{t|mi|piriona}}
+* Marathi: {{t+|mr|अब्ज}}
+* Mongolian: {{t+|mn|тэрбум|sc=Cyrl}}
+* Navajo: {{t|nv|binyóón}}
+* Nepali: {{t+|ne|अरब१}}, {{t+|ne|अर्बुद}}
+* Niuean: {{t|niu|piliona}}
+* North Frisian: {{t|frr|Miljārd|m|f}} {{q|Sylt}}
+* Norwegian:
+*: Bokmål: {{t+|nb|milliard}}
+*: Nynorsk: {{t+|nn|milliard}}
+* Occitan: {{t+|oc|miliard}}
+* Old Church Slavonic: {{t|cu|тьма тьмъ}}
+* Persian: {{t+|fa|میلیارد|tr=milyârd}}, {{qualifier|seldom}} {{t+|fa|بیلیون|tr=bilyun}}
+* Polish: {{t+|pl|miliard|m}}
+* Portuguese: {{t|pt|[[mil]] [[milhão|milhões]]}} {{q|Angola|Portugal}}, {{t+|pt|bilhão|m}} {{q|Brazil}}
+* Quechua: {{t|qu|lluna}}
+* Romanian: {{t+|ro|miliard|n}}
+* Romansch: {{t|rm|milliarda|f}}, {{t|rm|milliard|m}}
+* Russian: {{t+|ru|миллиа́рд|m}}, {{qualifier|seldom}} {{t+|ru|биллио́н|m}}
+* Samoan: {{t|sm|piliona}}
+* Sanskrit: {{t+|sa|अब्ज}}, {{t+|sa|अर्बुद}}
+* Scottish Gaelic: {{t|gd|billean}}
+* Serbo-Croatian:
+*: Cyrillic: {{t|sh|милијарда|f}}
+*: Roman: {{t+|sh|milijarda|f}}
+* Shona: {{t|sn|bhiriyoni}}
+* Sicilian: {{t|scn|miliardu|m}}
+* Slovak: {{t+|sk|miliarda|f}}
+* Slovene: {{t+|sl|milijarda|f}}
+* Somali: {{t|so|bilyan}}
+* Spanish: {{t+|es|millardo|m}}, {{t|es|mil millones|m-p}}
+* Sundanese: {{t|su|milyar}}
+* Swahili: {{t+|sw|bilioni}}
+* Swedish: {{t+|sv|miljard|c}}
+* Tagalog: {{t|tl|libong-angaw}}, {{t|tl|bilyon}}, {{t+|tl|gatos}}, {{t|tl|sanggatos}}
+* Tajik: {{t|tg|миллиард|sc=Cyrl}}
+* Tatar: {{t+|tt|миллиард|sc=Cyrl}}
+* Thai: {{t+|th|พันล้าน|tr=pan-láan}}
+* Tongan: {{t|to|piliona}}
+* Turkish: {{t+|tr|milyar}}
+* Turkmen: {{t|tk|milliard}}
+* Ukrainian: {{t+|uk|мілья́рд|m}}
+* Urdu: {{t|ur|ارب|tr=arab}}
+* Uyghur: {{t|ug|مىليارد}}
+* Uzbek: {{t+|uz|milliard}}
+* Vietnamese: {{t|vi|một tỉ}}, {{t+|vi|tỉ}}, {{t+|vi|tỷ}}
+* Welsh: {{t+|cy|biliwn}}
+* West Frisian: {{t+|fy|miljard|n}}
+* Xhosa: {{t|xh|ibhiliyoni}}
+* Yiddish: {{t|yi|מיליאַרד|m}}
+* Yup'ik: {{t|esu|tiissitsaaq miilicaaq}}
+* Zulu: {{t|zu|ibhiliyoni|c7|c8}}
+{{trans-bottom}}
+
+{{trans-top-also|a million million; 1,000,000,000,000|trillion|id=10^12}}
+* Armenian: {{t+|hy|երկիլիոն}}
+* Basque: {{t|eu|bilioi}}
+* Catalan: {{t+|ca|bilió}}
+* Chinese:
+*: Mandarin: {{t+|cmn|兆|tr=zhào}}, {{t+|cmn|萬億}}
+* Czech: {{t+|cs|bilión|m}}
+* Danish: {{t+|da|billion|c}}
+* Dutch: {{t+|nl|biljoen}}
+* Esperanto: {{t+|eo|duiliono}}
+* Faroese: {{t|fo|billión|f}}
+* Finnish: {{t+|fi|biljoona}}
+* French: {{t+|fr|billion}}
+* German: {{t+|de|Billion}}
+* Greek: {{t+|el|τρισεκατομμύριο|n}}
+* Italian: {{t+|it|bilione|m}}
+* Japanese: {{t+|ja|兆|tr=ちょう, chō}}
+* Korean: {{t+|ko|조}} 
+* Manchu: {{t|mnc|ᠰᠠᠵᠠ}}
+* Maori: {{t|mi|piriona}}
+* Persian: {{t+|fa|تریلیون|tr=trilyun}}
+* Polish: {{t+|pl|bilion}}
+* Portuguese: {{t+|pt|bilião|m}} {{qualifier|Angola, Portugal}}, {{t+|pt|trilhão|m}} {{qualifier|Brazil}}
+* Romanian: {{t+|ro|bilion|n}}
+* Russian: {{t+|ru|триллио́н|m}}
+* Sanskrit: {{t+|sa|महापद्म}}
+* Sicilian: {{t|scn|triliuni|m}}
+* Slovak: {{t+|sk|bilión|m}}
+* Spanish: {{t+|es|billón|m}}
+* Swedish: {{t+|sv|biljon|c}}
+* Turkish: {{t+|tr|trilyon}}
+* Urdu: {{t|ur|مِلْیُن}}
+{{trans-bottom}}
+
+{{trans-top|(plural) a very large number}}
+* Finnish: {{t+|fi|miljardi}} {{qualifier|usually in the partitive plural}}
+* French: {{t+|fr|milliards|m-p}}, {{t+|fr|millions|m-p}}
+* Polish: {{t+|pl|bilion|m}}
+* Portuguese: {{t+|pt|bilião}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Sinhalese: {{t-check|si|බිලියනය}}
+{{trans-bottom}}
+
+====See also====
+* {{qualifier|short scale}} '''Previous''': [[million]]. '''Next''' [[trillion]].
+* {{qualifier|long scale}} '''Previous''': [[milliard]]. '''Next''' [[billiard]].
+* ISO prefix: [[giga-]]
+
+{{cln|en|cardinal numbers}}
+
+==Danish==
+
+===Noun===
+{{da-noun}}
+
+# 10&lt;sup&gt;12&lt;/sup&gt;
+
+====Declension====
+{{da-decl|en|er}}
+
+==French==
+{{number box|fr}}
+
+===Etymology===
+From {{af|fr|bi-|gloss1=two|-illion}}; [[i.e.]], a [[million]] [[million]].
+
+Coined by {{w|Jehan Adam}} in 1475 as '''by-million'''.&lt;ref name=&quot;genevieve&quot;&gt;Bibliothèque St Geneviève, Paris, MS Français 3143 - original French manuscript by Jehan Adam&lt;/ref&gt; &lt;ref name=&quot;parchemin&quot;&gt;{{cite-web |url=http://www-bsg.univ-paris1.fr/la_reserve/expos/sciences/savants2.htm |title=Jehan Adam, Traicté en arismetique pour la practique par gectouers… Parchemin. XVe siècle (1475). |accessdate=3 July 2008 |archiveurl=https://web.archive.org/web/20070930165302/http://www-bsg.univ-paris1.fr/la_reserve/expos/sciences/savants2.htm |archivedate=30 September 2007 }}&lt;/ref&gt; &lt;ref name=&quot;thorndike&quot;&gt;Lynn Thorndike, “The Arithmetic of Jehan Adam, A.D. 1475,” Science and Thought in the Fifteenth Century&lt;/ref&gt;
+Rendered as '''byllion''' by {{w|Nicolas Chuquet}} in 1484, in his article “Triparty en la science des nombres”.&lt;ref name=&quot;Chuquet1&quot;&gt;
+{{cite-book|last=Chuquet
+|first=Nicolas
+|title=Triparty en la science des nombres (ISSN 9012-9458)
+|publisher=Aristide Marre
+|location=Bologna (Italy)
+|year_published=1880
+|year=1484
+}}
+&lt;br&gt;
+{{cite-web|last=&amp;nbsp;&amp;nbsp;&amp;nbsp;Idem
+|title=Nicolas Chuquet's manuscript
+|publisher=Published by www.miakinen.net
+|url=http://www.miakinen.net/vrac/nombres#lettres_zillions
+|accessdate=2008-03-01}}
+&lt;/ref&gt; &lt;ref name=&quot;Chuquet2&quot;&gt;
+{{cite-web|last=Idem
+|title=Nicolas Chuquet's chapter
+|publisher=Transcription by Michael Florencetime
+|url=http://hexadecimal.florencetime.net/chuquet/triparty.htm
+|accessdate=2008-03-01}}
+&lt;/ref&gt;
+
+===Pronunciation===
+* {{fr-IPA|[ll:l]}}
+* {{audio|fr|LL-Q150 (fra)-Lepticed7-billion.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Toulouse&gt;&gt;)}}
+* {{audio|fr|LL-Q150 (fra)-LoquaxFR-billion.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Vosges&gt;&gt;)}}
+* {{audio|fr|LL-Q150 (fra)-Poslovitch-billion.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Vosges&gt;&gt;)}}
+* {{audio|fr|LL-Q150 (fra)-WikiLucas00-billion.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Lyon&gt;&gt;)}}
+
+===Numeral===
+{{fr-card-noun|m}}
+
+# [[trillion]] {{gl|10&lt;sup&gt;12&lt;/sup&gt;}}
+#: {{syn|fr|mille milliards}}
+# {{lb|fr|dated}} {{l|en|billion}} {{gl|10&lt;sup&gt;9&lt;/sup&gt;}}
+#: {{syn|fr|milliard}}
+
+====Related terms====
+* {{l|fr|trillion}}, coined at same time
+
+====Descendants====
+* {{desc|ca|bilió|bor=1}}
+* {{desc|pt|bilião|bor=1|alts=1}}
+
+===References===
+&lt;references /&gt;
+
+===Further reading===
+* {{R:fr:TLFi}}
+
+==Middle French==
+
+===Noun===
+{{frm-noun|m}}
+
+# {{l|en|billion}}, a million-million, 10&lt;sup&gt;12&lt;/sup&gt;
+#* {{quote-text|frm|year=1520|author=Étienne de La Roche|title=L'arismethique novellement composee|pageurl=https://books.google.co.uk/books?id=9xg8AAAAcAAJ&amp;pg=PT407&amp;dq=billion&amp;hl=en&amp;sa=X&amp;redir_esc=y#v=onepage&amp;q=billion&amp;f=false|page=6
+|passage=ung '''billion''' vault mille milliers de millions
+|translation=a billion is equivalent to&lt;!--lit: is worth, verb valoir--&gt; a thousand thousands of millions}}
+
+{{cln|frm|cardinal numbers}}</text>
+      <sha1>teqms6viojv58zwscgvrkw3upqxjqsv</sha1>
+    </revision>
+  </page>

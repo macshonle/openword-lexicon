@@ -1,0 +1,189 @@
+<page>
+    <title>مرحبا</title>
+    <ns>0</ns>
+    <id>64910</id>
+    <revision>
+      <id>87624989</id>
+      <parentid>85061104</parentid>
+      <timestamp>2025-10-27T05:59:09Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>Arabic headwords: convert {{ar-con}}/{{ar-interj}}/{{ar-prep}}/{{ar-preposition}}/{{ar-particle}} to use {{ar-head}} (manually assisted)</comment>
+      <origin>87624989</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4753" sha1="m41gbtrjxhn5h9p7658r004wqriww37" xml:space="preserve">==Arabic==
+{{phrasebook|ar}}
+{{ar-rootbox|ر ح ب}}
+
+===Etymology===
+Related to the verb {{m|ar|رَحِبَ|t=to be wide}}. (The verb {{m|ar|رَحَّبَ|t=to make welcome, to receive graciously}} is derived from this term.)
+
+===Pronunciation===
+* {{ar-IPA|مَرْحَبًا|مَرْحَبَا|qual2=pausa}}
+
+===Interjection===
+{{ar-head|intj|مَرْحَبًا}}
+
+# [[hello]], [[welcome]]
+
+====Descendants====
+* {{desc|mt|merħba}}
+* {{desc|ary|مرحبا|tr=marḥba}}
+* {{desc|aa|marcabá|bor=1}}
+* {{desc|kmr|merheba|bor=1}}
+* {{desctree|ota|مرحبا|bor=1}}
+** {{desc|tr|merhaba}}
+* {{desc|fa-cls|مَرْحَبَا|مَرْحَبًا|bor=1}}
+** {{desc|tg|марҳабо|qq=rare, archaic}}
+** → Hindustani:
+*** {{desc|hi|मरहबा|tr=marhabā}}
+*** {{desc|ur|مَرْحَبَا}}
+** {{desc|bn|মরহাবা|tr=môrhaba|bor=1}}
+** {{desc|ps|مرحبا|tr=marḥabā|bor=1}}
+** → Punjabi:
+*** {{desc|pa|ਮਰਹਬਾ|tr=marhabā|sclb=1}}
+*** {{desc|pa|مرحبا|tr=marḥabā|sclb=1}}
+* {{desc|sw|marahaba|bor=1}}
+* {{desc|ti|መርሓባ|tr=märḥaba|bor=1}}
+* {{desc|zza|merheba|bor=1}}
+
+{{cln|ar|greetings}}
+
+==Hijazi Arabic==
+{{phrasebook|acw}}
+{{acw-root|ر ح ب}}
+
+===Etymology===
+From {{inh|acw|ar|مَرْحَبًا}}.
+
+===Pronunciation===
+* {{IPA|acw|/mar.ħa.ba/}}
+
+===Interjection===
+{{acw-interj|tr=marḥaba}}
+
+# [[welcome]]
+# [[hello]]
+
+====Inflection====
+{{acw-prep-inflection
+|base={{l|acw|مرحبا|tr=marḥaba}}
+|1s={{l|acw|مرحبا بي|tr=marḥabā bi}}
+|2ms={{l|acw|مرحبا بَك|tr=marḥabā bak}}
+|2fs={{l|acw|مرحبا بِك|tr=marḥabā bik}}
+|3ms={{l|acw|مرحبا بُه|tr=marḥabā bu}}
+|3fs={{l|acw|مرحبا بها|tr=marḥabā baha}}
+|1p={{l|acw|مرحبا بنا|tr=marḥabā bana}}
+|2p={{l|acw|مرحبا بكم|tr=marḥabā bakum}}
+|3p={{l|acw|مرحبا بهم|tr=marḥabā bahum}}
+}}
+
+{{cln|acw|greetings}}
+
+==Moroccan Arabic==
+{{phrasebook|ary}}
+
+===Etymology===
+From {{inh|ary|ar|مَرْحَبًا}}.
+
+===Pronunciation===
+* {{IPA|ary|/marħba/}}
+
+===Interjection===
+{{ary-interj|tr=marḥba}}
+
+# [[welcome]]
+
+{{cln|ary|greetings}}
+
+==Ottoman Turkish==
+
+===Alternative forms===
+* {{alt|ota|մէրհապա|մէրհապէն||Armn}}
+
+===Etymology===
+From {{bor|ota|ar|مَرْحَبًا}}.
+{{root|ota|ar|ر ح ب}}
+
+===Interjection===
+{{ota-interjection|head=مرحباً|tr=merhaba}}
+
+# [[hello]], [[welcome]]
+
+====Descendants====
+* {{desc|tr|merhaba}}
+* {{desc|bor=1|bg|мерхаба́|ме́рхаба|мараба́}}
+* {{desc|mk|мерхаба|bor=1}}
+* {{desc|sh|bor=1|-}}
+*: {{desc|sh|ме̏рха̄ба|sclb=1}}
+*: {{desc|sh|mȅrhāba|sclb=1}}
+
+===Further reading===
+* {{R:tr:OTK|merhaba|page=3151b}}
+* {{R:ota:Devellioğlu|merhabâ|page=741b}}
+* {{R:ota:Karapetean|page=781a}}
+* {{R:ota:Kelekian|page=1147b}}
+* {{R:tr:Nishanyan|merhaba}}
+* {{R:ota:Pozachean:1841|մէրհապա|page=568b}}
+* {{R:ota:Redhouse|page=1807a}}
+* {{R:ota:Sami:1899|page=1322c}}
+
+{{cln|ota|greetings}}
+
+==Persian==
+
+===Etymology===
+{{bor+|fa|ar|مَرْحَبًا}}.
+{{root|fa|ar|ر ح ب}}
+
+===Pronunciation===
+{{fa-IPA|marhaˈbā}}
+
+===Interjection===
+{{fa-regional|مرحبا|مرحبا|марҳабо}}
+{{head|fa|interjection|tr=marhabâ}}
+
+# [[bravo]], [[good job]]
+#: {{syn|fa|آفرین&lt;tr:âfarin&gt;|بارک الله&lt;tr:bârek allâh&gt;|ماشا الله&lt;tr:mâšâllâh&gt;}}
+# {{lb|fa|archaic}} [[hello]], [[welcome]]
+#* {{RQ:fa:Selim Divan|186
+|سلیمی را برآمد جان پی یک '''مرحبا''' وز ناز&lt;br&gt;نکرد آن سنگدل با دردمندان '''مرحبا''' هرگز
+|سَلِیمِی رَا بَر-آمَد جَان پَیِ یَک '''مَرْحَبَا''' وْ-اَز نَاز&lt;br&gt;نَ-کَرْد آن سَنْگْدِل بَا دَرْدْمَنْدَان '''مَرْحَبَا''' هَرْگِز
+|Selim's soul came forth for the sake of a single '''hello''', and out of coquettishness&lt;br&gt;That hard-hearted one never said a '''hello''' to those in pain [out of unrequited love for her].
+}}
+
+===Further reading===
+* {{NPED}}
+
+==South Levantine Arabic==
+{{phrasebook|ajp}}
+
+===Etymology===
+From {{inh|ajp|ar|مَرْحَبًا}}.
+
+===Pronunciation===
+* {{ajp-IPA|marḥaba&lt;p:ˈmɑr.ħɑ.bɑ&gt;}}
+* {{audio|ajp|LL-Q55633582 (ajp)-AdrianAbdulBaha-مرحبا.wav|a=Ramallah}}
+
+===Interjection===
+{{ajp-interjection|tr=marḥaba}}
+
+# [[hello]]
+#: {{syn|ajp|هلا|tr=hala|q=informal}}
+
+====Usage notes====
+* People usually respond to {{m-self|ajp|مرحبا|tr=marḥaba}} with its dual or plural form:
+** {{m|ajp|مرحبتين|tr=marḥabtēn|lit=two hellos}}
+** {{m|ajp|مراحب|tr=marāḥeb|lit=many hellos}}
+
+====See also====
+* {{l|ajp|أهلا|tr=ʔahla|t=welcome}}, {{l|ajp|أهلا وسهلا|tr=ʔahla w-sahla|t=welcome}}
+
+{{cln|ajp|greetings}}</text>
+      <sha1>m41gbtrjxhn5h9p7658r004wqriww37</sha1>
+    </revision>
+  </page>

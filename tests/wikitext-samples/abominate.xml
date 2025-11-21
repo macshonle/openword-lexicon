@@ -1,0 +1,128 @@
+<page>
+    <title>abominate</title>
+    <ns>0</ns>
+    <id>495</id>
+    <revision>
+      <id>87443158</id>
+      <parentid>85451600</parentid>
+      <timestamp>2025-10-14T19:56:18Z</timestamp>
+      <contributor>
+        <username>AutoDooz</username>
+        <id>3732454</id>
+      </contributor>
+      <minor />
+      <comment>one empty line between sections per [[WT:NORM]]</comment>
+      <origin>87443158</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4098" sha1="p6xtzjdenrqe9ceu0vse7injmjg8e5u" xml:space="preserve">==English==
+
+===Etymology===
+First attested in 1644. Perhaps a {{back-form|en|abomination|nocap=1}}.&lt;ref&gt;{{R:CDOE|page=4}}&lt;/ref&gt; Alternatively, perhaps from {{der|en|LL.|abōminātus}}, past participle of {{m|la|abōminarī||to deprecate as an ill omen}}, from {{m|la|ab}} + {{m|la|ominari||to forebode, presage}}, from {{m|la|omen}}.&lt;ref&gt;{{R:MW3 1976|page=5}}&lt;/ref&gt;
+
+===Pronunciation===
+* {{IPA|en|/əˈbɒm.əˌneɪt/|/əˈbɒm.ɪˌneɪt/|a=US}}
+* {{sense|adjective}} {{IPA|en|/əˈbɒm.əˌneɪt/|/əˈbɒm.ɪˌneɪt/|/əˈbɒm.ə.nət/|a=US}}
+* {{audio|en|en-us-abominate.ogg|a=US}}
+* {{audio|en|LL-Q7979-Soundguys-abominate.wav|a=UK}}
+
+===Adjective===
+{{en-adj}}
+
+# {{lb|en|rare}} {{cap|abominable}}; [[detest]]ed. {{defdate|First attested in the late 16&lt;sup&gt;th&lt;/sup&gt; century.}}&lt;ref name=SOED&gt;{{R:SOED5|page=6}}&lt;/ref&gt;
+
+===Verb===
+{{en-verb}}
+
+# {{lb|en|transitive}} To feel [[disgust]] towards; to [[loathe]] or [[detest]] thoroughly; to [[hate]] in the highest degree, as if with religious [[dread]]. {{defdate|First attested in the mid 17&lt;sup&gt;th&lt;/sup&gt; century.}}&lt;ref name=SOED/&gt;
+#: {{syn|en|abhor}}
+#* {{quote-book|en|passage=&quot;Much as I '''abominate''' writing, I would not give up Mr. Collins's correspondence for any consideration.&quot;|title=Pride and Prejudice|author=Jane Austen|year=1813}}
+# {{lb|en|transitive|colloquial}} To dislike strongly. {{defdate|First attested in the late 19&lt;sup&gt;th&lt;/sup&gt; century.}}&lt;ref name=SOED/&gt;
+#: I absolutely '''abominate''' waking up early on weekends.
+
+====Synonyms====
+* {{sense|to abhor}} {{l|en|abhor}}, {{l|en|loathe}}, {{l|en|detest}}
+* See also [[Thesaurus:hate]]
+
+====Derived terms====
+* {{l|en|abominator}}
+
+====Related terms====
+* {{l|en|abomination}}
+
+====Translations====
+{{trans-top|to feel disgust towards, to hate in the highest degree}}
+* Arabic: {{t|ar|مَقَت}}, {{t|ar|تَطَيَّر}}
+* Bulgarian: {{t|bg|отвращавам се|sc=Cyrl}}, {{t|bg|гнуся се от|sc=Cyrl}}, {{t+|bg|ненавиждам|sc=Cyrl}}
+* Catalan: {{t+|ca|abominar}}
+* Chinese:
+*: Mandarin: {{t+|cmn|憎恨|tr=zēnghèn}}, {{t+|cmn|厭惡|tr=yànwù}}, {{t+|cmn|討厭|tr=tǎoyàn}}
+* Crimean Tatar: {{t|crh|igrenmek}}
+* Dutch: {{t+|nl|verachten}}, {{t+|nl|verafschuwen}}
+* Esperanto: {{t+|eo|abomeni}}
+* Finnish: {{t+|fi|vihata}}, {{t+|fi|inhota}}, {{t|fi|kammoksua}}
+* French: {{t+|fr|abominer}}
+* German: {{t+|de|verabscheuen}}
+* Greek: {{t+|el|απεχθάνομαι}}
+*: Ancient: {{t|grc|ἀποπτύω}}
+* Hebrew: {{t|he|תיעב|tr=tiév}}
+* Hungarian: {{t+|hu|undorodik}}, {{t+|hu|irtózik}}, {{t+|hu|utál}}, {{t+|hu|gyűlöl}}
+* Ido: {{t+|io|abominar}}
+* Interlingua: {{t|ia|abominar}}, {{t|ia|detestar}}
+* Italian: {{t+|it|abominare}}
+* Japanese: {{t+|ja|忌み嫌う|tr=imikirau|sc=Jpan}}, {{t+|ja|唾棄|alt=唾棄する|tr=daki suru}}
+* Latin: {{t|la|abōminor}}
+* Norwegian:
+*: Bokmål: {{t|nb|føle avsky}}, {{t+|nb|avsky}}
+* Portuguese: {{t+|pt|abominar}}
+* Russian: {{t|ru|пита́ть отвраще́ние}}, {{t+|ru|ненави́деть}}, {{t+|ru|выносить|alt=не выноси́ть}}
+* Spanish: {{t+|es|abominar}}, {{t+|es|detestar}}
+* Swedish: {{t+|sv|avsky}}
+* Tagalog: {{t|tl|maani}} {{qualifier|literally}}, {{t|tl|masuklam}} {{qualifier|literally}}
+* Vietnamese: {{t+|vi|căm ghét}}
+* Volapük: {{t+|vo|naudön}}
+{{trans-bottom}}
+
+{{trans-top|to dislike strongly}}
+* Dutch: {{t|nl|gruwelen van}}, {{t|nl|walgen van}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Vietnamese: {{t+check|vi|ghê tởm}}, {{t-check|vi|ghét cay ghét đắng}}, {{t-check|vi|không ưa}}, {{t+check|vi|ghét mặt}}, {{t+check|vi|kinh tởm}}
+{{trans-bottom}}
+
+===References===
+&lt;references/&gt;
+
+==Italian==
+
+===Etymology 1===
+
+====Verb====
+{{head|it|verb form}}
+
+# {{inflection of|it|abominare||2|p|pres|indc|;|2|p|impr}}
+
+===Etymology 2===
+
+====Participle====
+{{head|it|past participle form|g=f-p}}
+
+# {{feminine plural of|it|abominato}}
+
+==Latin==
+
+===Verb===
+{{head|la|verb form|head=abōmināte}}
+
+# {{inflection of|la|abōminō||2|p|pres|actv|impr}}
+
+==Spanish==
+
+===Verb===
+{{head|es|verb form}}
+
+# {{es-verb form of|abominar}}</text>
+      <sha1>p6xtzjdenrqe9ceu0vse7injmjg8e5u</sha1>
+    </revision>
+  </page>

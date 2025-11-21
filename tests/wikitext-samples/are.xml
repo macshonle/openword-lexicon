@@ -1,0 +1,719 @@
+<page>
+    <title>are</title>
+    <ns>0</ns>
+    <id>1812</id>
+    <revision>
+      <id>87678931</id>
+      <parentid>87293767</parentid>
+      <timestamp>2025-10-31T19:38:33Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax (2); convert {{wikipedia}} to {{wp}} (2)</comment>
+      <origin>87678931</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="15116" sha1="k6bgwg8t2u9m8hs55i959crn60g2vga" xml:space="preserve">{{also|Appendix:Variations of &quot;are&quot;}}
+{{minitoc}}
+==Translingual==
+
+===Etymology===
+{{abbrev|mul|-}} {{der|mul|en|'''Ar'''r'''e'''rnte}}.
+
+===Symbol===
+{{mul-symbol}}
+
+# {{ISO 639|3}}
+
+===See also===
+* {{langcat}}
+
+==English==
+{{wp|ARE}}
+
+===Etymology 1===
+From {{inh|en|enm|aren}}, from {{inh|en|ang|earun}}, {{m|ang|earon|t=are}}, reinforced by {{cog|non|-}} plural forms in {{m|non||er-}} (displacing alternative {{cog|ang|sind}} and {{m|ang|bēoþ}}), from {{inh|en|gem-pro|*arun|t=(they) are}}, from {{inh|en|gem-pro|[[*esi]]/[[*izi]]}} (a form of {{der|en|gem-pro|*wesaną|t=to be}}), from {{inh|en|ine-pro|*h₁ésti|t=is}}.
+
+Cognate with {{cog|non|eru|t=(they) are}} (&gt; {{cog|is|eru|t=(they) are}}, {{cog|sv|äro|t=(they) are}}, {{cog|da|er|t=(they) are}}), {{cog|ang|eart|t=(thou) art}}. More at {{l|en|art}}.
+
+====Alternative forms====
+* {{alter|en|aren|arn||obsolete or dialectal}}
+* {{alter|en|ar||obsolete}}
+
+====Pronunciation====
+; Stressed
+* {{enPR|är|a=RP}}, {{IPA|en|/ɑː(ɹ)/}}
+* {{enPR|ar|a=GA}}, {{IPA|en|/ɑɹ/}}
+* {{enPR|är|a=AU,NZ}}, {{IPA|en|/ɐː/}}
+* {{enPR|är|a=Northern England,Wales}}, {{IPA|en|/aː(ɹ)/}}
+* {{IPA|en|/äɹ/|/ɑɹ/|/ɐɹ/|a=Canada}}
+* {{IPA|en|/aɹ/|/äːɹ/|/ɑɹ/|a=Ireland}}
+* {{IPA|en|/äɹ/|/äɾ/|a=Scotland}}
+* {{IPA|en|/ɛə(ɹ)/|/ɛː(ɹ)/|a=now dialectal}}&lt;ref&gt;{{R:Jespersen MEGoHP|I|4.432|130}}&lt;/ref&gt;
+* {{IPA|en|/aʊɚ/|/aʊə/|a=proscribed,rare,due to confusion with &quot;our&quot;}}
+* {{audio|en|en-us-are.ogg|a=US}}
+* {{homophones|en|argh|r|our}}
+* {{rhymes|en|ɑː(ɹ)|s=1}}
+; Unstressed
+* {{IPA|en|/ə(ɹ)/|a=RP,AU,NZ}}
+* {{enPR|är|a=GA,Canada,Ireland}}, {{IPA|en|/ɚ/}}
+&lt;!--This should probably have a stressed and unstressed pronunciation, but I'm not sure how to handle the audio. Please contact Dvortygirl for an unstressed sound sample if you are writing pronunciations.--&gt;
+&lt;!--Can't rhyme an unstressed word.--&gt;
+
+====Verb====
+{{head|en|verb form}}
+
+# {{inflection of|en|be||2|s|simple|pres}}
+#: {{ux|en|Mary, where '''are''' you going?}}
+# {{inflection of|en|be||1|p|simple|pres}}
+#: {{ux|en|We '''are''' not coming.}}
+#* {{quote-av|en|year=2016|url=https://web.archive.org/web/20170930001420/https://learningenglish.voanews.com/a/lets-learn-english-lesson-5-where-are-you/3168971.html|title=VOA Learning English (public domain)|text=Here we '''are'''!}}
+# {{inflection of|en|be||2|p|simple|pres}}
+#: {{ux|en|Mary and John, '''are''' you listening?}}
+# {{inflection of|en|be||3|p|simple|pres}}
+#: {{ux|en|They '''are''' here somewhere.}}
+#* {{RQ:King James Version|1 John|4|1|passage=BEloued, beleeue not euery ſpirit, but trie the ſpirits, whether they '''are''' of God: becauſe many falſe prophets '''are''' gone out into the woꝛld.}}
+# {{lb|en|East Yorkshire|Midlands}} {{inflection of|en|be||pres}}
+
+=====Usage notes=====
+* The pronunciation /aʊɚ/ arising from confusion of &quot;are&quot; and &quot;[[our]]&quot; is rare; however, it occasionally occurs due to the fact that the latter can be elided into /ɑɹ/ in quick speech.
+
+=====Synonyms=====
+* {{sense|second-person singular}} {{qualifier|archaic}} [[art]] (''used with'' '''[[thou]]''')
+
+====See also====
+{{col4|en|title=other forms of verb ''be''
+|am
+|is
+|art
+|be
+|being
+|been
+|beest
+|was
+|wast
+|were
+|wert
+}}
+
+===Etymology 2===
+From {{der|en|fr|are}}.
+
+====Pronunciation====
+* {{IPA|en|/ɛə/|/ɛː/|a=RP}}
+* {{enPR|âr|a=GenAm}}, {{IPA|en|/ɛəɹ/|/ɛɹ/}}
+* {{rhymes|en|ɛə(ɹ)|s=1}}
+* {{homophones|en|air|Ayr|ere|eyre|heir}}, [[err]] {{qualifier|one pronunciation}}; [[e'er]]
+
+====Noun====
+{{en-noun}}
+
+# {{senseid|en|unit of area}} {{lb|en|rare}} An accepted (but [[deprecate]]d and rarely used) [[metric]] unit of area equal to 100 [[square metre]]s, or a former unit of approximately the same extent. ''Symbol'': '''[[a]]'''.
+
+=====Usage notes=====
+* '''Are''' is now rarely used except in its derivative {{m|en|hectare}}.
+
+=====Synonyms=====
+* {{sense|SI unit}} {{qualifier|rare}} square [[decametre]]
+
+=====Derived terms=====
+{{col|en|milliare|centiare
+|decare
+|hectare
+}}
+
+=====Translations=====
+{{trans-top|unit of area}}
+* Armenian: {{t+|hy|ար}}
+* Bashkir: {{t|ba|ар}}; {{non-gloss|land area}} {{t|ba|сутый}}
+* Catalan: {{t+|ca|àrea|f}}
+* Chinese:
+*: Mandarin: {{t+|cmn|公畝|tr=gōngmǔ}}
+* Czech: {{t+|cs|ar|m}}
+* Danish: {{t+|da|ar}}
+* Dutch: {{t+|nl|are|m}}
+* Estonian: {{t+|et|aar}}
+* Finnish: {{t+|fi|aari}}
+* French: {{t+|fr|are|m}}
+* Galician: {{t+|gl|área|f}}
+* German: {{t+|de|Ar|n}}
+* Greek: {{t+|el|άρια|n}}
+* Hungarian: {{t+|hu|ár|id=are}}
+* Ingrian: {{t|izh|sotka}}
+* Irish: {{t|ga|ár|m}}
+* Italian: {{t+|it|ara|f}}
+* Japanese: {{t+|ja|アール|tr=āru}}
+* Kurdish:
+*: Northern Kurdish: {{t+|kmr|ar|f}}
+* Latvian: {{t|lv|ārs|m}}
+* Macedonian: {{t|mk|ар|m}}
+* Norwegian:
+*: Bokmål: {{t+|nb|ar|n}}
+*: Nynorsk: {{t|nn|ar|n}}
+* Occitan: {{t+|oc|ara|f}}
+* Ottoman Turkish: {{t|ota|آر}}
+* Polish: {{t+|pl|ar|m-in}}
+* Portuguese: {{t+|pt|are|m}}
+* Romanian: {{t+|ro|ar|m}}
+* Russian: {{t+|ru|ар|m}}
+* Slovak: {{t|sk|ár|m}}
+* Spanish: {{t+|es|área|f}}
+* Swedish: {{t+|sv|ar|c}}
+* Tagalog: {{t|tl|arya}}
+* Turkish: {{t+|tr|ar}}
+* Uyghur: {{t|ug|ئار}}
+* Vietnamese: {{t+|vi|a}}
+{{trans-bottom}}
+
+=====Further reading=====
+{{pedia|Hectare#Are|Are}}
+
+===Etymology 3===
+From the phonetic similarity between {{m|en|our}} and {{m|en|are}} in many English dialects (both {{IPAchar|/ɑː(ɹ)/}}).
+
+====Pronunciation====
+* {{IPA|en|/ɑː(ɹ)/|a=UK}}
+* {{rhymes|en|ɑː(ɹ)|s=1}}
+
+====Determiner====
+{{head|en|misspelling}}
+
+# {{lb|en|UK|US}} {{misspelling of|en|our}}.
+
+=====Usage notes=====
+Sometimes used deliberately as a form of [[classist]] humour, as a mocking imitation of a person with little education.
+
+===References===
+&lt;references/&gt;
+
+===Anagrams===
+* {{anagrams|en|a=aer|'ear|ear|Rea|rea|EAR|REA|aer-|ReA|aër-|Aer|ERA|era|Rae}}
+
+{{cln|en|auxiliary verb forms|heteronyms|irregular verb forms|3-letter words}}
+
+==Albanian==
+
+===Noun===
+{{head|sq|noun form}}
+
+# {{infl of|sq|arë||indef|dat//abl|s}}
+
+==Basque==
+
+===Etymology===
+From {{inh|eu|euq-pro|*arhe}}.
+
+===Pronunciation===
+* {{audio|eu|LL-Q8752 (eus)-Xabier Cañas-are.wav}}
+{{eu-pr}}
+
+===Noun===
+{{eu-noun|in}}
+
+# [[rake]]
+
+====Declension====
+{{eu-ndecl|in}}
+
+==Dutch==
+
+===Etymology===
+Borrowed from {{bor|nl|fr|are}}, from {{der|nl|la|ārea}}.
+
+===Pronunciation===
+* {{IPA|nl|/ˈaː.rə/}}
+* {{audio|nl|Nl-are.ogg}}
+* {{hyph|nl|are}}
+* {{rhyme|nl|aːrə}}
+
+===Noun===
+{{nl-noun|f|-en,-s|-}}
+
+# {{l|en|are}}, a [[unit]] of [[surface]] [[area]]
+
+====Derived terms====
+* {{l|nl|hectare}}
+
+====Descendants====
+* {{desc|id|are|bor=1}}
+* {{desc|pap|are|bor=1}}
+
+==French==
+
+===Etymology===
+Learned formation from {{bor|fr|la|area}}, a piece of level ground. {{doublet|fr|aire}}.
+
+===Pronunciation===
+* {{homophones|fr|art}}
+
+===Noun===
+{{fr-noun|m}}
+
+# an [[#Noun|are]]
+
+====Related terms====
+{{col2
+|fr|aire
+|aréage
+}}
+
+====Descendants====
+* {{desc|da|ar}}
+* {{desc|nb|ar}}
+
+===Further reading===
+* {{R:fr:TLFi}}
+
+==Indonesian==
+{{wp|id:}}
+
+===Etymology===
+From {{bor|id|nl|are}}, from {{der|id|fr|are}}, from {{der|id|la|ārea}}. {{doublet|id|area}}.
+
+===Pronunciation===
+{{id-pr}}
+
+===Noun===
+{{head|id|noun|head=arê}}
+
+# {{l|en|are}}; an SI unit of area equal to 100 square metres, or a former unit of approximately the same extent
+
+====Related terms====
+{{col|id
+|area
+|areal
+|hektare
+}}
+
+===Further reading===
+* {{R:KBBI Daring}}
+
+==Italian==
+
+===Pronunciation===
+{{it-pr|àre&lt;hmp:-are&lt;pos:infinitive verb suffix&gt;&gt;}}
+
+===Etymology 1===
+Variant of {{m|it|aere}}.
+
+====Noun====
+{{it-noun|m}}
+
+# {{archaic form of|it|aere}}
+
+===Etymology 2===
+{{nonlemma}}
+
+====Noun====
+{{head|it|noun form|g=f-p}}
+
+# {{plural of|it|ara}}
+
+===Anagrams===
+* {{anagrams|it|a=aer|-erà|Era|Rea|era|rea}}
+
+==Japanese==
+
+===Romanization===
+{{ja-romaji}}
+
+# {{ja-romanization of|あれ}}
+
+==Latin==
+
+===Verb===
+{{head|la|verb form|head=ārē}}
+
+# {{inflection of|la|āreō||2|s|pres|actv|impr}}
+
+===References===
+* {{R:L&amp;S}}
+
+==Lindu==
+
+===Noun===
+{{head|klw|noun}}
+
+# [[long]], [[large]] [[sickle]]
+
+==Mapudungun==
+
+===Noun===
+{{head|arn|noun}} {{arn-sp|r}}
+
+# [[warmth]], [[heat]]
+
+===References===
+* {{R:Wixaleyiñ 2008}}
+
+==Middle English==
+
+===Etymology 1===
+
+====Article====
+{{head|enm|article form}}
+
+# {{inflection of|enm|an||gen//dat|f}}
+
+===Etymology 2===
+
+====Determiner====
+{{head|enm|determiner|altform=1}}
+
+# {{lb|enm|chiefly|Kent|and|West Midlands ME}} {{alt form|enm|here|t=their|id=their}}
+
+===Etymology 3===
+
+====Noun====
+{{head|enm|noun|altform=1}} 
+
+# {{alt form|enm|hare|t=hare|id=hare}}
+
+===Etymology 4===
+
+====Noun====
+{{head|enm|noun|altform=1}}
+
+# {{tlb|enm|Northern|or|Early ME}} {{alt form|enm|ore|t=honour|id=honour}}
+
+===Etymology 5===
+
+====Noun====
+{{head|enm|determiner|altform=1}}
+
+# {{lb|enm|Northern ME}} {{alt form|enm|ore|t=oar}}
+
+===Etymology 6===
+
+====Verb====
+{{head|enm|verb form|altform=1}} 
+
+# {{alt form of|enm|aren}}
+
+[[Category:West Midland Middle English]]
+[[Category:Kentish Middle English]]
+
+==Norwegian Nynorsk==
+
+===Etymology 1===
+Perhaps from a {{der|nn|nds-nl|-}} or {{der|nn|nds-de|-}} verb.
+
+{{rfe|nn}}
+
+====Verb====
+{{nn-verb-1}}
+
+# {{lb|nn|reflexive}} to [[suit]], [[fit]]
+
+===Etymology 2===
+
+====Determiner====
+{{head|nn|determiner form}}
+
+# {{lb|nn|dialectal}} {{alt form|nn|andre}}
+
+====Adjective====
+{{head|nn|adjective}}
+
+# {{lb|nn|dialectal}} {{alt form|nn|andre}}
+
+===Etymology 3===
+{{rfe|nn}}
+
+====Noun====
+{{head|nn|noun}}
+
+# {{rfv-sense|nn}} [[white-tailed eagle]]
+
+==Old English==
+
+===Pronunciation===
+* {{IPA|ang|/ˈɑːre/}}
+
+===Etymology 1===
+
+====Noun====
+{{ang-noun|head=āre|f}}
+
+# [[honor]], [[glory]], [[grace]]
+
+=====Declension=====
+{{ang-decl-noun-n-f|ār}}
+
+===Etymology 2===
+
+====Noun====
+{{head|ang|noun form|head=āre}}
+
+# {{inflection of|ang|ār||dat|s|t=messenger, herald; angel; missionary}}
+
+===Etymology 3===
+
+====Noun====
+{{head|ang|noun form|head=āre}}
+
+# {{infl of|ang|ār||nom|pl|;|acc|s//p|;|gen//dat|sg|t=mercy}}
+
+==Old Frisian==
+
+===Etymology===
+From {{inh|ofs|gmw-pro|*auʀā}}, from {{inh|ofs|gem-pro|*ausô}}.
+
+===Noun===
+{{ofs-noun|n|āre}}
+
+# [[ear]]
+
+====Inflection====
+{{ofs-decl-noun-n-n|ār}}
+
+====Descendants====
+* {{desc|frr|-}}
+*: Föhr-Amrum: {{l|frr|uar}}
+*: Hallig, Mooring: {{l|frr|uur}}
+*: Helgoland: {{l|frr|Uaar}}
+*: Sylt: {{l|frr|Uar}}
+* {{desc|stq|Oor}}
+* {{desc|fy|ear}}
+
+{{c|ofs|Body parts}}
+
+==Pali==
+
+===Alternative forms===
+{{pi-alt}}
+
+===Etymology===
+{{onomatopoeic|pi}}.
+
+===Interjection===
+{{head|pi|interjection}}
+
+# [[wow]], [[whoa]]
+# [[yay]]
+
+====Derived terms====
+* {{l|pi|re}}
+
+==Portuguese==
+
+===Pronunciation===
+{{pt-IPA}}
+* {{audio|pt|LL-Q5146 (por)-Santamarcanda-are.wav|a=&lt;&lt;Portugal&gt;&gt; (&lt;&lt;Porto&gt;&gt;)}}
+* {{rhymes|pt|aɾi|q1=Brazil|aɾɨ|q2=Portugal|s=2}}
+* {{hyph|pt|a|re}}
+
+===Etymology 1===
+
+====Noun====
+{{pt-noun|m}}
+
+# {{lb|pt|historical}} {{l|en|are}} {{gloss|unit of area}}
+
+===Etymology 2===
+{{nonlemma}}
+
+====Verb====
+{{head|pt|verb form}}
+
+# {{pt-verb form of|arar}}
+
+==Romanian==
+
+===Pronunciation===
+* {{IPA|ro|/ˈa.re/}}
+* {{audio|ro|LL-Q7913 (ron)-Andreea Teodoraa-are.wav}}
+* {{rhymes|ro|are|s=2}}
+* {{hyph|ro|a|re}}
+
+===Etymology 1===
+Compare {{cog|la|habēret}}, {{m|la|habuerit}}. Compare {{cog|rup|ari}}. See also {{m|ro|ar}}, auxiliary used in a periphrastic construction of the conditional.
+
+====Verb====
+{{h|ro|verb form}}
+
+# {{infl of|ro|avea||t=to have|3s|ind|pres}}
+
+=====See also=====
+* {{l|ro|a}}
+
+===Etymology 2===
+
+====Verb====
+{{h|ro|verb form}}
+
+# {{infl of|ro|ara|t=to plow||3|s//p|subj|pres}}
+
+==Scots==
+
+===Etymology===
+From {{inh|sco|enm|are}}, from {{inh|sco|ang|ār|t=honor, worth, dignity}}, from {{inh|sco|gmw-pro|*aiʀu}}, from {{inh|sco|gem-pro|*aizō|t=respect, honour}}, from {{m|gem-pro|*ais-||to honour, respect, revere}}. 
+
+Cognate with {{cog|nl|eer||honour, credit}}, {{cog|de|Ehre||honour, glory}}, {{cog|la|erus||master, professor}}.
+
+===Noun===
+{{sco-noun|-}}
+
+# {{lb|sco|obsolete}} [[grace]]; [[mercy]]
+
+==Spanish==
+
+===Pronunciation===
+{{es-pr}}
+
+===Verb===
+{{head|es|verb form}}
+
+# {{es-verb form of|arar}}
+
+==Tagalog==
+
+===Pronunciation===
+{{tl-pr|aré}}
+
+===Pronoun===
+{{tl-pron|aré|b=+}} {{tlb|tl|chiefly|Batangas|Mindoro|Marinduque}}
+
+# {{alt form|tl|ari}}: [[this one]]; [[this]]
+#: {{syn|tl|ito|q1=Manila|ire|q2=Central Luzon|ere|q3=Central Luzon}}
+#: {{ux|tl|Ano ga '''are'''?|inline=1|What is '''this'''?}}
+
+====See also====
+{{tl-dem pronouns}}
+
+===Anagrams===
+* {{anagrams|tl|a=aer|-era}}
+
+==Tangam==
+
+===Etymology===
+From {{inh|sit-tgm|sit-tan-pro|*a-lə}}, from {{inh|sit-tgm|sit-pro|*la ~ ja|*la}}.
+
+===Noun===
+{{head|sit-tgm|noun}}
+
+# {{lb|sit-tgm|anatomy}} [[foot]], [[leg]]
+
+====References====
+* {{R:sit-tgm:Post:2017}}
+
+==Ternate==
+
+===Pronunciation===
+* {{IPA|tft|[ˈa.ɾe]}}
+
+===Verb===
+{{head|tft|verb}}
+
+# {{lb|tft|transitive}} to [[scratch]]
+
+====Conjugation====
+{{tft-conj}}
+
+===References===
+* {{R:tft:Hayami-Allen:2001}}
+
+==Toraja-Sa'dan==
+
+===Etymology===
+From {{inh|sda|poz-pro|*qazay}}.
+
+===Noun===
+{{head|sda|noun|}}
+
+# [[ant]]
+
+==Venetan==
+
+===Noun===
+{{head|vec|noun form}}
+
+# {{inflection of|vec|ara||p}}
+
+==Wolof==
+
+===Noun===
+{{wo-noun|bi}}
+
+# [[stop]], especially a [[bus stop]]
+
+==Yilan Creole==
+
+===Etymology===
+From {{der|ycr|ja|あれ|t=that}}.
+
+===Pronoun===
+{{head|ycr|pronoun}}
+
+# {{lb|ycr|Tungyueh|Aohua|Hanhsi}} {{n-g|third person singular pronoun}}
+# {{lb|ycr|Tungyueh|Aohua|Hanhsi}} [[that]] (person or object)
+
+====Synonyms====
+{{dial syn|ycr}}
+
+====Coordinate terms====
+* {{s|that}}
+** {{l|ycr|kore}}, {{l|ycr|are}}, {{l|ycr|dore}}
+** {{l|ycr|koci}}, {{l|ycr|aci}}, {{l|ycr|doko}}
+** {{l|ycr|kono}}, {{l|ycr|ano}}, {{l|ycr|dono}}
+** {{l|ycr|konna no}}, {{l|ycr|anna no}}, {{l|ycr|donna no}}
+** {{l|ycr|konnasite}}, {{l|ycr|annasite}}, {{l|ycr|donnasite}}
+
+====Derived terms====
+* {{s|third person singular pronoun}} {{l|ycr|aretaci}}, {{l|ycr|ataci}}
+
+===References===
+* {{cite-journal|year=2015|title=The lexical system of Yilan Creole|work=New Advances in Formosan Linguistics|pages=513-532|author=Chien Yuehchen|url=https://www.researchgate.net/profile/Stacy-Teng-2/publication/347421504_New_advances_in_Formosan_Linguistics_2015/links/5fdb084145851553a0c24526/New-advances-in-Formosan-Linguistics-2015.pdf}}
+* {{R:ycr:Chien pronoun}}
+* {{R:ycr:Chien demonstrative}}
+* {{R:ycr:Lin 2022}}
+* {{R:ycr:Qiu 2015}}
+
+==Yoruba==
+
+===Etymology 1===
+
+====Pronunciation====
+*{{yo-IPA|àre}}
+
+====Noun====
+{{yo-noun|àre}}
+
+# [[vindication]], [[justification]]; [[justice]]
+# [[excuse]], [[pardon]]
+
+=====Derived terms=====
+*{{l|yo|dáre|t=to [[vindicate]]}}
+*{{l|yo|jàre|t=[[please]], [[pardon me]]}}
+*{{l|yo|káre|t=[[well done]]!}}
+
+===Etymology 2===
+From the same root as {{l|yo|eré}}, {{l|yo|iré}}, and {{l|yo|uré}}, see {{inh|yo|alv-yor-pro|*V-ré}}
+
+====Pronunciation====
+*{{yo-IPA|aré}}
+
+====Noun====
+{{yo-noun|aré}}
+
+# {{altform|yo|eré|t=[[running]], [[race]]}}
+# {{altform|yo|eré|t=[[speed]]}}
+# {{altform|yo|eré|t=[[play]], [[pastime]]}}
+
+===Etymology 3===
+
+====Pronunciation====
+*{{yo-IPA|àre}}
+
+====Noun====
+{{yo-noun|àre}}
+
+# [[miserableness]]; the state of being [[miserable]] and [[aimless]]
+
+=====Derived terms=====
+*{{l|yo|ráre|t=to walk around [[aimlessly]]}}</text>
+      <sha1>k6bgwg8t2u9m8hs55i959crn60g2vga</sha1>
+    </revision>
+  </page>

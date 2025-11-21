@@ -1,0 +1,114 @@
+<page>
+    <title>привет</title>
+    <ns>0</ns>
+    <id>261292</id>
+    <revision>
+      <id>86783238</id>
+      <parentid>85977338</parentid>
+      <timestamp>2025-09-15T16:29:41Z</timestamp>
+      <contributor>
+        <username>Rodrigo5260</username>
+        <id>3579806</id>
+      </contributor>
+      <comment>/* Russian */</comment>
+      <origin>86783238</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2502" sha1="k1b8ch30jofxcrwxcigsot0eouhvb1s" xml:space="preserve">{{also|привѣтъ}}
+==Bulgarian==
+
+===Etymology===
+{{inh+|bg|cu|привѣтъ|t=approval, reverence}}, from {{inh|bg|sla-pro|*privětъ}}.
+
+===Pronunciation===
+* {{bg-IPA|приве́т}}
+* {{rhymes|bg|ɛt|s=2}}
+* {{bg-hyph}}
+* {{audio|bg|LL-Q7918 (bul)-Kiril kovachev-привет.wav|a=Standard Bulgarian}}
+
+===Noun===
+{{bg-noun|приве́т|m}}
+
+# [[greeting]]; [[well-wish]]
+#: {{syn|bg|по́здрав|приве́тствие}}
+
+====Declension====
+{{bg-ndecl|приве́т&lt;&gt;}}
+
+====Derived terms====
+{{col|bg|n=3
+|приветли́в|приветли́вост|приве́тен|приве́тност
+|приве́тствам|приве́тствие|приве́тствен
+}}
+
+===Interjection===
+{{head|bg|interjection|head=приве́т}}
+
+# [[greetings]]
+#: {{syn|bg|здраве́й|здраве́йте|здра́сти}}
+
+===References===
+* {{R:bg:RBE}}
+* {{R:bg:RBE2}}
+* {{R:bg:BER|привет|701|5}}
+* {{R:bg:STBR|привѣтъ|360|2}}
+
+{{cln|bg|greetings}}
+
+==Russian==
+
+===Alternative forms===
+* {{alter|ru|пр||youth slang|Internet}}
+* {{alter|ru|преве́д||Padonki|internet slang}}
+* {{alter|ru|прив||youth slang|Internet}}
+* {{alter|ru|привѣ́тъ||ru-PRO}}
+
+===Etymology===
+{{inh+|ru|orv|привѣтъ||greeting; appeal; dictum, word; intention, will}}, from {{inh|ru|sla-pro|*privětъ}}. Compare {{cog|uk|приві́т}} and {{cog|be|прыве́т}}.
+
+===Pronunciation===
+* {{ru-IPA|приве́т}}
+* {{audio|ru|Ru-привет.ogg}}
+* {{audio|ru|LL-Q7737 (rus)-Tatiana Kerbush-привет.wav|a=Saint Petersburg}}
+* {{rhymes|ru|et}}
+
+===Interjection===
+{{head|ru|interjection|head=приве́т}}
+
+# {{lb|ru|informal}} [[hello]], [[hi]]
+#: {{syn|ru|здра́вствуй|здра́вствуйте|;|здоро́во}}
+
+====Derived terms====
+* {{l|ru|приве́тить}}
+* {{l|ru|приве́тик}}
+* {{l|ru|приве́тливый}}
+* {{l|ru|приве́тствие}}
+* {{l|ru|приве́тствовать}}
+
+====Related terms====
+* {{l|ru|обе́т}}
+* {{l|ru|отве́т}}
+* {{l|ru|сове́т}}
+
+====Descendants====
+* {{desc|hy|պրիվետ|bor=on}}
+* {{desc|en|privet|bor=1}}
+* {{desc|ka|პრივეტ|bor=1|qq1=slang}}
+* {{desc|sah|пирибиэт|bor=1}}
+
+===Noun===
+{{ru-noun+|приве́т}}
+
+# a [[greeting]], a [[hello]], a [[hi]]
+
+====Declension====
+{{ru-noun-table|приве́т}}
+
+===References===
+* {{R:ru:Vasmer|привет}}
+* {{R:orv:Sreznevsky|привет|1388|2}}
+
+{{cln|ru|phrasebook|greetings}}</text>
+      <sha1>k1b8ch30jofxcrwxcigsot0eouhvb1s</sha1>
+    </revision>
+  </page>
