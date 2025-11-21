@@ -36,6 +36,7 @@ struct Morphology {
     prefixes: Vec<String>,
     suffixes: Vec<String>,
     is_compound: bool,
+    etymology_template: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -98,7 +99,7 @@ lazy_static! {
     static ref PREP_PHRASE_TEMPLATE: Regex = Regex::new(r"(?i)\{\{en-prepphr\b").unwrap();
 
     // Morphology/etymology patterns
-    static ref ETYMOLOGY_SECTION: Regex = Regex::new(r"(?i)===+\s*Etymology\s*\d*\s*===+\s*\n(.+?)(?=\n===|\z)").unwrap();
+    static ref ETYMOLOGY_SECTION: Regex = Regex::new(r"(?si)===+\s*Etymology\s*\d*\s*===+\s*\n(.+?)(?=\n===|\z)").unwrap();
     static ref SUFFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{suffix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
     static ref PREFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{prefix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
     static ref AFFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{affix\|en\|([^}]+)\}\}").unwrap();
@@ -555,6 +556,7 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
             prefixes: vec![],
             suffixes: vec![suffix],
             is_compound: false,
+            etymology_template: cap[0].to_string(),
         });
     }
 
@@ -575,6 +577,7 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
             prefixes: vec![prefix],
             suffixes: vec![],
             is_compound: false,
+            etymology_template: cap[0].to_string(),
         });
     }
 
@@ -599,6 +602,7 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
             prefixes: vec![prefix],
             suffixes: vec![suffix],
             is_compound: false,
+            etymology_template: cap[0].to_string(),
         });
     }
 
@@ -615,6 +619,7 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
                 prefixes: vec![],
                 suffixes: vec![],
                 is_compound: true,
+                etymology_template: cap[0].to_string(),
             });
         }
     }
@@ -665,6 +670,7 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
                     prefixes,
                     suffixes,
                     is_compound,
+                    etymology_template: cap[0].to_string(),
                 });
             }
         }
