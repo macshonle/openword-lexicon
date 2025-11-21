@@ -1,0 +1,3354 @@
+<page>
+    <title>A</title>
+    <ns>0</ns>
+    <id>66</id>
+    <revision>
+      <id>87672592</id>
+      <parentid>87660732</parentid>
+      <timestamp>2025-10-31T19:27:48Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax (6); convert {{wikipedia}} to {{wp}} (6)</comment>
+      <origin>87672592</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="70775" sha1="5nr8m86ioqb5c7gigz480hjt0e5z0ra" xml:space="preserve">{{also/a|a|ᴀ}}
+{{character info}}
+{{character info/var|Ａ}}
+{{minitoc}}
+==Translingual==
+
+===Etymology 1===
+From the {{der|mul|ett|-}} letter {{m|ett|𐌀}}, from the {{der|mul|grc|-}} letter {{m|grc|Α||alpha}}, derived from the {{der|mul|phn|-}} letter {{m|phn|𐤀||[[aleph]]}}, from the {{der|mul|egy|-}} hieroglyph {{m|egy|𓃾}}.
+
+====Pronunciation====
+* {{IPA|mul|/a/|qq=most languages}}
+
+====Letter====
+{{head|mul|letters}}
+
+# {{ng|The first letter of the [[Appendix:Latin script|basic modern Latin alphabet]].}}
+
+=====See also=====
+{{Latn-script}}
+* [[Appendix:Variations of &quot;a&quot;]]
+
+====Symbol====
+{{head|mul|symbols}}
+
+# {{ng|Marks the first item in a list.}}
+#: {{ux|mul|'''A'''. Go to the store. B. Get some food. C. Return home. D. Eat.}}
+# A hypothetical item or person designated the first, usually when there are more than one.
+#: {{ux|mul|Person '''A''' had 5 apples, and person B...}}
+# [[ten|Ten]], especially used in [[base]]s above ten, such as [[duodecimal]], [[hexadecimal]], [[vigesimal]] and so on.
+#: {{ux|mul|Decimal 270 can be converted as duodecimal 1'''A'''6 or vigesimal D'''A'''.}}
+#: {{lb|mul|computing}} ''The variable was a byte with value '''A'''0, or 160 in decimal.''
+# A standard size of dry cell battery, slightly larger than [[AA]].&lt;ref&gt;{{R:OCD2|page=1}}&lt;/ref&gt;
+# A system of paper sizes with similar proportions, as [[A0]], [[A1]], [[A2]], etc.&lt;ref name=SOED&gt;{{R:SOED5|page=1}}&lt;/ref&gt;
+#* {{quote-web|1=en|date=17 August 2022|accessdate=28 June 2025|work=Neenah|title=International Paper Sizes and Dimensions|url=https://www.neenahpaper.com/resources/paper-101/international-sizes|text=The most widely used for general printing and letterhead stationery is the '''A''' series.|archiveurl=https://web.archive.org/web/20220817013238/https://www.neenahpaper.com/resources/paper-101/international-sizes|archivedate=17 August 2022}}
+#* {{quote-journal|1=en|year=2007|author=International Organization for Standardization|title=Writing paper and certain classes of printed matter — Trimmed sizes — A and B series, and indication of machine direction|journal=International Standard|url=https://cdn.standards.iteh.ai/samples/36631/c0883203ea25445c9992bb09343620c5/ISO-216-2007.pdf|page=5|text=The trimmed sizes of the '''A''' series are intended for all kinds of stationery and printed matter as specified in Clause 1|accessdate=28 June 2025|archiveurl=https://web.archive.org/web/20221217145334/https://cdn.standards.iteh.ai/samples/36631/c0883203ea25445c9992bb09343620c5/ISO-216-2007.pdf|archivedate=17 December 2022}}
+#* {{quote-web|1=en|date=27 June 2024|author=MUNBYN Team|work=MUNBYN|url=https://munbyn.com/blogs/news/standard-paper-sizes|accessdate=27 June 2025|title=Understanding International Standard Paper Sizes Matters|text=The '''A''' series is the most common and versatile among the ISO 216 standard paper sizes.|archiveurl=https://web.archive.org/web/20240713012802/https://munbyn.com/blogs/news/standard-paper-sizes|archivedate=13 July 2024}}
+# {{rfv-sense|mul|fragment=A Translingual Symbol sense 6}} An academic grade lower than A+ but greater than A-.
+#* {{quote-web|1=en|date=09 October 2018|author=Anna Yuan|work=the black &amp; white|url=https://theblackandwhite.net/62957/news/students-earning-more-as-with-new-grading-system/|accessdate=27 June 2025|title=Students earning more A’s with new grading system|text=The Board’s data indicated that, in the 2014-2015 school year, 16.1 percent of students districtwide earned an '''A''' in core math classes.|archiveurl=https://web.archive.org/web/20200806074638/https://theblackandwhite.net/62957/news/students-earning-more-as-with-new-grading-system/|archivedate=6 August 2020}}
+#* {{quote-web|1=en|date=13 February 1983|author=Ian Frazier|work=The New Yorker|url=https://www.newyorker.com/magazine/1983/02/21/ponce-cruse-evans-profile-nobody-better-better-than-nobody|accessdate=27 June 2025|title=The Woman Behind “Hints from Heloise”|text=...she was the only girl in her high school to take shop class, and she got an '''A''' in it.|archiveurl=https://web.archive.org/web/20241226024149/https://www.newyorker.com/magazine/1983/02/21/ponce-cruse-evans-profile-nobody-better-better-than-nobody|archivedate=26 December 2024}}
+#* {{quote-book|1=en|year=2009|author=Charles J. Whalen|title=Human Resource Economics and Public Policy: Essays in Honor of Vernon M. Briggs Jr.|url=https://research.upjohn.org/cgi/viewcontent.cgi?params=/context/up_press/article/1161/&amp;path_info=up09cwhrea.pdf|page=9|text=When I earned an '''“A”''' in the course, not the dominant grade on my transcript at that time, Briggs sent a letter congratulating me and inviting me to visit during his office hours.|archiveurl=https://web.archive.org/web/20240912101420/https://research.upjohn.org/cgi/viewcontent.cgi?params=/context/up_press/article/1161/&amp;path_info=up09cwhrea.pdf|archivedate=12 September 2024}}
+# {{lb|mul|linguistics}} A [[wildcard]] for an [[open]] vowel
+# {{bond credit rating|lt=1|s=1|f=1|a bond is [[upper-medium]] [[grade]] with low [[risk]] of [[default]]}}
+# {{lb|mul|clothing}} {{ng|[[bra|Bra]] [[cup size]].}}
+
+=====Related terms=====
+{{col|mul|title=Letters sharing the same origin as &quot;A&quot;
+|Arabic {{m|mul|ا||tr=a|alif}}
+|Coptic {{m|mul|Ⲁ||tr=a|alfa}}
+|Cyrillic {{m|mul|А|tr=A}}
+|Devanāgari {{m|mul|अ||tr=a|aksara}}
+|Greek {{m|mul|Α||tr=A|Alpha}}
+|Hebrew {{m|mul|א||tr=a|aleph}}
+|Phoenician {{m|mul|𐤀}}
+|Syriac {{m|mul|ܐ||tr=a|alaph}}
+}}
+
+=====See also=====
+* {{qualifier|previous}} [[9]], {{qualifier|next}} [[B]]
+
+===Etymology 2===
+The abbreviation of a variety of terms.
+
+====Symbol====
+{{head|mul|symbols}}
+
+# {{chemical symbol|obs=1|argon}}
+#: {{syn|mul|Ar}}
+# {{lb|mul|chemistry|physics}} {{abbreviation of|mul|en:atomic mass number}}: [[mass number]], [[nucleon number]]
+# {{lb|mul|geometry}} [[area|Area]].
+# {{lb|mul|international standards}} {{n-g|A category of vehicle licence under the {{w|Vienna Convention on Road Traffic}}, referring to [[motorcycle]]s.}}
+
+====Noun====
+{{head|mul|nouns}}
+
+# {{lb|mul|physics|[[International System of Units]]}} [[ampere|Ampere]], a unit of [[electrical current]].
+# {{lb|mul|genetics}} [[IUPAC]] 1-letter abbreviation for [[adenine]] in genetic code.
+# {{lb|mul|amino acid}} {{IUPAC-1|alanine}} in proteins.
+#: {{syn|mul|Ala}}
+# {{lb|mul|music}} {{l|en|alto|Alto}}.
+
+====Proper noun====
+{{head|mul|proper nouns}}
+
+# {{lb|mul|vehicle-distinguishing signs}} [[Austria]].
+
+===Gallery===
+&lt;gallery caption=&quot;Letter styles&quot; perrow=&quot;3&quot; mode=&quot;packed&quot;&gt;
+File:Latin A.svg|Uppercase and lowercase versions of '''A''', in normal and italic type
+File:Fraktur letter a.svg|Uppercase and lowercase '''A''' in [[Fraktur]]
+File:UncialA-01.svg|'''A''' in [[uncial]] script
+&lt;/gallery&gt;
+
+===See also===
+{{Letter|page=A
+|NATO=Alpha
+|Morse=·–
+|Braille=⠁
+}}
+* {{l|mul|⠁}}
+* {{l|mul|·–}}
+* {{l|mul|LeftFlagDown-RightFlagLow}}
+
+===Further reading===
+* {{pedia}}
+
+===References===
+&lt;references/&gt;
+
+[[Category:Obsolete symbols for chemical elements]]
+
+==English==
+[[File:Runic letter ansuz.png|thumb|100px|Runic letter {{m|mul||ᚫ|tr=a|ansuz}}, source for Anglo-Saxon Futhorc letters replaced by ''A'']]
+
+===Etymology 1===
+From {{der|en|enm|-}} and {{der|en|ang|-}} upper case letter {{m|enm|A}} and split of {{der|en|enm|-}} and {{der|en|ang|-}} upper case letter {{m|enm|Æ}}.
+* The {{der|en|ang|-}} letters {{m|ang|A}} and {{m|ang|Æ}} replaced the Anglo-Saxon Futhorc letters {{m|mul|ᚪ||tr=a|āc}} and {{m|mul|ᚫ||tr=æ|æsc}}, derived from the Runic letter {{m|mul|ᚫ||tr=a|Ansuz}}, in the 7th century.
+
+====Alternative forms====
+* {{qualifier|Gregg shorthand versions [[w:Gregg Shorthand#Centennial Gregg Shorthand|Centennial]], [[w:Gregg Shorthand#Series 90 Gregg Shorthand|Series 90]], [[w:Gregg Shorthand#Diamond Jubilee Gregg Shorthand|DJS]], [[w:Gregg Shorthand#Simplified Gregg Shorthand|Simplified]], [[w:Gregg Shorthand#Anniversary Gregg Shorthand|Anniversary]], and [[w:Gregg Shorthand#Pre-Anniversary Gregg Shorthand|Pre-Anniversary]]}} {{alt|mul|·||dot}}
+
+====Pronunciation====
+* {{qualifier|letter name}}
+** {{IPA|en|/eɪ̯/|a=RP,GenAm}}
+** {{audio|en|en-us-a.ogg|a=US}}
+** {{IPA|en|/æɪ/|a=AusE}}
+** {{IPA|en|/eː/|a=South Asia}}
+* {{rhymes|en|eɪ|s=1}}
+*: The current pronunciation is a comparatively modern sound, and has taken the place of what, till about the early part of the 15th century, was similar to that in other languages.
+
+====Letter====
+{{en-letter}}
+
+# {{Latn-def|en|letter|1|a}}
+#: {{ux|en|Apple starts with '''A'''.}}
+#* {{RQ:Orwell Animal Farm|3
+|passage=Boxer could not get beyond the letter D. He would trace out '''A''', B, C, D, in the dust with his great hoof {{...}}}}
+
+=====Derived terms=====
+{{col3|en|Exhibit A| A number|antihemophilic factor A| A-League|A-back|Mode A|Pre-Pottery Neolithic A|Série A|A-Log|P-A|A factor|double-A|List A|triple-A|diptoindonesin A| A formation|A number 1|cluster A personality disorder|Generation A| A-B power|A-B powering
+|A-road|A road|A final|A-DNA|A-line|A-RNA|absey
+}}
+
+=====Related terms=====
+* {{l|en|A-frame}}
+* {{l|en|ABC}}, {{l|en|A.B.C.}} &lt;!-- also in the plural --&gt;
+* {{l|en|A to Z}}
+* {{l|en|A wave}}
+
+=====See also=====
+{{list:Latin script letters/en/simple}}
+
+====Number====
+{{en-number|upper=A|lower=a}}
+
+# {{Latn-def|en|ordinal|1|a}}
+#: {{ux|en|Item '''A''' is &quot;foods&quot;, item B is &quot;drinks&quot;.}}
+
+===Etymology 2===
+* {{sense|highest rank|grade|music}} From the initial position of the letter {{m|en|A}} in the English alphabet.
+* {{sense|blood type}} From {{m|en|w:ABO blood group system|A antigen}}
+
+====Symbol====
+{{en-head|sym}}
+
+# {{senseid|en|rank}} A rank, normally the highest rank, on any of various scales that assign letters.
+#: {{ux|en|We assign each item inspected a rating from '''A''' through G, depending on various factors.}}
+#: {{ux|en|In the UK, the highest [[w:NRS social grade|social grade]] is '''A''' &amp;ndash; [[upper middle class]].}}
+#: {{ux|en|The only standard brassiere cup size smaller than the '''A''' cup is the AA cup.}}
+# {{senseid|en|grade}} {{lb|en|education}} The highest [[letter grade]] assigned (disregarding plusses and minuses).
+#: {{ux|en|I was so happy to get an '''A''' on that test.}}
+#* {{quote-av|en|year=1999|writer=W. Peter Iliff|title={{w|Varsity Blues (film)|Varsity Blues}}|role=Mox|actor=w:James Van Der Beek|passage=Darcy's pretty sharp. She pulls '''A's'''.}}
+# {{lb|en|music}} A tone three fifths above C in the [[cycle of fifths]]; the sixth tone of the C major scale; the first note of the minor scale of A minor; the reference tone that occurs at exactly 440 Hz; the printed or written note A; the [[scale]] with A as its [[keynote]].&lt;ref name=SOED/&gt;&lt;ref name=OCD&gt;{{R:OCD2|page=1}}&lt;/ref&gt;
+#: {{ux|en|Orchestras traditionally tune to a concert '''A'''.}}
+# {{lb|en|medicine}} A [[blood type]] that has a specific antigen that aggravates the immune response in people with type [[B]] antigen in their blood. People with this blood type may receive blood from type A or type [[O]] but cannot receive blood from [[AB]] or [[B]].
+#: {{ux|en|My blood type is '''A''' negative.}}
+# {{lb|en|chemistry}} [[mass number|Mass number]].
+# {{lb|en|logic}} A universal affirmative suggestion.&lt;ref name=SOED&gt;{{R:SOED5|page=1}}&lt;/ref&gt;
+# {{lb|en|historical}} {{abbreviation of|en|adulterer,adulteress|addl=used as a human brand}}.
+#* {{quote-journal|en|date=1966 July 30|author=w:Ralph McGill|title=Today's students aim for humanistic values|journal=Latrobe Bulletin|location=Latrobe, Pennsylvania|page=6|text= Hester Prynne, the historical character in ''[[w:The Scarlet Letter|The Scarlet Letter]]'', was exposed and convicted by neighborhood gossip. [...] Gossip continues to brand some young ladies in small towns with this symbolic letter, but in our larger cities one rarely sees young ladies branded with an &quot;'''A'''&quot;.}}
+# [[allele|Allele]] dominant.
+# {{lb|en|chiefly|US}} {{alternative spelling of|en|A.M.|t=ante meridiem}} ''or'' '''{{l|en|AM}}'''
+
+=====Derived terms=====
+{{col|en|title=Rank or size
+|A1
+|AA
+|double A
+|AAA
+|triple A
+|A cup
+|A game,A-game
+|A level
+|A-list
+|A team
+|grade A
+}}
+
+{{col|en|title=Letter grade
+|straight A's
+|A minus
+|A plus
+}}
+
+{{col|en|title=(music) tone three fifths above C
+|A-flat
+|A major
+|A-minor
+|A-sharp
+|concert A
+}}
+
+{{col|en|title=Blood type
+|A positive
+|A negative
+|AB
+}}
+
+====Noun====
+{{head|en|nouns}}
+
+# [[ace|Ace]]. {{q|including in card games}}
+# [[acre|Acre]].
+# [[adult|Adult]]; as used in film rating.
+# [[ammeter|Ammeter]].
+# {{lb|en|physics}} [[angstrom|Angstrom]].
+# [[answer|Answer]].
+# {{lb|en|sports}} An [[assist]].
+# {{lb|en|sexuality}} [[asexual|Asexual]].
+# {{lb|en|UK|chiefly|_|London}} [[arsehole|Arsehole]].
+# {{lb|en|weaponry}} [[atom|Atom]].
+#: {{co|en|'''A'''-bomb}}
+
+=====Synonyms=====
+* {{sense|physics|angstrom}} {{l|en|Å}}
+
+=====Translations=====
+{{see translation subpage|Noun}}
+
+====Adjective====
+{{head|en|adjectives}}
+
+# {{lb|en|weaponry}} [[atom|Atom]]; [[atomic]].
+
+=====Derived terms=====
+* {{sense|weaponry|atom}} {{l|en|A-bomb}}
+
+===References===
+&lt;references/&gt;
+
+===Further reading===
+* {{R:Britannica 1911|A}}
+
+{{C|en|Academic grades}}
+
+==Acehnese==
+
+===Letter===
+{{head|ace|letters}}
+
+# {{Latn-def|ace|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ace}}
+
+==Acheron==
+
+===Letter===
+{{head|acz|letters}}
+
+# {{Latn-def|acz|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/acz}}
+
+==Adzera==
+
+===Letter===
+{{head|adz|letters}}
+
+# {{Latn-def|adz|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/adz}}
+
+==Afar==
+
+===Letter===
+{{head|aa|letters}}
+
+# {{Latn-def|aa|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/aa}}
+
+==Afrikaans==
+
+===Pronunciation===
+* {{sense|letter name}} {{IPA|af|/ɑː/}}
+* {{audio|af|LL-Q14196 (afr)-Oesjaar-A.wav}}
+
+===Letter===
+{{head|af|letters|upper case||lower case|a}}
+
+# {{Latn-def|af|letter|1}}
+
+====See also====
+{{list:Latin script letters/af/simple}}
+
+===Noun===
+{{af-noun|A's|A'tjie}}
+
+# [[#English|A]]
+
+==Akawaio==
+
+===Pronunciation===
+* {{IPA|ake|/a/}}
+
+===Letter===
+{{head|ake|letters|upper case|A|lower case|a}}
+
+# {{Latn-def|ake|letter|1}}
+
+====See also====
+{{list:Latin script letters/ake/simple}}
+
+===References===
+* {{R:AKED:2014|2}}
+
+==Albanian==
+
+===Pronunciation===
+* {{IPA|sq|/a/|/ɑ/}}
+
+===Letter===
+{{head|sq|letters|upper case|A|lower case|a}}
+
+# {{Latn-def|sq|letter|1}}
+
+====See also====
+{{list:Latin script letters/sq/simple}}
+
+==Alekano==
+
+===Letter===
+{{head|gah|letters}}
+
+# {{Latn-def|gah|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/gah}}
+
+==Alemannic German==
+
+===Letter===
+{{head|gsw|letters}}
+
+# {{Latn-def|gsw|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/gsw}}
+
+==Aleut==
+
+===Letter===
+{{head|ale|letters|lower case|a}}
+
+# {{Latn-def|ale|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ale}}
+
+==Amaimon==
+
+===Letter===
+{{head|ali|letters}}
+
+# {{Latn-def|ali|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ali}}
+
+==Amarasi==
+
+===Letter===
+{{head|aaz|letters}}
+
+# {{Latn-def|aaz|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/aaz}}
+
+==Ambrak==
+
+===Letter===
+{{head|aag|letters}}
+
+# {{Latn-def|aag|letter|1}}
+
+==American Sign Language==
+
+===Letter===
+{{head|ase|letter|head=[[File:Sign language A.svg|100px|A]]}}
+
+# {{form of|ase|Stokoe notation|𝣷𝪜||the letter A}}
+
+==Anāl==
+
+===Letter===
+{{head|anm|letters}}
+
+# {{Latn-def|anm|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/anm}}
+
+==Angami==
+
+===Letter===
+{{head|njm|letters}}
+
+# {{Latn-def|njm|letter|3}}
+
+====See also====
+* {{see-temp|list:Latin script letters/njm}}
+
+==Ankave==
+
+===Letter===
+{{head|aak|letters}}
+
+# {{Latn-def|aak|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/aak}}
+
+==Anuki==
+
+===Letter===
+{{head|aui|letters}}
+
+# {{Latn-def|aui|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/aui}}
+
+==Araki==
+
+===Letter===
+{{head|akr|letters}}
+
+# {{Latn-def|akr|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/akr}}
+
+==Aromanian==
+
+===Letter===
+{{head|rup|letters}}
+
+# {{Latn-def|rup|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/rup}}
+
+==Ashéninka Pajonal==
+
+===Letter===
+{{head|cjo|letters}}
+
+# {{Latn-def|cjo|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/cjo}}
+
+==Assiniboine==
+
+===Letter===
+{{head|asb|letters}}
+
+# {{Latn-def|asb|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/asb}}
+
+==Atsahuaca==
+
+===Letter===
+{{head|atc|letters}}
+
+# {{Latn-def|atc|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/atc}}
+
+==Auhelawa==
+
+===Letter===
+{{head|kud|letters}}
+
+# {{Latn-def|kud|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kud}}
+
+==Avokaya==
+
+===Letter===
+{{head|avu|letters}}
+
+# {{Latn-def|avu|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/avu}}
+
+==Awara==
+
+===Letter===
+{{head|awx|letters}}
+
+# {{Latn-def|awx|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/awx}}
+
+==Azerbaijani==
+
+===Pronunciation===
+* {{IPA|az|/ɑ/|q=phoneme; letter name}}
+
+===Letter===
+{{head|az|letter|upper case||lower case|a}}
+
+# {{Latn-def|az|letter|1}}
+
+====See also====
+{{list:Latin script letters/az}}
+
+==Balanta-Kentohe==
+
+===Letter===
+{{head|ble|letters}}
+
+# {{Latn-def|ble|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ble}}
+
+==Barai==
+
+===Letter===
+{{head|bbb|letters}}
+
+# {{Latn-def|bbb|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/bbb}}
+
+==Bari==
+
+===Letter===
+{{head|bfa|letters}}
+
+# {{Latn-def|bfa|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/bfa}}
+
+==Basque==
+
+===Pronunciation===
+{{eu-IPA}}
+
+===Letter===
+{{head|eu|letters|upper case||lower case|a}}
+
+# {{Latn-def|eu|letter|1|a}}
+
+====See also====
+{{list:Latin script letters/eu/simple}}
+
+==Bavarian==
+
+===Letter===
+{{head|bar|letters}}
+
+# {{Latn-def|bar|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/bar}}
+
+==Beja==
+
+===Letter===
+{{head|bej|letters}}
+
+# {{Latn-def|bej|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/bej}}
+
+==Bemba==
+
+===Letter===
+{{head|bem|letters}}
+
+# {{Latn-def|bem|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/bem}}
+
+==Blagar==
+
+===Letter===
+{{head|beu|letters}}
+
+# {{Latn-def|beu|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/beu}}
+
+==Blin==
+
+===Letter===
+{{head|byn|letters}}
+
+# {{Latn-def|byn|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/byn}}
+
+==Brahui==
+
+===Letter===
+{{head|brh|letters}}
+
+# {{Latn-def|brh|letter|32}}
+
+====See also====
+* {{see-temp|list:Latin script letters/brh}}
+
+==Breton==
+
+===Letter===
+{{head|br|letters}}
+
+# {{Latn-def|br|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/br}}
+
+==Busa==
+
+===Letter===
+{{head|bqp|letters}}
+
+# {{Latn-def|bqp|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/bqp}}
+
+==Catalan==
+
+===Pronunciation===
+* {{IPA|ca|/a/}}
+
+===Letter===
+{{head|ca|letters|upper case||lower case|a}}
+
+# {{Latn-def|ca|letter|1}}
+
+====See also====
+{{list:Latin script letters/ca}}
+
+==Central Franconian==
+
+===Etymology===
+* {{IPAchar|/a/}} is from Middle High German {{m|gmh||a}} in most closed syllables.
+* {{IPAchar|/aː/}} is from {{m|gmh||a}} before certain clusters, in most dialects also in open syllables; in southern Moselle Franconian from ''ou''.
+
+===Pronunciation===
+* {{IPA|gmw-cfr|q1=short|/a/|q2=long|/aː/}}
+
+===Letter===
+{{head|gmw-cfr|letters}}
+
+# {{ng|A letter in the German-based alphabet of Central Franconian.}}
+# {{ng|A letter in the Dutch-based alphabet of Central Franconian.}}
+
+====Usage notes====
+{{col-top|2|Doubling of long A}}
+* In the German-based spelling, long ''a'' is doubled to ''aa'' when the German cognate word has ''aa'' as well. Long ''a'' may or may not be doubled in the following cases:
+** when it is followed by two or more consonants: {{m|gmw-cfr|Saach}}, {{q|rarely}} {{m|gmw-cfr|Sach}};
+** when the German cognate has two vowel letters: {{m|gmw-cfr|glaawe}}, {{m|gmw-cfr|glawe}} (German {{m|de|glauben}});
+** when the German cognate has a consonant lost or not present in Central Franconian: {{m|gmw-cfr|waade}}, {{m|gmw-cfr|wade}} (German {{m|de|warten}});
+** when the German cognate has a short vowel: {{m|gmw-cfr|baal}}, {{m|gmw-cfr|bal}} (German {{m|de|bald}}).
+* In the Dutch-based spelling, long ''a'' is always doubled in closed syllables, always written simple in open syllables.
+{{col-bottom}}
+
+==Central Mazahua==
+
+===Pronunciation===
+* {{IPA|maz|/a/}}
+
+===Letter===
+{{head|maz|letters|lower case|a}}
+
+# {{ng|A letter of the [[Mazahua]] alphabet.}}
+
+====See also====
+{{list:Latin script letters/maz}}
+
+==Chachi==
+
+===Letter===
+{{head|cbi|letters}}
+
+# {{Latn-def|cbi|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/cbi}}
+
+==Chamorro==
+
+===Letter===
+{{head|ch|letters}}
+
+# {{Latn-def|ch|letter|2}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ch}}
+
+==Chechen==
+
+===Letter===
+{{head|ce|letters|upper case||lower case|a|Cyrillic|А}}
+
+# {{Latn-def|ce|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ce}}
+
+==Cheyenne==
+
+===Letter===
+{{head|chy|letters|upper case}}
+
+# {{Latn-def|chy|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/chy}}
+
+==Chinese==
+
+===Etymology 1===
+From the [[hotkey]] in many video games associated with the command &quot;attack&quot;.
+
+====Pronunciation====
+{{zh-pron
+|m=ēi
+|cat=v
+}}
+
+====Verb====
+{{zh-verb}}
+
+# {{lb|zh|slang|neologism}} to [[attack]]; to [[assault]]
+# {{lb|zh|slang|neologism}} to [[pursue]] romantically
+
+====See also====
+* {{zh-l|平A}}
+* {{zh-l|對A}}
+
+===Etymology 2===
+Initialism of {{bor|zh|en|available}}.
+
+====Pronunciation====
+{{zh-pron
+|c=ei1
+|cat=a
+}}
+
+====Adjective====
+{{head|zh|adjectives}}
+
+# {{lb|zh|Hong Kong Cantonese|slang}} single, open to a relationship
+
+=====Derived terms=====
+* {{l|zh|A0}}
+* {{l|zh|A380}}
+
+===Etymology 3===
+From the letter A of the English pattern playing cards. Various names exist for this symbol in the spoken language.
+; Mandarin ''jiān''
+: From {{zh-l|尖|tip}}, because the letter A has an upward tip.
+; Cantonese ''jin1''
+: {{clipping|yue|煙士}}, from {{bor|yue|en|ace}}.
+
+====Pronunciation====
+{{zh-pron
+|m=jiān
+|c=jin1
+|cat=n
+}}
+
+====Noun====
+{{head|zh|nouns}}
+
+# {{lb|zh|card games}} [[ace]] {{zh-mw|隻|張}}
+
+=====Synonyms=====
+{{zh-dial|尖兒}}
+
+===Etymology 4===
+
+====Pronunciation 1====
+{{zh-pron
+|m=ēi
+|m-s=
+|c=ei1
+|mn=xm:e
+|mn-t=ê5
+|w=sh:1e
+|cat=letters
+}}
+
+=====Letter=====
+{{head|zh|letters}}
+
+# {{n-g|The first letter of the Latin alphabet.}}
+
+====Pronunciation 2====
+{{zh-pron
+|m=ā
+|cat=letters
+}}
+
+====Letter====
+{{head|zh|letters}}
+
+# {{n-g|The first letter used in [[w:Pinyin#Letters|Pinyin]].}}
+
+=====Usage notes=====
+* The pronunciation above are only used while referring to letters in Pinyin. They are not used in other context (such as English).
+
+===Etymology 5===
+Initialism of {{bor|zh|en|alpha}}
+
+====Pronunciation====
+{{zh-pron
+|m=ēi
+|cat=n
+}}
+
+====Noun====
+{{head|zh|nouns}}
+
+# {{lb|zh|fandom}} {{alt form|zh|阿爾法}}
+#: {{see|zh|noast=1|ABO|B|O}}
+#* {{quote-web|zh|date=2020-12|author=晚秋初十|work=晋江文学城|url=https://www.jjwxc.net/onebook.php?novelid=4526134|archiveurl=http://archive.today/UyIBR|archivedate=2024-12-26}}
+#*: {{zh-q|《^在 ^情敌 ^面前 A ^变 O ^后 ^我 ^怀孕 ^了》|''After Having Become Omega From '''Alpha''' In Front Of My Rival In Love, I Got Pregnant''|simp=y}}
+
+==Chiwere==
+
+===Letter===
+{{head|iow|letters|upper case}}
+
+# {{Latn-def|iow|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/iow}}
+
+==Choctaw==
+
+===Letter===
+{{head|cho|letters|upper case||lower case|a}}
+
+# {{Latn-def|cho|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/cho}}
+
+==Ch'orti'==
+
+===Letter===
+{{head|caa|letters}}
+
+# {{Latn-def|caa|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/caa}}
+
+==Cofán==
+
+===Letter===
+{{head|con|letters}}
+
+# {{Latn-def|con|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/con}}
+
+==Comanche==
+
+===Letter===
+{{head|com|letters}}
+
+# {{Latn-def|com|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/com}}
+
+==Corsican==
+
+===Pronunciation===
+* {{IPA|co|/a/}}
+
+===Letter===
+{{head|co|letters}}
+
+# {{Latn-def|co|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/co}}
+
+==Crimean Tatar==
+
+===Letter===
+{{head|crh|letters|lower case|a}}
+
+# {{Latn-def|crh|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/crh}}
+
+==Cypriot Arabic==
+
+===Letter===
+{{head|acy|letters|lower case|a}}
+
+# {{Latn-def|acy|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/acy}}
+
+==Czech==
+
+===Letter===
+{{head|cs|letters}}
+
+# {{l|en|A}} {{gloss|the 1st letter in the Czech alphabet}}
+
+====See also====
+* {{see-temp|list:Latin script letters/cs}}
+
+==Dagbani==
+
+===Letter===
+{{head|dag|letters}}
+
+# {{Latn-def|dag|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/dag}}
+
+==Danish==
+
+===Pronunciation===
+* {{IPA|da|/æː/|[ˈæːˀ]}}
+* {{rhymes|da|æː}}
+* {{audio|da|da-cph-a-letter.ogg|a=Copenhagen}}
+
+===Etymology 1===
+
+====Letter====
+{{head|da|letters|upper case||lower case|a}}
+
+# {{Latn-def|da|letter|1}}
+
+=====See also=====
+{{list:Latin script letters/da/simple}}
+
+===Etymology 2===
+
+====Alternative forms====
+* {{alt|da|a}}
+
+====Noun====
+{{head|da|nouns|g=n|singular definite|A'et|plural indefinite|A'er}}
+
+# {{Latn-def|da|letter|1}}
+
+=====Inflection=====
+{{da-noun-infl|A'et|A'er|A'erne|A's}}
+
+==Dinka==
+
+===Letter===
+{{head|din|letters}}
+
+# {{Latn-def|din|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/din}}
+
+==Domari==
+
+===Letter===
+{{head|rmt|letters}}
+
+# {{Latn-def|rmt|letter|2}}
+
+====See also====
+* {{see-temp|list:Latin script letters/rmt}}
+
+==Dutch==
+
+===Pronunciation===
+* {{IPA|nl|/aː/}}
+* {{audio|nl|Nl-A.ogg}}
+
+===Letter===
+{{head|nl|letters|upper case||lower case|a}}
+
+# {{Latn-def|nl|letter|1}}
+
+====See also====
+{{list:Latin script letters/nl/simple}}
+
+==Duun==
+
+===Letter===
+{{head|dux|letters}}
+
+# {{Latn-def|dux|letter|1}}
+
+===Further reading===
+* ''[https://web.archive.org/web/20240630004652/https://www.sil-mali.org/sites/default/files/SIL-Mali-dux-2006-ABCdaire-duun-A4.pdf Duungooma ABC (alphabet duun)]'', page 2
+
+==Egyptian==
+
+===Romanization===
+{{head|egy|romanizations}}
+
+# {{egy-alt tr|ꜣ|type=Manuel de Codage}}
+
+==Elfdalian==
+
+===Alternative forms===
+* {{alt|ovd|ᛅ|ᚷ||Dalecarlian runes}}
+
+===Letter===
+{{head|ovd|letters|upper case||lower case|a}}
+
+# {{Latn-def|ovd|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ovd}}
+
+==Esan==
+
+===Letter===
+{{head|ish|letters}}
+
+# {{Latn-def|ish|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ish}}
+
+==Esperanto==
+
+===Pronunciation===
+{{eo-IPA|a=Eo-a.ogg}}
+
+===Letter===
+{{head|eo|letters|upper case||lower case|a}}
+
+# {{Latn-def|eo|letter|1|a}}
+
+====See also====
+{{list:Latin script letters/eo/simple}}
+
+==Estonian==
+
+===Pronunciation===
+* {{sense|letter name|[[aa]]}} {{IPA|et|/ˈɑː/}}
+* {{sense|phoneme}} {{IPA|et|/ɑ/}}
+
+===Letter===
+{{head|et|letters|upper case||lower case|a}}
+
+# {{Latn-def|et|letter|1|aa}}
+
+====See also====
+{{list:Latin script letters/et/simple}}
+
+==Ewe==
+
+===Letter===
+{{head|ee|letters}}
+
+# {{Latn-def|ee|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ee}}
+
+==Faroese==
+
+===Letter===
+{{head|fo|letters|lower case|a}}
+
+# {{Latn-def|fo|letter|1}}
+
+====See also====
+{{list:Latin script letters/fo/simple}}
+
+==Fe'fe'==
+
+===Letter===
+{{head|fmp|letters}}
+
+# {{Latn-def|fmp|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/fmp}}
+
+==Fijian==
+
+===Letter===
+{{head|fj|letters|upper case||lower case|a}}
+
+# {{Latn-def|fj|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/fj}}
+
+==Finnish==
+
+===Etymology===
+{{fi-ety-letter}}
+
+===Pronunciation===
+* {{audio|fi|Fi-aa.ogg|text=[[aa]], [[auto]], [[aamu]], [[ananas]], [[aa]]}}
+
+===Letter===
+{{head|fi|letters|upper case||lower case|a}}
+
+# {{Latn-def|fi|letter|1|aa}}
+
+====Derived terms====
+{{col|fi|title=compounds
+|A-oikeudet
+|A-pilari
+|A-pylväs
+}}
+
+====See also====
+{{list:Latin script letters/fi/simple}}
+
+===Noun===
+{{head|fi|nouns}}
+
+# {{abbreviation of|fi|approbatur}}
+# {{alt case form of|fi|a||A (musical note)|id=note}}
+
+===Symbol===
+{{head|fi|symbols}}
+
+# {{lb|fi|linguistics}} {{ng|Either the vowel [[a#Finnish|a]] {{IPAchar|/ɑ/}} or [[ä#Finnish|ä]] {{IPAchar|/æ/}}, depending on vowel harmony.}}
+
+====Usage notes====
+Used in linguistic descriptions in Finnish. For example, a Finnish grammar could use {{m|fi||-mA}} to refer to the suffix {{m|fi|-ma}} (in e.g. {{m|fi|osuma}}) or {{m|fi|-mä}} (in e.g. {{m|fi|elämä}}).
+
+==Fon==
+
+===Letter===
+{{head|fon|letters}}
+
+# {{Latn-def|fon|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/fon}}
+
+==French==
+
+===Pronunciation===
+* {{fr-IPA}}
+* {{audio|fr|Fr-FR-A.oga|a=Paris}}
+* {{audio|fr|LL-Q150 (fra)-DSwissK-A.wav|a=&lt;&lt;Switzerland&gt;&gt; (&lt;&lt;Valais&gt;&gt;)}}
+* {{audio|fr|LL-Q150 (fra)-Lepticed7-A.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Toulouse&gt;&gt;)}}
+* {{audio|fr|LL-Q150 (fra)-LoquaxFR-A.wav|a=France (Vosges)}}
+* {{audio|fr|LL-Q150 (fra)-Mecanautes-A.wav|a=France}}
+* {{audio|fr|LL-Q150 (fra)-Poslovitch-A.wav|a=France (Vosges)}}
+
+===Letter===
+{{head|fr|letters|upper case||lower case|a}}
+
+# {{Latn-def|fr|letter|1}}
+
+====Derived terms====
+* {{l|fr|bombe A}}
+* {{l|fr|prouver par A plus B}}, prouver par A + B
+
+====See also====
+* {{see-temp|list:Latin script letters/fr}}
+
+==Friulian==
+
+===Letter===
+{{head|fur|letters|upper||lower|a}}
+
+# {{Latn-def|fur|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/fur}}
+
+==Fula==
+
+===Letter===
+{{head|ff|letters|upper case||lower case|a}}
+
+# {{Latn-def|ff|letter|1|a}}
+
+====Usage notes====
+* {{U:ff:common}}
+
+====See also====
+{{list:Latin script letters/ff/simple}}
+
+==Ga==
+
+===Letter===
+{{head|gaa|letters}}
+
+# {{Latn-def|gaa|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/gaa}}
+
+==Gagauz==
+
+===Letter===
+{{head|gag|letters|lower case|a}}
+
+# {{Latn-def|gag|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/gag}}
+
+==Galician==
+
+===Letter===
+{{head|gl|letters|upper case||lower case|a}}
+
+# {{Latn-def|gl|letter|1}}
+
+====See also====
+{{list:Latin script letters/gl/simple}}
+
+==Gallo-Italic of Sicily==
+
+===Letter===
+{{head|roa-gis|letters}}
+
+# {{Latn-def|roa-gis|letter|1}}
+
+==German==
+
+===Etymology 1===
+
+====Pronunciation====
+* {{IPA|de|/ʔaː/}}
+* {{audio|de|De-A.OGG}}
+* {{rhymes|de|aː|s=1}}
+
+====Letter====
+{{head|de|letters|upper case||lower case|a}}
+
+# {{Latn-def|de|letter|1}}
+
+=====See also=====
+* {{see-temp|list:Latin script letters/de}}
+
+====Noun====
+{{de-noun|n,-:s,-:s}}
+
+# [[#English|A]]
+#: {{ux|inline=1|de|[[von A bis Z|Von '''A''' bis Z.]]|From '''A''' to Z.}}
+#: {{ux|inline=1|de|Wer '''A''' sagt, muss auch B sagen.|One who says '''A''' must also say B.}}
+
+=====Declension=====
+{{de-ndecl|n,-:s,-:s}}
+
+====Related terms====
+{{col3|de
+|das A und O
+|von A bis Z
+|von A nach B
+|wer A sagt, muss auch B sagen
+}}
+
+===Etymology 2===
+
+====Noun====
+{{head|de|nouns}}
+
+# {{abbr of|de|A-Dur}}
+# {{abbr of|de|Ampere}}
+# {{lb|de|historical|Nazism}} {{abbr of|de|Arbeitsjuden}}&lt;ref&gt;Michael, R., &amp; Doerr, K. (2002). ''Nazi-Deutsch/Nazi German: An English Lexicon of the Language of the Third Reich''. Greenwood, page 49.&lt;/ref&gt;
+# {{abbr of|de|Autobahn}}
+# {{alt form|de|Å}} {{gloss|symbol for {{l|de|Ångström}}}}
+
+===References===
+{{references}}
+* {{R:de:Duden|a_Buchstabe_Ton|a, Buchstabe, Ton}}
+* {{R:de:Duden|a_a_Moll_Ar|a, a Moll, Ar}}
+* {{R:de:DWDS}}
+
+==Gilbertese==
+
+===Letter===
+{{head|gil|letters}}
+
+# {{Latn-def|gil|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/gil}}
+
+==Gimi (Goroka)==
+
+===Letter===
+{{head|gim|letters}}
+
+# {{Latn-def|gim|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/gim}}
+
+==Greenlandic==
+
+===Letter===
+{{head|kl|letters}}
+
+# {{Latn-def|kl|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kl}}
+
+==Haida==
+
+===Letter===
+{{head|hai|letters}}
+
+# {{Latn-def|hai|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/hai}}
+
+==Haitian Creole==
+
+===Letter===
+{{head|ht|letters}}
+
+# {{Latn-def|ht|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ht}}
+
+==Halkomelem==
+
+===Letter===
+{{head|hur|letters}}
+
+# {{Latn-def|hur|letter|37}}
+
+====See also====
+* {{see-temp|list:Latin script letters/hur}}
+
+==Hausa==
+
+===Letter===
+{{head|ha|letters|lower case|a}}
+
+# {{Latn-def|ha|letter|1}} followed by [[B]].
+
+====See also====
+* {{see-temp|list:Latin script letters/ha}}
+
+==Hawaiian==
+
+===Etymology 1===
+
+====Alternative forms====
+* {{alt|haw|ʻā|q1=letter name}}
+
+====Pronunciation====
+* {{q|letter name}} {{haw-IPA|ʻā}}
+* {{q|phoneme}} {{haw-IPA}}
+
+====Letter====
+{{head|haw|letters}}
+
+# {{Latn-def|haw|letter|1}}
+
+=====See also=====
+{{list:Latin script letters/haw}}
+
+===Etymology 2===
+
+====Noun====
+{{head|haw|noun}}
+
+# {{abbr of|haw|ʻākau|t=north}}
+
+====References====
+* {{R:haw:CHD|A₂}}
+
+==Hungarian==
+
+===Pronunciation===
+* {{sense|letter or phoneme itself}} {{IPA|hu|[ɒː]}}&lt;ref&gt;{{R:SiptarTorkenczy 2007}}, p. 280&lt;/ref&gt;
+* {{sense|identifier or musical note}} {{IPA|hu|[ˈaː]}} {{q|in the names of major scales; see also {{m|hu|a|id=letter}}}}
+
+===Letter===
+{{head|hu|letters|upper case||lower case|a}}
+
+# {{Latn-def|hu|letter|1|a}}
+
+&lt;!--====Declension====
+{{hu-infl-nom|A-|o}}{{hu-pos-tok|A-}}
+--&gt;
+
+====Derived terms====
+* {{l|hu|A-dúr}}
+* {{l|hu|A-vitamin}}
+
+====See also====
+* {{see-temp|list:Latin script letters/hu}}
+
+===References===
+&lt;references/&gt;
+
+==Hunsrik==
+
+===Pronunciation===
+* {{IPA|hrx|/aː/}}
+* {{rhymes|hrx|aː|s=1}}
+
+===Letter===
+{{head|hrx|letters}}
+
+# {{Latn-def|hrx|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/hrx}}
+
+==Hupa==
+
+===Letter===
+{{head|hup|letters}}
+
+# {{Latn-def|hup|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/hup}}
+
+==Icelandic==
+
+===Letter===
+{{head|is|letter|lower case|a}}
+
+# {{Latn-def|is|letter|1}}
+
+===Noun===
+{{head|is|noun|g=n}} [[Category:Requests for inflections in Icelandic noun entries]]
+
+# {{abbreviation of|is|austur|t=east}}
+
+====Declension====
+{{rfinfl|is|noun}}
+
+====See also====
+* {{see-temp|list:Latin script letters/is}}
+
+==Ido==
+
+===Letter===
+{{head|io|letters|lower case|a}}
+
+# {{Latn-def|io|letter|1}}
+
+====See also====
+{{list:Latin script letters/io/simple}}
+
+==Igbo==
+
+===Letter===
+{{head|ig|letters|lower case|a}}
+
+# {{Latn-def|ig|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ig}}
+
+==Inari Sami==
+
+===Letter===
+{{head|smn|letters|lower case|a}}
+
+# {{Latn-def|smn|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/smn}}
+
+==Indonesian==
+
+===Pronunciation===
+* {{sense|letter name}} {{IPA|id|/a/}}
+* {{sense|phoneme}} {{IPA|id|/a/}}
+* {{homophones|id|a|à}}
+
+===Etymology 1===
+From the {{der|id|la|-}} letter {{m|la|A}}, from the {{der|id|ett|-}} letter {{m|ett|𐌀}}, from the {{der|id|grc|-}} letter {{m|grc|Α||alpha}}, derived from the {{der|id|phn|-}} letter {{m|phn|𐤀||[[aleph]]}}, from the {{der|id|egy|-}} hieroglyph {{m|egy|𓃾}}.
+
+====Letter====
+{{head|id|letters|upper case||lower case|a}}
+
+# {{Latn-def|id|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/id}}
+
+===Etymology 2===
+From the initial position of the letter {{m|id|A}} in the Indonesian alphabet.
+
+====Symbol====
+{{head|id|symbol}}
+
+# {{l|en|A}}:
+## {{senseid|id|rank}} a rank, normally the highest rank, on any of various scales that assign letters
+## {{senseid|id|grade}} {{lb|id|education}} the highest [[letter grade]] assigned (disregarding plusses and minuses)
+## {{lb|id|music}} a tone three fifths above C in the [[cycle of fifths]]; the sixth tone of the C major scale; the first note of the minor scale of A minor; the reference tone that occurs at exactly 440 Hz; the printed or written note A; the [[scale]] with A as its [[keynote]]
+# {{lb|id|vehicle-distinguishing signs}} vehicle number plate code for the Banten, Cilegon, Serang, Pandeglang, Lebak and Tangerang areas
+
+===Etymology 3===
+{{sense|blood type}} From {{m|en|w:ABO blood group system|A antigen}}
+
+====Symbol====
+{{head|id|symbol}}
+
+# {{lb|id|medicine}} {{l|en|A}} {{q|blood type}}
+
+===Further reading===
+* {{R:KBBI Daring}}
+
+==Ingrian==
+
+===Letter===
+{{head|izh|letters}}
+
+# {{Latn-def|izh|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/izh}}
+
+==Interlingua==
+
+===Letter===
+{{head|ia|letters|upper case||lower case|a}}
+
+# {{Latn-def|ia|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ia}}
+
+==Inupiaq==
+
+===Letter===
+{{head|ik|letters}}
+
+# {{Latn-def|ik|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ik}}
+
+==Irish==
+
+===Letter===
+{{head|ga|letters|upper case||lower case|a}}
+
+# {{Latn-def|ga|letter|1}}
+
+====See also====
+{{list:Latin script letters/ga}}
+
+==Isoko==
+
+===Letter===
+{{head|iso|letter|uppercase||lowercase|a}}
+
+# {{Latn-def|iso|letter|1}}
+
+===References===
+* E. O. Agbada et al, ''Vbuhrẹ Ụmụ́bọrá Isoko (Teach Yourself Isoko), first published 2008, revised edition 2017,'' pages 8, 10-11
+* Onyerioma Isaac Itegolor, ''Isoko Wha Dooo...! Book 2 (Operation Speak Your Language), Revised Standard Edition (2015)'', page 1
+* Joe Okedi, ''Abidi Isoko Na Kpobi'', 2020
+
+==Italian==
+{{wp|it:}}
+
+===Pronunciation===
+{{it-pr|À*&lt;pre:{{q|letter name}}&gt;&lt;hmp:a&gt;|a&lt;pre:{{q|phonemic realization}}&gt;&lt;rhyme:-&gt;}}
+
+===Letter===
+{{head|it|letters|upper case||lower case|a}}
+
+# {{Latn-def|it|letter|1|a}}
+
+===Noun===
+{{head|it|noun}}
+
+# {{lb|it|chess}} {{abbr of|it|alfiere|t=bishop}}
+
+===See also===
+{{list:Latin script letters/it}}
+* {{pedia|Italian alphabet}}
+
+===References===
+* [https://rcc.fide.com/wp-content/uploads/2023/04/FIDE-Regeln-2023-Final-DEU.pdf FIDE Laws of Chess 2023 - German translation]
+
+==Japanese==
+
+===Romanization===
+{{ja-rom}}
+
+# {{ja-rom of|あ}}
+
+==Jarai==
+
+===Letter===
+{{head|jra|letters}}
+
+# {{Latn-def|jra|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/jra}}
+
+==Juǀ'hoan==
+
+===Letter===
+{{head|ktz|letters}}
+
+# {{Latn-def|ktz|letter|96}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ktz}}
+
+==Kabyle==
+
+===Letter===
+{{head|kab|letters|upper case||lower case|a}}
+
+# {{Latn-def|kab|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kab}}
+
+==Kaingang==
+
+===Letter===
+{{head|kgp|letters}}
+
+# {{Latn-def|kgp|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kgp}}
+
+==Kakabai==
+
+===Letter===
+{{head|kqf|letters}}
+
+# {{Latn-def|kqf|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kqf}}
+
+==Kalo Finnish Romani==
+
+===Pronunciation===
+* {{IPA|rmf|/ɑ/}}
+
+===Letter===
+{{head|rmf|letters|upper case||lower case|a}}
+
+# {{Latn-def|rmf|letter|1}}&lt;ref&gt;{{cite-book|fi|author=Kimmo Granqvist|title=Lyhyt Suomen romanikielen kielioppi|trans-title=Consice grammar of Finnish Romani|chapter=Aakkoset|trans-chapter=Alphabet|pages=1-2|url=https://www.academia.edu/1523925/Lyhyt_Suomen_romanikielen_kielioppi_Consice_grammar_of_Finnish_Romani_|year=2011|location=Helsinki|publisher=Kotimaisten kielten keskus|isbn=978-952-5446-69-2|issn=1796-041X|accessdate=February 6, 2022}}&lt;/ref&gt;
+
+====See also====
+* {{see-temp|list:Latin script letters/rmf}}
+
+===References===
+&lt;references/&gt;
+
+==Kankanaey==
+
+===Etymology===
+{{bor+|kne|tl|A}}. Pronunciation is influenced by {{der|kne|en|A}}.
+
+===Pronunciation===
+{{kne-pr|ey}}
+
+===Letter===
+{{kne-head|letter}}
+
+# {{Latn-def|kne|letter|1|ey}}
+
+====See also====
+{{list:Latin script letters/kne}}
+
+===References===
+* {{R:kne:Ortograpiya 2016|page=10-11}}
+
+==Kanuri==
+
+===Letter===
+{{head|kr|letters}}
+
+# {{Latn-def|kr|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kr}}
+
+==Karakalpak==
+
+===Letter===
+{{head|kaa|letters}}
+
+# {{Latn-def|kaa|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kaa}}
+
+==Karelian==
+
+===Letter===
+{{head|krl|letters|upper case||lower case|a}}
+
+# {{Latn-def|krl|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/krl}}
+
+==Kari'na==
+
+===Letter===
+{{head|car|letters}}
+
+# {{Latn-def|car|letter|indef=1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/car}}
+
+==Kashaya==
+
+===Letter===
+{{head|kju|letters|upper case||lower case|a}}
+
+# {{Latn-def|kju|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kju}}
+
+==Kashubian==
+
+===Etymology===
+{{csb-ety-letter}}
+
+===Letter===
+{{head|csb|letter|upper case||lower case|a}}
+
+# {{Latn-def|csb|letter|1|A}}
+
+====See also====
+{{list:Latin script letters/csb}}
+
+==Kawésqar==
+
+===Letter===
+{{head|alc|letters}}
+
+# {{Latn-def|alc|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/alc}}
+
+==Khakas==
+
+===Letter===
+{{head|kjh|letters}}
+
+# {{Latn-def|kjh|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kjh}}
+
+==Kikuyu==
+
+===Letter===
+{{head|ki|letters|upper case||lower case|a}}
+
+# {{Latn-def|ki|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ki}}
+
+==Kobon==
+
+===Letter===
+{{head|kpw|letters}}
+
+# {{Latn-def|kpw|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kpw}}
+
+==Krio==
+
+===Letter===
+{{head|kri|letters}}
+
+# {{Latn-def|kri|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kri}}
+
+==Kwak'wala==
+
+===Letter===
+{{head|kwk|letters}}
+
+# {{Latn-def|kwk|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kwk}}
+
+==Lakota==
+
+===Letter===
+{{head|lkt|letters|lower case|a}}
+
+# {{Latn-def|lkt|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/lkt}}
+
+==Latgalian==
+
+===Letter===
+{{head|ltg|letters|lower case|a}}
+
+# {{Latn-def|ltg|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ltg}}
+
+==Latin==
+
+===Etymology===
+Borrowed from {{bor|la|grc|Α||alpha}}, likely through Etruscan.
+
+===Pronunciation===
+* {{la-IPA|ā}}
+
+===Letter===
+{{head|la|letters|upper case||lower case|a}}
+
+# {{lb|la|sometimes with ''[[littera]]''}} {{Latn-def|la|letter|1}}
+
+====Usage notes====
+* In compound words, long ''ā'' remains unchanged: {{m|la|labor|lābor}}, {{m|la|delabor|dēlābor}}; {{m|la|actus|āctus}}, {{m|la|peractus|perāctus}}. In an internal syllable, short ''ă'' is changed by {{w|vowel reduction}} into short ''ĭ'' in open syllables and before /ng/, or short ''ĕ'' in closed ones and before /r/ and /l/: {{m|la|facio|faciō}}, {{m|la|perficio|perficiō}}, {{m|la|perfectus}}; {{m|la|tango|tangō}}, {{m|la|contingo|contingō}}; {{m|la|paro|parō}}, {{m|la|impero|imperō}}. It remains unchanged in cases in which the word was coined later on or levelled through analogy: {{m|la|amo|amō}}, {{m|la|adamo|adamō}}; {{m|la|patiens|patiēns}}, {{m|la|impatiens|impatiēns}}; {{m|la|tracto|tractō}}, {{m|la|detrecto|dētrectō}}, later {{m|la|detracto|dētractō}}.
+
+====Descendants====
+* {{desc|nb|A}}
+
+====See also====
+* {{l|la|littera}}
+
+===References===
+* [http://www.perseus.tufts.edu/hopper/resolveform?type=exact&amp;lookup=A&amp;lang=latin A] in {{cite-book|author=Charlton T. Lewis|title=An Elementary Latin Dictionary|publisher=Harper &amp; Brothers|location=New York|year=1891}}
+: and in {{cite-book|author=Charlton T. Lewis and Charles Short|title=[[w:A Latin Dictionary|A Latin Dictionary]]|publisher=Clarendon Press|location=Oxford|year=1879}}
+
+==Latvian==
+{{wp|lv:}}
+
+===Etymology===
+Proposed in 1908 as part of the new Latvian spelling by the scientific commission headed by [[w:Kārlis Mīlenbahs|K. Mīlenbahs]], which was accepted and began to be taught in schools in 1909. Prior to that, Latvian had been written in German [[Fraktur]], and sporadically in [[Cyrillic]].
+
+===Pronunciation===
+* {{lv-IPA|a}}
+* {{audio|lv|lv-riga-a.ogg}}
+
+===Letter===
+[[File:Latin alphabet Aa.svg|thumb|200px|A]]
+{{head|lv|letters|upper case||lower case|a}}
+
+# {{Latn-def|lv|letter|1|a}}
+
+====See also====
+{{list:Latin script letters/lv/simple}}
+
+==Lingala==
+
+===Letter===
+{{head|ln|letters}}
+
+# {{Latn-def|ln|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ln}}
+
+==Lithuanian==
+
+===Letter===
+{{head|lt|letters|lower case|a}}
+
+# {{Latn-def|lt|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/lt}}
+
+==Livonian==
+
+===Letter===
+{{head|liv|letters|lower case|a}}
+
+# {{Latn-def|liv|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/liv}}
+
+==Lou==
+
+===Letter===
+{{head|loj|letters}}
+
+# {{Latn-def|loj|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/loj}}
+
+==Lower Sorbian==
+
+===Pronunciation===
+* {{IPA|dsb|/a/}}
+
+===Letter===
+{{dsb-letter|lower=a}}
+
+# {{Latn-def|dsb|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/dsb}}
+
+==Luxembourgish==
+
+===Pronunciation===
+* {{IPA|lb|/aː/}}
+** {{rhymes|lb|aː|s=1}}
+
+===Etymology 1===
+
+====Letter====
+{{head|lb|letters|lower case|a}}
+
+# {{Latn-def|lb|letter|1|a}}
+
+=====See also=====
+* {{see-temp|list:Latin script letters/lb}}
+
+===Etymology 2===
+From {{inh|lb|goh|ouga}}, from {{inh|lb|gem-pro|*augô}}, ultimately from {{der|lb|ine-pro|*h₃ekʷ-||eye; to see}}. The phonetic development in Luxembourgish is regular: Old High German ''-ou-'' becomes ''-ā-''; intervocalic ''-g-'' is lost; word-final short vowels are apocopated.
+
+====Noun====
+{{head|lb|nouns|g=n|plural|Aen}}
+
+# [[eye]]
+#: {{ux|lb|Ech hunn eppes am '''A.'''|I have something in my '''eye.'''}}
+
+===Etymology 3===
+From {{inh|lb|gmh|ouwe}}, from {{inh|lb|goh|ouwa}}, from {{inh|lb|gem-pro|*awjō}}. Cognate with {{cog|de|Aue}}, {{cog|en|eyot}}, {{cog|is|ey}}, {{cog|da|ø}}, {{cog|sv|ö}}.
+
+====Noun====
+{{head|lb|nouns|g=f|plural|Aen}}
+
+# {{lb|lb|only used in place names}} [[floodplain]], [[meadow]]
+
+{{C|lb|Anatomy}}
+
+==Malagasy==
+
+===Letter===
+{{head|mg|letters}}
+
+# {{Latn-def|mg|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/mg}}
+
+==Malay==
+{{wp|ms:}}
+
+===Pronunciation===
+* {{sense|letter name}} {{IPA|ms|[e]}}
+** {{audio|ms|LL-Q9237 (msa)-GinormousBuildings-a (L).wav|a=Malaysia}}
+* {{sense|interjection}} {{IPA|ms|[a]}}
+** {{audio|ms|LL-Q9237 (msa)-GinormousBuildings-a (interj).wav|a=Malaysia}}
+
+===Letter===
+{{head|ms|letters|upper case||lower case|a}}
+
+# {{Latn-def|ms|letter|1}}
+
+====See also====
+{{list:Latin script letters/ms/simple}}
+
+==Maltese==
+
+===Letter===
+{{head|mt|letters|upper case||lower case|a}}
+
+# {{Latn-def|mt|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/mt}}
+
+==Mampruli==
+
+===Letter===
+{{head|maw|letters}}
+
+# {{Latn-def|maw|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/maw}}
+
+==Mankanya==
+
+===Letter===
+{{head|knf|letters|lower case|a}}
+
+# {{Latn-def|knf|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/knf}}
+
+==Manx==
+
+===Letter===
+{{head|gv|letters}}
+
+# {{Latn-def|gv|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/gv}}
+
+==Maori==
+
+===Letter===
+{{head|mi|letters|upper case||lower case|a}}
+
+# {{Latn-def|mi|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/mi}}
+
+==Mapudungun==
+
+===Letter===
+{{head|arn|letters|upper case||lower case|a}}
+
+# {{Latn-def|arn|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/arn}}
+
+==Marba==
+
+===Letter===
+{{head|mpg|letters|lower case|a}}
+
+# {{Latn-def|mpg|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/mpg}}
+
+==Marshallese==
+
+===Letter===
+{{mh-head|letter|lower case|a}}
+
+# {{Latn-def|mh|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/mh}}
+
+==Maskelynes==
+
+===Letter===
+{{head|klv|letters|lower case|a}}
+
+# {{Latn-def|klv|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/klv}}
+
+==Massachusett==
+
+===Letter===
+{{head|wam|letters|lower case|a}}
+
+# {{Latn-def|wam|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/wam}}
+
+==Mayoyao Ifugao==
+
+===Letter===
+{{head|ifu|letters}}
+
+# {{Latn-def|ifu|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ifu}}
+
+==Mecayapan Nahuatl==
+
+===Letter===
+{{head|nhx|letters}}
+
+# {{Latn-def|nhx|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/nhx}}
+
+==Mohawk==
+
+===Letter===
+{{head|moh|letters|lower case|a}}
+
+# {{Latn-def|moh|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/moh}}
+
+==Moore==
+
+===Letter===
+{{head|mos|letters}}
+
+# {{Latn-def|mos|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/mos}}
+
+==Muinane==
+
+===Letter===
+{{head|bmr|letters}}
+
+# {{Latn-def|bmr|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/bmr}}
+
+==Muong==
+
+===Letter===
+{{head|mtq|letters|upper case||lower case|a}}
+
+# {{Latn-def|mtq|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/mtq}}
+
+==Nauruan==
+
+===Letter===
+{{head|na|letters|lower case|a}}
+
+# {{Latn-def|na|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/na}}
+
+==Navajo==
+
+===Letter===
+{{head|nv|letters|lower case|a}}
+
+# {{Latn-def|nv|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/nv}}
+
+==Nisga'a==
+
+===Letter===
+{{head|ncg|letters}}
+
+# {{Latn-def|ncg|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ncg}}
+
+==Noon==
+
+===Letter===
+{{head|snf|letters}}
+
+# {{Latn-def|snf|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/snf}}
+
+==Nootka==
+
+===Letter===
+{{head|nuk|letters}}
+
+# {{Latn-def|nuk|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/nuk}}
+
+==Northern Kurdish==
+
+===Letter===
+{{head|kmr|letters|lowercase|a}}
+
+# {{Latn-def|kmr|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kmr}}
+
+==Northern Sami==
+
+===Pronunciation===
+{{rfp|se}}
+
+===Letter===
+{{head|se|letters|lower case|a}}
+
+# {{Latn-def|se|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/se}}
+
+==Norwegian Bokmål==
+{{wp|nb:}}
+
+[[Image:Latin letter A.svg|250px|thumb|The [[letter]]  '''''A''''' from the [[Norwegian]] alphabet.]]
+
+===Etymology===
+From {{der|nb|la|A}}, from {{der|nb|grc|Α||alpha}}, likely through the {{der|nb|ett|-}} language, from {{der|nb|phn|𐤀}}, from Proto-Canaanite [[Image:Protoalef.svg|20px]], from Proto-Sinaitic [[Image:Proto-semiticA-01.svg|20px]], from {{der|nb|egy|𓃾}} representing the head of an [[ox]].
+
+===Pronunciation===
+* {{sense|letter name}} {{IPA|nb|/ɑː/}}
+* {{sense|phoneme}} {{IPA|nb|/a/|/ɑː/}}
+* {{audio|nb|Pronunciation of Norwegian Bokmål «A», «a».ogg}}
+* {{rhymes|nb|ɑː}}
+* {{hyphenation|nb|A}}
+* {{homophones|nb|a|à|A-|a-|ah}}
+
+===Letter===
+{{head|nb|letters|upper case||lower case|a}}
+
+# {{Latn-def|nb|letter|1}}
+
+====See also====
+{{list:Latin script letters/nb/simple}}
+
+===Noun===
+{{head|nb|nouns|g=m|definite singular|A-en|indefinite plural|A-er|definite plural|A-ene}}
+
+# the letter {{l|nb|A}}
+# {{lb|nb|horology}} symbol for {{l|nb|avance}}
+# {{lb|nb|physics}} symbol for {{l|nb|ampere}}
+# {{lb|nb|physics}} symbol for {{l|nb|massetall||nucleon number}}
+
+===Anagrams===
+* {{anagrams|nb|a|A-|a-}}
+
+==Norwegian Nynorsk==
+{{wp|nn:}}
+
+===Pronunciation===
+* {{IPA|nn|/a/}} {{nn-pronu-note}}
+
+===Letter===
+{{head|nn|letters|upper case||lower case|a}}
+
+# {{Latn-def|nn|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/nn}}
+
+===Noun===
+{{head|nn|nouns|g=m|definite singular|A-en|indefinite plural|A-ar|definite plural|A-ane}}
+
+# letter A
+
+==Nuer==
+
+===Letter===
+{{head|nus|letters}}
+
+# {{Latn-def|nus|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/nus}}
+
+==Nupe==
+
+===Pronunciation===
+* {{sense|phoneme}} {{IPA|nup|/a/|/ã/|q2=after /n/ or /m/}}
+
+===Letter===
+{{head|nup|letters|upper case||lower case|a}}
+
+# {{Latn-def|nup|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/nup}}
+
+==Occitan==
+
+===Letter===
+{{head|oc|letters|lowercase|a}}
+
+# {{Latn-def|oc|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/oc}}
+
+==Okanagan==
+
+===Letter===
+{{head|oka|letters}}
+
+# {{Latn-def|oka|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/oka}}
+
+==Old English==
+
+===Pronunciation===
+* {{IPA|ang|/a/|/aː/}}
+
+===Letter===
+{{head|ang|letter}}
+
+# {{Latn-def|ang|letter|indef=a}}
+
+==O'odham==
+
+===Letter===
+{{head|ood|letters}}
+
+# {{Latn-def|ood|letter|1}}
+
+====See also====
+* (Alvarez Spelling) {{see-temp|list:Latin script letters/ood}}
+
+==Paraguayan Guaraní==
+
+===Letter===
+{{head|gug|letters}}
+
+# {{Latn-def|gug|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/gug}}
+
+==Pennsylvania German==
+
+===Etymology===
+From {{bor|pdc|de|A}}.
+
+===Pronunciation===
+*{{IPA|pdc|/ɔː/}}
+*{{rhymes|pdc|ɔː}}
+
+===Noun===
+{{head|pdc|noun}}
+
+# [[A]], the first letter of the alphabet.
+#: {{ux|pdc|[[vun A bis Z|Vun '''A''' bis Z.]]|From the beginning to the end.}}
+
+===References===
+* Beam, C. R., Brown, J. R., &amp; Trout, J. L. (2004). The Comprehensive Pennsylvania German Dictionary.
+* Pennsylvania Dutch Dictionary. (n.d.). https://padutchdictionary.com/
+
+==Plautdietsch==
+
+===Letter===
+{{head|pdt|letters}}
+
+# {{Latn-def|pdt|letter|1|a}}
+
+====Usage notes====
+Plautdietsch has no standard orthography but this is by far the most widely used alphabet.
+
+====See also====
+* {{see-temp|list:Latin script letters/pdt}}
+
+==Polish==
+
+===Etymology===
+{{pl-ety-letter}}
+
+===Pronunciation===
+* {{IPA|pl|/a/}}
+
+===Letter===
+{{head|pl|letters|upper case||lower case|a}}
+
+# {{Latn-def|pl|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/pl}}
+
+==Portuguese==
+
+===Letter===
+{{head|pt|letters|upper case||lower case|a}}
+
+# {{Latn-def|pt|letter|1}}
+
+====See also====
+{{list:Latin script letters/pt/simple}}
+
+===Noun===
+{{head|pt|nouns|g=m|plural|As|cat2=irregular nouns}}
+
+# {{alternative form of|pt|á}}
+
+==Q'eqchi==
+
+===Letter===
+{{head|kek|letters}}
+
+# {{Latn-def|kek|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kek}}
+
+==Rohingya==
+
+===Letter===
+{{head|rhg|letters}}
+
+# {{Latn-def|rhg|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/rhg}}
+
+==Romani==
+
+===Pronunciation===
+* {{IPA|rom|/a/}}
+
+===Letter===
+{{head|rom|letters|upper case||lower case|a}}
+
+# {{Latn-def|rom|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/rom}}
+
+==Romanian==
+
+===Pronunciation===
+* {{IPA|ro|/a/}}
+
+===Letter===
+{{head|ro|letters|upper case||lower case|a}}
+
+# {{Latn-def|ro|letter|1|a}}
+
+====See also====
+{{list:Latin script letters/ro/simple}}
+
+==Ronga==
+
+===Letter===
+{{head|rng|letters}}
+
+# {{Latn-def|rng|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/rng}}
+
+==Rotokas==
+
+===Letter===
+{{head|roo|letters}}
+
+# {{Latn-def|roo|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/roo}}
+
+==Rotuman==
+
+===Letter===
+{{head|rtm|letters}}
+
+# {{Latn-def|rtm|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/rtm}}
+
+==Saafi-Saafi==
+
+===Letter===
+{{head|sav|letters}}
+
+# {{Latn-def|sav|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/sav}}
+
+==Saanich==
+
+===Pronunciation===
+* {{IPA|str|/e/}}
+
+===Letter===
+{{head|str|letters}}
+
+# {{Latn-def|str|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/str}}
+
+==Samoan==
+
+===Letter===
+{{head|sm|letters}}
+
+# {{Latn-def|sm|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/sm}}
+
+==Samogitian==
+
+===Letter===
+{{head|sgs|letters|upper case||lower case|a}}
+
+# {{Latn-def|sgs|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/sgs}}
+
+==Sango==
+
+===Letter===
+{{head|sg|letters}}
+
+# {{Latn-def|sg|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/sg}}
+
+==Scots==
+
+===Etymology 1===
+
+====Pronunciation====
+* {{IPA|sco|/ɑː/|/ɔː/}}
+* {{IPA|sco|/aː/|a=Northern,Insular}}
+
+====Letter====
+{{head|sco|letters|upper case||lower case|a}}
+
+# {{Latn-def|sco|letter|1|aw}}
+
+=====See also=====
+{{list:Latin script letters/sco/simple}}
+
+===Etymology 2===
+From {{inh|sco|enm|a}}, an unstressed form of {{m|enm|I}}, itself a reduced form of {{m|enm|ik}}, {{m|enm|ic}}, from {{inh|sco|ang|ic}}, from {{inh|sco|gmw-pro|*ik}}, from {{inh|sco|gem-pro|*ek||pos=pronoun|I}}, from {{inh|sco|ine-pro|*eǵh₂óm}}.
+
+====Alternative forms====
+* {{alter|sco|A'|Aa|Ah|Aw}}
+
+====Pronunciation====
+* {{IPA|sco|/ɑː/|/ɑɪ/|a=stressed}}
+** {{IPA|sco|/ɛː/|a=Dundee}} {{q|sometimes spelled {{m|sco|Eh}}}}
+* {{IPA|sco|/ə/|a=unstressed}}
+
+====Pronoun====
+{{head|sco|pronoun|cat2=personal pronouns}}
+
+# [[I]] {{gloss|first-person singular pronoun}}
+
+====See also====
+{{Scots personal pronouns}}
+
+===References===
+* {{R:Dictionary of the Scots Language|pos=n|accessdate=20 May 2024|source=SND}}
+* {{R:Dictionary of the Scots Language|pos=pers. pron|url=https://dsl.ac.uk/entry/snd/a_pers_pron|accessdate=20 May 2024|source=SND}}
+
+==Scottish Gaelic==
+
+===Letter===
+{{gd-letter|upper=A|lower=a}}
+
+# {{Latn-def|gd|letter|1}} ''It is followed by {{l|gd|b}}. Its traditional name is {{l|gd|ailm|t=elm}}.''
+
+====See also====
+{{list:Latin script letters/gd}}
+
+==Serbo-Croatian==
+
+===Letter===
+{{head|sh|letters|upper case||lower case|a}}
+
+# {{Latn-def|sh|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/sh}}
+
+==Serer==
+
+===Letter===
+{{head|srr|letters}}
+
+# {{Latn-def|srr|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/srr}}
+
+==Seri==
+
+===Letter===
+{{head|sei|letters|lower case|a}}
+
+# {{Latn-def|sei|letter|1|ha}}
+
+====See also====
+* {{see-temp|list:Latin script letters/sei}}
+
+===References===
+* {{R:sei:dict|page=37}}
+
+==Shilluk==
+
+===Letter===
+{{head|shk|letters}}
+
+# {{Latn-def|shk|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/shk}}
+
+==Shona==
+
+===Letter===
+{{head|sn|letters}}
+
+# {{Latn-def|sn|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/sn}}
+
+==Silesian==
+
+===Etymology===
+{{szl-ety-letter}}
+
+===Pronunciation===
+{{szl-pr|a=LL-Q30319 (szl)-Vxern-#.wav}}
+
+===Letter===
+{{head|szl|letter|upper case||lower case|a}}
+
+# {{Latn-def|szl|letter|1}}
+
+====See also====
+{{list:Latin script letters/szl}}
+
+==Skolt Sami==
+
+===Pronunciation===
+* {{qualifier|phoneme}} {{IPA|sms|/ɑ/}}
+
+===Letter===
+{{head|sms|letters|lower case|a}}
+
+# {{Latn-def|sms|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/sms}}
+
+==Slovak==
+
+===Letter===
+{{head|sk|letters|upper case||lower case|a}}
+
+# {{Latn-def|sk|letter|1}}
+
+====See also====
+{{list:Latin script letters/sk}}
+
+===Further reading===
+* {{R:sk:SDK}}
+
+==Slovene==
+{{wp|sl:}}
+
+===Etymology===
+From Gay's Latin alphabet {{m|sh|A}}, from {{der|mul|cs|-}} alphabet {{m|cs|A}}, from the {{der|mul|ett|-}} letter {{m|ett|𐌀}}, from the {{der|mul|grc|-}} letter {{m|grc|Α||alpha}}, derived from the {{der|mul|phn|-}} letter {{m|phn|𐤀||[[aleph]]}}, from the {{der|mul|egy|-}} hieroglyph {{m|egy|𓃾}}.
+
+===Pronunciation===
+* {{qualifier|phoneme|tonal variety}}: {{IPA|sl|/áː/|/àː/|/ʌ́/|/a/|[â]|[ǎ]}}
+* {{qualifier|phoneme|non-tonal variety}}: {{sl-IPA|aː|a}}
+* {{qualifier|letter name}}: {{sl-IPA|ā}}
+* {{audio|sl|Sl-nt-á.ogg|q=letter name, non-tonal}}
+* {{rhymes|sl|aː}}
+* {{homophones|sl|a}}
+
+===Letter===
+{{head|sl|letters|upper case||lower case|a}}
+
+# {{Latn-def|sl|letter|1}}
+# {{Latn-def|sl|alphabet name=Resian|letter|1}}
+# {{Latn-def|sl|alphabet name=Natisone Valley dialect|letter|1}}
+
+===Noun===
+{{sl-noun|Ā|m-in}}
+
+# {{ng|The name of the [[Appendix:Latin script|Latin script]] letter '''''[[A]]''''' / '''''a'''''.}}
+
+====Declension====
+* Overall more common
+{{sl-decl-noun-m|Ā|Ā-j}}
+
+* More common when with a definite adjective
+{{sl-decl-noun-table2|Ā|Ā|Ā|Ā|Ā|Ā|Ā|Ā|Ā|Ā|Ā|Ā|Ā|Ā|Ā|Ā|Ā|Ā|title=Masculine inan., no endings}}
+
+====Derived terms====
+{{col4|sl|od A do Ž|ena A|od A do B|Á|Ä}}
+
+===See also===
+{{list:Latin script letters/sl/simple}}
+* {{l|sl|Ä}}
+* {{l|sl|A|Á}}
+
+===Further reading===
+* {{R:sl:Fran}}
+
+==Somali==
+
+===Pronunciation===
+* {{sense|phoneme}} {{IPA|so|/æ/|/ɑ/}}
+* {{sense|letter name}} {{IPA|so|/ʔæ/}}
+
+===Letter===
+{{head|so|letters|upper case||lower case|a}}
+
+# {{Latn-def|so|letter|23|a}}
+
+====Usage notes====
+* The twenty-third letter of the [[Somali]] alphabet, which follows [[Arabic]] [[abjad]] order. It is preceded by [[Y]] and followed by [[E]].
+
+====See also====
+* {{see-temp|list:Latin script letters/so}}
+
+==Southern Sami==
+
+===Letter===
+{{head|sma|letters|upper case||lower case|a}}
+
+# {{Latn-def|sma|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/sma}}
+
+==Spanish==
+
+===Etymology 1===
+
+====Letter====
+{{head|es|letters|upper case||lower case|a}}
+
+# {{Latn-def|es|letter|1}}
+
+=====See also=====
+* {{see-temp|list:Latin script letters/es}}
+
+===Etymology 2===
+{{abbrev|es|alfil}}.
+
+====Noun====
+{{es-noun|m|-}}
+
+# {{lb|es|chess}} [[bishop]]
+#* {{quote-book|es|title=EL AJEDREZ. Aprender y progresar|page=24|pageurl=https://books.google.com/books?id=glYPGL_VffsC&amp;pg=PA24|author=Anatoly Karpov|year=1997|passage=19. '''A'''c4xd5, '''A'''b7xd5|t=19. '''B'''c4xd5, '''B'''b7xd5}}
+#* {{quote-book|es|title=Ajedrez a la ciega|page=87|author=Benito López Esnaola|year=1998|passage=Tae1, '''A'''e6|t=Rae1, '''B'''e6|pageurl=https://books.google.com/books?id=owDIVtASvAsC&amp;pg=PA87}}
+#* {{quote-journal|es|work=Iniciación al ajedrez|title=Los Errores en la Apertura. Las celadas.|volume=59|pageurl=https://books.google.com/books?id=6BANkSIOrIUC&amp;pg=PA79|page=79|author=Antonio Lopez Manzano; Joan Segura Vila|year=2006|passage=Veamos un ejemplo: 1. e4, e5; 2. Cf3, Cc6; 3. '''A'''c4, Cd4?|t=Let's look at an example: 1. e4, e5; 2. Nf3, Nc6; 3. '''B'''c4, Nd4?}}
+#* {{quote-web|es|title=Leyes Del Ajedrez 2023|url=https://rcc.fide.com/wp-content/uploads/2023/04/Traduccion-Leyes-Version-Final.pdf|date=2023-04|page=27|work=w:FIDE|passage=1.e4 e5 2.Cf3 Cf6 3.d4 exd4 4.e5 Ce4 5.Dxd4 d5 6.exd6 a.p. Cxd6; 7.'''A'''g5 Cc68.De3+ '''A'''e7 9.Cbd2 0-0 10.0-0-0 Te8 11.Rb1(=).}}
+
+==Squamish==
+
+===Letter===
+{{head|squ|letters}}
+
+# {{Latn-def|squ|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/squ}}
+
+==Swedish==
+
+===Letter===
+{{head|sv|letters|name|a|lower case|a}}
+
+# {{Latn-def|sv|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/sv}}
+
+===Symbol===
+{{head|sv|symbols}}
+
+# {{lb|sv|SAB}} [[books]] and [[libraries]]
+#: {{meronyms|sv|Aa|Ab|Ac|Ad|Ae|Af}}
+# {{lb|sv|zoning|dated}} {{m|sv|allmänt ändamål||public purpose}}; all operations with a [[public body]] as [[principal]]
+#: {{holo|sv|detaljplan}}
+# {{lb|sv|manhole cover}} {{abbr of|sv|avlopp||sewage}}
+## {{lb|sv|superstition}} {{n-g|A manhole cover that cause bad luck if stepped on; abbreviation of [[AIDS]], {{l|sv|arbetslöshet||unemployment}}, {{l|sv|aga||corporal punishment}}, etc...}}
+
+====Derived terms====
+* {{l|sv|A-brunn||sewer manhole}}
+
+===Adjective===
+{{head|sv|adjectives}}
+
+# indication of being of a higher rank, successful
+#: {{ant|sv|B}}
+
+====Derived terms====
+* {{m|sv|A-aktie||class A share}}
+* {{m|sv|A-lag||A team}}
+
+===Noun===
+{{head|sv|nouns}}
+
+# {{lb|sv|2011–}} the highest grade in the current grade system
+#: {{coord|sv|A|B|C|D|E}}
+# {{lb|sv|1897–1962}} the highest grade in the older grade system
+#: {{syn|sv|stora A|berömligt}}
+#: {{coord|sv|A|a|AB|Ba|B|BC|B?|C}}
+# {{lb|sv|1820–1897}} the highest grade in the oldest grade system
+#: {{syn|sv|berömlig insikt}}
+#: {{coord|sv|A|B|C|D}}
+
+==Tagalog==
+
+===Etymology 1===
+{{bor+|tl|es|A}}. Each pronunciation has a different source:
+* Filipino alphabet pronunciation is influenced by {{der|tl|en|A}}.
+* Abakada alphabet pronunciation is influenced by [[Baybayin]] character {{m|tl|ᜀ}}.
+* Abecedario pronunciation is from {{der|tl|es|A}}.
+
+====Pronunciation====
+{{tl-pr
+|éy&lt;qq:letter name, Filipino alphabet&gt;
+|á&lt;qq:letter name, Abakada alphabet, Abecedario&gt;
+|-á&lt;qq:phoneme, stressed&gt;
+|-ā&lt;qq:phoneme, unstressed&gt;
+|syll=A
+}}
+
+====Letter====
+{{tl-letter}}
+
+# {{tl-letter-def|1|ey|alph=fil}}
+# {{tl-letter-def|1|a|alph=abak}}
+# {{lb|tl|historical}} {{tl-letter-def|1|a|alph=abec}}
+
+=====See also=====
+{{list:Latin script letters/tl/simple}}
+
+===Etymology 2===
+Possibly short for {{m|tl|[[ama]] ([[ni]])}}.
+
+====Pronunciation====
+{{tl-pr}}
+
+====Noun====
+{{tl-noun|b=+}} {{tlb|tl|obsolete}}
+
+# [[father]] of
+#: {{syn|tl|Pan|An}}
+#: {{uxi|tl|'''A''' Miguel|'''Father of''' Miguel}}
+
+=====See also=====
+{{col|tl|I}}
+
+===Further reading===
+* {{R:Pambansang Diksiyonaryo}}
+* {{R:Vocabulario de la lengua tagala 1860}}
+* {{R:Vocabulario de la lengua tagala 1613|458|Padre) A) vſa le poco y cõ algunos nõbres, vt. a Maria, padre đ Maria, ada Lamba, padre đ Lamba}}
+
+==Tahitian==
+
+===Letter===
+{{head|ty|letters}}
+
+# {{Latn-def|ty|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ty}}
+
+==Tashelhit==
+
+===Pronunciation===
+* {{IPA|shi|/æ/}}
+
+===Letter===
+{{head|shi|letter|lower case|a}}
+
+# {{Latn-def|shi|letter|indef=a}}
+
+===Further reading===
+*[[W:Berber Latin alphabet|Berber Latin alphabet]]
+
+==Tatar==
+
+===Letter===
+{{head|tt|letters|upper case||lower case|a}}
+
+# {{ng|the 1st letter of [[w:Yañalif|Jaꞑalif]]}}
+
+====See also====
+* {{see-temp|list:Latin script letters/tt}}
+
+==Tày==
+
+===Pronunciation===
+* {{tyz-IPA|a}}
+
+===Letter===
+{{head|tyz|letter}}
+
+# {{Latn-def|tyz|letter|1}}
+
+===See also===
+* {{see-temp|list:Latin script letters/tyz}}
+
+==Tetum==
+
+===Letter===
+{{head|tet|letters|upper case||lower case|a}}
+
+# {{Latn-def|tet|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/tet}}
+
+==Tigon Mbembe==
+
+===Letter===
+{{head|nza|letters}}
+
+# {{Latn-def|nza|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/nza}}
+
+==Tlingit==
+
+===Letter===
+{{head|tli|letters}}
+
+# {{Latn-def|tli|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/tli}}
+
+==Tongan==
+
+===Letter===
+{{head|to|letters}}
+
+# {{Latn-def|to|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/to}}
+
+==Tonkawa==
+
+===Letter===
+{{head|tqw|letters}}
+
+# {{Latn-def|tqw|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/tqw}}
+
+==Tuareg==
+
+===Letter===
+{{head|tmh|letters}}
+
+# {{Latn-def|tmh|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/tmh}}
+
+==Tundra Nenets==
+
+===Letter===
+{{head|yrk|letters}}
+
+# {{Latn-def|yrk|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/yrk}}
+
+==Turkish==
+
+===Letter===
+{{head|tr|letters|upper case||lower case|a}}
+
+# {{Latn-def|tr|letter|1|a}}
+
+====See also====
+{{list:Latin script letters/tr/simple}}
+
+==Turkmen==
+
+===Letter===
+{{head|tk|letters|lower case|a}}
+
+# {{Latn-def|tk|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/tk}}
+
+==Tyap==
+
+===Letter===
+{{head|kcg|letters}}
+
+# {{Latn-def|kcg|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/kcg}}
+
+==Ubykh==
+
+===Letter===
+{{head|uby|letters}}
+
+# {{Latn-def|uby|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/uby}}
+
+==Udihe==
+
+===Letter===
+{{head|ude|letters}}
+
+# {{Latn-def|ude|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ude}}
+
+==Upper Sorbian==
+
+===Letter===
+{{head|hsb|letters|lower case|a|upper case||lower case|a}}
+
+# {{Latn-def|hsb|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/hsb}}
+
+==Uzbek==
+
+===Letter===
+{{head|uz|letters|upper case||lower case|a}}
+
+# {{Latn-def|uz|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/uz}}
+
+==Venda==
+
+===Letter===
+{{head|ve|letters|upper case||lower case|a}}
+
+# {{Latn-def|ve|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ve}}
+
+==Veps==
+
+===Letter===
+{{head|vep|letters}}
+
+# {{Latn-def|vep|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/vep}}
+
+==Vietnamese==
+
+===Pronunciation===
+{{vi-IPA}}
+* {{audio|vi|Vi ngang tone.ogg}}
+
+===Letter===
+{{vi-letter|upper=A|lower=a}}
+
+# {{Latn-def|vi|letter|1|a}}
+
+====See also====
+{{list:Latin script letters/vi}}
+
+===Interjection===
+{{head|vi|interjections|head=A!}}
+
+# [[hah]]!
+
+==Vilamovian==
+
+===Letter===
+{{head|wym|letters}}
+
+# {{Latn-def|wym|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/wym}}
+
+==Volapük==
+
+===Letter===
+{{head|vo|letters}}
+
+# {{Latn-def|vo|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/vo}}
+
+==Võro==
+
+===Letter===
+{{head|vro|letters}}
+
+# {{Latn-def|vro|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/vro}}
+
+==Votic==
+
+===Letter===
+{{head|vot|letters}}
+
+# {{Latn-def|vot|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/vot}}
+
+==Wakhi==
+
+===Letter===
+{{head|wbl|letters|lower case|a}}
+
+# {{Latn-def|wbl|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/wbl}}
+
+==Walloon==
+
+===Pronunciation===
+* {{IPA|wa|/a/}}
+
+===Letter===
+{{head|wa|letters}}
+
+# {{Latn-def|wa|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/wa}}
+
+==Welsh==
+
+===Pronunciation===
+* {{IPA|cy|/aː/}}
+
+===Letter===
+{{head|cy|letters|upper case||lower case|a}}
+
+# {{Latn-def|cy|letter|1|a}} ''It is followed by {{l|cy|B}}.''
+
+===See also===
+* {{see-temp|list:Latin script letters/cy}}
+
+===Mutation===
+* A cannot be mutated but, being a vowel, does take {{l|en|h-prothesis}}, for example with the word {{m|cy|afal||apple}}:
+{{cy-mut|afal}}
+
+===Further reading===
+* {{R:cy:GPC}}
+
+==West Frisian==
+
+===Letter===
+{{head|fy|letters}}
+
+# {{Latn-def|fy|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/fy}}
+
+==Winnebago==
+
+===Letter===
+{{head|win|letters|lower case|a}}
+
+# {{Latn-def|win|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/win}}
+
+==Xârâcùù==
+
+===Pronunciation===
+* {{IPA|ane|/ɑ/}}
+
+===Letter===
+{{head|ane|letters}}
+
+# {{Latn-def|ane|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/ane}}
+
+==Xhosa==
+
+===Letter===
+{{head|xh|letters}}
+
+# {{Latn-def|xh|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/xh}}
+
+==Yámana==
+
+===Letter===
+{{head|yag|letters}}
+
+# {{Latn-def|yag|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/yag}}
+
+==Yele==
+
+===Letter===
+{{head|yle|letters}}
+
+# {{Latn-def|yle|letter|2}}
+
+====See also====
+* {{see-temp|list:Latin script letters/yle}}
+
+==Yoruba==
+
+===Pronunciation===
+* {{sense|phoneme}} {{IPA|yo|/a/}}
+* {{sense|letter name}} {{IPA|yo|/á/}}
+
+===Letter===
+{{head|yo|letters|upper case||lower case|a}}
+
+# {{Latn-def|yo|letter|1|á}}
+
+====See also====
+* {{see-temp|list:Latin script letters/yo}}
+
+==Zarma==
+
+===Letter===
+{{head|dje|letters}}
+
+# {{Latn-def|dje|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/dje}}
+
+==Zazaki==
+
+===Letter===
+{{head|zza|letters}}
+
+# {{Latn-def|zza|letter|1|a}}
+
+====See also====
+* {{see-temp|list:Latin script letters/zza}}
+
+==Zulu==
+
+===Letter===
+{{head|zu|letters|upper case||lower case|a}}
+
+# {{Latn-def|zu|letter|1}}
+
+====See also====
+* {{see-temp|list:Latin script letters/zu}}</text>
+      <sha1>5nr8m86ioqb5c7gigz480hjt0e5z0ra</sha1>
+    </revision>
+  </page>

@@ -1,0 +1,1220 @@
+================================================================================
+INVESTIGATING: مرحبا
+================================================================================
+
+⚠️  NO ENGLISH SECTION FOUND
+
+Other languages present: Arabic, Hijazi Arabic, Moroccan Arabic, Ottoman Turkish, Persian, South Levantine Arabic
+
+
+================================================================================
+INVESTIGATING: привет
+================================================================================
+
+⚠️  NO ENGLISH SECTION FOUND
+
+Other languages present: Bulgarian, Russian
+
+
+================================================================================
+INVESTIGATING: водка
+================================================================================
+
+⚠️  NO ENGLISH SECTION FOUND
+
+Other languages present: Belarusian, Bulgarian, Russian, Ukrainian
+
+
+================================================================================
+INVESTIGATING: 日本
+================================================================================
+
+⚠️  NO ENGLISH SECTION FOUND
+
+Other languages present: Chinese, Japanese, Korean, Okinawan, Old Japanese, Vietnamese
+
+
+================================================================================
+INVESTIGATING: 你好
+================================================================================
+
+⚠️  NO ENGLISH SECTION FOUND
+
+Other languages present: Chinese, Japanese
+
+
+================================================================================
+INVESTIGATING: λ
+================================================================================
+
+⚠️  NO ENGLISH SECTION FOUND
+
+Other languages present: Translingual, Ancient Greek, Greek
+
+
+================================================================================
+INVESTIGATING: αὐτό
+================================================================================
+
+⚠️  NO ENGLISH SECTION FOUND
+
+Other languages present: Ancient Greek
+
+
+================================================================================
+INVESTIGATING: ω
+================================================================================
+
+⚠️  NO ENGLISH SECTION FOUND
+
+Other languages present: Translingual, Ancient Greek, Greek
+
+
+================================================================================
+INVESTIGATING: a
+================================================================================
+
+English section length: 6153 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - London
+  - UK
+  - US
+  - _
+  - chemistry
+  - chiefly
+  - education
+  - historical
+  - logic
+  - medicine
+  - music
+  - physics
+  - sexuality
+  - sports
+  - weaponry
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  - {{abbreviation of|en|adulterer,adulteress|addl=used as a human brand}}
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 2
+  1. ===Etymology 1===
+  2. ===Etymology 2===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: abdominal
+================================================================================
+
+English section length: 4493 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - colloquial
+  - ichthyology
+  - obsolete
+  - zoology
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: abominate
+================================================================================
+
+English section length: 3536 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - colloquial
+  - rare
+  - transitive
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: acronym
+================================================================================
+
+English section length: 11007 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - linguistics
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: an
+================================================================================
+
+English section length: 13611 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - British
+  - West Country
+  - _
+  - archaic
+  - nonstandard
+  - now quite
+  - rare
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 4
+  1. ===Etymology 1===
+  2. ===Etymology 2===
+  3. ===Etymology 3===
+  4. ===Etymology 4===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: are
+================================================================================
+
+English section length: 5587 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - East Yorkshire
+  - Midlands
+  - UK
+  - US
+  - rare
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  - {{inflection of|en|be||2|s|simple|pres}}
+  - {{inflection of|en|be||1|p|simple|pres}}
+  - {{inflection of|en|be||2|p|simple|pres}}
+  - {{inflection of|en|be||3|p|simple|pres}}
+  - {{inflection of|en|be||pres}}
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 3
+  1. ===Etymology 1===
+  2. ===Etymology 2===
+  3. ===Etymology 3===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: billion
+================================================================================
+
+English section length: 12312 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - British &amp; Australian
+  - US
+  - colloquial
+  - dated
+  - hyperbole
+  - long scale
+  - modern British &amp; Australian
+  - short scale
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  - {{confix|en|bi|gloss1=two|illion}}
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: cat
+================================================================================
+
+English section length: 30268 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - African American Vernacular
+  - Ireland
+  - US
+  - archaic
+  - by extension
+  - chiefly
+  - colloquial
+  - computing
+  - countable
+  - dated
+  - derogatory
+  - figurative
+  - games
+  - historical
+  - jazz
+  - military
+  - nautical
+  - now
+  - obsolete
+  - offensive
+  - originally
+  - rare
+  - slang
+  - transitive
+  - uncountable
+  - vulgar
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  - {{abbreviation of|en|catapult}}
+  - {{abbreviation of|en|catalytic converter}}
+  - {{abbreviation of|en|catamaran}}
+  - {{abbreviation of|en|category}}
+  - {{abbreviation of|en|catfish}}
+  - {{abbreviation of|en|caterpillar}}
+  - {{abbreviation of|en|computed axial tomography|addl=; often used [[attributively]], as in “[[CAT scan]]” or “[[CT scan]]”}}
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 3
+  1. ===Etymology 1===
+  2. ===Etymology 2===
+  3. ===Etymology 3===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: dialect
+================================================================================
+
+English section length: 13890 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - broad sense
+  - colloquial
+  - computing
+  - linguistics
+  - offensive
+  - ornithology
+  - pejorative
+  - programming
+  - strict sense
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  - {{surf|en|dia-|-lect|nocap=1}}
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: dictionary
+================================================================================
+
+English section length: 24691 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - by extension
+  - computing
+  - en
+  - figurative
+  - intransitive
+  - of
+  - preceded by {{m
+  - rare
+  - the
+  - transitive
+  - with {{m
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  - {{surf|en|diction|-ary}}
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: dimorphemic
+================================================================================
+
+English section length: 180 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  (none)
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  - {{prefix|en|di|morphemic}}
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: encyclopedia
+================================================================================
+
+English section length: 19106 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - dated
+  - specifically
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: flute
+================================================================================
+
+English section length: 17458 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - architectural element
+  - colloquial
+  - firearms
+  - intransitive
+  - transitive
+  - woodwind instrument
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 2
+  1. ===Etymology 1===
+  2. ===Etymology 2===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: footfucker
+================================================================================
+
+English section length: 723 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - slang
+  - vulgar
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  - {{compound|en|foot|fucker}}
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: four
+================================================================================
+
+English section length: 29244 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - basketball
+  - colloquial
+  - countable
+  - cricket
+  - obsolete
+  - rowing
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: happiness
+================================================================================
+
+English section length: 10586 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - archaic
+  - countable
+  - obsolete
+  - uncountable
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  - {{suffix|en|happy|ness}}
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: happy
+================================================================================
+
+English section length: 30815 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - Of acts, speech, etc.
+  - archaic
+  - in combination
+  - informal
+  - intransitive
+  - of people
+  - often followed by &quot;at&quot; or &quot;in&quot;
+  - rare
+  - transitive
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: hell
+================================================================================
+
+English section length: 23292 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - Australia
+  - NZ
+  - colloquial
+  - countable
+  - figuratively
+  - hyperbole
+  - in many religions
+  - intransitive
+  - metal-working
+  - non-productive
+  - obsolete
+  - postpositional
+  - rare
+  - sometimes
+  - uncountable
+  - usually with ''[[on]]''
+  - vulgar
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 3
+  1. ===Etymology 1===
+  2. ===Etymology 2===
+  3. ===Etymology 3===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: hello
+================================================================================
+
+English section length: 37505 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - UK
+  - chiefly
+  - colloquial
+  - transitive
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: indaba
+================================================================================
+
+English section length: 1778 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - Scouting
+  - South Africa
+  - by extension
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: is
+================================================================================
+
+English section length: 4229 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - Geordie
+  - colloquial
+  - dialectal
+  - now
+  - rare
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  - {{inflection of|en|be||||pres|indc}}
+
+MORPHOLOGY TEMPLATES:
+  - {{suffix|en|i|s}}
+
+ETYMOLOGY SECTIONS: 3
+  1. ===Etymology 1===
+  2. ===Etymology 2===
+  3. ===Etymology 3===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: it
+================================================================================
+
+English section length: 32221 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - British
+  - chiefly
+  - colloquial
+  - derogatory
+  - informal
+  - obsolete
+  - offensive
+  - rare
+  - uncountable
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: łódź
+================================================================================
+
+English section length: 114 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  (none)
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 0
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: True
+  Has extended Latin (À-ɏ): True
+  Non-ASCII characters: ó, ł, ź
+
+
+================================================================================
+INVESTIGATING: piss-easy
+================================================================================
+
+English section length: 120 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - AU
+  - UK
+  - slang
+  - vulgar
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 0
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: poppycock
+================================================================================
+
+English section length: 1386 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - colloquial
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: run
+================================================================================
+
+English section length: 75268 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - American football
+  - Australia
+  - New Zealand
+  - North Midland US
+  - Ohio
+  - Pennsylvania
+  - West Virginia
+  - _
+  - agriculture
+  - archaic
+  - banking
+  - baseball
+  - bobsledding
+  - card games
+  - chiefly
+  - colloquial
+  - computing
+  - construction
+  - copulative
+  - cricket
+  - eastern
+  - especially
+  - figurative
+  - figuratively
+  - fish
+  - fluids
+  - golf
+  - intransitive
+  - juggling
+  - maths
+  - mining
+  - music
+  - nautical
+  - obsolete
+  - of a
+  - of a vessel
+  - of horses
+  - or
+  - rare
+  - skiing
+  - slang
+  - speedrunning
+  - sports
+  - transitive
+  - video games
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  - {{past participle of|en|rin}}
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: running
+================================================================================
+
+English section length: 9428 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - botany
+  - colloquial
+  - informal
+  - medicine
+  - of a nose
+  - physics
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  - {{surf|en|run|-ing}}
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: saturday
+================================================================================
+
+English section length: 13620 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - Canada
+  - US
+  - creative
+  - informal in UK
+  - uncommon
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: slushpile
+================================================================================
+
+English section length: 278 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - colloquial
+  - publishing
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  - {{compound|en|slush|pile}}
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: the
+================================================================================
+
+English section length: 34272 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - colloquial
+  - with a superlative adjective
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 4
+  1. ===Etymology 1===
+  2. ===Etymology 2===
+  3. ===Etymology 3===
+  4. ===Etymology 4===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+
+================================================================================
+INVESTIGATING: tiếng
+================================================================================
+
+⚠️  NO ENGLISH SECTION FOUND
+
+Other languages present: Middle Vietnamese, Vietnamese
+
+
+================================================================================
+INVESTIGATING: üdvözlet
+================================================================================
+
+⚠️  NO ENGLISH SECTION FOUND
+
+Other languages present: Hungarian
+
+
+================================================================================
+INVESTIGATING: world
+================================================================================
+
+English section length: 40607 characters
+
+CONTEXT LABELS (from {{lb|en|...}} templates):
+  - archaic
+  - by extension
+  - computing
+  - countable
+  - informal
+  - metonymically
+  - tarot
+  - transitive
+  - video games
+  - with &quot;a&quot;
+  - with &quot;the&quot;
+  - with &quot;the&quot; or a plural possessive pronoun
+  - with &quot;the&quot; or a singular possessive pronoun
+
+CATEGORIES:
+  (none)
+
+ABBREVIATION TEMPLATES:
+  (none)
+
+INFLECTION TEMPLATES:
+  (none)
+
+MORPHOLOGY TEMPLATES:
+  (none)
+
+ETYMOLOGY SECTIONS: 1
+  1. ===Etymology===
+
+CHARACTER SET ANALYSIS:
+  Has Latin letters: True
+  Has non-ASCII: False
+
+

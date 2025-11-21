@@ -1,0 +1,402 @@
+<page>
+    <title>abdominal</title>
+    <ns>0</ns>
+    <id>330</id>
+    <revision>
+      <id>87569350</id>
+      <parentid>87406269</parentid>
+      <timestamp>2025-10-24T15:07:20Z</timestamp>
+      <contributor>
+        <username>AutoDooz</username>
+        <id>3732454</id>
+      </contributor>
+      <minor />
+      <comment>ro-adj-4: removed unused param '1'</comment>
+      <origin>87569350</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="9173" sha1="omvewuy2m0wvyz9gttv78xvrelxbsea" xml:space="preserve">{{minitoc}}
+==English==
+
+===Etymology===
+First attested in 1746. From {{der|en|NL.|abdōminālis}}, from {{der|en|la|abdōmen}}.&lt;ref&gt;{{R:CDOE|page=2}}&lt;/ref&gt; Equivalent to {{af|en|abdomin-|-al}}. Compare {{cog|fr|abdominal}}.
+
+===Pronunciation===
+* {{IPA|en|/æbˈdɒm.ə.nl̩/|/əbˈdɒm.ə.nl̩/|a=RP}}
+* {{IPA|en|/æbˈdɑm.ə.nl̩/|/əbˈdɑm.ə.nl̩/|a=US}}
+* {{audio|en|en-us-abdominal.ogg|a=US}}
+* {{hyphenation|en|ab|dom|i|nal}}
+
+===Adjective===
+{{en-adj}}
+
+# Of or pertaining to the [[abdomen]]; [[ventral]]. {{defdate|Mid 18&lt;sup&gt;th&lt;/sup&gt; century.}}&lt;ref name=SOED&gt;{{R:SOED5|page=3}}&lt;/ref&gt;
+#: {{co|en|'''abdominal''' muscles}}
+#: {{co|en|'''abdominal''' cavity}}
+# {{lb|en|ichthyology}} Having the [[ventral fin]]s under the abdomen and behind the [[pectoral fin]]s. {{defdate|Mid 19&lt;sup&gt;th&lt;/sup&gt; century.}}&lt;ref name=SOED/&gt;
+# {{lb|en|ichthyology}} [[ventral|Ventral]], in describing a fin. {{defdate|Late 19&lt;sup&gt;th&lt;/sup&gt; century.}}&lt;ref name=SOED/&gt;
+# {{lb|en|zoology|obsolete}} Belonging to the order [[Abdominales]] of fish.
+
+====Synonyms====
+* {{sense|of or pertaining to the abdomen}} {{l|en|ventral}}
+
+====Derived terms====
+{{col|en|abdominal aorta
+|abdominal breathing
+|abdominal cavity
+|abdominal decompression
+|abdominal evisceration
+|abdominal fin
+|abdominal gestation
+|abdominal inguinal ring
+|abdominally
+|abdominal migraine
+|abdominal muscle
+|abdominal pore
+|abdominal pouch
+|abdominal quadrant
+|abdominal reflex
+|abdominal region
+|abdominal respiration
+|abdominal rib
+|abdominal ring
+|abdominal section
+|abdominal-thrust maneuver
+|abdominal typhus
+|abdominal vacuum
+|abdominal wall
+|abs|abdominal etching
+|cervicothoracoabdominal
+|circumabdominal
+|costoabdominal
+|dorsoabdominal
+|endoabdominal
+|extraabdominal
+|femoroabdominal
+|hemiabdominal
+|inguinoabdominal
+|intraabdominal
+|intra-abdominal
+|intrabdominal
+|lumbo-abdominal
+|lumboabdominal
+|midabdominal
+|musculoabdominal
+|nephroabdominal
+|nonabdominal
+|pelviabdominal
+|phrenicoabdominal
+|postabdominal
+|rectoabdominal
+|retroabdominal
+|subabdominal
+|thoracoabdominal
+|transabdominal
+|uteroabdominal
+|vaginoabdominal
+|vesicoabdominal
+}}
+
+====Related terms====
+* {{l|en|abdomin-#Prefix}}
+* {{l|en|abdomino-#Prefix}}
+
+====Translations====
+{{trans-top|of or pertaining to the abdomen}}
+* Arabic: {{t|ar|بَطْنِيّ}}
+* Asturian: {{t+|ast|abdominal}}
+* Belarusian: {{t|be|брушны́}}, {{t|be|чарэўны́}}, {{t|be|абдаміна́льны}}
+* Bulgarian: {{t+|bg|абдомина́лен}}, {{t+|bg|коре́мен}}
+* Catalan: {{t+|ca|abdominal}}
+* Chinese:
+*: Mandarin: {{t+|cmn|腹部|tr=fùbù|alt=腹部的}}
+* Czech: {{t+|cs|břišní}}
+* Dutch: {{t+|nl|abdominaal}}, {{t+|nl|buik|alt=buik-}}
+* Finnish: {{t+|fi|vatsa|alt=vatsa-}} {{qualifier|in compounds}}, {{t+|fi|abdominaali}}
+* French: {{t+|fr|abdominal}}
+* Galician: {{t+|gl|abdominal}}
+* German: {{t+|de|abdominal}}, {{t+|de|abdominell}}, {{t+|de|Bauch|alt=Bauch-}}, {{t+|de|Unterleib|alt=Unterleib-}}
+* Greek:
+*: Ancient: {{t|grc|ἠτριαῖος}}
+* Hungarian: {{t+|hu|hasi}}, {{t+|hu|abdominális}}
+* Interlingua: {{t+|ia|abdominal}}
+* Irish: {{t|ga|abdómain}}, {{t|ga|boilg}}, {{t|ga|bolgach}}
+* Italian: {{t+|it|addominale}}
+* Latin: {{t|la|abdōminālis}}
+* Macedonian: {{t|mk|абдомина́лен}}, {{t|mk|трбушен}}
+* Manx: {{t|gv|bolgey|alt=y volgey}}
+* Norwegian:
+*: Bokmål: {{t+|nb|abdominal}}
+* Persian: {{t+|fa|شکمی|tr=šekami}}
+* Polish: {{t+|pl|brzuszny}}, {{t+|pl|odwłokowy}} {{qualifier|for insects}}, {{t+|pl|abdominalny}}
+* Portuguese: {{t+|pt|abdominal}}
+* Romanian: {{t+|ro|abdominal|m|n}}
+* Russian: {{t+|ru|брюшно́й}}, {{t+|ru|абдомина́льный}}
+* Serbo-Croatian:
+*: Cyrillic: {{t|sh|тр̀бушнӣ}}
+*: Roman: {{t+|sh|tr̀bušnī}}
+* Slovak: {{t+|sk|brušný}}
+* Slovene: {{t|sl|trebušen}}
+* Spanish: {{t+|es|abdominal}}
+* Swedish: {{t+|sv|abdominal}}, {{t+|sv|buk|alt=buk-}}, {{t+|sv|mag|alt=mag-}}
+* Tagalog: {{t|tl|pantiyan}}
+* Turkish: {{t|tr|karın ile ilgili}}
+* Ukrainian: {{t|uk|черевни́й}}, {{t+|uk|абдоміна́льний}}
+* Welsh: {{t+|cy|abdomenol}}
+* Zazaki: {{t|zza|pizane}}
+{{trans-bottom}}
+
+{{trans-top|having abdominal fins}}
+* Dutch: {{t|nl|buikvinnig}}
+* Finnish: {{t|fi|vatsaevällinen}}
+* Tagalog: {{t|tl|pantiyan}}
+{{trans-bottom}}
+
+====See also====
+* {{l|en|coelo-#Prefix}}
+
+===Noun===
+{{en-noun}}
+
+# {{lb|en|zoology|obsolete}} A fish of the order [[Abdominales]].
+# {{lb|en|colloquial}} An abdominal muscle. {{defdate|Mid 20&lt;sup&gt;th&lt;/sup&gt; century.}}&lt;ref name=SOED/&gt;
+
+====Synonyms====
+* {{sense|fish}} {{taxfmt|Cypriniformes|order}}.
+
+===References===
+&lt;references/&gt;
+
+==Catalan==
+
+===Etymology===
+{{bor+|ca|NL.|abdōminālis}}.
+
+===Pronunciation===
+* {{ca-IPA}}
+* {{audio|ca|LL-Q7026 (cat)-Marvives-abdominal.wav|a=Barcelona}}
+* {{rhyme|ca|al|s=4}}
+* {{hyph|ca|ab|do|mi|nal}}
+
+===Adjective===
+{{ca-adj}}
+
+# {{l|en|abdominal}}
+
+====Related terms====
+* {{l|ca|abdomen}}
+
+==French==
+
+===Etymology===
+From {{der|fr|NL.|abdōminālis}}.
+
+===Pronunciation===
+* {{fr-IPA}}
+* {{audio|fr|Fr-abdominal.ogg}}
+* {{audio|fr|LL-Q150 (fra)-Lepticed7-abdominal.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Toulouse&gt;&gt;)}}
+* {{audio|fr|LL-Q150 (fra)-LoquaxFR-abdominal.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Vosges&gt;&gt;)}}
+* {{audio|fr|LL-Q150 (fra)-Mecanautes-abdominal.wav|a=France}}
+* {{audio|fr|LL-Q150 (fra)-WikiLucas00-abdominal.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Lyon&gt;&gt;)}}
+* {{homophones|fr|abdominale|abdominales}}
+
+===Adjective===
+{{fr-adj}}
+
+# {{l|en|abdominal}}; of the abdomen
+
+===Further reading===
+* {{R:fr:TLFi}}
+
+==German==
+
+===Etymology===
+From {{der|de|NL.|abdōminālis}}.
+
+===Pronunciation===
+* {{IPA|de|/apdomiˈnaːl/}}
+* {{rhymes|de|aːl|s=4}}
+* {{audio|de|De-abdominal.ogg}}
+* {{audio|de|De-abdominal2.ogg|a=&lt;&lt;Germany&gt;&gt; (&lt;&lt;Berlin&gt;&gt;)}}
+
+===Adjective===
+{{de-adj|pred:-}}
+
+# [[#English|abdominal]]
+
+====Declension====
+{{de-adecl|pred:-}}
+
+==Indonesian==
+
+===Etymology===
+Ultimately from {{der|id|NL.|abdōminālis}}.
+
+===Pronunciation===
+{{id-pr|audio=LL-Q9240 (ind)-Dvnfit-abdominal.wav}}
+
+===Adjective===
+{{id-adj}}
+
+# {{l|en|abdominal}} {{gl|of or pertaining to the abdomen}}
+# {{lb|id|ichthyology}} {{l|en|abdominal}} {{gl|having abdominal fins}}
+
+====Related terms====
+{{col|id
+|abdomen
+}}
+
+===Further reading===
+* {{R:KBBI Daring}}
+
+==Interlingua==
+
+===Adjective===
+{{ia-adj|-}}
+
+# {{l|en|abdominal}}
+
+====Related terms====
+* {{l|ia|abdomine}}
+
+==Norwegian Bokmål==
+
+===Etymology===
+{{root|nb|ine-pro|*dʰeh₁-|*h₂el-}}
+From {{der|nb|NL.|abdōminālis||abdominal}}.
+
+===Pronunciation===
+* {{IPA|nb|/abdɔmɪˈnɑːl/}}
+* {{audio|nb|NB - Pronunciation of Norwegian Bokmål «abdominal».ogg}}
+* {{rhymes|nb|ɑːl}}
+* {{hyphenation|nb|ab|do|mi|nal}}
+
+===Adjective===
+{{head|nb|adjective|neuter singular|abdominalt|definite singular and plural|abdominale|comparative|[[mer]] [[abdominal]]|superlative|[[mest]] [[abdominal]]}}
+
+# {{lb|nb|anatomy|medicine}} {{l|en|abdominal}} {{q|of or pertaining to the [[abdomen]]}}
+#: {{ux|nb|'''Abdominalt''' støttebelte ved brokk.|'''Abdominal''' support belt for hernia.}}
+#* {{quote-web|nb|date=18.02.2015|work=tidsskriftet.no (Tidsskrift for Den norske legeforening)|text=mannen [hadde] et påfallende rundt ansikt, abdominal fedme og tynne ekstremiteter|t=the man [had] a striking round face, abdominal obesity and thin extremities}}
+
+====Related terms====
+* {{l|nb|abdomen||abdomen}}
+
+====See also====
+* {{l|nb|bakkropp||abdomen, hind body}}
+* {{l|nb|buk||abdomen}}
+* {{l|nb|bukhule||peritoneum}}
+
+===References===
+* {{R:The Bokmål Dictionary}}
+* {{R:NAOB}}
+
+==Portuguese==
+
+===Etymology===
+{{bor+|pt|NL.|abdōminālis}}.
+
+===Pronunciation===
+{{pt-IPA|br=abi^.dominal|pt=+}}
+* {{audio|pt|LL-Q5146 (por)-MedK1-abdominal.wav|a=&lt;&lt;Brazil&gt;&gt; (&lt;&lt;Caipira&gt;&gt;)}}
+* {{rhymes|pt|al|q1=Portugal|aw|q2=Brazil|s=4}}
+* {{hyph|pt|ab|do|mi|nal}}
+
+===Adjective===
+{{pt-adj|hascomp=no}}
+
+# {{l|en|abdominal}}
+
+===Noun===
+{{pt-noun|m}}
+
+# [[sit-up]]
+
+====Related terms====
+{{col|pt|abdómen|abdominoplastia}}
+
+===Further reading===
+* {{R:pt:Michaelis}}
+
+==Romanian==
+
+===Alternative forms===
+* {{alt|ro|абдоминал||new cyrl}}
+
+===Etymology===
+{{bor+|ro|fr|abdominal}}.
+
+===Pronunciation===
+* {{IPA|ro|/abdomiˈnal/}}
+* {{rhyme|ro|al|s=4}}
+* {{hyph|ro|ab|do|mi|nál}}
+
+===Adjective===
+{{ro-adj|4}}
+
+# {{l|en|abdominal}}
+
+====Declension====
+{{ro-adj-4}}
+
+===Further reading===
+* {{R:DEX}}
+
+==Spanish==
+
+===Etymology===
+{{bor+|es|NL.|abdōminālis}}.
+
+===Pronunciation===
+{{es-pr|+&lt;audio:LL-Q1321 (spa)-Marreromarco-abdominal.wav&lt;a:Venezuela&gt;&gt;}}
+
+===Adjective===
+{{es-adj}}
+
+# {{l|en|abdominal}}
+
+====Derived terms====
+{{col|es|aorta abdominal|abdominalmente|recto abdominal}}
+
+===Noun===
+{{es-noun|m}}
+
+# {{l|en|abdominal}} muscle
+# [[sit-up]]
+
+====Related terms====
+{{col|es|abdomen}}
+
+===Further reading===
+* {{R:es:DRAE}}
+
+==Swedish==
+
+===Etymology===
+{{suffix|sv|abdomen|al}}
+
+===Adjective===
+{{sv-adj|-}}
+
+# {{l|en|abdominal}}
+
+====Declension====
+{{sv-adj-abs}}
+
+==Tagalog==
+
+===Etymology===
+{{bor+|tl|es|abdominal}}.
+
+===Pronunciation===
+{{tl-pr|abdominál&lt;audio:LL-Q34057 (tgl)-Geoffjop0908-abdominal.wav&gt;}}
+
+===Adjective===
+{{tl-adj|abdominál|b=+}}
+
+# {{l|en|abdominal}}
+
+===Further reading===
+* {{R:tl:Hispanismos 1972|page=2|q=abdominál}}</text>
+      <sha1>omvewuy2m0wvyz9gttv78xvrelxbsea</sha1>
+    </revision>
+  </page>

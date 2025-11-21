@@ -1,0 +1,200 @@
+<page>
+    <title>acronym</title>
+    <ns>0</ns>
+    <id>2032</id>
+    <revision>
+      <id>87417181</id>
+      <parentid>87405356</parentid>
+      <timestamp>2025-10-13T04:16:51Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert English verb headwords using {{en-verb/old}} to new {{en-verb}} syntax; some cleanups of nouns and other terms, using abbr= and removing sporadic uses of Unicode apostrophes since there is no consistency in their use and general practice is not to use them; misc cleanups (manually assisted)</comment>
+      <origin>87417181</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="11161" sha1="7jn3mrwnatyqb4j8rwkvo3kjq3tdk2d" xml:space="preserve">==English==
+{{swp}}
+
+===Etymology===
+{{bor+|en|de|Akronym}}, from {{der|en|grc|ἄκρον||[[end]], [[peak]]}} and {{m|grc|ὄνυμα||[[name]]}}, equivalent to {{af|en|acro-|-onym|t1=[[high]]; [[beginning]]|t2=[[name]]}}.&lt;ref name=oed/&gt; Modelled after {{m|de|Homonym}} and {{m|de|Synonym}}, first attested in German in the early 1900s&lt;ref&gt;Gerhard Stilz, ''Studien zur englischen Philologie, Nummer 21'', Niemeyer., 1905&lt;/ref&gt; and in English in 1940.&lt;ref name=oed&gt;[http://www.oed.com/view/Entry/1844 &quot;acronym, ''n.''&quot;], in the ''Oxford English Dictionary'', Oxford: Oxford University Press.&lt;/ref&gt;
+{{root|en|ine-pro|*h₂eḱ-}}
+
+===Pronunciation===
+* {{IPA|en|/ˈæk.ɹə.nɪm/}}
+* {{audio|en|en-uk-acronym.ogg|a=UK}}
+* {{rhymes|en|ækɹənɪm|s=3}}
+
+===Noun===
+{{en-noun}}
+
+# {{senseid|en|Q101244}} {{lb|en|linguistics}} An [[abbreviation]] formed by the [[initial]] letters of other words.
+## [[generally|Generally]] such abbreviations, including those pronounced as individual letters ([[initialism]]s such as &quot;[[TNT]]&quot;).
+##* {{quote-text|en|year=1940|translators=W. Muir; et al.|author=L. Feuchtwanger|title=Paris Gazette|section=iii, xlvii, p. 518
+|passage=Pee-gee-enn. It's an '''acronym''', that's what it is. That's what they call words made up of initials.}}
+## [[exclusively|Exclusively]] such abbreviations when pronounced as a word (as &quot;[[laser]]&quot; or &quot;[[NATO]]&quot;).
+##* {{quote-journal|en|date=2014-09-23|title=Choosing a Primary School: A Teacher's Guide for Parents|titleurl=http://www.theguardian.com/education/2014/sep/23/choosing-primary-school-guide-teachers-guide-for-parents|journal=w:The Guardian
+|passage=Some teachers festoon every spare inch of wall with vocabulary choices or maths techniques to use, which look great at first, but to some children might appear quite daunting. You'll probably see unfamiliar '''acronyms''' such as Walt (We Are Learning To). Be sure to ask what they stand for and how they are used in practice.}}
+##* {{quote-journal|en|author=Ali Bianco|title=Trump’s not happy about Wall Street’s name for tariff flip-flops|magazine=w:POLITICO|url=https://www.politico.com/news/2025/05/28/trump-wall-street-acronym-tariffs-00372814|date=2025-05-28|passage=Traders have reportedly come up with the '''acronym''' TACO, which stands for “Trump always chickens out,” to take advantage of the trade environment created by the president’s habit of threatening to impose tariffs on countries, and then backing off at the last moment.}}
+# {{lb|en|linguistics}} An [[abbreviation]] formed by the [[beginning]] letters or syllables of other words (as &quot;[[Benelux]]&quot;).
+#* {{quote-text|en|year=1950|author=Simeon Potter|title=Our Language|page=163
+|passage='''Acronyms''' or telescoped names like ''nabisco'' from ''National Biscuit Company''.}}
+
+====Usage notes====
+The broader sense of acronym inclusive of [[initialism]]s (as {{m|en|TNT}}) is sometimes proscribed,&lt;ref name=mw&gt;{{R:Merriam-Webster|entry=acronym}}&lt;/ref&gt; but is the term's original and more common meaning.&lt;ref name=oed/&gt;&lt;ref name=mw/&gt; The status of an acronym's pronunciation is not always obvious, as some initialisms have gained interstitial vowels to ease their expression (as {{IPAchar|/ˈwɪzdəl/}} for {{m|en|WSDL}})&lt;ref&gt;http://www.ibm.com/developerworks/library/lol/acronym.html&lt;/ref&gt; and others are pronounced alternatively as words or initialisms (as {{IPAchar|/ˈsiːkwəl/}} or {{IPAchar|/ɛskjuːɛl/}} for {{m|en|SQL}}).&lt;ref&gt;S.Q.L or Sequel: How do you pronounce SQL? https://web.archive.org/web/20190325224245/https://www.vertabelo.com/blog/notes-from-the-lab/sql-or-sequel. Retrieved on May 19, 2016.&lt;/ref&gt;
+
+Acronyms in all senses may variously be written in all capital letters (as {{m|en|UNESCO}} or {{m|en|WYSIWYG}}) or in lower case (as {{m|en|scuba}} or {{m|en|sitcom}}), according to the degree to which they have come to be seen as words separate from their derivation (that is, depending on how [[anacronym]]ic they have become). American style guides tend to favor the use of capital spelling for pronounced acronyms of four letters or fewer (as {{m|en|NATO}}) whereas British style guides tend to favor standard capitalization of pronounced acronyms as though they were a standard word ({{m|en|Nato}}). Acronyms formed from beginning syllables are sometimes written in [[camel case]] (as {{m|en|EpiPen}} or {{m|en|CHiPs}}), although this may be precluded by style guides. Mixed capitalization is also sometimes used when acronyms include words usually left uncapitalized in [[title case]] but which have been included for pronunciation or clarity (as {{m|en|VaR|gloss=[[Value at Risk]]}}); in other cases, the standard acronym capitalizes such minor words as well (as {{m|en|TOEFL|gloss=[[w:Test of English as a Foreign Language|Test of English as a Foreign Language]]}}).
+
+Like all abbreviations, acronyms were formerly usually punctuated with [[full stop]]s or [[period]]s to mark the divisions between the original words (as {{m|en|U.S.A.}} or {{m|en|P.R.C.}}) but this punctuation is increasingly omitted, particularly in the case of acronyms treated as generic words (as {{m|en|radar}} and {{m|en|sonar}}) and in acronyms formed from syllables rather than letters. [[folk etymology|Folk etymologies]] frequently imagine acronymic expansions for such common words as {{m|en|fuck}}, {{m|en|shit}}, and {{m|en|posh}}, but the earliest English acronym listed by the ''OED'' is a form of {{m|en|abjad}} in 1793,&lt;ref&gt;[http://www.oed.com/view/Entry/271930 &quot;abjad, ''n.''&quot;], in the ''Oxford English Dictionary'', Oxford: Oxford University Press.&lt;/ref&gt; and their use did not become widespread (throughout the language) until the world wars of the 20th century.
+
+Some speakers insist that acronyms and initialisms are not abbreviations because abbreviations are solely shortenings of other types (for example, ''[[c.#English|c.]]'' for ''[[circa#English|circa]]'' or ''[[Dr#English|Dr]]'' for ''[[doctor#English|doctor]]''), but this insistence is not universally agreed and is usually used as a [[gotcha#Noun|gotcha]] or a [[trivia#Noun|trivia]] item rather than as a distinction with any practical value. In that same category is the fact that at least one reference work defines acronyms as a type of initialism,&lt;!--i.e., hyponym rather than coordinate term--&gt;&lt;!--ref: CSE SSF 9--&gt; but most do not.
+
+Alphanumeric [[symbol#Noun|symbol]]s such as gene and protein symbols (for example, {{m|en|BRCA1}}, {{m|en|HER-2}}, {{m|en|MARCKS}}) usually have acronymic or initializing etymology (origins); however, they are not called acronyms or initialisms in {{glossary|precise}} usage (rather, symbols), and the correspondence of the initial letters or syllables, between the current symbol and the current name, is not required to match (a usage difference from acronyms and initialisms [[stricto sensu#Phrase|stricto sensu]]).
+
+====Synonyms====
+* {{sense|broader sense}} {{l|en|initialism}}
+
+====Hypernyms====
+* {{sense|all senses}} {{l|en|abbreviation}}
+
+====Derived terms====
+{{col4|en|orphan acronym
+|acronymania
+|acronymic
+|acronymise
+|acronymist
+|acronymitis
+|acronymize
+|acronymophilia
+|acronymous
+|acronymphomania
+|acronymy
+|anachronym
+|anacronym
+|apronym
+|backronym
+|bacronym
+|macronym
+|nested acronym
+|netcronym
+|pseudoacronym
+|pseudo-acronym
+|recursive acronym
+|redundant acronym syndrome
+|YABA
+}}
+
+====Related terms====
+{{col5|en
+|acronymisation
+|acronymization
+|anacronymic
+|nonacronymous
+|non-acronymous
+}}
+
+====Translations====
+{{trans-top|any abbreviation formed by initial letters|id=Q101244}}
+* Arabic: {{t|ar|اِخْتِصَار|m}}
+* Bengali: {{t|bn|আদ্যক্ষরা}}
+* Bulgarian: {{t|bg|акроним|m}}
+* Chinese:
+*: Mandarin: {{t|cmn|首字母縮略詞|tr=shǒuzìmǔ suōlüècí}}
+* Danish: {{t+|da|akronym|n}}
+* Esperanto: {{t|eo|akronimo}}
+* Estonian: {{t+|et|akronüüm}}
+* Finnish: {{t|fi|kirjainlyhenne}}
+* French: {{t+|fr|sigle|m}}
+* Greek: {{t+|el|αρκτικόλεξο|n}}
+* Icelandic: {{t|is|upphafsstafaheiti|n}}
+* Irish: {{t|ga|acrainm|m}}
+* Italian: {{t+|it|sigla}}
+* Korean: {{t|ko|두문자어|tr=dumunja-eo}}
+* Maori: {{t|mi|kupu rāpoto}}
+* Mari:
+*: Eastern Mari: {{t|mhr|аббревиатур}}
+* Norwegian:
+*: Bokmål: {{t+|nb|akronym|n}}
+*: Nynorsk: {{t|nn|akronym|n}}
+* Polish: {{t+|pl|akronim|m}}, {{t+|pl|skrót|m}}, {{t+|pl|skrótowiec|m}}
+* Portuguese: {{t+|pt|sigla}}
+* Scottish Gaelic: {{t|gd|acranaim|m}}, {{t|gd|geàrr-ainm|m}}
+* Sicilian: {{t+|scn|acrònimu|m}}
+* Spanish: {{t+|es|sigla|f}}
+* Swahili: {{t+|sw|akronimu}}
+* Tagalog: {{t|tl|akronim}}
+* Thai: {{t|th|รัสพจน์|tr=rát-sà-pót}}
+{{trans-bottom}}
+
+{{trans-top|word formed by initial letters}}
+* Arabic: {{t|ar|اِخْتِصَار|m}}
+* Bulgarian: {{t|bg|акроним|m}}
+* Catalan: {{t+|ca|acrònim|m}}
+* Chinese:
+*: Mandarin: {{t+|cmn|縮寫|tr=suōxiě}}, {{t|cmn|縮略詞|tr=suōlüècí}}, {{t+|cmn|略語|tr=lüèyǔ}}
+* Czech: {{t+|cs|akronym|m}}
+* Danish: {{t+|da|akronym|n}}
+* Dutch: {{t+|nl|acroniem|n}}, {{t+|nl|letterwoord|n}}
+* Esperanto: {{t|eo|akronimo}}
+* Finnish: {{t+|fi|kirjainsana}}, {{t+|fi|akronyymi}}
+* French: {{t+|fr|acronyme|m}}
+* Galician: {{t+|gl|acrónimo|m}}
+* German: {{t+|de|Akronym|n}}
+* Greek: {{t+|el|ακρώνυμο|n}}, {{t+|el|ακρωνύμιο|n}}
+* Hebrew: {{t+|he|ראשי תיבות|m-p|tr=rashéi teivót}}
+* Hungarian: {{q|in general}} {{t+|hu|mozaikszó}}, {{q|initialism as a subtype}} {{t+|hu|betűszó}}, {{q|blend word as a subtype}} {{t+|hu|szóösszevonás}}
+* Interlingua: {{t|ia|acronymo}}, {{t|ia|[[initial|initiales]]}} &lt;!--disputed - see discussion page--&gt;
+* Irish: {{t|ga|acrainm|m}}
+* Italian: {{t+|it|acronimo|m}}
+* Japanese: {{t+|ja|頭字語|tr=とうじご, tōjigo}}, {{t+|ja|アクロニム|tr=akuronimu}}, {{t+|ja|略語|tr=りゃくご, ryakugo}}
+* Korean: {{t+|ko|약어}}, {{t|ko|두문자어|tr=dumunja-eo}}
+* Maori: {{t|mi|kupu rāpoto}}, {{t|mi|pūtaukī}}
+* Norwegian:
+*: Bokmål: {{t+|nb|akronym|n}}
+*: Nynorsk: {{t|nn|akronym|n}}
+* Occitan: {{t+|oc|acronim|m}}
+* Polish: {{t+|pl|akronim|m-in}}, {{t+|pl|skrót|m-in}}, {{t+|pl|skrótowiec|m-in}}
+* Portuguese: {{t|pt|acrograma|m}}
+*: Brazilian: {{t+|pt|acrônimo|m}}
+*: European: {{t+|pt|acrónimo|m}}
+* Romanian: {{t+|ro|acronim|n}}
+* Russian: {{t+|ru|акро́ним|m}}, {{t+|ru|сокраще́ние|n}}
+* Scottish Gaelic: {{t|gd|acranaim|m}}, {{t|gd|geàrr-ainm|m}}
+* Serbo-Croatian:
+*: Cyrillic: {{t|sh|акроним|m}}
+*: Roman: {{t+|sh|akronim|m}}
+* Sicilian: {{t+|scn|acrònimu|m}}
+* Slovene: {{t+|sl|kratica|f}}
+* Spanish: {{t+|es|acrónimo|m}}, {{t+|es|sigla|f}}
+* Swedish: {{t+|sv|akronym|c}}
+* Turkish: {{t+|tr|akronim}}
+* Ukrainian: {{t|uk|акро́нім|m}}
+{{trans-bottom}}
+
+===Verb===
+{{en-verb|+,++&lt;l:rare&gt;}}
+
+# To form into an [[#Noun|acronym]].
+
+===See also===
+* [[:Category:English acronyms|English acronyms]]
+* [[:Category:Acronyms by language|Acronyms by language]]
+* {{l|en|mnemonic}}
+* {{l|en|acrostic}}
+
+===References===
+&lt;references/&gt;
+
+===Further reading===
+* {{R:OneLook}}
+* {{R:GNV|three letter acronyms, three letter initialisms}}
+
+===Anagrams===
+* {{anagrams|en|a=acmnory|Cormany|romancy}}
+
+{{cln|en|terms suffixed with -nym}}</text>
+      <sha1>7jn3mrwnatyqb4j8rwkvo3kjq3tdk2d</sha1>
+    </revision>
+  </page>

@@ -1,0 +1,32 @@
+<page>
+    <title>dimorphemic</title>
+    <ns>0</ns>
+    <id>4648235</id>
+    <revision>
+      <id>81278091</id>
+      <parentid>72715078</parentid>
+      <timestamp>2024-08-19T03:37:44Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>add missing From in English etyms, remove stray spaces and L2R markers (manually assisted)</comment>
+      <origin>81278091</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="193" sha1="bmrhup92sxrpcqc7ojfgzp56djkxu40" xml:space="preserve">==English==
+
+===Etymology===
+From {{prefix|en|di|morphemic}}.
+
+===Pronunciation===
+* {{rhymes|en|iːmɪk|s=4}}
+
+===Adjective===
+{{en-adj|-}}
+
+# Consisting of, or relating to, two [[morpheme]]s.</text>
+      <sha1>bmrhup92sxrpcqc7ojfgzp56djkxu40</sha1>
+    </revision>
+  </page>

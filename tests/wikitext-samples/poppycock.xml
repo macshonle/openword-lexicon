@@ -1,0 +1,57 @@
+<page>
+    <title>poppycock</title>
+    <ns>0</ns>
+    <id>2013</id>
+    <revision>
+      <id>87648890</id>
+      <parentid>86793669</parentid>
+      <timestamp>2025-10-30T19:46:41Z</timestamp>
+      <contributor>
+        <username>Vealhurl</username>
+        <id>3611421</id>
+      </contributor>
+      <origin>87648890</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1451" sha1="g92lfcwa44q99fvn8rmd7n09h2z2dla" xml:space="preserve">==English==
+
+===Etymology===
+Borrowed from {{bor|en|nl|pappekak}}, from {{der|en|dum|pappe|t=soft food}} + {{m|dum|kak|t=dung, excrement}}.
+
+===Pronunciation===
+* {{IPA|en|/ˈpɒpikɒk/|a=RP}}
+* {{IPA|en|/ˈpɑpiˌkɑk/|a=GA}}
+* {{audio|en|LL-Q1860 (eng)-Flame, not lame-poppycock.wav|a=US}}
+
+===Noun===
+{{en-noun|-|s}}
+
+# {{lb|en|colloquial}} foolish talk; [[nonsense]].
+#: {{ux|en|That rumor is nothing but sheer '''poppycock'''.}}
+#: {{ux|en|He dismissed the conspiracy theory as '''poppycock'''.}}
+#: {{ux|en|Don’t talk such '''poppycock'''—you know it’s not true.}}
+
+====Synonyms====
+* {{l|en|balderdash}}; see also [[Thesaurus:nonsense]]
+
+====Derived terms====
+{{col|en|poppycockish
+}}
+
+====Translations====
+{{trans-top|nonsense}}
+* Afrikaans: {{t|af|pappekak}}, {{t|af|nonsens}}, {{t|af|onsin}}, {{t|af|snert}}, {{t|af|twak}}, {{t|af|stront}}
+* Bulgarian: {{t+|bg|глупости|f-p}}
+* Dutch: {{t+|nl|onzin}}, {{t+|nl|nonsens}}
+* Finnish: {{t+|fi|hölynpöly}}
+* French: {{t+|fr|baliverne|f}}
+* German: {{t+|de|Quatsch|m}}, {{t+|de|Dünnschiss|m}}
+* Italian: {{t+|it|stupidaggine|f}}
+* Polish: {{t|pl|bzdury|f-p}}, {{t+|pl|ambaje|m-p}} {{qualifier|archaic}}, {{t+|pl|androny}}, {{t|pl|banialuki|f-p}}
+* Russian: {{t+|ru|вздор|m}}, {{t+|ru|ерунда́|f}}, {{t+|ru|туфта́|f}}, {{t+|ru|чепуха́|f}}, {{t+|ru|чушь}}
+* Spanish: {{t|es|tontería}}, {{t|es|sinsentido}}
+* Turkish: {{t+|tr|laga luga}}
+{{trans-bottom}}</text>
+      <sha1>g92lfcwa44q99fvn8rmd7n09h2z2dla</sha1>
+    </revision>
+  </page>

@@ -1,0 +1,87 @@
+<page>
+    <title>Ω</title>
+    <ns>0</ns>
+    <id>175380</id>
+    <revision>
+      <id>85908246</id>
+      <parentid>83360101</parentid>
+      <timestamp>2025-08-15T18:36:30Z</timestamp>
+      <contributor>
+        <username>Quercus solaris</username>
+        <id>1131030</id>
+      </contributor>
+      <origin>85908246</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1836" sha1="b66ch24uw5srbpcsr7242s3zfadwwnk" xml:space="preserve">{{also|ω|ჲ|ὥ|ὦ|ᾧ|-ῳ|ᘯ|Appendix:Variations of &quot;o&quot;}}
+{{character info}}
+{{character info/var|0x2126}}
+==Translingual==
+
+===Symbol===
+{{head|mul|symbol}}
+
+# {{senseid|mul|Q47083}}  [[ohm#English:_Q47083|ohm]], the [[unit]] of [[electrical resistance]] in the [[International System of Units]].
+
+====Usage notes====
+* {{w|The Unicode Standard}} states that {{codepoint|U+2126|link=0}} is included in Unicode only for backward compatibility reasons. {{codepoint|U+03A9|link=0}} is preferred to represent ohms.
+
+====Derived terms====
+{{col|mul
+|YΩ
+|EΩ
+|PΩ
+|TΩ
+|GΩ
+|MΩ
+|hΩ
+|daΩ
+|dΩ
+|cΩ
+|mΩ
+|µΩ
+|nΩ
+|pΩ
+|fΩ
+|aΩ
+|zΩ
+|yΩ
+|Ω/□
+}}
+
+====See also====
+* {{pedia}}
+
+[[Category:Symbols for SI units]]
+
+==Ancient Greek==
+
+===Etymology===
+The most common uppercase form [[File:Greek uc omega.svg|x16px]] is a variant of omicron ({{l|grc|Ο|tr=-}}), broken up at the side ([[File:Greek Omega 09.svg|x16px]]), with the edges subsequently turned outward ([[File:Greek Omega 09.svg|x16px]], [[File:Greek Omega 05.svg|x16px]], [[File:Greek Omega 03.svg|x16px]], [[File:Greek Omega 07.svg|x16px]]). The alternative uppercase form, found in some typefaces, that looks like a larger version of lowercase {{l|grc|ω|tr=-}}, is from a digraph of two omicrons written close together.
+
+===Letter===
+{{head|grc|letter|uppercase||lowercase|ω}}
+
+# The letter [[omega]] ({{l|grc|ὦ μέγα|tr=-}}), the 24th letter of the ancient [[Greek alphabet]].
+
+====See also====
+{{Grek-script}}
+
+==Greek==
+
+===Letter===
+{{head|el|letter|uppercase||lowercase|ω}}
+
+# The [[upper case]] letter [[omega]] ([[ωμέγα]]), the last letter of the modern {{w|Greek alphabet}}.
+
+===Numeral===
+{{head|el|numeral}}
+
+# The number 800 in {{w|Greek numerals}}.
+# The number 800,000 in Greek numerals.
+
+===See also===
+: ''see:'' [[Appendix:Greek alphabet]]</text>
+      <sha1>b66ch24uw5srbpcsr7242s3zfadwwnk</sha1>
+    </revision>
+  </page>

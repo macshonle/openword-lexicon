@@ -1,0 +1,72 @@
+<page>
+    <title>taffy</title>
+    <ns>0</ns>
+    <id>61146</id>
+    <revision>
+      <id>85089507</id>
+      <parentid>85089199</parentid>
+      <timestamp>2025-06-10T08:05:12Z</timestamp>
+      <contributor>
+        <username>Shira the Mogul</username>
+        <id>3774263</id>
+      </contributor>
+      <comment>/* Noun */Added anti-Welsh sense. Originates in &quot;Taffy was a Welshman&quot; referring to the River Taff. It's a somewhat divisive term.</comment>
+      <origin>85089507</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2506" sha1="fnmnu2j75stw6sa5mdpmfcsbapi1gjq" xml:space="preserve">{{also|Taffy}}
+==English==
+
+===Alternative forms===
+* {{l|en|toffee}} {{qualifier|see usage notes}}
+
+===Etymology===
+Probably related to {{m|en|tafia||a type of rum}}.
+
+===Pronunciation===
+* {{IPA|en|/ˈtæ.fi/}}
+* {{audio|en|LL-Q1860 (eng)-Vealhurl-taffy.wav|a=Southern England}}
+* {{rhymes|en|æfi|s=2}}
+
+===Noun===
+{{en-noun|~}}
+
+# {{lb|en|US}} A soft, chewy [[candy]] made from boiled [[sugar]], [[molasses]], or [[corn syrup]] and [[butter]].
+# {{lb|en|informal}} [[flattery|Flattery]].
+#* {{quote-text|en|year=1881|author=w:Mark Twain|title=Unfinished Burlesque on Books of Etiquette
+|passage={{...}} if these statistices should seem to fail to tally with the facts, in places, do not nudge your neighbor, or press your foot upon his toes, or manifest, by any other sign, your awareness that '''taffy''' is being distributed.}}
+#* {{quote-book|en|year=1912|title=The Machine|author=w:Upton Sinclair|url=https://www.gutenberg.org/cache/epub/3304/pg3304-images.html|passage=Cut out the '''taffy'''. Who's your friend?}}
+# {{lb|en|Mainly [[UK]], usu. [[derogatory]]}} [[Welsh]] [[person]]. 
+#* {{quote-journal|en|30-03-2013|work=WalesOnline|title=Why there's still mileage in the name 'Taffy'|url=https://www.walesonline.co.uk/news/wales-news/theres-still-mileage-name-taffy-2323388|author=Rhodri Clark|quotee=Louise Pierpoint|text=&quot;Some people may find '''Taffy''' a bit derogatory but a lot of people are interested in displaying that on their vehicles. That's a way they can express their Welshness. But we haven't sold any plates with combinations of 'boyo'.&quot;}} 
+
+====Usage notes====
+* ''Taffy'' is a soft candy invented in the United States and known as ''chews'' or ''chewy sweets'' in the United Kingdom. It is not to be confused with {{m|en|toffee}}.
+
+====Derived terms====
+{{col|en|salt water taffy|taffy pull|saltwater taffy|laffy taffy|maple taffy
+}}
+
+====Translations====
+{{trans-top|soft, chewy candy}}
+* Cebuano: {{t|ceb|tiratira}}
+* Finnish: {{t+|fi|toffee}}
+* French: {{t|fr|caramel mou|m}}, {{t|fr|caramels mous|p}}
+* Polish: {{t+|pl|ciągutka|f}}, {{t+|pl|mordoklejka|f}}
+* Russian: {{t+|ru|ири́с|m}}, {{t+|ru|ири́ска|f}}
+* Spanish: {{t|es|caramelo de melaza|m}}; {{t+|es|chicloso|m}} {{qualifier|Mexico}}
+* Tagalog: {{t|tl|balikutsa}}, {{t|tl|balkutsa}}
+{{trans-bottom}}
+{{trans-top|flattery}}
+* Czech: {{t|cs|lichotky|f-p}}, {{t|cs|pochlebování|n}}
+{{trans-bottom}}
+
+===References===
+* {{R:MWO}}
+
+===Further reading===
+* {{pedia|lang=en|Taffy (candy)}}
+
+{{C|en|Sweets}}</text>
+      <sha1>fnmnu2j75stw6sa5mdpmfcsbapi1gjq</sha1>
+    </revision>
+  </page>

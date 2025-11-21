@@ -1,0 +1,102 @@
+<page>
+    <title>你好</title>
+    <ns>0</ns>
+    <id>48769</id>
+    <revision>
+      <id>85889972</id>
+      <parentid>85602798</parentid>
+      <timestamp>2025-08-14T07:55:03Z</timestamp>
+      <contributor>
+        <username>Wandering Maiden</username>
+        <id>4019487</id>
+      </contributor>
+      <comment>/* See also */</comment>
+      <origin>85889972</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3495" sha1="sbsvxlbavj25m7w38g5hrxy9ibp8qqw" xml:space="preserve">==Chinese==
+{{phrasebook|zh}}
+{{zh-forms|alt=汝好-Min}}
+
+===Pronunciation===
+{{zh-pron
+|m=nǐ hǎo
+|m-x=nì hào
+|dg=ни3 хо3
+|c=nei5 hou2
+|h=pfs=ngì-hó/n:nì-hó/s:ǹg-hó/ǹ-hó;gd=ngi2 hau3/n2 hau3
+|mb=nì-hǎu
+|md=nṳ̄ hō̤
+|mn=xm,zz,kh:lí hó/jj,ph:lí# hó/qz:lír# hó/tp:lú hó
+|mn-t=le2 ho2/lu2 ho2
+|ma=Zh nǐ hǎo.ogg
+|ca=zh-yue-你好.opus
+|mda=Cdo hello.ogg
+|cat=intj
+}}
+
+===Interjection===
+{{head|zh|interjection}}
+
+# [[hello]]; [[hi]]
+#: {{zh-x|你.好，好久不見。|'''Hi''', long time no see.}}
+
+====Usage notes====
+Often used as a polite way of getting someone's attention.
+
+====Derived terms====
+{{col3|zh|你好嗎|你好無}}
+
+====Descendants====
+* {{desc|en|nihao|bor=1}}
+* {{desc|ja|-|bor=1}} {{ja-r|你好|ニーハオ}}
+* {{desc|za|mwngz ndei|cal=1}}
+
+===See also===
+* {{zh-l|好|good (often used in greetings)}}
+* {{zh-l|您好|hello (polite)}}
+* {{zh-l|你們好|hello (to a group)}}
+* {{zh-l|喂|tr=wéi|hello (on the phone)}}
+* {{zh-l|幸會}}
+* {{zh-l|哈囉}} {{q|from &quot;hello&quot;}}
+* {{zh-l|嗨}} {{q|from &quot;hi&quot;}}
+* {{q|Wu}} {{zh-l|儂好}}
+* {{q|Suzhounese}} {{zh-l|倷好}}
+* {{q|Cantonese|informal}} {{zh-l|哈佬}} {{q|from &quot;hello&quot;}}
+* {{q|Min}} {{zh-l|汝好}}
+
+{{cln|zh|greetings}}
+
+==Japanese==
+{{ja-kanjitab|にい|はお|yomi=irr}}
+
+===Etymology===
+From modern {{bor|ja|cmn|-}} {{zh-l|你好||hello}}.
+
+===Pronunciation===
+{{ja-pron|ニイハオ|acc=1|acc_ref=DJR}}
+
+===Interjection===
+{{ja-pos|interjection|ニイハオ|ニーハオ}}
+
+# {{lb|ja|informal|rare}} [[hi]], [[hello]] {{qualifier|in a Chinese context}}
+#* '''1967''', リービ英雄, ''我的中国'', Page 221
+#*: {{ja-usex|「'''你好'''」と僧はすこし驚いた表%情で答えた。|「^'''ニーハオ'''」 と そう は すこし おどろいた ひょう%じょう で こたえた。|The monk said &quot;'''Nihao'''&quot;, looking a little surprised}}
+#* '''1985''', 山崎豊子, ''”虱”だらけの指導者・胡耀邦'' in 『山崎豊子全集19 大地の子（一）』, 2005, Page 605
+#*: {{ja-usex|小%学%校%帰りの赤いスカーフを胸もとに巻いた児%童たちに出会い、'''你好'''！と声をかけると、どこでも'''你好'''！と挨%拶が返って来る|^しょう%がっ%こう% がえり の あかい スカーフ を むなもと に まいた じ%どう たち に であい、 '''ニイハオ'''！ と こえ を かける と、 どこ でも '''ニイハオ'''！ と あい%さつ が かえって くる|When I meet children with a red neckerchief on their chest on their way back to home from school, and I say '''nihao''' to them, wherever it is, they return a greeting of '''nihao''' to me}}
+#* '''1987''', 鈴木孝雄, ''異文化融合と民族性と……'' in 『公明』, 1987, No. 7, Page 99
+#*: {{ja-usex|「'''你好'''」と声をかけたら「'''你好'''」と顔をあげた。「みかけない顔だ、どこから来たか」「日%本から来た」|「'''^ニイハオ'''」 と こえ を かけたら 「'''ニイハオ'''」 と かお を あげた。「^みかけない かお だ、 どこ から きた か」 「^に%ほん から きた」|&quot;'''Nihao''',&quot; I talked to him. &quot;'''Nihao'''&quot;, he said, looking up at me, &quot;I haven't seen you around here. Where are you from?&quot; - &quot;I came from Japan.&quot;}}
+
+====Synonyms====
+* {{ja-r|こんにちは|こんにち は}}
+
+====See also====
+* {{ja-r|謝謝|シエシエ|thank you (in Chinese context)}}
+
+===References===
+&lt;references /&gt;
+
+{{cln|ja|greetings}}</text>
+      <sha1>sbsvxlbavj25m7w38g5hrxy9ibp8qqw</sha1>
+    </revision>
+  </page>

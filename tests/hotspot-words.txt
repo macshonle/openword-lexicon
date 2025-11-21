@@ -1,0 +1,82 @@
+# Hotspot words for validation and testing
+# One word per line, comments start with #
+# These are words that appear in tests, docs, or have shown edge cases
+
+# === EDGE CASES - is_abbreviation ===
+acronym
+saturday
+
+# === EDGE CASES - is_informal (various patterns) ===
+dialect
+four
+hell
+poppycock
+slushpile
+abdominal
+abominate
+billion
+flute
+
+# === EDGE CASES - is_inflected ===
+are
+is
+
+# === EDGE CASES - Morphology ===
+dimorphemic
+footfucker
+
+# === EDGE CASES - Regional labels ===
+indaba
+piss-easy
+
+# === EDGE CASES - is_derogatory ===
+taffy
+
+# === EDGE CASES - Polysemy (multiple entries per word) ===
+sat
+sun
+may
+march
+turkey
+polish
+bat
+bank
+
+# === NON-ENGLISH - Should be excluded (non-Latin scripts) ===
+# Greek
+λ
+ω
+αὐτό
+# Cyrillic
+привет
+водка
+# Arabic
+مرحبا
+# CJK
+你好
+日本
+
+# === NON-ENGLISH - Should be excluded (Latin script, no English usage) ===
+# Polish (contains ł which is Latin Extended)
+łódź
+# Vietnamese (Latin with extensive diacritics)
+tiếng
+# Hungarian (Latin with umlauts)
+üdvözlet
+
+# === COMMON - Documentation examples ===
+dictionary
+encyclopedia
+cat
+it
+hello
+world
+
+# === COMMON - Sanity checks ===
+the
+a
+an
+run
+running
+happy
+happiness
