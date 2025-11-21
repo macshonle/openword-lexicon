@@ -21,7 +21,7 @@ import logging
 import sys
 import unicodedata
 from pathlib import Path
-from typing import Set
+from typing import List, Set
 
 logging.basicConfig(
     level=logging.INFO,
@@ -94,6 +94,70 @@ def load_lexicon_words(build_path: Path) -> Set[str]:
     return words
 
 
+def try_depluralize(word: str) -> List[str]:
+    """
+    Try to find potential singular/base forms by removing plural suffixes.
+
+    Returns list of potential base forms to check.
+
+    Examples:
+        "abrosias" → ["abrosia"]
+        "aboves" → ["above"]
+        "absentmindednesses" → ["absentmindedness", "absentmindednes"]
+        "academias" → ["academia"]
+    """
+    candidates = []
+
+    # Try removing 's'
+    if word.endswith('s') and len(word) > 2:
+        candidates.append(word[:-1])
+
+    # Try removing 'es'
+    if word.endswith('es') and len(word) > 3:
+        candidates.append(word[:-2])
+
+    # Try removing 'ies' and adding 'y' (e.g., "accidies" → "accidy")
+    if word.endswith('ies') and len(word) > 4:
+        candidates.append(word[:-3] + 'y')
+
+    return candidates
+
+
+def analyze_missing_words(missing: Set[str], lexicon_words: Set[str]) -> dict:
+    """
+    Analyze missing words to categorize them.
+
+    Returns dict with:
+        - 'likely_plurals': Words where base form exists in lexicon
+        - 'true_missing': Words where no base form found
+    """
+    likely_plurals = []
+    true_missing = []
+
+    for word in sorted(missing):
+        # Try to find base forms
+        base_forms = try_depluralize(word)
+
+        # Check if any base form exists in lexicon
+        found_base = False
+        for base in base_forms:
+            if base in lexicon_words:
+                likely_plurals.append({
+                    'word': word,
+                    'base': base,
+                })
+                found_base = True
+                break
+
+        if not found_base:
+            true_missing.append(word)
+
+    return {
+        'likely_plurals': likely_plurals,
+        'true_missing': true_missing,
+    }
+
+
 def main():
     """Run ENABLE coverage validation."""
     # Paths
@@ -136,15 +200,51 @@ def main():
     logger.info(f"Missing from lexicon:   {len(missing):,}")
     logger.info(f"Coverage percentage:    {coverage_pct:.2f}%")
 
-    # Show sample of missing words
+    # Analyze missing words
     if missing:
         logger.info("")
-        logger.info("Sample of missing words (first 20):")
-        for word in sorted(missing)[:20]:
-            logger.info(f"  - {word}")
+        logger.info("=" * 70)
+        logger.info("Missing Word Analysis")
+        logger.info("=" * 70)
 
-        if len(missing) > 20:
-            logger.info(f"  ... and {len(missing) - 20:,} more")
+        analysis = analyze_missing_words(missing, lexicon_words)
+
+        likely_plurals = analysis['likely_plurals']
+        true_missing = analysis['true_missing']
+
+        logger.info(f"Likely plurals (base form exists):  {len(likely_plurals):,}")
+        logger.info(f"True missing (no base form found):  {len(true_missing):,}")
+        logger.info("")
+
+        # Show sample of likely plurals
+        if likely_plurals:
+            logger.info("Sample likely plurals (first 15):")
+            for item in likely_plurals[:15]:
+                logger.info(f"  - {item['word']:30} → base: {item['base']}")
+
+            if len(likely_plurals) > 15:
+                logger.info(f"  ... and {len(likely_plurals) - 15:,} more")
+            logger.info("")
+
+        # Show sample of true missing
+        if true_missing:
+            logger.info("Sample true missing words (first 15):")
+            for word in true_missing[:15]:
+                logger.info(f"  - {word}")
+
+            if len(true_missing) > 15:
+                logger.info(f"  ... and {len(true_missing) - 15:,} more")
+            logger.info("")
+
+        # Analysis summary
+        plural_pct = (len(likely_plurals) / len(missing)) * 100 if missing else 0
+        logger.info("=" * 70)
+        logger.info("Summary:")
+        logger.info(f"  {plural_pct:.1f}% of missing words are likely plurals")
+        logger.info(f"  {100 - plural_pct:.1f}% are truly missing (no base form)")
+        logger.info("")
+        logger.info("Note: ENABLE includes many unusual plural forms not typically")
+        logger.info("listed as separate entries in dictionaries (e.g., 'absentmindednesses').")
 
     # Extra words in lexicon
     extra = lexicon_words - enable_words

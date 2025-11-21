@@ -238,7 +238,8 @@ POS_MAP = {
 # Label classifications
 REGISTER_LABELS = {
     'informal', 'colloquial', 'slang', 'vulgar', 'offensive',
-    'derogatory', 'formal', 'euphemistic', 'humorous', 'literary'
+    'derogatory', 'formal', 'euphemistic', 'humorous', 'literary',
+    'childish', 'baby talk', 'infantile', 'puerile'  # Added: childish terms
 }
 
 TEMPORAL_LABELS = {
@@ -382,6 +383,8 @@ def extract_labels(text: str) -> Dict[str, List[str]]:
             labels['register'].add('vulgar')
         if 'offensive' in cat_lower or 'derogatory' in cat_lower:
             labels['register'].add('offensive')
+        if 'childish' in cat_lower or 'baby talk' in cat_lower or 'infantile' in cat_lower:
+            labels['register'].add('childish')
         if 'obsolete' in cat_lower:
             labels['temporal'].add('obsolete')
         if 'archaic' in cat_lower:

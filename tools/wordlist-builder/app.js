@@ -377,12 +377,13 @@ function estimateWordCount(selectedSources) {
     if (BUILD_STATS && BUILD_STATS.source_combinations) {
         // Union operation: sum all disjoint combinations that are subsets of selection
         let totalWords = 0;
-        for (const [combo, count] of Object.entries(BUILD_STATS.source_combinations)) {
+        for (const [combo, data] of Object.entries(BUILD_STATS.source_combinations)) {
             const comboSources = combo.split(',');
 
             // Include this combination if it's a subset of selected sources
             const isSubset = comboSources.every(s => selectedSources.includes(s));
             if (isSubset) {
+                const count = data.count;
                 totalWords += count;
             }
         }
@@ -505,30 +506,65 @@ function computeMetadataCoverage(selectedSources) {
 
 /**
  * Determine the resulting license for a combination of selected sources.
- * Uses the license_combinations data to find the most restrictive license.
+ * Uses the source_combinations data (which includes licenses) to find the most
+ * restrictive license that applies.
  *
  * @param {string[]} selectedSources - Array of selected source IDs
  * @returns {Object} License information {id, description, sources}
  */
 function computeLicense(selectedSources) {
-    if (!BUILD_STATS || !BUILD_STATS.license_combinations) {
+    if (!BUILD_STATS || !BUILD_STATS.source_combinations) {
         // Fallback to hardcoded logic
         return computeLicenseFallback(selectedSources);
     }
 
-    // Find all license combinations that match our source selection
-    let matchedLicense = null;
-    let maxCoverage = 0;
+    // Normalize source names (map UI names to data names)
+    const sourceMap = {
+        'wiktionary': 'wikt',
+        'eowl': 'eowl',
+        'wordnet': 'wordnet',
+        'brysbaert': 'brysbaert',
+        'frequency': 'frequency'
+    };
+    const normalizedSources = selectedSources.map(s => sourceMap[s] || s);
 
-    for (const [licenses, count] of Object.entries(BUILD_STATS.license_combinations)) {
-        // This is a heuristic: we look for the license combination that appears
-        // most frequently with our selected sources. In practice, we should find
-        // the combination that exactly matches our source selection.
-        // For now, we'll use a simpler approach based on source requirements.
+    // Find all licenses that will be included in the union
+    const allLicenses = new Set();
+    for (const [combo, data] of Object.entries(BUILD_STATS.source_combinations)) {
+        const comboSources = combo.split(',');
+        // Include this combination if it's a subset of selected sources
+        const isSubset = comboSources.every(s => normalizedSources.includes(s));
+        if (isSubset && data.licenses) {
+            // Add all licenses from this combination
+            data.licenses.split(',').forEach(lic => allLicenses.add(lic));
+        }
     }
 
-    // Simplified: determine license based on most restrictive source
-    return computeLicenseFallback(selectedSources);
+    // Determine the most restrictive license
+    // Priority: CC-BY-SA-4.0 > WordNet > UKACD
+    let license = '';
+    let licenseDesc = '';
+    const sources = [];
+
+    if (allLicenses.has('CC-BY-SA-4.0')) {
+        license = 'CC BY-SA 4.0';
+        licenseDesc = 'Attribution + ShareAlike required';
+    } else if (allLicenses.has('WordNet')) {
+        license = 'WordNet License';
+        licenseDesc = 'WordNet License terms apply';
+    } else if (allLicenses.has('UKACD')) {
+        license = 'UKACD License';
+        licenseDesc = 'UKACD License terms apply';
+    }
+
+    // Build source list
+    if (selectedSources.includes('wiktionary')) sources.push('Wiktionary (CC BY-SA 4.0)');
+    if (selectedSources.includes('eowl')) sources.push('EOWL (UKACD License)');
+    if (selectedSources.includes('wordnet')) sources.push('WordNet (WordNet License)');
+    if (selectedSources.includes('brysbaert')) sources.push('Brysbaert (Research Use)');
+    if (selectedSources.includes('frequency')) sources.push('Frequency Data (CC BY-SA 4.0)');
+
+    return { license, licenseDesc, sources };
 }
 
 function computeLicenseFallback(selectedSources) {

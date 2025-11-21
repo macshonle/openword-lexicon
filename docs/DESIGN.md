@@ -57,7 +57,8 @@ This document describes the design decisions and architecture of the Openword Le
 └─────────────┬───────────────────────┘
               │
 ┌─────────────▼───────────────────────┐
-│  Core ingest (ENABLE, EOWL → JSONL) │
+│  Core ingest (EOWL → JSONL)         │
+│  [ENABLE optional via validate]     │
 └─────────────┬───────────────────────┘
               │
 ┌─────────────▼───────────────────────┐
@@ -109,9 +110,9 @@ This document describes the design decisions and architecture of the Openword Le
 ### Data Flow
 
 ```
-data/raw/           ← Fetched sources (ENABLE, EOWL, Wiktionary dump, etc.)
-  ├── core/         ← Core sources (PD/permissive)
-  └── plus/         ← Plus sources (CC BY-SA)
+data/raw/           ← Fetched sources (EOWL, Wiktionary dump, WordNet, etc.)
+  ├── en/           ← English sources (ENABLE optional for validation)
+  └── diagnostic/   ← Test/diagnostic data
 
 data/intermediate/  ← Processed entries (JSONL)
   ├── core/
@@ -162,7 +163,7 @@ data/artifacts/releases/  ← Packaged releases
   "lemma": null,
   "concreteness": "mixed",
   "frequency_tier": "top10k",
-  "sources": ["enable", "eowl", "wikt"]
+  "sources": ["eowl", "wikt", "wordnet"]
 }
 ```
 

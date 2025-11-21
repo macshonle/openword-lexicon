@@ -1,0 +1,223 @@
+{
+  "concreteness": {
+    "concrete": [
+      {
+        "word": "castle",
+        "expected": "concrete",
+        "actual": "mixed",
+        "status": "?"
+      },
+      {
+        "word": "apple",
+        "expected": "concrete",
+        "actual": "concrete",
+        "status": "✓"
+      },
+      {
+        "word": "hammer",
+        "expected": "concrete",
+        "actual": "mixed",
+        "status": "?"
+      },
+      {
+        "word": "dog",
+        "expected": "concrete",
+        "actual": "mixed",
+        "status": "?"
+      }
+    ],
+    "abstract": [
+      {
+        "word": "freedom",
+        "expected": "abstract",
+        "actual": "abstract",
+        "status": "✓"
+      },
+      {
+        "word": "justice",
+        "expected": "abstract",
+        "actual": "mixed",
+        "status": "?"
+      },
+      {
+        "word": "happiness",
+        "expected": "abstract",
+        "actual": "abstract",
+        "status": "✓"
+      },
+      {
+        "word": "love",
+        "expected": "abstract",
+        "actual": "mixed",
+        "status": "?"
+      }
+    ],
+    "mixed": [
+      {
+        "word": "paper",
+        "expected": "mixed",
+        "actual": "mixed",
+        "status": "✓"
+      },
+      {
+        "word": "bank",
+        "expected": "mixed",
+        "actual": "mixed",
+        "status": "✓"
+      },
+      {
+        "word": "light",
+        "expected": "mixed",
+        "actual": "mixed",
+        "status": "✓"
+      }
+    ]
+  },
+  "pos_tagging": {
+    "noun": [
+      {
+        "word": "castle",
+        "expected": "noun",
+        "actual": [
+          "noun",
+          "verb"
+        ],
+        "status": "✓"
+      },
+      {
+        "word": "dog",
+        "expected": "noun",
+        "actual": [
+          "noun",
+          "verb"
+        ],
+        "status": "✓"
+      },
+      {
+        "word": "table",
+        "expected": "noun",
+        "actual": [
+          "noun",
+          "verb"
+        ],
+        "status": "✓"
+      }
+    ],
+    "verb": [
+      {
+        "word": "run",
+        "expected": "verb",
+        "actual": [
+          "noun",
+          "verb"
+        ],
+        "status": "✓"
+      },
+      {
+        "word": "think",
+        "expected": "verb",
+        "actual": [
+          "noun",
+          "verb"
+        ],
+        "status": "✓"
+      },
+      {
+        "word": "eat",
+        "expected": "verb",
+        "actual": [
+          "verb"
+        ],
+        "status": "✓"
+      }
+    ],
+    "adjective": [
+      {
+        "word": "happy",
+        "expected": "adjective",
+        "actual": [
+          "adjective"
+        ],
+        "status": "✓"
+      },
+      {
+        "word": "red",
+        "expected": "adjective",
+        "actual": [
+          "adjective",
+          "noun"
+        ],
+        "status": "✓"
+      },
+      {
+        "word": "big",
+        "expected": "adjective",
+        "actual": [
+          "adjective",
+          "adverb"
+        ],
+        "status": "✓"
+      }
+    ],
+    "adverb": [
+      {
+        "word": "quickly",
+        "expected": "adverb",
+        "actual": [
+          "adverb"
+        ],
+        "status": "✓"
+      },
+      {
+        "word": "slowly",
+        "expected": "adverb",
+        "actual": [
+          "adverb"
+        ],
+        "status": "✓"
+      },
+      {
+        "word": "happily",
+        "expected": "adverb",
+        "actual": [
+          "adverb"
+        ],
+        "status": "✓"
+      }
+    ]
+  },
+  "edge_cases": [
+    {
+      "word": "nonexistentword12345",
+      "pos": [],
+      "concreteness": null,
+      "status": "✓"
+    },
+    {
+      "word": "a",
+      "pos": [
+        "noun"
+      ],
+      "concreteness": "mixed",
+      "status": "✓"
+    },
+    {
+      "word": "selfie",
+      "pos": [],
+      "concreteness": null,
+      "status": "✓"
+    },
+    {
+      "word": "cryptocurrency",
+      "pos": [],
+      "concreteness": null,
+      "status": "✓"
+    },
+    {
+      "word": "café",
+      "pos": [],
+      "concreteness": null,
+      "status": "✓"
+    }
+  ]
+}
