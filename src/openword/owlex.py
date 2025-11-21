@@ -128,6 +128,12 @@ class OwlexFilter:
             'multiWord': 'min_words',   # multiWord=true means min_words=2
             'requireSyllables': 'require_syllables',
             'preferBrysbaert': 'prefer_brysbaert',
+            'charPreset': 'char_preset',
+            'startsWith': 'starts_with',
+            'excludeStartsWith': 'exclude_starts_with',
+            'endsWith': 'ends_with',
+            'excludeEndsWith': 'exclude_ends_with',
+            'excludeContains': 'exclude_contains',
         }
 
         for old_key, value in config.items():
@@ -225,6 +231,7 @@ class OwlexFilter:
         word = entry['word']
         length = len(word)
 
+        # Length constraints
         if 'exact_length' in filters:
             if length != filters['exact_length']:
                 return False
@@ -237,22 +244,72 @@ class OwlexFilter:
             if length > filters['max_length']:
                 return False
 
+        # Character preset validation
+        if 'char_preset' in filters and filters['char_preset'] != 'any':
+            preset = filters['char_preset']
+            if preset == 'standard':
+                # Only lowercase letters (a-z)
+                if not all(c.islower() and c.isalpha() for c in word):
+                    return False
+            elif preset == 'contractions':
+                # Lowercase letters and apostrophes
+                if not all((c.islower() and c.isalpha()) or c == '\'' for c in word):
+                    return False
+            elif preset == 'alphanumeric':
+                # Lowercase letters and digits
+                if not all((c.islower() and c.isalpha()) or c.isdigit() for c in word):
+                    return False
+            elif preset == 'hyphenated':
+                # Lowercase letters and hyphens
+                if not all((c.islower() and c.isalpha()) or c == '-' for c in word):
+                    return False
+            elif preset == 'common-punct':
+                # Lowercase letters, apostrophes, and hyphens
+                if not all((c.islower() and c.isalpha()) or c in '\'-' for c in word):
+                    return False
+
+        # Legacy pattern support (for backwards compatibility)
         if 'pattern' in filters:
             if not re.match(filters['pattern'], word):
                 return False
 
+        # Starts with (OR logic - match ANY)
         if 'starts_with' in filters:
-            if not word.startswith(filters['starts_with']):
+            prefixes = filters['starts_with'] if isinstance(filters['starts_with'], list) else [filters['starts_with']]
+            if not any(word.startswith(prefix) for prefix in prefixes):
                 return False
 
+        # Doesn't start with (exclude ALL)
+        if 'exclude_starts_with' in filters:
+            prefixes = filters['exclude_starts_with'] if isinstance(filters['exclude_starts_with'], list) else [filters['exclude_starts_with']]
+            if any(word.startswith(prefix) for prefix in prefixes):
+                return False
+
+        # Ends with (OR logic - match ANY)
         if 'ends_with' in filters:
-            if not word.endswith(filters['ends_with']):
+            suffixes = filters['ends_with'] if isinstance(filters['ends_with'], list) else [filters['ends_with']]
+            if not any(word.endswith(suffix) for suffix in suffixes):
                 return False
 
+        # Doesn't end with (exclude ALL)
+        if 'exclude_ends_with' in filters:
+            suffixes = filters['exclude_ends_with'] if isinstance(filters['exclude_ends_with'], list) else [filters['exclude_ends_with']]
+            if any(word.endswith(suffix) for suffix in suffixes):
+                return False
+
+        # Contains (AND logic - must have ALL)
         if 'contains' in filters:
-            if filters['contains'] not in word:
+            sequences = filters['contains'] if isinstance(filters['contains'], list) else [filters['contains']]
+            if not all(seq in word for seq in sequences):
                 return False
 
+        # Doesn't contain (exclude any of these individual characters)
+        if 'exclude_contains' in filters:
+            excluded_chars = filters['exclude_contains']
+            if any(char in word for char in excluded_chars):
+                return False
+
+        # Legacy exclude_pattern support
         if 'exclude_pattern' in filters:
             if re.match(filters['exclude_pattern'], word):
                 return False

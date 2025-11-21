@@ -20,6 +20,8 @@
                     <select id="demo-select">
                         <option value="">Select a demo...</option>
                         <option value="wordle">Wordle Words</option>
+                        <option value="prefix-game">Prefix Game</option>
+                        <option value="no-special-chars">No Special Characters</option>
                         <option value="kids-nouns">Kids Game (Concrete Nouns)</option>
                         <option value="childrens-reading">Children's Reading</option>
                         <option value="scrabble">Scrabble Words</option>
@@ -160,7 +162,7 @@
                 <!-- Quick Filters Section -->
                 <section class="quick-filters-section">
                     <h2>Quick Filters</h2>
-                    <p class="hint">Instant toggles for common filters. Changes are applied immediately.</p>
+                    <p class="hint">Build a filter by selecting options below, then click "Add Filter" to apply.</p>
 
                     <div class="quick-filters-grid">
                         <!-- Word Type -->
@@ -181,6 +183,20 @@
                                 <button class="quick-filter-btn" data-value="required">Required</button>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Preview Panel -->
+                    <div class="quick-filter-preview" id="quick-filter-preview" style="display: none;">
+                        <div class="preview-header">
+                            <strong>Preview:</strong>
+                        </div>
+                        <div class="preview-content" id="quick-filter-description">
+                            No changes selected
+                        </div>
+                        <div class="preview-warning" id="quick-filter-warning" style="display: none;">
+                            ⚠️ <span id="quick-filter-warning-text"></span>
+                        </div>
+                        <button id="quick-filter-add" class="btn-primary quick-filter-add-btn" disabled>Add Filter</button>
                     </div>
                 </section>
 
