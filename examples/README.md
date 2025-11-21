@@ -365,7 +365,6 @@ chmod +x examples/*.sh
 ## See Also
 
 - **[FILTERING.md](../docs/FILTERING.md)** - Comprehensive filtering documentation
-- **[ANALYSIS_WORKFLOW.md](../docs/ANALYSIS_WORKFLOW.md)** - Analysis command guide
 - **[GAME_WORDS.md](../docs/GAME_WORDS.md)** - Game word filtering
 - **[SCHEMA.md](../docs/SCHEMA.md)** - Entry schema reference
 

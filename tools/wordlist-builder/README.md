@@ -105,10 +105,7 @@ If `build-statistics.json` cannot be loaded (e.g., file not generated yet), the 
 Once you have a specification file, use the `owlex` command to generate your word list:
 
 ```bash
-# Using Makefile
-make owlex-filter SPEC=wordlist-spec.json > words.txt
-
-# Or directly with owlex
+# Using owlex directly
 uv run python -m openword.owlex wordlist-spec.json > words.txt
 
 # With verbose output
@@ -127,7 +124,7 @@ make build-en
 make wordlist-builder-web
 
 # 3. Generate the word list
-make owlex-filter SPEC=wordlist-spec.json > my-words.txt
+uv run python -m openword.owlex wordlist-spec.json > my-words.txt
 
 # 4. Review results
 head -20 my-words.txt
@@ -757,7 +754,7 @@ cat > wordle-spec.json << 'EOF'
 EOF
 
 # Generate word list
-make owlex-filter SPEC=wordle-spec.json > wordle-words.txt
+uv run python -m openword.owlex wordle-spec.json > wordle-words.txt
 
 # Review
 head wordle-words.txt
@@ -767,7 +764,7 @@ head wordle-words.txt
 
 ```bash
 # Use example preset
-make owlex-filter SPEC=examples/wordlist-specs/kids-nouns.json > kids-words.txt
+uv run python -m openword.owlex examples/wordlist-specs/kids-nouns.json > kids-words.txt
 
 # Or use web builder to create custom specification:
 # make wordlist-builder-web
@@ -803,7 +800,7 @@ EOF
 make build-plus
 
 # Generate blocklist
-make owlex-filter SPEC=profanity-spec.json > profanity-blocklist.txt
+uv run python -m openword.owlex profanity-spec.json > profanity-blocklist.txt
 ```
 
 ---

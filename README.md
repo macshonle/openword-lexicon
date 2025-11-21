@@ -106,7 +106,7 @@ The builder creates JSON specifications that describe filtering criteria:
 
 ```bash
 # Generate word list from specification
-make owlex-filter SPEC=wordlist-spec.json > words.txt
+uv run python -m openword.owlex wordlist-spec.json > words.txt
 
 # With verbose output for debugging
 uv run python -m openword.owlex wordlist-spec.json --verbose --output words.txt

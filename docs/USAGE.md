@@ -567,13 +567,13 @@ The `owlex` CLI tool filters word lists using JSON specification files. See [Int
 
 ```bash
 # Filter using a specification file
-owlex filter wordlist-spec.json
+owlex wordlist-spec.json
 
 # Output to file
-owlex filter wordlist-spec.json > filtered_words.txt
+owlex wordlist-spec.json > filtered_words.txt
 
 # Use verbose mode to see filtering details
-owlex filter wordlist-spec.json --verbose
+owlex wordlist-spec.json --verbose
 ```
 
 ### Specification File Format

@@ -661,13 +661,13 @@ def main():
         epilog="""
 Examples:
   # Generate filtered word list
-  owlex filter wordlist-spec.json
+  owlex wordlist-spec.json
 
   # Save to file
-  owlex filter wordlist-spec.json --output kids-words.txt
+  owlex wordlist-spec.json --output kids-words.txt
 
   # Verbose output
-  owlex filter wordlist-spec.json --verbose
+  owlex wordlist-spec.json --verbose
 
   # Create specification with web interface
   open tools/wordlist-builder/web-builder.html

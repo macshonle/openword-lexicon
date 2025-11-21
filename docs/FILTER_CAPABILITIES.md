@@ -749,14 +749,14 @@ When filtering by metadata fields (POS, concreteness, labels):
 ### 4. Test Your Specifications
 ```bash
 # Generate and review output
-owlex filter spec.json --limit 100 > sample.txt
+owlex spec.json --limit 100 > sample.txt
 cat sample.txt
 
 # Check result count
-owlex filter spec.json | wc -l
+owlex spec.json | wc -l
 
 # Review with metadata
-owlex filter spec.json --format json | jq '.[0:10]'
+owlex spec.json --format json | jq '.[0:10]'
 ```
 
 ---
