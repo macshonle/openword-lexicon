@@ -8,6 +8,10 @@ This tool scans through the .xml.bz2 file and extracts the complete
 Usage:
     python tools/extract_wikitext.py INPUT.xml.bz2 OUTPUT_DIR WORD1 [WORD2 ...]
     python tools/extract_wikitext.py INPUT.xml.bz2 OUTPUT_DIR --words-file WORDLIST.txt
+    python tools/extract_wikitext.py INPUT.xml.bz2 OUTPUT_DIR --words-file WORDLIST.txt --update
+
+Options:
+    --update    Skip words that already have .xml files in OUTPUT_DIR
 
 Examples:
     # Extract specific words
@@ -17,6 +21,10 @@ Examples:
     # Extract from hotspot list
     python tools/extract_wikitext.py data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
         tests/wikitext-samples --words-file tests/hotspot-words.txt
+
+    # Update mode: only extract missing words
+    python tools/extract_wikitext.py data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
+        tests/wikitext-samples --words-file tests/hotspot-words.txt --update
 """
 
 import bz2
@@ -37,10 +45,39 @@ def load_words_from_file(filepath):
     return words
 
 
-def scan_and_extract(xml_path, output_dir, target_words):
+def filter_existing_words(target_words, output_dir):
+    """Filter out words that already have .xml files in output_dir."""
+    output_dir = Path(output_dir)
+    existing = []
+    missing = []
+
+    for word in target_words:
+        xml_file = output_dir / f"{word.lower()}.xml"
+        if xml_file.exists():
+            existing.append(word)
+        else:
+            missing.append(word)
+
+    return missing, existing
+
+
+def scan_and_extract(xml_path, output_dir, target_words, update_mode=False):
     """Scan XML dump and extract pages for target words."""
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    # In update mode, skip words that already have files
+    if update_mode:
+        missing_words, existing_words = filter_existing_words(target_words, output_dir)
+        if existing_words:
+            print(f"Update mode: Skipping {len(existing_words)} existing words:")
+            for word in sorted(existing_words):
+                print(f"  ✓ {word}.xml (already exists)")
+            print()
+        target_words = missing_words
+        if not target_words:
+            print("All words already extracted. Nothing to do.")
+            return set()
 
     # Convert to set for fast lookup (lowercase for case-insensitive matching)
     target_set = {word.lower() for word in target_words}
@@ -137,25 +174,35 @@ def main():
         print(f"Error: Input file not found: {xml_path}")
         sys.exit(1)
 
+    # Parse flags and words from arguments
+    args = sys.argv[3:]
+    update_mode = False
+    target_words = []
+
+    # Check for --update flag
+    if '--update' in args:
+        update_mode = True
+        args = [a for a in args if a != '--update']
+
     # Parse words from arguments or file
-    if len(sys.argv) > 3 and sys.argv[3] == '--words-file':
-        if len(sys.argv) < 5:
+    if len(args) > 0 and args[0] == '--words-file':
+        if len(args) < 2:
             print("Error: --words-file requires a filename argument")
             sys.exit(1)
-        words_file = Path(sys.argv[4])
+        words_file = Path(args[1])
         if not words_file.exists():
             print(f"Error: Words file not found: {words_file}")
             sys.exit(1)
         target_words = load_words_from_file(words_file)
         print(f"Loaded {len(target_words)} words from {words_file}")
     else:
-        target_words = sys.argv[3:]
+        target_words = args
 
     if not target_words:
         print("Error: No words specified")
         sys.exit(1)
 
-    scan_and_extract(xml_path, output_dir, target_words)
+    scan_and_extract(xml_path, output_dir, target_words, update_mode=update_mode)
 
 
 if __name__ == '__main__':
