@@ -87,7 +87,7 @@ const FILTER_TYPES = {
         requires: [],
         configFields: [
             { type: 'preset-select', name: 'charPreset', label: 'Allowed Characters', defaultValue: 'standard' },
-            { type: 'length-row', names: ['minLength', 'maxLength'], labels: ['Minimum Length', 'Maximum Length'], min: 1 },
+            { type: 'length-row', names: ['minLength', 'maxLength'], labels: ['Min Length', 'Max Length'], min: 1 },
             { type: 'text', name: 'startsWith', label: 'Starts With', placeholder: 'e.g., un,pre,re (comma-separated, matches any)', hint: 'Comma-separated prefixes - matches words starting with ANY of these' },
             { type: 'text', name: 'excludeStartsWith', label: 'Doesn\'t Start With', placeholder: 'e.g., x,z (comma-separated)', hint: 'Comma-separated prefixes to exclude' },
             { type: 'text', name: 'endsWith', label: 'Ends With', placeholder: 'e.g., ing,ed,s (comma-separated, matches any)', hint: 'Comma-separated suffixes - matches words ending with ANY of these' },
@@ -103,8 +103,7 @@ const FILTER_TYPES = {
         configFields: [
             { type: 'checkbox', name: 'multiWord', label: 'Multi-word phrases only', defaultChecked: true },
             { type: 'checkbox', name: 'singleWord', label: 'Single words only', defaultChecked: false },
-            { type: 'number', name: 'minWords', label: 'Minimum Words', min: 1, placeholder: 'e.g., 2' },
-            { type: 'number', name: 'maxWords', label: 'Maximum Words', min: 1, placeholder: 'e.g., 5' }
+            { type: 'length-row', names: ['minWords', 'maxWords'], labels: ['Min Words', 'Max Words'], min: 1 }
         ]
     },
     pos: {
@@ -185,8 +184,7 @@ const FILTER_TYPES = {
         icon: '🔢',
         requires: ['wiktionary'],
         configFields: [
-            { type: 'number', name: 'minSyllables', label: 'Minimum Syllables', min: 1, placeholder: 'e.g., 1' },
-            { type: 'number', name: 'maxSyllables', label: 'Maximum Syllables', min: 1, placeholder: 'e.g., 3' },
+            { type: 'length-row', names: ['minSyllables', 'maxSyllables'], labels: ['Min Syllables', 'Max Syllables'], min: 1 },
             { type: 'number', name: 'exact', label: 'Exact Syllables', min: 1, placeholder: 'e.g., 2 (overrides min/max)' },
             { type: 'checkbox', name: 'requireSyllables', label: 'Require syllable data (exclude words without syllable info)', defaultChecked: false }
         ]
