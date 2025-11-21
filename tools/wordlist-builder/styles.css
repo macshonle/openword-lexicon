@@ -228,47 +228,6 @@ body {
     font-weight: 600;
 }
 
-/* License Info */
-.license-info {
-    background: var(--bg-secondary);
-    padding: 1rem;
-    border-radius: var(--radius-md);
-}
-
-.license-result {
-    margin-bottom: 1rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.license-result strong {
-    color: var(--primary-color);
-    font-size: 0.9375rem;
-}
-
-.license-description {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-top: 0.25rem;
-}
-
-.license-details p {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-}
-
-.license-details ul {
-    list-style: none;
-    padding: 0;
-}
-
-.license-details li {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    padding: 0;
-}
-
 /* Right Panel */
 .right-panel {
     flex: 1;

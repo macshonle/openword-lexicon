@@ -1646,7 +1646,6 @@ function downloadJSON() {
 
 function updateUI() {
     updateSourceSummary();
-    updateLicenseInfo();
     updateFilterButtons();
     updateQuickFilters();
     updateFiltersList();
@@ -1681,41 +1680,19 @@ function updateSourceSummary() {
     // Compute real-time metadata coverage for ALL selected sources (including enrichment)
     const metadata = computeMetadataCoverage(dataSources);
 
-    // POS availability - depends on wiktionary or wordnet
-    const posAvailable = state.sources.wiktionary || state.sources.wordnet;
-    document.getElementById('pos-available').textContent = posAvailable && metadata
-        ? `Yes (${metadata.pos_tags.percentage}%)`
-        : posAvailable ? 'Yes' : 'No';
-
-    // Labels availability - depends on wiktionary
-    const labelsAvailable = state.sources.wiktionary;
-    document.getElementById('labels-available').textContent = labelsAvailable && metadata
-        ? `Yes (${metadata.any_labels.percentage}%)`
-        : labelsAvailable ? 'Yes' : 'No';
-
-    // Concreteness availability - depends on wordnet or brysbaert
-    const concretenessAvailable = state.sources.wordnet || state.sources.brysbaert;
-    document.getElementById('concreteness-available').textContent = concretenessAvailable && metadata
-        ? `Yes (${metadata.concreteness.percentage}%)`
-        : concretenessAvailable ? 'Yes' : 'No';
-
-    // Regional availability - depends on wiktionary
-    const regionalAvailable = state.sources.wiktionary;
-    document.getElementById('regional-available').textContent = regionalAvailable && metadata
-        ? `Yes (${metadata.region_labels.percentage}%)`
-        : regionalAvailable ? 'Yes' : 'No';
-}
-
-function updateLicenseInfo() {
-    const licenseResult = document.getElementById('license-result');
-    const licenseSources = document.getElementById('license-sources');
-
-    // Compute license using centralized function
-    const activeSources = getActiveSources();
-    const licenseInfo = computeLicense(activeSources);
-
-    licenseResult.innerHTML = `<strong>${licenseInfo.license}</strong><p class="license-description">${licenseInfo.licenseDesc}</p>`;
-    licenseSources.innerHTML = licenseInfo.sources.map(s => `<li>${s}</li>`).join('');
+    // Display word counts for each metadata type
+    if (metadata) {
+        document.getElementById('pos-available').textContent = metadata.pos_tags.count.toLocaleString();
+        document.getElementById('labels-available').textContent = metadata.any_labels.count.toLocaleString();
+        document.getElementById('concreteness-available').textContent = metadata.concreteness.count.toLocaleString();
+        document.getElementById('regional-available').textContent = metadata.region_labels.count.toLocaleString();
+    } else {
+        // Fallback when no metadata available
+        document.getElementById('pos-available').textContent = '0';
+        document.getElementById('labels-available').textContent = '0';
+        document.getElementById('concreteness-available').textContent = '0';
+        document.getElementById('regional-available').textContent = '0';
+    }
 }
 
 function updateFilterButtons() {
@@ -1801,28 +1778,19 @@ function updateFiltersList() {
 function updateResultsSummary() {
     const activeSources = getActiveSources();
 
-    // Map UI source names to data source names
-    const sourceMapping = {
-        'wiktionary': 'wikt',
-        'eowl': 'eowl',
-        'wordnet': 'wordnet',
-        'brysbaert': 'brysbaert',
-        'frequency': 'frequency'
-    };
-
-    // Get primary sources only (for word count)
-    const dataSources = activeSources.map(s => sourceMapping[s] || s);
-    // Note: 'enable' is validation-only, not a primary source
-    const primarySources = dataSources.filter(s => ['wikt', 'eowl'].includes(s));
-
-    // Calculate estimated word count using centralized function
-    const estimatedWords = estimateWordCount(primarySources);
-
     // Determine license using centralized function
     const licenseInfo = computeLicense(activeSources);
 
-    document.getElementById('result-word-count').textContent = estimatedWords > 0
-        ? `~${estimatedWords.toLocaleString()}`
-        : '0';
+    // Create clean source names list
+    const sourceNames = {
+        'wiktionary': 'Wiktionary',
+        'eowl': 'EOWL',
+        'wordnet': 'WordNet',
+        'brysbaert': 'Brysbaert',
+        'frequency': 'Frequency Data'
+    };
+    const sourcesList = activeSources.map(s => sourceNames[s] || s).join(', ');
+
     document.getElementById('result-license').textContent = licenseInfo.license;
+    document.getElementById('result-sources').textContent = sourcesList || 'None selected';
 }
