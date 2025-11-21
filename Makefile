@@ -116,7 +116,7 @@ $(WIKTIONARY_JSON): $(WIKTIONARY_DUMP)
 	@echo "Extracting Wiktionary..."
 	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
 	$(UV) run python tools/wiktionary_scanner_parser.py \
-		"$(WIKTIONARY_DUMP)" $(WIKTIONARY_JSON)"
+		"$(WIKTIONARY_DUMP)" "$(WIKTIONARY_JSON)"
 
 # Convenience target (will only rebuild if output missing or input newer)
 build-wiktionary-json: deps $(WIKTIONARY_JSON)
