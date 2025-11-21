@@ -83,9 +83,17 @@ fetch-en:
 # ===========================
 
 # Build English lexicon (unified pipeline)
+# Pipeline order:
+#   1. Ingest word sources (EOWL, Wiktionary, WordNet)
+#   2. Merge all sources
+#   3. WordNet POS backfill (concreteness deprecated)
+#   4. Brysbaert concreteness enrichment (PRIMARY source for concreteness)
+#   5. Frequency tiers
+#   6. Build trie
 build-en: fetch-en build-wiktionary-json
 	$(UV) run python src/openword/core_ingest.py
 	$(UV) run python src/openword/wikt_ingest.py
+	$(UV) run python src/openword/wordnet_source.py
 	$(UV) run python src/openword/merge_all.py
 	$(UV) run python src/openword/wordnet_enrich.py --unified
 	$(UV) run python src/openword/brysbaert_enrich.py --unified
@@ -197,6 +205,38 @@ validate-enable: deps
 		echo "ENABLE is optional - the lexicon builds successfully without it."; \
 		exit 1; \
 	fi
+
+# Validate profanity/offensive term labeling (optional validation)
+# ⚠️  WARNING: Downloads and analyzes lists with explicit/offensive content ⚠️
+validate-profanity: deps
+	@echo ""
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	@echo "⚠️  WARNING: PROFANITY VALIDATION - EXPLICIT CONTENT  ⚠️"
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	@echo ""
+	@echo "This validation compares our lexicon's vulgar/offensive labels"
+	@echo "against external profanity lists."
+	@echo ""
+	@bash scripts/fetch/fetch_profanity_lists.sh
+	@echo ""
+	@echo "Running validation..."
+	@$(UV) run python tools/validate_profanity_coverage.py
+
+# Validate childish term labeling (optional validation)
+validate-childish: deps
+	@echo "=== Validating childish term labeling ==="
+	@echo "This shows words labeled 'childish' in Wiktionary"
+	@echo "Useful for filtering in family games and educational apps"
+	@echo ""
+	@$(UV) run python tools/validate_childish_terms.py
+
+# Run all validation checks (ENABLE, profanity, childish)
+validate-all: validate-enable validate-profanity validate-childish
+	@echo ""
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	@echo "✓ All validation checks complete"
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
 
 # Run scanner parser in diagnostic mode
 diagnose-scanner: deps $(WIKTIONARY_DUMP)
