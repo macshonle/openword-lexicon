@@ -744,7 +744,18 @@ fn parse_entry(title: &str, text: &str) -> Option<Entry> {
     let is_technical = !domain.is_empty();
     let is_regional = labels.contains_key("region");
     let is_dated = temporal.contains(&"dated".to_string());
-    let is_inflected = text.contains("{{plural of|en|") || text.contains("{{past tense of|en|");
+    let is_inflected = text.contains("{{plural of|en|")
+        || text.contains("{{past tense of|en|")
+        || text.contains("{{past participle of|en|")
+        || text.contains("{{present participle of|en|")
+        || text.contains("{{comparative of|en|")
+        || text.contains("{{superlative of|en|")
+        || text.contains("{{inflection of|en|")
+        || text.contains("Category:English verb forms")
+        || text.contains("Category:English noun forms")
+        || text.contains("Category:English adjective forms")
+        || text.contains("Category:English adverb forms")
+        || text.contains("Category:English plurals");
 
     Some(Entry {
         word,
