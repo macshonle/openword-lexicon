@@ -35,10 +35,10 @@ class EntryMapper:
 
     def __init__(self, data_dir: Path, entries_file: Path):
         """
-        Initialize mapper by loading offset and count data.
+        Initialize mapper by loading offset and line list data.
 
         Args:
-            data_dir: Directory containing entry_offsets.bin and entry_counts.json
+            data_dir: Directory containing entry_offsets.bin and entry_line_lists.json
             entries_file: Path to wikt.jsonl file
         """
         self.data_dir = data_dir
@@ -50,12 +50,12 @@ class EntryMapper:
             offset_data = f.read()
             self.entry_offsets = struct.unpack(f'<{len(offset_data) // 4}I', offset_data)
 
-        # Load sparse counts (JSON)
-        counts_file = data_dir / "entry_counts.json"
-        with open(counts_file, 'r', encoding='utf-8') as f:
-            raw_counts = json.load(f)
+        # Load sparse line lists (JSON)
+        lists_file = data_dir / "entry_line_lists.json"
+        with open(lists_file, 'r', encoding='utf-8') as f:
+            raw_lists = json.load(f)
             # Convert string keys back to integers
-            self.entry_counts = {int(k): v for k, v in raw_counts.items()}
+            self.entry_line_lists = {int(k): v for k, v in raw_lists.items()}
 
         # Cache for random access to entries file
         self._entries_cache: Dict[int, Any] = {}
@@ -63,7 +63,7 @@ class EntryMapper:
         self._line_offsets: Optional[List[int]] = None
 
         print(f"Loaded mapping for {len(self.entry_offsets):,} words")
-        print(f"Multi-entry words: {len(self.entry_counts):,}")
+        print(f"Multi-entry words: {len(self.entry_line_lists):,}")
 
     def _build_line_index(self):
         """Build index of file offsets for each line (for random access)."""
@@ -92,7 +92,11 @@ class EntryMapper:
         if word_ordinal < 0 or word_ordinal >= len(self.entry_offsets):
             raise ValueError(f"Invalid word ordinal: {word_ordinal}")
 
-        return self.entry_counts.get(word_ordinal, 1)
+        # Multi-entry words have explicit line lists
+        if word_ordinal in self.entry_line_lists:
+            return len(self.entry_line_lists[word_ordinal])
+        else:
+            return 1
 
     def get_entries(self, word_ordinal: int) -> List[Dict[str, Any]]:
         """
@@ -110,14 +114,18 @@ class EntryMapper:
         # Build line index if needed
         self._build_line_index()
 
-        # Get offset and count
-        start_line = self.entry_offsets[word_ordinal]
-        count = self.entry_counts.get(word_ordinal, 1)
+        # Get line numbers to read
+        if word_ordinal in self.entry_line_lists:
+            # Multi-entry word: use explicit line list
+            line_numbers = self.entry_line_lists[word_ordinal]
+        else:
+            # Single-entry word: use offset directly
+            line_numbers = [self.entry_offsets[word_ordinal]]
 
         # Read entries
         entries = []
         with open(self.entries_file, 'r', encoding='utf-8') as f:
-            for line_num in range(start_line, start_line + count):
+            for line_num in line_numbers:
                 # Seek to line
                 f.seek(self._line_offsets[line_num])
                 line = f.readline()

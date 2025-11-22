@@ -3,7 +3,10 @@
 wikt_entry_mapper.py - Build word-to-entry offset mapping for trie lookups
 
 Reads wikt.jsonl and creates an efficient mapping from trie word ordinals
-to entry data, handling words with multiple entries using a sparse offset table.
+to entry data, handling words with multiple entries using sparse line lists.
+
+Note: Multi-entry words may have non-consecutive entries in the file, so we
+store explicit line number lists rather than just offsets+counts.
 
 Usage:
     python tools/wikt_entry_mapper.py [INPUT_FILE] [OUTPUT_DIR]
@@ -13,8 +16,8 @@ Arguments:
     OUTPUT_DIR  Output directory for mapping files (default: data/intermediate/en/)
 
 Outputs:
-    - entry_offsets.bin: Array of entry start indices (4 bytes × num_unique_words)
-    - entry_counts.json: Sparse map of {word_ordinal: count} for multi-entry words
+    - entry_offsets.bin: Array of first line numbers (4 bytes × num_unique_words)
+    - entry_line_lists.json: Sparse map {word_ordinal: [line_nums]} for multi-entry words
     - duplicate_analysis.txt: Statistics about duplicate word distribution
 """
 
@@ -67,7 +70,7 @@ def analyze_duplicates(input_file: Path) -> Tuple[Dict[str, List[int]], List[str
 def build_mapping_structures(
     word_to_lines: Dict[str, List[int]],
     ordered_words: List[str]
-) -> Tuple[List[int], Dict[int, int]]:
+) -> Tuple[List[int], Dict[int, List[int]]]:
     """
     Build sparse offset table structures.
 
@@ -76,29 +79,29 @@ def build_mapping_structures(
         ordered_words: List of unique words in order
 
     Returns:
-        Tuple of (entry_offsets, entry_counts)
-        - entry_offsets: List of starting line numbers for each word
-        - entry_counts: Sparse dict of {word_ordinal: count} for multi-entry words
+        Tuple of (entry_offsets, entry_line_lists)
+        - entry_offsets: List of starting line numbers for single-entry words
+        - entry_line_lists: Sparse dict of {word_ordinal: [line_numbers]} for multi-entry words
     """
     entry_offsets = []
-    entry_counts = {}
+    entry_line_lists = {}
 
     for ordinal, word in enumerate(ordered_words):
         lines = word_to_lines[word]
 
-        # Store the first line number as the offset
+        # Store the first line number as the offset (used for single-entry words)
         entry_offsets.append(lines[0])
 
-        # Only store count if > 1 (sparse)
+        # For multi-entry words, store ALL line numbers (sparse)
         if len(lines) > 1:
-            entry_counts[ordinal] = len(lines)
+            entry_line_lists[ordinal] = lines
 
-    return entry_offsets, entry_counts
+    return entry_offsets, entry_line_lists
 
 
 def write_mapping_files(
     entry_offsets: List[int],
-    entry_counts: Dict[int, int],
+    entry_line_lists: Dict[int, List[int]],
     output_dir: Path
 ):
     """Write mapping structures to disk."""
@@ -112,13 +115,13 @@ def write_mapping_files(
     print(f"✓ Wrote {len(entry_offsets):,} offsets to {offsets_file}")
     print(f"  File size: {offsets_file.stat().st_size / (1024*1024):.2f} MB")
 
-    # Write sparse counts as JSON
-    counts_file = output_dir / "entry_counts.json"
-    with open(counts_file, 'w', encoding='utf-8') as f:
-        json.dump(entry_counts, f, indent=2)
+    # Write sparse line lists as JSON
+    lists_file = output_dir / "entry_line_lists.json"
+    with open(lists_file, 'w', encoding='utf-8') as f:
+        json.dump(entry_line_lists, f, indent=2)
 
-    print(f"✓ Wrote {len(entry_counts):,} multi-entry counts to {counts_file}")
-    print(f"  File size: {counts_file.stat().st_size / 1024:.2f} KB")
+    print(f"✓ Wrote {len(entry_line_lists):,} multi-entry line lists to {lists_file}")
+    print(f"  File size: {lists_file.stat().st_size / 1024:.2f} KB")
 
 
 def write_duplicate_analysis(
@@ -215,11 +218,11 @@ def main():
 
     # Step 2: Build mapping structures
     print("\nBuilding mapping structures...")
-    entry_offsets, entry_counts = build_mapping_structures(word_to_lines, ordered_words)
+    entry_offsets, entry_line_lists = build_mapping_structures(word_to_lines, ordered_words)
 
     # Step 3: Write output files
     print("\nWriting output files...")
-    write_mapping_files(entry_offsets, entry_counts, output_dir)
+    write_mapping_files(entry_offsets, entry_line_lists, output_dir)
 
     # Step 4: Write analysis
     analysis_file = output_dir / "duplicate_analysis.txt"
@@ -230,8 +233,8 @@ def main():
     print("MAPPING COMPLETE")
     print("=" * 80)
     print(f"Unique words:           {len(ordered_words):>12,}")
-    print(f"Multi-entry words:      {len(entry_counts):>12,} ({len(entry_counts) / len(ordered_words) * 100:.1f}%)")
-    print(f"Total storage overhead: {(len(entry_offsets) * 4 + Path(output_dir / 'entry_counts.json').stat().st_size) / (1024*1024):>11.2f} MB")
+    print(f"Multi-entry words:      {len(entry_line_lists):>12,} ({len(entry_line_lists) / len(ordered_words) * 100:.1f}%)")
+    print(f"Total storage overhead: {(len(entry_offsets) * 4 + Path(output_dir / 'entry_line_lists.json').stat().st_size) / (1024*1024):>11.2f} MB")
     print()
 
     return 0
