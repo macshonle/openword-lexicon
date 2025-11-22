@@ -31,9 +31,12 @@ piss-easy
 
 # === EDGE CASES - is_derogatory ===
 taffy
+spade
+spook
 
 # === EDGE CASES - Polysemy (multiple entries per word) ===
 sat
+set
 sun
 may
 march

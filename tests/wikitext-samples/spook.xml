@@ -1,0 +1,230 @@
+<page>
+    <title>spook</title>
+    <ns>0</ns>
+    <id>76939</id>
+    <revision>
+      <id>87373768</id>
+      <parentid>87373742</parentid>
+      <timestamp>2025-10-09T06:25:09Z</timestamp>
+      <contributor>
+        <username>Box16</username>
+        <id>4143801</id>
+      </contributor>
+      <origin>87373768</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="9143" sha1="8ytpw9c7smvppxicqoiwq0q7q74owr7" xml:space="preserve">{{also|Spook}}
+
+==English==
+
+===Etymology===
+Borrowed from {{bor|en|nl|spook|t=ghost}}, from {{der|en|dum|spooc|t=spook, ghost}}. Cognate with {{cog|gml|spôk}}, {{m|gml|spûk|t=apparition, ghost}}, {{cog|gmh|gespük|t=a haunting}}, {{cog|de|Spuk}}, {{cog|da|spøge|t=to haunt}}, {{cog|sv|spöke|t=ghost}}.
+
+===Pronunciation===
+* {{enPR|spo͞ok}}, {{IPA|en|/spuːk/}}
+** {{audio|en|En-au-spook.ogg|a=AU}}
+** {{rhymes|en|uːk|s=1}}
+* {{enPR|spo͝ok}}, {{IPA|en|/spʊk/|ref={{R:en:McDavid:1979|13|116}}|aa=&lt;&lt;US&gt;&gt; &lt;&lt;dialectal&gt;&gt;}}
+
+===Noun===
+{{en-noun}}
+
+# {{lb|en|informal}} A [[ghost]] or [[phantom]].
+#: {{syn|en|Thesaurus:ghost}}
+#: {{ux|en|The building was haunted by a couple of '''spooks'''.}}
+#* {{RQ:Doyle Land of Mist|passage=&quot;I'll say what I think, no more and no less, and I won't be scared by you or your '''spooks''' into altering my opinions.&quot;}}
+# A [[hobgoblin]]. {{rfv-sense|en}}
+# {{lb|en|informal}} A [[scare]] or [[fright]].
+#: {{ux|en|The big spider gave me a '''spook'''.}}
+# {{lb|en|espionage|slang}} An [[undercover]] [[agent]], [[spy]]{{,}} or [[intelligence analyst]].
+#* {{quote-web|en|date=24 July 2009|title=Spies like them|work=BBC News Magazine|passage=From Ian Fleming to John Le Carre - authors have long been fascinated by the world of espionage. But, asks the BBC’s Gordon Corera, what do real life '''spooks''' make of fictional spies?}}
+#* {{quote-journal|en|date=Oct 13th 2012|work=The Economist|url=http://www.economist.com/node/21564585|title=Huawei and ZTE: Put on hold|passage=The congressional study frets that Huawei’s and ZTE’s products could be used as Trojan horses by Chinese '''spooks'''.}}
+#* {{quote-journal|en|date=2025-09-23|title=Six books to read to understand Europe’s hard right|work=The Economist|url=https://www.economist.com/culture/2025/09/23/six-books-to-read-to-understand-europes-hard-right|issn=0013-0613|passage=The hard right is on the march in Europe. The Alternative for Germany, a party declared extremist by domestic '''spooks''', scored a record result in a national election in February.}}
+# {{lb|en|slang|dated|offensive|ethnic slur}} A black person.
+#* {{quote-av|en|year=1976|title=w:Taxi Driver|writer=w:Paul Schrader|role=Travis Bickle|actor=Robert De Niro|passage=Some won't take '''spooks'''—hell, don't make no difference to me.}}
+#* {{quote-book|en|author=Don Spears|title=Playing for Keeps|year=2002|month=February|publisher=Milligan Books|location=Los Angeles|url=https://archive.org/details/isbn_9781881524526|isbn=1881524523|oclc=52631084|page=179|pageurl=https://archive.org/details/isbn_9781881524526/page/179|passage=&quot;{{...}} Dryades Street and that whole uptown neighborhood is gonna be worth a fortune once the white people take it back from you '''spooks''' and develop it. {{...}}&quot;}}
+# {{lb|en|philosophy}} A [[metaphysical]] [[manifestation]]; an [[artificial]] [[distinction]] or [[construct]].
+#* {{quote-book|en|title2={{w|The Ego and Its Own|The Ego and His Own}}|author=w:Max Stirner|translator=Steven T. Byington|publisher2=Dover|year2=2005|year=1845|title=Der Einzige und sein Eigentum|passage=He who is infatuated with ''Man'' leaves persons out of account so far as that infatuation extends, and floats in an ideal, sacred interest. ''Man'', you see, is not a person, but an ideal, a '''spook'''.}}
+# {{lb|en|US|slang|medicine}} A [[psychiatrist]].
+#* {{quote-text|en|year=1975|author=Robert O. Pasnau|title=Consultation-Liaison Psychiatry|page=124
+|passage=Commonly, the surgeons view nonsurgeons with disdain. The most disdain is directed toward the “shrinks” or the “'''spooks''',” as the psychiatrists are called.}}
+# {{lb|en|slang|gambling}} A player who engages in [[hole carding]] by attempting to glimpse the dealer's [[hole card]] when the dealer checks under an ace or a 10 to see if a [[blackjack]] is present.
+
+====Translations====
+{{trans-top|ghost or phantom}}
+* Bulgarian: {{t+|bg|при́зрак|m}}, {{t+|bg|дух|m}}
+* Chichewa: {{t|ny|mzukwa|3}}
+* Dutch: {{t+|nl|spook|n}}, {{t+|nl|schijnsel|n}}, {{t+|nl|geest}}
+* Finnish: {{t+|fi|haamu}}, {{t+|fi|aave}}, {{t+|fi|kummitus}}
+* French: {{t+|fr|fantôme|m}}, {{t+|fr|revenant|m}}
+* Georgian: {{t|ka|მოჩვენება}}, {{t|ka|მოლანდება}}
+* German: {{t+|de|Geist|m}}, {{t+|de|Phantom|n}}, {{t+|de|Gespenst|n}}
+* Indonesian: {{t+|id|hantu}}
+* Maori: {{t|mi|mangumangu taipō}}, {{t|mi|taipō}}
+* Plautdietsch: {{t|pdt|Spuak|m}}
+* Romanian: {{t+|ro|stafie|f}}, {{t+|ro|fantomă|f}}
+* Russian: {{t+|ru|при́зрак|m}}
+* Swedish: {{t+|sv|spöke|n}}, {{t|sv|osalig ande}}
+* Turkish: {{t+|tr|hayalet|s}}
+{{trans-bottom}}
+
+{{trans-top|hobgoblin}}
+* Bulgarian: {{t+|bg|таласъ́м|m}}
+* Dutch: {{t+|nl|kabouter|c}}
+* Finnish: {{t+|fi|peikko}}
+* German: {{t+|de|Kobold|m}}, {{t+|de|Wicht|m}}
+* Maori: {{t|mi|taipō}}
+* Romanian: {{t+|ro|spiriduș|m}}
+{{trans-bottom}}
+
+{{trans-top|spy}}
+* Dutch: {{t+|nl|spion|c}}, {{t+|nl|verspieder|c}}
+* Finnish: {{t+|fi|vakooja}}
+* French: {{t+|fr|barbouze|m}}, {{t+|fr|espion}}
+* Georgian: {{t|ka|შპიონი}}, {{t+|ka|ჯაშუში}}, {{t|ka|მსტოვარი}}
+* German: {{t|de|Geheimagent|m}}, {{t+|de|Spion|m}}
+* Occitan: {{t+|oc|espia|m}}, {{t+|oc|espion|m}}
+* Romanian: {{t+|ro|spion|m}}
+* Russian: {{t+|ru|шпио́н|m}}
+{{trans-bottom}}
+
+{{trans-top|pejorative: black person}}
+* Chinese:
+*: Mandarin: {{t+|cmn|黑鬼|tr=hēiguǐ}}
+* Dutch: {{t+|nl|nikker|m}}
+* French: {{t+|fr|bamboula|m}}
+* Russian: {{t+|ru|ни́ггер|m}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* German: {{t+check|de|Spuk}}
+* Italian: {{t+check|it|spettro}}, {{t+check|it|fantasma}}
+{{trans-bottom}}
+
+===Verb===
+{{en-verb}}
+
+# {{lb|en|transitive}} To frighten or make nervous (especially by startling).
+#: {{ux|en|The hunters were '''spooked''' when the black cat crossed their path. The movement in the bushes '''spooked''' the deer and they ran.}}
+#* {{quote-journal|en|date=2022 August 10|title=Stop &amp; Examine|journal=RAIL|issue=963|page=71|text=As that was happening, an East Midlands train came through at 90mph. George [a Labrador] was '''spooked''' as the train went past him and ran backwards across the neighbouring slow lines and off towards the sidings.}}
+# {{lb|en|intransitive}} To become [[frighten]]ed (by something startling).
+#: {{ux|en|The deer '''spooked''' at the sound of the dogs.}}
+# {{lb|en|transitive}} To [[haunt]].
+
+====Derived terms====
+{{col4|en|spookhouse|spookiness|spookish|spookmaster|spook out|spooky|suspook}}
+
+====Translations====
+{{trans-top|to scare or frighten}}
+* Finnish: {{t+|fi|säikäyttää}} {{qualifier|causative}}, {{t+|fi|säikytellä}} {{qualifier|frequentative}}, {{t+|fi|pelästyttää}} {{qualifier|causative}}
+* Maori: {{t|mi|whakamataku}}, {{t|mi|whakaohorere}}
+* Romanian: {{t+|ro|speria}}
+* Russian: {{t+|ru|пуга́ть}}, {{t+|ru|вспугивать}}
+* Spanish: {{t+|es|sobresaltar}}, {{t+|es|asustar}}, {{t+|es|espantar}}, {{t+|es|aterrorizar}}
+* Swedish: {{t+|sv|skrämma}}
+* Ukrainian: {{t|uk|зляка́ти|pf}}
+{{trans-bottom}}
+
+===References===
+&lt;references/&gt;
+
+===Further reading===
+* {{pedia|ghost}}
+* {{R:OneLook}}
+
+===Anagrams===
+* {{anagrams|en|a=koops|Koops|SOKOP|Sopko}}
+
+{{C|en|Fear|Ghosts|Occupations|People}}
+
+==Afrikaans==
+
+===Etymology===
+From {{inh|af|nl|spook}}, from {{inh|af|dum|spoke}}, {{m|dum|spooc}}, from {{inh|af|gem-pro|*spōk}}.
+
+===Pronunciation===
+* {{IPA|af|/spʊə̯k/}}
+
+===Noun===
+{{af-noun|spoke|spokie}}
+
+# [[ghost]], [[phantom]]
+
+====Descendants====
+* {{desc|nd|isipoko|bor=1}}
+* {{desc|xh|isiporho|bor=1}}
+* {{desc|zu|isipoki|bor=1}}
+
+{{C|af|Ghosts}}
+
+==Dutch==
+
+===Pronunciation===
+* {{IPA|nl|/spoːk/}}
+* {{audio|nl|Nl-spook.ogg}}
+* {{hyphenation|nl|spook}}
+* {{rhyme|nl|oːk|s=1}}
+
+===Etymology 1===
+From {{inh|nl|dum|spoke}}, {{m|dum|spooc}}, from {{m|dum|spoke}}, {{m|dum|spoocke}}, {{m|dum|spoicke|t=wizardry, witchcraft}}, from {{inh|nl|gem-pro|*spōk}}. Further etymology unclear. Cognate with {{cog|gml|spôk}}, {{cog|nds|spôk}}, {{cog|gmh|Spuch}}, and {{cog|de|Spuk}}.
+
+====Noun====
+[[Image:Spöke, av alers.png|thumb|250px|''Een spook zoals dat vaak in een kinderboek getekend wordt.''&lt;br&gt;A ghost such as is often drawn in a children's book.]]
+{{nl-noun|n|-en|+}}
+
+# [[phantom]], [[ghost]]
+#: {{uxi|nl|Geloof je in '''spoken'''?|Do you believe in '''ghosts'''?}}
+# spectre, [[horror]], [[terror]]
+#: {{uxi|nl|het '''spook''' van de oorlog|the horror of war}}
+# an imaginary horror, conceptual [[nightmare]]
+# an [[annoying]] and [[intolerable]] woman
+
+=====Synonyms=====
+* {{l|nl|geest}}
+* {{l|nl|fantoom}}
+
+=====Derived terms=====
+{{col|nl
+|gootspook
+|nachtspook
+|spokenjager
+|spookambtenaar
+|spookdier
+|spookdorp
+|spookhuis
+|spookrijden
+|spookrijder
+|spookschip
+|spookslot
+|spookstad
+|spooktrein
+|spookuur
+|spookverhaal
+|spookwoord
+}}
+
+=====Descendants=====
+* {{desctree|af|spook}}
+* {{desc|dcr|spook}}
+* {{desc|en|spook|bor=1}}
+* {{desc|bor=1|pap|spoki|spooki}}
+
+===Etymology 2===
+{{nonlemma}}
+
+====Verb====
+{{head|nl|verb form}}
+
+# {{infl of|nl|spoken||bare-verb}}
+
+{{C|nl|Ghosts}}
+
+==Middle English==
+
+===Noun===
+{{head|enm|noun}}
+
+# {{alternative form of|enm|spoke}}</text>
+      <sha1>8ytpw9c7smvppxicqoiwq0q7q74owr7</sha1>
+    </revision>
+  </page>
