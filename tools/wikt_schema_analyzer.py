@@ -193,19 +193,23 @@ def print_progress(aggregate: Dict[str, Set[Any]], entry_count: int, last_line_c
     return len(lines)
 
 
-def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int):
+def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int) -> int:
     """
     Print final aggregate with all unique values on single lines.
 
     Format:
-    - Non-integers: path: "val1", "val2", "val3" (count)
+    - Non-integers: path: "val1", "val2", "val3" (count ~ bits)
     - Integers: path: 1-3,5,7-9 (range ~ bits)
+
+    Returns:
+        Total bit count across all paths
     """
     print(f"\n{'='*80}")
     print(f"FINAL AGGREGATE - {entry_count:,} entries analyzed")
     print(f"{'='*80}\n")
 
     sorted_paths = sorted(aggregate.keys())
+    total_bits = 0
 
     for path in sorted_paths:
         values = aggregate[path]
@@ -218,6 +222,13 @@ def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int):
             # For integer-only sets, use range compression
             range_str = format_integer_range(set(non_null_values))
             print(f"{path}: {range_str}")
+
+            # Calculate bits for integers (based on range)
+            min_val = min(non_null_values)
+            max_val = max(non_null_values)
+            v = max_val - min_val
+            bits = math.ceil(math.log2(v)) if v > 0 else 0
+            total_bits += bits
         else:
             # Sort values for consistent output
             try:
@@ -226,11 +237,18 @@ def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int):
                 # If values aren't comparable, convert to strings for sorting
                 sorted_values = sorted(values, key=lambda x: (x is None, str(type(x)), str(x)))
 
-            # Format all values inline (comma-separated, with count)
+            # Format all values inline (comma-separated, with count and bits)
             formatted_values = [format_value(v) for v in sorted_values]
             values_str = ", ".join(formatted_values)
             count = len(sorted_values)
-            print(f"{path}: {values_str} ({count})")
+
+            # Calculate bits for non-integers (based on count)
+            bits = math.ceil(math.log2(count)) if count > 1 else 0
+            total_bits += bits
+
+            print(f"{path}: {values_str} ({count} ~ {bits} bit{'s' if bits != 1 else ''})")
+
+    return total_bits
 
 
 def main():
@@ -288,7 +306,7 @@ def main():
             sys.stdout.write('\033[K')  # Clear line
 
     # Final output
-    print_final_aggregate(aggregate, entry_count)
+    total_bits = print_final_aggregate(aggregate, entry_count)
 
     # Summary stats
     print(f"{'='*80}")
@@ -297,6 +315,7 @@ def main():
     print(f"Total entries analyzed: {entry_count:,}")
     print(f"Total unique paths: {len(aggregate):,}")
     print(f"Total unique values (across all paths): {sum(len(v) for v in aggregate.values()):,}")
+    print(f"Total bits: {total_bits}")
     print()
 
     return 0
