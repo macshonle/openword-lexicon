@@ -96,6 +96,7 @@ check-pnpm:
 #   4. Brysbaert concreteness enrichment (PRIMARY source for concreteness)
 #   5. Frequency tiers
 #   6. Build trie
+#   7. Generate build statistics (MUST run after all enrichment)
 build-en: fetch-en build-wiktionary-json
 	$(UV) run python src/openword/core_ingest.py
 	$(UV) run python src/openword/wikt_ingest.py
@@ -105,6 +106,7 @@ build-en: fetch-en build-wiktionary-json
 	$(UV) run python src/openword/brysbaert_enrich.py --unified
 	$(UV) run python src/openword/frequency_tiers.py --unified
 	$(UV) run python src/openword/trie_build.py --unified
+	$(UV) run python src/openword/generate_statistics.py
 
 # Build Wiktionary JSONL using lightweight scanner parser (file-based dependency)
 $(WIKTIONARY_JSON): $(WIKTIONARY_DUMP)

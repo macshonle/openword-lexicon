@@ -30,7 +30,6 @@ from typing import Dict, List, Set
 import orjson
 
 from openword.progress_display import ProgressDisplay
-from openword import build_stats
 
 
 logging.basicConfig(
@@ -218,23 +217,6 @@ def write_merged(entries: Dict[str, dict], output_path: Path):
     logger.info(f"Written: {output_path}")
 
 
-def generate_build_statistics(entries: Dict[str, dict]):
-    """Generate build statistics JSON file for word list builder."""
-    project_root = Path(__file__).parent.parent.parent
-    stats_output = project_root / "tools" / "wordlist-builder" / "build-statistics.json"
-
-    logger.info("")
-    logger.info("Generating build statistics...")
-
-    stats = build_stats.generate_and_write_statistics(entries, stats_output)
-
-    # Print the JSON output to console (pretty-printed)
-    logger.info("")
-    print(json.dumps(stats, indent=2))
-    logger.info("")
-    logger.info(f"Statistics written to: {stats_output}")
-
-
 def main():
     """Main unified merge pipeline."""
     data_root = Path(__file__).parent.parent.parent / "data"
@@ -294,9 +276,6 @@ def main():
     # Write output
     unified_output = intermediate_dir / "entries_merged.jsonl"
     write_merged(unified, unified_output)
-
-    # Generate build statistics
-    generate_build_statistics(unified)
 
     logger.info("")
     logger.info("=== Unified merge complete ===")
