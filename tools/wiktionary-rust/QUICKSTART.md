@@ -1,23 +1,23 @@
 # Wiktionary Rust Parser - Quick Start
 
-## What Was Created
+## Overview
 
-This spike implements a high-performance Rust version of the Wiktionary XML parser to potentially reduce processing time from ~15 minutes to ~3 minutes.
+High-performance Rust implementation of the Wiktionary XML parser, now integrated as the default parser in the build pipeline. Reduces processing time from ~15 minutes to ~2-3 minutes (5-10x faster than Python).
 
-## Files Created
+## Files
 
 ```
 tools/wiktionary-rust/
 ├── Cargo.toml              # Rust dependencies and build config
 ├── src/
-│   └── main.rs             # Complete parser implementation (~610 lines)
+│   └── main.rs             # Complete parser implementation (~850 lines)
 ├── README.md               # Detailed documentation
 └── QUICKSTART.md           # This file
 ```
 
-## Quick Test (No Data File Needed)
+## Building the Scanner
 
-Since you don't have the data file available on this machine, you can still:
+To build or rebuild the Rust scanner:
 
 1. **Verify it builds:**
    ```bash
@@ -35,13 +35,22 @@ Since you don't have the data file available on this machine, you can still:
    ./target/release/wiktionary-rust --help
    ```
 
-## Usage When You Have Data
+## Usage
+
+The Rust scanner is automatically used by the Makefile:
+
+```bash
+# Build via Makefile (recommended)
+make build-wiktionary-json
+```
+
+Or run directly:
 
 ```bash
 # From repo root
 tools/wiktionary-rust/target/release/wiktionary-rust \
     data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
-    data/intermediate/en/wikt-rust.jsonl
+    data/intermediate/en/wikt.jsonl
 ```
 
 ## Expected Performance
@@ -53,27 +62,26 @@ tools/wiktionary-rust/target/release/wiktionary-rust \
 
 ## What's Implemented
 
-✅ Core features:
+✅ **Full feature parity with Python version** - All features implemented:
 - BZ2 decompression
 - Streaming XML scanning
 - English section extraction
 - POS tag extraction
-- Label extraction (register, temporal, domain)
+- Label extraction (register, temporal, domain, region)
 - Boolean properties (archaic, vulgar, informal, etc.)
+- Syllable count extraction (hyphenation, rhymes, categories)
+- Morphology/etymology parsing (prefix, suffix, affix, compound, confix)
+- Phrase type detection (idiom, proverb, prepositional phrase, etc.)
+- Unicode normalization (Latin Extended support: 0x00C0-0x024F)
 - Compatible JSONL output
 
-❌ Omitted for spike (can be added later):
-- Syllable count extraction
-- Morphology/etymology parsing
-- Phrase type detection
-- Advanced Unicode edge cases
+## Status
 
-## Next Steps
-
-1. **Benchmark** - Run on actual data file and measure speedup
-2. **Validate** - Compare output with Python version
-3. **Decide** - If >5x faster, add missing features and integrate
-4. **Document** - Update build pipeline documentation
+✅ **Integrated into build pipeline** - The Rust scanner is now the default:
+- Makefile uses Rust scanner for `build-wiktionary-json` target
+- Python version remains available for reference/testing
+- Full feature parity achieved
+- Significant performance improvement (5-10x faster than Python)
 
 ## Quick Comparison Test
 
@@ -109,9 +117,9 @@ head -5 /tmp/python-1k.jsonl
 - Try with `--limit 10` first to test quickly
 
 **Output differences:**
-- Rust version omits some fields (syllables, morphology) - this is expected
-- Word counts and POS tags should match
-- Small differences in label extraction are acceptable for spike
+- Rust and Python versions produce functionally equivalent output
+- Rust version accepts slightly wider range of punctuation (~0.1% more entries, primarily idioms/proverbs with commas)
+- All core fields (word, POS, labels, syllables, morphology, phrase_type) are present in both versions
 
 ## Documentation
 

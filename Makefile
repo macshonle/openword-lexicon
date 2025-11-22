@@ -101,7 +101,7 @@ check-cargo:
 #
 # Build command: cd tools/wiktionary-rust && cargo build --release
 # Binary output: tools/wiktionary-rust/target/release/wiktionary-rust
-$(RUST_SCANNER): tools/wiktionary-rust/Cargo.toml tools/wiktionary-rust/src/main.rs check-cargo
+$(RUST_SCANNER): tools/wiktionary-rust/Cargo.toml tools/wiktionary-rust/src/main.rs | check-cargo
 	@echo "Building Rust scanner (release mode)..."
 	cd tools/wiktionary-rust && cargo build --release
 	@echo "Rust scanner built: $(RUST_SCANNER)"
