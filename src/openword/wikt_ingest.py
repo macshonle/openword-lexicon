@@ -3,7 +3,7 @@
 wikt_ingest.py — Parse Wiktionary extractions and normalize to schema.
 
 Reads:
-  - data/intermediate/en/wikt.jsonl (from custom scanner parser)
+  - data/intermediate/en/wikt.jsonl (from Rust scanner: tools/wiktionary-rust)
 
 Outputs:
   - data/intermediate/en/wikt_entries.jsonl
@@ -18,8 +18,8 @@ Maps scanner parser output to our schema with:
   - Syllable counts
 
 Note: wiktextract was initially considered but replaced with a custom
-scanner parser (wiktionary_scanner_parser.py) for better performance
-and control. This module processes output from that custom parser.
+Rust scanner (tools/wiktionary-rust/target/release/wiktionary-rust) for better
+performance and control. This module processes output from that scanner.
 """
 
 import json
@@ -550,7 +550,7 @@ def main():
     entries_dict = read_wiktionary_jsonl(input_path)
 
     if not entries_dict:
-        logger.error("No entries found. Run wiktionary_scanner_parser.py on the Wiktionary dump first.")
+        logger.error("No entries found. Run 'make build-wiktionary-json' to extract Wiktionary data first.")
         sys.exit(1)
 
     # Convert to sorted list
