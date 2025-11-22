@@ -198,7 +198,8 @@ def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int) -> i
     Print final aggregate with all unique values on single lines.
 
     Format:
-    - Non-integers: path: "val1", "val2", "val3" (count ~ bits)
+    - Label paths: path: "val1", "val2", "val3" (count = count bits)
+    - Other non-integers: path: "val1", "val2" (count ~ bits)
     - Integers: path: 1-3,5,7-9 (range ~ bits)
 
     Returns:
@@ -242,11 +243,17 @@ def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int) -> i
             values_str = ", ".join(formatted_values)
             count = len(sorted_values)
 
-            # Calculate bits for non-integers (based on count)
-            bits = math.ceil(math.log2(count)) if count > 1 else 0
-            total_bits += bits
-
-            print(f"{path}: {values_str} ({count} ~ {bits} bit{'s' if bits != 1 else ''})")
+            # Calculate bits: labels use count directly, others use log2
+            if path.startswith("labels_"):
+                # Label paths: any combination possible, so count = bits
+                bits = count
+                total_bits += bits
+                print(f"{path}: {values_str} ({count} = {bits} bit{'s' if bits != 1 else ''})")
+            else:
+                # Non-label paths: use log2 for encoding
+                bits = math.ceil(math.log2(count)) if count > 1 else 0
+                total_bits += bits
+                print(f"{path}: {values_str} ({count} ~ {bits} bit{'s' if bits != 1 else ''})")
 
     return total_bits
 
