@@ -3,7 +3,7 @@
 wikt_ingest.py — Parse Wiktionary extractions and normalize to schema.
 
 Reads:
-  - data/intermediate/en/wikt.jsonl (from Rust scanner: tools/wiktionary-rust)
+  - data/intermediate/en/wikt-sorted.jsonl (sorted by word, from wikt_sort.py)
 
 Outputs:
   - data/intermediate/en/wikt_entries.jsonl
@@ -16,6 +16,10 @@ Maps scanner parser output to our schema with:
   - Lemmatization info
   - Morphology data (derivation, compounds, affixes)
   - Syllable counts
+
+The input file is pre-sorted lexicographically by word, which ensures:
+  1. Duplicate entries for the same word are consecutive (efficient merging)
+  2. Consistent ordering with downstream trie construction
 
 Note: wiktextract was initially considered but replaced with a custom
 Rust scanner (tools/wiktionary-rust/target/release/wiktionary-rust) for better
@@ -541,19 +545,19 @@ def main():
     # Paths
     data_root = Path(__file__).parent.parent.parent / "data"
     intermediate_dir = data_root / "intermediate" / "en"
-    input_path = intermediate_dir / "wikt.jsonl"
+    input_path = intermediate_dir / "wikt-sorted.jsonl"
     output_path = intermediate_dir / "wikt_entries.jsonl"
 
     logger.info("Wiktionary ingestion (English)")
 
-    # Read scanner parser output
+    # Read scanner parser output (already sorted by word)
     entries_dict = read_wiktionary_jsonl(input_path)
 
     if not entries_dict:
         logger.error("No entries found. Run 'make build-wiktionary-json' to extract Wiktionary data first.")
         sys.exit(1)
 
-    # Convert to sorted list
+    # Convert to list (already in lexicographic order from sorted input)
     entries = [entries_dict[word] for word in sorted(entries_dict.keys())]
 
     # Write output

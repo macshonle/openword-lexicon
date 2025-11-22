@@ -17,6 +17,7 @@ SLICES_DIR := data/diagnostic/wikt_slices
 # Build artifacts
 WIKTIONARY_DUMP := $(RAW_DIR)/$(LEXICON_LANG)wiktionary-latest-pages-articles.xml.bz2
 WIKTIONARY_JSON := $(INTERMEDIATE_DIR)/wikt.jsonl
+WIKTIONARY_JSON_SORTED := $(INTERMEDIATE_DIR)/wikt-sorted.jsonl
 FREQUENCY_DATA := $(RAW_DIR)/$(LEXICON_LANG)_50k.txt
 WORDNET_ARCHIVE := $(RAW_DIR)/english-wordnet-2024.tar.gz
 UNIFIED_TRIE := $(BUILD_DIR)/$(LEXICON_LANG).trie
@@ -115,14 +116,16 @@ build-rust-scanner: $(RUST_SCANNER)
 
 # Build English lexicon (unified pipeline)
 # Pipeline order:
-#   1. Ingest word sources (EOWL, Wiktionary, WordNet)
-#   2. Merge all sources
-#   3. WordNet POS backfill (concreteness deprecated)
-#   4. Brysbaert concreteness enrichment (PRIMARY source for concreteness)
-#   5. Frequency tiers
-#   6. Build trie
-#   7. Generate build statistics (MUST run after all enrichment)
-build-en: fetch-en build-wiktionary-json
+#   0. Extract Wiktionary to wikt.jsonl (unsorted, XML order)
+#   1. Sort Wiktionary entries by word (creates wikt-sorted.jsonl)
+#   2. Ingest word sources (EOWL, Wiktionary, WordNet)
+#   3. Merge all sources
+#   4. WordNet POS backfill (concreteness deprecated)
+#   5. Brysbaert concreteness enrichment (PRIMARY source for concreteness)
+#   6. Frequency tiers
+#   7. Build trie
+#   8. Generate build statistics (MUST run after all enrichment)
+build-en: fetch-en $(WIKTIONARY_JSON_SORTED)
 	$(UV) run python src/openword/core_ingest.py
 	$(UV) run python src/openword/wikt_ingest.py
 	$(UV) run python src/openword/wordnet_source.py
@@ -134,10 +137,18 @@ build-en: fetch-en build-wiktionary-json
 	$(UV) run python src/openword/generate_statistics.py
 
 # Build Wiktionary JSONL using Rust scanner (file-based dependency)
+# Outputs wikt.jsonl in unsorted XML source order (kept for traceability)
 $(WIKTIONARY_JSON): $(WIKTIONARY_DUMP) $(RUST_SCANNER)
 	@echo "Extracting Wiktionary (using Rust scanner)..."
 	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
 	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" "$(WIKTIONARY_JSON)"
+
+# Sort Wiktionary entries lexicographically by word
+# This ensures: 1) duplicate entries are consecutive, 2) trie ordinal = line number
+# Sorting logic matches trie_build.py exactly (Python's default lexicographic sort)
+$(WIKTIONARY_JSON_SORTED): $(WIKTIONARY_JSON)
+	@echo "Sorting Wiktionary entries by word..."
+	$(UV) run python src/openword/wikt_sort.py
 
 # Convenience target (will only rebuild if output missing or input newer)
 build-wiktionary-json: $(WIKTIONARY_JSON)
