@@ -13,9 +13,10 @@ Arguments:
 """
 
 import json
+import math
 import sys
 from pathlib import Path
-from typing import Dict, Set, Any
+from typing import Dict, Set, Any, List
 from collections import defaultdict
 
 
@@ -28,7 +29,7 @@ def flatten_entry(entry: dict, prefix: str = "") -> Dict[str, Set[Any]]:
         prefix: Current path prefix
 
     Returns:
-        Dictionary mapping paths to sets of primitive values
+        Dictionary mapping paths (underscore-separated) to sets of primitive values
     """
     result = defaultdict(set)
 
@@ -37,7 +38,7 @@ def flatten_entry(entry: dict, prefix: str = "") -> Dict[str, Set[Any]]:
         if prefix == "" and key == "word":
             continue
 
-        path = f"{prefix}.{key}" if prefix else key
+        path = f"{prefix}_{key}" if prefix else key
 
         if value is None:
             result[path].add(None)
@@ -66,20 +67,20 @@ def should_include_path(path: str) -> bool:
     """
     Determine if a path should be included in the analysis.
 
-    Prunes all morphology paths except morphology.is_compound and morphology.type.
+    Prunes all morphology paths except morphology_is_compound and morphology_type.
 
     Args:
-        path: Dot-notation path to check
+        path: Underscore-separated path to check
 
     Returns:
         True if path should be included, False otherwise
     """
     # Include all non-morphology paths
-    if not path.startswith("morphology."):
+    if not path.startswith("morphology_"):
         return True
 
     # Only include these specific morphology paths
-    if path in ("morphology.is_compound", "morphology.type"):
+    if path in ("morphology_is_compound", "morphology_type"):
         return True
 
     # Exclude all other morphology paths
@@ -87,7 +88,7 @@ def should_include_path(path: str) -> bool:
 
 
 def format_value(val: Any) -> str:
-    """Format a value for display."""
+    """Format a value for display (without quotes)."""
     if isinstance(val, str):
         return f'"{val}"'
     elif val is None:
@@ -98,26 +99,108 @@ def format_value(val: Any) -> str:
         return str(val)
 
 
-def print_progress(aggregate: Dict[str, Set[Any]], entry_count: int):
-    """Print progress update showing paths and value counts."""
-    print(f"\n{'='*80}")
-    print(f"Progress: {entry_count:,} entries processed")
-    print(f"{'='*80}")
+def format_integer_range(values: Set[int]) -> str:
+    """
+    Format a set of integers as compressed ranges.
+
+    Example: {1,2,3,5,7,8,9} -> "1-3,5,7-9 (8 ~ 3 bits)"
+
+    Args:
+        values: Set of integer values
+
+    Returns:
+        Formatted range string with statistics
+    """
+    sorted_vals = sorted(values)
+    if not sorted_vals:
+        return ""
+
+    # Find consecutive ranges
+    ranges: List[str] = []
+    start = sorted_vals[0]
+    end = sorted_vals[0]
+
+    for i in range(1, len(sorted_vals)):
+        if sorted_vals[i] == end + 1:
+            # Consecutive
+            end = sorted_vals[i]
+        else:
+            # Gap - finish current range
+            if start == end:
+                ranges.append(str(start))
+            else:
+                ranges.append(f"{start}-{end}")
+            start = sorted_vals[i]
+            end = sorted_vals[i]
+
+    # Don't forget the last range
+    if start == end:
+        ranges.append(str(start))
+    else:
+        ranges.append(f"{start}-{end}")
+
+    range_str = ",".join(ranges)
+
+    # Calculate stats
+    min_val = sorted_vals[0]
+    max_val = sorted_vals[-1]
+    v = max_val - min_val
+    bits = math.ceil(math.log2(v)) if v > 0 else 0
+
+    return f"{range_str} ({v} ~ {bits} bits)"
+
+
+def print_progress(aggregate: Dict[str, Set[Any]], entry_count: int, last_line_count: int = 0):
+    """
+    Print progress update showing paths and value counts.
+
+    Uses ANSI escape codes to update in place without scrolling.
+
+    Args:
+        aggregate: Current aggregate state
+        entry_count: Number of entries processed
+        last_line_count: Number of lines printed in last update (for clearing)
+
+    Returns:
+        Number of lines printed in this update
+    """
+    # Clear previous output if this isn't the first update
+    if last_line_count > 0:
+        # Move cursor up and clear lines
+        for _ in range(last_line_count):
+            sys.stdout.write('\033[A')  # Move up
+            sys.stdout.write('\033[K')  # Clear line
+
+    lines = []
+    lines.append(f"{'='*80}")
+    lines.append(f"Progress: {entry_count:,} entries processed")
+    lines.append(f"{'='*80}")
+    lines.append(f"")
+    lines.append(f"Paths found: {len(aggregate)}")
+    lines.append("-" * 80)
 
     sorted_paths = sorted(aggregate.keys())
-
-    print(f"\nPaths found: {len(sorted_paths)}")
-    print("-" * 80)
-
     for path in sorted_paths:
         value_count = len(aggregate[path])
-        print(f"  {path:40s} [{value_count:>6,} unique values]")
+        lines.append(f"  {path:40s} [{value_count:>6,} unique values]")
 
-    print()
+    lines.append("")
+
+    # Print all lines
+    for line in lines:
+        print(line)
+
+    return len(lines)
 
 
 def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int):
-    """Print final aggregate with all unique values on single lines."""
+    """
+    Print final aggregate with all unique values on single lines.
+
+    Format:
+    - Non-integers: path: "val1", "val2", "val3" (count)
+    - Integers: path: 1-3,5,7-9 (range ~ bits)
+    """
     print(f"\n{'='*80}")
     print(f"FINAL AGGREGATE - {entry_count:,} entries analyzed")
     print(f"{'='*80}\n")
@@ -132,10 +215,9 @@ def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int):
         all_integers = all(isinstance(v, int) and not isinstance(v, bool) for v in non_null_values)
 
         if all_integers and len(non_null_values) > 0:
-            # For integer-only sets, show min and max
-            min_val = min(non_null_values)
-            max_val = max(non_null_values)
-            print(f"{path}: [min: {min_val}, max: {max_val}]")
+            # For integer-only sets, use range compression
+            range_str = format_integer_range(set(non_null_values))
+            print(f"{path}: {range_str}")
         else:
             # Sort values for consistent output
             try:
@@ -144,10 +226,11 @@ def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int):
                 # If values aren't comparable, convert to strings for sorting
                 sorted_values = sorted(values, key=lambda x: (x is None, str(type(x)), str(x)))
 
-            # Format all values inline
+            # Format all values inline (comma-separated, with count)
             formatted_values = [format_value(v) for v in sorted_values]
             values_str = ", ".join(formatted_values)
-            print(f"{path}: [{values_str}]")
+            count = len(sorted_values)
+            print(f"{path}: {values_str} ({count})")
 
 
 def main():
@@ -171,6 +254,7 @@ def main():
     # Aggregate: path -> set of unique values
     aggregate = defaultdict(set)
     entry_count = 0
+    last_line_count = 0
 
     with open(input_file, 'r', encoding='utf-8') as f:
         for line_num, line in enumerate(f, 1):
@@ -191,11 +275,17 @@ def main():
 
                 # Progress update every 1000 entries
                 if entry_count % 1000 == 0:
-                    print_progress(aggregate, entry_count)
+                    last_line_count = print_progress(aggregate, entry_count, last_line_count)
 
             except json.JSONDecodeError as e:
                 print(f"Warning: Invalid JSON at line {line_num}: {e}", file=sys.stderr)
                 continue
+
+    # Clear the progress display before showing final output
+    if last_line_count > 0:
+        for _ in range(last_line_count):
+            sys.stdout.write('\033[A')  # Move up
+            sys.stdout.write('\033[K')  # Clear line
 
     # Final output
     print_final_aggregate(aggregate, entry_count)
