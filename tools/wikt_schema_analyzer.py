@@ -16,8 +16,8 @@ import json
 import math
 import sys
 from pathlib import Path
-from typing import Dict, Set, Any, List
-from collections import defaultdict
+from typing import Dict, Set, Any, List, Tuple
+from collections import defaultdict, Counter
 
 
 def flatten_entry(entry: dict, prefix: str = "") -> Dict[str, Set[Any]]:
@@ -85,6 +85,41 @@ def should_include_path(path: str) -> bool:
 
     # Exclude all other morphology paths
     return False
+
+
+def extract_array_combinations(entry: dict, prefix: str = "") -> Dict[str, Tuple[str, ...]]:
+    """
+    Extract array-valued fields and their combinations.
+
+    Args:
+        entry: Dictionary to extract from
+        prefix: Current path prefix
+
+    Returns:
+        Dictionary mapping paths to tuples of sorted values (the combination)
+    """
+    result = {}
+
+    for key, value in entry.items():
+        # Skip the 'word' field
+        if prefix == "" and key == "word":
+            continue
+
+        path = f"{prefix}_{key}" if prefix else key
+
+        if isinstance(value, list):
+            # Check if list contains only primitive values
+            if all(isinstance(item, (str, int, float, bool, type(None))) for item in value):
+                # Sort and convert to tuple for hashability
+                sorted_values = tuple(sorted(str(v) for v in value if v is not None))
+                if sorted_values:  # Only include non-empty arrays
+                    result[path] = sorted_values
+        elif isinstance(value, dict):
+            # Recursively extract from nested objects
+            nested = extract_array_combinations(value, path)
+            result.update(nested)
+
+    return result
 
 
 def format_value(val: Any) -> str:
@@ -258,6 +293,61 @@ def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int) -> i
     return total_bits
 
 
+def print_array_combination_stats(combinations: Dict[str, Counter], entry_count: int):
+    """
+    Print statistics about array value combinations.
+
+    Shows most common combinations and individual value frequencies.
+    """
+    print(f"\n{'='*80}")
+    print("ARRAY COMBINATION ANALYSIS")
+    print(f"{'='*80}\n")
+
+    for path in sorted(combinations.keys()):
+        combo_counts = combinations[path]
+        if not combo_counts:
+            continue
+
+        total_occurrences = sum(combo_counts.values())
+        unique_combinations = len(combo_counts)
+
+        print(f"{path}:")
+        print(f"  Total occurrences: {total_occurrences:,}")
+        print(f"  Unique combinations: {unique_combinations:,}")
+        print(f"  Coverage: {total_occurrences / entry_count * 100:.1f}% of entries")
+
+        # Show top 10 combinations
+        print(f"\n  Top 10 combinations:")
+        for i, (combo, count) in enumerate(combo_counts.most_common(10), 1):
+            pct = count / total_occurrences * 100
+            combo_str = ", ".join(f'"{v}"' for v in combo)
+            print(f"    {i:2d}. [{combo_str}] - {count:,} ({pct:.1f}%)")
+
+        # Calculate individual value frequencies
+        value_freq = Counter()
+        for combo, count in combo_counts.items():
+            for value in combo:
+                value_freq[value] += count
+
+        print(f"\n  Individual value frequencies:")
+        for value, count in value_freq.most_common(10):
+            pct = count / total_occurrences * 100
+            print(f"    \"{value}\": {count:,} ({pct:.1f}%)")
+
+        # Coverage analysis
+        cumulative = 0
+        for i, (combo, count) in enumerate(combo_counts.most_common(), 1):
+            cumulative += count
+            coverage = cumulative / total_occurrences * 100
+            if coverage >= 80 and i <= 20:
+                print(f"\n  Top {i} combinations cover {coverage:.1f}% of occurrences")
+                break
+            elif i == 5:
+                print(f"\n  Top 5 combinations cover {coverage:.1f}% of occurrences")
+
+        print()
+
+
 def main():
     """Main analysis function."""
     # Check for command line argument
@@ -278,6 +368,8 @@ def main():
 
     # Aggregate: path -> set of unique values
     aggregate = defaultdict(set)
+    # Track array combinations: path -> Counter of combination tuples
+    array_combinations = defaultdict(Counter)
     entry_count = 0
     last_line_count = 0
 
@@ -295,6 +387,12 @@ def main():
                     # Only include paths that pass the filter
                     if should_include_path(path):
                         aggregate[path].update(values)
+
+                # Extract and count array combinations
+                combos = extract_array_combinations(entry)
+                for path, combo in combos.items():
+                    if should_include_path(path):
+                        array_combinations[path][combo] += 1
 
                 entry_count += 1
 
@@ -314,6 +412,9 @@ def main():
 
     # Final output
     total_bits = print_final_aggregate(aggregate, entry_count)
+
+    # Array combination analysis
+    print_array_combination_stats(array_combinations, entry_count)
 
     # Summary stats
     print(f"{'='*80}")
