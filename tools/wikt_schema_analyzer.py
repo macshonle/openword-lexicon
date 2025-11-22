@@ -3,7 +3,14 @@
 wikt_schema_analyzer.py - Analyze Wiktionary JSON schema and extract all unique values
 
 Reads data/intermediate/en/wikt.jsonl and builds an aggregate view of all unique
-values for each field path across all entries.
+values for each field path across all entries. Shows:
+  - All unique values for each field
+  - Bit counts for encoding (mutually exclusive fields use log2, combinatorial use count)
+  - Array combination analysis (frequency of value combinations)
+
+This helps identify encoding optimization opportunities. See also:
+  - wikt_entry_mapper.py: Build word-to-entry offset mapping for duplicate words
+  - wikt_entry_lookup.py: Lookup entries using the sparse offset table
 
 Usage:
     python tools/wikt_schema_analyzer.py [INPUT_FILE]
