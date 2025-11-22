@@ -62,6 +62,30 @@ def flatten_entry(entry: dict, prefix: str = "") -> Dict[str, Set[Any]]:
     return result
 
 
+def should_include_path(path: str) -> bool:
+    """
+    Determine if a path should be included in the analysis.
+
+    Prunes all morphology paths except morphology.is_compound and morphology.type.
+
+    Args:
+        path: Dot-notation path to check
+
+    Returns:
+        True if path should be included, False otherwise
+    """
+    # Include all non-morphology paths
+    if not path.startswith("morphology."):
+        return True
+
+    # Only include these specific morphology paths
+    if path in ("morphology.is_compound", "morphology.type"):
+        return True
+
+    # Exclude all other morphology paths
+    return False
+
+
 def format_value(val: Any) -> str:
     """Format a value for display."""
     if isinstance(val, str):
@@ -93,7 +117,7 @@ def print_progress(aggregate: Dict[str, Set[Any]], entry_count: int):
 
 
 def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int):
-    """Print final aggregate with all unique values."""
+    """Print final aggregate with all unique values on single lines."""
     print(f"\n{'='*80}")
     print(f"FINAL AGGREGATE - {entry_count:,} entries analyzed")
     print(f"{'='*80}\n")
@@ -103,38 +127,27 @@ def print_final_aggregate(aggregate: Dict[str, Set[Any]], entry_count: int):
     for path in sorted_paths:
         values = aggregate[path]
 
-        # Sort values for consistent output
-        # Sort with None first, then by value
-        try:
-            sorted_values = sorted(values, key=lambda x: (x is None, isinstance(x, bool), x))
-        except TypeError:
-            # If values aren't comparable, convert to strings for sorting
-            sorted_values = sorted(values, key=lambda x: (x is None, str(type(x)), str(x)))
+        # Check if all values are integers (excluding None)
+        non_null_values = [v for v in values if v is not None]
+        all_integers = all(isinstance(v, int) and not isinstance(v, bool) for v in non_null_values)
 
-        print(f"{path}:")
-
-        # For large sets, show count and sample
-        if len(sorted_values) > 50:
-            print(f"  ({len(sorted_values):,} unique values - showing first 50)")
-            print("  [")
-            for i in range(50):
-                formatted = format_value(sorted_values[i])
-                print(f"    {formatted},")
-            print(f"    ... and {len(sorted_values) - 50:,} more")
-            print("  ]")
+        if all_integers and len(non_null_values) > 0:
+            # For integer-only sets, show min and max
+            min_val = min(non_null_values)
+            max_val = max(non_null_values)
+            print(f"{path}: [min: {min_val}, max: {max_val}]")
         else:
-            # Show all values
-            print(f"  ({len(sorted_values):,} unique values)")
-            print("  [")
-            for i, val in enumerate(sorted_values):
-                formatted = format_value(val)
-                if i < len(sorted_values) - 1:
-                    print(f"    {formatted},")
-                else:
-                    print(f"    {formatted}")
-            print("  ]")
+            # Sort values for consistent output
+            try:
+                sorted_values = sorted(values, key=lambda x: (x is None, isinstance(x, bool), x))
+            except TypeError:
+                # If values aren't comparable, convert to strings for sorting
+                sorted_values = sorted(values, key=lambda x: (x is None, str(type(x)), str(x)))
 
-        print()
+            # Format all values inline
+            formatted_values = [format_value(v) for v in sorted_values]
+            values_str = ", ".join(formatted_values)
+            print(f"{path}: [{values_str}]")
 
 
 def main():
@@ -170,7 +183,9 @@ def main():
                 # Flatten and aggregate
                 flattened = flatten_entry(entry)
                 for path, values in flattened.items():
-                    aggregate[path].update(values)
+                    # Only include paths that pass the filter
+                    if should_include_path(path):
+                        aggregate[path].update(values)
 
                 entry_count += 1
 
