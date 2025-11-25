@@ -58,13 +58,34 @@ def main():
     """Generate build statistics from final enriched entries."""
     parser = argparse.ArgumentParser(description='Generate build statistics for word list builder')
     parser.add_argument('--lang', default='en', help='Language code (default: en)')
+    parser.add_argument('--input', type=Path, help='Input JSONL file (overrides default path)')
     args = parser.parse_args()
 
     # Determine paths
     project_root = Path(__file__).parent.parent.parent
     lang_dir = project_root / "data" / "intermediate" / args.lang
-    input_file = lang_dir / "entries_tiered.jsonl"
     output_file = project_root / "tools" / "wordlist-builder" / "build-statistics.json"
+
+    # Determine input file - try new format first, fall back to legacy
+    if args.input:
+        input_file = args.input
+    else:
+        # New two-file pipeline output
+        new_format = lang_dir / "en-lexeme-enriched.jsonl"
+        # Legacy pipeline output
+        legacy_format = lang_dir / "entries_tiered.jsonl"
+
+        if new_format.exists():
+            input_file = new_format
+        elif legacy_format.exists():
+            input_file = legacy_format
+        else:
+            logger.error(f"No input file found. Tried:")
+            logger.error(f"  {new_format}")
+            logger.error(f"  {legacy_format}")
+            logger.error("Make sure to run the full build pipeline first:")
+            logger.error("  make build-en")
+            return 1
 
     # Verify input file exists
     if not input_file.exists():

@@ -13,8 +13,105 @@ from typing import Dict
 from collections import defaultdict
 
 
+def detect_format(entries: Dict[str, dict]) -> str:
+    """Detect whether entries are in legacy or new lexeme format."""
+    sample = next(iter(entries.values())) if entries else {}
+    # New format has sense_offset/sense_length, legacy has sources/labels
+    if 'sense_offset' in sample or 'sense_length' in sample:
+        return 'lexeme'
+    return 'legacy'
+
+
+def compute_statistics_lexeme(entries: Dict[str, dict]) -> dict:
+    """Compute statistics from new two-file lexeme format."""
+    stats = {
+        'total_words': len(entries),
+        'generated_at': None,
+        'sources': {'wikt': len(entries)},  # All lexeme entries come from Wiktionary
+        'source_combinations': {'wikt': {'count': len(entries), 'licenses': 'CC-BY-SA-4.0'}},
+        'metadata_coverage': {},
+        'metadata_by_combination': {},
+        'enrichment_impact': {},
+        'pos_distribution': {},  # POS is in senses file, not available here
+        'frequency_distribution': {},
+        'concreteness_distribution': {},
+        'label_categories': {},
+    }
+
+    freq_counts = defaultdict(int)
+    concrete_counts = defaultdict(int)
+
+    with_syllables = 0
+    with_concreteness = 0
+    with_frequency = 0
+    multi_word = 0
+    total_senses = 0
+
+    entries_list = entries.values() if isinstance(entries, dict) else entries
+    for entry in entries_list:
+        # Syllables
+        if entry.get('syllables') is not None:
+            with_syllables += 1
+
+        # Concreteness
+        if entry.get('concreteness'):
+            with_concreteness += 1
+            concrete_val = entry['concreteness']
+            concrete_counts[concrete_val] += 1
+
+        # Frequency
+        if entry.get('frequency_tier'):
+            with_frequency += 1
+            freq_counts[entry['frequency_tier']] += 1
+
+        # Multi-word
+        if entry.get('word_count', 1) > 1:
+            multi_word += 1
+
+        # Sense count
+        total_senses += entry.get('sense_count', 0)
+
+    total = stats['total_words']
+    stats['metadata_coverage'] = {
+        'syllables': {
+            'count': with_syllables,
+            'percentage': round(100 * with_syllables / total, 1) if total > 0 else 0
+        },
+        'concreteness': {
+            'count': with_concreteness,
+            'percentage': round(100 * with_concreteness / total, 1) if total > 0 else 0
+        },
+        'frequency_tier': {
+            'count': with_frequency,
+            'percentage': round(100 * with_frequency / total, 1) if total > 0 else 0
+        },
+        'multi_word_phrases': {
+            'count': multi_word,
+            'percentage': round(100 * multi_word / total, 1) if total > 0 else 0
+        },
+        'total_senses': {
+            'count': total_senses,
+            'avg_per_word': round(total_senses / total, 2) if total > 0 else 0
+        },
+        # Legacy compatibility fields (empty for new format)
+        'pos_tags': {'count': 0, 'percentage': 0},
+        'any_labels': {'count': 0, 'percentage': 0},
+    }
+
+    stats['frequency_distribution'] = dict(sorted(freq_counts.items()))
+    stats['concreteness_distribution'] = dict(concrete_counts)
+
+    return stats
+
+
 def compute_statistics(entries: Dict[str, dict]) -> dict:
-    """Compute comprehensive statistics from entries."""
+    """Compute comprehensive statistics from entries (auto-detects format)."""
+    # Detect format and dispatch
+    fmt = detect_format(entries)
+    if fmt == 'lexeme':
+        return compute_statistics_lexeme(entries)
+
+    # Legacy format processing below
     stats = {
         'total_words': len(entries),
         'generated_at': None,  # Will be set when writing
