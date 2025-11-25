@@ -508,8 +508,12 @@ def make_concreteness_predicate(
 
 
 # =============================================================================
-# Legacy Single-File Filters (preserved for backward compatibility)
+# Single-File Schema Filters
 # =============================================================================
+#
+# These filters work with entries that have labels, pos, and sources fields
+# directly on the entry object (rather than split into lexeme + senses files).
+# Used by owlex.py for the word list builder.
 
 def is_child_safe(entry: dict) -> bool:
     """
@@ -1051,10 +1055,10 @@ def main():
     parser.add_argument('--no-abbreviations', action='store_true',
                        help='Exclude abbreviations')
 
-    # Legacy single-file filters
-    parser.add_argument('--child-safe', action='store_true', help='Filter for child safety (legacy)')
-    parser.add_argument('--concrete-nouns', action='store_true', help='Only concrete nouns (legacy)')
-    parser.add_argument('--max-license', help='Maximum license restrictiveness (legacy)')
+    # Single-file schema filters (used with owlex input format)
+    parser.add_argument('--child-safe', action='store_true', help='Filter for child safety')
+    parser.add_argument('--concrete-nouns', action='store_true', help='Only concrete nouns')
+    parser.add_argument('--max-license', help='Maximum license restrictiveness')
 
     parser.add_argument('--verbose', action='store_true', help='Verbose logging')
 
@@ -1131,8 +1135,8 @@ def main():
         )
 
     else:
-        # Legacy single-file mode
-        logger.info("Mode: Single-file filtering (legacy)")
+        # Single-file mode (for owlex-style entries with labels/pos/sources)
+        logger.info("Mode: Single-file filtering")
 
         filters = []
 

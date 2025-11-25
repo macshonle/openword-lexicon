@@ -27,7 +27,11 @@ WORDLIST_TXT := $(BUILD_DIR)/wordlist.txt
 # New two-file Wiktionary format
 LEXEME_JSON := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexeme.jsonl
 SENSES_JSON := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-aggregate-senses.jsonl
+LEXEME_MERGED := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexeme-merged.jsonl
 LEXEME_ENRICHED := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexeme-enriched.jsonl
+
+# Additional source files
+EOWL_FILE := $(RAW_DIR)/eowl.txt
 
 # Rust tools
 RUST_SCANNER := tools/wiktionary-rust/target/release/wiktionary-rust
@@ -119,18 +123,25 @@ build-rust-scanner: $(RUST_SCANNER)
 # Build Pipeline
 # ===========================
 
-# Build English lexicon (NEW two-file pipeline)
+# Build English lexicon (two-file pipeline with multi-source support)
 # Pipeline order:
 #   0. Extract Wiktionary to wikt.jsonl (per-sense, unsorted)
 #   1. Sort entries by word (creates wikt-sorted.jsonl)
 #   2. Normalize into lexeme + senses tables (wikt_normalize.py)
-#   3. Enrich lexeme file (frequency, concreteness)
-#   4. Build trie from lexeme file
-#   5. Generate statistics
+#   3. Merge additional sources (EOWL, WordNet) into lexeme file
+#   4. Enrich lexeme file (concreteness, frequency)
+#   5. Build trie from lexeme file
+#   6. Generate statistics
 build-en: fetch-en $(LEXEME_JSON) $(SENSES_JSON)
+	@echo "Merging sources (EOWL, WordNet)..."
+	$(UV) run python src/openword/source_merge.py \
+		--wikt-lexeme $(LEXEME_JSON) \
+		--eowl $(EOWL_FILE) \
+		--wordnet $(WORDNET_ARCHIVE) \
+		--output $(LEXEME_MERGED)
 	@echo "Enriching lexeme file..."
 	$(UV) run python src/openword/brysbaert_enrich.py \
-		--input $(LEXEME_JSON) \
+		--input $(LEXEME_MERGED) \
 		--output $(LEXEME_ENRICHED)
 	$(UV) run python src/openword/frequency_tiers.py \
 		--input $(LEXEME_ENRICHED) \
@@ -138,18 +149,6 @@ build-en: fetch-en $(LEXEME_JSON) $(SENSES_JSON)
 	@echo "Building trie..."
 	$(UV) run python src/openword/trie_build.py \
 		--input $(LEXEME_ENRICHED)
-	$(UV) run python src/openword/generate_statistics.py
-
-# LEGACY: Build using old merged pipeline (deprecated)
-build-en-legacy: fetch-en $(WIKTIONARY_JSON_SORTED)
-	$(UV) run python src/openword/core_ingest.py
-	$(UV) run python src/openword/wikt_ingest.py
-	$(UV) run python src/openword/wordnet_source.py
-	$(UV) run python src/openword/merge_all.py
-	$(UV) run python src/openword/wordnet_enrich.py --unified
-	$(UV) run python src/openword/brysbaert_enrich.py --unified
-	$(UV) run python src/openword/frequency_tiers.py --unified
-	$(UV) run python src/openword/trie_build.py --unified
 	$(UV) run python src/openword/generate_statistics.py
 
 # Build Wiktionary JSONL using Rust scanner (file-based dependency)
@@ -278,6 +277,7 @@ extract-slices: deps $(WIKTIONARY_DUMP)
 	$(UV) run python tools/wiktionary_xml_slicer.py \
 		"$(WIKTIONARY_DUMP)" "$(SLICES_DIR)"
 	@echo "Slices written -- add to git with: git add $(SLICES_DIR)"
+	
 # ===========================
 # Interactive Word List Builder
 # ===========================

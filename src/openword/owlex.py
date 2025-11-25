@@ -63,7 +63,7 @@ class OwlexFilter:
 
     def _normalize_new_format(self, spec: Dict) -> Dict:
         """
-        Convert new web builder format to legacy owlex format.
+        Convert web builder format to owlex internal format.
 
         New format:
           {
@@ -87,7 +87,7 @@ class OwlexFilter:
         """
         normalized = spec.copy()
 
-        # Set distribution to 'en' (unified English build)
+        # Set distribution to 'en' (English build)
         normalized['distribution'] = 'en'
 
         # Convert filter array to filter object
@@ -163,11 +163,11 @@ class OwlexFilter:
         """Determine input JSONL file based on distribution."""
         dist = self.spec['distribution']
 
-        # Try tiered file first (has frequency tiers), then enriched, then merged
+        # Try new lexeme-enriched file first, then fallback to older formats
         candidates = [
+            Path(f'data/intermediate/{dist}/{dist}-lexeme-enriched.jsonl'),
             Path(f'data/intermediate/{dist}/entries_tiered.jsonl'),
             Path(f'data/intermediate/{dist}/{dist}_entries_enriched.jsonl'),
-            Path(f'data/intermediate/{dist}/entries_merged.jsonl'),
         ]
 
         for path in candidates:
@@ -268,7 +268,7 @@ class OwlexFilter:
                 if not all((c.islower() and c.isalpha()) or c in '\'-' for c in word):
                     return False
 
-        # Legacy pattern support (for backwards compatibility)
+        # Regex pattern support
         if 'pattern' in filters:
             if not re.match(filters['pattern'], word):
                 return False
@@ -309,7 +309,7 @@ class OwlexFilter:
             if any(char in word for char in excluded_chars):
                 return False
 
-        # Legacy exclude_pattern support
+        # Exclude pattern support
         if 'exclude_pattern' in filters:
             if re.match(filters['exclude_pattern'], word):
                 return False
@@ -329,7 +329,7 @@ class OwlexFilter:
             if word_count > filters['max_words']:
                 return False
 
-        # Legacy is_phrase filter: true means word_count > 1, false means word_count == 1
+        # is_phrase filter: true means word_count > 1, false means word_count == 1
         if 'is_phrase' in filters:
             if filters['is_phrase'] and word_count == 1:
                 return False

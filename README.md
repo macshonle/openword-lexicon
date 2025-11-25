@@ -1,10 +1,15 @@
 # Openword Lexicon
 
-Permissively usable English lexicon for any application (games, NLP, education). Unified build integrates all sources (EOWL, Wiktionary, WordNet, frequency data, Brysbaert concreteness) with per-source licensing tracking, enabling flexible runtime filtering for your specific use case.
+Permissively usable English lexicon for any application (games, NLP, education). Integrates multiple sources (Wiktionary, EOWL, WordNet, frequency data, Brysbaert concreteness) with per-source licensing tracking, enabling flexible runtime filtering for your specific use case.
 
 ## Approach
 
-**Unified English Build**: Single comprehensive dataset with all sources integrated. Filter at runtime based on your needs (child-safety, region, license requirements, etc.).
+**Multi-Source Architecture**: Words from multiple sources (Wiktionary, EOWL, WordNet) are merged with source tracking. Each entry has a `sources` array and `license_sources` mapping, enabling:
+- Runtime filtering by source selection
+- License-aware word list generation
+- Interactive word count estimates in the Word List Builder
+
+**Two-File Format**: Normalized data split into lexeme-level and sense-level files for efficient filtering. Word properties (frequency, concreteness, sources) in one file, sense properties (POS, register) in another.
 
 **License Tracking**: Every entry includes `license_sources` mapping, so you know exactly which licenses apply to each word.
 
@@ -66,28 +71,28 @@ make build-en
 ```
 
 **Pipeline Steps (automated by `make build-en`):**
-1. **Fetch** English sources (EOWL, Wiktionary, WordNet, Brysbaert, frequency data)
-2. **Ingest** source data to normalized JSONL with morphology extraction
-3. **Merge** all entries with license tracking
-4. **Enrich** with WordNet and Brysbaert (concreteness ratings + POS tags for ALL entries)
-5. **Tier** by frequency (A-Z logarithmic scale)
-6. **Build** trie + metadata sidecar + affix index
+1. **Fetch** English sources (Wiktionary, EOWL, WordNet, Brysbaert, frequency data)
+2. **Extract** Wiktionary to per-sense JSONL (using Rust scanner)
+3. **Normalize** into lexeme + senses two-file format
+4. **Merge** additional sources (EOWL, WordNet) with source tracking
+5. **Enrich** with Brysbaert concreteness and frequency tiers
+6. **Build** MARISA trie for efficient lookup
 
 **Note**: ENABLE is now optional (validation only). Run `make validate-enable` to check coverage.
 
 ## High-level pipeline
 1. **Fetch** English sources with checksums & provenance
-2. **Normalize** entries to JSONL (schema, NFKC, controlled labels)
-3. **Merge** all sources with license tracking
-4. **Enrich** with WordNet and Brysbaert (concreteness ratings + POS for ALL entries)
-5. **Tier** by frequency (A-Z logarithmic scale)
-6. **Build** trie (compressed MARISA) + metadata sidecar
-7. **Filter** at runtime using `filters.py` (child-safe, region, license, etc.)
+2. **Extract** Wiktionary data using high-performance Rust scanner
+3. **Normalize** into two-file format (lexeme + senses)
+4. **Merge** EOWL and WordNet words into lexeme file with source tracking
+5. **Enrich** with Brysbaert concreteness and frequency tiers
+6. **Build** MARISA trie for efficient lookup
+7. **Filter** at runtime using `filters.py` or Word List Builder
 
 ## Primary artifacts
-- `en.trie` + `en.meta.json` (English lexicon)
-- `entries_tiered.jsonl` (intermediate with all metadata)
-- `ATTRIBUTION.md` (generated per build)
+- `data/build/en/en.trie` (MARISA trie for word lookup)
+- `data/intermediate/en/en-lexeme-enriched.jsonl` (word-level properties)
+- `data/intermediate/en/en-aggregate-senses.jsonl` (sense-level properties)
 
 ## Interactive Web Tools
 
@@ -218,7 +223,7 @@ Contributions welcome! Please open an issue or pull request to discuss proposed 
   - ENABLE: CC0 (Public Domain)
   - EOWL: UKACD (Permissive)
   - Wiktionary: CC BY-SA 4.0
-  - WordNet: WordNet License
+  - WordNet (Open English WordNet): CC BY 4.0
   - Brysbaert: Research/Educational Use
   - Frequency data: CC BY 4.0
 

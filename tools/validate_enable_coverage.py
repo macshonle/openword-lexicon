@@ -60,7 +60,7 @@ def load_enable_words(enable_path: Path) -> Set[str]:
 
 
 def load_lexicon_words(build_path: Path) -> Set[str]:
-    """Load words from built unified lexicon."""
+    """Load words from built lexicon file."""
     words = set()
 
     if not build_path.exists():
@@ -164,10 +164,8 @@ def main():
     data_root = Path(__file__).parent.parent / "data"
     enable_path = data_root / "raw" / "en" / "enable1.txt"
 
-    # Try unified lexicon first, fall back to intermediate
-    lexicon_path = data_root / "intermediate" / "unified" / "entries_tiered.jsonl"
-    if not lexicon_path.exists():
-        lexicon_path = data_root / "intermediate" / "en" / "wikt_entries.jsonl"
+    # Use current pipeline output
+    lexicon_path = data_root / "intermediate" / "en" / "en-lexeme-enriched.jsonl"
 
     logger.info("=" * 70)
     logger.info("ENABLE Coverage Validation")

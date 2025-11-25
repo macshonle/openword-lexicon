@@ -3,8 +3,8 @@
 An interactive web-based tool for building custom word lists from the OpenWord Lexicon. Create filtered word lists for games, educational apps, language learning tools, and more.
 
 This directory contains two web interfaces:
-- **[index.html](index.html)** - New advanced builder with dynamic filters and source selection (recommended)
-- **[web-builder.html](web-builder.html)** - Legacy builder with distribution-based architecture
+- **[index.html](index.html)** - Advanced builder with dynamic filters and source selection (recommended)
+- **[web-builder.html](web-builder.html)** - Basic builder with form-based interface
 
 ---
 
@@ -38,7 +38,7 @@ make wordlist-builder-web
 
 ## Build Statistics
 
-The advanced builder uses `build-statistics.json` to provide accurate, real-time estimates of word counts and metadata coverage. This file is generated from the actual unified build data.
+The advanced builder uses `build-statistics.json` to provide accurate, real-time estimates of word counts and metadata coverage. This file is generated from the build data.
 
 ### Generating Statistics
 
@@ -369,7 +369,7 @@ This directory contains two builder implementations:
 
 **Browser Requirements:** ES6+ support (Chrome 60+, Firefox 60+, Safari 12+, Edge 79+)
 
-### Legacy Builder (web-builder.html, spec-builder.js)
+### Basic Builder (web-builder.html, spec-builder.js)
 
 The word list builder consists of three main components:
 

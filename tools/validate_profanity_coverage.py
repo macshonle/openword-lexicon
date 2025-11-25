@@ -315,7 +315,7 @@ def main():
 
     # Paths
     project_root = Path(__file__).parent.parent
-    lexicon_path = project_root / "data" / "intermediate" / "en" / "entries_tiered.jsonl"
+    lexicon_path = project_root / "data" / "intermediate" / "en" / "en-lexeme-enriched.jsonl"
     profanity_dir = project_root / "data" / "raw" / "validation" / "profanity"
     censor_text_path = profanity_dir / "censor-text-profanity-list.txt"
     dsojevic_path = profanity_dir / "dsojevic-profanity-list.json"

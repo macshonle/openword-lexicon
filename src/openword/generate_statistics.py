@@ -66,23 +66,15 @@ def main():
     lang_dir = project_root / "data" / "intermediate" / args.lang
     output_file = project_root / "tools" / "wordlist-builder" / "build-statistics.json"
 
-    # Determine input file - try new format first, fall back to legacy
+    # Determine input file
     if args.input:
         input_file = args.input
     else:
-        # New two-file pipeline output
-        new_format = lang_dir / "en-lexeme-enriched.jsonl"
-        # Legacy pipeline output
-        legacy_format = lang_dir / "entries_tiered.jsonl"
+        # Current pipeline output (two-file format)
+        input_file = lang_dir / f"{args.lang}-lexeme-enriched.jsonl"
 
-        if new_format.exists():
-            input_file = new_format
-        elif legacy_format.exists():
-            input_file = legacy_format
-        else:
-            logger.error(f"No input file found. Tried:")
-            logger.error(f"  {new_format}")
-            logger.error(f"  {legacy_format}")
+        if not input_file.exists():
+            logger.error(f"No input file found: {input_file}")
             logger.error("Make sure to run the full build pipeline first:")
             logger.error("  make build-en")
             return 1

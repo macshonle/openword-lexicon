@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-frequency_tiers.py — Assign frequency rank codes (A–Z) to entries.
+frequency_tiers.py — Assign frequency rank codes (A–Z) to lexeme entries.
 
-Reads:
-  - data/raw/plus/en_50k.txt (frequency list: word<space>count)
-  - data/intermediate/{core,plus}/*_enriched.jsonl
+Usage:
+  uv run python src/openword/frequency_tiers.py \\
+      --input data/intermediate/en/en-lexeme.jsonl \\
+      --output data/intermediate/en/en-lexeme-enriched.jsonl
 
-Outputs:
-  - data/intermediate/{core,plus}/*_tiered.jsonl
+Reads frequency data from data/raw/{lang}/{lang}_50k.txt
 
 Rank Code System (A–Z, logarithmic scale with base B = 10^(1/4)):
   Each letter represents a geometric band on the frequency rank scale.
@@ -238,23 +238,22 @@ def main():
     import sys
 
     parser = argparse.ArgumentParser(description='Assign frequency tiers to entries')
-    parser.add_argument('--input', type=Path,
-                        help='Input JSONL file (lexeme or entries)')
-    parser.add_argument('--output', type=Path,
+    parser.add_argument('--input', type=Path, required=True,
+                        help='Input JSONL file (lexeme entries)')
+    parser.add_argument('--output', type=Path, required=True,
                         help='Output JSONL file')
-    parser.add_argument('--unified', action='store_true',
-                        help='Use unified build mode (legacy, language-based structure)')
     parser.add_argument('--language', default='en',
-                        help='Language code (default: en)')
+                        help='Language code for frequency file (default: en)')
     args = parser.parse_args()
 
     data_root = Path(__file__).parent.parent.parent / "data"
     raw_dir = data_root / "raw" / args.language
-    intermediate_dir = data_root / "intermediate"
 
     freq_file = raw_dir / f"{args.language}_50k.txt"
 
     logger.info("Frequency tier assignment")
+    logger.info(f"  Input: {args.input}")
+    logger.info(f"  Output: {args.output}")
 
     # Load frequency ranks
     ranks = load_frequency_ranks(freq_file)
@@ -262,44 +261,11 @@ def main():
     if not ranks:
         logger.warning("No frequency data loaded. All words will be marked 'rare'.")
 
-    # NEW: Explicit input/output mode (for two-file pipeline)
-    if args.input and args.output:
-        logger.info(f"Mode: Explicit input/output")
-        logger.info(f"  Input: {args.input}")
-        logger.info(f"  Output: {args.output}")
-
-        if not args.input.exists():
-            logger.error(f"Input file not found: {args.input}")
-            sys.exit(1)
-
-        process_file(args.input, args.output, ranks)
-
-    elif args.unified:
-        # UNIFIED BUILD MODE (legacy, language-based)
-        logger.info(f"Mode: Unified build ({args.language})")
-
-        lang_dir = intermediate_dir / args.language
-
-        # Prefer Brysbaert-enriched file if available, otherwise use WordNet-enriched
-        brysbaert_input = lang_dir / "entries_enriched_brysbaert.jsonl"
-        wordnet_input = lang_dir / "entries_enriched.jsonl"
-
-        if brysbaert_input.exists():
-            unified_input = brysbaert_input
-            logger.info("Using Brysbaert-enriched entries")
-        elif wordnet_input.exists():
-            unified_input = wordnet_input
-            logger.info("Using WordNet-enriched entries (Brysbaert data not available)")
-        else:
-            logger.error(f"No enriched input file found in {lang_dir}")
-            logger.error("Run wordnet_enrich.py --unified first")
-            sys.exit(1)
-
-        unified_output = lang_dir / "entries_tiered.jsonl"
-        process_file(unified_input, unified_output, ranks)
-    else:
-        logger.error("Must specify either --input/--output or --unified flag.")
+    if not args.input.exists():
+        logger.error(f"Input file not found: {args.input}")
         sys.exit(1)
+
+    process_file(args.input, args.output, ranks)
 
     logger.info("")
     logger.info("Frequency tier assignment complete")
