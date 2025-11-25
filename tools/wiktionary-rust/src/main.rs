@@ -13,7 +13,7 @@ use unicode_normalization::UnicodeNormalization;
 
 #[derive(Parser)]
 #[command(name = "wiktionary-rust")]
-#[command(about = "Fast Rust-based Wiktionary XML parser")]
+#[command(about = "Fast Rust-based Wiktionary XML parser - outputs one entry per sense")]
 struct Args {
     /// Input XML file (.xml or .xml.bz2)
     input: PathBuf,
@@ -26,7 +26,7 @@ struct Args {
     limit: Option<usize>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 struct Morphology {
     #[serde(rename = "type")]
     morph_type: String,
@@ -39,31 +39,53 @@ struct Morphology {
     etymology_template: String,
 }
 
+/// Flat entry structure - one per sense (definition line)
 #[derive(Debug, Serialize, Deserialize)]
 struct Entry {
     word: String,
-    pos: Vec<String>,
-    #[serde(skip_serializing_if = "HashMap::is_empty")]
-    labels: HashMap<String, Vec<String>>,
+    pos: String,  // Single POS, not Vec
+
+    // Flat label arrays (not nested HashMap)
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    register_tags: Vec<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    region_tags: Vec<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    domain_tags: Vec<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    temporal_tags: Vec<String>,
+
+    // Word-level fields (duplicated across senses)
     word_count: usize,
     is_phrase: bool,
     is_abbreviation: bool,
     is_proper_noun: bool,
-    is_vulgar: bool,
-    is_archaic: bool,
-    is_rare: bool,
-    is_informal: bool,
-    is_technical: bool,
-    is_regional: bool,
     is_inflected: bool,
-    is_dated: bool,
-    is_derogatory: bool,
-    sources: Vec<String>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     phrase_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     syllables: Option<usize>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    morphology: Option<Morphology>,
+}
+
+/// Represents a POS section with its definitions
+struct PosSection {
+    pos: String,
+    is_proper_noun: bool,
+    definitions: Vec<String>,  // Raw definition lines
+}
+
+/// Word-level data extracted once and shared across senses
+struct WordData {
+    word: String,
+    word_count: usize,
+    is_phrase: bool,
+    is_abbreviation: bool,
+    is_inflected: bool,
+    phrase_type: Option<String>,
+    syllables: Option<usize>,
     morphology: Option<Morphology>,
 }
 
@@ -78,12 +100,15 @@ lazy_static! {
     static ref ENGLISH_SECTION: Regex = Regex::new(r"(?i)==\s*English\s*==").unwrap();
     static ref LANGUAGE_SECTION: Regex = Regex::new(r"(?m)^==\s*([^=]+?)\s*==$").unwrap();
 
-    // POS patterns
+    // POS patterns - match level 3 and 4 headers
     static ref POS_HEADER: Regex = Regex::new(r"(?m)^===+\s*(.+?)\s*===+\s*$").unwrap();
     static ref HEAD_TEMPLATE: Regex = Regex::new(r"(?i)\{\{(?:head|en-head|head-lite)\|en\|([^}|]+)").unwrap();
     static ref EN_POS_TEMPLATE: Regex = Regex::new(r"(?i)\{\{en-(noun|verb|adj|adv|prop|pron)\b").unwrap();
 
-    // Label patterns
+    // Definition line pattern - lines starting with # (but not ## which are sub-definitions)
+    static ref DEFINITION_LINE: Regex = Regex::new(r"(?m)^#\s+(.+)$").unwrap();
+
+    // Label patterns - for extracting from definition lines
     static ref CONTEXT_LABEL: Regex = Regex::new(r"(?i)\{\{(?:lb|label|context)\|en\|([^}]+)\}\}").unwrap();
     static ref CATEGORY: Regex = Regex::new(r"(?i)\[\[Category:English\s+([^\]]+)\]\]").unwrap();
 
@@ -100,7 +125,6 @@ lazy_static! {
     static ref PREP_PHRASE_TEMPLATE: Regex = Regex::new(r"(?i)\{\{en-prepphr\b").unwrap();
 
     // Morphology/etymology patterns
-    // Note: Rust regex doesn't support lookahead, so we match everything and trim in code
     static ref ETYMOLOGY_SECTION: Regex = Regex::new(r"(?si)===+\s*Etymology\s*\d*\s*===+\s*\n(.+)").unwrap();
     static ref NEXT_SECTION: Regex = Regex::new(r"\n===").unwrap();
     static ref SUFFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{suffix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
@@ -258,20 +282,12 @@ fn is_englishlike(token: &str) -> bool {
             return false;
         }
 
-        // Simplified character validation for spike
         if ch.is_ascii() {
             if ch.is_alphabetic() {
                 saw_latin_letter = true;
-            } else if ch.is_numeric() {
-                // Allow numbers
-            } else if allowed_punct.contains(&ch) {
-                // Allow specific punctuation
-            } else if ch.is_whitespace() {
-                // Allow whitespace
             }
         } else {
             // Non-ASCII character - check if it's Latin-based
-            // This is a simplified check - for spike purposes
             if ch.is_alphabetic() {
                 // Accept common Latin diacritics (À-ɏ range)
                 if ch as u32 >= 0x00C0 && ch as u32 <= 0x024F {
@@ -310,113 +326,98 @@ fn extract_english_section(text: &str) -> Option<String> {
     )
 }
 
-fn extract_pos_tags(text: &str) -> Vec<String> {
-    let mut pos_tags = HashSet::new();
+/// Extract labels from a single definition line
+fn extract_labels_from_line(line: &str) -> (Vec<String>, Vec<String>, Vec<String>, Vec<String>) {
+    let mut register_tags = HashSet::new();
+    let mut region_tags = HashSet::new();
+    let mut domain_tags = HashSet::new();
+    let mut temporal_tags = HashSet::new();
 
-    // Extract from section headers
-    for cap in POS_HEADER.captures_iter(text) {
-        let header = cap[1].to_lowercase().trim().to_string();
-        let header = header.split_whitespace().collect::<Vec<_>>().join(" ");
-        if let Some(&mapped) = POS_MAP.get(header.as_str()) {
-            pos_tags.insert(mapped.to_string());
-        }
-    }
-
-    // Fallback: head templates
-    if pos_tags.is_empty() {
-        for cap in HEAD_TEMPLATE.captures_iter(text) {
-            let pos = cap[1].to_lowercase().trim().to_string();
-            if let Some(&mapped) = POS_MAP.get(pos.as_str()) {
-                pos_tags.insert(mapped.to_string());
-            }
-        }
-    }
-
-    // Fallback: en-POS templates
-    if pos_tags.is_empty() {
-        for cap in EN_POS_TEMPLATE.captures_iter(text) {
-            let pos = cap[1].to_lowercase();
-            let mapped = match pos.as_str() {
-                "noun" => "noun",
-                "verb" => "verb",
-                "adj" => "adjective",
-                "adv" => "adverb",
-                "prop" => "noun",
-                "pron" => "pronoun",
-                _ => continue,
-            };
-            pos_tags.insert(mapped.to_string());
-        }
-    }
-
-    let mut result: Vec<String> = pos_tags.into_iter().collect();
-    result.sort();
-    result
-}
-
-fn extract_labels(text: &str) -> HashMap<String, Vec<String>> {
-    let mut labels: HashMap<String, HashSet<String>> = HashMap::new();
-
-    // Extract from context labels
-    for cap in CONTEXT_LABEL.captures_iter(text) {
+    // Extract from context labels in this line
+    for cap in CONTEXT_LABEL.captures_iter(line) {
         for label in cap[1].split('|') {
             let label = label.trim().to_lowercase();
 
             if REGISTER_LABELS.contains(label.as_str()) {
-                labels.entry("register".to_string()).or_default().insert(label);
+                register_tags.insert(label);
             } else if TEMPORAL_LABELS.contains(label.as_str()) {
-                labels.entry("temporal".to_string()).or_default().insert(label);
+                temporal_tags.insert(label);
             } else if DOMAIN_LABELS.contains(label.as_str()) {
-                labels.entry("domain".to_string()).or_default().insert(label);
+                domain_tags.insert(label);
             } else if let Some(&region_code) = REGION_LABELS.get(label.as_str()) {
-                labels.entry("region".to_string()).or_default().insert(region_code.to_string());
-            }
-        }
-    }
-
-    // Extract from categories
-    for cap in CATEGORY.captures_iter(text) {
-        let cat = cap[1].to_lowercase();
-
-        if cat.contains("informal") || cat.contains("colloquial") {
-            labels.entry("register".to_string()).or_default().insert("informal".to_string());
-        }
-        if cat.contains("slang") {
-            labels.entry("register".to_string()).or_default().insert("slang".to_string());
-        }
-        if cat.contains("vulgar") {
-            labels.entry("register".to_string()).or_default().insert("vulgar".to_string());
-        }
-        if cat.contains("offensive") || cat.contains("derogatory") {
-            labels.entry("register".to_string()).or_default().insert("offensive".to_string());
-        }
-        if cat.contains("childish") || cat.contains("baby talk") || cat.contains("infantile") {
-            labels.entry("register".to_string()).or_default().insert("childish".to_string());
-        }
-        if cat.contains("obsolete") {
-            labels.entry("temporal".to_string()).or_default().insert("obsolete".to_string());
-        }
-        if cat.contains("archaic") {
-            labels.entry("temporal".to_string()).or_default().insert("archaic".to_string());
-        }
-
-        // Extract regional labels from categories
-        for (region_key, region_code) in REGION_LABELS.iter() {
-            if cat.contains(region_key) {
-                labels.entry("region".to_string()).or_default().insert(region_code.to_string());
-                break;
+                region_tags.insert(region_code.to_string());
             }
         }
     }
 
     // Convert to sorted vectors
-    labels.into_iter()
-        .map(|(k, v)| {
-            let mut vec: Vec<String> = v.into_iter().collect();
-            vec.sort();
-            (k, vec)
+    let mut register: Vec<String> = register_tags.into_iter().collect();
+    let mut region: Vec<String> = region_tags.into_iter().collect();
+    let mut domain: Vec<String> = domain_tags.into_iter().collect();
+    let mut temporal: Vec<String> = temporal_tags.into_iter().collect();
+
+    register.sort();
+    region.sort();
+    domain.sort();
+    temporal.sort();
+
+    (register, region, domain, temporal)
+}
+
+/// Parse POS sections and their definitions from English text
+fn parse_pos_sections(english_text: &str) -> Vec<PosSection> {
+    let mut sections = Vec::new();
+
+    // Find all POS headers and their positions
+    let headers: Vec<(usize, &str, bool)> = POS_HEADER
+        .captures_iter(english_text)
+        .filter_map(|cap| {
+            let full_match = cap.get(0)?;
+            let header_text = cap.get(1)?.as_str().to_lowercase();
+            let header_normalized = header_text.split_whitespace().collect::<Vec<_>>().join(" ");
+
+            // Check if it's a proper noun
+            let is_proper = header_normalized.contains("proper noun") ||
+                           header_normalized.contains("proper name");
+
+            // Map to normalized POS
+            if let Some(&mapped_pos) = POS_MAP.get(header_normalized.as_str()) {
+                Some((full_match.start(), mapped_pos, is_proper))
+            } else {
+                None
+            }
         })
-        .collect()
+        .map(|(pos, mapped, is_proper)| (pos, mapped, is_proper))
+        .collect();
+
+    // For each POS header, extract definitions until next header
+    for i in 0..headers.len() {
+        let (start_pos, pos, is_proper) = headers[i];
+        let section_start = start_pos;
+        let section_end = if i + 1 < headers.len() {
+            headers[i + 1].0
+        } else {
+            english_text.len()
+        };
+
+        let section_text = &english_text[section_start..section_end];
+
+        // Extract definition lines (lines starting with single #)
+        let definitions: Vec<String> = DEFINITION_LINE
+            .captures_iter(section_text)
+            .map(|cap| cap[1].to_string())
+            .collect();
+
+        if !definitions.is_empty() {
+            sections.push(PosSection {
+                pos: pos.to_string(),
+                is_proper_noun: is_proper,
+                definitions,
+            });
+        }
+    }
+
+    sections
 }
 
 fn extract_syllable_count_from_hyphenation(text: &str) -> Option<usize> {
@@ -434,7 +435,6 @@ fn extract_syllable_count_from_hyphenation(text: &str) -> Option<usize> {
         .iter()
         .filter_map(|&part| {
             let part = part.trim();
-            // Skip empty parts or parameter assignments
             if part.is_empty() || part.contains('=') {
                 None
             } else {
@@ -444,7 +444,6 @@ fn extract_syllable_count_from_hyphenation(text: &str) -> Option<usize> {
         .collect();
 
     // Single-part templates with long unseparated text are likely incomplete
-    // Only trust single-part templates for very short words (1-3 chars)
     if syllables.len() == 1 && syllables[0].len() > 3 {
         return None;
     }
@@ -531,11 +530,9 @@ fn clean_template_components(parts: &[&str]) -> Vec<String> {
         .iter()
         .filter_map(|part| {
             let part = part.trim();
-            // Skip empty parts or parameter assignments
             if part.is_empty() || part.contains('=') {
                 return None;
             }
-            // Skip language code prefixes (grc:, la:, etc.)
             if part.contains(':') && part.len() > 2 && part.chars().take(4).all(|c| c.is_ascii_lowercase() || c == ':') {
                 return None;
             }
@@ -545,27 +542,22 @@ fn clean_template_components(parts: &[&str]) -> Vec<String> {
 }
 
 fn extract_morphology(text: &str) -> Option<Morphology> {
-    // Try to find etymology section
     let etym_match = ETYMOLOGY_SECTION.captures(text)?;
     let mut etymology_text = etym_match[1].to_string();
 
-    // Trim at next section header (since Rust regex doesn't support lookahead)
     if let Some(next_section) = NEXT_SECTION.find(&etymology_text) {
         etymology_text = etymology_text[..next_section.start()].to_string();
     }
 
     let etymology_text = etymology_text.as_str();
 
-    // Try suffix template: {{suffix|en|base|suffix}}
+    // Try suffix template
     if let Some(cap) = SUFFIX_TEMPLATE.captures(etymology_text) {
         let base = cap[1].trim().to_string();
         let mut suffix = cap[2].trim().to_string();
-
-        // Normalize suffix format
         if !suffix.starts_with('-') {
             suffix = format!("-{}", suffix);
         }
-
         return Some(Morphology {
             morph_type: "suffixed".to_string(),
             base: Some(base.clone()),
@@ -577,16 +569,13 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
         });
     }
 
-    // Try prefix template: {{prefix|en|prefix|base}}
+    // Try prefix template
     if let Some(cap) = PREFIX_TEMPLATE.captures(etymology_text) {
         let mut prefix = cap[1].trim().to_string();
         let base = cap[2].trim().to_string();
-
-        // Normalize prefix format
         if !prefix.ends_with('-') {
             prefix = format!("{}-", prefix);
         }
-
         return Some(Morphology {
             morph_type: "prefixed".to_string(),
             base: Some(base.clone()),
@@ -598,20 +587,17 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
         });
     }
 
-    // Try confix template: {{confix|en|prefix|base|suffix}}
+    // Try confix template
     if let Some(cap) = CONFIX_TEMPLATE.captures(etymology_text) {
         let mut prefix = cap[1].trim().to_string();
         let base = cap[2].trim().to_string();
         let mut suffix = cap[3].trim().to_string();
-
-        // Normalize formats
         if !prefix.ends_with('-') {
             prefix = format!("{}-", prefix);
         }
         if !suffix.starts_with('-') {
             suffix = format!("-{}", suffix);
         }
-
         return Some(Morphology {
             morph_type: "circumfixed".to_string(),
             base: Some(base.clone()),
@@ -623,11 +609,10 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
         });
     }
 
-    // Try compound template: {{compound|en|word1|word2|...}}
+    // Try compound template
     if let Some(cap) = COMPOUND_TEMPLATE.captures(etymology_text) {
         let parts: Vec<&str> = cap[1].split('|').collect();
         let components = clean_template_components(&parts);
-
         if components.len() >= 2 {
             return Some(Morphology {
                 morph_type: "compound".to_string(),
@@ -648,7 +633,6 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
             let components = clean_template_components(&parts);
 
             if components.len() >= 2 {
-                // Analyze components
                 let prefixes: Vec<String> = components
                     .iter()
                     .filter(|c| c.ends_with('-') && !c.starts_with('-'))
@@ -667,7 +651,6 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
                     .cloned()
                     .collect();
 
-                // Determine morphology type
                 let (morph_type, is_compound, base) = if !prefixes.is_empty() && !suffixes.is_empty() {
                     ("affixed", false, bases.first().cloned())
                 } else if !prefixes.is_empty() {
@@ -696,63 +679,30 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
     None
 }
 
-fn parse_entry(title: &str, text: &str) -> Option<Entry> {
+/// Parse a page and return multiple entries (one per sense)
+fn parse_page(title: &str, text: &str) -> Vec<Entry> {
     let word = title.to_lowercase().trim().to_string();
 
     // Extract English section
-    let english_text = extract_english_section(text)?;
+    let english_text = match extract_english_section(text) {
+        Some(t) => t,
+        None => return vec![],
+    };
 
-    // Extract POS tags
-    let pos_tags = extract_pos_tags(&english_text);
-
-    // If no POS tags, check for other English signals
-    if pos_tags.is_empty() {
-        // Check for English categories or templates as validation
-        let has_categories = text.to_lowercase().contains("category:english");
-        let has_en_templates = text.contains("{{en-");
-
-        if !has_categories && !has_en_templates {
-            return None;
-        }
-    }
-
-    let labels = extract_labels(&english_text);
+    // Extract word-level data (shared across all senses)
     let word_count = word.split_whitespace().count();
-
-    // Extract phrase type for multi-word entries
     let phrase_type = if word_count > 1 {
         extract_phrase_type(&english_text)
     } else {
         None
     };
 
-    // Extract syllable count from multiple sources (priority: hyphenation > rhymes > categories)
-    let syllable_count = extract_syllable_count_from_hyphenation(&english_text)
+    let syllables = extract_syllable_count_from_hyphenation(&english_text)
         .or_else(|| extract_syllable_count_from_rhymes(&english_text))
         .or_else(|| extract_syllable_count_from_categories(&english_text));
 
-    // Extract morphology from etymology section
     let morphology = extract_morphology(&english_text);
-
-    // Extract boolean flags
     let is_abbreviation = ABBREVIATION_TEMPLATE.is_match(&english_text);
-    let is_proper_noun = POS_HEADER.captures_iter(&english_text)
-        .any(|cap| cap[1].to_lowercase().contains("proper noun"));
-
-    let temporal = labels.get("temporal").map(|v| v.as_slice()).unwrap_or(&[]);
-    let register = labels.get("register").map(|v| v.as_slice()).unwrap_or(&[]);
-    let domain = labels.get("domain").map(|v| v.as_slice()).unwrap_or(&[]);
-
-    let is_vulgar = register.contains(&"vulgar".to_string()) || register.contains(&"offensive".to_string());
-    let is_archaic = temporal.contains(&"archaic".to_string()) || temporal.contains(&"obsolete".to_string());
-    let is_rare = temporal.contains(&"rare".to_string());
-    let is_informal = register.contains(&"informal".to_string())
-        || register.contains(&"slang".to_string())
-        || register.contains(&"colloquial".to_string());
-    let is_technical = !domain.is_empty();
-    let is_regional = labels.contains_key("region");
-    let is_dated = temporal.contains(&"dated".to_string());
-    let is_derogatory = register.contains(&"derogatory".to_string());
     let is_inflected = text.contains("{{plural of|en|")
         || text.contains("{{past tense of|en|")
         || text.contains("{{past participle of|en|")
@@ -766,28 +716,76 @@ fn parse_entry(title: &str, text: &str) -> Option<Entry> {
         || text.contains("Category:English adverb forms")
         || text.contains("Category:English plurals");
 
-    Some(Entry {
-        word,
-        pos: pos_tags,
-        labels,
+    let word_data = WordData {
+        word: word.clone(),
         word_count,
         is_phrase: word_count > 1,
         is_abbreviation,
-        is_proper_noun,
-        is_vulgar,
-        is_archaic,
-        is_rare,
-        is_informal,
-        is_technical,
-        is_regional,
         is_inflected,
-        is_dated,
-        is_derogatory,
-        sources: vec!["wikt".to_string()],
         phrase_type,
-        syllables: syllable_count,
+        syllables,
         morphology,
-    })
+    };
+
+    // Parse POS sections and their definitions
+    let pos_sections = parse_pos_sections(&english_text);
+
+    // If no POS sections found, try to create a single entry with unknown POS
+    if pos_sections.is_empty() {
+        // Check for English categories or templates as validation
+        let has_categories = text.to_lowercase().contains("category:english");
+        let has_en_templates = text.contains("{{en-");
+
+        if has_categories || has_en_templates {
+            // Create a single entry with unknown POS
+            return vec![Entry {
+                word: word_data.word,
+                pos: "unknown".to_string(),
+                register_tags: vec![],
+                region_tags: vec![],
+                domain_tags: vec![],
+                temporal_tags: vec![],
+                word_count: word_data.word_count,
+                is_phrase: word_data.is_phrase,
+                is_abbreviation: word_data.is_abbreviation,
+                is_proper_noun: false,
+                is_inflected: word_data.is_inflected,
+                phrase_type: word_data.phrase_type,
+                syllables: word_data.syllables,
+                morphology: word_data.morphology,
+            }];
+        }
+        return vec![];
+    }
+
+    // Create one entry per definition
+    let mut entries = Vec::new();
+
+    for section in pos_sections {
+        for def_line in &section.definitions {
+            let (register_tags, region_tags, domain_tags, temporal_tags) =
+                extract_labels_from_line(def_line);
+
+            entries.push(Entry {
+                word: word_data.word.clone(),
+                pos: section.pos.clone(),
+                register_tags,
+                region_tags,
+                domain_tags,
+                temporal_tags,
+                word_count: word_data.word_count,
+                is_phrase: word_data.is_phrase,
+                is_abbreviation: word_data.is_abbreviation,
+                is_proper_noun: section.is_proper_noun,
+                is_inflected: word_data.is_inflected,
+                phrase_type: word_data.phrase_type.clone(),
+                syllables: word_data.syllables,
+                morphology: word_data.morphology.clone(),
+            });
+        }
+    }
+
+    entries
 }
 
 fn scan_pages(mut reader: impl BufRead, mut callback: impl FnMut(String) -> bool) -> std::io::Result<()> {
@@ -809,18 +807,15 @@ fn scan_pages(mut reader: impl BufRead, mut callback: impl FnMut(String) -> bool
                 let page_xml = buffer[start..end].to_string();
                 buffer.drain(..end);
 
-                // Callback returns false to signal early termination
                 if !callback(page_xml) {
                     return Ok(());
                 }
             } else {
-                // Incomplete page, keep in buffer
                 buffer.drain(..start);
                 break;
             }
         }
 
-        // Keep last bit in case it's a partial tag
         if buffer.len() > 10 && !buffer.contains("<page>") {
             buffer.drain(..buffer.len().saturating_sub(10));
         }
@@ -834,7 +829,7 @@ fn main() -> std::io::Result<()> {
 
     println!("Parsing: {}", args.input.display());
     println!("Output: {}", args.output.display());
-    println!("Method: Fast Rust scanner (compiled, optimized)");
+    println!("Method: Fast Rust scanner (per-sense output)");
     if let Some(limit) = args.limit {
         println!("Limit: {} entries", limit);
     }
@@ -842,7 +837,6 @@ fn main() -> std::io::Result<()> {
 
     let start_time = Instant::now();
 
-    // Open input file
     let file = File::open(&args.input)?;
     let reader: Box<dyn BufRead> = if args.input.to_string_lossy().ends_with(".bz2") {
         Box::new(BufReader::with_capacity(256 * 1024, BzDecoder::new(file)))
@@ -850,7 +844,6 @@ fn main() -> std::io::Result<()> {
         Box::new(BufReader::with_capacity(256 * 1024, file))
     };
 
-    // Open output file
     let output = File::create(&args.output)?;
     let mut writer = BufWriter::with_capacity(256 * 1024, output);
 
@@ -865,19 +858,18 @@ fn main() -> std::io::Result<()> {
     let limit_reached = std::cell::Cell::new(false);
 
     scan_pages(reader, |page_xml| {
-        // Check if limit already reached
         if limit_reached.get() {
-            return false; // Stop scanning
+            return false;
         }
 
-        stats.processed += 1;
+        stats.pages_processed += 1;
 
-        if stats.processed % 1000 == 0 {
+        if stats.pages_processed % 1000 == 0 {
             let elapsed = start_time.elapsed().as_secs_f64();
-            let rate = stats.processed as f64 / elapsed;
+            let rate = stats.pages_processed as f64 / elapsed;
             pb.set_message(format!(
-                "Processed: {} | Written: {} | Skipped: {} | Rate: {:.0} pg/s",
-                stats.processed, stats.written, stats.skipped, rate
+                "Pages: {} | Senses: {} | Words: {} | Rate: {:.0} pg/s",
+                stats.pages_processed, stats.senses_written, stats.words_written, rate
             ));
         }
 
@@ -886,28 +878,28 @@ fn main() -> std::io::Result<()> {
             Some(cap) => cap[1].to_string(),
             None => {
                 stats.skipped += 1;
-                return true; // Continue scanning
+                return true;
             }
         };
 
-        // Check namespace (only process ns=0)
+        // Check namespace
         if let Some(cap) = NS_PATTERN.captures(&page_xml) {
             if &cap[1] != "0" {
                 stats.special += 1;
-                return true; // Continue scanning
+                return true;
             }
         }
 
         // Check for special prefixes
         if SPECIAL_PREFIXES.iter().any(|prefix| title.starts_with(prefix)) {
             stats.special += 1;
-            return true; // Continue scanning
+            return true;
         }
 
         // Check for redirects
         if REDIRECT_PATTERN.is_match(&page_xml) {
             stats.redirects += 1;
-            return true; // Continue scanning
+            return true;
         }
 
         // Extract text
@@ -915,52 +907,55 @@ fn main() -> std::io::Result<()> {
             Some(cap) => cap[1].to_string(),
             None => {
                 stats.skipped += 1;
-                return true; // Continue scanning
+                return true;
             }
         };
 
         // Check for English section
         if !ENGLISH_SECTION.is_match(&text) {
             stats.non_english += 1;
-            return true; // Continue scanning
+            return true;
         }
 
         // Check for dict-only
         if DICT_ONLY.is_match(&text) {
             stats.dict_only += 1;
-            return true; // Continue scanning
+            return true;
         }
 
         // Check if English-like
         if !is_englishlike(&title) {
             stats.non_latin += 1;
-            return true; // Continue scanning
+            return true;
         }
 
-        // Parse entry
-        match parse_entry(&title, &text) {
-            Some(entry) => {
-                if let Ok(json) = serde_json::to_string(&entry) {
-                    writeln!(writer, "{}", json).ok();
-                    stats.written += 1;
+        // Parse page into multiple entries (one per sense)
+        let entries = parse_page(&title, &text);
 
-                    if let Some(limit) = args.limit {
-                        if stats.written >= limit {
-                            limit_reached.set(true);
-                            return false; // Stop scanning - limit reached!
-                        }
+        if entries.is_empty() {
+            stats.skipped += 1;
+            return true;
+        }
+
+        stats.words_written += 1;
+
+        for entry in entries {
+            if let Ok(json) = serde_json::to_string(&entry) {
+                writeln!(writer, "{}", json).ok();
+                stats.senses_written += 1;
+
+                if let Some(limit) = args.limit {
+                    if stats.senses_written >= limit {
+                        limit_reached.set(true);
+                        return false;
                     }
                 }
             }
-            None => {
-                stats.skipped += 1;
-            }
         }
 
-        true // Continue scanning
+        true
     })?;
 
-    // Flush writer before finishing
     writer.flush()?;
 
     if limit_reached.get() {
@@ -972,20 +967,18 @@ fn main() -> std::io::Result<()> {
     let elapsed = start_time.elapsed();
     println!();
     println!("============================================================");
-    println!("Total processed: {}", stats.processed);
-    println!("Total written: {}", stats.written);
+    println!("Pages processed: {}", stats.pages_processed);
+    println!("Words written: {}", stats.words_written);
+    println!("Senses written: {}", stats.senses_written);
+    println!("Avg senses/word: {:.2}", stats.senses_written as f64 / stats.words_written.max(1) as f64);
     println!("Special pages: {}", stats.special);
     println!("Redirects: {}", stats.redirects);
     println!("Dictionary-only terms: {}", stats.dict_only);
     println!("Non-English pages: {}", stats.non_english);
     println!("Non-Latin scripts: {}", stats.non_latin);
-    println!("Total skipped: {}", stats.skipped);
-    println!(
-        "Success rate: {:.1}%",
-        stats.written as f64 / stats.processed as f64 * 100.0
-    );
+    println!("Skipped: {}", stats.skipped);
     println!("Time: {}m {}s", elapsed.as_secs() / 60, elapsed.as_secs() % 60);
-    println!("Rate: {:.0} pages/sec", stats.processed as f64 / elapsed.as_secs_f64());
+    println!("Rate: {:.0} pages/sec", stats.pages_processed as f64 / elapsed.as_secs_f64());
     println!("============================================================");
 
     Ok(())
@@ -993,8 +986,9 @@ fn main() -> std::io::Result<()> {
 
 #[derive(Default)]
 struct Stats {
-    processed: usize,
-    written: usize,
+    pages_processed: usize,
+    words_written: usize,
+    senses_written: usize,
     special: usize,
     redirects: usize,
     dict_only: usize,

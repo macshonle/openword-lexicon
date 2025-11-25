@@ -141,13 +141,56 @@ def verify_trie(trie_path: Path, entries: List[Dict]):
         logger.error(f"  Word count mismatch: {len(trie)} vs {len(entries)}")
 
 
+def build_trie_simple(input_path: Path, trie_path: Path):
+    """
+    Build MARISA trie from lexeme file (new two-file pipeline).
+
+    In the two-file pipeline, the lexeme JSONL file IS the metadata.
+    Trie ordinal = line number in the lexeme file (0-indexed).
+    No separate meta.json is needed.
+    """
+    logger.info(f"Building trie from {input_path.name}")
+
+    words = []
+    with ProgressDisplay(f"Loading words from {input_path.name}", update_interval=1000) as progress:
+        with open(input_path, 'r', encoding='utf-8') as f:
+            for line_num, line in enumerate(f, 1):
+                line = line.strip()
+                if not line:
+                    continue
+
+                try:
+                    entry = json.loads(line)
+                    words.append(entry['word'])
+                    progress.update(Lines=line_num, Words=len(words))
+                except (json.JSONDecodeError, KeyError) as e:
+                    logger.warning(f"Line {line_num}: {e}")
+                    continue
+
+    logger.info(f"  -> Loaded {len(words):,} words")
+
+    # Build trie
+    logger.info("  Building MARISA trie...")
+    trie = marisa_trie.Trie(words)
+
+    # Save trie
+    trie_path.parent.mkdir(parents=True, exist_ok=True)
+    trie.save(str(trie_path))
+
+    trie_size_kb = trie_path.stat().st_size / 1024
+    logger.info(f"  Trie saved: {trie_path} ({trie_size_kb:.1f} KB)")
+    logger.info(f"  Word count: {len(trie):,}")
+
+
 def main():
     """Main trie build pipeline."""
     import argparse
 
     parser = argparse.ArgumentParser(description='Build trie structures')
+    parser.add_argument('--input', type=Path,
+                        help='Input JSONL file (lexeme file for new pipeline)')
     parser.add_argument('--unified', action='store_true',
-                        help='Use unified build mode (language-based structure)')
+                        help='Use unified build mode (legacy, language-based structure)')
     parser.add_argument('--language', default='en',
                         help='Language code (default: en)')
     args = parser.parse_args()
@@ -159,8 +202,23 @@ def main():
 
     logger.info("Trie build (MARISA)")
 
-    if args.unified:
-        # UNIFIED BUILD MODE (language-based)
+    # NEW: Explicit input mode (for two-file pipeline)
+    if args.input:
+        logger.info(f"Mode: Explicit input (two-file pipeline)")
+        logger.info(f"  Input: {args.input}")
+
+        if not args.input.exists():
+            logger.error(f"Input file not found: {args.input}")
+            sys.exit(1)
+
+        # Output to language build dir
+        lang_dir_build = build_dir / args.language
+        trie_path = lang_dir_build / f"{args.language}.trie"
+
+        build_trie_simple(args.input, trie_path)
+
+    elif args.unified:
+        # UNIFIED BUILD MODE (legacy, language-based)
         logger.info(f"Mode: Unified build ({args.language})")
         logger.info(f"\nBuilding {args.language.upper()} trie (all sources, full metadata)...")
 
@@ -183,32 +241,8 @@ def main():
             logger.error("Run frequency_tiers.py --unified first")
             sys.exit(1)
     else:
-        # LEGACY MODE (Core/Plus separate)
-        logger.info("Mode: Legacy (Core/Plus separate)")
-
-        # Build core trie
-        core_input = filtered_dir / "core" / "family_friendly.jsonl"
-        core_trie = build_dir / "core" / "core.trie"
-        core_meta = build_dir / "core" / "core.meta.json"
-
-        if core_input.exists():
-            logger.info("\nBuilding CORE distribution trie...")
-            entries = load_entries(core_input)
-            if entries:
-                build_trie(entries, core_trie, core_meta)
-                verify_trie(core_trie, entries)
-
-        # Build plus trie
-        plus_input = filtered_dir / "plus" / "family_friendly.jsonl"
-        plus_trie = build_dir / "plus" / "plus.trie"
-        plus_meta = build_dir / "plus" / "plus.meta.json"
-
-        if plus_input.exists():
-            logger.info("\nBuilding PLUS distribution trie...")
-            entries = load_entries(plus_input)
-            if entries:
-                build_trie(entries, plus_trie, plus_meta)
-                verify_trie(plus_trie, entries)
+        logger.error("Must specify either --input or --unified flag.")
+        sys.exit(1)
 
     logger.info("")
     logger.info("Trie build complete")

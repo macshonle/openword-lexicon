@@ -24,6 +24,11 @@ UNIFIED_TRIE := $(BUILD_DIR)/$(LEXICON_LANG).trie
 UNIFIED_META := $(BUILD_DIR)/$(LEXICON_LANG).meta.json
 WORDLIST_TXT := $(BUILD_DIR)/wordlist.txt
 
+# New two-file Wiktionary format
+LEXEME_JSON := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexeme.jsonl
+SENSES_JSON := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-aggregate-senses.jsonl
+LEXEME_ENRICHED := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexeme-enriched.jsonl
+
 # Rust tools
 RUST_SCANNER := tools/wiktionary-rust/target/release/wiktionary-rust
 
@@ -114,18 +119,29 @@ build-rust-scanner: $(RUST_SCANNER)
 # Build Pipeline
 # ===========================
 
-# Build English lexicon (unified pipeline)
+# Build English lexicon (NEW two-file pipeline)
 # Pipeline order:
-#   0. Extract Wiktionary to wikt.jsonl (unsorted, XML order)
-#   1. Sort Wiktionary entries by word (creates wikt-sorted.jsonl)
-#   2. Ingest word sources (EOWL, Wiktionary, WordNet)
-#   3. Merge all sources
-#   4. WordNet POS backfill (concreteness deprecated)
-#   5. Brysbaert concreteness enrichment (PRIMARY source for concreteness)
-#   6. Frequency tiers
-#   7. Build trie
-#   8. Generate build statistics (MUST run after all enrichment)
-build-en: fetch-en $(WIKTIONARY_JSON_SORTED)
+#   0. Extract Wiktionary to wikt.jsonl (per-sense, unsorted)
+#   1. Sort entries by word (creates wikt-sorted.jsonl)
+#   2. Normalize into lexeme + senses tables (wikt_normalize.py)
+#   3. Enrich lexeme file (frequency, concreteness)
+#   4. Build trie from lexeme file
+#   5. Generate statistics
+build-en: fetch-en $(LEXEME_JSON) $(SENSES_JSON)
+	@echo "Enriching lexeme file..."
+	$(UV) run python src/openword/brysbaert_enrich.py \
+		--input $(LEXEME_JSON) \
+		--output $(LEXEME_ENRICHED)
+	$(UV) run python src/openword/frequency_tiers.py \
+		--input $(LEXEME_ENRICHED) \
+		--output $(LEXEME_ENRICHED)
+	@echo "Building trie..."
+	$(UV) run python src/openword/trie_build.py \
+		--input $(LEXEME_ENRICHED)
+	$(UV) run python src/openword/generate_statistics.py
+
+# LEGACY: Build using old merged pipeline (deprecated)
+build-en-legacy: fetch-en $(WIKTIONARY_JSON_SORTED)
 	$(UV) run python src/openword/core_ingest.py
 	$(UV) run python src/openword/wikt_ingest.py
 	$(UV) run python src/openword/wordnet_source.py
@@ -149,6 +165,20 @@ $(WIKTIONARY_JSON): $(WIKTIONARY_DUMP) $(RUST_SCANNER)
 $(WIKTIONARY_JSON_SORTED): $(WIKTIONARY_JSON)
 	@echo "Sorting Wiktionary entries by word..."
 	$(UV) run python src/openword/wikt_sort.py
+
+# Normalize into two-file format: lexeme + aggregate-senses
+# This step:
+#   1. Groups entries by word
+#   2. Extracts word-level properties into lexeme entries
+#   3. Deduplicates senses by projection (pos, tags, flags)
+#   4. Writes offset/length linking between files
+$(LEXEME_JSON) $(SENSES_JSON): $(WIKTIONARY_JSON_SORTED)
+	@echo "Normalizing Wiktionary into lexeme + senses tables..."
+	$(UV) run python src/openword/wikt_normalize.py \
+		--input $(WIKTIONARY_JSON_SORTED) \
+		--lexeme-output $(LEXEME_JSON) \
+		--senses-output $(SENSES_JSON) \
+		-v
 
 # Convenience target (will only rebuild if output missing or input newer)
 build-wiktionary-json: $(WIKTIONARY_JSON)

@@ -238,8 +238,12 @@ def main():
     import sys
 
     parser = argparse.ArgumentParser(description='Assign frequency tiers to entries')
+    parser.add_argument('--input', type=Path,
+                        help='Input JSONL file (lexeme or entries)')
+    parser.add_argument('--output', type=Path,
+                        help='Output JSONL file')
     parser.add_argument('--unified', action='store_true',
-                        help='Use unified build mode (language-based structure)')
+                        help='Use unified build mode (legacy, language-based structure)')
     parser.add_argument('--language', default='en',
                         help='Language code (default: en)')
     args = parser.parse_args()
@@ -258,8 +262,20 @@ def main():
     if not ranks:
         logger.warning("No frequency data loaded. All words will be marked 'rare'.")
 
-    if args.unified:
-        # UNIFIED BUILD MODE (language-based)
+    # NEW: Explicit input/output mode (for two-file pipeline)
+    if args.input and args.output:
+        logger.info(f"Mode: Explicit input/output")
+        logger.info(f"  Input: {args.input}")
+        logger.info(f"  Output: {args.output}")
+
+        if not args.input.exists():
+            logger.error(f"Input file not found: {args.input}")
+            sys.exit(1)
+
+        process_file(args.input, args.output, ranks)
+
+    elif args.unified:
+        # UNIFIED BUILD MODE (legacy, language-based)
         logger.info(f"Mode: Unified build ({args.language})")
 
         lang_dir = intermediate_dir / args.language
@@ -282,23 +298,8 @@ def main():
         unified_output = lang_dir / "entries_tiered.jsonl"
         process_file(unified_input, unified_output, ranks)
     else:
-        # LEGACY MODE (Core/Plus separate) - deprecated
-        logger.warning("Legacy mode is deprecated. Use --unified flag.")
-        logger.info("Mode: Legacy (Core/Plus separate)")
-
-        # Process core entries
-        core_input = intermediate_dir / "core" / "core_entries_enriched.jsonl"
-        core_output = intermediate_dir / "core" / "core_entries_tiered.jsonl"
-
-        if core_input.exists():
-            process_file(core_input, core_output, ranks)
-
-        # Process wikt entries
-        plus_input = intermediate_dir / "plus" / "wikt_entries_enriched.jsonl"
-        plus_output = intermediate_dir / "plus" / "wikt_entries_tiered.jsonl"
-
-        if plus_input.exists():
-            process_file(plus_input, plus_output, ranks)
+        logger.error("Must specify either --input/--output or --unified flag.")
+        sys.exit(1)
 
     logger.info("")
     logger.info("Frequency tier assignment complete")

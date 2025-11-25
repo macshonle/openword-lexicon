@@ -220,8 +220,12 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description='Enrich entries with Brysbaert concreteness data')
+    parser.add_argument('--input', type=Path,
+                        help='Input JSONL file (lexeme or entries)')
+    parser.add_argument('--output', type=Path,
+                        help='Output JSONL file')
     parser.add_argument('--unified', action='store_true',
-                        help='Use unified build mode (language-based structure)')
+                        help='Use unified build mode (legacy, language-based structure)')
     parser.add_argument('--language', default='en',
                         help='Language code (default: en)')
     parser.add_argument('--no-prefer', action='store_true',
@@ -250,8 +254,20 @@ def main():
     else:
         logger.info("Mode: Fill missing only (will not override existing concreteness)")
 
-    if args.unified:
-        # UNIFIED BUILD MODE (language-based)
+    # NEW: Explicit input/output mode (for two-file pipeline)
+    if args.input and args.output:
+        logger.info(f"Mode: Explicit input/output")
+        logger.info(f"  Input: {args.input}")
+        logger.info(f"  Output: {args.output}")
+
+        if not args.input.exists():
+            logger.error(f"Input file not found: {args.input}")
+            sys.exit(1)
+
+        process_file(args.input, args.output, ratings, prefer_brysbaert)
+
+    elif args.unified:
+        # UNIFIED BUILD MODE (legacy, language-based)
         logger.info(f"Mode: Unified build ({args.language})")
 
         lang_dir = intermediate_dir / args.language
@@ -269,7 +285,7 @@ def main():
             logger.error("Run wordnet_enrich.py --unified first")
             sys.exit(1)
     else:
-        logger.error("Legacy mode not supported. Use --unified flag.")
+        logger.error("Must specify either --input/--output or --unified flag.")
         sys.exit(1)
 
     logger.info("")
