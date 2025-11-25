@@ -72,6 +72,7 @@ def aggregate_word_senses(
     word_count = senses[0].get('word_count', 1)
     phrase_type = next((s.get('phrase_type') for s in senses if s.get('phrase_type')), None)
     is_phrase = senses[0].get('is_phrase', False)
+    spelling_region = next((s.get('spelling_region') for s in senses if s.get('spelling_region')), None)
 
     # Deduplicate senses by projection
     seen_projections = set()
@@ -123,6 +124,8 @@ def aggregate_word_senses(
         lexeme['phrase_type'] = phrase_type
     if morphology:
         lexeme['morphology'] = morphology
+    if spelling_region:
+        lexeme['spelling_region'] = spelling_region
 
     return lexeme, unique_senses
 

@@ -216,6 +216,10 @@ class OwlexFilter:
         if not self._check_source_filters(entry, filters.get('sources', {})):
             return False
 
+        # Spelling region filters
+        if not self._check_spelling_region_filters(entry, filters.get('spelling_region', {})):
+            return False
+
         # Proper noun filters
         if not self._check_proper_noun_filters(entry, filters.get('proper_noun', {})):
             return False
@@ -468,6 +472,48 @@ class OwlexFilter:
             # Entry must not have any of the excluded sources
             exclude_set = set(filters['exclude'])
             if sources & exclude_set:
+                return False
+
+        return True
+
+    def _check_spelling_region_filters(self, entry: Dict, filters: Dict) -> bool:
+        """
+        Apply spelling region filters.
+
+        Use cases:
+        - US game: include only en-US spellings or universal (no regional marker)
+        - UK game: include only en-GB spellings or universal
+        - Spellchecker: accept all spellings
+
+        Filter options:
+        - region: str - Only include words for this region (e.g., "en-US", "en-GB")
+                       Words without spelling_region are considered universal
+        - include_universal: bool - Include words without spelling_region (default: true)
+        - exclude: list - Exclude words from these regions (e.g., ["en-US"])
+
+        Examples:
+        - {"region": "en-US"} - Only US spellings and universal words
+        - {"region": "en-GB"} - Only British spellings and universal words
+        - {"region": "en-US", "include_universal": false} - Only US spellings, no universal
+        - {"exclude": ["en-US"]} - Exclude US spellings, keep everything else
+        """
+        spelling_region = entry.get('spelling_region')  # None = universal/unspecified
+        include_universal = filters.get('include_universal', True)
+
+        # If specific region required
+        if 'region' in filters:
+            target_region = filters['region']
+            if spelling_region is None:
+                # Universal word - include if include_universal is true
+                return include_universal
+            else:
+                # Regional word - must match target region
+                return spelling_region == target_region
+
+        # Exclude specific regions
+        if 'exclude' in filters:
+            exclude_regions = set(filters['exclude'])
+            if spelling_region and spelling_region in exclude_regions:
                 return False
 
         return True

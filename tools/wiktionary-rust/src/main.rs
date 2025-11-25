@@ -55,6 +55,11 @@ struct Entry {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     temporal_tags: Vec<String>,
 
+    // Regional spelling variant (e.g., "en-US" for American spelling, "en-GB" for British)
+    // Extracted from {{tlb|en|American spelling}} or similar on head lines
+    #[serde(skip_serializing_if = "Option::is_none")]
+    spelling_region: Option<String>,
+
     // Word-level fields (duplicated across senses)
     word_count: usize,
     is_phrase: bool,
@@ -87,6 +92,7 @@ struct WordData {
     phrase_type: Option<String>,
     syllables: Option<usize>,
     morphology: Option<Morphology>,
+    spelling_region: Option<String>,
 }
 
 lazy_static! {
@@ -253,6 +259,28 @@ lazy_static! {
         m.insert("indian", "en-IN");
         m
     };
+
+    // Spelling variant labels - maps label text to region code
+    // These appear in {{tlb|en|American spelling}} templates on head lines
+    static ref SPELLING_LABELS: HashMap<&'static str, &'static str> = {
+        let mut m = HashMap::new();
+        m.insert("american spelling", "en-US");
+        m.insert("us spelling", "en-US");
+        m.insert("british spelling", "en-GB");
+        m.insert("uk spelling", "en-GB");
+        m.insert("commonwealth spelling", "en-GB");
+        m.insert("canadian spelling", "en-CA");
+        m.insert("australian spelling", "en-AU");
+        m.insert("irish spelling", "en-IE");
+        m.insert("new zealand spelling", "en-NZ");
+        m.insert("south african spelling", "en-ZA");
+        m.insert("indian spelling", "en-IN");
+        m
+    };
+
+    // Pattern to extract {{tlb|en|...}} or {{lb|en|...}} from text
+    // Used for head line labels (spelling variants)
+    static ref TLB_TEMPLATE: Regex = Regex::new(r"(?i)\{\{(?:tlb|lb)\|en\|([^}]+)\}\}").unwrap();
 }
 
 fn is_englishlike(token: &str) -> bool {
@@ -465,6 +493,22 @@ fn extract_syllable_count_from_categories(text: &str) -> Option<usize> {
     SYLLABLE_CATEGORY
         .captures(text)
         .and_then(|cap| cap[1].parse::<usize>().ok())
+}
+
+/// Extract regional spelling variant from head lines
+/// Looks for {{tlb|en|American spelling}} or similar patterns
+fn extract_spelling_region(text: &str) -> Option<String> {
+    for cap in TLB_TEMPLATE.captures_iter(text) {
+        // Get all labels in this template
+        for label in cap[1].split('|') {
+            let label = label.trim().to_lowercase();
+            // Check if this is a spelling variant label
+            if let Some(&region) = SPELLING_LABELS.get(label.as_str()) {
+                return Some(region.to_string());
+            }
+        }
+    }
+    None
 }
 
 fn extract_phrase_type(text: &str) -> Option<String> {
@@ -716,6 +760,9 @@ fn parse_page(title: &str, text: &str) -> Vec<Entry> {
         || text.contains("Category:English adverb forms")
         || text.contains("Category:English plurals");
 
+    // Extract regional spelling variant (e.g., "American spelling", "British spelling")
+    let spelling_region = extract_spelling_region(&english_text);
+
     let word_data = WordData {
         word: word.clone(),
         word_count,
@@ -725,6 +772,7 @@ fn parse_page(title: &str, text: &str) -> Vec<Entry> {
         phrase_type,
         syllables,
         morphology,
+        spelling_region,
     };
 
     // Parse POS sections and their definitions
@@ -745,6 +793,7 @@ fn parse_page(title: &str, text: &str) -> Vec<Entry> {
                 region_tags: vec![],
                 domain_tags: vec![],
                 temporal_tags: vec![],
+                spelling_region: word_data.spelling_region,
                 word_count: word_data.word_count,
                 is_phrase: word_data.is_phrase,
                 is_abbreviation: word_data.is_abbreviation,
@@ -773,6 +822,7 @@ fn parse_page(title: &str, text: &str) -> Vec<Entry> {
                 region_tags,
                 domain_tags,
                 temporal_tags,
+                spelling_region: word_data.spelling_region.clone(),
                 word_count: word_data.word_count,
                 is_phrase: word_data.is_phrase,
                 is_abbreviation: word_data.is_abbreviation,
