@@ -16,7 +16,11 @@ const state = {
         frequency: true
     },
     filters: [],  // Array of filter objects
-    nextFilterId: 1
+    nextFilterId: 1,
+    pendingQuickFilter: {
+        wordType: 'any',
+        syllableData: 'any'
+    }
 };
 
 // Build statistics - loaded from build-statistics.json
@@ -36,6 +40,43 @@ const DEFAULT_STATS = {
 };
 
 // ============================================================================
+// CHARACTER PRESETS
+// ============================================================================
+
+const CHAR_PRESETS = {
+    'standard': {
+        label: 'Standard letters (a-z)',
+        allowedChars: 'a-z',
+        description: 'lowercase letters only'
+    },
+    'contractions': {
+        label: 'Letters + apostrophes (a-z\')',
+        allowedChars: 'a-z\'',
+        description: 'lowercase letters and apostrophes'
+    },
+    'alphanumeric': {
+        label: 'Letters + numbers (a-z0-9)',
+        allowedChars: 'a-z0-9',
+        description: 'lowercase letters and digits'
+    },
+    'hyphenated': {
+        label: 'Letters + hyphens (a-z-)',
+        allowedChars: 'a-z-',
+        description: 'lowercase letters and hyphens'
+    },
+    'common-punct': {
+        label: 'Letters + common punctuation (a-z\'-)',
+        allowedChars: 'a-z\'-',
+        description: 'lowercase letters, apostrophes, and hyphens'
+    },
+    'any': {
+        label: 'Any characters',
+        allowedChars: '',
+        description: 'no character restrictions'
+    }
+};
+
+// ============================================================================
 // FILTER DEFINITIONS
 // ============================================================================
 
@@ -45,12 +86,14 @@ const FILTER_TYPES = {
         icon: '🔤',
         requires: [],
         configFields: [
-            { type: 'number', name: 'minLength', label: 'Minimum Length', min: 1, placeholder: 'e.g., 1' },
-            { type: 'number', name: 'maxLength', label: 'Maximum Length', min: 1, placeholder: 'e.g., 15' },
-            { type: 'text', name: 'pattern', label: 'Pattern (regex)', placeholder: 'e.g., ^[a-z]+$ (lowercase only)' },
-            { type: 'text', name: 'startsWith', label: 'Starts With', placeholder: 'e.g., un' },
-            { type: 'text', name: 'endsWith', label: 'Ends With', placeholder: 'e.g., ing' },
-            { type: 'text', name: 'contains', label: 'Contains', placeholder: 'e.g., tion' }
+            { type: 'preset-select', name: 'charPreset', label: 'Allowed Characters', defaultValue: 'standard' },
+            { type: 'length-row', names: ['minLength', 'maxLength'], labels: ['Min Length', 'Max Length'], min: 1 },
+            { type: 'text', name: 'startsWith', label: 'Starts With', placeholder: 'e.g., un,pre,re (comma-separated, matches any)', hint: 'Comma-separated prefixes - matches words starting with ANY of these' },
+            { type: 'text', name: 'excludeStartsWith', label: 'Doesn\'t Start With', placeholder: 'e.g., x,z (comma-separated)', hint: 'Comma-separated prefixes to exclude' },
+            { type: 'text', name: 'endsWith', label: 'Ends With', placeholder: 'e.g., ing,ed,s (comma-separated, matches any)', hint: 'Comma-separated suffixes - matches words ending with ANY of these' },
+            { type: 'text', name: 'excludeEndsWith', label: 'Doesn\'t End With', placeholder: 'e.g., ly,ness (comma-separated)', hint: 'Comma-separated suffixes to exclude' },
+            { type: 'text', name: 'contains', label: 'Contains', placeholder: 'e.g., tion,ing (comma-separated, must have all)', hint: 'Comma-separated sequences - word must contain ALL of these' },
+            { type: 'text', name: 'excludeContains', label: 'Doesn\'t Contain', placeholder: 'e.g., \',- (individual characters)', hint: 'Individual characters to exclude' }
         ]
     },
     phrase: {
@@ -60,8 +103,7 @@ const FILTER_TYPES = {
         configFields: [
             { type: 'checkbox', name: 'multiWord', label: 'Multi-word phrases only', defaultChecked: true },
             { type: 'checkbox', name: 'singleWord', label: 'Single words only', defaultChecked: false },
-            { type: 'number', name: 'minWords', label: 'Minimum Words', min: 1, placeholder: 'e.g., 2' },
-            { type: 'number', name: 'maxWords', label: 'Maximum Words', min: 1, placeholder: 'e.g., 5' }
+            { type: 'length-row', names: ['minWords', 'maxWords'], labels: ['Min Words', 'Max Words'], min: 1 }
         ]
     },
     pos: {
@@ -142,8 +184,7 @@ const FILTER_TYPES = {
         icon: '🔢',
         requires: ['wiktionary'],
         configFields: [
-            { type: 'number', name: 'minSyllables', label: 'Minimum Syllables', min: 1, placeholder: 'e.g., 1' },
-            { type: 'number', name: 'maxSyllables', label: 'Maximum Syllables', min: 1, placeholder: 'e.g., 3' },
+            { type: 'length-row', names: ['minSyllables', 'maxSyllables'], labels: ['Min Syllables', 'Max Syllables'], min: 1 },
             { type: 'number', name: 'exact', label: 'Exact Syllables', min: 1, placeholder: 'e.g., 2 (overrides min/max)' },
             { type: 'checkbox', name: 'requireSyllables', label: 'Require syllable data (exclude words without syllable info)', defaultChecked: false }
         ]
@@ -162,8 +203,8 @@ const DEMOS = {
             {
                 type: 'character',
                 mode: 'include',
-                config: { minLength: 5, maxLength: 5 },
-                summary: '5 letters exactly'
+                config: { minLength: 5, maxLength: 5, charPreset: 'standard', excludeContains: '\'-' },
+                summary: '5 letters, lowercase letters only, no contractions'
             },
             {
                 type: 'frequency',
@@ -228,8 +269,8 @@ const DEMOS = {
             {
                 type: 'character',
                 mode: 'include',
-                config: { minLength: 2, maxLength: 15 },
-                summary: '2-15 letters'
+                config: { minLength: 2, maxLength: 15, charPreset: 'standard' },
+                summary: '2-15 letters, standard letters only'
             }
         ]
     },
@@ -298,6 +339,62 @@ const DEMOS = {
                 summary: 'No vulgar/offensive/slang'
             }
         ]
+    },
+    'prefix-game': {
+        name: 'Prefix Game',
+        sources: { eowl: true, wiktionary: true, wordnet: true, brysbaert: false, frequency: true },
+        filters: [
+            {
+                type: 'character',
+                mode: 'include',
+                config: {
+                    startsWith: ['un', 're', 'pre', 'dis', 'mis', 'over'],
+                    minLength: 4,
+                    charPreset: 'standard'
+                },
+                summary: 'Starts with "un", "re", "pre", "dis", "mis", or "over", 4+ letters, standard letters only'
+            },
+            {
+                type: 'frequency',
+                mode: 'include',
+                config: { minTier: 'A', maxTier: 'G' },
+                summary: 'Common words (A-G)'
+            },
+            {
+                type: 'phrase',
+                mode: 'include',
+                config: { singleWord: true },
+                summary: 'Single words only'
+            }
+        ]
+    },
+    'no-special-chars': {
+        name: 'No Special Characters',
+        sources: { eowl: true, wiktionary: true, wordnet: true, brysbaert: false, frequency: true },
+        filters: [
+            {
+                type: 'character',
+                mode: 'include',
+                config: {
+                    charPreset: 'standard',
+                    minLength: 3,
+                    maxLength: 12
+                },
+                summary: '3-12 letters, lowercase only (no apostrophes, hyphens, etc.)'
+            },
+            {
+                type: 'frequency',
+                mode: 'include',
+                config: { minTier: 'A', maxTier: 'H' },
+                summary: 'Common words (A-H)'
+            },
+            {
+                type: 'phrase',
+                mode: 'include',
+                config: { singleWord: true },
+                summary: 'Single words only'
+            }
+        ]
     }
 };
 
@@ -359,14 +456,19 @@ function getStats() {
  * WHY WE CAN'T JUST USE TOTALS: When a user selects sources, they want a UNION
  * (all words from ANY selected source). We can't precompute all possible unions
  * because with N sources there are 2^N possibilities. Instead, we compute unions
- * on-the-fly using the subset principle:
+ * on-the-fly using the intersection principle:
  *
- * SUBSET PRINCIPLE: Include a combination if ALL its sources are selected.
+ * INTERSECTION PRINCIPLE: Include a combination if ANY of its sources are selected.
+ *   User selects ["eowl"]:
+ *     - "wikt" ✗ (no overlap with {eowl})
+ *     - "eowl" ✓ (eowl ∈ {eowl})
+ *     - "eowl,wikt" ✓ (eowl ∈ {eowl})  ← words from EOWL that are also in wikt
+ *   Total: 3,252 + 32,126 = ~35,378 words (placeholder numbers)
+ *
  *   User selects ["wikt", "eowl"]:
- *     - "wikt" ✓ (wikt ⊆ {wikt, eowl})
- *     - "eowl" ✓ (eowl ⊆ {wikt, eowl})
- *     - "eowl,wikt" ✓ (both ⊆ {wikt, eowl})
- *     - "enable,eowl,wikt" ✗ (enable ∉ {wikt, eowl})
+ *     - "wikt" ✓ (wikt ∈ {wikt, eowl})
+ *     - "eowl" ✓ (eowl ∈ {wikt, eowl})
+ *     - "eowl,wikt" ✓ (both sources in {wikt, eowl})
  *   Total: 1,095,480 + 3,252 + 32,126 = 1,130,858 words
  *
  * WHY ADDITION WORKS: Since combinations are disjoint (no word appears in multiple
@@ -375,14 +477,14 @@ function getStats() {
 function estimateWordCount(selectedSources) {
     // If we have detailed statistics, use them for accurate estimates
     if (BUILD_STATS && BUILD_STATS.source_combinations) {
-        // Union operation: sum all disjoint combinations that are subsets of selection
+        // Union operation: sum all disjoint combinations that have any overlap with selection
         let totalWords = 0;
         for (const [combo, data] of Object.entries(BUILD_STATS.source_combinations)) {
             const comboSources = combo.split(',');
 
-            // Include this combination if it's a subset of selected sources
-            const isSubset = comboSources.every(s => selectedSources.includes(s));
-            if (isSubset) {
+            // Include this combination if ANY of its sources are in the selected sources
+            const hasOverlap = comboSources.some(s => selectedSources.includes(s));
+            if (hasOverlap) {
                 const count = data.count;
                 totalWords += count;
             }
@@ -439,9 +541,9 @@ function computeMetadataCoverage(selectedSources) {
     // Sum counts from all matching combinations (disjoint union)
     for (const [combo, metadata] of Object.entries(BUILD_STATS.metadata_by_combination)) {
         const comboSources = combo.split(',');
-        const isSubset = comboSources.every(s => selectedSources.includes(s));
+        const hasOverlap = comboSources.some(s => selectedSources.includes(s));
 
-        if (isSubset) {
+        if (hasOverlap) {
             totals.total_words += metadata.total;
             totals.with_pos += metadata.pos_tags.count;
             totals.with_any_labels += metadata.any_labels.count;
@@ -532,9 +634,9 @@ function computeLicense(selectedSources) {
     const allLicenses = new Set();
     for (const [combo, data] of Object.entries(BUILD_STATS.source_combinations)) {
         const comboSources = combo.split(',');
-        // Include this combination if it's a subset of selected sources
-        const isSubset = comboSources.every(s => normalizedSources.includes(s));
-        if (isSubset && data.licenses) {
+        // Include this combination if ANY of its sources are selected
+        const hasOverlap = comboSources.some(s => normalizedSources.includes(s));
+        if (hasOverlap && data.licenses) {
             // Add all licenses from this combination
             data.licenses.split(',').forEach(lic => allLicenses.add(lic));
         }
@@ -604,6 +706,258 @@ function computeLicenseFallback(selectedSources) {
 }
 
 // ============================================================================
+// QUICK FILTERS (Builder Mode)
+// ============================================================================
+
+function initializeQuickFilters() {
+    // Handle quick filter button clicks
+    document.querySelectorAll('.quick-filter-buttons').forEach(buttonGroup => {
+        const filterType = buttonGroup.dataset.filterType;
+
+        buttonGroup.querySelectorAll('.quick-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Deactivate siblings
+                buttonGroup.querySelectorAll('.quick-filter-btn').forEach(b => b.classList.remove('active'));
+                // Activate clicked button
+                btn.classList.add('active');
+
+                // Update pending state instead of applying immediately
+                updateQuickFilterSelection(filterType, btn.dataset.value);
+            });
+        });
+    });
+
+    // Handle "Add Filter" button
+    const addBtn = document.getElementById('quick-filter-add');
+    if (addBtn) {
+        addBtn.addEventListener('click', applyPendingQuickFilter);
+    }
+}
+
+function updateQuickFilterSelection(filterType, value) {
+    // Map filter types to state keys
+    const stateKeyMap = {
+        'word-type': 'wordType',
+        'syllable-data': 'syllableData'
+    };
+
+    const stateKey = stateKeyMap[filterType];
+    if (stateKey) {
+        state.pendingQuickFilter[stateKey] = value;
+    }
+
+    updateQuickFilterPreview();
+}
+
+function updateQuickFilterPreview() {
+    const preview = document.getElementById('quick-filter-preview');
+    const description = document.getElementById('quick-filter-description');
+    const warning = document.getElementById('quick-filter-warning');
+    const warningText = document.getElementById('quick-filter-warning-text');
+    const addBtn = document.getElementById('quick-filter-add');
+
+    // Compute what filter would be created
+    const filterToAdd = computeQuickFilter(state.pendingQuickFilter);
+
+    // If no filter (all "any"), hide preview
+    if (!filterToAdd) {
+        preview.style.display = 'none';
+        return;
+    }
+
+    // Show preview
+    preview.style.display = 'block';
+    description.textContent = filterToAdd.summary;
+
+    // Validate filter
+    const validation = validateFilter(filterToAdd);
+
+    if (validation.warning) {
+        warning.style.display = 'block';
+        warningText.textContent = validation.warning;
+        addBtn.disabled = validation.blocking;
+    } else {
+        warning.style.display = 'none';
+        addBtn.disabled = false;
+    }
+}
+
+function computeQuickFilter(pending) {
+    const filters = [];
+
+    // Word Type filter
+    if (pending.wordType !== 'any') {
+        if (pending.wordType === 'single') {
+            filters.push({
+                type: 'phrase',
+                mode: 'include',
+                config: { singleWord: true },
+                summary: 'Single words only'
+            });
+        } else if (pending.wordType === 'phrases') {
+            filters.push({
+                type: 'phrase',
+                mode: 'include',
+                config: { multiWord: true },
+                summary: 'Phrases only'
+            });
+        }
+    }
+
+    // Syllable Data filter
+    if (pending.syllableData !== 'any') {
+        if (pending.syllableData === 'required') {
+            filters.push({
+                type: 'syllable',
+                mode: 'include',
+                config: { requireSyllables: true },
+                summary: 'Syllable data required'
+            });
+        }
+    }
+
+    // If no non-"any" selections, return null
+    if (filters.length === 0) {
+        return null;
+    }
+
+    // If only one filter, return it directly
+    if (filters.length === 1) {
+        return filters[0];
+    }
+
+    // If multiple filters, create a composite description
+    return {
+        type: 'composite',
+        filters: filters,
+        summary: filters.map(f => f.summary).join(' + ')
+    };
+}
+
+function validateFilter(filterToAdd) {
+    // Check for redundancy and conflicts with existing filters
+    for (const existing of state.filters) {
+        if (filtersEquivalent(existing, filterToAdd)) {
+            return {
+                warning: 'This filter (or an equivalent one) already exists',
+                blocking: true
+            };
+        }
+
+        if (filtersConflict(existing, filterToAdd)) {
+            return {
+                warning: 'This contradicts an existing filter',
+                blocking: true
+            };
+        }
+    }
+
+    return { warning: null, blocking: false };
+}
+
+function filtersEquivalent(filter1, filter2) {
+    // Handle composite filters
+    if (filter1.type === 'composite' && filter2.type === 'composite') {
+        // Check if they have the same set of sub-filters
+        if (filter1.filters.length !== filter2.filters.length) {
+            return false;
+        }
+        // Simple check: same summaries
+        return filter1.summary === filter2.summary;
+    }
+
+    // Handle composite vs non-composite
+    if (filter1.type === 'composite' || filter2.type === 'composite') {
+        return false;
+    }
+
+    // Same type and mode
+    if (filter1.type !== filter2.type || filter1.mode !== filter2.mode) {
+        return false;
+    }
+
+    // Check config equivalence (simple JSON comparison)
+    return JSON.stringify(filter1.config) === JSON.stringify(filter2.config);
+}
+
+function filtersConflict(filter1, filter2) {
+    // Check for contradictory filters
+    // Example: singleWord=true conflicts with multiWord=true
+
+    // Handle composite filters
+    if (filter1.type === 'composite') {
+        return filter1.filters.some(f => filtersConflict(f, filter2));
+    }
+    if (filter2.type === 'composite') {
+        return filter2.filters.some(f => filtersConflict(filter1, f));
+    }
+
+    // Phrase filters: singleWord conflicts with multiWord
+    if (filter1.type === 'phrase' && filter2.type === 'phrase') {
+        const single1 = filter1.config.singleWord;
+        const single2 = filter2.config.singleWord;
+        const multi1 = filter1.config.multiWord;
+        const multi2 = filter2.config.multiWord;
+
+        if (single1 && multi2) return true;
+        if (multi1 && single2) return true;
+    }
+
+    return false;
+}
+
+function applyPendingQuickFilter() {
+    const filterToAdd = computeQuickFilter(state.pendingQuickFilter);
+
+    if (!filterToAdd) {
+        return;
+    }
+
+    // Handle composite filters by adding each sub-filter
+    if (filterToAdd.type === 'composite') {
+        filterToAdd.filters.forEach(f => {
+            const filter = {
+                id: state.nextFilterId++,
+                type: f.type,
+                mode: f.mode,
+                config: f.config,
+                summary: f.summary
+            };
+            state.filters.push(filter);
+        });
+    } else {
+        const filter = {
+            id: state.nextFilterId++,
+            type: filterToAdd.type,
+            mode: filterToAdd.mode,
+            config: filterToAdd.config,
+            summary: filterToAdd.summary
+        };
+        state.filters.push(filter);
+    }
+
+    // Reset pending quick filter to "any"
+    state.pendingQuickFilter = {
+        wordType: 'any',
+        syllableData: 'any'
+    };
+
+    // Reset UI buttons
+    document.querySelectorAll('.quick-filter-btn').forEach(btn => {
+        if (btn.dataset.value === 'any') {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    // Hide preview
+    document.getElementById('quick-filter-preview').style.display = 'none';
+
+    updateUI();
+}
+
+// ============================================================================
 // INITIALIZATION
 // ============================================================================
 
@@ -613,6 +967,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     initializeSourceCheckboxes();
     initializeFilterButtons();
+    initializeQuickFilters();
     initializeDemoSelector();
     initializeExportButtons();
     initializeResizeHandle();
@@ -740,9 +1095,10 @@ function generateFilterSummary(filterType, config, mode = 'include') {
 
     switch (filterType) {
         case 'character':
+            // Length constraints
             if (config.minLength || config.maxLength) {
                 if (config.minLength && config.maxLength && config.minLength === config.maxLength) {
-                    parts.push(config.minLength === 5 ? '5 letters exactly' : `${config.minLength} letters`);
+                    parts.push(config.minLength === 1 ? '1 letter' : `${config.minLength} letters`);
                 } else if (config.minLength && config.maxLength) {
                     parts.push(`${config.minLength}-${config.maxLength} letters`);
                 } else if (config.minLength) {
@@ -751,10 +1107,74 @@ function generateFilterSummary(filterType, config, mode = 'include') {
                     parts.push(`≤${config.maxLength} letters`);
                 }
             }
-            if (config.pattern) parts.push(`pattern: ${config.pattern}`);
-            if (config.startsWith) parts.push(`starts with "${config.startsWith}"`);
-            if (config.endsWith) parts.push(`ends with "${config.endsWith}"`);
-            if (config.contains) parts.push(`contains "${config.contains}"`);
+
+            // Character preset
+            if (config.charPreset && config.charPreset !== 'any') {
+                const preset = CHAR_PRESETS[config.charPreset];
+                if (preset) {
+                    parts.push(preset.description);
+                }
+            }
+
+            // Starts with (OR logic)
+            if (config.startsWith && config.startsWith.length > 0) {
+                const list = Array.isArray(config.startsWith) ? config.startsWith : [config.startsWith];
+                if (list.length === 1) {
+                    parts.push(`starts with "${list[0]}"`);
+                } else {
+                    parts.push(`starts with ${list.map(s => `"${s}"`).join(' or ')}`);
+                }
+            }
+
+            // Doesn't start with
+            if (config.excludeStartsWith && config.excludeStartsWith.length > 0) {
+                const list = Array.isArray(config.excludeStartsWith) ? config.excludeStartsWith : [config.excludeStartsWith];
+                if (list.length === 1) {
+                    parts.push(`doesn't start with "${list[0]}"`);
+                } else {
+                    parts.push(`doesn't start with ${list.map(s => `"${s}"`).join(', ')}`);
+                }
+            }
+
+            // Ends with (OR logic)
+            if (config.endsWith && config.endsWith.length > 0) {
+                const list = Array.isArray(config.endsWith) ? config.endsWith : [config.endsWith];
+                if (list.length === 1) {
+                    parts.push(`ends with "${list[0]}"`);
+                } else {
+                    parts.push(`ends with ${list.map(s => `"${s}"`).join(' or ')}`);
+                }
+            }
+
+            // Doesn't end with
+            if (config.excludeEndsWith && config.excludeEndsWith.length > 0) {
+                const list = Array.isArray(config.excludeEndsWith) ? config.excludeEndsWith : [config.excludeEndsWith];
+                if (list.length === 1) {
+                    parts.push(`doesn't end with "${list[0]}"`);
+                } else {
+                    parts.push(`doesn't end with ${list.map(s => `"${s}"`).join(', ')}`);
+                }
+            }
+
+            // Contains (AND logic)
+            if (config.contains && config.contains.length > 0) {
+                const list = Array.isArray(config.contains) ? config.contains : [config.contains];
+                if (list.length === 1) {
+                    parts.push(`contains "${list[0]}"`);
+                } else {
+                    parts.push(`contains ${list.map(s => `"${s}"`).join(' and ')}`);
+                }
+            }
+
+            // Doesn't contain
+            if (config.excludeContains) {
+                parts.push(`no ${config.excludeContains.split('').map(c => `"${c}"`).join(', ')}`);
+            }
+
+            // Legacy pattern support (for backwards compatibility)
+            if (config.pattern && !config.charPreset) {
+                parts.push(`pattern: ${config.pattern}`);
+            }
             break;
 
         case 'phrase':
@@ -952,7 +1372,28 @@ function applyFilterConfig() {
     const config = {};
 
     filterDef.configFields.forEach(field => {
+        // Handle preset-select
+        if (field.type === 'preset-select') {
+            const input = document.getElementById(`filter-${field.name}`);
+            if (input && input.value) {
+                config[field.name] = input.value;
+            }
+            return;
+        }
+
+        // Handle length-row (split row fields)
+        if (field.type === 'length-row') {
+            field.names.forEach(name => {
+                const input = document.getElementById(`filter-${name}`);
+                if (input && input.value) {
+                    config[name] = parseInt(input.value);
+                }
+            });
+            return;
+        }
+
         const input = document.getElementById(`filter-${field.name}`);
+        if (!input) return;
 
         if (field.type === 'checkbox') {
             config[field.name] = input.checked;
@@ -961,6 +1402,19 @@ function applyFilterConfig() {
             config[field.name] = selected;
         } else if (field.type === 'number') {
             if (input.value) config[field.name] = parseInt(input.value);
+        } else if (field.type === 'text') {
+            // Parse comma-separated values for certain fields
+            if (input.value) {
+                const value = input.value.trim();
+                // Fields that should be parsed as comma-separated lists
+                if (['startsWith', 'excludeStartsWith', 'endsWith', 'excludeEndsWith', 'contains'].includes(field.name)) {
+                    // Split by comma, trim whitespace, filter empty strings
+                    config[field.name] = value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+                } else {
+                    // Other text fields remain as strings
+                    config[field.name] = value;
+                }
+            }
         } else {
             if (input.value) config[field.name] = input.value;
         }
@@ -1012,6 +1466,43 @@ function generateFilterConfigHTML(filterDef, existingFilter = null) {
 
     // Configuration fields
     filterDef.configFields.forEach(field => {
+        // Special handling for preset-select
+        if (field.type === 'preset-select') {
+            html += '<div class="form-group">';
+            html += `<label class="form-label" for="filter-${field.name}">${field.label}</label>`;
+            const fieldValue = config[field.name] || field.defaultValue || 'standard';
+            html += `<select id="filter-${field.name}" class="form-select">`;
+            Object.keys(CHAR_PRESETS).forEach(presetKey => {
+                const preset = CHAR_PRESETS[presetKey];
+                const selected = fieldValue === presetKey ? 'selected' : '';
+                html += `<option value="${presetKey}" ${selected}>${preset.label}</option>`;
+            });
+            html += '</select>';
+            html += '<p class="hint">Choose a character preset or select "Any" for no restrictions</p>';
+            html += '</div>';
+            return;
+        }
+
+        // Special handling for length-row (split row for min/max length)
+        if (field.type === 'length-row') {
+            html += '<div class="form-group">';
+            html += '<label class="form-label">Word Length</label>';
+            html += '<div class="form-row-split">';
+            field.names.forEach((name, index) => {
+                const value = config[name] !== undefined ? config[name] : '';
+                html += '<div class="form-col">';
+                html += `<label class="form-sublabel">${field.labels[index]}:</label>`;
+                html += `<input type="number" id="filter-${name}" class="form-input"
+                         placeholder="${index === 0 ? '1' : '15'}"
+                         min="${field.min || 0}"
+                         value="${value}">`;
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '</div>';
+            return;
+        }
+
         html += '<div class="form-group">';
         html += `<label class="form-label" for="filter-${field.name}">${field.label}</label>`;
 
@@ -1055,6 +1546,11 @@ function generateFilterConfigHTML(filterDef, existingFilter = null) {
             html += `<input type="text" id="filter-${field.name}" class="form-input"
                      placeholder="${field.placeholder || ''}"
                      value="${value}">`;
+        }
+
+        // Add hint text if present
+        if (field.hint) {
+            html += `<p class="hint">${field.hint}</p>`;
         }
 
         html += '</div>';
@@ -1148,8 +1644,8 @@ function downloadJSON() {
 
 function updateUI() {
     updateSourceSummary();
-    updateLicenseInfo();
     updateFilterButtons();
+    updateQuickFilters();
     updateFiltersList();
     updateResultsSummary();
 }
@@ -1182,41 +1678,19 @@ function updateSourceSummary() {
     // Compute real-time metadata coverage for ALL selected sources (including enrichment)
     const metadata = computeMetadataCoverage(dataSources);
 
-    // POS availability - depends on wiktionary or wordnet
-    const posAvailable = state.sources.wiktionary || state.sources.wordnet;
-    document.getElementById('pos-available').textContent = posAvailable && metadata
-        ? `Yes (${metadata.pos_tags.percentage}%)`
-        : posAvailable ? 'Yes' : 'No';
-
-    // Labels availability - depends on wiktionary
-    const labelsAvailable = state.sources.wiktionary;
-    document.getElementById('labels-available').textContent = labelsAvailable && metadata
-        ? `Yes (${metadata.any_labels.percentage}%)`
-        : labelsAvailable ? 'Yes' : 'No';
-
-    // Concreteness availability - depends on wordnet or brysbaert
-    const concretenessAvailable = state.sources.wordnet || state.sources.brysbaert;
-    document.getElementById('concreteness-available').textContent = concretenessAvailable && metadata
-        ? `Yes (${metadata.concreteness.percentage}%)`
-        : concretenessAvailable ? 'Yes' : 'No';
-
-    // Regional availability - depends on wiktionary
-    const regionalAvailable = state.sources.wiktionary;
-    document.getElementById('regional-available').textContent = regionalAvailable && metadata
-        ? `Yes (${metadata.region_labels.percentage}%)`
-        : regionalAvailable ? 'Yes' : 'No';
-}
-
-function updateLicenseInfo() {
-    const licenseResult = document.getElementById('license-result');
-    const licenseSources = document.getElementById('license-sources');
-
-    // Compute license using centralized function
-    const activeSources = getActiveSources();
-    const licenseInfo = computeLicense(activeSources);
-
-    licenseResult.innerHTML = `<strong>${licenseInfo.license}</strong><p class="license-description">${licenseInfo.licenseDesc}</p>`;
-    licenseSources.innerHTML = licenseInfo.sources.map(s => `<li>${s}</li>`).join('');
+    // Display word counts for each metadata type
+    if (metadata) {
+        document.getElementById('pos-available').textContent = metadata.pos_tags.count.toLocaleString();
+        document.getElementById('labels-available').textContent = metadata.any_labels.count.toLocaleString();
+        document.getElementById('concreteness-available').textContent = metadata.concreteness.count.toLocaleString();
+        document.getElementById('regional-available').textContent = metadata.region_labels.count.toLocaleString();
+    } else {
+        // Fallback when no metadata available
+        document.getElementById('pos-available').textContent = '0';
+        document.getElementById('labels-available').textContent = '0';
+        document.getElementById('concreteness-available').textContent = '0';
+        document.getElementById('regional-available').textContent = '0';
+    }
 }
 
 function updateFilterButtons() {
@@ -1224,6 +1698,20 @@ function updateFilterButtons() {
         const requires = btn.dataset.requires ? btn.dataset.requires.split(',') : [];
         const isAvailable = hasRequiredSources(requires);
         btn.disabled = !isAvailable;
+    });
+}
+
+function updateQuickFilters() {
+    // Update availability based on selected sources
+    document.querySelectorAll('.quick-filter-item[data-requires]').forEach(item => {
+        const requires = item.dataset.requires.split(',');
+        const isAvailable = hasRequiredSources(requires);
+
+        if (isAvailable) {
+            item.classList.add('available');
+        } else {
+            item.classList.remove('available');
+        }
     });
 }
 
@@ -1288,28 +1776,19 @@ function updateFiltersList() {
 function updateResultsSummary() {
     const activeSources = getActiveSources();
 
-    // Map UI source names to data source names
-    const sourceMapping = {
-        'wiktionary': 'wikt',
-        'eowl': 'eowl',
-        'wordnet': 'wordnet',
-        'brysbaert': 'brysbaert',
-        'frequency': 'frequency'
-    };
-
-    // Get primary sources only (for word count)
-    const dataSources = activeSources.map(s => sourceMapping[s] || s);
-    // Note: 'enable' is validation-only, not a primary source
-    const primarySources = dataSources.filter(s => ['wikt', 'eowl'].includes(s));
-
-    // Calculate estimated word count using centralized function
-    const estimatedWords = estimateWordCount(primarySources);
-
     // Determine license using centralized function
     const licenseInfo = computeLicense(activeSources);
 
-    document.getElementById('result-word-count').textContent = estimatedWords > 0
-        ? `~${estimatedWords.toLocaleString()}`
-        : '0';
+    // Create clean source names list
+    const sourceNames = {
+        'wiktionary': 'Wiktionary',
+        'eowl': 'EOWL',
+        'wordnet': 'WordNet',
+        'brysbaert': 'Brysbaert',
+        'frequency': 'Frequency Data'
+    };
+    const sourcesList = activeSources.map(s => sourceNames[s] || s).join(', ');
+
     document.getElementById('result-license').textContent = licenseInfo.license;
+    document.getElementById('result-sources').textContent = sourcesList || 'None selected';
 }

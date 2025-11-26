@@ -1,225 +1,103 @@
-# Openword Lexicon
+# OpenWord Lexicon
 
-Permissively usable English lexicon for any application (games, NLP, education). Unified build integrates all sources (EOWL, Wiktionary, WordNet, frequency data, Brysbaert concreteness) with per-source licensing tracking, enabling flexible runtime filtering for your specific use case.
+A comprehensive English wordlist with metadata for word games, educational apps, and spell checkers.
 
-## Approach
+## What You Get
 
-**Unified English Build**: Single comprehensive dataset with all sources integrated. Filter at runtime based on your needs (child-safety, region, license requirements, etc.).
+- **1.35M words** with part-of-speech, frequency tiers, concreteness ratings
+- **Game-ready wordlist** (`en-game.trie`) — pure a-z words, no hyphens or apostrophes
+- **Modular metadata** — load only what you need (frequency, concreteness, syllables, sources)
+- **Per-word licensing** — filter by source to meet your license requirements
 
-**License Tracking**: Every entry includes `license_sources` mapping, so you know exactly which licenses apply to each word.
-
-**Language-Based Organization**: Architecture supports future expansion to other languages while maintaining clean separation.
-
-**Code License:** Apache-2.0
-
-## Constraints
-- Total downloads ≤ **100 GB**
-- Peak RAM per step ≤ **2 GB**
-
-## Quickstart
-
-### Using Pre-built Releases
-
-Download and extract a release:
+## Quick Start
 
 ```bash
-# Download latest release
-wget https://github.com/macshonle/openword-lexicon/releases/latest/download/openword-lexicon-core-0.1.0.tar.gz
-
-# Extract
-tar xzf openword-lexicon-core-0.1.0.tar.gz
-cd openword-lexicon-core-0.1.0
-
-# Verify (optional)
-sha256sum -c *.sha256
-
-# Use in Python
-python3 -m pip install marisa-trie
-python3
->>> import marisa_trie, json
->>> trie = marisa_trie.Trie()
->>> trie.load('core.trie')
->>> 'castle' in trie
-True
->>> len(trie)
-208201
-```
-
-### Building from Source (uv)
-
-```bash
-# Install uv (one time)
-brew install uv  # macOS
-# or: curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Clone repository
+# Clone and build
 git clone https://github.com/macshonle/openword-lexicon.git
 cd openword-lexicon
-
-# Bootstrap environment
 make bootstrap
-
-# Build English lexicon
 make build-en
 
-# Result: data/build/en/en.trie + en.meta.json
+# Check a word exists
+uv run python -c "
+import marisa_trie
+trie = marisa_trie.Trie().mmap('data/build/en.trie')
+print('castle' in trie)  # True
+"
 ```
 
-**Pipeline Steps (automated by `make build-en`):**
-1. **Fetch** English sources (EOWL, Wiktionary, WordNet, Brysbaert, frequency data)
-2. **Ingest** source data to normalized JSONL with morphology extraction
-3. **Merge** all entries with license tracking
-4. **Enrich** with WordNet and Brysbaert (concreteness ratings + POS tags for ALL entries)
-5. **Tier** by frequency (A-Z logarithmic scale)
-6. **Build** trie + metadata sidecar + affix index
+See [docs/QUICKSTART.md](docs/QUICKSTART.md) for more usage examples.
 
-**Note**: ENABLE is now optional (validation only). Run `make validate-enable` to check coverage.
+## Output Files
 
-## High-level pipeline
-1. **Fetch** English sources with checksums & provenance
-2. **Normalize** entries to JSONL (schema, NFKC, controlled labels)
-3. **Merge** all sources with license tracking
-4. **Enrich** with WordNet and Brysbaert (concreteness ratings + POS for ALL entries)
-5. **Tier** by frequency (A-Z logarithmic scale)
-6. **Build** trie (compressed MARISA) + metadata sidecar
-7. **Filter** at runtime using `filters.py` (child-safe, region, license, etc.)
+After `make build-en`, you'll find:
 
-## Primary artifacts
-- `en.trie` + `en.meta.json` (English lexicon)
-- `entries_tiered.jsonl` (intermediate with all metadata)
-- `ATTRIBUTION.md` (generated per build)
+| File | Description | Size |
+|------|-------------|------|
+| `data/build/en.trie` | Full lexicon (MARISA trie) | ~4 MB |
+| `data/build/en-game.trie` | Game profile (a-z only) | ~2.5 MB |
+| `data/build/en-wordlist.txt` | Plain text word list | ~16 MB |
+| `data/build/en-frequency.json.gz` | Frequency tiers (A-Z) | ~5 MB |
+| `data/build/en-concreteness.json.gz` | Concreteness ratings | ~150 KB |
+| `data/build/en-syllables.json.gz` | Syllable counts | ~200 KB |
+| `data/build/en-sources.json.gz` | Source attributions | ~5 MB |
 
-## Interactive Web Tools
+## Use Cases
 
-### Word List Builder
+| Use Case | Recommended Files | Filter Strategy |
+|----------|-------------------|-----------------|
+| Wordle clone | `en-game.trie` + frequency | 5 letters, tiers A-M |
+| Kids vocabulary | lexemes + concreteness | Concrete nouns, tiers A-N |
+| Spell checker | `en.trie` | Full lexicon |
+| Profanity filter | lexemes file | Check `labels.register` for vulgar/offensive |
+| Scrabble | `en-game.trie` | Pure a-z, check proper noun flags |
 
-Create custom filtered word lists using the interactive web interface:
+## Creating Custom Word Lists
+
+Use the interactive web builder or command-line tool:
 
 ```bash
-# Start web-based builder (opens browser at http://localhost:8000)
+# Web interface
 make wordlist-builder-web
 
-# Requires: pnpm (install with: npm install -g pnpm)
+# Command line with JSON spec
+uv run python -m openword.owlex examples/wordlist-specs/wordle.json
 ```
 
-The builder creates JSON specifications that describe filtering criteria:
-
-```bash
-# Generate word list from specification
-make owlex-filter SPEC=wordlist-spec.json > words.txt
-
-# With verbose output for debugging
-uv run python -m openword.owlex wordlist-spec.json --verbose --output words.txt
-```
-
-### Available Filters
-
-- **Character**: Length, patterns, regex (100% coverage)
-- **Frequency**: A-Z logarithmic tiers (100% coverage, top ~75k words = A-T, rest = Z)
-- **Part-of-speech**: noun, verb, adjective, etc. (~52.5% coverage)
-- **Concreteness**: Filter by how tangible/abstract words are (~39k words with Brysbaert ratings)
-  - Categorical: concrete/abstract/mixed classifications
-  - Numeric: Precise 1-5 ratings for custom filtering and ranking
-  - Confidence: Standard deviation for filtering ambiguous words
-  - Use cases: children's apps, language learning, accessibility
-- **Morphology**: Derivation and compound word structure (~240k words from Wiktionary)
-  - Filter by formation type: suffixed, prefixed, compound, affixed, circumfixed
-  - Search by base word: find all words derived from "happy"
-  - Search by affix: find all words with suffix "-ness" or prefix "un-"
-  - Reverse affix index: ~450 prefixes, ~380 suffixes, ~12 interfixes
-  - Interfix support: Compound linking morphemes (e.g., "-s-" in "beeswax")
-  - Clean component extraction: Template parameter pollution fixed (~3,800 entries)
-  - Use cases: vocabulary learning, word families, morphological analysis, linguistic research
-- **Labels** (Plus only): register, domain, temporal, region (~3-11% coverage)
-- **Policy**: family-friendly, modern-only, no-jargon shortcuts
-
-### Example Specifications
-
-Pre-built examples in `examples/wordlist-specs/`:
-
-- `wordle.json` - 5-letter common words
-- `kids-nouns.json` - Concrete nouns for children
-- `scrabble.json` - Single words for Scrabble
-- `profanity-blocklist.json` - Flagged inappropriate words
-
-See `tools/wordlist-builder/README.md` for complete documentation.
-
-### Trie Viewer
-
-Visualize and explore the lexicon's trie data structure interactively:
-
-```bash
-# Start trie viewer server (opens browser at http://localhost:8080)
-make viewer-web
-
-# Build binary trie for faster loading (optional)
-make build-trie
-
-# Requires: pnpm (install with: npm install -g pnpm)
-# Requires: Run 'make build-en' first to generate wordlist data
-```
-
-Two viewing modes available:
-- **index.html** - Builds trie from wordlist dynamically in browser
-- **index-binary.html** - Loads pre-built binary trie (faster, requires `make build-trie`)
-
-Features:
-- Real-time prefix search and word validation
-- Random word generation with prefix filtering
-- Trie statistics (nodes, compression ratio, etc.)
-- Interactive exploration of word structure
-
-## Status
-
-✅ **Core Pipeline Complete**
-- Repository scaffolding and guardrails
-- Source fetching with provenance tracking
-- Normalization, ingest, enrichment, and merge
-- Policy filters, attribution, and trie build
-- CI/CD, packaging, releases, and documentation
-
-🚧 **TODO**
-- Comprehensive test suite
-- Performance benchmarks
-
-See [docs/planned/](docs/planned/) for future feature plans.
+See [docs/FILTERING.md](docs/FILTERING.md) for filter options.
 
 ## Documentation
 
-- [USAGE.md](docs/USAGE.md) — Python API usage and examples
-- [SCHEMA.md](docs/SCHEMA.md) — Entry schema reference
-- [DATASETS.md](docs/DATASETS.md) — Source dataset details
-- [DESIGN.md](docs/DESIGN.md) — Architecture and design decisions
-- [ATTRIBUTION.md](ATTRIBUTION.md) — Full source attributions (generated during builds)
+| Document | Description |
+|----------|-------------|
+| [QUICKSTART.md](docs/QUICKSTART.md) | Get words into your app in 5 minutes |
+| [SCHEMA.md](docs/SCHEMA.md) | Data format and field reference |
+| [BUILDING.md](docs/BUILDING.md) | Build pipeline and architecture |
+| [FILTERING.md](docs/FILTERING.md) | Create custom filtered wordlists |
+| [SOURCES.md](docs/SOURCES.md) | Data sources and licensing |
 
 ## Statistics
 
-| Language | Words | Trie Size | License Model |
-|----------|-------|-----------|---------------|
-| **English** | ~1.3M | ~3 MB | Per-word tracking via `license_sources` |
-
-**Metadata Coverage** (English):
-- WordNet + Brysbaert enrichment on ALL entries (not just permissive sources)
-- Concreteness ratings: ~39,561 words from Brysbaert (1-5 scale with confidence scores)
-- 4x better concreteness coverage vs separate pipelines (~40k vs ~20-30k from WordNet alone)
-- Safe defaults for child-appropriate filtering (concrete words for kids)
-- Runtime license filtering (filter to CC0+UKACD for permissive-only)
-- Syllable data from Wiktionary hyphenation (~30-50% coverage)
-- Morphology data from Wiktionary etymology (~240k words: derivation, compounds, affixes with reverse index)
-
-## Contributing
-
-Contributions welcome! Please open an issue or pull request to discuss proposed changes.
+| Metric | Value |
+|--------|-------|
+| Total words | ~1,350,000 |
+| Game words (a-z only) | ~330,000 |
+| With frequency data | ~75,000 (tiers A-T) |
+| With concreteness | ~39,000 |
+| With syllable counts | ~30,000 |
+| With POS tags | ~700,000 |
 
 ## License
 
 - **Code**: Apache-2.0
-- **Data**: Per-word license tracking via `license_sources` field
-  - ENABLE: CC0 (Public Domain)
-  - EOWL: UKACD (Permissive)
+- **Data**: Per-word tracking via `sources` field
   - Wiktionary: CC BY-SA 4.0
-  - WordNet: WordNet License
-  - Brysbaert: Research/Educational Use
-  - Frequency data: CC BY 4.0
+  - EOWL: UKACD (permissive)
+  - WordNet: CC BY 4.0
+  - Brysbaert: Research/Educational
 
-See [LICENSE](LICENSE) for code terms. Data licensing details in ATTRIBUTION.md (generated during builds).
+Filter by source if you need permissive-only words. See [docs/SOURCES.md](docs/SOURCES.md).
+
+## Contributing
+
+Contributions welcome! Please open an issue to discuss proposed changes.

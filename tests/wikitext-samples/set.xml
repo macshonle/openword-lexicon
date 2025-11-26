@@ -1,0 +1,2111 @@
+<page>
+    <title>set</title>
+    <ns>0</ns>
+    <id>7543</id>
+    <revision>
+      <id>87727933</id>
+      <parentid>87430748</parentid>
+      <timestamp>2025-10-31T20:57:50Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{slim-wikipedia}} to new syntax; convert {{slim-wikipedia}} to {{swp}}; convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}; convert {{wp}} to new syntax</comment>
+      <origin>87727933</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="81183" sha1="3heememj2uda8dl5t5m32xbmskqbjy4" xml:space="preserve">{{also|Appendix:Variations of &quot;set&quot;}}
+{{minitoc}}
+==Translingual==
+
+===Symbol===
+{{mul-symbol}}
+
+# {{ISO 639|3}}
+
+===See also===
+* {{langcat}}
+
+==English==
+{{swp|&lt;dab&gt;}}
+
+===Pronunciation===
+* {{enPR|sĕt}}, {{IPA|en|/sɛt/}}
+* {{audio|en|en-us-set.ogg|a=US}}
+* {{homophones|en|sett}}
+* {{rhymes|en|ɛt|s=1}}
+&lt;!-- 1 syllable words !--&gt;
+
+===Etymology 1===
+{{root|en|ine-pro|*sed-}}
+From {{inh|en|enm|setten|}}, from {{inh|en|ang|settan}}, from {{inh|en|gmw-pro|*sattjan}}, from {{inh|en|gem-pro|*satjaną}}, from {{inh|en|ine-pro|*sodéyeti}}, causative of {{m|ine-pro|*sed-||to sit}}.
+
+====Verb====
+{{en-verb|~s|~ting|~|+,~ten&lt;l:dialectal&gt;}}
+
+# {{lb|en|transitive}} To [[put]] (something) down, to [[rest]].
+#: {{syn|en|put|lay|set down}}
+#: {{ant|en|pick up}}
+#: {{ux|en|'''Set''' the [[tray]] there.}}
+#: {{ux|en|He helped his mother '''set''' the table for lunch.}}
+# {{lb|en|transitive}} To attach or affix (something) to something else, or in or upon a certain place.
+#: {{ux|en|I have '''set''' my heart on running the marathon.}}
+#* {{RQ:KJV|Genesis|4|15|passage=The Lord '''set''' a mark upon Cain.}}
+# {{lb|en|transitive}} To put in a specified condition or state; to cause to be.
+#* {{RQ:KJV|Deuteronomy|28|1|passage=The Lord thy God will '''set''' thee on high.}}
+#* {{RQ:KJV|Matthew|10|35|passage=I am come to '''set''' a man at variance against his father, and the daughter against her mother.}}
+#* {{quote-text|en|year=1827|author=w:Samuel Taylor Coleridge|title=Hamlet
+|passage=Every incident '''sets''' him thinking.}}
+# {{lb|en|transitive}} To [[start]] (a [[fire]]).
+#: {{syn|en|light}}
+#: {{ant|en|extinguish|put out|quench}}
+# {{lb|en|transitive|dated}} To cause to stop or stick; to obstruct; to fasten to a spot.
+#: {{ux|en|to '''set''' a coach in the mud}}
+# {{senseid|en|determine}}{{lb|en|transitive}} To [[determine]] or [[settle]].
+#: {{ux|en|to '''set''' the rent}}
+# {{lb|en|transitive}} To [[adjust]].
+#: {{ux|en|I '''set''' the alarm at 6 a.m.}}  (i.e. I programmed it at that hour to go off at a later time)
+#: {{ux|en|I '''set''' the alarm for 6 a.m.}}  (i.e. I programmed it earlier to go off at that hour.)
+# {{lb|en|transitive}} To punch (a [[nail]]) into [[wood]] so that its head is below the surface.
+# {{lb|en|transitive}} To arrange with [[dish]]es and [[cutlery]], to [[set the table]].
+#: {{ux|en|Please '''set''' the table for our guests.}}
+# {{lb|en|transitive}} To [[introduce]] or [[describe]].
+#: {{ux|en|I’ll tell you what happened, but first let me '''set''' the scene.}}
+#* {{RQ:Fielding Tom Jones|chapter=II|passage=An incident which happened about this time will '''set''' the characters of these two lads more fairly before the discerning reader than is in the power of the longest dissertation.}}
+# {{lb|en|transitive}} To [[locate]] (a play, etc.); to assign a [[backdrop]] to, geographically or temporally.
+#: {{ux|en|He says he will '''set''' his next film in France.}}
+#: {{ux|en|Her debut novel is '''set''' during the U.S. Civil War.}}
+# {{lb|en|transitive}} To [[compile]], to make (a puzzle or challenge).
+#: {{ux|en|This crossword was '''set''' by Araucaria.}}
+# {{lb|en|transitive}} To prepare (a stage or film set).
+# {{lb|en|transitive}} To fit (someone) up in a situation. &lt;!-- Same as &quot;set the scene&quot; or rather &quot;prepare&quot;? An example would help.--&gt;
+# {{lb|en|transitive}} To arrange (type).
+#: {{syn|en|typeset}}
+#: {{ux|en|It was a complex page, but he '''set''' it quickly.}}
+# {{lb|en|transitive}} To [[devise]] and [[assign]] (work) to.
+#: {{ux|en|The teacher '''set''' her students the task of drawing a foot.}}
+# {{lb|en|transitive|volleyball}} To direct (the ball) to a teammate for an attack.
+# {{lb|en|intransitive}} To [[solidify]].
+#: {{ux|en|The glue '''sets''' in five minutes.}}
+# {{lb|en|transitive}} To render stiff or solid; especially, to convert into curd; to curdle.
+#: {{ux|en|to '''set''' milk for cheese}}
+# {{lb|en|intransitive}} Of a heavenly body, to disappear below the [[horizon]] of a planet, etc, as the latter rotates.&lt;!--not necessarily Earth: on the moon, the Earth can be seen to set--&gt;
+#: {{ux|en|The moon '''sets''' at eight o'clock tonight.}}
+# {{lb|en|transitive|bridge}} To [[defeat]] a [[contract]].
+# {{lb|en|obsolete|now followed by &quot;out&quot;, as in [[set out]]}} To begin to move; to [[go forth]].
+#* {{RQ:Shakespeare Henry 5|text=The king is '''set''' from London, and the scene is now transported, gentles, to Southampton}}
+# {{lb|en|transitive|botany}} To produce after pollination.
+#: {{ux|en|to '''set''' seed}}
+#* {{quote-text|en|year=2012|author=Daniel Chamovitz|title=What a Plant Knows|page=155
+|passage=Many fruit trees will only flower and '''set''' fruit following a cold winter.}}
+# {{lb|en|intransitive|of fruit}} To be fixed for growth; to strike root; to begin to germinate or form.
+#* {{quote-text|en|year=1906|author=Canada. Dept. of Agriculture. Fruit Branch|title=Fruit crop report
+|passage=In the Annapolis Valley, in spite of an irregular bloom, the fruit has '''set''' well and has, as yet, been little affected by scab.}}
+# {{lb|en|intransitive|Southern US|Midwestern US|dialects}} To [[sit]] {{gloss|be in a seated position}}.
+#: {{ux|en|He '''sets''' in that chair all day.}}
+#* {{RQ:Lincoln Pratt's Patients|chapter=7|passage=Old Applegate, in the stern, just '''set''' and looked at me, and Lord James, amidship, waved both arms and kept hollering for help. I took a couple of everlasting big strokes and managed to grab hold of the skiff's rail, close to the stern.}}
+#* {{quote-book|en|year=1987|author=Toni Morrison|title=Beloved|pageurl=https://books.google.com/books?id=sfmp6gjZGP8C&amp;pg=PA227|page=227
+|passage=And if Mrs. Garner didn't need me right there in the kitchen, I could get a chair and you and me could '''set''' out there while I did the vegetables.}}
+# {{lb|en|intransitive|Southern US|Midwestern US|dialects}} To [[rest]] or [[lie]] somewhere, on something, etc.; to occupy a certain place.
+#* {{quote-song|en|year=1975|lyricist=C.W. McCall; Chip Davis|title={{w|Convoy (song)|Convoy}}|album=Black Bear Road|url=|artist=w:C. W. McCall|passage=Well, we rolled up Interstate 44&lt;br&gt;Like a rocket-sled on rails.&lt;br&gt;We tore up all of our swindle sheets&lt;br&gt;And left 'em '''settin'''' on the scales.}}
+# To hunt game with the aid of a [[setter]].
+# {{senseid|en|hunting}}{{lb|en|hunting|ambitransitive}} Of a dog, to indicate the position of [[game]].
+#: {{ux|en|The dog '''sets''' the bird.}}
+#: {{ux|en|Your dog '''sets''' well.}}
+# To apply oneself; to undertake earnestly.
+#* {{RQ:Hammond Of Fundamentals
+|passage=If he '''set''' industriously and sincerely to perform the commands of Christ, he can have no ground of doubting but it shall prove successful to him.}}
+# {{lb|en|ambitransitive}} To fit music to words.
+#* {{RQ:Dryden Mac Flecknoe|passage='''Set''' thy own songs, and sing them to thy lute.}}
+#* {{RQ:Shakespeare Two Gentlemen of Verona|1|2|passage=That I might sing it (Madam) to a tune:&lt;br&gt;Giue me a Note, your Ladiship can '''set'''}}
+# {{lb|en|ambitransitive}} To place plants or shoots in the ground; to plant.
+#: {{ux|en|to '''set''' pear trees in an orchard}}
+#* {{quote-book|en|year=1774|author=John Robinson; Thomas Rispin|title=A Journey Through Nova-Scotia|location=York|publisher=C. Etherington|pageurl=https://hdl.handle.net/2027/aeu.ark:/13960/t56d6f521?urlappend=%3Bseq=24|page=19
+|passage=We saw him with eight men '''setting''' potatoes within a week of mid-summer.}}
+#* {{quote-journal|en|year=1915|author={{w|D. H. Lawrence}}|journal=The Rainbow|publisher=Vintage|year_published=2011|page=204
+|passage=At Eastertime one year, she helped him to '''set''' potatoes.}}
+# To become [[fixed]] or [[rigid]]; to be [[fastened]].
+# To have a certain direction of motion; to flow; to move on; to tend.
+#: {{ux|en|The current '''sets''' to the north; the tide '''sets''' to the windward.}}
+# {{lb|en|intransitive|country dancing}} To acknowledge a dancing partner by facing him or her and moving first to one side and then to the other, while she or he does the opposite.
+#: {{ux|en|'''Set''' to partners! was the next instruction from the caller.}}
+# To place or fix in a [[setting]].
+#: {{ux|en|to '''set''' a precious stone in a border of metal}}
+#: {{ux|en|to '''set''' glass in a sash}}
+#* {{RQ:Dryden Spanish Fryar|58|And him too rich a jewel to be '''set''' / In vulgar metal for a vulgar use.}}
+# To put in order in a particular manner; to prepare.
+#: {{ux|en|to '''set''' (that is, to hone) a razor}}
+#: {{ux|en|to '''set''' a saw}}
+# To extend and bring into position; to spread.
+#: {{ux|en|to '''set''' the sails of a ship}}
+# To give a pitch to, as a tune; to start by fixing the keynote.
+#* {{RQ:Fielding Joseph Andrews|volume=I|chapter=Here Joseph Andrews Writ a Letter to His Sister Pamela|page=25|passage={{...}} I ſhould be very vvilling to be his Clerk; for vvhich you knovv I am qualified, being able to read, and to '''ſet''' a Pſalm.}}
+# To reduce from a dislocated or fractured state.
+#: {{ux|en|to '''set''' a broken bone}}
+# {{lb|en|intransitive|now|dialectal}} To [[sit]] or [[lie]] (easily etc.) on the [[stomach]]; to be [[digested]] in a certain manner.&lt;!--OED2 5d.--&gt;
+#* {{quote-journal|en|date=1917-02-12|title=If You Knew What Foods?|title_plain=advertisement|journal=w:[[The Independent (New York City)|The Independent]]|volume=59|issue=3558|location=New York|publisher=Independent Corporation|page=280|pageurl=https://archive.org/details/sim_independent_1917-02-12_89_3558/page/280/mode/2up?q=set|passage=If you also knew how to combine foods—that is, what foods eaten together “'''set''' well,” you need never have indigestion, constipation or any of the headachy, stomachachy ills they lead to.}}
+# {{lb|en|masonry}} To lower into place and fix solidly, as the blocks of cut stone in a structure.
+# {{lb|en|obsolete}} To wager in gambling; to risk.
+#* {{RQ:Shakespeare Richard 3|V|iv|passage=I have '''set''' my life upon a cast, / And I will stand the hazard of the die.}}
+# To adorn with something infixed or affixed; to stud; to variegate with objects placed here and there.
+#* {{RQ:Dryden Fables|The Flower and the Leaf
+|passage=High on their heads, with jewels richly '''set''', / Each lady wore a radiant coronet.}}
+#* {{quote-text|en|year=1815|author=w:William Wordsworth|title=Poems of the Imagination
+|passage=pastoral dales thin '''set''' with modern farms}}
+# {{lb|en|obsolete}} To value; to rate; used with ''at''.
+#* {{RQ:Shakespeare Henry 4-2|V|ii|passage=Be you contented, wearing now the garland, / To have a son '''set''' your decrees at naught.}}
+#* {{RQ:Shakespeare Hamlet|I|iv|passage=I do not '''set''' my life at a pin's fee.}}
+# To establish as a rule; to furnish; to prescribe; to assign.
+#: {{ux|en|to '''set''' a good example}}
+# {{lb|en|Scotland}} To suit; to become.
+#: {{ux|en|It '''sets''' him ill.}}
+# To cause (a domestic fowl) to sit on eggs to brood.
+#: {{uxi|en|To '''set''' a hen.}}
+
+=====Usage notes=====
+Originally, ''set'' specifically served as the causative of ''sit'', and this relationship is still reflected in several of the above senses. However, as with many such pairs, the correspondence has mostly deteriorated, with new senses of ''sit'' no longer being accompanied with a like sense of ''set''; notably, there are now transitive senses of ''sit'' and intransitive senses of ''set''. Compare {{m|en|rise}} and {{m|en|raise}}, whose senses are almost all intransitive and transitive counterparts, respectively.
+
+=====Conjugation=====
+{{en-conj|past=set|pres_ptc=setting|old=1|pres_2sg_old=settest|past_2sg_old=settest|pres_3sg_old=setteth|past_ptc2=setten|past_ptc2_qual=note1|note1=[[Appendix:Glossary#dialectal|Dialectal]].}}
+
+=====Synonyms=====
+* {{sense|of heavenly bodies, to disappear below the horizon}} {{l|en|go down}}, {{l|en|go west}}
+
+=====Derived terms=====
+{{col4|en|title=Terms derived from ''set'' (verb)
+|beset
+|coldset|heatset
+|forset
+|foreset
+|forthset|set onto|set up to oneself|set with
+|inset
+|level set
+|nailset
+|newset
+|overset
+|reset
+|set aback
+|set about
+|set against
+|set ahead
+|set alight
+|set-and-forget
+|set apart
+|set-aside
+|set a spell
+|set back
+|set by
+|set by the ears|set over
+|set down
+|set eyes on
+|set fair
+|set-fair
+|set fire|set fire by|set fire in|set fire into|set fire of|set fire on|set fire to|set fire unto|set fire upon
+|set foot
+|set forth
+|set forward|set forwards
+|set free
+|set in
+|set in motion
+|set in stone
+|set loose
+|set mine
+|set off&lt;!--“set-off” is derived from “set off”--&gt;
+|set on
+|set on a pedestal
+|set on fire
+|set on foot|set one's affairs in order|set one's cap at|set one's face against|set one's heart upon|set one's house in order|set one's shoulder to the wheel|set one's sights|set one's watch back|set one's watch by someone|set one's hair on fire|have one's heart set upon
+|set one's heart on
+|set one's sights on
+|set out&lt;!--#transitive: to recount or display a narrative or argument (''she set out her concerns.''); #intransitive: to start. (''He set out to break the world record.'')--&gt;
+|set pen to paper
+|set phasers to
+|set pulses racing
+|set sail,set sails
+|set sights
+|set sights on
+|set store by
+|set straight
+|set the cat among the pigeons
+|set the scene
+|set the table
+|set to
+|set up
+|set upon
+|withset|set a thief to catch a thief|set at defiance|set in train|set one's hand to|set right|set the heather alight
+|set the ball rolling|set the bar|set the heather on fire|set the land|set the pace|set the record straight|set the stage|set the Thames on fire|set the tone|set the wheels in motion|set the world ablaze|set the world afire|set the world aflame|set the world alight|set the world on fire|set the world to rights|set to music|set to work|set together by the ears|set a beggar on horseback and he'll ride to the Devil|set a sponge|set adrift|set afire|set after|set an example|set aright|set aside|set at naught|set at nought|set someone's teeth on edge|set foot on land}}
+
+=====Descendants=====
+* {{desctree|ja|セット|tr=setto|bor=1}}
+* {{desc|ko|세트|bor=1}}
+
+=====Translations=====
+{{trans-top|to put something down}}
+{{multitrans|data=
+* Afrikaans: {{tt+|af|sit}}, {{tt|af|neersit}}, {{tt+|af|plaas}}, {{tt+|af|lê}}
+* Arabic: {{t+|ar|وَضَع}}
+*: Egyptian Arabic: {{tt|arz|حط|tr=ḥaṭṭ}}
+*: Hijazi Arabic: {{t|acw|حَطّ|tr=ḥaṭṭ}}
+* Assamese: {{tt|as|লহিয়া}}
+* Azerbaijani: {{tt+|az|qoymaq}}
+* Bashkir: {{tt|ba|ҡуйыу}}
+* Bulgarian: {{tt+|bg|поставям}}
+* Catalan: {{tt+|ca|posar}}
+* Chinese:
+*: Mandarin: {{tt+|cmn|放|tr=fàng}}
+* Danish: {{tt+|da|sætte}}, {{tt+|da|stille}}, {{tt+|da|placere}}
+* Dutch: {{tt+|nl|zetten}}, {{tt+|nl|neerzetten}}
+* Esperanto: {{tt|eo|meti}}
+* Finnish: {{tt+|fi|asettaa}}, {{tt+|fi|panna}}, {{tt+|fi|pistää}}, {{tt+|fi|laittaa}}
+* French: {{tt+|fr|poser}}
+* Galician: {{tt+|gl|pousar}}
+* German: {{tt+|de|setzen}}, {{tt+|de|legen}}, {{tt+|de|stellen}}, {{tt+|de|aufstellen}}
+* Gothic: {{tt|got|𐌻𐌰𐌲𐌾𐌰𐌽}}
+* Greek: {{tt+|el|βάζω}}
+*: Ancient: {{tt|grc|τίθημι}}
+* Hebrew: {{tt+|he|הֵנִיח|tr=heníakh}}, {{tt+|he|שָׂם|tr=sam}}
+* Hungarian: {{tt+|hu|tesz}}, {{tt+|hu|helyez}}, {{tt+|hu|állít}}, {{tt+|hu|támaszt}}
+* Irish: {{tt+|ga|cuir}}
+*: Old Irish: {{tt|sga|fo·ceird}}
+* Italian: {{tt+|it|deporre}}, {{tt+|it|posare}}, {{tt+|it|mettere}}, {{tt+|it|riporre}}, {{tt+|it|collocare}}, {{tt+|it|porre}}
+* Japanese: {{tt+|ja|置く|tr=おく, oku|sc=Jpan}}
+* Korean: {{tt+|ko|두다}}
+* Latin: {{tt+|la|pōnō}}, {{tt+|la|locō}}
+* Macedonian: {{tt|mk|наме́стува}}, {{tt|mk|сме́стува}}, {{tt|mk|ста́ва}}, {{tt|mk|поста́вува}}
+* Neapolitan: {{tt|nap|mette}}
+* Norwegian: {{tt+|no|putte}}, {{tt+|no|sette}}, {{tt+|no|plassere}}, {{tt+|no|stille}}
+* Occitan: {{tt+|oc|pausar}}
+* Persian: {{tt|fa|نهادن|tr=nehâdan}}, {{tt+|fa|گذاشتن|tr=gozâštan}}
+* Polish: {{tt+|pl|kłaść}}, {{tt+|pl|stawiać}}
+* Portuguese: {{tt+|pt|pôr}}, {{tt+|pt|colocar}}
+* Rapa Nui: {{tt|rap|hata}}
+* Romanian: {{tt+|ro|așeza}}, {{tt+|ro|pune}}
+* Russian: {{tt+|ru|класть|impf}}, {{tt+|ru|положи́ть|pf}}, {{tt+|ru|ста́вить|impf}}, {{tt+|ru|поста́вить|pf}}
+* Sanskrit: {{tt+|sa|दधाति}}
+* Slovene: {{tt|sl|postaviti}}
+* Sorbian:
+*: Lower Sorbian: {{tt|dsb|stajaś}} {{qualifier|imperfective}}, {{tt|dsb|stajiś}} {{qualifier|perfective}}
+* Spanish: {{tt+|es|poner}}, {{tt+|es|dejar}}, {{tt+|es|colocar}}
+* Swedish: {{tt+|sv|sätta}}, {{tt+|sv|ställa}}, {{tt+|sv|placera}}, {{tt+|sv|lägga}}
+* Tagalog: {{tt|tl|maglagay}}, {{tt|tl|ilagay}}, {{tt|tl|lagyan}}
+* Tocharian B: {{tt|txb|tā-}}
+* Turkish: {{tt+|tr|koymak}}
+* Ugaritic: {{tt|uga|𐎌𐎚}}
+* Vietnamese: {{tt+|vi|để}}, {{tt+|vi|đặt}}
+{{trans-bottom}}
+
+{{trans-top-also|to attach or affix (something) to something else, or in or upon a certain place|mount}}
+* French: {{t+|fr|sceller}}
+* Polish: {{t+|pl|wstawiać|impf}}, {{t+|pl|wstawić|pf}}
+* Spanish: {{t+|es|engastar}}
+{{trans-bottom}}
+
+{{trans-top|to determine}}
+* Bulgarian: {{tt+|bg|определям}}
+* Catalan: {{tt+|ca|determinar}}, {{tt+|ca|establir}}, {{tt+|ca|fixar}}
+* Danish: {{tt+|da|fastsætte}}
+* Dutch: {{tt+|nl|bepalen}}
+* Finnish: {{tt+|fi|määrätä}}, {{tt+|fi|asettaa}}
+* French: {{tt+|fr|fixer}}
+* German: {{tt+|de|festsetzen}}, {{tt+|de|festlegen}}, {{tt+|de|bestimmen}}, {{tt+|de|aufstellen}}
+* Greek: {{tt+|el|ορίζω}}, {{tt+|el|καθορίζω}}, {{tt+|el|προσδιορίζω}}
+* Hebrew: {{tt+|he|קבע|tr=kavá}}
+* Hungarian: {{tt+|hu|megállapít}}, {{tt+|hu|megszab}}, {{tt+|hu|meghatároz}}
+* Italian: {{tt+|it|fissare}}, {{tt+|it|stabilire}}, {{tt+|it|determinare}}
+* Latin: {{tt+|la|dēterminō}}
+* Macedonian: {{tt|mk|одре́дува}}, {{tt|mk|опреде́лува}}, {{tt|mk|назна́чува}}
+* Norwegian: {{tt+|no|bestemme}}, {{tt|no|fastlegge}}
+* Polish: {{tt+|pl|ustalać}}, {{tt+|pl|określać}}
+* Portuguese: {{tt+|pt|determinar}}
+* Romanian: {{tt+|ro|fixa}}, {{tt+|ro|stabili}}
+* Russian: {{tt+|ru|задава́ть|impf}}, {{tt+|ru|зада́ть|pf}}, {{tt+|ru|устана́вливать|impf}}, {{tt+|ru|установи́ть|pf}}, {{tt+|ru|определя́ть|impf|sc=Cyrl}}, {{tt+|ru|определи́ть|pf|sc=Cyrl}}
+* Slovene: {{tt|sl|določiti}}
+* Spanish: {{tt+|es|establecer}}, {{tt+|es|determinar}}, {{tt+|es|fijar}}, {{t+|es|montar}}, {{t+|es|setear}} {{qualifier|Puerto Rico}}
+* Tagalog: {{tt|tl|magtakda}}, {{tt|tl|itakda}}
+* Turkish: {{tt+|tr|belirlemek}}
+* Ukrainian: {{tt|uk|устано́влювати|impf}}, {{tt|uk|установи́ти|pf}}, {{tt|uk|встано́влювати|impf}}, {{tt|uk|встанови́ти|pf}}
+{{trans-bottom}}
+
+{{trans-top|to adjust}}
+* Azerbaijani: {{tt+|az|quraşdırmaq}}
+* Bulgarian: {{tt+|bg|намествам}}
+* Catalan: {{tt+|ca|ajustar}}
+* Czech: {{tt|cs|nastavit}}
+* Danish: {{tt+|da|stille}}, {{tt+|da|indstille}}
+* Dutch: {{tt+|nl|aanpassen}}, {{tt+|nl|instellen}}
+* Esperanto: {{tt|eo|alĝustigi}}
+* Finnish: {{tt+|fi|asettaa}}, {{tt+|fi|säätää}}
+* French: {{tt+|fr|régler}}
+* Galician: {{tt+|gl|axustar}}
+* German: {{tt+|de|stellen}}, {{tt+|de|einstellen}}, {{tt+|de|justieren}}
+* Greek: {{tt+|el|ρυθμίζω}}, {{tt+|el|βάζω}} {{qualifier|το ξυπνητήρι}}
+* Hebrew: {{tt+|he|כיוון|tr=kivén}}
+* Hungarian: {{tt+|hu|beállít}}, {{tt+|hu|szabályoz}}, {{tt+|hu|állít}}
+* Italian: {{tt+|it|regolare}}
+* Japanese: {{tt+|ja|準備|tr=junbi suru|alt=準備する}}, {{tt+|ja|用意|tr=youi suru|alt=用意する}}, {{tt+|ja|拵える|tr=koshiraeru}}
+* Macedonian: {{tt|mk|ме́сти|sc=Cyrl}}
+* Norwegian: {{tt+|no|stille}}, {{tt+|no|justere}}
+* Polish: {{tt+|pl|nastawić}}, {{tt+|pl|ustawiać}}
+* Portuguese: {{tt+|pt|ajustar}}
+* Romanian: {{tt+|ro|fixa}}, {{tt+|ro|poziționa}}, {{tt+|ro|regla}}
+* Russian: {{tt+|ru|устана́вливать|impf}}, {{tt+|ru|установи́ть|pf}}
+* Slovene: {{tt|sl|nastaviti}}, {{tt|sl|naravnati}}
+* Spanish: {{tt+|es|ajustar}}, {{t|es|[[configurar]] [[para]]}}, {{t|es|[[poner]] [[para]]}}, {{t+|es|setear}} {{qualifier|Puerto Rico}}
+* Swedish: {{tt+|sv|sätta}}, {{tt+|sv|ställa}}, {{tt+|sv|ställa in}}
+* Tagalog: {{tt+|tl|ayusin}}, {{tt|tl|iayos}}, {{tt|tl|mag-ayos}}, {{tt|tl|isaayos}}
+* Turkish: {{tt+|tr|ayarlamak}}, {{tt+|tr|dizmek}}
+* Vietnamese: {{tt+|vi|điều chỉnh}} ({{tt|vi|調整|sc=Hani}})
+* West Frisian: {{t|fy|ynstelle}}
+{{trans-bottom}}
+
+{{trans-top|to punch a nail into wood}}
+* Azerbaijani: {{tt+|az|vurmaq}}
+* Danish: {{tt|da|forsænke}}, {{tt+|da|indfatte}}
+* Finnish: {{tt+|fi|upottaa}}
+* French: {{tt+|fr|enfoncer}}
+* Italian: {{tt+|it|inchiodare}}
+* Macedonian: {{tt|mk|кова}}, {{tt|mk|заковува}}
+* Portuguese: {{tt+|pt|pregar}}
+* Romanian: {{tt+|ro|bate}}
+* Russian: {{tt+|ru|забива́ть|impf}}, {{tt+|ru|заби́ть|pf}}
+* Spanish: {{t+|es|clavar}}
+* Swedish: {{tt+|sv|sänka}}, {{tt|sv|försänka}}
+* Vietnamese: {{t+check|vi|đóng}} (nail=[[đinh]]) [[chặt]]
+{{trans-bottom}}
+
+{{trans-top|to arrange with dishes and cutlery}}
+* Catalan: {{tt+|ca|parar}}
+* Danish: {{tt|da|dække}}
+* Dutch: {{tt+|nl|dekken}}
+* Finnish: {{tt+|fi|kattaa}}
+* French: {{tt+|fr|mettre}}
+* Gallurese: {{tt|sdn|innandià}}
+* German: {{tt+|de|decken}}
+* Greek: {{tt+|el|στρώνω}}
+* Hebrew: {{tt+|he|ערך|tr=arákh}}
+* Hungarian: {{tt+|hu|megterít}}, {{tt+|hu|terít}}
+* Italian: {{tt+|it|apparecchiare}}
+* Macedonian: {{tt|mk|поставува}}
+* Norwegian: {{tt+|no|dekke}}
+* Polish: {{tt+|pl|zastawić}}, {{tt+|pl|nakryć}}
+* Portuguese: {{tt+|pt|dispor}}
+* Romanian: {{tt+|ro|așeza}}, {{tt+|ro|pune}}
+* Russian: {{tt+|ru|расставля́ть|impf}}, {{tt+|ru|расста́вить|pf}}
+* Sardinian:
+*: Campidanese: {{tt|sc|apparicciài}}, {{tt|sc|preparai}}
+*: Logudorese: {{tt|sc|ammannire}}, {{tt|sc|preparà}}
+* Sassarese: {{tt|sdc|appariccià}}
+* Scottish Gaelic: {{tt|gd|riaraich}}
+* Slovene: {{tt|sl|pogrniti}}
+* Spanish: {{t|es|[[poner]] [[la]] [[mesa]]}}
+* Swedish: {{tt+|sv|duka}}
+* Tagalog: {{tt|tl|mag-ayos}}, {{tt+|tl|ayusin}}
+* Turkish: {{tt+|tr|kurmak}}, {{tt+|tr|donatmak}}
+* Vietnamese: {{tt+|vi|dọn}}, {{tt+|vi|bày}}
+{{trans-bottom}}
+
+{{trans-top-see|to introduce|take place}}
+* Azerbaijani: {{tt|az|təqdim etmək}}
+* Catalan: {{tt+|ca|introduir}}
+* Danish: {{tt|da|præsentere}} (set the scene: {{tt|da|lægge op til}})
+* Dutch: {{tt+|nl|introduceren}}
+* Finnish: {{tt+|fi|kuvailla}}
+* German: {{tt+|de|einführen}}, {{tt+|de|aufstellen}}
+* Greek: {{tt+|el|παρουσιάζω}}
+* Indonesian: {{tt+|id|memperkenalkan}}
+* Italian: {{tt+|it|stabilire}}, {{tt+|it|raffigurare}}, {{tt+|it|introdurre}}, {{tt+|it|descrivere}}
+* Norwegian: {{tt|no|introdusert}}
+* Polish: {{tt+|pl|nakreślić}}
+* Portuguese: {{tt+|pt|apresentar}}, {{tt+|pt|introduzir}}
+* Romanian: {{tt+|ro|introduce}}, {{tt+|ro|pune}}, {{tt+|ro|descrie}}
+* Spanish: {{tt+|es|ambientar}}, {{tt+|es|presentar}}
+* Swedish: {{tt+|sv|presentera}}, {{tt+|sv|beskriva}}
+* Tagalog: {{tt|tl|umpisahan}}, {{tt|tl|pasimulan}}, {{tt|tl|magsimula}}
+* Vietnamese: {{tt+|vi|đặt}}
+{{trans-bottom}}
+
+{{trans-top|to locate, to backdrop}}
+* Bulgarian: {{tt+|bg|слагам}}
+* Danish: {{tt+|da|placere}}
+* Finnish: {{tt+|fi|sijoittaa}}
+* Greek: {{tt+|el|διαδραματίζομαι}}, {{tt+|el|εκτυλίσσομαι}}
+* Hebrew: {{tt|he|מיקם|tr=mikém}}
+* Irish: {{t|ga|suigh}}
+* Italian: {{tt+|it|localizzare}}, {{tt+|it|riprendere}}
+* Norwegian: {{tt+|no|sette}}, {{tt+|no|plassere}}
+* Polish: {{tt+|pl|umiejscawiać}}
+* Portuguese: {{tt+|pt|localizar}}
+* Russian: {{tt+|ru|ста́вить|impf}}, {{tt+|ru|поста́вить|pf}} ''(a play)'', {{tt+|ru|снима́ть|impf}}, {{tt+|ru|снять|pf}} ''(a film)''
+* Spanish: {{t+|es|localizar}}
+* Swedish: {{tt+|sv|placera}}
+{{trans-bottom}}
+
+{{trans-top|to compile, to make (a crossword)}}
+* Azerbaijani: {{tt+|az|qurmaq}}
+* Bulgarian: {{tt+|bg|съставям}}
+* Danish: {{tt|da|konstruere}}
+* Finnish: {{tt+|fi|laatia}}
+* Italian: {{tt+|it|completare}}, {{tt+|it|terminare}}
+* Macedonian: {{tt|mk|составува}}
+* Norwegian: {{tt|no|sette sammen}}
+* Portuguese: {{tt+|pt|completar}}
+* Russian: {{tt+|ru|составля́ть|impf}}, {{tt+|ru|соста́вить|pf}}
+* Spanish: {{t+|es|completar}}
+* Tagalog: {{tt|tl|ihanda}}
+* Turkish: {{tt+|tr|tamamlamak}}
+{{trans-bottom}}
+
+{{trans-top|to prepare (a stage or film set)}}
+* Danish: {{tt|da|opstille}}
+* Finnish: {{tt+|fi|lavastaa}}
+* Greek: {{tt+|el|στήνω}}
+* Italian: {{tt+|it|sceneggiare}}
+* Norwegian: {{tt|no|stille opp}}
+* Polish: {{tt+|pl|przygotowywać}}
+* Portuguese: {{tt+|pt|preparar}}
+* Romanian: {{tt+|ro|pregăti}}
+* Spanish: {{t+|es|preparar}}
+* Vietnamese: {{tt+|vi|sửa soạn}}
+{{trans-bottom}}
+
+{{trans-top|to fit (someone) up in a situation}}
+* Danish: {{tt+|da|stille}}
+* Finnish: {{tt+|fi|valmistella}}
+* Romanian: {{tt+|ro|potrivi}}
+* Spanish: {{tt+|es|configurar}}
+{{trans-bottom}}
+
+{{trans-top|to arrange type}}
+* Danish: {{tt+|da|sætte}}
+* Dutch: {{tt+|nl|zetten}}
+* Finnish: {{tt+|fi|latoa}}
+* German: {{tt+|de|setzen}}
+* Greek: {{tt+|el|στοιχειοθετώ}}
+* Polish: {{tt+|pl|składać}}
+* Spanish: {{t+|es|colocar}}
+* Swedish: {{tt+|sv|sätta}}
+* Vietnamese: {{tt|vi|[[sắp]] ([[chữ]])}}, {{tt|vi|[[xếp]] ([[chữ]])}}
+{{trans-bottom}}
+
+{{trans-top|to devise and assign work}}
+* Bulgarian: {{tt|bg|задавам}}
+* Catalan: {{tt+|ca|assignar}}
+* Danish: {{tt+|da|stille}}
+* Dutch: {{tt+|nl|opdragen}}
+* Finnish: {{tt|fi|antaa tehtäväksi}}
+* French: {{tt+|fr|assigner}}
+* German: {{tt+|de|vergeben}}
+* Greek: {{tt+|el|βάζω}}
+* Hebrew: {{tt|he|הקצה|tr=hiktzá}}
+* Italian: {{tt+|it|assegnare}}, {{tt+|it|stabilire}}, {{tt+|it|distribuire}}
+* Macedonian: {{tt|mk|задава}}
+* Polish: {{tt+|pl|zadawać}}
+* Portuguese: {{tt+|pt|atribuir}}, {{tt+|pt|distribuir}}
+* Russian: {{tt+|ru|задава́ть|impf}}, {{tt+|ru|зада́ть|pf}}
+* Spanish: {{tt+|es|asignar}}
+* Tagalog: {{tt|tl|magsimula}}, {{tt|tl|pasimulan}}, {{tt|tl|mag-umpisa}}
+* Ukrainian: {{tt|uk|задава́ти|impf}}, {{tt|uk|зада́ти|pf}}
+* Vietnamese: {{tt|vi|[[bắt]] ([[phải]])}}
+{{trans-bottom}}
+
+{{trans-see|to sit|sit}}
+
+{{trans-top|to direct the ball to a teammate for an attack}}
+* Danish: {{tt|da|lægge op til}}
+* Finnish: {{tt+|fi|passata}}
+* Italian: {{tt+|it|passare}}
+* Portuguese: {{tt+|pt|passar}}
+* Romanian: {{tt+|ro|pasa}}, {{tt+|ro|trimite}}
+* Spanish: {{t+|es|pasar}}
+* Swedish: {{tt+|sv|lägga upp}}, {{tt+|sv|passa}}
+{{trans-bottom}}
+
+{{trans-top|to solidify}}
+* Bulgarian: {{tt+|bg|втвърдявам}}
+* Danish: {{tt|da|størkne}}
+* Dutch: {{tt+|nl|harden}}
+* Finnish: {{tt+|fi|jähmettyä}}, {{tt+|fi|kovettua}}, {{tt+|fi|asettua}}
+* French: {{tt+|fr|geler}}
+* German: {{tt+|de|härten}}, {{tt+|de|aushärten}}, {{tt|de|fest werden}}
+* Greek: {{tt+|el|πήζω}}, {{tt+|el|στερεοποιούμαι}}
+* Hebrew: {{tt+|he|קָרַשׁ|tr=karásh}}
+* Hungarian: {{tt+|hu|megszilárdul}}
+* Interlingua: {{tt|ia|solidificar}} se
+* Irish: {{tt|ga|stalc}}, {{tt|ga|cruaigh}}
+* Italian: {{tt|it|rapprendersi}}, {{tt+|it|solidificarsi}}
+* Macedonian: {{tt|mk|се зацврснува}}
+* Maori: {{tt|mi|whakatoka}}, {{tt|mi|tetepe}}
+* Norwegian: {{tt|no|stivne}}, {{tt+|no|størkne}}
+* Polish: {{tt|pl|zastygać}}, {{tt+|pl|tężeć}}, {{tt+|pl|wysychać}}
+* Portuguese: {{tt+|pt|solidificar|alt=solidificarse}}
+* Romanian: {{tt|ro|[[se]] [[întări]]}}, {{tt|ro|[[se]] [[solidifica]]}}
+* Russian: {{tt+|ru|застыва́ть|impf}}, {{tt+|ru|засты́ть|pf}}
+* Slovene: {{tt|sl|se strditi}}
+* Spanish: {{tt+|es|solidificarse}}, {{t+|es|fraguar}}, {{t+|es|frogar}}, {{t+|es|cuajar}}
+* Swedish: {{tt+|sv|stelna}}
+* Tagalog: {{tt|tl|tumigas}}, {{tt|tl|manigas}}, {{tt|tl|mabuo}}, {{tt|tl|mamuo}}
+* Vietnamese: {{tt|vi|đặt lại}}, {{tt|vi|se lại}}
+{{trans-bottom}}
+
+{{trans-top|of a heavenly body: to disappear below the horizon}}
+* Arabic: {{tt+|ar|غَرَبَ}}
+* Armenian: {{tt|hy|մայր մտնել}}
+* Aromanian: {{tt|rup|apun}}, {{tt|rup|ascapit}}
+* Bashkir: {{tt|ba|байыу}} ''(the Sun)'', {{tt|ba|батыу}} ''(all other heavenly bodies)''
+* Bulgarian: {{tt+|bg|залязвам}}
+* Catalan: {{tt+|ca|pondre's}}
+* Cherokee: {{tt|chr|ᏭᏕᎵᎦ}}
+* Czech: {{tt|cs|zapadnout}}
+* Danish: {{tt|da|gå ned}}
+* Dhivehi: {{tt|dv|އޮއްސެނީ}}
+* Dutch: {{tt+|nl|ondergaan}}, {{tt+|nl|verdwijnen}}
+* Esperanto: {{tt|eo|subiri}}
+* Finnish: {{tt+|fi|laskea}}
+* French: {{tt+|fr|coucher|alt=se coucher}}, {{tt+|fr|disparaître}}
+* German: {{tt+|de|untergehen}}
+* Greek: {{tt+|el|δύω}}
+*: Ancient: {{tt|grc|δύω}}
+* Hawaiian: {{tt|haw|napoʻo}}, {{tt|haw|anapoʻo}} {{qualifier|Niʻihau}}
+* Hebrew: {{tt+|he|שקע|tr=shaká}}, {{tt+|he|בָּא|tr=ba}}
+* Hungarian: {{tt+|hu|lemegy}}, {{tt+|hu|lenyugszik}}
+* Ingrian: {{t|izh|[[laskiissa]] [[Looja|Loojaa]]}}
+* Italian: {{tt+|it|coricarsi}}, {{tt+|it|tramontare}}
+* Latin: {{tt+|la|occidō}}
+* Macedonian: {{tt|mk|заоѓа}}
+* Maore Comorian: {{tt|swb|tswa|alt=utswa}}
+* Maori: {{tt|mi|whakawhenua}}, {{tt|mi|rumaki}}, {{tt|mi|ahuahu}} {{qualifier|of the sun}}, {{tt|mi|torongi}} {{qualifier|of the sun}}, {{tt|mi|tōwenewene}} {{qualifier|of the sun}}, {{tt|mi|tō}}, {{tt|mi|toene}} {{qualifier|of the sun}}, {{tt|mi|torengi}}
+* Ngazidja Comorian: {{tt|zdj|tswa|alt=hutswa}}
+* Norwegian: {{tt|no|gå ned}}
+* Old English: {{tt|ang|tō setle gān}}, {{tt|ang|on setl gān}}
+* Polish: {{tt+|pl|zachodzić}}
+* Portuguese: {{tt+|pt|pôr}}
+* Romanian: {{tt+|ro|apune}}, {{tt+|ro|asfinți}}, {{tt+|ro|scăpăta}} (''popular'')
+* Russian: {{tt+|ru|заходи́ть|impf}}, {{tt+|ru|зайти́|pf}}, {{tt+|ru|сади́ться|impf}}, {{tt+|ru|сесть|pf}}
+* Sicilian: {{tt|scn|tracuḍḍari}}
+* Slovene: {{tt+|sl|zaiti}}
+* Spanish: {{tt+|es|poner|alt=ponerse}}
+* Swahili: {{tt+|sw|tua|alt=kutua}}
+* Swedish: {{tt+|sv|gå ned}}, {{tt+|sv|gå ner}}
+* Tagalog: {{tt|tl|lumubog}}
+* Tocharian B: {{tt|txb|yäp-}}
+* Ukrainian: {{tt|uk|захо́дити|impf}}, {{tt|uk|зайти́|pf}}
+* Vietnamese: {{tt+|vi|lặn}}
+* Welsh: {{tt+|cy|machlud}}
+{{trans-bottom}}
+
+{{trans-top|to form as a fruit}}
+* Bulgarian: {{tt+|bg|връзвам}}
+* Finnish: {{tt+|fi|muodostua}}
+* Italian: {{tt+|it|fruttificare}}
+* Maori: {{tt|mi|ngakuru}}
+* Spanish: {{t+|es|fructificar}}
+{{trans-bottom}}
+
+{{trans-top|to put in order in a particular manner; to prepare}}
+* Catalan: {{t+|ca|arreglar}}
+* Finnish: {{tt+|fi|valmistella}}
+* Maori: {{tt|mi|tāpiko}} {{qualifier|referring to a trap}}, {{tt|mi|tāhere}} {{qualifier|referring to snares}}
+* Spanish: {{t+|es|preparar}}
+{{trans-bottom}}
+
+{{trans-top|to adjust (bend) the teeth of a saw}}
+* Danish: {{tt|da|udlægge}}
+* German: {{tt+|de|schränken}}
+* Italian: {{tt+|it|allicciare}}
+* Spanish: {{t+|es|alinear}}
+* Swedish: {{tt+|sv|skränka}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Indonesian: {{t+check|id|atur|alt=mengatur}} &lt;!-- was &quot;[[atur|mengatur]]&quot; - assumed inflected form or vocalised spelling; please verify if linking is acceptable. see [[User:Kephir/gadgets/xte#Translation_fixing]] --&gt;, {{t+check|id|pasang|alt=memasang}} &lt;!-- was &quot;[[pasang|memasang]]&quot; - assumed inflected form or vocalised spelling; please verify if linking is acceptable. see [[User:Kephir/gadgets/xte#Translation_fixing]] --&gt;, {{t+check|id|pas|alt=mempaskan}} &lt;!-- was &quot;[[pas|mempaskan]]&quot; - assumed inflected form or vocalised spelling; please verify if linking is acceptable. see [[User:Kephir/gadgets/xte#Translation_fixing]] --&gt;, {{t+check|id|tepat|alt=menepatkan}} &lt;!-- was &quot;[[tepat|menepatkan]]&quot; - assumed inflected form or vocalised spelling; please verify if linking is acceptable. see [[User:Kephir/gadgets/xte#Translation_fixing]] --&gt;
+* Interlingua: {{t-check|ia|poner}}, {{qualifier|1}} {{t-check|ia|deponer}}, {{qualifier|2}} {{t-check|ia|clavar}}, {{t-check|ia|arrangiar}}, {{qualifier|3}} {{t-check|ia|preparar}}
+* Korean: {{t+check|ko|배치하다}}
+* Romanian: {{t-check|ro|seta}}
+* Slovak: {{qualifier|1}} {{t-check|sk|položiť}}, {{qualifier|1}} {{t-check|sk|usadnúť}}, {{qualifier|3}} {{t-check|sk|zapadnúť}}
+}}&lt;!-- close {{multitrans}} --&gt;
+{{trans-bottom}}
+
+===Etymology 2===
+From {{inh|en|enm|set}}, {{m|enm|sette}}, from {{inh|en|ang|set|t=seat, place of residence, camp, settlement, entrenchment, stable, pen}}, from {{inh|en|gmw-pro|*set|t=seat}}, from {{inh|en|gem-pro|*setą|t=seat}}.
+
+====Noun====
+{{wp}}
+{{en-noun}}
+
+# A [[punch]] for setting [[nail]]s in [[wood]].
+#: {{ux|en|nail '''set'''}}
+# A device for receiving broadcast radio waves (or, more recently, broadcast data); a radio or television.
+#: {{ux|en|television '''set'''}}
+# {{alt form|en|sett||a hole made and lived in by a [[badger]]}}.
+# {{alt form|en|sett||pattern of threads and yarns}}.
+# {{alt form|en|sett||piece of quarried stone}}.
+# {{lb|en|horticulture}} A small [[tuber]] or [[bulb]] used instead of [[seed]], particularly onion sets and potato sets.
+# The amount by which the teeth of a [[saw]] protrude to the side in order to create the [[kerf]]. &lt;!-- see [[WP:saw set]] --&gt;
+# {{lb|en|engineering}} A [[permanent]] [[change]] of [[shape]] caused by [[excessive]] [[strain]], as from [[compression]], [[tension]], [[bend]]ing, [[twist]]ing, etc.
+#: {{ux|en|the '''set''' of a spring}}
+#* {{quote-book|en|date=29 March 1986|author=w:National Transportation Safety Board|title=Aircraft Accident Report: China Airlines Boeing 747-SP, N4522V, 300 Nautical Miles Northwest of San Francisco, California, February 19, 1985|chapter=1.12 Wreckage and Impact Information|url=https://www.ntsb.gov/investigations/AccidentReports/Reports/AAR8603.pdf|archiveurl=https://web.archive.org/web/20220710162138/https://www.ntsb.gov/investigations/AccidentReports/Reports/AAR8603.pdf|archivedate=10 July 2022|accessdate=10 July 2022|page=12|text=The wings were bent or set permanently 2 to 3 inches upward at the wingtips; however, the '''set''' was within the manufacturer's allowable tolerances.}}
+# A [[bias]] of mind; an [[attitude]] or pattern of behaviour.
+# {{lb|en|piledriving}} A piece placed temporarily upon the head of a [[pile]] when the latter cannot otherwise be reached by the weight, or hammer.
+# {{lb|en|printing|dated}} The [[width]] of the [[body]] of a [[type]].
+# A [[young]] [[oyster]] when first [[attach]]ed.
+# Collectively, the [[crop]] of young oysters in any [[locality]].
+# {{senseid|en|series or group}} A series or group of something. (''Note the similar meaning in {{l|en|set|Etymology 4, Noun|id=matching collection}}'')
+# {{lb|en|colloquial}} The [[manner]], [[state]], or [[quality]] of setting or [[fit]]ting; [[fit]].
+#: {{ux|en|the '''set''' of a coat}}
+#* {{quote-journal|en|date=29 Dec 84|volume=12|number=25|journal=Gay Community News|page=7|author=Amy Hoffman|title=Dyke Detectives Solve Murder Mysteries|text=So much of our culture, hidden by necessity for so long, involves subtle codes and signals: the '''set''' of her shoulders, the sway of his hips.}}
+# The [[pattern]] of a [[tartan]], etc.
+# The [[camber]] of a curved roofing tile.
+# The full number of [[egg]]s set under a [[hen]].
+# {{lb|en|obsolete|rare}} That which is [[stake]]d; a [[wager]]; hence, a gambling game.
+#* {{RQ:Shakespeare Henry 5|I|ii|passage=We will in France, by God's grace, play a '''set''' / Shall strike his father's crown into the hazard.}}
+#* {{RQ:Dryden Hind and Panther
+|passage=That was but civil war, an equal '''set'''.}}
+#* {{RQ:Dickens Little Dorrit|passage=Thenceforth the Dowager, with a light and careless humour, often recounted to her particular acquaintance how, after a hard trial, she had found it impossible to know those people who belonged to Henry’s wife, and who had made that desperate '''set''' to catch him.}}
+# A [[tool]] for [[dress]]ing [[forge]]d [[iron]]. &lt;!--Ch1908; not sure if this is the correct ety--&gt;
+
+=====Derived terms=====
+{{col4|en|title=Terms derived from ''set'' (noun)
+|compression set|set dec
+|dead set|set dresser|butt set|time-point set
+|level set|marzipan set|set light|stop set
+|offset
+|onset
+|outset
+|seam set
+|set-off
+|set tool
+|set-top box
+|television set
+|TV set}}
+
+=====Translations=====
+{{trans-top|punch for setting nails in wood}}
+{{multitrans|data=
+* Danish: {{tt+|da|sætning}}
+* Finnish: {{tt|fi|upotuspiikki}}
+* Maori: {{tt|mi|panihi}}
+{{trans-bottom}}
+
+{{trans-top|device for receiving broadcast radio waves}}
+* Bulgarian: {{tt+|bg|апарат|m}}
+* Catalan: {{tt+|ca|aparell|m}}
+* Danish: {{tt|da|anlæg|n}}, {{tt+|da|apparat|n}}
+* Dutch: {{tt+|nl|toestel|n}}
+* Finnish: {{tt+|fi|vastaanotin}}
+* French: {{tt+|fr|poste|m}}, {{tt+|fr|appareil|m}}, {{tt+|fr|récepteur|m}}
+* German: {{tt+|de|Gerät|n}}
+* Greek: {{tt+|el|συσκευή|f}}, {{tt+|el|δέκτης|m}}
+* Italian: {{tt+|it|apparecchio|m}}, {{tt+|it|apparato|m}}
+* Latvian: {{tt|lv|uztvērējs|m}}
+* Macedonian: {{tt|mk|при́емник|m}}
+* Polish: {{tt+|pl|odbiornik|m}}
+* Portuguese: {{tt+|pt|aparelho|m}}
+* Romanian: {{tt+|ro|aparat|n}}, {{tt+|ro|receptor|n}}
+* Russian: {{tt+|ru|приёмник|m}}, {{tt+|ru|аппара́т|m}}, {{tt+|ru|устро́йство|n}}
+* Spanish: {{tt+|es|aparato|m}}
+* Swedish: {{tt+|sv|apparat|c}}
+* Vietnamese: {{tt+|vi|máy thu thanh}}
+{{trans-bottom}}
+
+{{trans-see|alternative form of '''sett'''|sett}}
+
+{{trans-top|horticulture: small tuber or bulb used instead of seed}}
+* Finnish: {{tt+|fi|siemen|alt=siemen-}}
+* Irish: {{t|ga|sceallán|m}} {{qualifier|of potato}}
+{{trans-bottom}}
+
+{{trans-top|amount the teeth of a saw diverge}}
+* Finnish: {{tt+|fi|haritus}}
+* Russian: {{tt|ru|[[разво́д]] [[зуб|зу́бьев]] [[пила|пилы́]]|m}}
+{{trans-bottom}}
+
+{{trans-top|engineering: permanent change of shape caused by excessive strain}}
+* Finnish: {{tt+|fi|muodonmuutos}}
+{{trans-bottom}}
+
+{{trans-top|bias of mind, pattern of behaviour}}
+* Finnish: {{tt+|fi|asenne}} {{q|bias}}; {{tt+|fi|tapa}} {{q|pattern}}
+{{trans-bottom}}
+
+{{trans-top|piledriving: piece placed temporarily upon the head of a pile}}
+* Finnish: {{tt|fi|lyöntilevy}}
+{{trans-bottom}}
+
+{{trans-top|printing: width of a type}}
+* Finnish: {{tt+|fi|leveys}}
+{{trans-bottom}}
+
+{{trans-top|young oyster}}
+{{trans-bottom}}
+
+{{trans-top|crop of young oysters}}
+{{trans-bottom}}
+
+{{trans-top|series of, a group of}}
+* Finnish: {{tt+|fi|sarja}}
+* French: {{tt+|fr|série}}, {{tt+|fr|lot}}
+* Irish: {{tt|ga|slí|f}} {{qualifier|tools}}
+* Italian: {{tt+|it|serie}}
+* Maori: {{tt|mi|huinga}}
+* Portuguese: {{tt+|pt|série}}, {{tt+|pt|conjunto}}, {{tt+|pt|trem|m}}
+* Russian: {{tt+|ru|набо́р|m}}, {{tt+|ru|се́рия|f}}, {{tt+|ru|гру́ппа|f}}, {{tt+|ru|компле́кт|m}}
+* Serbo-Croatian:
+*: Cyrillic: {{tt|sh|се̏т|m}}
+*: Roman: {{tt+|sh|sȅt|m}}
+* Spanish: {{tt+|es|serie}}, {{t+|es|juego|m}}, {{t+|es|conjunto|m}}
+* Vietnamese: {{tt+|vi|loạt}}, {{tt+|vi|bộ}}
+{{trans-bottom}}
+
+{{trans-see|manner of setting or fitting|fit}}
+
+{{trans-top|pattern of a tartan}}
+* Finnish: {{tt+|fi|kuvio}}
+{{trans-bottom}}
+
+{{trans-top|camber of a curved roofing tile}}
+{{trans-bottom}}
+
+{{trans-top|full number of eggs set under a hen}}
+* Finnish: {{tt+|fi|satsi}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Bulgarian: {{t+check|bg|комплект|m}} (1), {{t+check|bg|мно́жество|n}} (2)
+* Interlingua: {{qualifier|1}} {{t-check|ia|collection}}, {{qualifier|2}} {{t-check|ia|insimul}}, {{qualifier|5}} {{t-check|ia|scena}}
+* Latvian: {{qualifier|1}} {{t-check|lv|kolekcija}}
+* Romanian: {{qualifier|1}} {{t+check|ro|mulțime|f}}
+* Slovak: {{qualifier|1}} {{t-check|sk|sada|f}}, {{qualifier|2}} {{t-check|sk|množina|f}}, {{qualifier|3}} {{t+check|sk|skupina|f}}, {{qualifier|5}} {{t-check|sk|scéna|f}}
+* Spanish: {{t+check|es|decorado|m}}
+}}&lt;!-- close {{multitrans}} --&gt;
+{{trans-bottom}}
+
+===Etymology 3===
+From {{inh|en|enm|sett}}, from {{inh|en|ang|ġesett}}, past participle of {{m|ang|settan}}.
+
+====Adjective====
+{{en-adj}}
+
+# [[fixed|Fixed]] in position.
+#* {{quote-journal|en|date=2013-07-19| author=[http://www.theguardian.com/profile/iansample Ian Sample]| volume=189| issue=6| page=34| magazine=w:The Guardian Weekly| title=[http://www.theguardian.com/lifeandstyle/2013/jul/08/irregular-bedtimes-affect-childrens-brains Irregular bedtimes may affect children's brains]| passage=Irregular bedtimes may disrupt healthy brain development in young children, according to a study of intelligence and sleeping habits.&amp;nbsp; &amp;para;&amp;nbsp;Going to bed at a different time each night affected girls more than boys, but both fared worse on mental tasks than children who had a '''set''' bedtime, researchers found.}}
+# [[rigid|Rigid]], solidified.
+# [[ready|Ready]], [[prepared]].
+#: {{ux|en|[[on your mark, get set, go|on your marks, get '''set''', go!]];&amp;nbsp; [[on your marks]], '''set''', go!}}
+# [[intent|Intent]], [[determine]]d (to do something).
+#: {{ux|en|'''set''' on getting to his destination}}
+#* {{RQ:Stevenson Osbourne Wrecker|chapter=In which Jim and I Take Different Ways|page=179|passage=And she likes you so much, and thinks you so accomplished and distingué-looking, and was just as '''set''' as I was to have you for best man.}}
+# [[prearrange|Prearranged]].
+#: {{uxi|en|a [[set menu]]|t=a meal that is instituted by a [[restaurateur]] for a limited occasion}}
+#: {{uxi|en|a '''set''' book|t=a required reading for a course in an educational institution}}
+# {{U|fixed}} in one’s [[opinion]].
+#: {{ux|en|I’m '''set''' against the idea of smacking children to punish them.}}
+# {{lb|en|of hair}} Fixed in a certain style.
+
+=====Synonyms=====
+* {{sense|intent, determined}} {{l|en|determined}}, {{l|en|intent}}
+* {{sense|prearranged}} {{l|en|dictated}}, {{l|en|prearranged}}, {{l|en|predetermined}}, {{l|en|prescribed}}, {{l|en|specified}}
+* {{sense|fixed in one's opinion}} {{l|en|fixed}}, {{l|en|rigid}}
+
+=====Derived terms=====
+{{col3|en|title=Terms derived from Etymology 1
+|all set
+|close-set
+|dead set
+|dead set against
+|deep-set
+|hard-set
+|have one's heart set on
+|heavyset,heavy-set
+|nail set|set book
+|mindset
+|moonset
+|offset
+|outset
+|photoset
+|preset
+|quickset
+|set-aside
+|saw set
+|self-set
+|set back
+|setback
+|set chisel
+|set fair
+|set for life
+|sethood
+|set-in
+|set in one's ways
+|setlist
+|setness
+|set net
+|set of one's jaw
+|set phrase
+|set shot
+|set square
+|set-stitched
+|setter&lt;!--volleyball--&gt;
+|set-to
+|sharp-set
+|sunset
+|thickset
+|trendsetter
+|typeset
+|unset
+|upset
+|well-set|set screw|go set
+}}
+
+=====Translations=====
+{{trans-top|fixed in position}}
+{{multitrans|data=
+* Bulgarian: {{tt+|bg|неподвижен}}
+* French: {{tt+|fr|fixe}}, {{tt+|fr|statique}}
+* Hebrew: {{t|he|ערוך|tr=arúkh}}
+* Latin: {{tt+|la|status}}
+* Old English: {{tt|ang|āsett}}
+* Swedish: {{tt+|sv|fastställd}}
+{{trans-bottom}}
+
+{{trans-top|ready, prepared}}
+* Bulgarian: {{tt+|bg|готов}}
+* Catalan: {{tt|ca|preparat}}, {{tt+|ca|llest}}
+* Chinese:
+*: Mandarin: {{tt+|cmn|既定|tr=jìdìng}}
+* Danish: {{tt+|da|klar}}, {{tt|da|færdig}}
+* Dutch: {{tt+|nl|klaar}}, {{tt+|nl|klare}}, {{tt+|nl|voorbereid}}, {{tt+|nl|voorbereide}}
+* Esperanto: {{tt+|eo|preta}}
+* Finnish: {{tt+|fi|valmis}}
+* French: {{tt+|fr|prêt|m}}
+* German: {{tt+|de|fertig}}, {{tt+|de|bereit}}
+* Greek: {{tt+|el|έτοιμος|m}}
+* Hebrew: {{tt|he|מוכן|tr=mukhán}}
+* Indonesian: {{tt+|id|siap}} {{qualifier|a starter's signal}}
+* Italian: {{tt+|it|pronto|m}}
+* Japanese: {{tt+|ja|準備|tr=junbi-ga-dekita|alt=準備ができた|sc=Jpan}}, {{tt+|ja|用意|tr=yōi-ga-dekita|alt=用意ができた|sc=Jpan}}, {{qualifier|a starter's signal}} {{tt+|ja|用意|tr=yōi|sc=Jpan}}
+* Macedonian: {{tt|mk|подготвен|m}}, {{tt|mk|готов|m}}
+* Polish: {{tt+|pl|gotowy|m}}
+* Portuguese: {{tt+|pt|pronto|m}}, {{tt+|pt|preparado|m}}
+* Romanian: {{tt+|ro|pregătit}}, {{tt+|ro|gata}}
+* Russian: {{tt+|ru|устано́вленный}}, {{tt+|ru|гото́вый}}
+* Slovene: {{tt|sl|pripravljen|m}}, {{tt|sl|gotov|m}}
+* Spanish: {{tt+|es|listo}}
+* Swedish: {{tt+|sv|klar}}, {{tt+|sv|redo}}, {{tt+|sv|färdig}}
+* Tagalog: {{tt|tl|nakatakda}}, {{tt|tl|nakahanda}}
+* Turkish: {{tt+|tr|hazır}}
+* Vietnamese: {{tt+|vi|sẵn sàng}}
+{{trans-bottom}}
+
+{{trans-top|intent, determined}}
+* Bulgarian: {{tt+|bg|решителен}}
+* Danish: {{tt|da|fastsat}}
+* Dutch: {{tt+|nl|ingesteld}}, {{tt+|nl|ingestelde}}
+* Finnish: {{tt+|fi|määrätietoinen}}, {{tt+|fi|päättäväinen}}
+* French: {{tt+|fr|prêt|m}}
+* Greek: {{tt+|el|αποφασισμένος|m}}
+* Italian: {{tt+|it|determinato|m}}
+* Polish: {{tt+|pl|zdeterminowany|m}}
+* Portuguese: {{tt+|pt|determinado|m}}
+* Romanian: {{tt+|ro|hotărât}}
+* Slovene: {{tt+|sl|odločen|m}}
+* Swedish: {{tt+|sv|besluten}}, {{tt+|sv|bestämd}}
+* Turkish: {{tt+|tr|kararlı}}
+* Vietnamese: {{tt+|vi|cố ý}}, {{tt+|vi|nhất định}}, {{tt+|vi|kiên quyết}}
+{{trans-bottom}}
+
+{{trans-top|prearranged}}
+* Catalan: {{tt+|ca|establert}}
+* Danish: {{tt|da|fastsat}}, {{tt+|da|bestemt}}, {{tt+|da|fast}}
+* Finnish: {{tt+|fi|kiinteä}}, {{tt+|fi|määrätty}}, {{tt|fi|vakio|alt=vakio-}}
+* French: {{tt+|fr|établi|m}}, {{tt+|fr|déterminé|m}}
+* Greek: {{tt+|el|προκαθορισμένος|m}}, {{tt+|el|συγκεκριμένος|m}}
+* Italian: {{tt+|it|programmato|m}}, {{tt+|it|predisposto|m}}
+* Macedonian: {{tt|mk|наме́стен|m}}
+* Old English: {{tt|ang|āsett}}
+* Polish: {{tt|pl|ustalony|m}}, {{tt+|pl|określony|m}}
+* Portuguese: {{tt+|pt|combinado}}
+* Romanian: {{tt+|ro|stabilit}}, {{tt+|ro|fixat}}
+* Slovene: {{tt|sl|predpripravljen|m}}
+* Swedish: {{tt+|sv|fast}}, {{tt+|sv|bestämd}}, {{tt+|sv|spikad}}
+* Vietnamese: {{tt|vi|đã định}}
+{{trans-bottom}}
+
+{{trans-top|fixed in one’s opinion}}
+* Bulgarian: {{tt+|bg|установен}}
+* Danish: {{tt+|da|bestemt}}
+* Finnish: {{tt+|fi|vakuuttunut}}
+* Greek: {{tt+|el|αμετακίνητος|m}}, {{tt+|el|αμετάβλητος|m}}
+* Italian: {{tt+|it|fissato|m}}
+* Macedonian: {{tt|mk|одлучен|m}}, {{tt|mk|непоколеблив|m}}
+* Portuguese: {{tt+|pt|determinado}}
+* Vietnamese: {{tt+|vi|nhất định}}
+{{trans-bottom}}
+
+{{trans-top|of hair: fixed in a certain style}}
+* Danish: {{tt|da|opsat}}
+* Finnish: {{tt+|fi|laitettu}}
+* Polish: {{tt|pl|ułożony|m}}
+* Romanian: {{tt+|ro|așezat}}
+* Swedish: {{tt+|sv|satt}}, {{tt+|sv|uppsatt}}
+* Turkish: {{tt|tr|yapılmış}}
+}}&lt;!-- close {{multitrans}} --&gt;
+{{trans-bottom}}
+
+&lt;!--Remove this section once all of the translations below have been moved into the tables above.--&gt;
+{{checktrans-top}}
+* Interlingua: {{t-check|ia|preparate}}
+{{trans-bottom}}
+
+===Etymology 4===
+From {{der|en|enm|set}}, {{m|enm|sete}}, {{m|enm|sette||that which is set, the act of setting, seat}}, from {{der|en|ang|set||setting, seat, a place where people remain, habitation, camp, entrenchment, a place where animals are kept, stall, fold}} and {{der|en|ang|seten||a set, shoot, slip, branch; a nursery, plantation; that which is planted or set; a cultivated place; planting, cultivation; a setting, putting; a stopping; occupied land}}, related to {{cog|ang|settan||to set}}. Compare {{cog|gml|gesette||a set, suite}}, {{cog|ang|gesetl||assembly}}. According to Skeat, in senses denoting a group of things or persons, representing an alteration of {{m|en|sept}}, from {{der|en|fro|sette||a religious sect}}, from {{der|en|ML.|secta||retinue}}, from {{der|en|la|secta||a faction}}. See {{l|en|sect}}. It is quite possible that the modern word is more of a merger between both, however.
+
+====Noun====
+{{en-noun}}
+
+# A young plant fit for setting out; a [[slip]]; [[shoot]].
+# A rudimentary fruit.
+# The setting of the sun or other luminary; {{lb|en|by extension}} the close of the day.
+#* {{RQ:Shakespeare Richard 3|act=V|scene=iii|passage=The weary sun hath made a golden '''set'''.}}
+#* {{RQ:Tennyson Poems 1842|volume=I|poem=Adeline|page=41|passage=And a rose-bush leans upon, / Thou that faintly smilest still, / As a Naiad in a well, / Looking at the '''set''' of day, {{...}}}}
+# {{lb|en|literally|and|figuratively}} General [[movement]]; [[direction]]; [[drift]]; [[tendency]].
+#* {{quote-text|en|year=1840|author=w:Thomas De Quincey|title=Style
+|passage=Here and there, amongst individuals alive to the particular evils of the age, and watching the very '''set''' of the current, there may have been even a more systematic counteraction applied to the mischief.}}
+#* {{quote-book|en|year=1951|author=Herman Wouk|title=The Caine Mutiny|page=238|passage=He put his eye to the alidade. “I thought so! Zero ''five'' four and that's allowing nothing for '''set''' and drift along the line of bearing. We're inside the departure point now{{...}}”}}
+# {{senseid|en|matching collection}} A [[match]]ing [[collection]] of similar things. (''Note the similar meaning in {{l|en|set|Etymology 2, Noun|id=series or group}}''.)
+#: {{ux|en|a '''set''' of tables}}
+# A collection of various objects for a particular purpose.
+#: {{ux|en|a '''set''' of tools}}
+# An object made up of several parts.
+#: {{ux|en|a '''set''' of steps}}
+# {{senseid|en|math-collection}}{{lb|en|set theory}} A collection of zero or more [[object]]s, possibly infinite in size, and disregarding any order or repetition of the objects which may be contained within it.
+# {{lb|en|in plural, “sets”|mathematics|informal}} [[set theory|Set theory]].
+# A group of people, usually meeting socially or connected through some shared interest, activity, attribute, etc.
+#: {{ux|en|the country '''set'''}}
+#* {{RQ:Thackeray Pendennis|chapter=XIX|passage=That he took perfumed baths is a truth; and he used to say that he took them after meeting certain men of a very low '''set''' in hall.}}
+#* {{quote-book|en|year=1889|year_published=1899|author={{w|Rudyard Kipling}}|title={{w|Under the Deodars}}|chapter=The Education of Otis Yeere|location= Boston|publisher=The Greenock Press|page=21|text=“Good gracious, child, you didn't join the Theosophists and kiss Buddha's big toe, did you ? I tried to get into their '''set''' once, but they cast me out for a sceptic — without a chance of improving my poor little mind, too.”}}
+#* {{quote-journal|en|date=29 Dec 84|volume=12|number=25|journal=Gay Community News|page=13|author=H. W. Seng|title=Alice, Gertrude and Sammy Dearest|text=They were very private people, though they did have their circle of friends at Bilignin. They had little or no association with the Natalie Barney '''set''', in their eyes much too frivolous.}}
+# The [[scenery]] for a [[film]] or [[play]].
+# the general [[locations]] and [[area]] where a [[movie]]’s, a [[film]]’s, or  a [[video]]’s [[scenery]] is arranged to be filmed also including places for [[actors]], assorted crew, [[director]], [[producer]]s which are typically not filmed.
+# {{lb|en|dance}} The initial or basic [[formation]] of [[dancer]]s.
+# {{senseid|en|exercise}} {{lb|en|exercise}} A group of [[repetition]]s of a single [[exercise]] performed one after the other without rest.
+#: {{mer|en|rep&lt;id:repetition&gt;&lt;alt:reps&gt;}}
+#* {{quote-text|en|year=1974|author=Charles Gaines; George Butler|title=Pumping Iron: The Art and Sport of Bodybuilding|page=22
+|passage=This is the fourth '''set''' of benchpresses.}}
+# {{senseid|en|tennis}} {{lb|en|tennis}} A complete series of [[game]]s, forming part of a [[match]].
+# {{lb|en|volleyball}} A complete series of [[point]]s, forming part of a [[match]].
+# {{lb|en|volleyball}} The act of directing the ball to a teammate for an [[attack]].
+# {{senseid|en|musical performance comprising several pieces}} {{lb|en|music}} A musical [[performance]] by a [[band]], [[disc jockey]], etc., consisting of several musical pieces.
+#* {{quote-journal|en|date=June 26, 2017|author=Alexis Petridis| title=Glastonbury 2017 verdict: Radiohead, Foo Fighters, Lorde, Stormzy and more| work=the Guardian| url=https://www.theguardian.com/music/2017/jun/26/glastonbury-2017-verdict-radiohead-foo-fighters-lorde-stormzy-and-more| passage=You heard “oh, Jeremy Corbyn” everywhere: at the silent disco, during Radiohead’s Friday night headlining '''set''', midway through the Other stage appearance by rapper Stormzy, who gamely joined in. }}
+# {{lb|en|music}} A [[drum kit]], a [[drum set]].
+#: {{ux|en|He plays the '''set''' on Saturdays.}}
+# {{lb|en|UK|education}} A class group in a subject where pupils are divided by ability.
+#* {{quote-journal| 1=en| date=2012-04-26| title=Themes: Pupil grouping and organisation of classes| url=http://www.education.gov.uk/schools/toolsandinitiatives/tripsresearchdigests/a0013256/themes-pupil-grouping-and-organisation-of-classes| publisher=Department for Education| passage=Looking at pupil attainment, the study found that students with the same Key Stage 3 scores could have their GCSE grade raised or lowered by up to half a grade as a result of being placed in a higher or lower '''set'''.| accessdate=9 June 2012| archiveurl=https://web.archive.org/web/20120614055933/http://www.education.gov.uk/schools/toolsandinitiatives/tripsresearchdigests/a0013256/themes-pupil-grouping-and-organisation-of-classes| archivedate=14 June 2012}}
+# {{lb|en|poker|slang}} [[three of a kind|Three of a kind]], especially if two cards are in one's [[hand]] and the third is on the [[board]]. Compare {{m|en|trips||three of a kind, especially with two cards on the board and one in one's hand}}.&lt;ref&gt; Weisenberg, Michael (2000) ''[http://www.poker1.com/mcu/pokerdictionary/mculib_dictionary_info.asp The Official Dictionary of Poker].'' MGI/Mike Caro University. {{ISBN|978-1880069523}}&lt;/ref&gt;
+
+=====Synonyms=====
+* {{sense|close of the day}} {{l|en|dusk}}, {{l|en|eve}}, {{l|en|evening}}, {{l|en|sundown}}, {{l|en|sunset}}
+* {{sense|general movement}} {{l|en|direction}}, {{l|en|drift}}, {{l|en|heading}}, {{l|en|motion}}, {{l|en|movement}}, {{l|en|path}}, {{l|en|tendency}}, {{l|en|trend}}
+* {{sense|matching collection of similar things}} {{l|en|suite}}, {{l|en|block}} 
+* {{sense|set theory, in plural}} {{l|en|set theory}}
+* {{sense|group of people, usually meeting socially}} {{l|en|club}}, {{l|en|coterie}}
+* {{sense|scenery}} {{l|en|scenery}}
+* {{sense|performance of several musical pieces}} {{l|en|gig}}, {{l|en|session}}
+* {{sense|drum kit}} {{l|en|drum}}s, [[drum kit]], [[drum set]]
+* {{sense|three of a kind}} {{l|en|three of a kind}}
+
+=====Derived terms=====
+{{col4|en|title=terms derived from Etymology 4 of ''set'' &quot;grouping&quot; (noun)
+|age set
+|point-set topology|power set|quotient set|totally ordered set|skill set|Besicovitch set|cabana set|cluster set|conversation set|cut-set|dope set|swoon set
+|box set|Fatou set|giant set|Kakeya set|lexical set|reduction set||sofa set|spectral set|steak set|swingset
+|bump set&lt;!--volleyball?--&gt;|expansion set
+|country set|finite set|sala set
+|crystal set|wandering set
+|drop set&lt;!-- ? --&gt;|prong-set
+|filmset|limbo set
+|game, set, match
+|jet set
+|Julia set
+|level set
+|null set
+|ordered set
+|perfect set
+|recordset
+|set-builder notation
+|set of pipes
+|set piece
+|set point&lt;!--in tennis, volleyball--&gt;
+|set theory
+|skill set
+|subset
+|train set
+|trainset
+|twinset
+|instruction set
+|arithmetical set|Aronhold set|axiom of power set|bedroom set|Borel set|boxed set|breakfast set|Caccioppoli set|Cantor set|carrier set|causal set|causet|character set|chess set|companion set|dining set|fireside set|gift set|golden set|grow a set|Hintikka set|negligible set|scuba set|set designer|singleton set|universal set|uncountable set|underlying set|upper set|working set|contrast set|convex set|cord set|countable set|cruet set|data set|edge set|evoked set|Delone set|difference set|directed set|discrete set|disjoint set|dominating set|edge set|evoked set|film set|film-set|fixed set|fuzzy set|game set|ground set|hom-set|homeset|hot set|independent set|IP set|Islington set|item set|key set identifier|lower set|measurable set|mess set|Meyer set|morphism set|partially ordered set|perceptual set|poset|roomset|toilet set|riveting set|sake set|service set identifier|set function|set of wheels|set operation|smart set|sieve set|stage set|tea set|transitive set|trap set|two set}}
+
+=====Translations=====
+{{trans-top|a young plant fit for setting out, a slip, shoot.}}
+* French: {{t+|fr|semis|m}}
+* Latin: {{t|la|virgultum|n|alt=virgulta}}
+{{trans-bottom}}
+{{trans-top|matching collection of similar things, such as a set of tables}}
+{{multitrans|data=
+* Arabic: {{tt+|ar|مَجْمُوعَة|f}}, {{tt|ar|طَقْم|m}}
+*: Hijazi Arabic: {{t|acw|طقم|m|tr=ṭagim}}, {{t|acw|مجموعة|f|tr=majmūʕa}}
+* Belarusian: {{tt|be|набо́р|m}}, {{tt|be|кампле́кт|m}}
+* Bulgarian: {{tt+|bg|компле́кт|m}}
+* Chinese:
+*: Mandarin: {{tt+|cmn|組|tr=zǔ}}
+* Czech: {{tt+|cs|sada|f}}, {{tt+|cs|skupina|f}}
+* Danish: {{tt+|da|samling|c}}
+* Dutch: {{tt+|nl|verzameling|f}}, {{tt+|nl|set|m}}
+* Esperanto: {{tt|eo|aro}}
+* Finnish: {{tt+|fi|sarja}}, {{tt+|fi|setti}}
+* French: {{tt+|fr|ensemble|m}}
+* German: {{tt+|de|Satz|m}}, {{tt+|de|Set|m}}
+* Greek: {{tt+|el|σετ|n}}
+*: Ancient Greek: {{tt|grc|ἀριθμός}}
+* Hebrew: {{tt|he|סט|m|tr=sét}}, {{tt|he|אוסף|m|tr=ósef}}
+* Japanese: {{tt+|ja|一式|tr=いっしき, isshiki}}, {{tt+|ja|一揃い|tr=ひとそろい, hitosoroi}}, {{tt+|ja|セット|tr=setto}}
+* Korean: {{tt+|ko|세트}}
+* Kurdish:
+*: Central Kurdish: {{tt|ckb|سێت}}, {{tt|ckb|تاقم}}
+* Macedonian: {{tt|mk|компле́т|m}}
+* Persian: {{t+|fa|مجموعه|s|tr=majmū'e}}
+* Polish: {{tt+|pl|komplet|m}}, {{t+|pl|zestaw|m}}
+* Portuguese: {{tt+|pt|jogo}}, {{tt+|pt|conjunto|m}}
+* Romanian: {{tt+|ro|set|n}}, {{tt+|ro|colecție|f}}, {{tt+|ro|set|n}}, {{tt+|ro|ansamblu|n}}
+* Russian: {{tt+|ru|набо́р|m}}, {{tt+|ru|компле́кт|m}}
+* Slovene: {{tt+|sl|zbirka|f}}, {{tt|sl|set|m}}, {{tt|sl|set|m}}
+* Spanish: {{tt+|es|juego|m}}
+* Swahili: {{tt|sw|seti}}
+* Swedish: {{tt+|sv|set|n}}
+* Tagalog: {{tt+|tl|pangkat}}, {{tt|tl|pulutong}}, {{tt|tl|magkakasama}}
+* Ukrainian: {{tt|uk|набі́р|m}}, {{tt+|uk|компле́кт|m}}
+* Vietnamese: {{tt+|vi|bộ}}
+{{trans-bottom}}
+
+{{trans-top|collection of various objects for a particular purpose, such as a set of tools}}
+* Armenian: {{tt+|hy|սպասք}}
+* Catalan: {{tt+|ca|joc|m}}
+* Chinese:
+*: Mandarin: {{tt+|cmn|套|tr=tào}}
+* Czech: {{tt+|cs|sada|f}}
+* Danish: {{tt+|da|samling|c}}
+* Dutch: {{tt+|nl|set|m}}
+* Finnish: {{tt+|fi|sarja}}, {{tt+|fi|lajitelma}}
+* French: {{tt+|fr|jeu|m}}
+* German: {{tt+|de|Set|m}}
+* Hebrew: {{tt|he|סט|m|tr=sét}}, {{tt+|he|ערכה|f|tr=erká}}
+* Hungarian: {{tt+|hu|szett}}
+* Japanese: {{tt+|ja|一式|tr=いっしき, isshiki}}, {{tt+|ja|一揃い|tr=ひとそろい, hitosoroi}}, {{tt+|ja|セット|tr=setto}}
+* Korean: {{tt+|ko|세트}}
+* Kurdish:
+*: Central Kurdish: {{tt+|ckb|دەستە}}
+* Latvian: {{tt|lv|komplekts|m}}
+* Macedonian: {{tt|mk|прибор|m}}
+* Polish: {{tt+|pl|zestaw|m}}
+* Portuguese: {{tt+|pt|jogo}}, {{tt+|pt|kit|m}}
+* Romanian: {{tt+|ro|set|n}}, {{tt+|ro|trusă|f}}
+* Russian: {{tt+|ru|колле́кция|m}}, {{tt+|ru|набо́р|m}}, {{tt+|ru|сет|m}}
+* Slovene: {{tt+|sl|zbirka|f}}, {{tt|sl|set|m}}
+* Spanish: {{tt+|es|batería|f}}, {{tt+|es|juego|m}}
+* Swedish: {{tt+|sv|mängd|c}}, {{tt+|sv|uppsättning|c}}
+* Turkish: {{tt+|tr|takım}}
+* Vietnamese: {{tt+|vi|bộ}}
+{{trans-bottom}}
+
+{{trans-top|object made up several parts, such as a set of steps}}
+* Belarusian: {{tt|be|се́рыя|f}}, {{tt|be|сэ́рыя|f}} {{qualifier|Taraškievica}}
+* Czech: {{tt+|cs|sada}}, {{tt+|cs|série}}
+* Danish: {{tt|da|aggregat|n}}, {{tt|da|samlesæt|n}}
+* Dutch: {{tt+|nl|serie}}
+* Finnish: {{tt+|fi|sarja}}, {{tt+|fi|kuvio}}, {{tt+|fi|kokoelma}}
+* French: {{tt+|fr|série|f}}
+* Greek: {{tt+|el|σειρά|f}}
+* Irish: {{tt+|ga|foireann|f}}
+* Russian: {{tt+|ru|се́рия|f}}
+* Ukrainian: {{tt|uk|се́рія|f}}
+* Vietnamese: {{tt+|vi|loạt}}, {{tt+|vi|dãy}}, {{tt+|vi|bộ}}
+{{trans-bottom}}
+
+{{trans-top|set theory: collection of objects}}
+* Afrikaans: {{tt+|af|versameling}}
+* Arabic: {{tt+|ar|مَجْمُوعَة|f}}
+* Azerbaijani: {{t+|az|çoxluq}}
+* Basque: {{t|eu|multzo}}
+* Belarusian: {{tt|be|мно́ства|n}}
+* Bulgarian: {{tt+|bg|мно́жество|n}}
+* Catalan: {{tt+|ca|conjunt|m}}
+* Chinese:
+*: Mandarin: {{tt+|cmn|集|tr=jí}}, {{tt+|cmn|集合|tr=jíhé}}
+* Czech: {{tt+|cs|množina|f}}
+* Danish: {{tt+|da|mængde|c}}
+* Dutch: {{tt+|nl|verzameling|f}}, {{tt+|nl|set|m}}
+* Esperanto: {{tt|eo|ensemblo}}
+* Estonian: {{tt+|et|hulk}}
+* Finnish: {{tt+|fi|joukko}}
+* French: {{tt+|fr|ensemble|m}}
+* German: {{tt+|de|Menge|f}}
+* Greek: {{tt+|el|σύνολο|n}}
+* Hebrew: {{tt+|he|קבוצה|f|tr=kvutza}}
+* Hungarian: {{tt+|hu|halmaz}}
+* Icelandic: {{tt+|is|mengi|n}}
+* Indonesian: {{tt+|id|himpunan}}
+* Interlingua: {{tt|ia|insimul}}
+* Irish: {{tt|ga|tacar|m}}
+* Italian: {{tt+|it|insieme|m}}
+* Japanese: {{tt+|ja|集合|tr=しゅうごう, shūgō}}
+* Kazakh: {{tt|kk|жиын}}
+* Korean: {{tt+|ko|집합(集合)}}
+* Latin: {{tt|la|conjunctum|n}}, {{tt|la|collectum|n}}
+* Latvian: {{tt|lv|kopa|f}}
+* Lithuanian: {{tt+|lt|aibė}}
+* Macedonian: {{tt|mk|множество}}
+* Persian: {{tt+|fa|مجموعه|tr=majmu'e}}
+* Polish: {{tt+|pl|zbiór|m}}, {{tt+|pl|agregat|m}}
+* Portuguese: {{tt+|pt|conjunto|m}}
+* Romanian: {{tt+|ro|mulțime|f}}
+* Russian: {{tt+|ru|мно́жество|n}}
+* Serbo-Croatian:
+*: Cyrillic: {{tt|sh|ску̏п|m}}
+*: Roman: {{tt+|sh|skȕp|m}}
+* Slovak: {{tt|sk|množina|f}}
+* Slovene: {{tt|sl|množica|f}}
+* Spanish: {{tt+|es|conjunto|m}}
+* Swedish: {{tt+|sv|mängd|c}}
+* Tagalog: {{tt|tl|tangkas}}
+* Tajik: {{tt|tg|маҷмӯъа}}
+* Turkish: {{tt+|tr|küme}}
+* Ukrainian: {{tt+|uk|множина́|f}}
+* Urdu: {{tt|ur|مجموعہ}}
+* Vietnamese: {{tt+|vi|tập hợp}} ({{tt|vi|集合|sc=Hani}})
+{{trans-bottom}}
+
+{{trans-see|plural: set theory|set theory}}
+
+{{trans-top|group of people, usually meeting socially}}
+* Bulgarian: {{tt+|bg|компания|f}}
+* Catalan: {{tt+|ca|grup|m}}
+* Danish: {{tt+|da|gruppe|c}}
+* Dutch: {{tt+|nl|verzameling|f}}, {{tt+|nl|set|m}}
+* Esperanto: {{tt|eo|aro}}
+* Finnish: {{tt+|fi|ryhmä}}, {{tt+|fi|piiri}}
+* German: {{tt+|de|Gruppe|f}}
+* Greek: {{tt+|el|κύκλος|m}}, {{tt|el|συνάφι|n}} {{qualifier|colloquial}}, {{tt+|el|κλίκα|f}} {{qualifier|colloquial}}
+* Irish: {{tt|ga|aicme|f}}
+* Macedonian: {{tt|mk|друштво|n}}
+* Polish: {{tt+|pl|grupa|f}}, {{tt+|pl|zespół|m}}
+* Portuguese: {{tt+|pt|grupo|m}}
+* Romanian: {{tt+|ro|grup|n}}
+* Russian: {{tt+|ru|гру́ппа|f}}
+* Slovene: {{tt+|sl|skupina|f}}, {{tt|sl|društvo|n}}
+* Spanish: {{tt+|es|grupo|m}}
+* Swedish: {{tt+|sv|band|n}}, {{tt+|sv|grupp|c}}, {{tt+|sv|klick|c}}, {{tt+|sv|kotteri|n}}, {{tt+|sv|krets|c}}, {{tt+|sv|lag|n}}, {{tt+|sv|liga|c}}, {{tt|sv|umgängeskrets|c}}
+* Vietnamese: {{tt+|vi|bọn}}, {{tt+|vi|đám}}, {{tt+|vi|đoàn}}, {{tt+|vi|lũ}}, {{tt+|vi|giới}}
+* Welsh: {{tt+|cy|criw|m}}
+{{trans-bottom}}
+
+{{trans-top|scenery for a film or play}}
+* Bulgarian: {{tt+|bg|декор|m}}
+* Catalan: {{tt+|ca|plató|m}}
+* Danish: {{tt|da|sætstykke|n}}, {{tt|da|scenario|n}}, {{tt|da|dekoration|c}}
+* Finnish: {{tt+|fi|lavastus}}
+* French: {{qualifier|play}} {{tt+|fr|scène|f}}, {{qualifier|film}} {{tt+|fr|plateau}} / {{tt+|fr|plateau de tournage}}
+* German: {{tt+|de|Set|m}}
+* Greek: {{tt+|el|σκηνικό|n}}, {{tt+|el|πλατό|n}}
+* Italian: {{tt+|it|scenario|m}}
+* Macedonian: {{tt|mk|сцена|f}}
+* Maori: {{tt|mi|pae whakaari}}
+* Polish: {{tt+|pl|plan|m}}, {{tt|pl|dekoracje|f-p}}
+* Portuguese: {{tt+|pt|cenário|m}}
+* Romanian: {{tt+|ro|platou|n}}, {{tt|ro|platou de filmare|n}}
+* Slovene: {{tt|sl|prizorišče|n}}, {{tt|sl|scena|f}}
+* Spanish: {{tt+|es|escenario|m}}, {{tt+|es|plató|m}}
+* Vietnamese: {{tt|vi|[[cảnh]] [[dựng]]}}
+{{trans-bottom}}
+
+{{trans-top|dancing: initial or basic formation of dancers}}
+* Danish: {{tt+|da|opstilling|c}}
+* Finnish: {{tt|fi|alkuasema}}
+{{trans-bottom}}
+
+{{trans-top|in tennis}}
+* Bulgarian: {{tt+|bg|сет|m}}, {{tt+|bg|част|f}}
+* Catalan: {{tt+|ca|set|m}}
+* Chinese:
+*: Mandarin: {{tt+|cmn|盘|tr=pán}}
+* Danish: {{tt+|da|sæt|n}}
+* Dutch: {{tt+|nl|set|m}}
+* Esperanto: {{t-needed|eo}}
+* Finnish: {{tt+|fi|erä}}
+* French: {{tt+|fr|set|m}}, {{tt+|fr|manche}}
+* German: {{tt+|de|Satz|m}}
+* Greek: {{tt+|el|σετ|n}}
+* Hungarian: {{tt+|hu|szett}}, {{tt+|hu|játszma}}
+* Japanese: {{tt+|ja|セット|tr=setto}}
+* Korean: {{tt+|ko|세트}}
+* Macedonian: {{tt|mk|сет|m}}
+* Polish: {{tt+|pl|set|m}}
+* Portuguese: {{tt+|pt|set|m}}
+* Romanian: {{tt+|ro|set|n}}
+* Russian: {{tt+|ru|сет|m|tr=sɛt}}
+* Slovene: {{tt|sl|set|m}}
+* Spanish: {{tt+|es|set}}
+* Swedish: {{tt+|sv|set|n}}
+* Vietnamese: {{tt+|vi|ván}}
+{{trans-bottom}}
+
+{{trans-top|volleyball}}
+* Bulgarian: {{tt|bg|гейм|m}}
+* Catalan: {{tt+|ca|set|m}}
+* Danish: {{tt+|da|sæt|n}}
+* Finnish: {{tt+|fi|passi}}, {{tt+|fi|erä}}
+* French: {{tt+|fr|set|m}}
+* German: {{t+|de|Satz|m}}
+* Greek: {{tt+|el|σετ|n}}
+* Polish: {{tt+|pl|set|m}}
+* Portuguese: {{tt+|pt|set|m}}
+* Romanian: {{tt+|ro|set|n}}
+* Russian: {{tt+|ru|пас|m}}
+* Slovene: {{tt|sl|set|m}}
+* Vietnamese: {{tt+|vi|ván}}
+}}&lt;!-- close {{multitrans}} --&gt;
+{{trans-bottom}}
+
+=====See also=====
+{{col4|en|title=(set theory) collection of objects
+|bag
+|closed set
+|empty set
+|Mandelbrot set
+|multiset
+|open set
+|subset
+|superset
+}}
+
+===Etymology 5===
+{{rfe|en}}
+
+====Verb====
+{{en-verb}}
+
+# {{lb|en|UK|education}} To divide a class group in a subject according to ability
+#* {{quote-text|en|year=2008|author=Patricia Murphy; Robert McCormick|title=Knowledge and Practice: Representations and Identities
+|passage=In '''setted''' classes, students are brought together because they are believed to be of similar 'ability'. Yet, '''setted''' lessons are often conducted as though students are not only similar, but ''identical''—in terms of ability, preferred learning style and pace of working.}}
+#* {{quote-book|en|year=2002|author=Jo Boaler|title=Experiencing School Mathematics: Traditional and Reform Approaches and Their Impact on Student Learning|passage=At Amber Hill, '''setting''' was a high-profile concept, and the students were frequently reminded of the set to which they belonged.}}
+#* {{quote-journal|en|date=2013-07-19|author=w:Peter Wilby
+|volume=189|issue=6|page=30|magazine=w:The Guardian Weekly
+|title=[http://www.theguardian.com/education/2013/jul/01/education-michael-gove-finland-gcse Finland spreads word on schools]
+|passage=Imagine a country where children do nothing but play until they start compulsory schooling at age seven. Then, without exception, they attend comprehensives until the age of 16. Charging school fees is illegal, and so is sorting pupils into ability groups by streaming or '''setting'''.}}
+
+===References===
+&lt;references/&gt;
+
+===Anagrams===
+* {{anagrams|en|a=est|Tse|StE|tes|-est|TSE|est|Est.|ETS|STE|est.|tse|ETs|TEs|Ste|EST|Ste.|Est}}
+
+{{cln|en|causative verbs|irregular past participles|irregular simple past forms|irregular verbs}}
+{{C|en|Collectives}}
+
+==Afrikaans==
+
+===Pronunciation===
+* {{audio|af|LL-Q14196 (afr)-Oesjaar-set.wav}}
+
+===Noun===
+{{af-noun}}
+
+# {{Latn-def-lite|af|name|Z|z}}
+
+==Aragonese==
+
+===Etymology===
+From {{inh|an|la|sitis}}.
+
+===Noun===
+{{head-lite|an|nouns|g=f}}
+
+# [[thirst]]
+
+==Catalan==
+
+===Etymology 1===
+{{number box|ca}}
+{{inh+|ca|la|septem||seven}}, from {{inh|ca|ine-pro|*septḿ̥}}. Cognates include {{cog|oc|sèt}}.
+
+====Pronunciation====
+* {{ca-IPA|è}}&lt;!-- per GDLC, DNV, DCVB --&gt;
+* {{rhymes|ca|ɛt|s=1}}
+
+====Numeral====
+{{ca-num}}
+
+# {{lb|ca|cardinal}} [[seven]]
+
+====Noun====
+{{ca-noun|m}}
+
+# [[seven]]
+
+====Derived terms====
+* {{l|ca|set pecats capitals}}
+* {{l|ca|setciències}}
+
+===Etymology 2===
+{{inh+|ca|la|sitis}}, from {{inh|ca|ine-pro|*dʰgʷʰítis}}.
+
+====Pronunciation====
+* {{ca-IPA|ê}}
+
+====Noun====
+{{ca-noun|f}}
+
+# [[thirst]]
+# [[hunger]] {{q|strong desire}}
+
+=====Derived terms=====
+* {{l|ca|assedegar}}
+* {{l|ca|sedegar}}
+* {{l|ca|sedejar}}
+
+===Further reading===
+* {{R:ca:IEC2}}
+* {{R:ca:GDLC}}
+* {{R:ca:DNV}}
+* {{R:ca:DCVB}}
+
+==Chinese==
+
+===Etymology===
+From {{bor|yue|en|set}}.
+
+===Pronunciation===
+{{zh-pron
+|c=set1
+|cat=n,v,cl
+}}
+
+===Noun===
+{{head-lite|zh|nouns}}
+
+# {{lb|zh|Hong Kong Cantonese}} [[package]] or [[collection]] of [[item]]s {{zh-mw|c:個}}
+
+===Verb===
+{{head-lite|zh|verbs}}
+
+# {{lb|zh|Hong Kong Cantonese}} to {{l|en|set}}; to [[adjust]]
+#: {{zh-x|set{t1} 鬧鐘|to '''set''' the alarm|C|tr='''set1''' naau6 zung1}}
+# {{lb|zh|Hong Kong Cantonese}} to {{l|en|set}}; to [[prepare]]
+#: {{zh-x|'''set{t1}'''場|to '''prepare and decorate''' a venue|C|tr='''set1''' coeng4}}
+
+====Derived terms====
+{{col3|zh|yue:set頭|yue:set場}}
+
+===Classifier===
+{{head-lite|zh|classifiers}}
+
+# {{lb|zh|Hong Kong Cantonese}} {{zh-classifier|packages or collections of items}}
+
+===See also===
+* {{l|yue|恤髮}}
+
+===References===
+* {{R:yue:ELHKC}}
+
+==Crimean Tatar==
+
+===Noun===
+{{head-lite|crh|nouns}}
+
+# [[sofa]], [[couch]], [[settee]]
+
+==Czech==
+
+===Pronunciation===
+* {{cs-IPA}}
+* {{audio|cs|Cs-set.ogg}}
+* {{homophones|cs|sed}}
+* {{rhymes|cs|ɛt|s=1}}
+
+===Etymology 1===
+{{der+|cs|en|set}}.
+
+====Noun====
+{{cs-noun|m-in}}
+
+# {{lb|cs|tennis|volleyball}} {{l|en|set}} {{gloss|part of a match in sports like tennis and volleyball}}
+#: {{syn|cs|sada}}
+
+=====Declension=====
+{{cs-ndecl|m}}
+
+===Etymology 2===
+{{nonlemma}}
+
+====Noun====
+{{head-lite|cs|noun forms|g=n}}
+
+# {{infl of|cs|sto||gen|p}}
+
+===Etymology 3===
+
+====Participle====
+{{head|cs|past passive participle}}
+
+# {{infl of|cs|sít||m|s|pass|part}}
+
+===Further reading===
+* {{R:cs:PSJC}}
+* {{R:cs:SSJC}}
+
+==Danish==
+
+===Verb===
+{{head|da|past participles}}
+
+# {{past participle of|da|se|nocat=1}}
+
+====Derived terms====
+* {{l|da|sådan set}}
+
+==Dutch==
+
+===Etymology===
+Borrowed from {{bor|nl|en|set}}.
+
+===Pronunciation===
+* {{IPA|nl|/sɛt/}}
+* {{audio|nl|Nl-set.ogg}}
+* {{hyphenation|nl|set}}
+* {{rhymes|nl|ɛt}}
+* {{homophones|nl|Seth}}
+
+===Noun===
+{{nl-noun|m|-s|+}}
+
+# a {{l|en|set}} {{gloss|collection of objects belonging together}}
+# a {{l|en|set}} {{gloss|installation consisting of multiple appliances}}
+# {{lb|nl|tennis}} a {{l|en|set}} {{gloss|tennis match}}
+# a [[film set]] {{gloss|filming location}}
+#: {{syn|nl|filmset}}
+
+====Derived terms====
+{{col|nl
+|jetset
+|kledingset
+|loungeset
+|pannenset
+|setpoint
+|stereoset
+}}
+
+==Eastern Durango Nahuatl==
+
+===Noun===
+{{head-lite|azd|nouns}}
+
+# [[ice]]
+
+{{topics|azd|Geography}}
+
+==French==
+
+===Etymology===
+{{bor+|fr|en|set}} {{defdate|from 1833}}.
+
+===Pronunciation===
+* {{fr-IPA|sette}}
+* {{audio|fr|LL-Q150 (fra)-Xenophôn-set.wav}}
+* {{audio|fr|LL-Q150 (fra)-WikiLucas00-set.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Lyon&gt;&gt;)}}
+* {{homophones|fr|cet|cette|sept|Sète}}
+* {{rhymes|fr|ɛt|s=1}}
+
+===Noun===
+{{fr-noun|m}}
+
+# {{lb|fr|tennis}} {{l|en|set}}
+#: {{syn|fr|manche}}
+
+====Derived terms====
+* {{l|fr|balle de set}} {{q|set point}}
+
+===Further reading===
+* {{R:fr:TLFi}}
+
+===Anagrams===
+* {{l|fr|est}}, {{l|fr|Ste.}}, {{l|fr|tes}}
+
+==Icelandic==
+
+===Etymology===
+From {{inh|is|non|set}}, from {{inh|is|gem-pro|*setą}}. Compare the English {{m|en|seat}}.
+
+===Noun===
+{{is-noun|@@}}
+
+# [[seat]], a place to sit
+
+====Declension====
+{{is-ndecl|n}}
+
+==Indonesian==
+
+===Pronunciation===
+{{id-pr|sèt}}
+
+===Etymology 1===
+From {{bor|id|nl|set}}, from {{der|id|en|set}}, alteration of {{m|en|sept}}, from {{der|id|fro|sette||a religious sect}}, from {{der|id|ML.|secta||retinue}}, from {{der|id|la|secta||a faction}}.
+
+====Noun====
+{{id-noun|head=sèt}}
+
+# {{lb|id|sport}} {{l|en|set}}, group of games counting as a unit toward a match
+#: {{syn|id|babak}}
+# {{l|en|set}}:
+#: {{syn|id|perangkat|setel}}
+## a [[matching]] [[collection]] of similar things
+## a collection of various objects for a particular purpose
+# {{l|en|set}}, an object made up of several parts
+
+=====Derived terms=====
+{{col3|id|
+|set kedua
+|set panjang
+|set penentuan
+|set tambahan
+|set adegan
+|set dalam
+|set sayap panggung
+|set tirai
+|set kepala
+|set tangan
+}}
+
+===Etymology 2===
+From {{bor|id|en|set}}, from {{der|id|enm|setten}}, from {{der|id|ang|settan}}, from {{der|id|gem-pro|*satjaną}}, from {{der|id|ine-pro|*sodéyeti}}, causative of {{m|ine-pro|*sed-||to sit}}.
+
+====Verb====
+{{id-verb|head=sèt}}
+
+# to {{l|en|set}}:
+#: {{syn|id|mengeset}}
+## to [[put]] in a specified condition or state
+## to [[adjust]]
+## to [[prepare]]
+## to [[arrange]]
+
+=====Derived terms=====
+{{col3|id|
+|mengeset
+|pengeset
+|pengesetan
+}}
+
+====Noun====
+{{id-noun}}
+
+# {{lb|id|colloquial}} [[trick]]; [[act]]; [[strategy]]
+#: {{syn|id|muslihat|tindak|strategi}}
+
+===Further reading===
+* {{R:KBBI Daring}}
+
+==Italian==
+
+===Etymology===
+{{ubor|it|en|set}}.
+
+===Pronunciation===
+{{it-pr|sèt}}
+
+===Noun===
+{{it-noun|m|#}}
+
+# {{l|en|set}} (group of things in maths, tennis, cinema, etc.)
+
+===Anagrams===
+* {{anagrams|it|a=est|'ste|est}}
+
+==Ladin==
+{{cardinalbox|lld|6|7|8|sies|ot|ord=setim}}
+
+===Etymology===
+From {{inh|lld|la|septem}}.
+
+===Adjective===
+{{head-lite|lld|adjectives}}
+
+# [[seven]]
+
+===Noun===
+{{lld-noun|m|-}}
+
+# [[seven]]
+
+{{cln|lld|cardinal numbers}}
+
+==Latin==
+
+===Etymology===
+Alternative spelling of {{m|la|sed}}. See [[aliquit#Etymology]].
+
+===Pronunciation===
+* {{la-IPA}}
+
+===Conjunction===
+{{head|la|conjunction}}
+
+# {{alternative form of|la|sed}}
+#* {{quote-text|la|year=c. 1300|title=Tractatus de Ponderibus et Mensuris
+|passage=sexies viginti petre faciunt carrum plumbi scilicet magnum carrum London’ '''set''' carrus del Peek est multo minus.
+|translation=Six times twenty [[stone]] make the [[load]] of lead, [[scilicet]] the great London load, '''but''' the load of [[Derbyshire|Peek]] is much less.}}
+
+==Livonian==
+
+===Etymology===
+{{rfe|liv}}
+
+===Pronunciation===
+{{liv-p}}
+
+===Determiner===
+{{head|liv|determiner}}
+
+# {{lb|liv|not inflected}} [[several]], [[a few]]
+
+===Adverb===
+{{head|liv|adverb}}
+
+# [[only]], [[just]]
+# [[still]]
+
+===Conjunction===
+{{head|liv|conjunction}}
+
+# ([[but]]) [[just]]
+
+===References===
+* {{R:liv:LEL|set}}
+* {{R:liv:Livonian.tech|set}}
+
+==Lombard==
+
+===Alternative forms===
+* {{alt|lmo|sett|sètt||Western orthographies}}
+* {{alt|lmo|sèt||Eastern orthographies}}
+
+===Etymology===
+From {{der|lmo|la|septem}}.
+
+===Pronunciation===
+* {{IPA|lmo|/set/|[sɛt]}}
+* {{IPA|lmo|/set/|[hɛt]}} (High Brescian and Bergamasque)
+
+===Numeral===
+{{head|lmo|numeral}}
+
+# {{cln|lmo|cardinal numbers}} [[seven]]
+
+==Lower Sorbian==
+
+===Pronunciation===
+* {{IPA|dsb|[sɛt]}}
+
+===Verb===
+{{head-lite|dsb|verb forms}}
+
+# {{infl of|dsb|seś||sup}}
+
+==Mauritian Creole==
+{{cardinalbox|mfe|6|7|8|sis|wit|ord=setiem}}
+
+===Etymology===
+From {{der|mfe|fr|sept}}.
+
+===Numeral===
+{{head|mfe|numeral}}
+
+# {{cln|mfe|cardinal numbers}} [[seven]]
+
+==Michif==
+
+===Etymology===
+From {{der|crg|fr|sept}}.
+
+===Pronunciation===
+* {{IPA|crg|[sɛt]}}
+
+===Numeral===
+{{head|crg|numeral}}
+
+# [[seven]]
+
+{{cln|crg|cardinal numbers}}
+
+==North Frisian==
+
+===Alternative forms===
+* {{alt|frr|sat||Föhr-Amrum}}
+* {{alt|frr|sate||Mooring}}
+
+===Etymology===
+{{dercat|frr|gem-pro|inh=1}}
+From {{inh|frr|ofs|sitta}}, from {{inh|frr|gmw-pro|*sittjan}}.
+
+===Pronunciation===
+* {{IPA|frr|[sɛt]|a=Sylt}}
+
+===Verb===
+{{head|frr|verb}}
+
+# {{lb|frr|Sylt}} to [[sit]]
+
+====Conjugation====
+{{frr-Sylt-conj-table|inf_2=seten|ppp=seeten|pres_2=setst|pres_3=set|past_1=seet|past_2=seetst}}
+
+==Norwegian Nynorsk==
+
+===Etymology 1===
+
+====Verb====
+{{head-lite|nn|verb forms}}
+
+# {{infl of|nn|setja,setta||pres}}
+# {{infl of|nn|setja||imp}}
+
+===Etymology 2===
+
+====Participle====
+{{head-lite|nn|past participles|lemma=1}}
+
+# {{nn-former-context|1938}} {{past participle of|nn|sjå}}
+
+==Occitan==
+
+===Etymology===
+From {{inh|oc|la|sitis}}, from {{inh|oc|ine-pro|*dʰgʷʰítis}}.
+
+===Pronunciation===
+* {{audio|oc|LL-Q14185 (oci)-Davidgrosclaude-set.wav|a=Béarn}}
+
+===Noun===
+{{head|oc|noun|g=f|g2=m|plural|sets}}
+
+# [[thirst]]
+
+===Numeral===
+{{cardinalbox|oc|6|7|8|sieis|uech|ord=}}
+{{head|oc|numeral}} {{lb|oc|Limousin}}
+
+# [[seven]]
+
+====Alternative forms====
+* {{l|oc|sèt}}
+
+====Derived terms====
+{{col4|oc
+|dietz set
+}}
+
+===Further reading===
+* {{R:oc-lan:Cantalausa|910}}
+
+{{cln|oc|cardinal numbers}}
+
+==Old English==
+
+===Etymology===
+Compare the verb {{m|ang|settan}}. Compare {{cog|non|sæti}}, {{cog|goh|gesazi}} ({{cog|de|Gesäß}}), {{cog|dum|gesaete}}, from {{der|ang|gem-pro|*sētiją}}.
+
+===Pronunciation===
+* {{ang-IPA|set}}
+
+===Noun===
+{{ang-noun|n}}
+
+# [[seat]]
+
+====Declension====
+{{ang-decl-noun-a-n|set|short=1}}
+
+====Related terms====
+* {{l|ang|ġeset}}
+
+==Old French==
+
+===Etymology 1===
+From {{inh|fro|la|septem}}.
+
+====Pronunciation====
+* {{IPA|fro|/ˈsɛt/}}
+
+====Numeral====
+{{enum|fro|sis|uit|cardinal number|7}}
+{{head|fro|numeral}}
+
+# [[seven]]
+
+=====Descendants=====
+* {{desctree|frm|sept}}
+* {{desc|nrf|sept|alts=1}}
+* {{desc|wa|set}}
+
+===Etymology 2===
+{{nonlemma}}
+
+====Verb====
+{{head-lite|fro|verb forms}}
+
+# {{inflection of|fro|savoir||3|s|pres|indc}}
+
+=====Descendants=====
+* {{desc|fr|sait}}
+
+{{cln|fro|cardinal numbers}}
+
+==Old Norse==
+
+===Verb===
+{{head|non|verb form}}
+
+# {{infl of|non|setja||1|s|pres|act|ind|;|2|s|act|imp}}
+
+==Papiamentu==
+
+===Etymology===
+From {{der|pap|es|sed}} and {{der|pap|pt|sede}} and {{der|pap|kea|sedi}}.
+
+===Noun===
+{{head-lite|pap|nouns}}
+
+# [[thirst]]
+
+==Piedmontese==
+{{cardinalbox|pms|6|7|8|ses|eut}}
+
+===Etymology===
+{{dercat|pms|ine-pro|inh=1}}
+From {{inh|pms|la|septem}}, from {{inh|pms|itc-pro|*septem}}. Cognates include {{cog|it|sette}} and {{cog|fr|sept}}.
+
+===Pronunciation===
+* {{IPA|pms|/sɛt/}}
+
+===Numeral===
+{{head|pms|numeral|cat2=cardinal numbers}}
+
+# [[seven]]
+
+==Polish==
+{{wp|pl:}}
+
+===Pronunciation===
+{{pl-pr|a=LL-Q809 (pol)-Olaf-set.wav|hh=Set}}
+
+===Etymology 1===
+{{dercat|pl|enm|ang|gmw-pro|gem-pro|ine-pro}}
+{{bor+|pl|en|set}}.
+
+====Noun====
+{{pl-noun|m-anml,m-in|adj=setowy}}
+
+# {{lb|pl|badminton|tennis|volleyball}} {{l|en|set}} {{gl|complete series of games, forming part of a match}}
+
+=====Declension=====
+{{pl-decl-noun-m-anml|gens=seta/setu|accs=seta/set}}
+
+=====Related terms=====
+{{col|pl|title=adverbs|setowo}}
+
+====Noun====
+{{pl-noun|m-in|adj=setowy}}
+
+# {{lb|pl|colloquial|music}} {{l|en|set}} {{gl|set of songs performed during a concert of popular music}}
+
+=====Declension=====
+{{pl-decl-noun-m-in}}
+
+====Noun====
+{{pl-noun|m-anml}}
+
+# {{lb|pl|card games}} ''{{w|Set (card game)|Set}}'' {{gl|real-time card game designed by Marsha Falco in 1974 and published by Set Enterprises in 1991}}
+
+=====Declension=====
+{{pl-decl-noun-m-anml|tantum=s}}
+
+===Etymology 2===
+{{nonlemma}}
+
+====Noun====
+{{head-lite|pl|noun forms|g=f}}
+
+# {{infl of|pl|seta||gen|p}}
+
+===Further reading===
+* {{R:pl:WSJP||6859}}
+* {{R:pl:PWN}}
+* {{R:pl:PWN Encyclopedia}}
+
+==Portuguese==
+
+===Etymology===
+{{ubor|pt|en|set}}.
+
+===Pronunciation===
+{{pt-IPA|br=séti^|pt=séte}}
+* {{homophones|pt|sete}}
+
+===Noun===
+{{pt-noun|m|#s}}
+
+# {{l|en|set}} (group of things in maths, tennis, cinema, etc.)
+
+==Romanian==
+
+===Etymology===
+{{bor+|ro|en|set}} or {{bor|ro|fr|set}}.
+
+===Pronunciation===
+* {{IPA|ro|/set/}}
+
+===Noun===
+{{ro-noun|n|seturi}}
+
+# {{lb|ro|tennis}} {{l|en|set}}
+# {{l|en|set}} {{gl|of objects}}
+
+====Declension====
+{{ro-noun-n-uri}}
+
+==Romansch==
+{{cardinalbox|rm|6|7|8|sis|otg}}
+
+===Etymology 1===
+From {{inh|rm|la|septem}}, from {{inh|rm|ine-pro|*septḿ̥}}.
+
+====Number====
+{{head|rm|number}}
+
+# {{cln|rm|cardinal numbers}} {{lb|rm|Rumantsch Grischun|Surmiran|Puter|Vallader}} [[seven]]
+
+=====Alternative forms=====
+* {{alt|rm|siat||Sursilvan}}
+* {{alt|rm|seat||Sutsilvan}}
+
+===Etymology 2===
+From {{inh|rm|la|sitis}}, from {{inh|rm|ine-pro|*dʰgʷʰítis||perishing, decrease}}.
+
+====Noun====
+{{head-lite|rm|nouns|g=f}}
+
+# {{lb|rm|Sutsilvan}} [[thirst]]
+
+=====Alternative forms=====
+* {{alt|rm|said||Rumantsch Grischun|Puter|Vallader}}
+* {{alt|rm|seit||Sursilvan}}
+* {{alt|rm|seid||Surmiran}}
+
+==Spanish==
+
+===Etymology===
+{{bor+|es|en|set}}.
+
+===Pronunciation===
+{{es-pr}}
+
+===Noun===
+{{es-noun|m}}
+
+# {{lb|es|tennis}} {{l|en|set}}
+# {{l|en|set}} or [[series]] of [[thing]]s {{gl|such as crockery, cutlery, tools, instruments, etc.}}
+
+===Further reading===
+* {{R:es:DRAE}}
+
+==Swedish==
+
+===Etymology===
+Borrowed from {{bor|sv|en|set}}.
+
+===Pronunciation===
+* {{IPA|sv|/sɛtː/}}
+* {{homophones|sv|sett|sätt}}
+
+===Noun===
+{{sv-noun|n}}
+
+# a {{l|en|set}} (matching collection of items)
+# a {{l|en|set}} (in for example tennis)
+# a {{l|en|set}} (musical performance)
+
+====Declension====
+{{sv-infl-noun-n-zero}}
+
+===See also===
+* {{l|sv|sett}}
+* {{l|sv|sätt}}
+* {{l|sv|tågsätt}}
+
+===References===
+* {{R:svenska.se|so}}
+* {{R:svenska.se|saol}}
+* {{R:svenska.se|saob}}
+
+===Anagrams===
+* {{anagrams|sv|a=est|est|tes}}
+
+==Walloon==
+
+===Etymology===
+From {{inh|wa|la|septem}}, from {{inh|wa|ine-pro|*septḿ̥}}.
+
+===Pronunciation===
+* {{IPA|wa|/sɛt/}}
+
+===Numeral===
+{{head|wa|numeral}}
+
+# [[seven]]
+
+{{cln|wa|cardinal numbers}}
+
+==Welsh==
+
+===Etymology 1===
+
+====Verb====
+{{cy-verb form}}
+
+# {{contraction of|cy|baset}}
+
+===Etymology 2===
+{{bor+|cy|en|set}}.
+
+====Noun====
+{{cy-noun|f|setiau}}
+
+# {{l|en|set}}
+
+=====Derived terms=====
+* {{l|cy|is-set||subset}}
+
+===Mutation===
+{{cy-mut}}
+
+===Further reading===
+* {{R:cy:Termiadur}}
+
+==Yola==
+
+===Noun===
+{{head-lite|yol|nouns}}
+
+# {{alt form|yol|zet}}
+#* {{quote-book|yol|year=1867|title=GLOSSARY OF THE DIALECT OF FORTH AND BARGY|passage=Houghany '''set'''.|translation=Stupid '''set'''.}}
+
+===References===
+* {{R:Poole 1867|page=47}}</text>
+      <sha1>3heememj2uda8dl5t5m32xbmskqbjy4</sha1>
+    </revision>
+  </page>

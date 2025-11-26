@@ -2,8 +2,12 @@
 """
 build_stats.py - Generate build statistics for the Advanced Word List Builder
 
-Computes comprehensive statistics from unified entries and generates a JSON file
+Computes comprehensive statistics from lexeme entries and generates a JSON file
 for the web-based word list builder to provide accurate estimates.
+
+Supports both:
+  - Two-file format: en-lexeme-enriched.jsonl (current pipeline)
+  - Single-file format: entries with sources/labels/pos (owlex format)
 """
 
 import json
@@ -13,8 +17,180 @@ from typing import Dict
 from collections import defaultdict
 
 
+def detect_format(entries: Dict[str, dict]) -> str:
+    """Detect whether entries are in two-file lexeme format or single-file format."""
+    sample = next(iter(entries.values())) if entries else {}
+    # Two-file format has sense_offset/sense_length, single-file has sources/labels
+    if 'sense_offset' in sample or 'sense_length' in sample:
+        return 'lexeme'
+    return 'single_file'
+
+
+def compute_statistics_lexeme(entries: Dict[str, dict]) -> dict:
+    """Compute statistics from two-file lexeme format with multi-source support."""
+    stats = {
+        'total_words': len(entries),
+        'generated_at': None,
+        'sources': {},  # Per-source word counts
+        'source_combinations': {},  # Combination counts with licenses
+        'metadata_coverage': {},
+        'metadata_by_source': {},  # Metadata coverage broken down by source
+        'enrichment_impact': {},
+        'pos_distribution': {},  # POS is in senses file, not available here
+        'frequency_distribution': {},
+        'concreteness_distribution': {},
+        'label_categories': {},
+    }
+
+    freq_counts = defaultdict(int)
+    concrete_counts = defaultdict(int)
+    source_counts = defaultdict(int)
+    source_combo_counts = defaultdict(lambda: {'count': 0, 'licenses': set()})
+
+    # Per-source metadata tracking
+    source_metadata = defaultdict(lambda: {
+        'total': 0,
+        'with_concreteness': 0,
+        'with_frequency': 0,
+        'with_syllables': 0,
+        'with_senses': 0,
+    })
+
+    with_syllables = 0
+    with_concreteness = 0
+    with_frequency = 0
+    multi_word = 0
+    total_senses = 0
+
+    entries_list = entries.values() if isinstance(entries, dict) else entries
+    for entry in entries_list:
+        # Source tracking
+        sources = entry.get('sources', ['wikt'])  # Default to wikt for backwards compat
+        sources_key = ','.join(sorted(sources))
+        license_sources = entry.get('license_sources', {})
+
+        # Count individual sources
+        for src in sources:
+            source_counts[src] += 1
+            source_metadata[src]['total'] += 1
+
+        # Count source combinations
+        combo = source_combo_counts[sources_key]
+        combo['count'] += 1
+        for lic in license_sources.keys():
+            combo['licenses'].add(lic)
+
+        # Syllables
+        if entry.get('syllables') is not None:
+            with_syllables += 1
+            for src in sources:
+                source_metadata[src]['with_syllables'] += 1
+
+        # Concreteness
+        if entry.get('concreteness'):
+            with_concreteness += 1
+            concrete_val = entry['concreteness']
+            concrete_counts[concrete_val] += 1
+            for src in sources:
+                source_metadata[src]['with_concreteness'] += 1
+
+        # Frequency
+        if entry.get('frequency_tier'):
+            with_frequency += 1
+            freq_counts[entry['frequency_tier']] += 1
+            for src in sources:
+                source_metadata[src]['with_frequency'] += 1
+
+        # Multi-word
+        if entry.get('word_count', 1) > 1:
+            multi_word += 1
+
+        # Sense count
+        sense_count = entry.get('sense_count', entry.get('sense_length', 0))
+        total_senses += sense_count
+        if sense_count > 0:
+            for src in sources:
+                source_metadata[src]['with_senses'] += 1
+
+    total = stats['total_words']
+
+    # Convert source counts
+    stats['sources'] = dict(sorted(source_counts.items(), key=lambda x: -x[1]))
+
+    # Convert source combinations (convert license sets to sorted strings)
+    for combo_key, combo_data in source_combo_counts.items():
+        stats['source_combinations'][combo_key] = {
+            'count': combo_data['count'],
+            'licenses': ','.join(sorted(combo_data['licenses']))
+        }
+    # Sort by count descending
+    stats['source_combinations'] = dict(
+        sorted(stats['source_combinations'].items(), key=lambda x: -x[1]['count'])
+    )
+
+    # Per-source metadata coverage
+    for src, meta in source_metadata.items():
+        src_total = meta['total']
+        stats['metadata_by_source'][src] = {
+            'total': src_total,
+            'concreteness': {
+                'count': meta['with_concreteness'],
+                'percentage': round(100 * meta['with_concreteness'] / src_total, 1) if src_total > 0 else 0
+            },
+            'frequency_tier': {
+                'count': meta['with_frequency'],
+                'percentage': round(100 * meta['with_frequency'] / src_total, 1) if src_total > 0 else 0
+            },
+            'syllables': {
+                'count': meta['with_syllables'],
+                'percentage': round(100 * meta['with_syllables'] / src_total, 1) if src_total > 0 else 0
+            },
+            'senses': {
+                'count': meta['with_senses'],
+                'percentage': round(100 * meta['with_senses'] / src_total, 1) if src_total > 0 else 0
+            },
+        }
+
+    stats['metadata_coverage'] = {
+        'syllables': {
+            'count': with_syllables,
+            'percentage': round(100 * with_syllables / total, 1) if total > 0 else 0
+        },
+        'concreteness': {
+            'count': with_concreteness,
+            'percentage': round(100 * with_concreteness / total, 1) if total > 0 else 0
+        },
+        'frequency_tier': {
+            'count': with_frequency,
+            'percentage': round(100 * with_frequency / total, 1) if total > 0 else 0
+        },
+        'multi_word_phrases': {
+            'count': multi_word,
+            'percentage': round(100 * multi_word / total, 1) if total > 0 else 0
+        },
+        'total_senses': {
+            'count': total_senses,
+            'avg_per_word': round(total_senses / total, 2) if total > 0 else 0
+        },
+        # Fields for UI compatibility
+        'pos_tags': {'count': 0, 'percentage': 0},
+        'any_labels': {'count': 0, 'percentage': 0},
+    }
+
+    stats['frequency_distribution'] = dict(sorted(freq_counts.items()))
+    stats['concreteness_distribution'] = dict(concrete_counts)
+
+    return stats
+
+
 def compute_statistics(entries: Dict[str, dict]) -> dict:
-    """Compute comprehensive statistics from entries."""
+    """Compute comprehensive statistics from entries (auto-detects format)."""
+    # Detect format and dispatch
+    fmt = detect_format(entries)
+    if fmt == 'lexeme':
+        return compute_statistics_lexeme(entries)
+
+    # Single-file format processing below
     stats = {
         'total_words': len(entries),
         'generated_at': None,  # Will be set when writing

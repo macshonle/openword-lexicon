@@ -61,9 +61,6 @@ jobs:
         uv venv
         uv pip install -e .
 
-    - name: Check limits
-      run: bash scripts/sys/limits.sh check || true
-
     - name: Fetch core sources (shallow)
       run: |
         bash scripts/fetch/fetch_enable.sh

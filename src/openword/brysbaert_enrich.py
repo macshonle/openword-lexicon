@@ -220,21 +220,24 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description='Enrich entries with Brysbaert concreteness data')
-    parser.add_argument('--unified', action='store_true',
-                        help='Use unified build mode (language-based structure)')
+    parser.add_argument('--input', type=Path, required=True,
+                        help='Input JSONL file (lexeme entries)')
+    parser.add_argument('--output', type=Path, required=True,
+                        help='Output JSONL file')
     parser.add_argument('--language', default='en',
-                        help='Language code (default: en)')
+                        help='Language code for ratings file (default: en)')
     parser.add_argument('--no-prefer', action='store_true',
                         help='Do not override existing concreteness data')
     args = parser.parse_args()
 
     data_root = Path(__file__).parent.parent.parent / "data"
     raw_dir = data_root / "raw" / args.language
-    intermediate_dir = data_root / "intermediate"
 
     ratings_file = raw_dir / "brysbaert_concreteness.txt"
 
     logger.info("Brysbaert concreteness enrichment")
+    logger.info(f"  Input: {args.input}")
+    logger.info(f"  Output: {args.output}")
 
     # Load Brysbaert ratings
     ratings = load_brysbaert_ratings(ratings_file)
@@ -250,27 +253,11 @@ def main():
     else:
         logger.info("Mode: Fill missing only (will not override existing concreteness)")
 
-    if args.unified:
-        # UNIFIED BUILD MODE (language-based)
-        logger.info(f"Mode: Unified build ({args.language})")
-
-        lang_dir = intermediate_dir / args.language
-
-        # Run AFTER wordnet_enrich if prefer_brysbaert=False
-        # Run BEFORE wordnet_enrich if prefer_brysbaert=True
-        # For now, assume we run after wordnet and override
-        unified_input = lang_dir / "entries_enriched.jsonl"
-        unified_output = lang_dir / "entries_enriched_brysbaert.jsonl"
-
-        if unified_input.exists():
-            process_file(unified_input, unified_output, ratings, prefer_brysbaert)
-        else:
-            logger.error(f"Unified input file not found: {unified_input}")
-            logger.error("Run wordnet_enrich.py --unified first")
-            sys.exit(1)
-    else:
-        logger.error("Legacy mode not supported. Use --unified flag.")
+    if not args.input.exists():
+        logger.error(f"Input file not found: {args.input}")
         sys.exit(1)
+
+    process_file(args.input, args.output, ratings, prefer_brysbaert)
 
     logger.info("")
     logger.info("Brysbaert enrichment complete")

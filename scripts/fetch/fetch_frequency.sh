@@ -15,7 +15,7 @@ readonly SOURCE_FILE="${OUTPUT_DIR}/frequency.SOURCE.json"
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
 
-echo "→ Fetching word frequency list (OpenSubtitles 2018)..."
+echo "Fetching word frequency list (OpenSubtitles 2018)..."
 echo "  Repository: $FREQ_REPO"
 
 # Check if file already exists

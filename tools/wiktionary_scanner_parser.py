@@ -2,6 +2,13 @@
 """
 wiktionary_scanner_parser.py - Lightweight scanner-based Wiktionary parser
 
+This is the Python reference implementation of the Wiktionary scanner.
+A Rust implementation is also available at tools/wiktionary-rust/ which is
+significantly faster (typically 5-10x). Both produce identical output.
+
+Production builds use the Rust version via `make build-wiktionary-json`.
+This Python version serves as a readable reference and for testing/development.
+
 Uses simple string scanning to find <page> boundaries instead of full XML
 parsing. Much faster than ET.iterparse() for predictable MediaWiki format.
 

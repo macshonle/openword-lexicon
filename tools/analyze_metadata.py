@@ -21,15 +21,115 @@ from typing import Dict, Any, List, Tuple
 
 
 def load_metadata(meta_path: Path) -> Dict[str, Any]:
-    """Load metadata JSON (stored as array, convert to dict)."""
+    """Load metadata from JSONL lexeme file or legacy JSON array."""
     if not meta_path.exists():
         return {}
 
-    with open(meta_path, 'r', encoding='utf-8') as f:
-        metadata_list = json.load(f)
+    metadata = {}
 
-    # Convert list to dict keyed by word
-    return {entry['word']: entry for entry in metadata_list}
+    # JSONL format (current pipeline)
+    if meta_path.suffix == '.jsonl':
+        with open(meta_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    entry = json.loads(line)
+                    metadata[entry['word']] = entry
+    else:
+        # Legacy JSON array format
+        with open(meta_path, 'r', encoding='utf-8') as f:
+            metadata_list = json.load(f)
+        metadata = {entry['word']: entry for entry in metadata_list}
+
+    return metadata
+
+
+def load_senses(senses_path: Path) -> Dict[str, Dict[str, Any]]:
+    """Load senses file and aggregate sense-level data per word.
+
+    The senses file contains one entry per sense with:
+    - pos (string)
+    - register_tags, domain_tags, region_tags, temporal_tags (arrays)
+    - is_proper_noun, is_abbreviation, is_inflected (booleans)
+
+    Returns a dict with aggregated data per word:
+    {
+        'word': {
+            'pos': ['noun', 'verb'],  # List of unique POS
+            'labels': {
+                'register': ['informal', 'slang'],
+                'domain': ['medicine', 'law'],
+                'region': ['UK', 'US'],
+                'temporal': ['archaic', 'dated'],
+            }
+        }
+    }
+    """
+    if not senses_path.exists():
+        return {}
+
+    word_senses: Dict[str, Dict[str, Any]] = {}
+
+    with open(senses_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+
+            entry = json.loads(line)
+            word = entry.get('word', '')
+
+            if word not in word_senses:
+                word_senses[word] = {
+                    'pos': set(),
+                    'labels': {
+                        'register': set(),
+                        'domain': set(),
+                        'region': set(),
+                        'temporal': set(),
+                    }
+                }
+
+            # Collect POS
+            pos = entry.get('pos')
+            if pos:
+                word_senses[word]['pos'].add(pos)
+
+            # Collect tags
+            for tag_field, label_key in [
+                ('register_tags', 'register'),
+                ('domain_tags', 'domain'),
+                ('region_tags', 'region'),
+                ('temporal_tags', 'temporal'),
+            ]:
+                tags = entry.get(tag_field, [])
+                word_senses[word]['labels'][label_key].update(tags)
+
+    # Convert sets to sorted lists
+    for word, data in word_senses.items():
+        data['pos'] = sorted(data['pos'])
+        for label_key in data['labels']:
+            data['labels'][label_key] = sorted(data['labels'][label_key])
+
+    return word_senses
+
+
+def merge_lexemes_and_senses(
+    lexemes: Dict[str, Any],
+    senses: Dict[str, Dict[str, Any]]
+) -> Dict[str, Any]:
+    """Merge lexeme entries with aggregated sense data."""
+    for word, lexeme in lexemes.items():
+        if word in senses:
+            sense_data = senses[word]
+            lexeme['pos'] = sense_data['pos']
+            lexeme['labels'] = sense_data['labels']
+        else:
+            # Word has no senses (secondary source only)
+            lexeme['pos'] = []
+            lexeme['labels'] = {}
+
+    return lexemes
 
 
 def analyze_frequency_tiers(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
@@ -709,10 +809,22 @@ def sample_rich_entries(metadata: Dict[str, Any]) -> str:
 
 def generate_report(language: str = 'en'):
     """Generate comprehensive metadata analysis report for a language."""
-    meta_path = Path(f'data/build/{language}/{language}.meta.json')
+    # Try new lexemes-enriched format first (flat structure with language-prefixed files)
+    meta_path = Path(f'data/intermediate/{language}-lexemes-enriched.jsonl')
+    if not meta_path.exists():
+        meta_path = Path(f'data/build/{language}.meta.json')
+
+    # Load senses file for POS and label data (two-file format)
+    senses_path = Path(f'data/intermediate/{language}-senses.jsonl')
 
     # Load metadata first to set reproducible seed based on data
     metadata = load_metadata(meta_path)
+
+    # Load and merge senses data for POS and labels
+    if senses_path.exists():
+        senses = load_senses(senses_path)
+        metadata = merge_lexemes_and_senses(metadata, senses)
+        print(f"Merged {len(senses):,} senses entries")
 
     # Set seed based on metadata size for reproducibility that changes with data
     # This makes sampling reproducible but updates when data significantly changes

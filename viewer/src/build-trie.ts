@@ -84,7 +84,7 @@ function serializeDAWG(nodes: DAWGNode[], wordCount: number): Uint8Array {
   let size = 12; // Header: magic(6) + version(2) + wordCount(4)
 
   for (const node of nodes) {
-    size += 1; // flags_and_children byte
+    size += 2; // flags(1) + child_count(1) - supports up to 255 children
     size += node.children.size * 3; // Each child: char(1) + offset(2)
   }
 
@@ -97,7 +97,7 @@ function serializeDAWG(nodes: DAWGNode[], wordCount: number): Uint8Array {
   buffer.set(magic, offset);
   offset += 6;
 
-  view.setUint16(offset, 1, true); // Version 1, little-endian
+  view.setUint16(offset, 2, true); // Version 2: extended child count, little-endian
   offset += 2;
 
   view.setUint32(offset, wordCount, true);
@@ -107,14 +107,16 @@ function serializeDAWG(nodes: DAWGNode[], wordCount: number): Uint8Array {
   for (const node of nodes) {
     const childCount = node.children.size;
 
-    if (childCount > 127) {
+    if (childCount > 255) {
       throw new Error(`Node has too many children: ${childCount}`);
     }
 
-    // Pack flags and child count into one byte
-    // Bit 7: is_terminal, Bits 0-6: child_count
-    const flagsByte = (node.isTerminal ? 0x80 : 0x00) | (childCount & 0x7F);
+    // Version 2 format: separate bytes for flags and child count
+    // Byte 1: flags (bit 0: is_terminal)
+    // Byte 2: child_count (0-255)
+    const flagsByte = node.isTerminal ? 0x01 : 0x00;
     buffer[offset++] = flagsByte;
+    buffer[offset++] = childCount;
 
     // Write children (sorted by character for consistency)
     const sortedChildren = Array.from(node.children.entries())

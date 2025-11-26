@@ -7,10 +7,7 @@ This directory contains example JSON specifications for common word list filteri
 To generate a word list from any of these specifications:
 
 ```bash
-# Using Makefile
-make owlex-filter SPEC=examples/wordlist-specs/wordle.json > wordle-words.txt
-
-# Or directly with owlex
+# Using owlex directly
 uv run python -m openword.owlex examples/wordlist-specs/wordle.json > wordle-words.txt
 ```
 
@@ -88,7 +85,7 @@ Copy one of these examples and edit:
 ```bash
 cp examples/wordlist-specs/wordle.json my-spec.json
 # Edit my-spec.json
-make owlex-filter SPEC=my-spec.json > my-words.txt
+uv run python -m openword.owlex my-spec.json > my-words.txt
 ```
 
 ---
@@ -130,10 +127,10 @@ Test your specification before generating large lists:
 
 ```bash
 # Preview first 20 results
-make owlex-filter SPEC=my-spec.json | head -20
+uv run python -m openword.owlex my-spec.json | head -20
 
 # Count total matches
-make owlex-filter SPEC=my-spec.json | wc -l
+uv run python -m openword.owlex my-spec.json | wc -l
 
 # Verbose mode for debugging
 uv run python -m openword.owlex my-spec.json --verbose | head -20
@@ -149,8 +146,8 @@ You can combine multiple filtered lists:
 
 ```bash
 # Generate individual lists
-make owlex-filter SPEC=examples/wordlist-specs/wordle.json > wordle.txt
-make owlex-filter SPEC=my-hard-words.json > hard.txt
+uv run python -m openword.owlex examples/wordlist-specs/wordle.json > wordle.txt
+uv run python -m openword.owlex my-hard-words.json > hard.txt
 
 # Combine
 cat wordle.txt hard.txt | sort -u > combined.txt
@@ -162,10 +159,10 @@ To exclude profanity from your list:
 
 ```bash
 # Generate main list
-make owlex-filter SPEC=my-spec.json > words.txt
+uv run python -m openword.owlex my-spec.json > words.txt
 
 # Generate blocklist (requires Plus)
-make owlex-filter SPEC=examples/wordlist-specs/profanity-blocklist.json > blocked.txt
+uv run python -m openword.owlex examples/wordlist-specs/profanity-blocklist.json > blocked.txt
 
 # Remove blocked words
 grep -vFxf blocked.txt words.txt > clean-words.txt
@@ -187,7 +184,7 @@ For very large lists, use JSONL output for better performance:
 Then extract words:
 
 ```bash
-make owlex-filter SPEC=my-spec.json | jq -r '.word' > words.txt
+uv run python -m openword.owlex my-spec.json | jq -r '.word' > words.txt
 ```
 
 ---

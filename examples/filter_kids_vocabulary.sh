@@ -5,19 +5,19 @@
 # children's educational apps or games by combining multiple filters.
 #
 # Requirements:
-# - Built core distribution (make build-core)
+# - Built lexicon (make build-en)
 # - jq (JSON processor)
 
 set -euo pipefail
 
 # Configuration
-ENRICHED_JSONL="data/intermediate/core/core_entries_enriched.jsonl"
+ENRICHED_JSONL="data/intermediate/en-lexemes-enriched.jsonl"
 OUTPUT_FILE="kids_vocabulary.txt"
 
 # Filtering criteria for kids' vocabulary:
 # - Only nouns (easier to visualize/understand)
 # - Concrete (physical objects)
-# - Common words (top 1k to top 10k frequency)
+# - Common words (frequency tier ≤ N, roughly top ~2,500)
 # - Short words (3-10 characters, easier to read/spell)
 # - No phrases (single words only)
 # - Family-friendly (no vulgar/offensive labels)
@@ -28,7 +28,7 @@ echo ""
 echo "Criteria:"
 echo "  - Part of speech: noun"
 echo "  - Concreteness: concrete"
-echo "  - Frequency tier: top1k, top10k"
+echo "  - Frequency tier: A-N (top ~2,500 words)"
 echo "  - Word length: 3-10 characters"
 echo "  - Single words only (no phrases)"
 echo "  - Family-friendly (no vulgar/offensive)"
@@ -38,23 +38,25 @@ echo ""
 # Check if input file exists
 if [[ ! -f "$ENRICHED_JSONL" ]]; then
     echo "Error: Input file not found: $ENRICHED_JSONL"
-    echo "Please run 'make build-core' first to generate enriched entries."
+    echo "Please run 'make build-en' first to generate enriched entries."
     exit 1
 fi
 
 # Filter using jq
+# Frequency tiers use A-Z scale: A is most common, Z is unranked/rare
+# Tier N is approximately rank 2,500 - good for children's vocabulary
 jq -r 'select(
-    # Must be a noun
-    (.pos | contains(["noun"])) and
+    # Must be a noun (check senses or pos field)
+    ((.pos // []) | any(. == "noun")) and
 
     # Must be concrete (not abstract)
     .concreteness == "concrete" and
 
-    # Must be in common frequency range
-    (.frequency_tier == "top1k" or .frequency_tier == "top10k") and
+    # Must be in common frequency range (A through N, where A is most common)
+    ((.frequency_tier // "Z") <= "N") and
 
     # Single word only (no phrases)
-    .is_phrase == false and
+    (.is_phrase // false) == false and
 
     # Only alphabetic characters (no numbers, hyphens, apostrophes)
     (.word | test("^[a-z]+$")) and

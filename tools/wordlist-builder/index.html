@@ -20,6 +20,8 @@
                     <select id="demo-select">
                         <option value="">Select a demo...</option>
                         <option value="wordle">Wordle Words</option>
+                        <option value="prefix-game">Prefix Game</option>
+                        <option value="no-special-chars">No Special Characters</option>
                         <option value="kids-nouns">Kids Game (Concrete Nouns)</option>
                         <option value="childrens-reading">Children's Reading</option>
                         <option value="scrabble">Scrabble Words</option>
@@ -102,38 +104,20 @@
                             <span class="stat-value" id="total-words">~1,298,737</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">POS tags available:</span>
-                            <span class="stat-value" id="pos-available">Yes (98.8%)</span>
+                            <span class="stat-label">With POS tags:</span>
+                            <span class="stat-value" id="pos-available">0</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">Labels available:</span>
-                            <span class="stat-value" id="labels-available">Yes (11.3%)</span>
+                            <span class="stat-label">With labels:</span>
+                            <span class="stat-value" id="labels-available">0</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">Concreteness available:</span>
-                            <span class="stat-value" id="concreteness-available">Yes (8.6%)</span>
+                            <span class="stat-label">With concreteness:</span>
+                            <span class="stat-value" id="concreteness-available">0</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">Regional labels:</span>
-                            <span class="stat-value" id="regional-available">Yes (1.9%)</span>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="panel-section">
-                    <h2>License Information</h2>
-                    <div class="license-info">
-                        <div class="license-result" id="license-result">
-                            <strong>CC BY-SA 4.0</strong>
-                            <p class="license-description">Attribution + ShareAlike required</p>
-                        </div>
-                        <div class="license-details">
-                            <p><strong>Contributing sources:</strong></p>
-                            <ul id="license-sources">
-                                <li>Wiktionary (CC BY-SA 4.0)</li>
-                                <li>EOWL (UKACD License)</li>
-                                <li>WordNet (WordNet License)</li>
-                            </ul>
+                            <span class="stat-label">With region labels:</span>
+                            <span class="stat-value" id="regional-available">0</span>
                         </div>
                     </div>
                 </section>
@@ -154,6 +138,47 @@
 
                     <div class="filters-list" id="filters-list">
                         <!-- Filters will be added here dynamically -->
+                    </div>
+                </section>
+
+                <!-- Quick Filters Section -->
+                <section class="quick-filters-section">
+                    <h2>Quick Filters</h2>
+                    <p class="hint">Build a filter by selecting options below, then click "Add Filter" to apply.</p>
+
+                    <div class="quick-filters-grid">
+                        <!-- Word Type -->
+                        <div class="quick-filter-item">
+                            <label class="quick-filter-label">Word Type:</label>
+                            <div class="quick-filter-buttons" data-filter-type="word-type">
+                                <button class="quick-filter-btn active" data-value="any">Any</button>
+                                <button class="quick-filter-btn" data-value="single">Single words</button>
+                                <button class="quick-filter-btn" data-value="phrases">Phrases only</button>
+                            </div>
+                        </div>
+
+                        <!-- Syllable Data -->
+                        <div class="quick-filter-item" data-requires="wiktionary">
+                            <label class="quick-filter-label">Syllable Data:</label>
+                            <div class="quick-filter-buttons" data-filter-type="syllable-data">
+                                <button class="quick-filter-btn active" data-value="any">Any</button>
+                                <button class="quick-filter-btn" data-value="required">Required</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preview Panel -->
+                    <div class="quick-filter-preview" id="quick-filter-preview" style="display: none;">
+                        <div class="preview-header">
+                            <strong>Preview:</strong>
+                        </div>
+                        <div class="preview-content" id="quick-filter-description">
+                            No changes selected
+                        </div>
+                        <div class="preview-warning" id="quick-filter-warning" style="display: none;">
+                            ⚠️ <span id="quick-filter-warning-text"></span>
+                        </div>
+                        <button id="quick-filter-add" class="btn-primary quick-filter-add-btn" disabled>Add Filter</button>
                     </div>
                 </section>
 
@@ -209,12 +234,12 @@
                 <section class="results-section">
                     <div class="result-stats">
                         <div class="stat-row">
-                            <span class="stat-label">Estimated words:</span>
-                            <span class="stat-value" id="result-word-count">~1,298,737</span>
-                        </div>
-                        <div class="stat-row">
                             <span class="stat-label">License:</span>
                             <span class="stat-value" id="result-license">CC BY-SA 4.0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Sources:</span>
+                            <span class="stat-value" id="result-sources">Wiktionary, EOWL, WordNet</span>
                         </div>
                     </div>
 

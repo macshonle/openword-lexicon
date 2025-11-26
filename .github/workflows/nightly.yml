@@ -35,9 +35,6 @@ jobs:
         # Skip Wiktionary dump (too large for CI)
         echo "Skipping Wiktionary full dump for CI"
 
-    - name: Check limits
-      run: bash scripts/sys/limits.sh check
-
     - name: Run full pipeline
       run: |
         # Core ingest

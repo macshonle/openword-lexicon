@@ -422,10 +422,10 @@ def main():
     )
 
     parser.add_argument(
-        '--distribution',
-        choices=['core', 'plus'],
-        default='plus',
-        help='Which distribution to filter (default: plus, has more metadata)'
+        '--lang',
+        type=str,
+        default='en',
+        help='Language code (default: en)'
     )
 
     parser.add_argument(
@@ -460,17 +460,17 @@ def main():
 
     config = config_map[args.use_case]
 
-    # Load metadata
-    dist = args.distribution
-    meta_path = Path(f'data/build/{dist}/{dist}.meta.json')
+    # Load metadata (flat structure with language-prefixed files)
+    lang = args.lang
+    meta_path = Path(f'data/build/{lang}.meta.json')
 
     if not meta_path.exists():
         print(f"Metadata not found: {meta_path}")
-        print(f"  Run 'make build-{dist}' first")
+        print(f"  Run 'make build-{lang}' first")
         return 1
 
     print(f"Filtering words for: {config.description}")
-    print(f"Distribution: {dist}")
+    print(f"Language: {lang}")
     print()
 
     metadata = load_metadata(meta_path)
@@ -486,7 +486,7 @@ def main():
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    output_path = output_dir / f'{args.use_case}_{dist}.txt'
+    output_path = output_dir / f'{args.use_case}_{lang}.txt'
     export_wordlist(candidates, output_path, args.with_scores)
 
     # Show sample

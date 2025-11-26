@@ -15,7 +15,7 @@ readonly SOURCE_FILE="${OUTPUT_DIR}/eowl.SOURCE.json"
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
 
-echo "→ Fetching EOWL (English Open Word List)..."
+echo "Fetching EOWL (English Open Word List)..."
 echo "  Repository: $EOWL_REPO"
 
 # Clone repository (shallow clone to save bandwidth)

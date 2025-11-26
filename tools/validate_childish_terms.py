@@ -215,27 +215,19 @@ def print_report(analysis: dict):
     print()
 
     print("=" * 80)
-    print("EXAMPLE FILTER QUERIES")
+    print("FILTER NOTES")
     print("=" * 80)
     print()
-
-    print("  # Exclude childish terms (ages 8+)")
-    print("  jq 'select(.labels.register | index(\"childish\") | not)' \\")
-    print("     data/intermediate/en/entries_tiered.jsonl")
+    print("  In the two-file pipeline format:")
+    print("    - en-lexemes-enriched.jsonl: word-level properties")
+    print("    - en-senses.jsonl: sense-level properties (register_tags, etc.)")
     print()
-
-    print("  # Include ONLY childish terms (ages 3-5)")
-    print("  jq 'select(.labels.register | index(\"childish\"))' \\")
-    print("     data/intermediate/en/entries_tiered.jsonl")
+    print("  Use filters.py for programmatic filtering:")
+    print("    uv run python -m openword.filters \\")
+    print("      data/intermediate/en-lexemes-enriched.jsonl \\")
+    print("      --senses data/intermediate/en-senses.jsonl \\")
+    print("      --no-profanity --modern output.jsonl")
     print()
-
-    print("  # Exclude childish + vulgar (family-friendly)")
-    print("  jq 'select(")
-    print("       (.labels.register | index(\"childish\") | not) and")
-    print("       (.labels.register | index(\"vulgar\") | not)")
-    print("     )' data/intermediate/en/entries_tiered.jsonl")
-    print()
-
     print("=" * 80)
     print()
 
@@ -243,9 +235,9 @@ def print_report(analysis: dict):
 def main():
     """Main validation pipeline."""
 
-    # Paths
+    # Paths (flat structure with language-prefixed files)
     project_root = Path(__file__).parent.parent
-    lexicon_path = project_root / "data" / "intermediate" / "en" / "entries_tiered.jsonl"
+    lexicon_path = project_root / "data" / "intermediate" / "en-lexemes-enriched.jsonl"
 
     logger.info("=" * 80)
     logger.info("Childish Terms Validation")

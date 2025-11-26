@@ -63,7 +63,7 @@ class OwlexFilter:
 
     def _normalize_new_format(self, spec: Dict) -> Dict:
         """
-        Convert new web builder format to legacy owlex format.
+        Convert web builder format to owlex internal format.
 
         New format:
           {
@@ -87,7 +87,7 @@ class OwlexFilter:
         """
         normalized = spec.copy()
 
-        # Set distribution to 'en' (unified English build)
+        # Set distribution to 'en' (English build)
         normalized['distribution'] = 'en'
 
         # Convert filter array to filter object
@@ -128,6 +128,12 @@ class OwlexFilter:
             'multiWord': 'min_words',   # multiWord=true means min_words=2
             'requireSyllables': 'require_syllables',
             'preferBrysbaert': 'prefer_brysbaert',
+            'charPreset': 'char_preset',
+            'startsWith': 'starts_with',
+            'excludeStartsWith': 'exclude_starts_with',
+            'endsWith': 'ends_with',
+            'excludeEndsWith': 'exclude_ends_with',
+            'excludeContains': 'exclude_contains',
         }
 
         for old_key, value in config.items():
@@ -157,11 +163,11 @@ class OwlexFilter:
         """Determine input JSONL file based on distribution."""
         dist = self.spec['distribution']
 
-        # Try tiered file first (has frequency tiers), then enriched, then merged
+        # Try new lexemes-enriched file first (flat structure with language-prefixed files)
         candidates = [
-            Path(f'data/intermediate/{dist}/entries_tiered.jsonl'),
-            Path(f'data/intermediate/{dist}/{dist}_entries_enriched.jsonl'),
-            Path(f'data/intermediate/{dist}/entries_merged.jsonl'),
+            Path(f'data/intermediate/{dist}-lexemes-enriched.jsonl'),
+            Path(f'data/intermediate/{dist}/entries_tiered.jsonl'),  # Legacy
+            Path(f'data/intermediate/{dist}/{dist}_entries_enriched.jsonl'),  # Legacy
         ]
 
         for path in candidates:
@@ -210,6 +216,10 @@ class OwlexFilter:
         if not self._check_source_filters(entry, filters.get('sources', {})):
             return False
 
+        # Spelling region filters
+        if not self._check_spelling_region_filters(entry, filters.get('spelling_region', {})):
+            return False
+
         # Proper noun filters
         if not self._check_proper_noun_filters(entry, filters.get('proper_noun', {})):
             return False
@@ -225,6 +235,7 @@ class OwlexFilter:
         word = entry['word']
         length = len(word)
 
+        # Length constraints
         if 'exact_length' in filters:
             if length != filters['exact_length']:
                 return False
@@ -237,22 +248,72 @@ class OwlexFilter:
             if length > filters['max_length']:
                 return False
 
+        # Character preset validation
+        if 'char_preset' in filters and filters['char_preset'] != 'any':
+            preset = filters['char_preset']
+            if preset == 'standard':
+                # Only lowercase letters (a-z)
+                if not all(c.islower() and c.isalpha() for c in word):
+                    return False
+            elif preset == 'contractions':
+                # Lowercase letters and apostrophes
+                if not all((c.islower() and c.isalpha()) or c == '\'' for c in word):
+                    return False
+            elif preset == 'alphanumeric':
+                # Lowercase letters and digits
+                if not all((c.islower() and c.isalpha()) or c.isdigit() for c in word):
+                    return False
+            elif preset == 'hyphenated':
+                # Lowercase letters and hyphens
+                if not all((c.islower() and c.isalpha()) or c == '-' for c in word):
+                    return False
+            elif preset == 'common-punct':
+                # Lowercase letters, apostrophes, and hyphens
+                if not all((c.islower() and c.isalpha()) or c in '\'-' for c in word):
+                    return False
+
+        # Regex pattern support
         if 'pattern' in filters:
             if not re.match(filters['pattern'], word):
                 return False
 
+        # Starts with (OR logic - match ANY)
         if 'starts_with' in filters:
-            if not word.startswith(filters['starts_with']):
+            prefixes = filters['starts_with'] if isinstance(filters['starts_with'], list) else [filters['starts_with']]
+            if not any(word.startswith(prefix) for prefix in prefixes):
                 return False
 
+        # Doesn't start with (exclude ALL)
+        if 'exclude_starts_with' in filters:
+            prefixes = filters['exclude_starts_with'] if isinstance(filters['exclude_starts_with'], list) else [filters['exclude_starts_with']]
+            if any(word.startswith(prefix) for prefix in prefixes):
+                return False
+
+        # Ends with (OR logic - match ANY)
         if 'ends_with' in filters:
-            if not word.endswith(filters['ends_with']):
+            suffixes = filters['ends_with'] if isinstance(filters['ends_with'], list) else [filters['ends_with']]
+            if not any(word.endswith(suffix) for suffix in suffixes):
                 return False
 
+        # Doesn't end with (exclude ALL)
+        if 'exclude_ends_with' in filters:
+            suffixes = filters['exclude_ends_with'] if isinstance(filters['exclude_ends_with'], list) else [filters['exclude_ends_with']]
+            if any(word.endswith(suffix) for suffix in suffixes):
+                return False
+
+        # Contains (AND logic - must have ALL)
         if 'contains' in filters:
-            if filters['contains'] not in word:
+            sequences = filters['contains'] if isinstance(filters['contains'], list) else [filters['contains']]
+            if not all(seq in word for seq in sequences):
                 return False
 
+        # Doesn't contain (exclude any of these individual characters)
+        if 'exclude_contains' in filters:
+            excluded_chars = filters['exclude_contains']
+            if any(char in word for char in excluded_chars):
+                return False
+
+        # Exclude pattern support
         if 'exclude_pattern' in filters:
             if re.match(filters['exclude_pattern'], word):
                 return False
@@ -272,7 +333,7 @@ class OwlexFilter:
             if word_count > filters['max_words']:
                 return False
 
-        # Legacy is_phrase filter: true means word_count > 1, false means word_count == 1
+        # is_phrase filter: true means word_count > 1, false means word_count == 1
         if 'is_phrase' in filters:
             if filters['is_phrase'] and word_count == 1:
                 return False
@@ -411,6 +472,48 @@ class OwlexFilter:
             # Entry must not have any of the excluded sources
             exclude_set = set(filters['exclude'])
             if sources & exclude_set:
+                return False
+
+        return True
+
+    def _check_spelling_region_filters(self, entry: Dict, filters: Dict) -> bool:
+        """
+        Apply spelling region filters.
+
+        Use cases:
+        - US game: include only en-US spellings or universal (no regional marker)
+        - UK game: include only en-GB spellings or universal
+        - Spellchecker: accept all spellings
+
+        Filter options:
+        - region: str - Only include words for this region (e.g., "en-US", "en-GB")
+                       Words without spelling_region are considered universal
+        - include_universal: bool - Include words without spelling_region (default: true)
+        - exclude: list - Exclude words from these regions (e.g., ["en-US"])
+
+        Examples:
+        - {"region": "en-US"} - Only US spellings and universal words
+        - {"region": "en-GB"} - Only British spellings and universal words
+        - {"region": "en-US", "include_universal": false} - Only US spellings, no universal
+        - {"exclude": ["en-US"]} - Exclude US spellings, keep everything else
+        """
+        spelling_region = entry.get('spelling_region')  # None = universal/unspecified
+        include_universal = filters.get('include_universal', True)
+
+        # If specific region required
+        if 'region' in filters:
+            target_region = filters['region']
+            if spelling_region is None:
+                # Universal word - include if include_universal is true
+                return include_universal
+            else:
+                # Regional word - must match target region
+                return spelling_region == target_region
+
+        # Exclude specific regions
+        if 'exclude' in filters:
+            exclude_regions = set(filters['exclude'])
+            if spelling_region and spelling_region in exclude_regions:
                 return False
 
         return True
@@ -661,13 +764,13 @@ def main():
         epilog="""
 Examples:
   # Generate filtered word list
-  owlex filter wordlist-spec.json
+  owlex wordlist-spec.json
 
   # Save to file
-  owlex filter wordlist-spec.json --output kids-words.txt
+  owlex wordlist-spec.json --output kids-words.txt
 
   # Verbose output
-  owlex filter wordlist-spec.json --verbose
+  owlex wordlist-spec.json --verbose
 
   # Create specification with web interface
   open tools/wordlist-builder/web-builder.html

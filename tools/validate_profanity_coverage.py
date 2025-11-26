@@ -313,9 +313,9 @@ def print_report(analysis: dict):
 def main():
     """Main validation pipeline."""
 
-    # Paths
+    # Paths (flat structure with language-prefixed files)
     project_root = Path(__file__).parent.parent
-    lexicon_path = project_root / "data" / "intermediate" / "en" / "entries_tiered.jsonl"
+    lexicon_path = project_root / "data" / "intermediate" / "en-lexemes-enriched.jsonl"
     profanity_dir = project_root / "data" / "raw" / "validation" / "profanity"
     censor_text_path = profanity_dir / "censor-text-profanity-list.txt"
     dsojevic_path = profanity_dir / "dsojevic-profanity-list.json"
