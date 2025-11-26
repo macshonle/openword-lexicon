@@ -163,11 +163,11 @@ class OwlexFilter:
         """Determine input JSONL file based on distribution."""
         dist = self.spec['distribution']
 
-        # Try new lexeme-enriched file first, then fallback to older formats
+        # Try new lexemes-enriched file first (flat structure with language-prefixed files)
         candidates = [
-            Path(f'data/intermediate/{dist}/{dist}-lexeme-enriched.jsonl'),
-            Path(f'data/intermediate/{dist}/entries_tiered.jsonl'),
-            Path(f'data/intermediate/{dist}/{dist}_entries_enriched.jsonl'),
+            Path(f'data/intermediate/{dist}-lexemes-enriched.jsonl'),
+            Path(f'data/intermediate/{dist}/entries_tiered.jsonl'),  # Legacy
+            Path(f'data/intermediate/{dist}/{dist}_entries_enriched.jsonl'),  # Legacy
         ]
 
         for path in candidates:

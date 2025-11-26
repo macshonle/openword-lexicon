@@ -18,17 +18,15 @@ This directory contains automated inspection reports for the Openword Lexicon pr
 
 ---
 
-## Recent Improvements
+## Pipeline Architecture
 
-**Unified Build (2025):**
-- Unified build integrating all sources (ENABLE, EOWL, Wiktionary, WordNet)
-- Per-word license tracking via `license_sources` field
-- Language-based organization (English-only currently)
+**Two-File Format (2025):**
+- Normalized format with separate lexemes and senses files
+- Word-level properties in `en-lexemes-enriched.jsonl`
+- Sense-level properties in `en-senses.jsonl`
+- Flat directory structure with language-prefixed filenames
 - Safe defaults philosophy for missing metadata
 - Runtime filtering support (child-safe, region-specific, profanity, etc.)
-- Fixed syllable data loss pipeline issue
-- Added missing POS tag detection
-- Enhanced analysis with source-specific sampling
 
 ---
 

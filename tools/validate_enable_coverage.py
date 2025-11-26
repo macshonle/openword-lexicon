@@ -164,8 +164,8 @@ def main():
     data_root = Path(__file__).parent.parent / "data"
     enable_path = data_root / "raw" / "en" / "enable1.txt"
 
-    # Use current pipeline output
-    lexicon_path = data_root / "intermediate" / "en" / "en-lexeme-enriched.jsonl"
+    # Use current pipeline output (flat structure with language-prefixed files)
+    lexicon_path = data_root / "intermediate" / "en-lexemes-enriched.jsonl"
 
     logger.info("=" * 70)
     logger.info("ENABLE Coverage Validation")

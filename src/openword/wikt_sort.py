@@ -2,23 +2,14 @@
 """
 wikt_sort.py - Sort Wiktionary entries lexicographically by word
 
-Reads the unsorted wikt.jsonl (in XML source order) and outputs wikt-sorted.jsonl
+Reads the unsorted wikt.jsonl (in XML source order) and outputs a sorted version
 with entries sorted lexicographically by word. This ensures:
   1. Duplicate entries for the same word are consecutive
   2. Trie ordinal directly maps to line number (no offset table needed)
   3. Sorting logic matches trie_build.py exactly
 
 Usage:
-    python src/openword/wikt_sort.py [--lang LANG]
-
-Arguments:
-    --lang LANG  Language code (default: en)
-
-Input:
-    data/intermediate/{lang}/wikt.jsonl (unsorted, from Rust scanner)
-
-Output:
-    data/intermediate/{lang}/wikt-sorted.jsonl (sorted lexicographically)
+    python src/openword/wikt_sort.py --input INPUT.jsonl --output OUTPUT.jsonl
 
 Both files are kept for traceability. The unsorted version preserves XML order
 for debugging, while the sorted version is used by downstream tools.
@@ -109,15 +100,14 @@ def main():
     parser = argparse.ArgumentParser(
         description='Sort Wiktionary entries lexicographically by word'
     )
-    parser.add_argument('--lang', default='en', help='Language code (default: en)')
+    parser.add_argument('--input', type=Path, required=True,
+                        help='Input JSONL file (unsorted Wiktionary entries)')
+    parser.add_argument('--output', type=Path, required=True,
+                        help='Output JSONL file (sorted by word)')
     args = parser.parse_args()
 
-    # Determine paths
-    project_root = Path(__file__).parent.parent.parent
-    lang_dir = project_root / "data" / "intermediate" / args.lang
-
-    input_file = lang_dir / "wikt.jsonl"
-    output_file = lang_dir / "wikt-sorted.jsonl"
+    input_file = args.input
+    output_file = args.output
 
     if not input_file.exists():
         print(f"Error: Input file not found: {input_file}")

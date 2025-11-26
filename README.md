@@ -90,9 +90,9 @@ make build-en
 7. **Filter** at runtime using `filters.py` or Word List Builder
 
 ## Primary artifacts
-- `data/build/en/en.trie` (MARISA trie for word lookup)
-- `data/intermediate/en/en-lexeme-enriched.jsonl` (word-level properties)
-- `data/intermediate/en/en-aggregate-senses.jsonl` (sense-level properties)
+- `data/build/en.trie` (MARISA trie for word lookup)
+- `data/intermediate/en-lexemes-enriched.jsonl` (word-level properties)
+- `data/intermediate/en-senses.jsonl` (sense-level properties)
 
 ## Interactive Web Tools
 

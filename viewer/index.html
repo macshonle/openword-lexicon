@@ -382,7 +382,7 @@
         // Load wordlist
         async function loadWordlist() {
             try {
-                const response = await fetch('/data/build/en/wordlist.txt');
+                const response = await fetch('/data/build/en-wordlist.txt');
                 const text = await response.text();
                 const words = text.trim().split('\n');
 

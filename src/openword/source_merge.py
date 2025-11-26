@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
-source_merge.py — Merge multiple word sources into a unified lexeme file.
+source_merge.py — Merge multiple word sources into a unified lexemes file.
 
 This script combines words from multiple sources (Wiktionary, EOWL, WordNet)
-into a single lexeme file with source tracking. This enables:
+into a single lexemes file with source tracking. This enables:
   - Runtime filtering by source selection
   - License-aware word list generation
   - Interactive word count estimates in the Word List Builder
 
 Usage:
   uv run python src/openword/source_merge.py \
-      --wikt-lexeme data/intermediate/en/en-lexeme.jsonl \
-      --eowl data/raw/en/eowl.txt \
-      --wordnet data/raw/en/english-wordnet-2024.tar.gz \
-      --output data/intermediate/en/en-lexeme-merged.jsonl
+      --wikt-lexemes LEXEMES.jsonl \
+      --eowl EOWL.txt \
+      --wordnet WORDNET.tar.gz \
+      --output OUTPUT.jsonl
 
 Output format (lexeme entries):
   {
@@ -322,22 +322,20 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Merge multiple word sources into unified lexeme file'
+        description='Merge multiple word sources into unified lexemes file'
     )
-    parser.add_argument('--wikt-lexeme', type=Path, required=True,
-                        help='Wiktionary lexeme JSONL file (base)')
+    parser.add_argument('--wikt-lexemes', type=Path, required=True,
+                        help='Wiktionary lexemes JSONL file (base)')
     parser.add_argument('--eowl', type=Path,
                         help='EOWL word list file (optional)')
     parser.add_argument('--wordnet', type=Path,
                         help='WordNet tarball archive (optional)')
     parser.add_argument('--output', type=Path, required=True,
                         help='Output merged JSONL file')
-    parser.add_argument('--language', default='en',
-                        help='Language code (default: en)')
     args = parser.parse_args()
 
     logger.info("Source merge")
-    logger.info(f"  Wiktionary: {args.wikt_lexeme}")
+    logger.info(f"  Wiktionary: {args.wikt_lexemes}")
     if args.eowl:
         logger.info(f"  EOWL: {args.eowl}")
     if args.wordnet:
@@ -346,7 +344,7 @@ def main():
     logger.info("")
 
     # Load Wiktionary lexemes (base)
-    wikt_entries = load_wikt_lexemes(args.wikt_lexeme)
+    wikt_entries = load_wikt_lexemes(args.wikt_lexemes)
     if not wikt_entries:
         logger.error("No Wiktionary entries loaded")
         sys.exit(1)

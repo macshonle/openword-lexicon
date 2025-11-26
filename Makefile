@@ -6,29 +6,30 @@ UV ?= uv
 PY_VERSION ?= 3.11
 LEXICON_LANG ?= en
 
-# Directory structure (language-based)
+# Directory structure (flat with language-prefixed files)
 RAW_DIR := data/raw/$(LEXICON_LANG)
-INTERMEDIATE_DIR := data/intermediate/$(LEXICON_LANG)
-BUILD_DIR := data/build/$(LEXICON_LANG)
+INTERMEDIATE_DIR := data/intermediate
+BUILD_DIR := data/build
 REPORTS_DIR := reports
 WORDLISTS_DIR := data/wordlists
 SLICES_DIR := data/diagnostic/wikt_slices
 
-# Build artifacts
+# Build artifacts (language-prefixed filenames in flat directories)
 WIKTIONARY_DUMP := $(RAW_DIR)/$(LEXICON_LANG)wiktionary-latest-pages-articles.xml.bz2
-WIKTIONARY_JSON := $(INTERMEDIATE_DIR)/wikt.jsonl
-WIKTIONARY_JSON_SORTED := $(INTERMEDIATE_DIR)/wikt-sorted.jsonl
+WIKTIONARY_JSON := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-wikt.jsonl
+WIKTIONARY_JSON_SORTED := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-wikt-sorted.jsonl
 FREQUENCY_DATA := $(RAW_DIR)/$(LEXICON_LANG)_50k.txt
 WORDNET_ARCHIVE := $(RAW_DIR)/english-wordnet-2024.tar.gz
 UNIFIED_TRIE := $(BUILD_DIR)/$(LEXICON_LANG).trie
+GAME_TRIE := $(BUILD_DIR)/$(LEXICON_LANG)-game.trie
 UNIFIED_META := $(BUILD_DIR)/$(LEXICON_LANG).meta.json
-WORDLIST_TXT := $(BUILD_DIR)/wordlist.txt
+WORDLIST_TXT := $(BUILD_DIR)/$(LEXICON_LANG)-wordlist.txt
 
-# New two-file Wiktionary format
-LEXEME_JSON := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexeme.jsonl
-SENSES_JSON := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-aggregate-senses.jsonl
-LEXEME_MERGED := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexeme-merged.jsonl
-LEXEME_ENRICHED := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexeme-enriched.jsonl
+# Wiktionary pipeline outputs (two-file normalized format)
+LEXEMES_JSON := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexemes.jsonl
+SENSES_JSON := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-senses.jsonl
+LEXEMES_MERGED := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexemes-merged.jsonl
+LEXEMES_ENRICHED := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexemes-enriched.jsonl
 
 # Additional source files
 EOWL_FILE := $(RAW_DIR)/eowl.txt
@@ -37,7 +38,7 @@ EOWL_FILE := $(RAW_DIR)/eowl.txt
 RUST_SCANNER := tools/wiktionary-rust/target/release/wiktionary-rust
 
 .PHONY: bootstrap venv deps fmt lint test clean scrub \
-        fetch-en build-en build-wiktionary-json build-rust-scanner build-trie package check-limits \
+        fetch-en build-en build-wiktionary-json build-rust-scanner build-trie build-metadata package check-limits \
         report-en analyze-local diagnose-scanner validate-enable \
         wordlist-builder-web viewer-web
 
@@ -130,25 +131,30 @@ build-rust-scanner: $(RUST_SCANNER)
 #   2. Normalize into lexeme + senses tables (wikt_normalize.py)
 #   3. Merge additional sources (EOWL, WordNet) into lexeme file
 #   4. Enrich lexeme file (concreteness, frequency)
-#   5. Build trie from lexeme file
+#   5. Build tries (full + game profile)
 #   6. Generate statistics
-build-en: fetch-en $(LEXEME_JSON) $(SENSES_JSON)
+build-en: fetch-en $(LEXEMES_JSON) $(SENSES_JSON)
 	@echo "Merging sources (EOWL, WordNet)..."
 	$(UV) run python src/openword/source_merge.py \
-		--wikt-lexeme $(LEXEME_JSON) \
+		--wikt-lexemes $(LEXEMES_JSON) \
 		--eowl $(EOWL_FILE) \
 		--wordnet $(WORDNET_ARCHIVE) \
-		--output $(LEXEME_MERGED)
-	@echo "Enriching lexeme file..."
+		--output $(LEXEMES_MERGED)
+	@echo "Enriching lexemes file..."
 	$(UV) run python src/openword/brysbaert_enrich.py \
-		--input $(LEXEME_MERGED) \
-		--output $(LEXEME_ENRICHED)
+		--input $(LEXEMES_MERGED) \
+		--output $(LEXEMES_ENRICHED)
 	$(UV) run python src/openword/frequency_tiers.py \
-		--input $(LEXEME_ENRICHED) \
-		--output $(LEXEME_ENRICHED)
-	@echo "Building trie..."
+		--input $(LEXEMES_ENRICHED) \
+		--output $(LEXEMES_ENRICHED)
+	@echo "Building tries..."
 	$(UV) run python src/openword/trie_build.py \
-		--input $(LEXEME_ENRICHED)
+		--input $(LEXEMES_ENRICHED) --profile full
+	$(UV) run python src/openword/trie_build.py \
+		--input $(LEXEMES_ENRICHED) --profile game
+	@echo "Exporting metadata modules..."
+	$(UV) run python src/openword/export_metadata.py \
+		--input $(LEXEMES_ENRICHED) --modules all --gzip
 	$(UV) run python src/openword/generate_statistics.py
 
 # Build Wiktionary JSONL using Rust scanner (file-based dependency)
@@ -163,19 +169,21 @@ $(WIKTIONARY_JSON): $(WIKTIONARY_DUMP) $(RUST_SCANNER)
 # Sorting logic matches trie_build.py exactly (Python's default lexicographic sort)
 $(WIKTIONARY_JSON_SORTED): $(WIKTIONARY_JSON)
 	@echo "Sorting Wiktionary entries by word..."
-	$(UV) run python src/openword/wikt_sort.py
+	$(UV) run python src/openword/wikt_sort.py \
+		--input $(WIKTIONARY_JSON) \
+		--output $(WIKTIONARY_JSON_SORTED)
 
-# Normalize into two-file format: lexeme + aggregate-senses
+# Normalize into two-file format: lexemes + senses
 # This step:
 #   1. Groups entries by word
 #   2. Extracts word-level properties into lexeme entries
 #   3. Deduplicates senses by projection (pos, tags, flags)
 #   4. Writes offset/length linking between files
-$(LEXEME_JSON) $(SENSES_JSON): $(WIKTIONARY_JSON_SORTED)
-	@echo "Normalizing Wiktionary into lexeme + senses tables..."
+$(LEXEMES_JSON) $(SENSES_JSON): $(WIKTIONARY_JSON_SORTED)
+	@echo "Normalizing Wiktionary into lexemes + senses tables..."
 	$(UV) run python src/openword/wikt_normalize.py \
 		--input $(WIKTIONARY_JSON_SORTED) \
-		--lexeme-output $(LEXEME_JSON) \
+		--lexemes-output $(LEXEMES_JSON) \
 		--senses-output $(SENSES_JSON) \
 		-v
 
@@ -186,7 +194,14 @@ build-wiktionary-json: $(WIKTIONARY_JSON)
 build-trie: $(WORDLIST_TXT) viewer/node_modules
 	@echo "Building browser-compatible trie..."
 	@echo "Building binary trie from $(WORDLIST_TXT)..."
-	cd viewer && pnpm run build-trie -- ../$(WORDLIST_TXT) data/$(LEXICON_LANG).trie.bin
+	cd viewer && pnpm run build-trie ../$(WORDLIST_TXT) data/$(LEXICON_LANG).trie.bin
+
+# Export modular metadata layers (frequency, concreteness, syllables, sources)
+# Creates gzipped JSON files in data/build/{lang}-{module}.json.gz
+build-metadata: $(LEXEMES_ENRICHED)
+	@echo "Exporting metadata modules (gzipped)..."
+	$(UV) run python src/openword/export_metadata.py \
+		--input $(LEXEMES_ENRICHED) --modules all --gzip
 
 # Export trie to plain text wordlist
 $(WORDLIST_TXT): $(UNIFIED_TRIE)

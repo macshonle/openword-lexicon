@@ -19,8 +19,8 @@ Arguments:
     --ordinal N        Lookup word at ordinal position N
     --word WORD        Lookup entries for WORD (requires building word index)
     --interactive      Interactive lookup mode
-    --data-dir DIR     Directory containing mapping files (default: data/intermediate/en/)
-    --entries FILE     Path to wikt.jsonl (default: data/intermediate/en/wikt.jsonl)
+    --data-dir DIR     Directory containing mapping files (default: data/intermediate/)
+    --entries FILE     Path to wikt.jsonl (default: data/intermediate/en-wikt.jsonl)
 """
 
 import json
@@ -244,10 +244,10 @@ def main():
     parser.add_argument('--word', type=str, help='Word string to lookup')
     parser.add_argument('--interactive', action='store_true', help='Interactive mode')
     parser.add_argument('--data-dir', type=Path,
-                        default=Path('data/intermediate/en'),
+                        default=Path('data/intermediate'),
                         help='Directory with mapping files')
     parser.add_argument('--entries', type=Path,
-                        default=Path('data/intermediate/en/wikt.jsonl'),
+                        default=Path('data/intermediate/en-wikt.jsonl'),
                         help='Path to wikt.jsonl')
 
     args = parser.parse_args()

@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 """
 Normalize Wiktionary scanner output into two flat tables:
-- en-lexeme.jsonl: Word-level properties (one row per unique word)
-- en-aggregate-senses.jsonl: Sense-level properties (deduplicated by projection)
+- {lang}-lexemes.jsonl: Word-level properties (one row per unique word)
+- {lang}-senses.jsonl: Sense-level properties (deduplicated by projection)
 
 The scanner outputs one entry per sense (definition line). This script:
 1. Groups entries by word
 2. Extracts word-level properties into lexeme entries
 3. Deduplicates senses by projection (pos, tags, flags)
 4. Writes both files with offset/length linking
+
+Usage:
+    python src/openword/wikt_normalize.py \\
+        --input INPUT.jsonl \\
+        --lexemes-output LEXEMES.jsonl \\
+        --senses-output SENSES.jsonl
 """
 
 import json
@@ -132,17 +138,17 @@ def aggregate_word_senses(
 
 def normalize_wiktionary(
     input_path: Path,
-    lexeme_path: Path,
+    lexemes_path: Path,
     senses_path: Path,
     verbose: bool = False
 ) -> Tuple[int, int, int]:
     """
-    Transform sorted Wiktionary output into normalized lexeme + senses tables.
+    Transform sorted Wiktionary output into normalized lexemes + senses tables.
 
-    Reads: wikt-sorted.jsonl (one line per sense, sorted by word)
+    Reads: Sorted JSONL (one line per sense, sorted by word)
     Outputs:
-        - en-lexeme.jsonl (one line per unique word)
-        - en-aggregate-senses.jsonl (deduplicated senses)
+        - lexemes JSONL (one line per unique word)
+        - senses JSONL (deduplicated senses)
 
     Returns: (lexeme_count, sense_count, original_sense_count)
     """
@@ -187,7 +193,7 @@ def normalize_wiktionary(
         all_sense_entries.extend(senses)
 
     # Write output files
-    lexeme_count = write_jsonl(lexeme_path, iter(lexeme_entries))
+    lexeme_count = write_jsonl(lexemes_path, iter(lexeme_entries))
     sense_count = write_jsonl(senses_path, iter(all_sense_entries))
 
     if verbose:
@@ -202,25 +208,25 @@ def normalize_wiktionary(
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Normalize Wiktionary scanner output into lexeme + senses tables'
+        description='Normalize Wiktionary scanner output into lexemes + senses tables'
     )
     parser.add_argument(
         '--input',
         type=Path,
-        default=Path('data/intermediate/en/wikt-sorted.jsonl'),
-        help='Input sorted JSONL file from scanner'
+        required=True,
+        help='Input sorted JSONL file (from wikt_sort.py)'
     )
     parser.add_argument(
-        '--lexeme-output',
+        '--lexemes-output',
         type=Path,
-        default=Path('data/intermediate/en/en-lexeme.jsonl'),
-        help='Output lexeme JSONL file'
+        required=True,
+        help='Output lexemes JSONL file (word-level properties)'
     )
     parser.add_argument(
         '--senses-output',
         type=Path,
-        default=Path('data/intermediate/en/en-aggregate-senses.jsonl'),
-        help='Output senses JSONL file'
+        required=True,
+        help='Output senses JSONL file (sense-level properties)'
     )
     parser.add_argument(
         '-v', '--verbose',
@@ -235,17 +241,17 @@ def main():
         return 1
 
     # Ensure output directory exists
-    args.lexeme_output.parent.mkdir(parents=True, exist_ok=True)
+    args.lexemes_output.parent.mkdir(parents=True, exist_ok=True)
     args.senses_output.parent.mkdir(parents=True, exist_ok=True)
 
     print(f"Input: {args.input}")
-    print(f"Lexeme output: {args.lexeme_output}")
+    print(f"Lexemes output: {args.lexemes_output}")
     print(f"Senses output: {args.senses_output}")
     print()
 
     lexeme_count, sense_count, original_count = normalize_wiktionary(
         args.input,
-        args.lexeme_output,
+        args.lexemes_output,
         args.senses_output,
         verbose=args.verbose
     )
@@ -253,7 +259,7 @@ def main():
     print()
     print("=" * 60)
     print(f"Lexemes: {lexeme_count:,}")
-    print(f"Aggregate senses: {sense_count:,}")
+    print(f"Senses: {sense_count:,}")
     print(f"Original senses: {original_count:,}")
     print(f"Compression: {original_count / max(sense_count, 1):.2f}x")
     print("=" * 60)

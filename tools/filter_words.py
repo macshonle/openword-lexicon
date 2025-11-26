@@ -460,9 +460,9 @@ def main():
 
     config = config_map[args.use_case]
 
-    # Load metadata
+    # Load metadata (flat structure with language-prefixed files)
     dist = args.distribution
-    meta_path = Path(f'data/build/{dist}/{dist}.meta.json')
+    meta_path = Path(f'data/build/{dist}.meta.json')
 
     if not meta_path.exists():
         print(f"Metadata not found: {meta_path}")

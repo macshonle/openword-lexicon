@@ -61,9 +61,9 @@ def main():
     parser.add_argument('--input', type=Path, help='Input JSONL file (overrides default path)')
     args = parser.parse_args()
 
-    # Determine paths
+    # Determine paths (flat structure with language-prefixed files)
     project_root = Path(__file__).parent.parent.parent
-    lang_dir = project_root / "data" / "intermediate" / args.lang
+    intermediate_dir = project_root / "data" / "intermediate"
     output_file = project_root / "tools" / "wordlist-builder" / "build-statistics.json"
 
     # Determine input file
@@ -71,7 +71,7 @@ def main():
         input_file = args.input
     else:
         # Current pipeline output (two-file format)
-        input_file = lang_dir / f"{args.lang}-lexeme-enriched.jsonl"
+        input_file = intermediate_dir / f"{args.lang}-lexemes-enriched.jsonl"
 
         if not input_file.exists():
             logger.error(f"No input file found: {input_file}")

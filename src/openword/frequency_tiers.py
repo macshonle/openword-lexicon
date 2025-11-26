@@ -4,8 +4,8 @@ frequency_tiers.py — Assign frequency rank codes (A–Z) to lexeme entries.
 
 Usage:
   uv run python src/openword/frequency_tiers.py \\
-      --input data/intermediate/en/en-lexeme.jsonl \\
-      --output data/intermediate/en/en-lexeme-enriched.jsonl
+      --input INPUT.jsonl \\
+      --output OUTPUT.jsonl
 
 Reads frequency data from data/raw/{lang}/{lang}_50k.txt
 

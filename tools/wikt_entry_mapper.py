@@ -12,8 +12,8 @@ Usage:
     python tools/wikt_entry_mapper.py [INPUT_FILE] [OUTPUT_DIR]
 
 Arguments:
-    INPUT_FILE  Path to wikt.jsonl (default: data/intermediate/en/wikt.jsonl)
-    OUTPUT_DIR  Output directory for mapping files (default: data/intermediate/en/)
+    INPUT_FILE  Path to wikt.jsonl (default: data/intermediate/en-wikt.jsonl)
+    OUTPUT_DIR  Output directory for mapping files (default: data/intermediate/)
 
 Outputs:
     - entry_offsets.bin: Array of first line numbers (4 bytes × num_unique_words)
@@ -187,12 +187,12 @@ def write_duplicate_analysis(
 def main():
     """Main entry point."""
 
-    # Parse arguments
+    # Parse arguments (flat structure with language-prefixed files)
     if len(sys.argv) > 1:
         input_file = Path(sys.argv[1])
     else:
         project_root = Path(__file__).parent.parent
-        input_file = project_root / "data" / "intermediate" / "en" / "wikt.jsonl"
+        input_file = project_root / "data" / "intermediate" / "en-wikt.jsonl"
 
     if len(sys.argv) > 2:
         output_dir = Path(sys.argv[2])

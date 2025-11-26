@@ -219,13 +219,13 @@ def print_report(analysis: dict):
     print("=" * 80)
     print()
     print("  In the two-file pipeline format:")
-    print("    - en-lexeme-enriched.jsonl: word-level properties")
-    print("    - en-aggregate-senses.jsonl: sense-level properties (register_tags, etc.)")
+    print("    - en-lexemes-enriched.jsonl: word-level properties")
+    print("    - en-senses.jsonl: sense-level properties (register_tags, etc.)")
     print()
     print("  Use filters.py for programmatic filtering:")
     print("    uv run python -m openword.filters \\")
-    print("      data/intermediate/en/en-lexeme-enriched.jsonl \\")
-    print("      --senses data/intermediate/en/en-aggregate-senses.jsonl \\")
+    print("      data/intermediate/en-lexemes-enriched.jsonl \\")
+    print("      --senses data/intermediate/en-senses.jsonl \\")
     print("      --no-profanity --modern output.jsonl")
     print()
     print("=" * 80)
@@ -235,9 +235,9 @@ def print_report(analysis: dict):
 def main():
     """Main validation pipeline."""
 
-    # Paths
+    # Paths (flat structure with language-prefixed files)
     project_root = Path(__file__).parent.parent
-    lexicon_path = project_root / "data" / "intermediate" / "en" / "en-lexeme-enriched.jsonl"
+    lexicon_path = project_root / "data" / "intermediate" / "en-lexemes-enriched.jsonl"
 
     logger.info("=" * 80)
     logger.info("Childish Terms Validation")

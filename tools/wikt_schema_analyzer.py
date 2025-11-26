@@ -2,7 +2,7 @@
 """
 wikt_schema_analyzer.py - Analyze Wiktionary JSON schema and extract all unique values
 
-Reads data/intermediate/en/wikt.jsonl and builds an aggregate view of all unique
+Reads data/intermediate/en-wikt.jsonl and builds an aggregate view of all unique
 values for each field path across all entries. Shows:
   - All unique values for each field
   - Bit counts for encoding (mutually exclusive fields use log2, combinatorial use count)
@@ -16,7 +16,7 @@ Usage:
     python tools/wikt_schema_analyzer.py [INPUT_FILE]
 
 Arguments:
-    INPUT_FILE  Optional path to input JSONL file (default: data/intermediate/en/wikt.jsonl)
+    INPUT_FILE  Optional path to input JSONL file (default: data/intermediate/en-wikt.jsonl)
 """
 
 import json
@@ -357,12 +357,12 @@ def print_array_combination_stats(combinations: Dict[str, Counter], entry_count:
 
 def main():
     """Main analysis function."""
-    # Check for command line argument
+    # Check for command line argument (flat structure with language-prefixed files)
     if len(sys.argv) > 1:
         input_file = Path(sys.argv[1])
     else:
         project_root = Path(__file__).parent.parent
-        input_file = project_root / "data" / "intermediate" / "en" / "wikt.jsonl"
+        input_file = project_root / "data" / "intermediate" / "en-wikt.jsonl"
 
     if not input_file.exists():
         print(f"Error: Input file not found: {input_file}")
