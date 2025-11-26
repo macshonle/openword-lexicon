@@ -1,6 +1,6 @@
 [package]
 name = "wiktionary-rust"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 
 [dependencies]
@@ -13,7 +13,20 @@ unicode-normalization = "0.1"
 clap = { version = "4.5", features = ["derive"] }
 indicatif = "0.17"
 
+# Note: Additional parallel processing dependencies (rayon, crossbeam, num_cpus)
+# would provide better performance but are not in the cached Cargo.lock.
+# Using std::thread for parallelization instead.
+
 [profile.release]
 opt-level = 3
 lto = true
 codegen-units = 1
+
+[profile.release-fast]
+inherits = "release"
+lto = "thin"
+codegen-units = 4
+
+[profile.bench]
+inherits = "release"
+debug = true
