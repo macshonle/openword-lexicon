@@ -9,13 +9,13 @@
 # (not yet implemented). For now, this shows the intended approach.
 #
 # Requirements:
-# - Built core distribution with WordNet enrichment
+# - Built lexicon (make build-en)
 # - jq (JSON processor)
 
 set -euo pipefail
 
 # Configuration
-ENRICHED_JSONL="data/intermediate/core/core_entries_enriched.jsonl"
+ENRICHED_JSONL="data/intermediate/en-lexemes-enriched.jsonl"
 
 # Available semantic categories from WordNet:
 # - noun.animal: Animals
@@ -61,7 +61,7 @@ echo ""
 # Check if input file exists
 if [[ ! -f "$ENRICHED_JSONL" ]]; then
     echo "Error: Input file not found: $ENRICHED_JSONL"
-    echo "Please run 'make build-core' first."
+    echo "Please run 'make build-en' first."
     exit 1
 fi
 
@@ -75,7 +75,7 @@ if ! jq -e 'select(has("wordnet_lexname"))' "$ENRICHED_JSONL" | head -1 > /dev/n
     echo "This field is not yet implemented. To add it:"
     echo ""
     echo "1. Update src/openword/wordnet_enrich.py to add wordnet_lexname field"
-    echo "2. Rebuild the lexicon: make clean-build && make build-core"
+    echo "2. Rebuild the lexicon: make clean && make build-en"
     echo ""
     echo "For now, using concreteness field as a fallback..."
     echo "(This is less precise but shows concrete vs abstract filtering)"
@@ -85,16 +85,16 @@ if ! jq -e 'select(has("wordnet_lexname"))' "$ENRICHED_JSONL" | head -1 > /dev/n
     if [[ "$CATEGORY" =~ ^noun\.(animal|artifact|body|food|plant|substance|object)$ ]]; then
         echo "Filtering concrete nouns (approximate category match)..."
         jq -r 'select(
-            (.pos | contains(["noun"])) and
+            ((.pos // []) | any(. == "noun")) and
             .concreteness == "concrete" and
-            .is_phrase == false
+            (.is_phrase // false) == false
         ) | .word' "$ENRICHED_JSONL" | sort -u > "$OUTPUT_FILE"
     else
         echo "Filtering abstract nouns (approximate category match)..."
         jq -r 'select(
-            (.pos | contains(["noun"])) and
+            ((.pos // []) | any(. == "noun")) and
             .concreteness == "abstract" and
-            .is_phrase == false
+            (.is_phrase // false) == false
         ) | .word' "$ENRICHED_JSONL" | sort -u > "$OUTPUT_FILE"
     fi
 

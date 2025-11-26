@@ -11,7 +11,6 @@ RAW_DIR := data/raw/$(LEXICON_LANG)
 INTERMEDIATE_DIR := data/intermediate
 BUILD_DIR := data/build
 REPORTS_DIR := reports
-WORDLISTS_DIR := data/wordlists
 SLICES_DIR := data/diagnostic/wikt_slices
 
 # Build artifacts (language-prefixed filenames in flat directories)
@@ -38,9 +37,9 @@ EOWL_FILE := $(RAW_DIR)/eowl.txt
 RUST_SCANNER := tools/wiktionary-rust/target/release/wiktionary-rust
 
 .PHONY: bootstrap venv deps fmt lint test clean scrub \
-        fetch-en build-en build-wiktionary-json build-rust-scanner build-trie build-metadata package check-limits \
-        report-en analyze-local diagnose-scanner validate-enable \
-        wordlist-builder-web viewer-web
+        fetch-en build-en build-wiktionary-json build-rust-scanner build-trie build-metadata package \
+        report-en diagnose-scanner validate-all validate-enable validate-profanity validate-childish \
+        extract-slices wordlist-builder-web viewer-web
 
 # ===========================
 # Development Environment
@@ -90,7 +89,10 @@ fetch-en:
 
 .PHONY: check-pnpm
 check-pnpm:
-	@command -v pnpm >/dev/null 2>&1 || { echo "Error: pnpm not found. Install with: npm install -g pnpm"; exit 1; }
+	@command -v pnpm >/dev/null 2>&1 || { \
+		echo "Error: pnpm not found. Install with: npm install -g pnpm"; \
+		exit 1; \
+	}
 
 # Install dependencies when package.json changes
 %/node_modules: %/package.json check-pnpm
@@ -104,7 +106,10 @@ check-pnpm:
 
 .PHONY: check-cargo
 check-cargo:
-	@command -v cargo >/dev/null 2>&1 || { echo "Error: cargo not found. Install Rust from: https://rustup.rs/"; exit 1; }
+	@command -v cargo >/dev/null 2>&1 || { \
+		echo "Error: cargo not found. Install Rust from: https://rustup.rs/"; \
+		exit 1; \
+	}
 
 # Build Rust-based Wiktionary scanner
 # This is a high-performance replacement for tools/wiktionary_scanner_parser.py
@@ -157,17 +162,14 @@ build-en: fetch-en $(LEXEMES_JSON) $(SENSES_JSON)
 		--input $(LEXEMES_ENRICHED) --modules all --gzip
 	$(UV) run python src/openword/generate_statistics.py
 
-# Build Wiktionary JSONL using Rust scanner (file-based dependency)
-# Outputs wikt.jsonl in unsorted XML source order (kept for traceability)
-$(WIKTIONARY_JSON): $(WIKTIONARY_DUMP) $(RUST_SCANNER)
+# Build and sort Wiktionary JSONL using Rust scanner
+# 1. Extract from XML dump to unsorted JSONL (kept for traceability)
+# 2. Sort lexicographically by word (ensures duplicate entries are consecutive,
+#    trie ordinal = line number, matches Python's default lexicographic sort)
+$(WIKTIONARY_JSON_SORTED): $(WIKTIONARY_DUMP) $(RUST_SCANNER)
 	@echo "Extracting Wiktionary (using Rust scanner)..."
 	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
 	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" "$(WIKTIONARY_JSON)"
-
-# Sort Wiktionary entries lexicographically by word
-# This ensures: 1) duplicate entries are consecutive, 2) trie ordinal = line number
-# Sorting logic matches trie_build.py exactly (Python's default lexicographic sort)
-$(WIKTIONARY_JSON_SORTED): $(WIKTIONARY_JSON)
 	@echo "Sorting Wiktionary entries by word..."
 	$(UV) run python src/openword/wikt_sort.py \
 		--input $(WIKTIONARY_JSON) \
@@ -188,7 +190,7 @@ $(LEXEMES_JSON) $(SENSES_JSON): $(WIKTIONARY_JSON_SORTED)
 		-v
 
 # Convenience target (will only rebuild if output missing or input newer)
-build-wiktionary-json: $(WIKTIONARY_JSON)
+build-wiktionary-json: $(WIKTIONARY_JSON_SORTED)
 
 # Build compact trie for browser visualization
 build-trie: $(WORDLIST_TXT) viewer/node_modules
@@ -232,7 +234,7 @@ scrub: clean
 	rm -rf .venv
 
 # ===========================
-# Inspection & Reporting
+# Reports & Validation
 # ===========================
 
 # Generate comprehensive analysis reports for English
@@ -242,19 +244,10 @@ report-en: deps
 	@echo "Reports generated in: $(REPORTS_DIR)/"
 	@ls -lh $(REPORTS_DIR)/*.md 2>/dev/null || true
 
-# ===========================
-# Local Development Workflows
-# ===========================
-
-# Run full local analysis workflow (extract Wiktionary data)
-analyze-local: build-wiktionary-json
-
-# ===========================
-# Validation
-# ===========================
+# Run all validation checks
 validate-all: validate-enable validate-profanity validate-childish
 
-# Validate lexicon coverage against ENABLE word list (baseline check)
+# Validate lexicon coverage against ENABLE word list
 validate-enable: deps
 	@echo "Validating against ENABLE word list..."
 	@bash scripts/fetch/fetch_enable.sh || echo "Warning: ENABLE fetch failed (GitHub CDN issue?)"
@@ -268,7 +261,7 @@ validate-enable: deps
 	fi
 
 # Validate profanity/offensive term labeling
-# ⚠️  WARNING: Downloads and analyzes lists with explicit/offensive content ⚠️
+# WARNING: Downloads and analyzes lists with explicit/offensive content
 validate-profanity: deps
 	@bash scripts/fetch/fetch_profanity_lists.sh
 	@echo "Running validation..."
@@ -279,7 +272,11 @@ validate-childish: deps
 	@echo "Validating childish term labeling..."
 	@$(UV) run python tools/validate_childish_terms.py
 
-# Run Rust scanner with limit for quick diagnostics
+# ===========================
+# Diagnostics
+# ===========================
+
+# Run Rust scanner on limited entries for quick testing
 diagnose-scanner: $(WIKTIONARY_DUMP) $(RUST_SCANNER)
 	@echo "Running Rust scanner with limit (first 10000 entries)..."
 	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" /tmp/scanner_diagnostic.jsonl --limit 10000
@@ -292,32 +289,12 @@ extract-slices: deps $(WIKTIONARY_DUMP)
 	$(UV) run python tools/wiktionary_xml_slicer.py \
 		"$(WIKTIONARY_DUMP)" "$(SLICES_DIR)"
 	@echo "Slices written -- add to git with: git add $(SLICES_DIR)"
-	
+
 # ===========================
-# Interactive Word List Builder
+# Web Tools
 # ===========================
 
-# Display help for word list builder
-help-builder:
-	@echo "  # Create specification with web interface"
-	@echo "  make wordlist-builder-web"
-	@echo ""
-	@echo "  # Generate word list from specification"
-	@echo "  uv run python -m openword.owlex wordlist-spec.json > words.txt"
-	@echo ""
-	@echo "  # Use Python filters directly"
-	@echo "  uv run python -m openword.filters \\"
-	@echo "    data/intermediate/unified/entries_tiered.jsonl \\"
-	@echo "    output.jsonl --preset kids-nouns"
-	@echo ""
-	@echo "Presets Available:"
-	@echo "  - wordle: 5-letter common words"
-	@echo "  - kids-nouns: Concrete nouns for children"
-	@echo "  - scrabble: Single words for Scrabble"
-	@echo "  - profanity: Flagged inappropriate words (for blocklist)"
-	@echo "  - child-safe: Safe for children's games"
-
-# Start web builder server
+# Word list builder - create filtered word lists via web UI
 wordlist-builder-web: tools/wordlist-builder/node_modules
 	@echo "Starting web-based word list builder..."
 	@echo ""
@@ -326,11 +303,7 @@ wordlist-builder-web: tools/wordlist-builder/node_modules
 	@echo ""
 	@cd tools/wordlist-builder && pnpm start
 
-# ===========================
-# Interactive Trie Viewer
-# ===========================
-
-# Start trie viewer server
+# Trie viewer - explore lexicon interactively
 viewer-web: viewer/node_modules
 	@echo "Starting interactive trie viewer..."
 	@if [ ! -f "$(WORDLIST_TXT)" ]; then \
