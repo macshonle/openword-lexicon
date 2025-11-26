@@ -1,159 +1,386 @@
-# Phrase Filtering Guide
+# Filtering Guide
 
-**Note:** This document is for reference only. Ad hoc phrase filtering targets have been removed. Use the general-purpose `tools/filter_words.py` framework instead. See `docs/GAME_WORDS.md` for usage examples.
+Create custom word lists by filtering the lexicon.
 
-The Plus distribution includes multi-word phrases from Wiktionary, ranging from useful idioms like "kick the bucket" to full proverbs like "when you're up to your neck in alligators, it's hard to remember that your initial objective was to drain the swamp."
+## Methods
 
-For reference, this guide describes phrase characteristics and filtering considerations.
+1. **Web Builder** — Interactive visual interface
+2. **JSON Specs** — Reusable filter configurations
+3. **Python** — Direct filtering in code
+4. **jq** — Command-line JSON processing
 
-## Analysis
-
-The phrase analysis report (`reports/phrase_analysis_plus.md`) shows:
-- Distribution by word count (1-word, 2-word, 3-word, etc.)
-- Distribution by character length
-- Examples at each threshold
-- Suggested filter thresholds
-
-## Filtering Options
-
-### By Word Count
-
-Limit the number of space-separated words in a phrase:
+## Web Builder
 
 ```bash
-# Keep only 1-3 word phrases (excludes long proverbs)
-make export-wordlist-filtered-w3
-
-# Keep only 1-4 word phrases
-make export-wordlist-filtered-w4
-
-# Custom word count
-uv run python src/openword/export_wordlist_filtered.py \
-  --distribution plus \
-  --max-words 5
+make wordlist-builder-web
+# Opens http://localhost:8000
 ```
 
-**Recommended:** `--max-words 3` keeps useful idioms while excluding most proverbs.
+The web builder lets you:
+- Select filter criteria visually
+- See live word count estimates
+- Export JSON specifications
+- Download filtered word lists
 
-### By Character Length
+## JSON Specifications
 
-Limit the total character length:
+Create a JSON file describing your filters:
+
+```json
+{
+  "version": "1.0",
+  "distribution": "en",
+  "filters": {
+    "character": {
+      "exact_length": 5,
+      "char_preset": "standard"
+    },
+    "frequency": {
+      "max_tier": "M"
+    },
+    "policy": {
+      "family_friendly": true
+    }
+  },
+  "output": {
+    "format": "text",
+    "sort_by": "alphabetical"
+  }
+}
+```
+
+Run with:
 
 ```bash
-# Keep entries ≤50 characters
-make export-wordlist-filtered-c50
-
-# Custom character limit
-uv run python src/openword/export_wordlist_filtered.py \
-  --distribution plus \
-  --max-chars 40
+uv run python -m openword.owlex my-spec.json > words.txt
+uv run python -m openword.owlex my-spec.json --verbose --output words.txt
 ```
 
-### Combined Filters
+## Filter Reference
 
-Apply both word count and character length filters:
+### Character Filters
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `exact_length` | int | Exact character count |
+| `min_length` | int | Minimum characters |
+| `max_length` | int | Maximum characters |
+| `char_preset` | string | Character set (see below) |
+| `pattern` | string | Regex pattern to match |
+| `starts_with` | string/list | Required prefix(es) |
+| `ends_with` | string/list | Required suffix(es) |
+| `contains` | string/list | Required substring(s) |
+| `exclude_starts_with` | string/list | Excluded prefix(es) |
+| `exclude_ends_with` | string/list | Excluded suffix(es) |
+| `exclude_contains` | string | Excluded characters |
+
+**Character Presets**:
+
+| Preset | Allowed Characters |
+|--------|-------------------|
+| `standard` | a-z only |
+| `contractions` | a-z and apostrophe |
+| `hyphenated` | a-z and hyphen |
+| `common-punct` | a-z, apostrophe, hyphen |
+| `alphanumeric` | a-z and digits |
+| `any` | All characters |
+
+### Phrase Filters
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `min_words` | int | Minimum word count |
+| `max_words` | int | Maximum word count |
+| `is_phrase` | bool | true = multi-word only, false = single words |
+
+### Frequency Filters
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `tiers` | list | Specific tiers to include (e.g., `["A", "B", "C"]`) |
+| `min_tier` | string | Most frequent tier (closer to A) |
+| `max_tier` | string | Least frequent tier (closer to Z) |
+
+Example tier ranges:
+- `"max_tier": "M"` — Top ~1,300 words
+- `"max_tier": "Q"` — Top ~13,000 words
+- `"max_tier": "T"` — Top ~75,000 words
+
+### POS Filters
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `include` | list | Required POS tags (any match) |
+| `exclude` | list | Excluded POS tags (all excluded) |
+| `require_pos` | bool | Require POS data to exist |
+
+POS tags: `noun`, `verb`, `adjective`, `adverb`, `pronoun`, `preposition`, `conjunction`, `interjection`, `determiner`, `particle`, `proper noun`
+
+### Concreteness Filters
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `values` | list | Allowed classifications |
+| `require_concreteness` | bool | Require concreteness data |
+
+Values: `"concrete"` (4.0+), `"abstract"` (<2.5), `"mixed"` (2.5-4.0)
+
+### Label Filters
+
+Filter by register, region, domain, or temporal labels:
+
+```json
+{
+  "labels": {
+    "register": {
+      "exclude": ["vulgar", "offensive", "derogatory"]
+    },
+    "temporal": {
+      "exclude": ["archaic", "obsolete"]
+    },
+    "region": {
+      "include": ["en-US"]
+    }
+  }
+}
+```
+
+### Policy Filters
+
+Shorthand for common label combinations:
+
+| Option | Effect |
+|--------|--------|
+| `family_friendly` | Exclude vulgar, offensive, derogatory |
+| `modern_only` | Exclude archaic, obsolete, dated |
+| `no_jargon` | Exclude medical, legal, technical, scientific |
+
+### Source Filters
+
+```json
+{
+  "sources": {
+    "include": ["eowl", "wordnet"],
+    "exclude": ["wikt"]
+  }
+}
+```
+
+### Spelling Region Filters
+
+For regional spelling variants (color/colour):
+
+```json
+{
+  "spelling_region": {
+    "region": "en-US",
+    "include_universal": true
+  }
+}
+```
+
+### Syllable Filters
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `min` | int | Minimum syllables |
+| `max` | int | Maximum syllables |
+| `exact` | int | Exact syllable count |
+| `require_syllables` | bool | Require syllable data |
+
+## Output Options
+
+```json
+{
+  "output": {
+    "format": "text",
+    "sort_by": "alphabetical",
+    "limit": 1000,
+    "include_metadata": false,
+    "metadata_fields": ["word", "frequency_tier", "pos"]
+  }
+}
+```
+
+| Option | Values |
+|--------|--------|
+| `format` | `text`, `json`, `jsonl`, `csv`, `tsv` |
+| `sort_by` | `alphabetical`, `frequency`, `score`, `length` |
+| `limit` | Maximum words to output |
+| `include_metadata` | Include metadata in output |
+| `metadata_fields` | Which fields to include |
+
+## Example Specifications
+
+### Wordle (5-letter common words)
+
+```json
+{
+  "version": "1.0",
+  "distribution": "en",
+  "filters": {
+    "character": {
+      "exact_length": 5,
+      "char_preset": "standard"
+    },
+    "frequency": {
+      "max_tier": "Q"
+    },
+    "phrase": {
+      "max_words": 1
+    },
+    "policy": {
+      "family_friendly": true
+    }
+  },
+  "output": {
+    "format": "text",
+    "sort_by": "frequency"
+  }
+}
+```
+
+### Kids Vocabulary
+
+```json
+{
+  "version": "1.0",
+  "distribution": "en",
+  "filters": {
+    "character": {
+      "min_length": 3,
+      "max_length": 8,
+      "char_preset": "standard"
+    },
+    "pos": {
+      "include": ["noun"]
+    },
+    "concreteness": {
+      "values": ["concrete"]
+    },
+    "frequency": {
+      "max_tier": "N"
+    },
+    "policy": {
+      "family_friendly": true,
+      "modern_only": true
+    }
+  }
+}
+```
+
+### Scrabble Dictionary
+
+```json
+{
+  "version": "1.0",
+  "distribution": "en",
+  "filters": {
+    "character": {
+      "min_length": 2,
+      "max_length": 15,
+      "char_preset": "standard"
+    },
+    "phrase": {
+      "max_words": 1
+    },
+    "proper_noun": {
+      "require_common_usage": true
+    }
+  },
+  "output": {
+    "format": "text",
+    "sort_by": "alphabetical"
+  }
+}
+```
+
+### Profanity Blocklist
+
+```json
+{
+  "version": "1.0",
+  "distribution": "en",
+  "filters": {
+    "labels": {
+      "register": {
+        "include": ["vulgar", "offensive", "derogatory"]
+      }
+    }
+  },
+  "output": {
+    "format": "text"
+  }
+}
+```
+
+## Python Filtering
+
+For more control, filter directly in Python:
+
+```python
+import json
+
+def load_lexemes(path='data/intermediate/en-lexemes-enriched.jsonl'):
+    with open(path) as f:
+        for line in f:
+            yield json.loads(line)
+
+# Custom filter function
+def is_wordle_word(entry):
+    word = entry['word']
+    return (
+        len(word) == 5 and
+        word.isalpha() and
+        word.islower() and
+        entry.get('frequency_tier', 'Z') <= 'Q'
+    )
+
+wordle_words = [e['word'] for e in load_lexemes() if is_wordle_word(e)]
+```
+
+## jq Filtering
+
+For quick ad-hoc filtering:
 
 ```bash
-# Keep ≤3 words AND ≤50 characters
-make export-wordlist-filtered-w3c50
+# 5-letter words
+jq -r 'select(.word | length == 5) | .word' \
+    data/intermediate/en-lexemes-enriched.jsonl
 
-# Custom combination
-uv run python src/openword/export_wordlist_filtered.py \
-  --distribution plus \
-  --max-words 3 \
-  --max-chars 40
+# Common nouns
+jq -r 'select(
+    (.pos // [] | contains(["noun"])) and
+    (.frequency_tier // "Z") <= "M"
+) | .word' data/intermediate/en-lexemes-enriched.jsonl
+
+# Words with concreteness data
+jq -r 'select(.concreteness != null) | "\(.word)\t\(.concreteness)"' \
+    data/intermediate/en-lexemes-enriched.jsonl
 ```
 
-## Output Files
+## Pre-built Specifications
 
-Filtered wordlists are saved with descriptive names:
+Example specs in `examples/wordlist-specs/`:
 
-- `data/build/plus/wordlist-w3.txt` - Max 3 words
-- `data/build/plus/wordlist-w4.txt` - Max 4 words
-- `data/build/plus/wordlist-c50.txt` - Max 50 characters
-- `data/build/plus/wordlist-w3-c50.txt` - Max 3 words AND 50 chars
+| File | Description |
+|------|-------------|
+| `wordle.json` | 5-letter common words |
+| `kids-nouns.json` | Concrete nouns for children |
+| `scrabble.json` | Single words for Scrabble |
+| `profanity-blocklist.json` | Flagged inappropriate words |
 
-## Building Binary Tries with Filters
+## Coverage Notes
 
-To build a binary trie from a filtered wordlist:
+Not all words have all metadata:
 
-```bash
-# 1. Generate filtered wordlist
-make export-wordlist-filtered-w3
+| Field | Coverage |
+|-------|----------|
+| `frequency_tier` | 100% (unranked = Z) |
+| `sources` | 100% |
+| `pos` | ~52% |
+| `concreteness` | ~3% (~39K words) |
+| `syllables` | ~2% (~30K words) |
+| `labels` | ~11% |
 
-# 2. Build binary trie from filtered list
-cd viewer
-pnpm run build-trie ../data/build/plus/wordlist-w3.txt data/plus-w3.trie.bin
-```
-
-Or specify the input/output paths directly:
-
-```bash
-tsx src/build-trie.ts \
-  ../data/build/plus/wordlist-w3.txt \
-  data/plus-w3.trie.bin
-```
-
-## Recommended Thresholds
-
-Based on typical Wiktionary content:
-
-| Use Case | Filter | What It Keeps | What It Removes |
-|----------|--------|---------------|-----------------|
-| **Single words only** | `--max-words 1` | Individual words | All multi-word phrases |
-| **Words + short idioms** | `--max-words 3` | "kick the bucket", "in front of" | Long proverbs, sayings |
-| **Words + expressions** | `--max-words 4` | Most idioms and phrases | Very long expressions |
-| **Character-based** | `--max-chars 50` | Most words and idioms | Proverbs, full sentences |
-| **Conservative** | `--max-words 3 --max-chars 50` | High-quality lexicon | Long/unusual entries |
-
-## Examples
-
-### What Gets Filtered
-
-With `--max-words 3`:
-- ✗ "when you're up to your neck in alligators, it's hard to remember that your initial objective was to drain the swamp" (24 words)
-- ✗ "give a man a fish and you feed him for a day; teach a man to fish and you feed him for a lifetime" (21 words)
-- ✓ "break the ice" (3 words)
-- ✓ "in front of" (3 words)
-
-With `--max-chars 50`:
-- ✗ "electroencephalographically" (27 chars) - if you want to exclude technical terms
-- ✓ "kick the bucket" (15 chars)
-- ✓ Most normal words and idioms
-
-## Integration with Build Pipeline
-
-To use filtered wordlists by default, you can modify the export step in your build workflow:
-
-```bash
-# Option 1: Export both full and filtered
-make export-wordlist  # Full version
-make export-wordlist-filtered-w3  # Filtered version
-
-# Option 2: Use filtered for binary builds
-make export-wordlist-filtered-w3
-cd viewer
-pnpm run build-trie ../data/build/plus/wordlist-w3.txt data/plus.trie.bin
-```
-
-## Verbose Output
-
-To see exactly what gets filtered:
-
-```bash
-uv run python src/openword/export_wordlist_filtered.py \
-  --distribution plus \
-  --max-words 3 \
-  --verbose
-```
-
-This shows up to 50 examples of filtered entries.
-
-## No Filtering
-
-To export without filters (same as `export_wordlist.py`):
-
-```bash
-uv run python src/openword/export_wordlist_filtered.py \
-  --distribution plus
-```
+When filtering by optional fields, consider using `require_*` options to exclude words without data, or accept that some words may pass filters by default.
