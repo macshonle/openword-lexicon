@@ -470,7 +470,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 919485,
+  "sense_offset": 919531,
   "sources": [
     "wikt"
   ],
@@ -499,7 +499,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 758685,
+  "sense_offset": 758714,
   "sources": [
     "wikt"
   ],
@@ -577,7 +577,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 979441,
+  "sense_offset": 979489,
   "sources": [
     "eowl",
     "wikt"
@@ -610,7 +610,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 402392,
+  "sense_offset": 402407,
   "sources": [
     "eowl",
     "wikt"
@@ -643,7 +643,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 740178,
+  "sense_offset": 740206,
   "sources": [
     "eowl",
     "wikt"
@@ -661,6 +661,9 @@ Representative samples from different source combinations:
 {
   "frequency_tier": "Z",
   "labels": {},
+  "lexnames": [
+    "noun.communication"
+  ],
   "license_sources": {
     "CC-BY-4.0": [
       "wordnet"
@@ -683,6 +686,9 @@ Representative samples from different source combinations:
 {
   "frequency_tier": "Z",
   "labels": {},
+  "lexnames": [
+    "noun.plant"
+  ],
   "license_sources": {
     "CC-BY-4.0": [
       "wordnet"
@@ -705,6 +711,9 @@ Representative samples from different source combinations:
 {
   "frequency_tier": "Z",
   "labels": {},
+  "lexnames": [
+    "noun.plant"
+  ],
   "license_sources": {
     "CC-BY-4.0": [
       "wordnet"
@@ -735,6 +744,9 @@ Representative samples from different source combinations:
     "register": [],
     "temporal": []
   },
+  "lexnames": [
+    "adj.all"
+  ],
   "license_sources": {
     "CC-BY-4.0": [
       "wordnet"
@@ -762,7 +774,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 1350363,
+  "sense_offset": 1350422,
   "sources": [
     "wikt",
     "wordnet"
@@ -782,6 +794,9 @@ Representative samples from different source combinations:
     "register": [],
     "temporal": []
   },
+  "lexnames": [
+    "noun.cognition"
+  ],
   "license_sources": {
     "CC-BY-4.0": [
       "wordnet"
@@ -795,7 +810,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 1229022,
+  "sense_offset": 1229077,
   "sources": [
     "wikt",
     "wordnet"
@@ -816,6 +831,9 @@ Representative samples from different source combinations:
     "register": [],
     "temporal": []
   },
+  "lexnames": [
+    "noun.animal"
+  ],
   "license_sources": {
     "CC-BY-4.0": [
       "wordnet"
@@ -829,7 +847,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 2,
   "sense_length": 1,
-  "sense_offset": 695956,
+  "sense_offset": 695983,
   "sources": [
     "wikt",
     "wordnet"
@@ -860,6 +878,10 @@ Representative samples from different source combinations:
     ],
     "temporal": []
   },
+  "lexnames": [
+    "noun.act",
+    "noun.event"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -880,7 +902,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 7,
   "sense_length": 5,
-  "sense_offset": 1287426,
+  "sense_offset": 1287481,
   "sources": [
     "brysbaert",
     "eowl",
@@ -906,6 +928,9 @@ Representative samples from different source combinations:
     "register": [],
     "temporal": []
   },
+  "lexnames": [
+    "noun.event"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -926,7 +951,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 3,
   "sense_length": 2,
-  "sense_offset": 589740,
+  "sense_offset": 589765,
   "sources": [
     "brysbaert",
     "eowl",
@@ -951,6 +976,9 @@ Representative samples from different source combinations:
     "register": [],
     "temporal": []
   },
+  "lexnames": [
+    "noun.phenomenon"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -984,7 +1012,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 2,
   "sense_length": 1,
-  "sense_offset": 876080,
+  "sense_offset": 876122,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1011,6 +1039,9 @@ Representative samples from different source combinations:
     ],
     "temporal": []
   },
+  "lexnames": [
+    "adj.all"
+  ],
   "license_sources": {
     "CC-BY-4.0": [
       "wordnet"
@@ -1027,7 +1058,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 2,
   "sense_length": 2,
-  "sense_offset": 438004,
+  "sense_offset": 438022,
   "sources": [
     "eowl",
     "wikt",
@@ -1049,6 +1080,9 @@ Representative samples from different source combinations:
     "register": [],
     "temporal": []
   },
+  "lexnames": [
+    "verb.change"
+  ],
   "license_sources": {
     "CC-BY-4.0": [
       "wordnet"
@@ -1065,7 +1099,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 343365,
+  "sense_offset": 343374,
   "sources": [
     "eowl",
     "wikt",
@@ -1090,6 +1124,9 @@ Representative samples from different source combinations:
       "obsolete"
     ]
   },
+  "lexnames": [
+    "verb.possession"
+  ],
   "license_sources": {
     "CC-BY-4.0": [
       "wordnet"
@@ -1107,7 +1144,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 5,
   "sense_length": 3,
-  "sense_offset": 340707,
+  "sense_offset": 340716,
   "sources": [
     "eowl",
     "wikt",
@@ -1135,6 +1172,9 @@ Representative samples from different source combinations:
     "register": [],
     "temporal": []
   },
+  "lexnames": [
+    "adj.all"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -1166,7 +1206,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 3,
   "sense_length": 2,
-  "sense_offset": 330188,
+  "sense_offset": 330197,
   "sources": [
     "brysbaert",
     "wikt",
@@ -1194,6 +1234,10 @@ Representative samples from different source combinations:
       "dated"
     ]
   },
+  "lexnames": [
+    "noun.cognition",
+    "noun.possession"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -1205,13 +1249,27 @@ Representative samples from different source combinations:
       "wikt"
     ]
   },
+  "morphology": {
+    "base": "scholar",
+    "components": [
+      "scholar",
+      "-ship"
+    ],
+    "etymology_template": "{{af|en|scholar|-ship}}",
+    "is_compound": false,
+    "prefixes": [],
+    "suffixes": [
+      "-ship"
+    ],
+    "type": "suffixed"
+  },
   "pos": [
     "noun",
     "verb"
   ],
   "sense_count": 7,
   "sense_length": 3,
-  "sense_offset": 1120785,
+  "sense_offset": 1120836,
   "sources": [
     "brysbaert",
     "wikt",
@@ -1235,6 +1293,9 @@ Representative samples from different source combinations:
     "register": [],
     "temporal": []
   },
+  "lexnames": [
+    "noun.attribute"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -1246,12 +1307,26 @@ Representative samples from different source combinations:
       "wikt"
     ]
   },
+  "morphology": {
+    "base": "explicit",
+    "components": [
+      "explicit",
+      "-ness"
+    ],
+    "etymology_template": "{{af|en|explicit|-ness}}",
+    "is_compound": false,
+    "prefixes": [],
+    "suffixes": [
+      "-ness"
+    ],
+    "type": "suffixed"
+  },
   "pos": [
     "noun"
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 424603,
+  "sense_offset": 424621,
   "sources": [
     "brysbaert",
     "wikt",
@@ -1305,7 +1380,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 1363552,
+  "sense_offset": 1363611,
   "sources": [
     "brysbaert",
     "wikt"
@@ -1338,12 +1413,26 @@ Representative samples from different source combinations:
       "wikt"
     ]
   },
+  "morphology": {
+    "base": "attribute",
+    "components": [
+      "attribute",
+      "-er"
+    ],
+    "etymology_template": "{{af|en|attribute|-er|id2=agent noun}}",
+    "is_compound": false,
+    "prefixes": [],
+    "suffixes": [
+      "-er"
+    ],
+    "type": "suffixed"
+  },
   "pos": [
     "noun"
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 80968,
+  "sense_offset": 80969,
   "sources": [
     "brysbaert",
     "wikt"
@@ -1394,7 +1483,7 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 331240,
+  "sense_offset": 331249,
   "sources": [
     "brysbaert",
     "wikt"
@@ -1432,6 +1521,10 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "register": [],
     "temporal": []
   },
+  "lexnames": [
+    "verb.change",
+    "verb.creation"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -1446,12 +1539,26 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "eowl"
     ]
   },
+  "morphology": {
+    "base": "active",
+    "components": [
+      "active",
+      "-ate"
+    ],
+    "etymology_template": "{{af|en|active|-ate|id2=verb}}",
+    "is_compound": false,
+    "prefixes": [],
+    "suffixes": [
+      "-ate"
+    ],
+    "type": "suffixed"
+  },
   "pos": [
     "verb"
   ],
   "sense_count": 10,
   "sense_length": 8,
-  "sense_offset": 15197,
+  "sense_offset": 15196,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1491,6 +1598,18 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "obsolete"
     ]
   },
+  "lexnames": [
+    "noun.act",
+    "noun.artifact",
+    "noun.attribute",
+    "noun.communication",
+    "noun.group",
+    "noun.object",
+    "noun.quantity",
+    "verb.communication",
+    "verb.contact",
+    "verb.social"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -1513,7 +1632,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 55,
   "sense_length": 16,
-  "sense_offset": 101432,
+  "sense_offset": 101433,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1551,6 +1670,11 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     ],
     "temporal": []
   },
+  "lexnames": [
+    "noun.communication",
+    "noun.object",
+    "noun.shape"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -1571,7 +1695,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 25,
   "sense_length": 11,
-  "sense_offset": 325358,
+  "sense_offset": 325367,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1612,6 +1736,16 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "obsolete"
     ]
   },
+  "lexnames": [
+    "noun.animal",
+    "noun.artifact",
+    "noun.communication",
+    "noun.plant",
+    "verb.change",
+    "verb.communication",
+    "verb.creation",
+    "verb.motion"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -1632,7 +1766,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 41,
   "sense_length": 11,
-  "sense_offset": 451768,
+  "sense_offset": 451786,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1672,6 +1806,16 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "historical"
     ]
   },
+  "lexnames": [
+    "adj.all",
+    "noun.artifact",
+    "noun.food",
+    "noun.location",
+    "verb.change",
+    "verb.consumption",
+    "verb.contact",
+    "verb.motion"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -1693,7 +1837,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 34,
   "sense_length": 17,
-  "sense_offset": 984156,
+  "sense_offset": 984204,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1730,6 +1874,11 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "historical"
     ]
   },
+  "lexnames": [
+    "noun.communication",
+    "noun.group",
+    "noun.substance"
+  ],
   "license_sources": {
     "CC-BY-4.0": [
       "wordnet"
@@ -1749,7 +1898,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 127,
   "sense_length": 22,
-  "sense_offset": 4585,
+  "sense_offset": 4584,
   "sources": [
     "eowl",
     "wikt",
@@ -1789,6 +1938,17 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "obsolete"
     ]
   },
+  "lexnames": [
+    "adj.all",
+    "noun.act",
+    "noun.artifact",
+    "noun.group",
+    "noun.person",
+    "noun.quantity",
+    "noun.substance",
+    "verb.competition",
+    "verb.social"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -1810,7 +1970,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 39,
   "sense_length": 18,
-  "sense_offset": 11477,
+  "sense_offset": 11476,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1852,6 +2012,22 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "rare"
     ]
   },
+  "lexnames": [
+    "adj.all",
+    "noun.artifact",
+    "noun.cognition",
+    "noun.communication",
+    "noun.group",
+    "noun.location",
+    "noun.object",
+    "noun.quantity",
+    "noun.relation",
+    "noun.shape",
+    "noun.substance",
+    "verb.cognition",
+    "verb.consumption",
+    "verb.stative"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -1873,7 +2049,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 55,
   "sense_length": 18,
-  "sense_offset": 105181,
+  "sense_offset": 105182,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1912,6 +2088,18 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "historical"
     ]
   },
+  "lexnames": [
+    "noun.artifact",
+    "noun.body",
+    "noun.communication",
+    "noun.location",
+    "noun.plant",
+    "noun.possession",
+    "verb.change",
+    "verb.contact",
+    "verb.social",
+    "verb.stative"
+  ],
   "license_sources": {
     "Brysbaert-Research": [
       "brysbaert"
@@ -1933,7 +2121,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 47,
   "sense_length": 15,
-  "sense_offset": 292247,
+  "sense_offset": 292254,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1969,6 +2157,10 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     ],
     "temporal": []
   },
+  "lexnames": [
+    "noun.artifact",
+    "noun.substance"
+  ],
   "license_sources": {
     "CC-BY-4.0": [
       "wordnet"
@@ -1987,7 +2179,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 16,
   "sense_length": 13,
-  "sense_offset": 410932,
+  "sense_offset": 410947,
   "sources": [
     "eowl",
     "wikt",
