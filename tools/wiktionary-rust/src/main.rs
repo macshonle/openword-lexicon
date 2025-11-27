@@ -75,6 +75,8 @@ struct Morphology {
     components: Vec<String>,
     prefixes: Vec<String>,
     suffixes: Vec<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    interfixes: Vec<String>,
     is_compound: bool,
     etymology_template: String,
 }
@@ -166,6 +168,9 @@ lazy_static! {
 
     // Other patterns
     static ref ABBREVIATION_TEMPLATE: Regex = Regex::new(r"(?i)\{\{(?:abbreviation of|abbrev of|abbr of|initialism of)\|en\|").unwrap();
+    // Template-existence check for inflection detection (handles cases where lemma extraction fails)
+    // This matches Python's detect_inflected_form() which just checks if templates exist
+    static ref INFLECTION_TEMPLATE_EXISTS: Regex = Regex::new(r"(?i)\{\{(?:plural of|past tense of|past participle of|present participle of|comparative of|superlative of|inflection of)\|en\|").unwrap();
     pub static ref DICT_ONLY: Regex = Regex::new(r"(?i)\{\{no entry\|en").unwrap();
 
     // Syllable extraction patterns
@@ -186,6 +191,8 @@ lazy_static! {
     static ref COMPOUND_TEMPLATE: Regex = Regex::new(r"(?i)\{\{compound\|en\|([^}]+)\}\}").unwrap();
     static ref SURF_TEMPLATE: Regex = Regex::new(r"(?i)\{\{surf\|en\|([^}]+)\}\}").unwrap();
     static ref CONFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{confix\|en\|([^}|]+)\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
+    // Language code prefix pattern (e.g., "pt:", "grc:", "ang:") - matches Python's LANG_CODE_PREFIX
+    static ref LANG_CODE_PREFIX: Regex = Regex::new(r"(?i)^[a-z]{2,4}:").unwrap();
 
     // POS mapping
     static ref POS_MAP: HashMap<&'static str, &'static str> = {
@@ -727,12 +734,10 @@ fn clean_template_components(parts: &[&str]) -> Vec<String> {
             if part.is_empty() || part.contains('=') {
                 return None;
             }
-            // Skip language code prefixes (grc:, la:, ang:, etc.) at start of part
-            if part.len() > 2 {
-                let prefix: String = part.chars().take(4).collect();
-                if prefix.chars().all(|c| c.is_ascii_lowercase() || c == ':') && prefix.contains(':') {
-                    return None;
-                }
+            // Skip language code prefixes (grc:, la:, ang:, pt:, etc.) at start of part
+            // These indicate non-English etymological roots
+            if LANG_CODE_PREFIX.is_match(&part) {
+                return None;
             }
             // Decode HTML entities
             if part.contains("&lt;") || part.contains("&gt;") || part.contains("&amp;") {
@@ -773,6 +778,7 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
             components: vec![base, suffix.clone()],
             prefixes: vec![],
             suffixes: vec![suffix],
+            interfixes: vec![],
             is_compound: false,
             etymology_template: cap[0].to_string(),
         });
@@ -791,6 +797,7 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
             components: vec![prefix.clone(), base],
             prefixes: vec![prefix],
             suffixes: vec![],
+            interfixes: vec![],
             is_compound: false,
             etymology_template: cap[0].to_string(),
         });
@@ -813,6 +820,7 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
             components: vec![prefix.clone(), base, suffix.clone()],
             prefixes: vec![prefix],
             suffixes: vec![suffix],
+            interfixes: vec![],
             is_compound: false,
             etymology_template: cap[0].to_string(),
         });
@@ -823,12 +831,19 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
         let parts: Vec<&str> = cap[1].split('|').collect();
         let components = clean_template_components(&parts);
         if components.len() >= 2 {
+            // Extract interfixes (components with both leading and trailing hyphens)
+            let interfixes: Vec<String> = components
+                .iter()
+                .filter(|c| c.starts_with('-') && c.ends_with('-'))
+                .cloned()
+                .collect();
             return Some(Morphology {
                 morph_type: "compound".to_string(),
                 base: None,
                 components,
                 prefixes: vec![],
                 suffixes: vec![],
+                interfixes,
                 is_compound: true,
                 etymology_template: cap[0].to_string(),
             });
@@ -854,6 +869,13 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
                     .cloned()
                     .collect();
 
+                // Interfixes have both leading and trailing hyphens (e.g., -s-, -i-)
+                let interfixes: Vec<String> = components
+                    .iter()
+                    .filter(|c| c.starts_with('-') && c.ends_with('-'))
+                    .cloned()
+                    .collect();
+
                 let bases: Vec<String> = components
                     .iter()
                     .filter(|c| !c.starts_with('-') && !c.ends_with('-'))
@@ -866,6 +888,9 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
                     ("prefixed", false, bases.first().cloned())
                 } else if !suffixes.is_empty() {
                     ("suffixed", false, bases.first().cloned())
+                } else if !interfixes.is_empty() && bases.len() >= 2 {
+                    // Compound with interfixes (e.g., "beeswax" = bee + -s- + wax)
+                    ("compound", true, None)
                 } else if bases.len() >= 2 {
                     ("compound", true, None)
                 } else {
@@ -878,6 +903,7 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
                     components,
                     prefixes,
                     suffixes,
+                    interfixes,
                     is_compound,
                     etymology_template: cap[0].to_string(),
                 });
@@ -911,13 +937,20 @@ pub fn parse_page(title: &str, text: &str) -> Vec<Entry> {
         .or_else(|| extract_syllable_count_from_categories(&english_text));
 
     let morphology = extract_morphology(&english_text);
+    // Detect abbreviations via templates only
+    // Note: Category checks like 'Category:English acronyms' have false positives
+    // because [[:Category:...]] links (to the category page) look similar to
+    // [[Category:...]] membership. Template-based detection is more reliable.
     let is_abbreviation = ABBREVIATION_TEMPLATE.is_match(&english_text);
     // Extract lemma from inflection templates (e.g., {{plural of|en|cat}} → "cat")
     // Search in english_text only to avoid matching templates from other language sections
     let lemma = extract_lemma(&english_text);
 
-    // Mark as inflected if we found a lemma OR if category indicates inflection
+    // Mark as inflected if we found a lemma OR if inflection template exists OR if category indicates inflection
+    // The template-existence check handles cases like {{inflection of|en|[[link|word]]}} where
+    // the lemma extraction fails due to complex wiki syntax but the template is present
     let is_inflected = lemma.is_some()
+        || INFLECTION_TEMPLATE_EXISTS.is_match(&english_text)
         || english_text.contains("Category:English verb forms")
         || english_text.contains("Category:English noun forms")
         || english_text.contains("Category:English adjective forms")

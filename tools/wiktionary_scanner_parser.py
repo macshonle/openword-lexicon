@@ -1136,8 +1136,13 @@ def detect_abbreviation(text: str, pos_tags: List[str]) -> bool:
 
     Detection methods:
     1. Templates: {{abbr of|en|...}}, {{abbreviation of|en|...}}, {{initialism of|en|...}}
-    2. Categories: Category:English abbreviations, Category:English initialisms
+    2. Categories: [[Category:English abbreviations]], etc. (actual membership)
     3. POS: symbol (often abbreviations)
+
+    Note: We check for '[[Category:' (without colon prefix) to avoid false positives
+    from category links like '[[:Category:English acronyms|...]]' which are just
+    links to the category page, not actual membership. The word "acronym" was
+    incorrectly flagged before this fix because it links to the acronyms category.
 
     Examples: USA, Dr., etc., crp (stenoscript)
     """
@@ -1145,14 +1150,16 @@ def detect_abbreviation(text: str, pos_tags: List[str]) -> bool:
     if ABBREVIATION_TEMPLATE.search(text):
         return True
 
-    # Check categories
-    if 'Category:English abbreviations' in text:
+    # Check categories - use [[Category: prefix to distinguish from [[:Category: links
+    # [[Category:X]] = membership in category X
+    # [[:Category:X]] = link to category X (not membership)
+    if '[[Category:English abbreviations' in text:
         return True
-    if 'Category:English initialisms' in text:
+    if '[[Category:English initialisms' in text:
         return True
-    if 'Category:English acronyms' in text:
+    if '[[Category:English acronyms' in text:
         return True
-    if 'Category:English Stenoscript abbreviations' in text:
+    if '[[Category:English Stenoscript abbreviations' in text:
         return True
 
     # Symbol POS is often used for abbreviations
