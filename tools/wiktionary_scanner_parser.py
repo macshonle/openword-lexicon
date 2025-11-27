@@ -160,7 +160,8 @@ INFLECTION_TEMPLATES = [
 # Morphology templates for derivation tracking
 SUFFIX_TEMPLATE = re.compile(r'\{\{suffix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}', re.IGNORECASE)
 PREFIX_TEMPLATE = re.compile(r'\{\{prefix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}', re.IGNORECASE)
-AFFIX_TEMPLATE = re.compile(r'\{\{affix\|en\|([^}]+)\}\}', re.IGNORECASE)
+# Matches both {{affix|en|...}} and {{af|en|...}} (common shorthand)
+AFFIX_TEMPLATE = re.compile(r'\{\{af(?:fix)?\|en\|([^}]+)\}\}', re.IGNORECASE)
 COMPOUND_TEMPLATE = re.compile(r'\{\{compound\|en\|([^}]+)\}\}', re.IGNORECASE)
 # Surface form template (alternative to affix template)
 SURF_TEMPLATE = re.compile(r'\{\{surf\|en\|([^}]+)\}\}', re.IGNORECASE)
@@ -368,6 +369,87 @@ def extract_pos_tags(text: str) -> List[str]:
             pos_tags.append('symbol')
 
     return sorted(set(pos_tags))
+
+
+# Definition line pattern - lines starting with # (but not ## which are sub-definitions)
+DEFINITION_LINE = re.compile(r'^#\s+(.+)$', re.MULTILINE)
+
+
+class PosSection:
+    """Represents a POS section with its definitions."""
+    def __init__(self, pos: str, is_proper_noun: bool, definitions: List[str]):
+        self.pos = pos
+        self.is_proper_noun = is_proper_noun
+        self.definitions = definitions
+
+
+def parse_pos_sections(english_text: str) -> List[PosSection]:
+    """
+    Parse POS sections and their definitions from English text.
+    Returns list of PosSection, each containing pos, is_proper_noun, and definitions.
+    """
+    sections = []
+
+    # Find all POS headers and their positions
+    headers = []
+    for match in POS_HEADER.finditer(english_text):
+        header_text = match.group(1).lower().strip()
+        header_normalized = ' '.join(header_text.split())
+
+        # Check if it's a proper noun
+        is_proper = 'proper noun' in header_normalized or 'proper name' in header_normalized
+
+        # Map to normalized POS
+        if header_normalized in POS_MAP:
+            mapped_pos = POS_MAP[header_normalized]
+            headers.append((match.start(), mapped_pos, is_proper))
+
+    # For each POS header, extract definitions until next header
+    for i, (start_pos, pos, is_proper) in enumerate(headers):
+        section_start = start_pos
+        section_end = headers[i + 1][0] if i + 1 < len(headers) else len(english_text)
+
+        section_text = english_text[section_start:section_end]
+
+        # Extract definition lines (lines starting with single #)
+        definitions = [m.group(1) for m in DEFINITION_LINE.finditer(section_text)]
+
+        if definitions:
+            sections.append(PosSection(pos, is_proper, definitions))
+
+    return sections
+
+
+def extract_labels_from_line(line: str) -> tuple:
+    """
+    Extract label tags from a single definition line.
+    Returns (register_tags, region_tags, domain_tags, temporal_tags) as sorted lists.
+    """
+    register_tags = set()
+    region_tags = set()
+    domain_tags = set()
+    temporal_tags = set()
+
+    # Extract from context labels in this line
+    for match in CONTEXT_LABEL.finditer(line):
+        for label in match.group(1).split('|'):
+            label = label.strip().lower()
+
+            if label in REGISTER_LABELS:
+                register_tags.add(label)
+            elif label in TEMPORAL_LABELS:
+                temporal_tags.add(label)
+            elif label in DOMAIN_LABELS:
+                domain_tags.add(label)
+            elif label in REGION_LABELS:
+                region_tags.add(REGION_LABELS[label])
+
+    return (
+        sorted(register_tags),
+        sorted(region_tags),
+        sorted(domain_tags),
+        sorted(temporal_tags),
+    )
 
 
 def extract_labels(text: str) -> Dict[str, List[str]]:
@@ -586,7 +668,11 @@ def clean_template_components(parts: List[str], template_type: str = 'affix') ->
                 continue
             part = cleaned_part
 
-        # Remove HTML entities and tags <id:...>, <tag>, etc.
+        # Decode HTML entities (&lt; -> <, &gt; -> >, &amp; -> &)
+        if '&lt;' in part or '&gt;' in part or '&amp;' in part:
+            part = part.replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&')
+
+        # Remove HTML/XML tags and template parameters like <id:...>, <t:...>, etc.
         if '<' in part or '>' in part:
             part = HTML_ENTITY_PATTERN.sub('', part)
             # If nothing left after removing HTML, skip
@@ -925,7 +1011,7 @@ def extract_page_content(page_xml: str) -> Optional[tuple]:
 def is_englishlike(token: str) -> bool:
     """
     Returns True if `token` looks like an English-language word or phrase:
-    - Uses Latin letters (with optional combining diacritics)
+    - Uses Latin letters (ASCII or Latin diacritics in range 0x00C0-0x024F)
     - May include ASCII spaces between parts
     - May include hyphen (U+002D), en dash (U+2013),
       straight apostrophe (U+0027), left single quote (U+2018),
@@ -933,59 +1019,49 @@ def is_englishlike(token: str) -> bool:
       and slash (U+002F)
     - Rejects any string of only spaces, any non-ASCII whitespace,
       and any obvious HTML-entity-like token (&, ;, <, >)
+
+    Note: Uses same Latin range as Rust scanner (0x00C0-0x024F) for parity.
+    This covers Latin-1 Supplement, Latin Extended-A, and Latin Extended-B.
     """
 
     t = ud.normalize("NFC", token)
 
     # Reject non-ASCII whitespace except ordinary space U+0020
-    if any(ch != ' ' and ud.category(ch).startswith('Z') for ch in t):
+    if any(ch != ' ' and ch.isspace() for ch in t):
         return False
 
     # Reject strings that are empty or only spaces
-    if t.strip(' ') == '':
+    if t.strip() == '':
         return False
 
-    ALLOWED_PUNCT = {"'", "’", "‘", "-", "–", ".", "/"}
+    ALLOWED_PUNCT = {"'", "'", "'", "-", "–", ".", "/"}
     FORBIDDEN = set("&;<>")
 
     saw_latin_letter = False
-    prev_base_is_latin = False  # for validating combining marks
 
     for ch in t:
         if ch == ' ':
-            prev_base_is_latin = False
             continue
 
         if ch in FORBIDDEN:
             return False
 
-        cat = ud.category(ch)
-
-        if cat.startswith('M'):
-            # combining mark must follow a Latin base
-            if not prev_base_is_latin:
-                return False
-            continue
-
-        if cat.startswith('L'):
-            # require Latin letters
-            if "LATIN" not in ud.name(ch, ""):
-                return False
-            saw_latin_letter = True
-            prev_base_is_latin = True
-            continue
-
-        if cat.startswith('N'):
-            # allow numbers
-            prev_base_is_latin = False
-            continue
-
-        if ch in ALLOWED_PUNCT:
-            prev_base_is_latin = False
-            continue
-
-        # anything else disallowed
-        return False
+        if ch.isascii():
+            if ch.isalpha():
+                saw_latin_letter = True
+        else:
+            # Non-ASCII character - check if it's in Latin diacritics range
+            if ch.isalpha():
+                cp = ord(ch)
+                # Accept Latin diacritics (À-ɏ range) matching Rust scanner
+                if 0x00C0 <= cp <= 0x024F:
+                    saw_latin_letter = True
+                else:
+                    return False
+            elif ch in ALLOWED_PUNCT:
+                pass  # Allow punctuation
+            # Reject other non-ASCII non-alphabetic characters
+            # (except allowed punctuation handled above)
 
     return saw_latin_letter
 
@@ -1383,26 +1459,34 @@ def has_english_categories(text: str) -> bool:
     return any(pattern.lower() in text_lower for pattern in english_pos_patterns)
 
 
-def parse_entry(title: str, text: str) -> Optional[Dict]:
+def extract_spelling_region(text: str) -> Optional[str]:
     """
-    Parse a single Wiktionary page.
+    Extract regional spelling variant from the page text.
+    Returns region code like "en-US" or "en-GB" if found.
+    """
+    # Check for American/British spelling templates on head lines
+    if re.search(r'\{\{(?:tlb|lb)\|en\|(?:American|US) spelling', text, re.IGNORECASE):
+        return "en-US"
+    if re.search(r'\{\{(?:tlb|lb)\|en\|(?:British|UK) spelling', text, re.IGNORECASE):
+        return "en-GB"
+    if re.search(r'\{\{(?:tlb|lb)\|en\|(?:Australian) spelling', text, re.IGNORECASE):
+        return "en-AU"
+    if re.search(r'\{\{(?:tlb|lb)\|en\|(?:Canadian) spelling', text, re.IGNORECASE):
+        return "en-CA"
+    return None
+
+
+def parse_entry(title: str, text: str) -> List[Dict]:
+    """
+    Parse a single Wiktionary page and return multiple entries (one per sense).
 
     Critical: Extracts ONLY the ==English== section before parsing to prevent
     contamination from other language sections (French, Translingual, etc.).
 
-    Uses multiple signals to validate English entries:
-    1. Primary: Successful POS extraction (strongest signal)
-    2. Secondary: English categories present
-    3. Tertiary: English templates ({{en-noun}}, etc.)
-    4. Quaternary: Definition-generating templates ({{abbr of|en|...}}, etc.)
-
-    Philosophy: When information is present (POS, labels, etc.), include the entry.
-    Only reject if we have NO English signals at all.
-
-    Examples handled:
-    - "crp": Has {{abbr of|en|corporate}} but no POS header → included via signal 4
-    - Entries with only categories → included via signal 2
-    - Entries with en-templates → included via signal 3
+    Returns a list of Entry dicts, one for each (POS, definition) pair.
+    Each entry has: word, pos (string), register_tags, region_tags, domain_tags,
+    temporal_tags, spelling_region, word_count, is_phrase, is_abbreviation,
+    is_proper_noun, is_inflected, lemma, phrase_type, syllables, morphology.
     """
     word = title.lower().strip()
 
@@ -1410,67 +1494,18 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     # This prevents contamination from other language sections
     english_text = extract_english_section(text)
     if not english_text:
-        return None  # No English section found
+        return []  # No English section found
 
-    # Try to extract POS tags - this is the STRONGEST signal that it's English
-    pos_tags = extract_pos_tags(english_text)
-
-    # Check for English categories as a secondary signal
-    has_categories = has_english_categories(english_text)
-
-    # Check for English-specific templates as tertiary signal
-    has_en_templates = bool(re.search(r'\{\{en-(?:noun|verb|adj|adv)', english_text))
-
-    # Check for definition-generating templates (quaternary signal)
-    # Catches entries like "crp" that have {{abbr of|en|...}} but no POS headers
-    has_definition_templates = bool(DEFINITION_TEMPLATES.search(english_text))
-
-    # Decision logic: Keep if ANY strong English signal is present
-    if not pos_tags and not has_categories and not has_en_templates and not has_definition_templates:
-        # No English signals at all - reject
-        return None
-
-    # If we have categories/templates but no POS, this might be a minimal entry
-    # Keep it but it will have empty POS list
-    if not pos_tags and (has_categories or has_en_templates or has_definition_templates):
-        # Valid English entry with categories/templates but no extractable POS
-        # This can happen with some stub entries, abbreviations, or special formats
-        pos_tags = []  # Empty but valid
-
-    labels = extract_labels(english_text)
-
-    # Calculate word count (always track, even for single words)
+    # Extract word-level data (shared across all senses)
     word_count = len(word.split())
-
-    # Extract specific phrase type for multi-word entries
     phrase_type = extract_phrase_type(english_text) if word_count > 1 else None
 
     # Extract syllable count from multiple sources, trying in priority order
-    # Only set syllable count when we have reliable data - never guess
     syllable_count = None
-
-    # Extract from all three sources
     hyph_count = extract_syllable_count_from_hyphenation(english_text, word)
     rhymes_count = extract_syllable_count_from_rhymes(english_text)
     cat_count = extract_syllable_count_from_categories(english_text)
 
-    # Check for conflicts between sources (data quality monitoring)
-    sources = []
-    if hyph_count is not None:
-        sources.append(('hyphenation', hyph_count))
-    if rhymes_count is not None:
-        sources.append(('rhymes', rhymes_count))
-    if cat_count is not None:
-        sources.append(('category', cat_count))
-
-    # Log conflicts if multiple sources disagree
-    if len(sources) > 1:
-        counts = [s[1] for s in sources]
-        if len(set(counts)) > 1:  # Disagreement detected
-            source_info = ', '.join(f'{name}={count}' for name, count in sources)
-            logger.debug(f"Syllable conflict in '{word}': {source_info}")
-
-    # Apply priority system: hyphenation > rhymes > categories
     if hyph_count is not None:
         syllable_count = hyph_count
     elif rhymes_count is not None:
@@ -1481,73 +1516,125 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     # Extract morphology from etymology section
     morphology = extract_morphology(english_text)
 
-    # Detect boolean properties for filtering
-    is_phrase = word_count > 1
-    is_abbreviation = detect_abbreviation(english_text, pos_tags)
-    is_proper_noun = detect_proper_noun(english_text, pos_tags)
-    is_vulgar = detect_vulgar_or_offensive(labels)
-    is_archaic = detect_archaic_or_obsolete(labels)
-    is_rare = detect_rare(labels)
-    is_informal = detect_informal_or_slang(labels)
-    is_technical = detect_technical(labels)
-    is_regional = detect_regional(labels)
+    # Detect word-level properties
+    is_abbreviation = detect_abbreviation(english_text, [])
 
-    # Extract lemma from inflection templates (e.g., {{plural of|en|cat}} → "cat")
+    # Extract lemma from inflection templates
     lemma = extract_lemma(english_text)
 
     # Mark as inflected if we found a lemma OR if category indicates inflection
-    is_inflected = lemma is not None or detect_inflected_form(english_text, pos_tags)
+    is_inflected = lemma is not None or detect_inflected_form(english_text, [])
 
-    is_dated = detect_dated(labels)
-    is_derogatory = detect_derogatory(labels)
+    # Extract regional spelling variant
+    spelling_region = extract_spelling_region(english_text)
 
-    entry = {
+    # Word-level data shared across all senses
+    word_data = {
         'word': word,
-        'pos': pos_tags,
-        'labels': labels,
         'word_count': word_count,
-        'is_phrase': is_phrase,
+        'is_phrase': word_count > 1,
         'is_abbreviation': is_abbreviation,
-        'is_proper_noun': is_proper_noun,
-        'is_vulgar': is_vulgar,
-        'is_archaic': is_archaic,
-        'is_rare': is_rare,
-        'is_informal': is_informal,
-        'is_technical': is_technical,
-        'is_regional': is_regional,
         'is_inflected': is_inflected,
-        'is_dated': is_dated,
-        'is_derogatory': is_derogatory,
-        'sources': ['wikt'],
     }
 
-    # Add phrase type for multi-word entries
+    # Add optional word-level fields
+    if lemma:
+        word_data['lemma'] = lemma
     if phrase_type:
-        entry['phrase_type'] = phrase_type
-
-    # Only include syllable count if reliably determined
-    # Leave unspecified (None) if data is missing or unreliable
+        word_data['phrase_type'] = phrase_type
     if syllable_count is not None:
-        entry['syllables'] = syllable_count
+        word_data['syllables'] = syllable_count
+    if morphology:
+        word_data['morphology'] = morphology
+    if spelling_region:
+        word_data['spelling_region'] = spelling_region
 
-    # Add morphology if etymology data was successfully extracted
-    if morphology is not None:
-        entry['morphology'] = morphology
+    # Parse POS sections and their definitions
+    pos_sections = parse_pos_sections(english_text)
 
-    # Add lemma (base form) for inflected words
-    if lemma is not None:
-        entry['lemma'] = lemma
+    # If no POS sections found, try to create a single entry with unknown POS
+    if not pos_sections:
+        # Check for English categories or templates as validation
+        has_categories = has_english_categories(english_text)
+        has_en_templates = bool(re.search(r'\{\{en-(?:noun|verb|adj|adv)', english_text))
+        has_definition_templates = bool(DEFINITION_TEMPLATES.search(english_text))
 
-    return entry
+        if has_categories or has_en_templates or has_definition_templates:
+            # Create a single entry with unknown POS
+            entry = {
+                'word': word,
+                'pos': 'unknown',
+                'word_count': word_data['word_count'],
+                'is_phrase': word_data['is_phrase'],
+                'is_abbreviation': word_data['is_abbreviation'],
+                'is_proper_noun': False,
+                'is_inflected': word_data['is_inflected'],
+            }
+            # Add optional fields
+            if 'lemma' in word_data:
+                entry['lemma'] = word_data['lemma']
+            if 'phrase_type' in word_data:
+                entry['phrase_type'] = word_data['phrase_type']
+            if 'syllables' in word_data:
+                entry['syllables'] = word_data['syllables']
+            if 'morphology' in word_data:
+                entry['morphology'] = word_data['morphology']
+            if 'spelling_region' in word_data:
+                entry['spelling_region'] = word_data['spelling_region']
+            return [entry]
+        return []
+
+    # Create one entry per definition
+    entries = []
+
+    for section in pos_sections:
+        for def_line in section.definitions:
+            register_tags, region_tags, domain_tags, temporal_tags = extract_labels_from_line(def_line)
+
+            entry = {
+                'word': word,
+                'pos': section.pos,
+                'word_count': word_data['word_count'],
+                'is_phrase': word_data['is_phrase'],
+                'is_abbreviation': word_data['is_abbreviation'],
+                'is_proper_noun': section.is_proper_noun,
+                'is_inflected': word_data['is_inflected'],
+            }
+
+            # Add tag arrays only if non-empty (matches Rust's skip_serializing_if)
+            if register_tags:
+                entry['register_tags'] = register_tags
+            if region_tags:
+                entry['region_tags'] = region_tags
+            if domain_tags:
+                entry['domain_tags'] = domain_tags
+            if temporal_tags:
+                entry['temporal_tags'] = temporal_tags
+
+            # Add optional word-level fields
+            if 'lemma' in word_data:
+                entry['lemma'] = word_data['lemma']
+            if 'phrase_type' in word_data:
+                entry['phrase_type'] = word_data['phrase_type']
+            if 'syllables' in word_data:
+                entry['syllables'] = word_data['syllables']
+            if 'morphology' in word_data:
+                entry['morphology'] = word_data['morphology']
+            if 'spelling_region' in word_data:
+                entry['spelling_region'] = word_data['spelling_region']
+
+            entries.append(entry)
+
+    return entries
 
 
 # Layout for status display (label, value) pairs
 PAIRS_LAYOUT = [
     # each row contains up to three (label, key) pairs
-    [("Processed", "Processed"), ("Written", "Written"), ("Special", "Special")],
-    [("Redirects", "Redirects"), ("Dict-only", "Dict-only"), ("Non-EN", "Non-EN")],
-    [("Non-Latin", "Non-Latin"), ("Skipped", "Skipped"), ("Rate", "Rate")],
-    [("Decomp MB", "Decomp MB"), ("Decomp Rate", "Decomp Rate"), ("Elapsed", "Elapsed")],
+    [("Processed", "Processed"), ("Words", "Words"), ("Senses", "Senses")],
+    [("Special", "Special"), ("Redirects", "Redirects"), ("Dict-only", "Dict-only")],
+    [("Non-EN", "Non-EN"), ("Non-Latin", "Non-Latin"), ("Skipped", "Skipped")],
+    [("Rate", "Rate"), ("Decomp MB", "Decomp MB"), ("Elapsed", "Elapsed")],
 ]
 
 
@@ -1659,7 +1746,8 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     # Prepare metrics dictionary for Live display
     metrics = {
         "Processed": 0,
-        "Written": 0,
+        "Words": 0,
+        "Senses": 0,
         "Special": 0,
         "Redirects": 0,
         "Dict-only": 0,
@@ -1678,7 +1766,8 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
         file_obj = open(xml_path, 'rb')
 
     entries_processed = 0
-    entries_written = 0
+    words_written = 0
+    senses_written = 0
     entries_skipped = 0
     special_pages_found = 0
     redirects_found = 0
@@ -1777,13 +1866,25 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     metrics["Non-Latin"] = non_englishlike_found
                     continue
 
-                # Parse entry
+                # Parse entry (returns list of entries, one per sense)
                 try:
-                    entry = parse_entry(title, text)
-                    if entry:
-                        out.write(json.dumps(entry, ensure_ascii=False, sort_keys=True) + '\n')
-                        entries_written += 1
-                        metrics["Written"] = entries_written
+                    entries_list = parse_entry(title, text)
+                    if entries_list:
+                        # Track as one word written, multiple senses
+                        words_written += 1
+                        metrics["Words"] = words_written
+                        limit_reached = False
+                        for entry in entries_list:
+                            out.write(json.dumps(entry, ensure_ascii=False, sort_keys=True) + '\n')
+                            senses_written += 1
+                            metrics["Senses"] = senses_written
+                            # Check limit after each sense (matches Rust scanner precision)
+                            if limit and senses_written >= limit:
+                                print(f"\nReached limit of {limit:,} senses")
+                                limit_reached = True
+                                break
+                        if limit_reached:
+                            break
                     else:
                         entries_skipped += 1
                         metrics["Skipped"] = entries_skipped
@@ -1839,10 +1940,6 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                     if entries_processed % 5000 == 0:
                         out.flush()
 
-                if limit and entries_written >= limit:
-                    print(f"\nReached limit of {limit:,} entries")
-                    break
-
     # Close skip log file
     skip_log.close()
 
@@ -1850,18 +1947,19 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
     elapsed_min = int(elapsed / 60)
     elapsed_sec = int(elapsed % 60)
 
-    # Summary to stdout
+    # Summary to stdout (matches Rust scanner output format)
     print()
     print("=" * 60)
-    print(f"Total processed: {entries_processed:,}")
-    print(f"Total written: {entries_written:,}")
+    print(f"Pages processed: {entries_processed:,}")
+    print(f"Words written: {words_written:,}")
+    print(f"Senses written: {senses_written:,}")
+    print(f"Avg senses/word: {senses_written / max(words_written, 1):.2f}")
     print(f"Special pages: {special_pages_found:,}")
     print(f"Redirects: {redirects_found:,}")
     print(f"Dictionary-only terms: {dict_only_found:,}")
     print(f"Non-English pages: {non_english_found:,}")
     print(f"Non-Latin scripts: {non_englishlike_found:,}")
-    print(f"Total skipped: {entries_skipped:,}")
-    print(f"Success rate: {entries_written/entries_processed*100:.1f}%")
+    print(f"Skipped: {entries_skipped:,}")
     print(f"Time: {elapsed_min}m {elapsed_sec}s")
     print(f"Rate: {entries_processed / elapsed:.0f} pages/sec")
     print("=" * 60)
@@ -1884,15 +1982,16 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
             write("AGGREGATE RESULTS")
             write("=" * 60)
             write()
-            write(f"Total processed: {entries_processed:,}")
-            write(f"Total written: {entries_written:,}")
+            write(f"Pages processed: {entries_processed:,}")
+            write(f"Words written: {words_written:,}")
+            write(f"Senses written: {senses_written:,}")
+            write(f"Avg senses/word: {senses_written / max(words_written, 1):.2f}")
             write(f"Special pages: {special_pages_found:,}")
             write(f"Redirects: {redirects_found:,}")
             write(f"Dictionary-only terms: {dict_only_found:,}")
             write(f"Non-English pages: {non_english_found:,}")
             write(f"Non-Latin scripts: {non_englishlike_found:,}")
-            write(f"Total skipped: {entries_skipped:,}")
-            write(f"Success rate: {entries_written/entries_processed*100:.1f}%")
+            write(f"Skipped: {entries_skipped:,}")
             write(f"Time: {elapsed_min}m {elapsed_sec}s")
             write(f"Rate: {entries_processed / elapsed:.0f} pages/sec")
             write("=" * 60)

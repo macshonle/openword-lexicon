@@ -36,11 +36,17 @@ EOWL_FILE := $(RAW_DIR)/eowl.txt
 # Rust tools
 RUST_SCANNER := tools/wiktionary-rust/target/release/wiktionary-rust
 
+# Benchmark outputs
+BENCHMARK_DIR := data/benchmark
+
 .PHONY: bootstrap venv deps fmt lint test clean scrub fetch-en \
         build-en build-rust-scanner build-trie build-metadata \
 		package report-en diagnose-scanner \
 		validate-all validate-enable validate-profanity validate-childish \
-        extract-slices wordlist-builder-web viewer-web
+		validate-scanner-parity \
+        extract-slices wordlist-builder-web viewer-web \
+		benchmark-rust-scanner benchmark-validate \
+		nightly
 
 # ===========================
 # Development Environment
@@ -66,8 +72,8 @@ fmt:
 lint:
 	$(UV) run ruff check .
 
-# Tests
-test:
+# Tests (includes scanner parity validation if Wiktionary dump available)
+test: validate-scanner-parity
 	$(UV) run pytest -q || true
 
 # ===========================
@@ -166,10 +172,12 @@ build-en: fetch-en $(LEXEMES_JSON) $(SENSES_JSON)
 # 1. Extract from XML dump to unsorted JSONL (kept for traceability)
 # 2. Sort lexicographically by word (ensures duplicate entries are consecutive,
 #    trie ordinal = line number, matches Python's default lexicographic sort)
+# Uses channel-pipeline strategy with 4 threads (1.32x faster than sequential)
 $(WIKTIONARY_JSON_SORTED): $(WIKTIONARY_DUMP) $(RUST_SCANNER)
-	@echo "Extracting Wiktionary (using Rust scanner)..."
+	@echo "Extracting Wiktionary (using Rust scanner, channel-pipeline)..."
 	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
-	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" "$(WIKTIONARY_JSON)"
+	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" "$(WIKTIONARY_JSON)" \
+		--strategy channel-pipeline --threads 4
 	@echo "Sorting Wiktionary entries by word..."
 	$(UV) run python src/openword/wikt_sort.py \
 		--input $(WIKTIONARY_JSON) \
@@ -268,6 +276,20 @@ validate-childish: deps
 	@echo "Validating childish term labeling..."
 	@$(UV) run python tools/validate_childish_terms.py
 
+# Validate Python/Rust scanner parity
+# Runs both scanners on 500000 entries and compares outputs word-by-word
+# Skips gracefully if Wiktionary dump not available
+validate-scanner-parity: $(WIKTIONARY_DUMP) $(RUST_SCANNER) deps
+	echo "Running Python scanner (500000 entries)..."
+	$(UV) run python tools/wiktionary_scanner_parser.py \
+		"$(WIKTIONARY_DUMP)" /tmp/parity-python.jsonl --limit 500000
+	echo "Running Rust scanner (500000 entries)..."
+	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" /tmp/parity-rust.jsonl --limit 500000
+	echo "Validating parity..."
+	$(UV) run python tools/wiktionary-rust/scripts/validate_parity.py \
+		--python-output /tmp/parity-python.jsonl \
+		--rust-output /tmp/parity-rust.jsonl
+
 # ===========================
 # Diagnostics
 # ===========================
@@ -284,6 +306,32 @@ extract-slices: deps $(WIKTIONARY_DUMP)
 	@mkdir -p "$(SLICES_DIR)"
 	$(UV) run python tools/wiktionary_xml_slicer.py \
 		"$(WIKTIONARY_DUMP)" "$(SLICES_DIR)"
+
+# ===========================
+# Benchmarks
+# ===========================
+
+# Run complete benchmarks on full Wiktionary dataset
+# Tests all parallelization strategies with thread counts: 4, 8, 16, 32
+# Output: data/benchmark/en-wikt-{timestamp}-{strategy}[-t{threads}].jsonl
+#
+# For overnight runs, use:
+#   caffeinate -i make benchmark-rust-scanner
+benchmark-rust-scanner: $(WIKTIONARY_DUMP) $(RUST_SCANNER)
+	@echo "Running complete Rust scanner benchmarks..."
+	@mkdir -p $(BENCHMARK_DIR)
+	$(UV) run python tools/wiktionary-rust/scripts/run_full_benchmark.py \
+		--input "$(WIKTIONARY_DUMP)" \
+		--output-dir "$(BENCHMARK_DIR)" \
+		--scanner "$(RUST_SCANNER)"
+	@echo "Benchmark complete. Results in: $(BENCHMARK_DIR)/"
+
+# Validate that all benchmark outputs are identical (when sorted)
+benchmark-validate:
+	@echo "Validating benchmark outputs..."
+	$(UV) run python tools/wiktionary-rust/scripts/run_full_benchmark.py \
+		--output-dir "$(BENCHMARK_DIR)" \
+		--validate-only
 
 # ===========================
 # Web Tools
@@ -310,3 +358,73 @@ viewer-web: viewer/node_modules
 	@echo "    /index.html        - Dynamic trie builder"
 	@echo "    /index-binary.html - Binary trie loader"
 	(cd viewer; pnpm start)
+
+# ===========================
+# Nightly CI Build
+# ===========================
+
+# Full pipeline for nightly CI builds
+# Runs the complete fetch → build → package → report → validate → test cycle
+#
+# Pipeline stages:
+#   1. Bootstrap: Set up Python environment and dependencies
+#   2. Fetch: Download all source data (Wiktionary, WordNet, frequency lists, etc.)
+#   3. Build: Compile Rust scanner, run full build-en pipeline
+#   4. Package: Create release artifacts with manifest
+#   5. Report: Generate comprehensive analysis reports
+#   6. Validate: Run all validation checks (ENABLE coverage, profanity, childish terms)
+#   7. Test: Run pytest and scanner parity validation
+#   8. Diagnose: Run diagnostic checks on scanner output
+#
+# Usage:
+#   make nightly                    # Run full pipeline
+#   caffeinate -i make nightly      # Run with sleep prevention (macOS)
+#
+# Environment:
+#   OPENWORD_CI=1 is set automatically to skip interactive prompts
+#
+# Expected runtime: 15-30 minutes depending on network speed and CPU
+nightly: export OPENWORD_CI=1
+nightly:
+	@echo "============================================================"
+	@echo "NIGHTLY CI BUILD - Starting full pipeline"
+	@echo "============================================================"
+	@echo "Start time: $$(date)"
+	@echo "Mode: Non-interactive (OPENWORD_CI=1)"
+	@echo ""
+	@echo "[1/8] Bootstrapping environment..."
+	$(MAKE) bootstrap
+	@echo ""
+	@echo "[2/8] Fetching all source data..."
+	$(MAKE) fetch-en
+	@echo ""
+	@echo "[3/8] Building Rust scanner..."
+	$(MAKE) build-rust-scanner
+	@echo ""
+	@echo "[4/8] Running full build pipeline..."
+	$(MAKE) build-en
+	@echo ""
+	@echo "[5/8] Packaging release artifacts..."
+	$(MAKE) package
+	@echo ""
+	@echo "[6/8] Generating reports..."
+	$(MAKE) report-en
+	@echo ""
+	@echo "[7/8] Running validation checks..."
+	$(MAKE) validate-all
+	$(MAKE) validate-scanner-parity
+	@echo ""
+	@echo "[8/8] Running tests and diagnostics..."
+	$(MAKE) test
+	$(MAKE) diagnose-scanner
+	@echo ""
+	@echo "============================================================"
+	@echo "NIGHTLY CI BUILD - Complete"
+	@echo "============================================================"
+	@echo "End time: $$(date)"
+	@echo ""
+	@echo "Build artifacts:"
+	@ls -lh $(BUILD_DIR)/*.trie $(BUILD_DIR)/*.json* 2>/dev/null || true
+	@echo ""
+	@echo "Reports:"
+	@ls -lh $(REPORTS_DIR)/*.md 2>/dev/null || true

@@ -1,5 +1,5 @@
 use bzip2::read::BzDecoder;
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use indicatif::{ProgressBar, ProgressStyle};
 use lazy_static::lazy_static;
 use regex::Regex;
@@ -8,8 +8,24 @@ use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{BufRead, BufReader, BufWriter, Write};
 use std::path::PathBuf;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 use unicode_normalization::UnicodeNormalization;
+
+mod parallel;
+use parallel::{ParallelConfig, process_batch_parallel, process_channel_pipeline, process_two_phase};
+
+/// Processing strategy for parsing
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+pub enum Strategy {
+    /// Sequential processing (original baseline)
+    Sequential,
+    /// Batch-parallel processing with thread pool
+    BatchParallel,
+    /// Channel-based pipeline processing
+    ChannelPipeline,
+    /// Two-phase: load all pages, then process in parallel
+    TwoPhase,
+}
 
 #[derive(Parser)]
 #[command(name = "wiktionary-rust")]
@@ -21,9 +37,33 @@ struct Args {
     /// Output JSONL file
     output: PathBuf,
 
+    /// Processing strategy
+    #[arg(short, long, value_enum, default_value_t = Strategy::Sequential)]
+    strategy: Strategy,
+
+    /// Number of threads (0 = auto-detect)
+    #[arg(short, long, default_value_t = 0)]
+    threads: usize,
+
+    /// Batch size for batch-parallel strategy
+    #[arg(long, default_value_t = 1000)]
+    batch_size: usize,
+
+    /// Channel buffer size for channel-pipeline strategy
+    #[arg(long, default_value_t = 10000)]
+    channel_buffer: usize,
+
     /// Limit number of entries to extract (for testing)
     #[arg(long)]
     limit: Option<usize>,
+
+    /// Run all strategies and compare (benchmark mode)
+    #[arg(long)]
+    benchmark: bool,
+
+    /// Quiet mode - minimal output
+    #[arg(short, long)]
+    quiet: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -40,8 +80,8 @@ struct Morphology {
 }
 
 /// Flat entry structure - one per sense (definition line)
-#[derive(Debug, Serialize, Deserialize)]
-struct Entry {
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Entry {
     word: String,
     pos: String,  // Single POS, not Vec
 
@@ -103,13 +143,13 @@ struct WordData {
 
 lazy_static! {
     // Basic XML patterns
-    static ref TITLE_PATTERN: Regex = Regex::new(r"<title>([^<]+)</title>").unwrap();
-    static ref NS_PATTERN: Regex = Regex::new(r"<ns>(\d+)</ns>").unwrap();
-    static ref TEXT_PATTERN: Regex = Regex::new(r"(?s)<text[^>]*>(.+?)</text>").unwrap();
-    static ref REDIRECT_PATTERN: Regex = Regex::new(r#"<redirect\s+title="[^"]+""#).unwrap();
+    pub static ref TITLE_PATTERN: Regex = Regex::new(r"<title>([^<]+)</title>").unwrap();
+    pub static ref NS_PATTERN: Regex = Regex::new(r"<ns>(\d+)</ns>").unwrap();
+    pub static ref TEXT_PATTERN: Regex = Regex::new(r"(?s)<text[^>]*>(.+?)</text>").unwrap();
+    pub static ref REDIRECT_PATTERN: Regex = Regex::new(r#"<redirect\s+title="[^"]+""#).unwrap();
 
     // English section
-    static ref ENGLISH_SECTION: Regex = Regex::new(r"(?i)==\s*English\s*==").unwrap();
+    pub static ref ENGLISH_SECTION: Regex = Regex::new(r"(?i)==\s*English\s*==").unwrap();
     static ref LANGUAGE_SECTION: Regex = Regex::new(r"(?m)^==\s*([^=]+?)\s*==$").unwrap();
 
     // POS patterns - match level 3 and 4 headers
@@ -126,7 +166,7 @@ lazy_static! {
 
     // Other patterns
     static ref ABBREVIATION_TEMPLATE: Regex = Regex::new(r"(?i)\{\{(?:abbreviation of|abbrev of|abbr of|initialism of)\|en\|").unwrap();
-    static ref DICT_ONLY: Regex = Regex::new(r"(?i)\{\{no entry\|en").unwrap();
+    pub static ref DICT_ONLY: Regex = Regex::new(r"(?i)\{\{no entry\|en").unwrap();
 
     // Syllable extraction patterns
     static ref HYPHENATION_TEMPLATE: Regex = Regex::new(r"(?i)\{\{(?:hyphenation|hyph)\|en\|([^}]+)\}\}").unwrap();
@@ -141,7 +181,8 @@ lazy_static! {
     static ref NEXT_SECTION: Regex = Regex::new(r"\n===").unwrap();
     static ref SUFFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{suffix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
     static ref PREFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{prefix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
-    static ref AFFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{affix\|en\|([^}]+)\}\}").unwrap();
+    // Matches both {{affix|en|...}} and {{af|en|...}} (common shorthand)
+    static ref AFFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{af(?:fix)?\|en\|([^}]+)\}\}").unwrap();
     static ref COMPOUND_TEMPLATE: Regex = Regex::new(r"(?i)\{\{compound\|en\|([^}]+)\}\}").unwrap();
     static ref SURF_TEMPLATE: Regex = Regex::new(r"(?i)\{\{surf\|en\|([^}]+)\}\}").unwrap();
     static ref CONFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{confix\|en\|([^}|]+)\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
@@ -234,7 +275,7 @@ lazy_static! {
     };
 
     // Special page prefixes
-    static ref SPECIAL_PREFIXES: Vec<&'static str> = vec![
+    pub static ref SPECIAL_PREFIXES: Vec<&'static str> = vec![
         "Wiktionary:",
         "MediaWiki:",
         "Module:",
@@ -311,7 +352,7 @@ lazy_static! {
     ];
 }
 
-fn is_englishlike(token: &str) -> bool {
+pub fn is_englishlike(token: &str) -> bool {
     let normalized: String = token.nfc().collect();
 
     // Reject non-ASCII whitespace except ordinary space
@@ -676,17 +717,35 @@ fn extract_phrase_type(text: &str) -> Option<String> {
 }
 
 fn clean_template_components(parts: &[&str]) -> Vec<String> {
+    // Regex to strip XML/HTML tags like <id:...>, <t:...>, etc.
+    let tag_pattern = Regex::new(r"<[^>]+>").unwrap();
+
     parts
         .iter()
         .filter_map(|part| {
-            let part = part.trim();
+            let mut part = part.trim().to_string();
             if part.is_empty() || part.contains('=') {
                 return None;
             }
-            if part.contains(':') && part.len() > 2 && part.chars().take(4).all(|c| c.is_ascii_lowercase() || c == ':') {
-                return None;
+            // Skip language code prefixes (grc:, la:, ang:, etc.) at start of part
+            if part.len() > 2 {
+                let prefix: String = part.chars().take(4).collect();
+                if prefix.chars().all(|c| c.is_ascii_lowercase() || c == ':') && prefix.contains(':') {
+                    return None;
+                }
             }
-            Some(part.to_string())
+            // Decode HTML entities
+            if part.contains("&lt;") || part.contains("&gt;") || part.contains("&amp;") {
+                part = part.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
+            }
+            // Remove XML/HTML tags like <id:...>, <t:...>, etc.
+            if part.contains('<') || part.contains('>') {
+                part = tag_pattern.replace_all(&part, "").to_string();
+                if part.is_empty() {
+                    return None;
+                }
+            }
+            Some(part)
         })
         .collect()
 }
@@ -830,7 +889,7 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
 }
 
 /// Parse a page and return multiple entries (one per sense)
-fn parse_page(title: &str, text: &str) -> Vec<Entry> {
+pub fn parse_page(title: &str, text: &str) -> Vec<Entry> {
     let word = title.to_lowercase().trim().to_string();
 
     // Extract English section
@@ -982,36 +1041,27 @@ fn scan_pages(mut reader: impl BufRead, mut callback: impl FnMut(String) -> bool
     Ok(())
 }
 
-fn main() -> std::io::Result<()> {
-    let args = Args::parse();
-
-    println!("Parsing: {}", args.input.display());
-    println!("Output: {}", args.output.display());
-    println!("Method: Fast Rust scanner (per-sense output)");
-    if let Some(limit) = args.limit {
-        println!("Limit: {} entries", limit);
-    }
-    println!();
-
+/// Run sequential processing (original baseline)
+fn run_sequential(
+    reader: impl BufRead,
+    writer: &mut BufWriter<File>,
+    limit: Option<usize>,
+    quiet: bool,
+) -> std::io::Result<Stats> {
     let start_time = Instant::now();
-
-    let file = File::open(&args.input)?;
-    let reader: Box<dyn BufRead> = if args.input.to_string_lossy().ends_with(".bz2") {
-        Box::new(BufReader::with_capacity(256 * 1024, BzDecoder::new(file)))
-    } else {
-        Box::new(BufReader::with_capacity(256 * 1024, file))
-    };
-
-    let output = File::create(&args.output)?;
-    let mut writer = BufWriter::with_capacity(256 * 1024, output);
-
     let mut stats = Stats::default();
-    let pb = ProgressBar::new_spinner();
-    pb.set_style(
-        ProgressStyle::default_spinner()
-            .template("{spinner} {msg}")
-            .unwrap()
-    );
+
+    let pb = if quiet {
+        ProgressBar::hidden()
+    } else {
+        let pb = ProgressBar::new_spinner();
+        pb.set_style(
+            ProgressStyle::default_spinner()
+                .template("{spinner} {msg}")
+                .unwrap()
+        );
+        pb
+    };
 
     let limit_reached = std::cell::Cell::new(false);
 
@@ -1022,7 +1072,7 @@ fn main() -> std::io::Result<()> {
 
         stats.pages_processed += 1;
 
-        if stats.pages_processed % 1000 == 0 {
+        if !quiet && stats.pages_processed % 1000 == 0 {
             let elapsed = start_time.elapsed().as_secs_f64();
             let rate = stats.pages_processed as f64 / elapsed;
             pb.set_message(format!(
@@ -1102,8 +1152,8 @@ fn main() -> std::io::Result<()> {
                 writeln!(writer, "{}", json).ok();
                 stats.senses_written += 1;
 
-                if let Some(limit) = args.limit {
-                    if stats.senses_written >= limit {
+                if let Some(l) = limit {
+                    if stats.senses_written >= l {
                         limit_reached.set(true);
                         return false;
                     }
@@ -1116,15 +1166,20 @@ fn main() -> std::io::Result<()> {
 
     writer.flush()?;
 
-    if limit_reached.get() {
-        pb.finish_with_message(format!("Reached limit of {} entries", args.limit.unwrap()));
+    if limit_reached.get() && !quiet {
+        pb.finish_with_message(format!("Reached limit of {} entries", limit.unwrap()));
     } else {
         pb.finish_and_clear();
     }
 
-    let elapsed = start_time.elapsed();
+    stats.elapsed = start_time.elapsed();
+    Ok(stats)
+}
+
+fn print_stats(stats: &Stats, strategy_name: &str) {
     println!();
     println!("============================================================");
+    println!("Strategy: {}", strategy_name);
     println!("Pages processed: {}", stats.pages_processed);
     println!("Words written: {}", stats.words_written);
     println!("Senses written: {}", stats.senses_written);
@@ -1135,22 +1190,103 @@ fn main() -> std::io::Result<()> {
     println!("Non-English pages: {}", stats.non_english);
     println!("Non-Latin scripts: {}", stats.non_latin);
     println!("Skipped: {}", stats.skipped);
-    println!("Time: {}m {}s", elapsed.as_secs() / 60, elapsed.as_secs() % 60);
-    println!("Rate: {:.0} pages/sec", stats.pages_processed as f64 / elapsed.as_secs_f64());
+    println!("Time: {}m {}s", stats.elapsed.as_secs() / 60, stats.elapsed.as_secs() % 60);
+    println!("Rate: {:.0} pages/sec", stats.pages_processed as f64 / stats.elapsed.as_secs_f64());
     println!("============================================================");
+}
+
+fn main() -> std::io::Result<()> {
+    let args = Args::parse();
+
+    // Build parallel config
+    let mut config = ParallelConfig::default();
+    if args.threads > 0 {
+        config.num_threads = args.threads;
+        config.num_workers = args.threads.saturating_sub(1).max(1);
+    }
+    config.batch_size = args.batch_size;
+    config.channel_buffer = args.channel_buffer;
+
+    if !args.quiet {
+        println!("Parsing: {}", args.input.display());
+        println!("Output: {}", args.output.display());
+        println!("Strategy: {:?}", args.strategy);
+        if args.strategy != Strategy::Sequential {
+            println!("Threads: {}", config.num_threads);
+        }
+        if let Some(limit) = args.limit {
+            println!("Limit: {} entries", limit);
+        }
+        println!();
+    }
+
+    // Run the selected strategy
+    let stats = match args.strategy {
+        Strategy::Sequential => {
+            let file = File::open(&args.input)?;
+            let reader: Box<dyn BufRead> = if args.input.to_string_lossy().ends_with(".bz2") {
+                Box::new(BufReader::with_capacity(256 * 1024, BzDecoder::new(file)))
+            } else {
+                Box::new(BufReader::with_capacity(256 * 1024, file))
+            };
+            let output = File::create(&args.output)?;
+            let mut writer = BufWriter::with_capacity(256 * 1024, output);
+            run_sequential(reader, &mut writer, args.limit, args.quiet)?
+        }
+
+        Strategy::BatchParallel => {
+            let file = File::open(&args.input)?;
+            let reader: Box<dyn BufRead> = if args.input.to_string_lossy().ends_with(".bz2") {
+                Box::new(BufReader::with_capacity(256 * 1024, BzDecoder::new(file)))
+            } else {
+                Box::new(BufReader::with_capacity(256 * 1024, file))
+            };
+            let output = File::create(&args.output)?;
+            let mut writer = BufWriter::with_capacity(256 * 1024, output);
+            process_batch_parallel(reader, &mut writer, &config, args.limit)?
+        }
+
+        Strategy::ChannelPipeline => {
+            let file = File::open(&args.input)?;
+            let reader: Box<dyn BufRead + Send> = if args.input.to_string_lossy().ends_with(".bz2") {
+                Box::new(BufReader::with_capacity(256 * 1024, BzDecoder::new(file)))
+            } else {
+                Box::new(BufReader::with_capacity(256 * 1024, file))
+            };
+            let output = File::create(&args.output)?;
+            process_channel_pipeline(reader, output, &config, args.limit)?
+        }
+
+        Strategy::TwoPhase => {
+            let file = File::open(&args.input)?;
+            let reader: Box<dyn BufRead> = if args.input.to_string_lossy().ends_with(".bz2") {
+                Box::new(BufReader::with_capacity(256 * 1024, BzDecoder::new(file)))
+            } else {
+                Box::new(BufReader::with_capacity(256 * 1024, file))
+            };
+            let output = File::create(&args.output)?;
+            let mut writer = BufWriter::with_capacity(256 * 1024, output);
+            process_two_phase(reader, &mut writer, &config, args.limit)?
+        }
+    };
+
+    if !args.quiet {
+        print_stats(&stats, &format!("{:?}", args.strategy));
+    }
 
     Ok(())
 }
 
 #[derive(Default)]
-struct Stats {
-    pages_processed: usize,
-    words_written: usize,
-    senses_written: usize,
-    special: usize,
-    redirects: usize,
-    dict_only: usize,
-    non_english: usize,
-    non_latin: usize,
-    skipped: usize,
+pub struct Stats {
+    pub pages_processed: usize,
+    pub words_written: usize,
+    pub senses_written: usize,
+    pub special: usize,
+    pub redirects: usize,
+    pub dict_only: usize,
+    pub non_english: usize,
+    pub non_latin: usize,
+    pub skipped: usize,
+    pub elapsed: Duration,
 }

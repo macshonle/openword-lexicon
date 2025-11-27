@@ -33,8 +33,12 @@ echo -e "${YELLOW}our lexicon properly labels vulgar/offensive terms.${NC}"
 echo ""
 echo -e "${YELLOW}These lists are NOT part of the main lexicon build.${NC}"
 echo ""
-echo -e "${RED}Press Ctrl+C now to cancel, or Enter to continue...${NC}"
-read -r
+if [ "${OPENWORD_CI:-}" = "1" ] || [ "${CI:-}" = "true" ]; then
+    echo -e "${YELLOW}CI mode: Auto-confirming profanity list download${NC}"
+else
+    echo -e "${RED}Press Ctrl+C now to cancel, or Enter to continue...${NC}"
+    read -r
+fi
 
 echo ""
 echo "Creating validation directory..."
