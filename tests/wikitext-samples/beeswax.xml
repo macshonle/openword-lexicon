@@ -1,0 +1,143 @@
+<page>
+    <title>beeswax</title>
+    <ns>0</ns>
+    <id>4468</id>
+    <revision>
+      <id>87701976</id>
+      <parentid>87647784</parentid>
+      <timestamp>2025-10-31T20:16:49Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87701976</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4632" sha1="0sxs6ztwj0e26un44eoemhqgachostu" xml:space="preserve">==English==
+{{wp}}
+
+===Etymology===
+[[File:Beeswax.jpg|thumb|'''Beeswax''']]
+From {{affix|en|bee|-s-|wax}}.
+
+===Pronunciation===
+* {{IPA|en|/ˈbiːzwæks/}}
+* {{audio|en|en-us-beeswax.ogg|a=US}}
+* {{rhymes|en|iːzwæks|s=2}}
+
+===Noun===
+{{en-noun|-|+}}
+
+# A [[wax]] [[secrete]]d by bees from which they make [[honeycomb]]; or, the processed form of this wax used in the manufacture of various goods.
+#: {{ux|en|The candle was made entirely of natural '''beeswax'''.}}
+#: {{ux|en|She polished the furniture with '''beeswax''' to give it a shine.}}
+#: {{ux|en|The beekeeper collected honey and '''beeswax''' from the hives.}}
+# {{lb|en|informal|North American|humorous}} ''[[business|Business]]'', as in such phrases as {{m|en|mind your own beeswax}} and {{m|en|none of your beeswax}}.
+
+====Synonyms====
+* {{l|mul|E901}} {{qualifier|when used as a [[glazing agent]]}}
+
+====Derived terms====
+{{col|en|mind your own beeswax}}
+
+====Translations====
+{{trans-top|wax secreted by bees}}
+* Arabic: {{t|ar|شَمْع الْعَسَل|m}}
+* Aramaic:
+*: Classical Syriac: {{t|syc|ܫܲܥܘܼܬ݂ܵܐ|tr=šaˁūṯā}}
+* Armenian: {{t+|hy|մեղրամոմ}}
+* Assamese: {{t|as|মৌসিটা}}, {{t|as|মম}}
+* Azerbaijani: {{t+|az|mum}}, {{t|az|arı mumu}}
+* Bashkir: {{t|ba|балауыҙ}}
+* Belarusian: {{t|be|пчалі́ны воск|m}}
+* Bengali: {{t+|bn|মোম}}
+* Bhojpuri: {{t|bho|मोम}}
+* Bulgarian: {{t|bg|пче́лен во́сък|m}}
+* Catalan: {{t|ca|cera d'abella|f}}
+* Chinese:
+*: Mandarin: {{t+|cmn|蜜蠟|tr=mìlà}}, {{t+|cmn|蜂蠟|tr=fēnglà}}
+* Classical Nahuatl: {{t|nci|xīcohcuitlatl}}
+* Crimean Tatar: {{t|crh|balavuz}}
+* Czech: {{t|cs|včelí vosk|m}}
+* Danish: {{t+|da|bivoks|c|n}}
+* Dupaningan Agta: {{t|duo|lilen}}
+* Dutch: {{t+|nl|bijenwas|m}}
+* Esperanto: {{t|eo|abelvakso}}
+* Estonian: {{t+|et|mesilasvaha}}
+* Finnish: {{t+|fi|mehiläisvaha}}
+* French: {{t+|fr|cire d'abeille|f}}
+* Galician: {{t|gl|cera de abella|f}}, {{t|gl|borra de abella|f}}, {{t+|gl|buio|m}}, {{t|gl|morria|f}}
+* German: {{t+|de|Bienenwachs|n}}
+* Greek: {{t|el|μελισσόκηρος|m}}, {{t+|el|μελισσοκέρι|n}}
+*: Ancient: {{t|grc|κηρός|m}}
+* Hawaiian: {{t|haw|kūkaenalo}}
+* Hebrew: {{t+|he|דונג|m|tr=dónag}}
+* Hindi: {{t+|hi|मोम|m}}, {{t|hi|मधुमोम|m}}
+* Hungarian: {{t+|hu|méhviasz}}
+* Icelandic: {{t|is|bývax|n}}
+* Indonesian: {{t+|id|lilin lebah}}, {{t+|id|malam}}
+* Ingrian: {{t|izh|vaha}}
+* Italian: {{t+|it|cera d'api}}
+* Japanese: {{t+|ja|蜜蝋|tr=みつろう, mitsurō}}, {{t+|ja|封蝋|tr=ふうろう, fūrō}}
+* Kazakh: {{t|kk|балауыз}}
+* Khiamniungan Naga: {{t|kix|yàp}}
+* Khmer: {{t|km|ក្រមួនឃ្មុំ}}
+* Korean: {{t+|ko|밀랍(蜜蠟)}}, {{t+|ko|봉랍(蜂蠟)}}
+* Kurdish:
+*: Northern Kurdish: {{t+|kmr|şima|f}}
+* Kyrgyz: {{t|ky|мом}}
+* Latin: {{t|la|cēra|f}}
+* Latvian: {{t+|lv|vasks|m}}
+* Macedonian: {{t|mk|пчелин восок|m}}
+* Malay: {{t|ms|lilin lebah}}
+* Malayalam: {{t|ml|മെഴുക്}}
+* Maori: {{t+|mi|ware}}
+* Middle English: {{t|enm|wax}}
+* Navajo: {{t|nv|tsísʼná bijeeh}}
+* Norwegian:
+*: Bokmål: {{t+|nb|bivoks|m}}
+*: Nynorsk: {{t|nn|bivoks|m}}
+* Ottoman Turkish: {{t|ota|بالمومی|tr=balmumu}}
+* Persian: {{t+|fa|موم|tr=mum}}
+* Polish: {{t+|pl|wosk pszczeli|m}}
+* Portuguese: {{t|pt|cera de abelha|f}}
+* Punjabi: {{t|pa|ਮੋਮ|f}}
+* Romanian: {{t+|ro|ceară de albine|f}}
+* Russian: {{t|ru|пчели́ный воск|m}}
+* Scottish Gaelic: {{t|gd|cèir|f}}, {{t|gd|cèir-sheillean|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{t|sh|восковаринa|f}}, {{t|sh|пчелињи восак|m}}
+*: Latin: {{t+|sh|voskovarina|f}}, {{t|sh|pčelinji vosak|m}}
+* Sicilian: {{t+|scn|cira}}, {{t|scn|cira dî lapi}}
+* Slovak: {{t|sk|včelí vosk|m}}
+* Slovene: {{t|sl|čebelji vosek|m}}
+* Spanish: {{t|es|cera de abeja|f}}
+* Sudovian: {{t|xsv|vaskan}}
+* Swedish: {{t+|sv|bivax|n}}
+* Tagalog: {{t|tl|pagkit}}
+* Tajik: {{t|tg|мум}}
+* Tamil: {{t+|ta|மெழுகு}}
+* Tatar: {{t+|tt|балавыз}}
+* Thai: {{t+|th|ขี้ผึ้ง}}
+* Tibetan: {{t|bo|སྤྲ་ཚིལ}}, {{t|bo|བུང་བའི་སྤྲ་ཚིལ}}, {{t|bo|སྦྲང་བུའི་སྤྲ་ཚིལ}}
+* Tooro: {{t|ttj|ebisasara|c8}}
+* Turkish: {{t+|tr|bal mumu}}
+* Ukrainian: {{t|uk|бджоли́ний ві́ск|m}}
+* Urdu: {{t|ur|موم|m|tr=mom}}
+* Venetan: {{t|vec|zèra|f}}
+* Vietnamese: {{t|vi|[[sáp]] [[ong]]}}
+* Volapük: {{t+|vo|bienaväk}}
+* Welsh: {{t|cy|cŵyr gwenyn|m}}
+{{trans-bottom}}
+
+===Verb===
+{{en-verb}}
+
+# {{lb|en|transitive}} To [[polish]] with beeswax.
+
+{{C|en|Bees}}</text>
+      <sha1>0sxs6ztwj0e26un44eoemhqgachostu</sha1>
+    </revision>
+  </page>

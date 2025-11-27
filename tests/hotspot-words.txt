@@ -20,10 +20,16 @@ flute
 # === EDGE CASES - is_inflected ===
 are
 is
+beat
 
 # === EDGE CASES - Morphology ===
 dimorphemic
 footfucker
+guinea
+afghanistan
+uzbekistan
+tajikistan
+beeswax
 
 # === EDGE CASES - Regional labels ===
 indaba

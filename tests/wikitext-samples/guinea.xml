@@ -1,0 +1,475 @@
+<page>
+    <title>Guinea</title>
+    <ns>0</ns>
+    <id>3189</id>
+    <revision>
+      <id>87691168</id>
+      <parentid>87641009</parentid>
+      <timestamp>2025-10-31T19:59:14Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wp}} to new syntax (2); convert {{wikipedia}} to new syntax (8); convert {{wikipedia}} to {{wp}} (8); convert {{swp}} to new syntax</comment>
+      <origin>87691168</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="11462" sha1="4wx5x3cvqzcgr73ceygopn8wdi5josp" xml:space="preserve">{{also|guinea}}
+==English==
+{{wp}}
+[[File:Guinea w2 locator.svg|thumb|right|Guinea]]
+
+===Etymology===
+From {{af|en|pt:Guiné|-ia|id2=place}}, which is of {{unc|en|nocap=1}} origin.
+
+===Pronunciation===
+* {{IPA|en|/ˈɡɪni/}}
+* {{audio|en|En-us-Guinea.ogg|a=US}}
+* {{audio|en|LL-Q1860 (eng)-Soundguys-Guinea.wav|a=UK}}
+* {{rhymes|en|ɪni|s=2}}
+
+===Proper noun===
+{{en-prop}}
+
+# {{lb|en|historical}} {{place|en|The &lt;&lt;coastal region&gt;&gt; of &lt;&lt;r/West Africa&gt;&gt; between [[Morocco]] and the [[Congo]], [[particularly]] the [[north]] [[shore]] of the [[Gulf of Guinea]]}}.
+# {{senseid|en|Q1006}}{{place|en|country|r/West Africa|official=Republic of Guinea}}.
+#* {{quote-web|en|url=https://www.theguardian.com/world/2025/may/08/white-smoke-signals-election-of-new-roman-catholic-pope|title=White smoke from Sistine Chapel chimney signals election of new pope|date=2025-05-08|author=Angela Giuffrida and Harriet Sherwood|work=w:The Guardian|passage=Among the frontrunners before the conclave began were Pietro Parolin, the Vatican’s secretary of state; Luis Antonio Tagle, a reformer from the Philippines; Péter Erdő, a traditionalist from Hungary; Robert Sarah, a cardinal from '''Guinea''' who criticised Francis’s papacy; and the moderate US cardinal Robert Prevost.}}
+# {{lb|en|derogatory|_|US|_|slang|ethnic slur}} Someone of [[Italian]] descent in the [[United States]].
+
+====Hyponyms====
+* {{sense|historical region}} {{l|en|Upper Guinea}}, {{l|en|Lower Guinea}}; {{l|en|Gold Coast}}, {{l|en|Pepper Coast}}, {{l|en|Grain Coast}}, {{l|en|Slave Coast}}, {{l|en|Ivory Coast}}
+
+====Derived terms====
+{{col|en
+|Equatorial Guinea
+|French Guinea
+|Guinea-Bissau
+|Guinean
+|Guinea arrowroot
+|Guinea corn
+|guinea fowl,guineafowl
+|guinea grains
+|guinea hen weed
+|guinea keet
+|Guinea pepper
+|Guinea peach
+|Proto-Trans-New Guinea
+|guinea pig,guinea piglet
+|Guinea plum
+|Guinea wheat
+|guinea worm
+|guinea-worm disease
+|Lower Guinea
+|New Guinea
+|Papua New Guinea
+|Portuguese Guinea
+|Spanish Guinea
+|Upper Guinea
+}}
+
+====Descendants====
+* {{desc|ja|bor=1|ギニア|tr=Ginia}}
+
+====Translations====
+{{trans-top|id=Q1006|short form of the Republic of Guinea}}
+* Afrikaans: {{t|af|Guinee}}
+* Amharic: {{t|am|ጊኔ}}
+* Arabic: {{t|ar|غِينْيَا|f}}, {{t|ar|غِنَاوَة|f}} {{q|archaic, of the historical region}}
+* Armenian: {{t+|hy|Գվինեա}}
+* Assyrian Neo-Aramaic: {{t|aii|ܓܝܼܢܹܐ|f}}
+* Asturian: {{t+|ast|Guinea}}
+* Belarusian: {{t|be|Гвіне́я|f}}, {{t|be|Гвінэ́я|f}} {{qualifier|Taraškievica}}
+* Bengali: {{t+|bn|গিনি|sc=Beng}}
+* Breton: {{t+|br|Ginea|f}}
+* Bulgarian: {{t|bg|Гвине́я|f}}
+* Burmese: {{t|my|ဂီနီ}}
+* Carpathian Rusyn: {{t|rue|Ґвіне́я|f}}
+* Chinese:
+*: Mandarin: {{t+|cmn|幾內亞|tr=Jǐnèiyǎ}}
+* Cornish: {{t|kw|Gyni}}
+* Czech: {{t+|cs|Guinea|f}}
+* Danish: {{t+|da|Guinea}}
+* Dutch: {{t+|nl|Guinee|n}}
+* Esperanto: {{t+|eo|Gvineo}}
+* Estonian: {{t+|et|Guinea}}
+* Farefare: {{t|gur|Gine}}, {{t|gur|Gini}}
+* Finnish: {{t+|fi|Guinea}}
+* French: {{t+|fr|Guinée|f}}
+* Georgian: {{t+|ka|გვინეა}}
+* German: {{t+|de|Guinea|n}}
+* Greek: {{t+|el|Γουινέα|f}}
+* Hausa: {{t+|ha|Gini}}
+* Hebrew: {{t|he|גינאה|f|tr=gineh}}
+* Hindi: {{t+|hi|गिनी}}
+* Hungarian: {{t+|hu|Guinea}}
+* Icelandic: {{t+|is|Gínea|f}}
+* Interlingua: {{t|ia|Guinea}}
+* Irish: {{t|ga|Guine|f}}
+* Italian: {{t+|it|Guinea|f}}
+* Japanese: {{t+|ja|ギニア|tr=Ginia}}
+* Kalenjin: {{t|kln|Gini}}
+* Kamba: {{t|kam|Ngini}}
+* Kazakh: {{t+|kk|Гвинея}}
+* Khmer: {{t+|km|ហ្គីណេ}}
+* Kikuyu: {{t|ki|Gine}}
+* Korean: {{t+|ko|^기니}}
+* Kyrgyz: {{t|ky|Гвинея}}
+* Latin: {{t|la|Guinea|f}}
+* Latvian: {{t+|lv|Gvineja|f}}
+* Lithuanian: {{t+|lt|Gvinėja|f}}
+* Luhya: {{t|luy|Gini}}
+* Luo: {{t|luo|Gini}}
+* Macedonian: {{t+|mk|Гвине́ја|f}}
+* Maltese: {{t|mt|Gwinea|tr=il-Gwinea}}
+* Maori: {{t|mi|Kini}}
+* Marathi: {{t|mr|गिनी}}
+* Meru: {{t|mer|Gine}}
+* Mongolian: {{t|mn|Гвиней}}
+* Navajo: {{t|nv|Gíní}}
+* Norman: {{t|nrf|Graund-Gùinaée|f}} {{qual|Guernsey}}, {{t|nrf|Dginnée|f}} {{qual|Jersey}}
+* Norwegian:
+*: Bokmål: {{t+|nb|Guinea}}
+*: Nynorsk: {{t+|nn|Guinea}}
+* Persian: {{t+|fa|گینه|tr=gine}}
+* Polish: {{t+|pl|Gwinea|f}}
+* Portuguese: {{t+|pt|Guiné|f}}
+* Rarotongan: {{t|rar|Kini}}
+* Romanian: {{t+|ro|Guineea|f}}
+* Russian: {{t+|ru|Гвине́я|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{t|sh|Гвине́ја|f|sc=Cyrl}}
+*: Roman: {{t+|sh|Gvinéja|f}}
+* Sinhalese: {{t+|si|ගිනි}}
+* Slovak: {{t|sk|Guinea|f}}
+* Slovene: {{t+|sl|Gvinêja|f}}
+* Spanish: {{t+|es|Guinea|f}}
+* Swahili: {{t+|sw|Gine}}
+* Swedish: {{t+|sv|Guinea}}
+* Tajik: {{t+|tg|Гвинея}}
+* Tamil: {{t|ta|கினி}}, {{t|ta|கினியா}}
+* Thai: {{t+|th|กินี}}
+* Turkish: {{t+|tr|Gine}}
+* Turkmen: {{t|tk|Gwineýa}}
+* Ukrainian: {{t+|uk|Гвіне́я|f}}, {{t|uk|Ґвіне́я|f}}
+* Urdu: {{t|ur|گنی|tr=ginī}}
+* Uzbek: {{t+|uz|Gvineya}}
+* Vietnamese: {{t|vi|Ghi-nê}}
+* Welsh: {{t|cy|Gini|f}}
+* Yoruba: {{t|yo|Gínì}}
+{{trans-bottom}}
+
+====See also====
+* [[Appendix:Countries of the world|Countries of the world]]
+{{list:countries in Africa/en}}
+
+==Catalan==
+
+===Pronunciation===
+* {{ca-IPA|[né]}}&lt;!-- per GDLC; compare [[guinea]] in DNV --&gt;
+* {{audio|ca|LL-Q7026 (cat)-Millars-Guinea.wav|a=Valencia}}
+
+===Proper noun===
+{{ca-proper noun|f}}
+
+# {{tcl|ca|Guinea|id=Q1006}}
+
+====Derived terms====
+* {{l|ca|guineà}}
+* {{l|ca|Guinea Bissau}}
+* {{l|ca|Guinea Equatorial}}
+* {{l|ca|Nova Guinea}}
+
+====Related terms====
+* {{l|ca|guinea}}
+
+==Central Huasteca Nahuatl==
+
+===Proper noun===
+{{head|nch|proper noun}}
+
+# {{tcl|nch|Guinea|id=Q1006}}
+
+==Central Nahuatl==
+
+===Proper noun===
+{{head|nhn|proper noun}}
+
+# {{tcl|nhn|Guinea|id=Q1006}}
+
+==Czech==
+{{wp|cs:}}
+
+===Pronunciation===
+* {{cs-IPA|Ginea}}
+* {{cs-IPA|Gvínea}}
+* {{audio|cs|Cs-Guinea.ogg|IPA=[ˈɡɪnɛa]}}
+
+===Proper noun===
+{{cs-proper noun|f|adj=guinejský|dem=Guinejec}}
+
+# {{tcl|cs|Guinea|id=Q1006}}
+
+====Declension====
+{{cs-ndecl|f.sg}}
+
+===Further reading===
+* {{R:cs:PSJC}}
+* {{R:cs:SSJC}}
+* {{R:cs:IJP}}
+
+==Danish==
+{{wp|da:}}
+
+===Proper noun===
+{{head|da|proper noun}}
+
+# {{tcl|da|Guinea|id=Q1006}}
+
+====Derived terms====
+* {{l|da|guineaner}}
+* {{l|da|guineansk}}
+
+==Finnish==
+{{wp|fi:}}
+
+===Etymology===
+From {{der|fi|pt|Guiné}}.
+
+===Pronunciation===
+{{fi-p|ginea|h=Gui.ne.a}}
+
+===Proper noun===
+{{fi-proper noun}}
+
+# {{tcl|fi|Guinea|id=Q1006}}
+
+====Declension====
+{{fi-decl-kulkija|n=sg|Guine|a}}
+
+====Derived terms====
+{{col|fi
+|guinealainen
+}}
+
+{{col|fi|title=compounds
+|Guinea-Bissau
+|guineangueretsa
+|guineankarkko
+|Guineanlahti
+|guineanmarakatti
+|guineanruostegueretsa
+|guineansimpanssi
+|guineansuomuhäntäorava
+|Uusi-Guinea
+}}
+
+==German==
+{{wp|de:}}
+
+===Pronunciation===
+* {{IPA|de|/ɡiˈneːa/}}
+* {{audio|de|De-Guinea.ogg|a=&lt;&lt;Germany&gt;&gt; (&lt;&lt;Berlin&gt;&gt;)}}
+* {{audio|de|De-Guinea2.ogg|a=&lt;&lt;Germany&gt;&gt; (&lt;&lt;Berlin&gt;&gt;)}}
+* {{homophones|de|Guineer|qq1=some speakers}}
+
+===Proper noun===
+{{de-proper noun|toponym}}
+
+# {{tcl|de|Guinea|id=Q1006}}
+#* '''1835''', ''Joh. Georg August Galletti's allgemeine Weltkunde oder geographisch-statistisch-historische Uebersicht aller Länder [...] Achte Auflage, verbessert und vermehrt von J. G. F. Cannabich'', column 442:
+#*: {{quote|de|Balbi klassifizirt die sämtlichen afrikanischen Zungen auf nachstehende Art: [...] 3) Sprachen von Nigritien oder dem Negerlande, wohin er auch Senegambien und beide '''Guinea''' rechnet, [...].}}
+#* {{quote-book|de|year=1831|title=Wörterbuch der Naturgeschichte, dem gegenwärtigen Stande der Botanik, Mineralogie und Zoologie angemessen. Siebenter Band|page=137
+|passage=Am besten kennt man in den beiden '''Guinea's''' die Fulah's, die Jolof's, die Sousou's, die Mandingo's, die Aschantie's, die Neger von der Küste von Ardra und Benin, die Bewohner der Küste Gabon [...]}}
+#* '''1843''', Joseph Russegger, ''Reisen in Europa, Asien und Afrika [...]&lt;!--, mit besonderer Rücksicht auf [...] --&gt;. Zweiter Band. Reisen in Egypten, Nubien und Ost-Sudan. Erster Theil. Erste Reise durch Egypten und Nubien'', page 8:
+#*: {{quote|de|[...] das Vorschreiten der Kolonien in Senegambien, in beiden '''Guinea's''', am Vorgebirge der guten Hoffnung u. s. w.}}
+
+====Derived terms====
+{{col|de
+|Äquatorialguinea
+|Guinea-Bissau
+|Guineer
+|guineisch
+|Oberguinea,Ober-Guinea
+|Portugiesisch-Guinea
+|Spanisch-Guinea
+}}
+
+===See also===
+{{list:countries in Africa/de}}
+
+==Hungarian==
+{{swp|hu:}}
+
+===Pronunciation===
+* {{hu-IPA|gínea}} &lt;!-- based on Osiris Diákszótár by Laczkó–Mártonfi, Osiris, Bp., 2008 --&gt;
+* {{hyphenation|hu|Gui|nea}}
+* {{rhymes|hu|ɒ|s=3}}
+
+===Proper noun===
+{{head|hu|proper noun}}
+
+# {{tcl|hu|Guinea|id=Q1006|place_official=hu:Guineai Köztársaság}}
+
+====Declension====
+{{hu-infl-nom|Guineá|o|n=sg}}{{hu-pos-tok|Guineá|n=sg}}
+
+====Derived terms====
+{{col4|hu
+|guineai
+}}
+{{col4|hu|title=Compound words
+|Alsó-Guinea
+|Bissau-Guinea
+|Bissau-guineai Köztársaság
+|Egyenlítői-Guinea
+|Egyenlítői-guineai Köztársaság
+|Északkelet-Új-Guinea
+|Guineai-öböl
+|Pápua Új-Guinea
+|Új-Guinea
+}}
+
+===See also===
+{{list:countries in Africa/hu}}
+
+==Italian==
+{{wp|it:}}
+
+===Pronunciation===
+{{it-pr|Guinèa}}
+
+===Proper noun===
+{{it-proper noun|f}}
+
+# {{tcl|it|Guinea|id=Q1006}}
+
+====Related terms====
+* {{l|it|guineano}}
+* {{l|it|Guinea-Bissau}}
+* {{l|it|Guinea Equatoriale}}
+* {{l|it|Nuova Guinea}}
+* {{l|it|Papua Nuova Guinea}}
+
+===Anagrams===
+* {{anagrams|it|a=aeginu|guaine|iguane}}
+
+==Latin==
+
+===Pronunciation===
+* {{la-IPA}}
+
+===Proper noun===
+{{la-proper noun|Guinea&lt;1&gt;}}
+
+# {{lb|la|New Latin}} {{tcl|la|Guinea|id=Q1006}}
+
+====Declension====
+{{la-ndecl|Guinea&lt;1&gt;}}
+
+==Norwegian Bokmål==
+{{wp|no:}}
+
+===Proper noun===
+{{head|nb|proper noun}}
+
+# {{tcl|nb|Guinea|id=Q1006}}
+
+====Related terms====
+* {{l|nb|guineaner}}
+* {{l|nb|guineansk}}
+
+===See also===
+* {{l|nb|Ekvatorial-Guinea}}
+* {{l|nb|Guinea-Bissau}}
+* {{l|nb|Ny-Guinea}}
+* {{l|nb|Papua Ny-Guinea}}
+
+==Norwegian Nynorsk==
+{{wp|nn:}}
+
+===Proper noun===
+{{head|nn|proper noun}}
+
+# {{tcl|nn|Guinea|id=Q1006}}
+
+====Related terms====
+* {{l|nn|guinean}}, {{l|nn|guineanar}}
+* {{l|nn|guineansk}}
+
+===See also===
+* {{l|nn|Ekvatorial-Guinea}}
+* {{l|nn|Guinea-Bissau}}
+* {{l|nn|Ny-Guinea}}
+* {{l|nn|Papua Ny-Guinea}}
+
+==Slovak==
+
+===Pronunciation===
+* {{sk-IPA}}
+
+===Proper noun===
+{{sk-proper noun|f|gen=Guiney|decl=žena}}
+
+# {{tcl|sk|Guinea|id=Q1006}}
+
+===References===
+* {{R:sk:SDK}}
+
+==Spanish==
+
+===Pronunciation===
+{{es-pr|+&lt;audio:LL-Q1321 (spa)-Rodelar-Guinea.wav&gt;}}
+
+===Proper noun===
+{{es-proper noun|f}}
+
+# {{tcl|es|Guinea|id=Q1006}}
+#: {{syn|es|República de Guinea}}
+
+====Derived terms====
+{{col|es|palma de Guinea|Guinea-Bisáu|gallina de Guinea|Guinea Ecuatorial|Nueva Guinea|hierba de Guinea|pimienta de Guinea|Papúa Nueva Guinea}}
+
+====Related terms====
+{{col|es|guinea|guineano|guineo}}
+
+==Swahili==
+{{wp|sw:}}
+
+===Pronunciation===
+* {{audio|sw|Sw-ke-Guinea.flac|a=Kenya}}
+
+===Proper noun===
+{{head|sw|proper noun}}
+
+# {{tcl|sw|Guinea|id=Q1006}}
+
+===See also===
+{{list:countries in Africa/sw}}
+
+==Swedish==
+{{wp|sv:}}
+
+===Pronunciation===
+* {{IPA|sv|/ɡɵɪˈneːa/}}
+* {{audio|sv|LL-Q9027 (swe)-Moonhouse-Guinea.wav}}
+
+===Proper noun===
+{{sv-proper noun|n}}
+
+# {{tcl|sv|Guinea|id=Q1006}}
+
+====Related terms====
+* {{l|sv|guinean}}
+* {{l|sv|guineansk}}
+* {{l|sv|guineanska}}
+
+====See also====
+{{list:countries in Africa/sv}}
+
+===References===
+* {{R:svenska.se|saol}}
+* [https://mesh.kib.ki.se/term/D016701/guinea Svensk MeSH]</text>
+      <sha1>4wx5x3cvqzcgr73ceygopn8wdi5josp</sha1>
+    </revision>
+  </page>
