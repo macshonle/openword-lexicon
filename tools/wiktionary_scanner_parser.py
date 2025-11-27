@@ -136,6 +136,27 @@ SYLLABLE_CATEGORY = re.compile(r'\[\[Category:English\s+(\d+)-syllable\s+words?\
 
 # Etymology section extraction (for morphology analysis)
 ETYMOLOGY_SECTION = re.compile(r'===+\s*Etymology\s*\d*\s*===+\s*\n(.+?)(?=\n===|\Z)', re.DOTALL | re.IGNORECASE)
+
+# Inflection templates for lemma extraction
+# These templates indicate the word is a grammatical inflection of a base word (lemma)
+# Format: {{template name|en|lemma|optional params...}}
+INFLECTION_TEMPLATES = [
+    # Noun inflections
+    ('plural of', re.compile(r'\{\{plural of\|en\|([^|}]+)', re.IGNORECASE)),
+
+    # Verb inflections
+    ('past tense of', re.compile(r'\{\{past tense of\|en\|([^|}]+)', re.IGNORECASE)),
+    ('past participle of', re.compile(r'\{\{past participle of\|en\|([^|}]+)', re.IGNORECASE)),
+    ('present participle of', re.compile(r'\{\{present participle of\|en\|([^|}]+)', re.IGNORECASE)),
+    ('third-person singular of', re.compile(r'\{\{(?:en-third-person singular of|third-person singular of)\|en\|([^|}]+)', re.IGNORECASE)),
+
+    # Adjective/adverb inflections
+    ('comparative of', re.compile(r'\{\{comparative of\|en\|([^|}]+)', re.IGNORECASE)),
+    ('superlative of', re.compile(r'\{\{superlative of\|en\|([^|}]+)', re.IGNORECASE)),
+
+    # Generic inflection template (handles various forms)
+    ('inflection of', re.compile(r'\{\{inflection of\|en\|([^|}]+)', re.IGNORECASE)),
+]
 # Morphology templates for derivation tracking
 SUFFIX_TEMPLATE = re.compile(r'\{\{suffix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}', re.IGNORECASE)
 PREFIX_TEMPLATE = re.compile(r'\{\{prefix\|en\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}', re.IGNORECASE)
@@ -1204,6 +1225,97 @@ def detect_inflected_form(text: str, pos_tags: List[str]) -> bool:
     return False
 
 
+def clean_lemma(raw: str) -> str:
+    """
+    Clean wiki markup from extracted lemma.
+
+    Removes section anchors (#...), wiki links ([[...]]), and templates ({{...}}).
+    This handles malformed Wiktionary template content that leaks into lemma values.
+
+    Args:
+        raw: Raw lemma string potentially containing wiki markup
+
+    Returns:
+        Cleaned lemma string
+
+    Examples:
+        "after#noun" → "after"
+        "[[rhodologist]]" → "rhodologist"
+        "[[:en:word]]" → "word"
+        "germanic {{italic" → "germanic"
+        "read -> [[#etymology 1" → "read"
+    """
+    result = raw
+
+    # Remove section anchors (e.g., "after#noun" -> "after")
+    if '#' in result:
+        result = result.split('#')[0]
+
+    # Remove wiki link syntax: [[target]] or [[target|display]] or [[:en:target]]
+    while '[[' in result:
+        start = result.find('[[')
+        end = result.find(']]', start)
+        if end != -1:
+            link_content = result[start + 2:end]
+            # Handle [[target|display]] - extract target
+            if '|' in link_content:
+                cleaned = link_content.split('|')[0]
+            else:
+                cleaned = link_content
+            # Handle [[:en:word]] - strip leading colon and namespace
+            cleaned = cleaned.lstrip(':')
+            if ':' in cleaned:
+                cleaned = cleaned.rsplit(':', 1)[-1]
+            result = result[:start] + cleaned + result[end + 2:]
+        else:
+            # Malformed (no closing ]]) - remove from [[ to end
+            result = result[:start]
+    result = result.replace(']]', '')
+
+    # Remove template syntax {{...}}
+    while '{{' in result:
+        start = result.find('{{')
+        end = result.find('}}', start)
+        if end != -1:
+            result = result[:start] + result[end + 2:]
+        else:
+            # Malformed (no closing }}) - remove from {{ to end
+            result = result[:start]
+    result = result.replace('}}', '')
+    result = result.replace('//', '')
+
+    return result.strip()
+
+
+def extract_lemma(text: str) -> Optional[str]:
+    """
+    Extract lemma (base form) from inflection templates.
+
+    Searches for templates like {{plural of|en|cat}} and extracts "cat" as the lemma.
+    Returns the first matching lemma found, or None if no inflection template found.
+
+    Args:
+        text: The English section of Wiktionary page text
+
+    Returns:
+        The lemma (base form) string, or None if not an inflected form
+
+    Examples:
+        "{{plural of|en|cat}}" → "cat"
+        "{{past tense of|en|run}}" → "run"
+        "{{inflection of|en|go||past|part}}" → "go"
+    """
+    for template_name, pattern in INFLECTION_TEMPLATES:
+        match = pattern.search(text)
+        if match:
+            raw_lemma = match.group(1).strip()
+            lemma = clean_lemma(raw_lemma).lower()
+            # Validate the lemma is reasonable (non-empty and English-like)
+            if lemma and is_englishlike(lemma):
+                return lemma
+    return None
+
+
 def detect_dated(labels: Dict) -> bool:
     """
     Detect if entry is dated (understood but not commonly used).
@@ -1379,7 +1491,13 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     is_informal = detect_informal_or_slang(labels)
     is_technical = detect_technical(labels)
     is_regional = detect_regional(labels)
-    is_inflected = detect_inflected_form(english_text, pos_tags)
+
+    # Extract lemma from inflection templates (e.g., {{plural of|en|cat}} → "cat")
+    lemma = extract_lemma(english_text)
+
+    # Mark as inflected if we found a lemma OR if category indicates inflection
+    is_inflected = lemma is not None or detect_inflected_form(english_text, pos_tags)
+
     is_dated = detect_dated(labels)
     is_derogatory = detect_derogatory(labels)
 
@@ -1415,6 +1533,10 @@ def parse_entry(title: str, text: str) -> Optional[Dict]:
     # Add morphology if etymology data was successfully extracted
     if morphology is not None:
         entry['morphology'] = morphology
+
+    # Add lemma (base form) for inflected words
+    if lemma is not None:
+        entry['lemma'] = lemma
 
     return entry
 

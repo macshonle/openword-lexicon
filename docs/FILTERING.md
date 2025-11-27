@@ -188,6 +188,103 @@ For regional spelling variants (color/colour):
 | `exact` | int | Exact syllable count |
 | `require_syllables` | bool | Require syllable data |
 
+### Lemma Filters
+
+Filter based on word forms and their base (dictionary) forms:
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `base_forms_only` | bool | Exclude inflected forms (plurals, conjugations) |
+| `exclude_inflected` | bool | Same as `base_forms_only` |
+
+**Examples:**
+
+Get only base forms (dictionary entries, no "cats", "running", "went"):
+```json
+{
+  "lemma": {
+    "base_forms_only": true
+  }
+}
+```
+
+**Advanced: Two-File Filtering**
+
+For precise lemma-based filtering using sense-level data:
+
+```bash
+python -m openword.filters INPUT OUTPUT \
+    --senses data/intermediate/en-senses.jsonl \
+    --base-forms-only
+```
+
+This uses the senses file which contains per-sense lemma data, correctly handling words like "left" that have multiple lemmas depending on meaning.
+
+### Lexname Filters (Semantic Categories)
+
+Filter by WordNet semantic category using the `lexnames` field:
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `include` | string[] | Include words with any of these lexnames |
+| `exclude` | string[] | Exclude words with any of these lexnames |
+| `require_lexnames` | bool | Only include words with lexname data |
+
+**Examples:**
+
+Get only animal words:
+```json
+{
+  "lexnames": {
+    "include": ["noun.animal"]
+  }
+}
+```
+
+Get concrete nouns (good for children's games):
+```json
+{
+  "lexnames": {
+    "include": [
+      "noun.animal",
+      "noun.artifact",
+      "noun.body",
+      "noun.food",
+      "noun.plant",
+      "noun.object"
+    ]
+  }
+}
+```
+
+Get all words except abstract concepts:
+```json
+{
+  "lexnames": {
+    "exclude": [
+      "noun.cognition",
+      "noun.feeling",
+      "noun.state",
+      "noun.attribute"
+    ]
+  }
+}
+```
+
+**Command-line filtering:**
+
+```bash
+# Get all animal words
+jq -r 'select(.lexnames // [] | any(. == "noun.animal")) | .word' \
+    data/intermediate/en-lexemes-enriched.jsonl
+
+# Get all food and plant words
+jq -r 'select(.lexnames // [] | any(. == "noun.food" or . == "noun.plant")) | .word' \
+    data/intermediate/en-lexemes-enriched.jsonl
+```
+
+See [SCHEMA.md](SCHEMA.md#lexnames-wordnet-semantic-categories) for the complete list of 45 lexname categories.
+
 ## Output Options
 
 ```json

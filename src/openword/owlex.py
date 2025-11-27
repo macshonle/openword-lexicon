@@ -228,6 +228,10 @@ class OwlexFilter:
         if not self._check_syllable_filters(entry, filters.get('syllables', {})):
             return False
 
+        # Lemma/inflection filters
+        if not self._check_lemma_filters(entry, filters.get('lemma', {})):
+            return False
+
         return True
 
     def _check_character_filters(self, entry: Dict, filters: Dict) -> bool:
@@ -586,6 +590,41 @@ class OwlexFilter:
             exact_syllables=filters.get('exact'),
             require_syllables=filters.get('require_syllables', False)
         )
+
+    def _check_lemma_filters(self, entry: Dict, filters: Dict) -> bool:
+        """
+        Apply lemma/inflection filters.
+
+        NOTE: Full lemma filtering requires sense-level data. For comprehensive
+        lemma-based filtering, use the two-file pipeline in filters.py:
+            python -m openword.filters INPUT OUTPUT --senses SENSES --base-forms-only
+
+        Filter options (lexeme-level approximation):
+          - base_forms_only: Exclude words that are primarily inflections
+                             (Approximated by checking if 'is_inflected_any' is set)
+          - exclude_inflected: Same as base_forms_only
+
+        Examples:
+          Only base forms (no plurals, verb conjugations, etc.):
+            {"base_forms_only": true}
+        """
+        if not filters:
+            return True
+
+        # Check for base forms only filter
+        # Note: This is an approximation since lemma data is at sense level
+        # For accurate filtering, use the two-file pipeline in filters.py
+        if filters.get('base_forms_only') or filters.get('exclude_inflected'):
+            # Check if any sense is marked as inflected
+            # This field would need to be aggregated from senses during enrichment
+            if entry.get('is_inflected_any', False):
+                return False
+
+            # Also check legacy single-value field
+            if entry.get('is_inflected', False):
+                return False
+
+        return True
 
     def calculate_score(self, entry: Dict) -> float:
         """Calculate score for an entry."""

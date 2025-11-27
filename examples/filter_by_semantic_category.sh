@@ -66,7 +66,7 @@ if [[ ! -f "$ENRICHED_JSONL" ]]; then
 fi
 
 # NOTE: This assumes wordnet_lexname field exists in entries
-# Currently NOT implemented - would need to add to wordnet_enrich.py
+# Currently NOT implemented
 
 # Check if wordnet_lexname field exists
 if ! jq -e 'select(has("wordnet_lexname"))' "$ENRICHED_JSONL" | head -1 > /dev/null 2>&1; then
@@ -74,7 +74,7 @@ if ! jq -e 'select(has("wordnet_lexname"))' "$ENRICHED_JSONL" | head -1 > /dev/n
     echo ""
     echo "This field is not yet implemented. To add it:"
     echo ""
-    echo "1. Update src/openword/wordnet_enrich.py to add wordnet_lexname field"
+    echo "1. Add wordnet_lexname field to the enrichment pipeline"
     echo "2. Rebuild the lexicon: make clean && make build-en"
     echo ""
     echo "For now, using concreteness field as a fallback..."

@@ -221,6 +221,60 @@ def sense_is_inflected(sense: dict) -> bool:
     return sense.get('is_inflected', False)
 
 
+def sense_is_base_form(sense: dict) -> bool:
+    """
+    Check if sense is a base form (not an inflection).
+
+    Base forms are:
+    - Not marked as inflected
+    - Or don't have a lemma pointing to a different word
+
+    Args:
+        sense: Sense dict from senses file
+
+    Returns:
+        True if this sense represents a base/root form
+    """
+    # If explicitly marked as inflected, it's not a base form
+    if sense.get('is_inflected', False):
+        return False
+
+    # If it has a lemma pointing to another word, it's an inflection
+    lemma = sense.get('lemma')
+    if lemma:
+        # Has lemma = inflected form (lemma points to base word)
+        return False
+
+    return True
+
+
+def sense_has_lemma(sense: dict, target_lemma: str) -> bool:
+    """
+    Check if sense's lemma matches target.
+
+    Args:
+        sense: Sense dict from senses file
+        target_lemma: The lemma value to match
+
+    Returns:
+        True if this sense's lemma matches the target
+    """
+    return sense.get('lemma') == target_lemma
+
+
+def sense_get_lemma(sense: dict) -> str | None:
+    """
+    Get the lemma (base form) for a sense.
+
+    Args:
+        sense: Sense dict from senses file
+
+    Returns:
+        The lemma string if inflected, None if base form
+    """
+    return sense.get('lemma')
+
+
 def sense_is_abbreviation(sense: dict) -> bool:
     """Check if sense is marked as abbreviation."""
     return sense.get('is_abbreviation', False)
@@ -1052,6 +1106,8 @@ def main():
                        help='Exclude proper nouns')
     parser.add_argument('--no-inflected', action='store_true',
                        help='Exclude inflected forms')
+    parser.add_argument('--base-forms-only', action='store_true',
+                       help='Only include base forms (exclude all inflections)')
     parser.add_argument('--no-abbreviations', action='store_true',
                        help='Exclude abbreviations')
 
@@ -1113,6 +1169,9 @@ def main():
 
         if args.no_inflected:
             sense_predicates.append(lambda s: not sense_is_inflected(s))
+
+        if args.base_forms_only:
+            sense_predicates.append(sense_is_base_form)
 
         if args.no_abbreviations:
             sense_predicates.append(lambda s: not sense_is_abbreviation(s))

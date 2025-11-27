@@ -36,7 +36,7 @@ import logging
 import sys
 import unicodedata
 from pathlib import Path
-from typing import Dict, Set, Optional
+from typing import Dict, Set, Optional, List, Tuple
 
 import orjson
 
@@ -84,13 +84,19 @@ def load_eowl(eowl_path: Path) -> Set[str]:
     return words
 
 
-def load_wordnet(wordnet_path: Path) -> Set[str]:
-    """Load WordNet words from the OEWN tarball."""
+def load_wordnet(wordnet_path: Path) -> Tuple[Set[str], Dict[str, List[str]]]:
+    """
+    Load WordNet words and their lexnames from the OEWN tarball.
+
+    Returns:
+        Tuple of (words set, lexnames dict mapping word -> list of lexnames)
+    """
     words = set()
+    word_lexnames: Dict[str, List[str]] = {}
 
     if not wordnet_path.exists():
         logger.warning(f"WordNet archive not found: {wordnet_path}")
-        return words
+        return words, word_lexnames
 
     logger.info(f"Loading WordNet from {wordnet_path}")
 
@@ -104,15 +110,22 @@ def load_wordnet(wordnet_path: Path) -> Set[str]:
             if lemma:
                 words.add(normalize_word(lemma))
 
+        # Build lexnames mapping (this loads synsets with lexname tracking)
+        raw_lexnames = parser.build_word_lexnames()
+
+        # Convert set values to sorted lists for JSON serialization
+        for word, lexname_set in raw_lexnames.items():
+            word_lexnames[word] = sorted(lexname_set)
+
     except ImportError:
         logger.error("WordNet YAML parser not available")
-        return words
+        return words, word_lexnames
     except Exception as e:
         logger.error(f"Error loading WordNet: {e}")
-        return words
+        return words, word_lexnames
 
-    logger.info(f"  -> Loaded {len(words):,} WordNet words")
-    return words
+    logger.info(f"  -> Loaded {len(words):,} WordNet words with {len(word_lexnames):,} lexname mappings")
+    return words, word_lexnames
 
 
 def load_wikt_lexemes(lexeme_path: Path) -> Dict[str, dict]:
@@ -172,12 +185,13 @@ def add_source_to_entry(entry: dict, source: str) -> dict:
     return entry
 
 
-def create_secondary_entry(word: str, sources: list) -> dict:
+def create_secondary_entry(word: str, sources: list, lexnames: Optional[List[str]] = None) -> dict:
     """Create a lexeme entry for a word that only exists in secondary sources (not Wiktionary).
 
     Args:
         word: The word
         sources: List of sources that contain this word (e.g., ['eowl', 'wordnet'])
+        lexnames: Optional list of WordNet lexnames (semantic categories)
 
     Returns:
         Lexeme entry with source tracking and no Wiktionary senses
@@ -194,7 +208,7 @@ def create_secondary_entry(word: str, sources: list) -> dict:
     for license_key in license_sources:
         license_sources[license_key] = sorted(license_sources[license_key])
 
-    return {
+    entry = {
         'word': word,
         'sources': sorted(sources),
         'license_sources': license_sources,
@@ -204,11 +218,18 @@ def create_secondary_entry(word: str, sources: list) -> dict:
         'word_count': len(word.split()),
     }
 
+    # Add lexnames if available
+    if lexnames:
+        entry['lexnames'] = lexnames
+
+    return entry
+
 
 def merge_sources(
     wikt_entries: Dict[str, dict],
     eowl_words: Set[str],
     wordnet_words: Set[str],
+    word_lexnames: Dict[str, List[str]],
     output_path: Path
 ):
     """
@@ -216,6 +237,7 @@ def merge_sources(
 
     - Words in Wiktionary: Add secondary source tags where applicable
     - Words only in secondary sources: Create new entries with no Wiktionary senses
+    - Adds WordNet lexnames (semantic categories) to words in WordNet
     - Tracks source combinations for statistics
     """
     logger.info("Merging sources...")
@@ -229,6 +251,7 @@ def merge_sources(
         'wikt_wordnet': 0,
         'eowl_wordnet': 0,
         'all_three': 0,
+        'with_lexnames': 0,
     }
 
     # Track words not in Wiktionary that are in secondary sources
@@ -246,12 +269,15 @@ def merge_sources(
                     secondary_only[word] = []
                 secondary_only[word].append('eowl')
 
-    # Process WordNet words
+    # Process WordNet words (and add lexnames)
     if wordnet_words:
         logger.info(f"  Processing {len(wordnet_words):,} WordNet words...")
         for word in wordnet_words:
             if word in wikt_entries:
                 wikt_entries[word] = add_source_to_entry(wikt_entries[word], 'wordnet')
+                # Add lexnames to existing entry
+                if word in word_lexnames:
+                    wikt_entries[word]['lexnames'] = word_lexnames[word]
             else:
                 if word not in secondary_only:
                     secondary_only[word] = []
@@ -261,7 +287,8 @@ def merge_sources(
     if secondary_only:
         logger.info(f"  Creating {len(secondary_only):,} secondary-only entries...")
         for word, sources in secondary_only.items():
-            wikt_entries[word] = create_secondary_entry(word, sources)
+            lexnames = word_lexnames.get(word)
+            wikt_entries[word] = create_secondary_entry(word, sources, lexnames)
 
     # Calculate statistics by examining source combinations
     for entry in wikt_entries.values():
@@ -285,6 +312,10 @@ def merge_sources(
         elif has_wordnet:
             stats['wordnet_only'] += 1
 
+        # Count entries with lexnames
+        if entry.get('lexnames'):
+            stats['with_lexnames'] += 1
+
     # Log statistics
     logger.info("Source statistics:")
     logger.info(f"  Wiktionary only:        {stats['wikt_only']:,}")
@@ -298,6 +329,8 @@ def merge_sources(
         logger.info(f"  EOWL + WordNet:         {stats['eowl_wordnet']:,}")
         logger.info(f"  All three sources:      {stats['all_three']:,}")
     logger.info(f"  Total entries:          {len(wikt_entries):,}")
+    if word_lexnames:
+        logger.info(f"  With lexnames:          {stats['with_lexnames']:,}")
 
     # Sort entries by word and write output
     logger.info(f"Writing merged lexeme file...")
@@ -354,13 +387,14 @@ def main():
     if args.eowl and args.eowl.exists():
         eowl_words = load_eowl(args.eowl)
 
-    # Load WordNet words (optional)
+    # Load WordNet words and lexnames (optional)
     wordnet_words = set()
+    word_lexnames: Dict[str, List[str]] = {}
     if args.wordnet and args.wordnet.exists():
-        wordnet_words = load_wordnet(args.wordnet)
+        wordnet_words, word_lexnames = load_wordnet(args.wordnet)
 
     # Merge all sources
-    stats = merge_sources(wikt_entries, eowl_words, wordnet_words, args.output)
+    stats = merge_sources(wikt_entries, eowl_words, wordnet_words, word_lexnames, args.output)
 
     logger.info("")
     logger.info("Source merge complete")

@@ -160,12 +160,5 @@ reports/local/
 
 After copying this file to your build environment:
 
-- [ ] Run `uv run python src/openword/wikt_ingest.py`
-- [ ] Run `uv run python src/openword/merge_all.py`
-- [ ] Run `uv run python src/openword/wordnet_enrich.py --unified`
-- [ ] Run `uv run python src/openword/brysbaert_enrich.py --unified`
-- [ ] Run `uv run python src/openword/frequency_tiers.py --unified`
-- [ ] Run `uv run python src/openword/trie_build.py --unified`
-- [ ] Run `uv run python tools/analyze_metadata.py en`
-- [ ] Verify syllable coverage in report: `grep "Syllables" reports/metadata_analysis_en.md`
+- [ ] Run `make build-en` to rebuild the lexicon
 

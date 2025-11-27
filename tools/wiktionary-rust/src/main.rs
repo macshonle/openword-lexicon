@@ -67,6 +67,11 @@ struct Entry {
     is_proper_noun: bool,
     is_inflected: bool,
 
+    // Lemma (base form) for inflected words
+    // Extracted from templates like {{plural of|en|cat}} → "cat"
+    #[serde(skip_serializing_if = "Option::is_none")]
+    lemma: Option<String>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     phrase_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -89,6 +94,7 @@ struct WordData {
     is_phrase: bool,
     is_abbreviation: bool,
     is_inflected: bool,
+    lemma: Option<String>,
     phrase_type: Option<String>,
     syllables: Option<usize>,
     morphology: Option<Morphology>,
@@ -281,6 +287,28 @@ lazy_static! {
     // Pattern to extract {{tlb|en|...}} or {{lb|en|...}} from text
     // Used for head line labels (spelling variants)
     static ref TLB_TEMPLATE: Regex = Regex::new(r"(?i)\{\{(?:tlb|lb)\|en\|([^}]+)\}\}").unwrap();
+
+    // Inflection templates for lemma extraction
+    // These templates indicate the word is a grammatical inflection of a base word (lemma)
+    // Only includes true morphological inflections, not alternative spellings or forms
+    // Format: {{template name|en|lemma|optional params...}}
+    static ref INFLECTION_TEMPLATES: Vec<(&'static str, Regex)> = vec![
+        // Noun inflections
+        ("plural of", Regex::new(r"(?i)\{\{plural of\|en\|([^|}]+)").unwrap()),
+
+        // Verb inflections
+        ("past tense of", Regex::new(r"(?i)\{\{past tense of\|en\|([^|}]+)").unwrap()),
+        ("past participle of", Regex::new(r"(?i)\{\{past participle of\|en\|([^|}]+)").unwrap()),
+        ("present participle of", Regex::new(r"(?i)\{\{present participle of\|en\|([^|}]+)").unwrap()),
+        ("third-person singular of", Regex::new(r"(?i)\{\{(?:en-third-person singular of|third-person singular of)\|en\|([^|}]+)").unwrap()),
+
+        // Adjective/adverb inflections
+        ("comparative of", Regex::new(r"(?i)\{\{comparative of\|en\|([^|}]+)").unwrap()),
+        ("superlative of", Regex::new(r"(?i)\{\{superlative of\|en\|([^|}]+)").unwrap()),
+
+        // Generic inflection template (handles various forms)
+        ("inflection of", Regex::new(r"(?i)\{\{inflection of\|en\|([^|}]+)").unwrap()),
+    ];
 }
 
 fn is_englishlike(token: &str) -> bool {
@@ -505,6 +533,84 @@ fn extract_spelling_region(text: &str) -> Option<String> {
             // Check if this is a spelling variant label
             if let Some(&region) = SPELLING_LABELS.get(label.as_str()) {
                 return Some(region.to_string());
+            }
+        }
+    }
+    None
+}
+
+/// Clean wiki markup from extracted lemma
+/// Removes section anchors (#...), wiki links ([[...]]), and templates ({{...}})
+fn clean_lemma(raw: &str) -> String {
+    let mut result = raw.to_string();
+
+    // Remove section anchors (e.g., "after#noun" -> "after")
+    if let Some(hash_pos) = result.find('#') {
+        result = result[..hash_pos].to_string();
+    }
+
+    // Remove wiki link syntax: [[target]] or [[target|display]] or [[:en:target]]
+    // Extract just the target word
+    while result.contains("[[") {
+        if let Some(start) = result.find("[[") {
+            if let Some(end) = result[start..].find("]]") {
+                let link_content = &result[start + 2..start + end];
+                // Handle [[target|display]] - take target
+                // Handle [[:en:target]] - take target after last colon
+                let cleaned = if link_content.contains('|') {
+                    link_content.split('|').next().unwrap_or("")
+                } else {
+                    link_content
+                };
+                // Remove language prefix like ":en:"
+                let cleaned = cleaned.trim_start_matches(':');
+                let cleaned = if cleaned.contains(':') {
+                    cleaned.rsplit(':').next().unwrap_or(cleaned)
+                } else {
+                    cleaned
+                };
+                result = format!("{}{}{}", &result[..start], cleaned, &result[start + end + 2..]);
+            } else {
+                // Malformed (no closing ]]) - remove from [[ to end of string
+                result = result[..start].to_string();
+            }
+        }
+    }
+
+    // Remove any remaining ]]
+    result = result.replace("]]", "");
+
+    // Remove template syntax: {{...}} -> empty (nested templates shouldn't be in lemmas)
+    while result.contains("{{") {
+        if let Some(start) = result.find("{{") {
+            if let Some(end) = result[start..].find("}}") {
+                result = format!("{}{}", &result[..start], &result[start + end + 2..]);
+            } else {
+                // Malformed (no closing }}) - remove from {{ to end of string
+                result = result[..start].to_string();
+            }
+        }
+    }
+
+    // Remove any remaining }}
+    result = result.replace("}}", "");
+
+    // Clean up any double slashes (from malformed templates)
+    result = result.replace("//", "");
+
+    result.trim().to_string()
+}
+
+/// Extract lemma (base form) from inflection templates
+/// Returns the first matching lemma found in the text
+fn extract_lemma(text: &str) -> Option<String> {
+    for (_template_name, regex) in INFLECTION_TEMPLATES.iter() {
+        if let Some(cap) = regex.captures(text) {
+            let raw_lemma = cap[1].trim();
+            let lemma = clean_lemma(raw_lemma).to_lowercase();
+            // Validate the lemma is reasonable
+            if !lemma.is_empty() && is_englishlike(&lemma) {
+                return Some(lemma);
             }
         }
     }
@@ -747,18 +853,17 @@ fn parse_page(title: &str, text: &str) -> Vec<Entry> {
 
     let morphology = extract_morphology(&english_text);
     let is_abbreviation = ABBREVIATION_TEMPLATE.is_match(&english_text);
-    let is_inflected = text.contains("{{plural of|en|")
-        || text.contains("{{past tense of|en|")
-        || text.contains("{{past participle of|en|")
-        || text.contains("{{present participle of|en|")
-        || text.contains("{{comparative of|en|")
-        || text.contains("{{superlative of|en|")
-        || text.contains("{{inflection of|en|")
-        || text.contains("Category:English verb forms")
-        || text.contains("Category:English noun forms")
-        || text.contains("Category:English adjective forms")
-        || text.contains("Category:English adverb forms")
-        || text.contains("Category:English plurals");
+    // Extract lemma from inflection templates (e.g., {{plural of|en|cat}} → "cat")
+    // Search in english_text only to avoid matching templates from other language sections
+    let lemma = extract_lemma(&english_text);
+
+    // Mark as inflected if we found a lemma OR if category indicates inflection
+    let is_inflected = lemma.is_some()
+        || english_text.contains("Category:English verb forms")
+        || english_text.contains("Category:English noun forms")
+        || english_text.contains("Category:English adjective forms")
+        || english_text.contains("Category:English adverb forms")
+        || english_text.contains("Category:English plurals");
 
     // Extract regional spelling variant (e.g., "American spelling", "British spelling")
     let spelling_region = extract_spelling_region(&english_text);
@@ -769,6 +874,7 @@ fn parse_page(title: &str, text: &str) -> Vec<Entry> {
         is_phrase: word_count > 1,
         is_abbreviation,
         is_inflected,
+        lemma,
         phrase_type,
         syllables,
         morphology,
@@ -799,6 +905,7 @@ fn parse_page(title: &str, text: &str) -> Vec<Entry> {
                 is_abbreviation: word_data.is_abbreviation,
                 is_proper_noun: false,
                 is_inflected: word_data.is_inflected,
+                lemma: word_data.lemma,
                 phrase_type: word_data.phrase_type,
                 syllables: word_data.syllables,
                 morphology: word_data.morphology,
@@ -828,6 +935,7 @@ fn parse_page(title: &str, text: &str) -> Vec<Entry> {
                 is_abbreviation: word_data.is_abbreviation,
                 is_proper_noun: section.is_proper_noun,
                 is_inflected: word_data.is_inflected,
+                lemma: word_data.lemma.clone(),
                 phrase_type: word_data.phrase_type.clone(),
                 syllables: word_data.syllables,
                 morphology: word_data.morphology.clone(),

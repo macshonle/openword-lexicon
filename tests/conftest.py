@@ -1,7 +1,6 @@
 """Pytest configuration and shared fixtures."""
 import pytest
 import tempfile
-import json
 from pathlib import Path
 
 

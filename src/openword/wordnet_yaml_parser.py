@@ -46,7 +46,75 @@ class OEWNParser:
         'r': 'adverb',
     }
 
-    # Lexical domains that indicate concreteness
+    # All synset files organized by POS with their lexnames
+    # Each file contains synsets for a specific semantic domain
+    SYNSET_FILES = {
+        # Nouns (26 categories)
+        'noun.Tops.yaml': 'noun.Tops',
+        'noun.act.yaml': 'noun.act',
+        'noun.animal.yaml': 'noun.animal',
+        'noun.artifact.yaml': 'noun.artifact',
+        'noun.attribute.yaml': 'noun.attribute',
+        'noun.body.yaml': 'noun.body',
+        'noun.cognition.yaml': 'noun.cognition',
+        'noun.communication.yaml': 'noun.communication',
+        'noun.event.yaml': 'noun.event',
+        'noun.feeling.yaml': 'noun.feeling',
+        'noun.food.yaml': 'noun.food',
+        'noun.group.yaml': 'noun.group',
+        'noun.location.yaml': 'noun.location',
+        'noun.motive.yaml': 'noun.motive',
+        'noun.object.yaml': 'noun.object',
+        'noun.person.yaml': 'noun.person',
+        'noun.phenomenon.yaml': 'noun.phenomenon',
+        'noun.plant.yaml': 'noun.plant',
+        'noun.possession.yaml': 'noun.possession',
+        'noun.process.yaml': 'noun.process',
+        'noun.quantity.yaml': 'noun.quantity',
+        'noun.relation.yaml': 'noun.relation',
+        'noun.shape.yaml': 'noun.shape',
+        'noun.state.yaml': 'noun.state',
+        'noun.substance.yaml': 'noun.substance',
+        'noun.time.yaml': 'noun.time',
+        # Verbs (15 categories)
+        'verb.body.yaml': 'verb.body',
+        'verb.change.yaml': 'verb.change',
+        'verb.cognition.yaml': 'verb.cognition',
+        'verb.communication.yaml': 'verb.communication',
+        'verb.competition.yaml': 'verb.competition',
+        'verb.consumption.yaml': 'verb.consumption',
+        'verb.contact.yaml': 'verb.contact',
+        'verb.creation.yaml': 'verb.creation',
+        'verb.emotion.yaml': 'verb.emotion',
+        'verb.motion.yaml': 'verb.motion',
+        'verb.perception.yaml': 'verb.perception',
+        'verb.possession.yaml': 'verb.possession',
+        'verb.social.yaml': 'verb.social',
+        'verb.stative.yaml': 'verb.stative',
+        'verb.weather.yaml': 'verb.weather',
+        # Adjectives (3 categories)
+        'adj.all.yaml': 'adj.all',
+        'adj.pert.yaml': 'adj.pert',
+        'adj.ppl.yaml': 'adj.ppl',
+        # Adverbs (1 category)
+        'adv.all.yaml': 'adv.all',
+    }
+
+    # Lexical domains that indicate concreteness (for children's games, etc.)
+    CONCRETE_LEXNAMES = {
+        'noun.animal', 'noun.artifact', 'noun.body', 'noun.food',
+        'noun.location', 'noun.object', 'noun.person', 'noun.plant',
+        'noun.shape', 'noun.substance',
+    }
+
+    ABSTRACT_LEXNAMES = {
+        'noun.Tops', 'noun.act', 'noun.attribute', 'noun.cognition',
+        'noun.communication', 'noun.event', 'noun.feeling', 'noun.group',
+        'noun.motive', 'noun.phenomenon', 'noun.possession', 'noun.process',
+        'noun.quantity', 'noun.relation', 'noun.state', 'noun.time',
+    }
+
+    # Legacy domain sets (for backwards compatibility)
     CONCRETE_DOMAINS = {
         'artifact', 'object', 'substance', 'food', 'plant', 'animal',
         'body', 'person', 'location', 'shape', 'container', 'vehicle',
@@ -71,7 +139,9 @@ class OEWNParser:
             raise FileNotFoundError(f"OEWN archive not found: {archive_path}")
 
         self._synsets_cache = None
+        self._synset_lexnames = None  # Maps synset_id -> lexname
         self._words_cache = None
+        self._word_lexnames = None  # Maps normalized_word -> set of lexnames
 
     def _load_yaml_from_tar(self, filename: str) -> Dict:
         """Load a YAML file from the tarball."""
@@ -107,32 +177,17 @@ class OEWNParser:
         if self._synsets_cache is not None:
             return self._synsets_cache
 
-        logger.info("Loading OEWN synsets from YAML...")
+        logger.info("Loading OEWN synsets from YAML (all 45 categories)...")
         synsets = {}
+        synset_lexnames = {}
 
-        # Synset files
-        synset_files = [
-            'noun.Tops.yaml',
-            'noun.act.yaml',
-            'noun.animal.yaml',
-            'noun.artifact.yaml',
-            'noun.attribute.yaml',
-            'noun.body.yaml',
-            'noun.cognition.yaml',
-            'noun.communication.yaml',
-            'noun.event.yaml',
-            'noun.feeling.yaml',
-            'noun.food.yaml',
-            'adj.all.yaml',
-            'adj.pert.yaml',
-            'adj.ppl.yaml',
-            'adv.all.yaml',
-        ]
-
-        for synset_file in synset_files:
+        for synset_file, lexname in self.SYNSET_FILES.items():
             try:
                 data = self._load_yaml_from_tar(f'src/yaml/{synset_file}')
                 synsets.update(data)
+                # Track lexname for each synset
+                for synset_id in data.keys():
+                    synset_lexnames[synset_id] = lexname
                 logger.debug(f"  Loaded {len(data)} synsets from {synset_file}")
             except FileNotFoundError:
                 logger.warning(f"  Synset file not found: {synset_file}")
@@ -142,7 +197,8 @@ class OEWNParser:
                 continue
 
         self._synsets_cache = synsets
-        logger.info(f"  Loaded {len(synsets):,} total synsets")
+        self._synset_lexnames = synset_lexnames
+        logger.info(f"  Loaded {len(synsets):,} total synsets across {len(self.SYNSET_FILES)} categories")
         return synsets
 
     def load_words(self) -> Dict[str, Dict]:
@@ -181,6 +237,106 @@ class OEWNParser:
         """Get synset by ID."""
         synsets = self.load_synsets()
         return synsets.get(synset_id)
+
+    def get_synset_lexname(self, synset_id: str) -> Optional[str]:
+        """
+        Get the lexname (semantic category) for a synset.
+
+        Args:
+            synset_id: The synset ID (e.g., '00001740-n')
+
+        Returns:
+            Lexname string (e.g., 'noun.animal') or None if not found
+        """
+        # Ensure synsets are loaded (which also populates lexnames)
+        self.load_synsets()
+        if self._synset_lexnames is None:
+            return None
+        return self._synset_lexnames.get(synset_id)
+
+    def get_word_lexnames(self, word: str) -> Set[str]:
+        """
+        Get all lexnames (semantic categories) for a word.
+
+        A word can belong to multiple categories if it has multiple senses.
+        For example, 'bank' might be in noun.artifact (building) and
+        noun.object (river bank).
+
+        Args:
+            word: The word to look up
+
+        Returns:
+            Set of lexname strings
+        """
+        normalized = self._normalize_word(word)
+        words = self.load_words()
+        self.load_synsets()  # Ensure lexnames are loaded
+
+        if self._synset_lexnames is None:
+            return set()
+
+        lexnames = set()
+
+        # Look up word (case-insensitive)
+        for lemma, entry_data in words.items():
+            if self._normalize_word(lemma) != normalized:
+                continue
+
+            # Check each POS
+            for pos_tag, pos_data in entry_data.items():
+                if pos_tag not in self.POS_MAP:
+                    continue
+
+                # Get synsets for this POS
+                senses = pos_data.get('sense', [])
+                for sense in senses:
+                    synset_id = sense.get('synset')
+                    if synset_id and synset_id in self._synset_lexnames:
+                        lexnames.add(self._synset_lexnames[synset_id])
+
+        return lexnames
+
+    def build_word_lexnames(self) -> Dict[str, Set[str]]:
+        """
+        Build a mapping of all words to their lexnames.
+
+        This is efficient for bulk lookups during source merging.
+
+        Returns:
+            Dictionary mapping normalized word -> set of lexnames
+        """
+        if self._word_lexnames is not None:
+            return self._word_lexnames
+
+        logger.info("Building word -> lexnames mapping...")
+        words = self.load_words()
+        self.load_synsets()  # Ensure lexnames are loaded
+
+        if self._synset_lexnames is None:
+            return {}
+
+        word_lexnames: Dict[str, Set[str]] = {}
+
+        for lemma, entry_data in words.items():
+            normalized = self._normalize_word(lemma)
+
+            # Check each POS
+            for pos_tag, pos_data in entry_data.items():
+                if pos_tag not in self.POS_MAP:
+                    continue
+
+                # Get synsets for this POS
+                senses = pos_data.get('sense', [])
+                for sense in senses:
+                    synset_id = sense.get('synset')
+                    if synset_id and synset_id in self._synset_lexnames:
+                        if normalized not in word_lexnames:
+                            word_lexnames[normalized] = set()
+                        word_lexnames[normalized].add(self._synset_lexnames[synset_id])
+
+        self._word_lexnames = word_lexnames
+        logger.info(f"  Built lexname mapping for {len(word_lexnames):,} words")
+        return word_lexnames
 
     def iter_words(self) -> Iterator[Dict]:
         """

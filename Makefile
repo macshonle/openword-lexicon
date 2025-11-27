@@ -10,8 +10,8 @@ LEXICON_LANG ?= en
 RAW_DIR := data/raw/$(LEXICON_LANG)
 INTERMEDIATE_DIR := data/intermediate
 BUILD_DIR := data/build
-REPORTS_DIR := reports
 SLICES_DIR := data/diagnostic/wikt_slices
+REPORTS_DIR := reports
 
 # Build artifacts (language-prefixed filenames in flat directories)
 WIKTIONARY_DUMP := $(RAW_DIR)/$(LEXICON_LANG)wiktionary-latest-pages-articles.xml.bz2
@@ -36,9 +36,10 @@ EOWL_FILE := $(RAW_DIR)/eowl.txt
 # Rust tools
 RUST_SCANNER := tools/wiktionary-rust/target/release/wiktionary-rust
 
-.PHONY: bootstrap venv deps fmt lint test clean scrub \
-        fetch-en build-en build-wiktionary-json build-rust-scanner build-trie build-metadata package \
-        report-en diagnose-scanner validate-all validate-enable validate-profanity validate-childish \
+.PHONY: bootstrap venv deps fmt lint test clean scrub fetch-en \
+        build-en build-rust-scanner build-trie build-metadata \
+		package report-en diagnose-scanner \
+		validate-all validate-enable validate-profanity validate-childish \
         extract-slices wordlist-builder-web viewer-web
 
 # ===========================
@@ -52,7 +53,6 @@ bootstrap: venv deps
 venv:
 	$(UV) venv --python $(PY_VERSION)
 	@$(UV) run python -c "import sys; print('Python', sys.version)"
-	@echo "Venv: .venv created/updated"
 
 # Install dependencies
 deps:
@@ -66,7 +66,7 @@ fmt:
 lint:
 	$(UV) run ruff check .
 
-# Tests (placeholder until implemented)
+# Tests
 test:
 	$(UV) run pytest -q || true
 
@@ -74,7 +74,7 @@ test:
 # Data Fetching
 # ===========================
 
-# Fetch all English language sources (ENABLE removed - optional validation only)
+# Fetch all English language sources
 fetch-en:
 	@echo "Fetching English Language Sources..."
 	bash scripts/fetch/fetch_eowl.sh
@@ -97,7 +97,7 @@ check-pnpm:
 # Install dependencies when package.json changes
 %/node_modules: %/package.json check-pnpm
 	@echo "Installing dependencies in $*..."
-	cd $* && pnpm install
+	(cd $*; pnpm install)
 	@touch $@
 
 # ===========================
@@ -113,14 +113,11 @@ check-cargo:
 
 # Build Rust-based Wiktionary scanner
 # This is a high-performance replacement for tools/wiktionary_scanner_parser.py
-# The Rust version is significantly faster (typically 5-10x) and produces identical output.
-#
-# Build command: cd tools/wiktionary-rust && cargo build --release
+# The Rust version is faster (typically 4-5x) and produces identical output.
 # Binary output: tools/wiktionary-rust/target/release/wiktionary-rust
 $(RUST_SCANNER): tools/wiktionary-rust/Cargo.toml tools/wiktionary-rust/src/main.rs | check-cargo
 	@echo "Building Rust scanner (release mode)..."
-	cd tools/wiktionary-rust && cargo build --release
-	@echo "Rust scanner built: $(RUST_SCANNER)"
+	(cd tools/wiktionary-rust; cargo build --release)
 
 # Convenience target for building Rust scanner
 build-rust-scanner: $(RUST_SCANNER)
@@ -160,6 +157,9 @@ build-en: fetch-en $(LEXEMES_JSON) $(SENSES_JSON)
 	@echo "Exporting metadata modules..."
 	$(UV) run python src/openword/export_metadata.py \
 		--input $(LEXEMES_ENRICHED) --modules all --gzip
+	@echo "Exporting lemma metadata..."
+	$(UV) run python src/openword/export_lemma_groups.py \
+		--senses $(SENSES_JSON) --gzip
 	$(UV) run python src/openword/generate_statistics.py
 
 # Build and sort Wiktionary JSONL using Rust scanner
@@ -189,14 +189,11 @@ $(LEXEMES_JSON) $(SENSES_JSON): $(WIKTIONARY_JSON_SORTED)
 		--senses-output $(SENSES_JSON) \
 		-v
 
-# Convenience target (will only rebuild if output missing or input newer)
-build-wiktionary-json: $(WIKTIONARY_JSON_SORTED)
-
 # Build compact trie for browser visualization
 build-trie: $(WORDLIST_TXT) viewer/node_modules
 	@echo "Building browser-compatible trie..."
 	@echo "Building binary trie from $(WORDLIST_TXT)..."
-	cd viewer && pnpm run build-trie ../$(WORDLIST_TXT) data/$(LEXICON_LANG).trie.bin
+	(cd viewer; pnpm run build-trie ../$(WORDLIST_TXT) data/$(LEXICON_LANG).trie.bin)
 
 # Export modular metadata layers (frequency, concreteness, syllables, sources)
 # Creates gzipped JSON files in data/build/{lang}-{module}.json.gz
@@ -227,7 +224,7 @@ clean:
 	rm -rf viewer/node_modules viewer/pnpm-lock.yaml viewer/data viewer/dist
 	@if [ -d tools/wiktionary-rust/target ]; then \
 		echo "Cleaning Rust build artifacts..."; \
-		cd tools/wiktionary-rust && cargo clean; \
+		(cd tools/wiktionary-rust; cargo clean); \
 	fi
 
 scrub: clean
@@ -241,7 +238,6 @@ scrub: clean
 report-en: deps
 	@echo "Generating English Lexicon Reports..."
 	$(UV) run python tools/generate_reports.py
-	@echo "Reports generated in: $(REPORTS_DIR)/"
 	@ls -lh $(REPORTS_DIR)/*.md 2>/dev/null || true
 
 # Run all validation checks
@@ -288,7 +284,6 @@ extract-slices: deps $(WIKTIONARY_DUMP)
 	@mkdir -p "$(SLICES_DIR)"
 	$(UV) run python tools/wiktionary_xml_slicer.py \
 		"$(WIKTIONARY_DUMP)" "$(SLICES_DIR)"
-	@echo "Slices written -- add to git with: git add $(SLICES_DIR)"
 
 # ===========================
 # Web Tools
@@ -297,29 +292,21 @@ extract-slices: deps $(WIKTIONARY_DUMP)
 # Word list builder - create filtered word lists via web UI
 wordlist-builder-web: tools/wordlist-builder/node_modules
 	@echo "Starting web-based word list builder..."
-	@echo ""
 	@echo "  Server will start at: http://localhost:8000"
 	@echo "  Press Ctrl+C to stop the server"
-	@echo ""
-	@cd tools/wordlist-builder && pnpm start
+	(cd tools/wordlist-builder; pnpm start)
 
 # Trie viewer - explore lexicon interactively
 viewer-web: viewer/node_modules
 	@echo "Starting interactive trie viewer..."
 	@if [ ! -f "$(WORDLIST_TXT)" ]; then \
-		echo ""; \
-		echo "Warning: Wordlist not found at $(WORDLIST_TXT)"; \
+		echo "Error: Wordlist not found at $(WORDLIST_TXT)"; \
 		echo "Run 'make build-en' first to generate the lexicon."; \
-		echo ""; \
-		echo "The viewer will start, but data will not be available until you build."; \
-		echo ""; \
-		sleep 2; \
+		exit 1; \
 	fi
 	@echo "  Server will start at: http://localhost:8080"
 	@echo "  Press Ctrl+C to stop the server"
-	@echo ""
 	@echo "  Available pages:"
 	@echo "    /index.html        - Dynamic trie builder"
 	@echo "    /index-binary.html - Binary trie loader"
-	@echo ""
-	@cd viewer && pnpm start
+	(cd viewer; pnpm start)

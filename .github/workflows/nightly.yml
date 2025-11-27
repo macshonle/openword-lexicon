@@ -40,9 +40,6 @@ jobs:
         # Core ingest
         uv run python src/openword/core_ingest.py
 
-        # Enrichment
-        uv run python src/openword/wordnet_enrich.py
-
         # Frequency tiers
         uv run python src/openword/frequency_tiers.py
 

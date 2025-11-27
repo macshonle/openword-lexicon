@@ -47,6 +47,9 @@ def sense_projection(sense: Dict[str, Any]) -> Tuple:
     """
     Create a hashable projection of sense-level properties for deduplication.
     Two senses with the same projection are considered duplicates.
+
+    NOTE: lemma is included because the same word can have different lemmas
+    depending on the sense (e.g., "left" → "leave" as verb vs "left" as adjective)
     """
     return (
         sense.get('pos', 'unknown'),
@@ -57,6 +60,7 @@ def sense_projection(sense: Dict[str, Any]) -> Tuple:
         sense.get('is_abbreviation', False),
         sense.get('is_inflected', False),
         sense.get('is_proper_noun', False),
+        sense.get('lemma'),  # Include lemma - different lemmas = different senses
     )
 
 
@@ -109,6 +113,11 @@ def aggregate_word_senses(
                 sense_entry['is_inflected'] = True
             if sense.get('is_proper_noun', False):
                 sense_entry['is_proper_noun'] = True
+
+            # Add lemma (base form) for inflected words
+            lemma = sense.get('lemma')
+            if lemma:
+                sense_entry['lemma'] = lemma
 
             unique_senses.append(sense_entry)
 
