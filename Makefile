@@ -10,7 +10,6 @@ LEXICON_LANG ?= en
 RAW_DIR := data/raw/$(LEXICON_LANG)
 INTERMEDIATE_DIR := data/intermediate
 BUILD_DIR := data/build
-SLICES_DIR := data/diagnostic/wikt_slices
 REPORTS_DIR := reports
 
 # Build artifacts (language-prefixed filenames in flat directories)
@@ -44,7 +43,7 @@ BENCHMARK_DIR := data/benchmark
 		package report-en diagnose-scanner \
 		validate-all validate-enable validate-profanity validate-childish \
 		validate-scanner-parity \
-        extract-slices wordlist-builder-web viewer-web \
+        wordlist-builder-web viewer-web \
 		benchmark-rust-scanner benchmark-validate \
 		nightly
 
@@ -299,13 +298,6 @@ diagnose-scanner: $(WIKTIONARY_DUMP) $(RUST_SCANNER)
 	@echo "Running Rust scanner with limit (first 10000 entries)..."
 	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" /tmp/scanner_diagnostic.jsonl --limit 10000
 	@echo "Output written to: /tmp/scanner_diagnostic.jsonl"
-
-# Extract diagnostic XML slices for analysis
-extract-slices: deps $(WIKTIONARY_DUMP)
-	@echo "Extracting diagnostic XML slices..."
-	@mkdir -p "$(SLICES_DIR)"
-	$(UV) run python tools/wiktionary_xml_slicer.py \
-		"$(WIKTIONARY_DUMP)" "$(SLICES_DIR)"
 
 # ===========================
 # Benchmarks
