@@ -916,7 +916,8 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
 
 /// Parse a page and return multiple entries (one per sense)
 pub fn parse_page(title: &str, text: &str) -> Vec<Entry> {
-    let word = title.to_lowercase().trim().to_string();
+    // Preserve original case - downstream consumers can filter by case pattern as needed
+    let word = title.trim().to_string();
 
     // Extract English section
     let english_text = match extract_english_section(text) {
@@ -1180,6 +1181,14 @@ fn run_sequential(
 
         stats.words_written += 1;
 
+        // Track case distribution for reporting
+        match classify_case(&title) {
+            CaseForm::Lower => stats.case_lower += 1,
+            CaseForm::Title => stats.case_title += 1,
+            CaseForm::Upper => stats.case_upper += 1,
+            CaseForm::Mixed => stats.case_mixed += 1,
+        }
+
         for entry in entries {
             if let Ok(json) = serde_json::to_string(&entry) {
                 writeln!(writer, "{}", json).ok();
@@ -1217,6 +1226,13 @@ fn print_stats(stats: &Stats, strategy_name: &str) {
     println!("Words written: {}", stats.words_written);
     println!("Senses written: {}", stats.senses_written);
     println!("Avg senses/word: {:.2}", stats.senses_written as f64 / stats.words_written.max(1) as f64);
+    println!("------------------------------------------------------------");
+    println!("Case distribution:");
+    println!("  lowercase: {} (e.g., sat)", stats.case_lower);
+    println!("  Titlecase: {} (e.g., Sat)", stats.case_title);
+    println!("  UPPERCASE: {} (e.g., SAT)", stats.case_upper);
+    println!("  miXedCase: {} (e.g., iPhone)", stats.case_mixed);
+    println!("------------------------------------------------------------");
     println!("Special pages: {}", stats.special);
     println!("Redirects: {}", stats.redirects);
     println!("Dictionary-only terms: {}", stats.dict_only);
@@ -1322,4 +1338,41 @@ pub struct Stats {
     pub non_latin: usize,
     pub skipped: usize,
     pub elapsed: Duration,
+    // Case distribution (for reporting)
+    pub case_lower: usize,      // all lowercase: "sat"
+    pub case_title: usize,      // Capitalized: "Sat"
+    pub case_upper: usize,      // ALL CAPS: "SAT"
+    pub case_mixed: usize,      // miXed case: "iPhone"
+}
+
+/// Classify the case pattern of a word (for reporting purposes)
+fn classify_case(s: &str) -> CaseForm {
+    let has_alpha = s.chars().any(|c| c.is_alphabetic());
+    if !has_alpha {
+        return CaseForm::Lower; // Treat non-alphabetic as lowercase
+    }
+
+    let alpha_chars: Vec<char> = s.chars().filter(|c| c.is_alphabetic()).collect();
+    let all_lower = alpha_chars.iter().all(|c| c.is_lowercase());
+    let all_upper = alpha_chars.iter().all(|c| c.is_uppercase());
+    let first_upper = alpha_chars.first().map(|c| c.is_uppercase()).unwrap_or(false);
+    let rest_lower = alpha_chars.iter().skip(1).all(|c| c.is_lowercase());
+
+    if all_lower {
+        CaseForm::Lower
+    } else if all_upper {
+        CaseForm::Upper
+    } else if first_upper && rest_lower {
+        CaseForm::Title
+    } else {
+        CaseForm::Mixed
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+enum CaseForm {
+    Lower,
+    Title,
+    Upper,
+    Mixed,
 }

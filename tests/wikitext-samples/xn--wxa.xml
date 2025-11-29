@@ -1,0 +1,84 @@
+<page>
+    <title>λ</title>
+    <ns>0</ns>
+    <id>223338</id>
+    <revision>
+      <id>84385647</id>
+      <parentid>84348069</parentid>
+      <timestamp>2025-03-26T08:40:20Z</timestamp>
+      <contributor>
+        <username>Kwamikagami</username>
+        <id>52912</id>
+      </contributor>
+      <comment>add see also</comment>
+      <origin>84385647</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2379" sha1="jqlgaf2se07p8uxrvan9k02z0qcb1d9" xml:space="preserve">{{also|ꟛ|Λ|Ꟛ|ʌ|ƛ|λ.|ƛ̕|𐓛|入|ג|Appendix:Variations of &quot;l&quot;|uni=auto}}
+{{character info}}
+{{character info/var|𝜆}}
+
+==Translingual==
+
+===Symbol===
+{{mul-symbol}}
+
+# {{lb|mul|physics}} [[wavelength]]
+# {{lb|mul|physics|chemistry}} [[half-life]]
+# {{lb|mul|analysis}} [[Lebesgue measure]]
+# {{lb|mul|computer science}} {{w|Lambda calculus#Lambda terms|Lambda abstraction}}
+# {{lb|mul|linear algebra}} [[eigenvalue]]
+#* {{quote-journal|en|termlang=mul|title=Lesson 11|section=8.2 Method to find eigenvalues and eigenvectors|work=w:University College London|url=https://www.ucl.ac.uk/~ucahmdl/LessonPlans/Lesson11.pdf|page=1|passage=Both equations give the relation x&lt;sub&gt;1&lt;/sub&gt; = −x&lt;sub&gt;2&lt;/sub&gt;. Therefore the set of eigenvectors corresponding to '''λ''' = 2 is given by:}}
+# {{lb|mul|NAPA}} a voiced [[alveolar]] [[lateral]] [[affricate]] (IPA [{{IPAfont|[[d͡ɮ]]}}]).
+#: {{syn|mul|ꟛ}}
+# {{lb|mul|[[Romic]]}} a {{w|voiced palatal lateral approximant}} (IPA: {{IPAlink|ʎ}}).
+
+====Usage notes====
+As an orthographic letter of a Latin alphabet, Unicode has assigned a distinct character, {{angbr|[[ꟛ]]}}. See {{w|Latin lambda}}.
+
+===Further reading===
+* {{pedia|Lambda}}
+
+==Ancient Greek==
+
+===Etymology===
+Derived from its [[majuscule]] counterpart [[Λ]].
+
+===Letter===
+{{head|grc|letter|lowercase||uppercase|Λ}}
+
+# Lower-case [[lambda]] ({{l|grc|λάβδα|tr=-}}), the 11th letter of the ancient [[Greek alphabet]]. It represented the [[w:alveolar lateral approximant|alveolar lateral approximant]] {{IPAchar|/l/}}. It is preceded by [[κ]] and followed by [[μ]].
+
+====Derived terms====
+See also [[lambda]]
+* {{l|el|λ΄}}, {{l|el|͵λ}}
+* {{l|mul|л|sc=Cyrl}}, {{l|mul|Л|sc=Cyrl}} {{qualifier|[[Cyrillic]]}}
+* {{l|got|𐌻|tr=-}} {{qualifier|[[Gothic]]}}
+* {{l|cop|ⲗ|sc=Copt|tr=-}}, {{l|cop|Ⲗ|sc=Copt|tr=-}} {{qualifier|[[Coptic]]}}
+* {{l|kwk|ꟛ|sc=Latn}}, {{l|kwk|Ꟛ|sc=Latn}} {{qualifier|[[Latin]]}}
+
+===See also===
+* {{Grek-script}}
+
+==Greek==
+
+===Letter===
+{{head|el|letter|lowercase||uppercase|Λ}}
+
+# The [[lower case]] letter [[lambda]] ([[λάμδα]]), the eleventh letter of the modern [[w:Greek alphabet|Greek alphabet]].
+
+===Numeral===
+{{head|el|numeral}}
+
+# The number thirty in [[w:Greek numerals|Greek numerals]].
+
+===Numeral===
+{{head|el|numeral|head=͵λ}}
+
+# The number 30,000 in Greek numerals.
+
+===See also===
+{{Grek-script}}</text>
+      <sha1>jqlgaf2se07p8uxrvan9k02z0qcb1d9</sha1>
+    </revision>
+  </page>

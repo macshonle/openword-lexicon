@@ -1,0 +1,84 @@
+<page>
+    <title>ω</title>
+    <ns>0</ns>
+    <id>224101</id>
+    <revision>
+      <id>85874207</id>
+      <parentid>83442256</parentid>
+      <timestamp>2025-08-13T04:56:34Z</timestamp>
+      <contributor>
+        <username>Rudyeeeeeeee</username>
+        <id>4049533</id>
+      </contributor>
+      <comment>See the Wikipedia page for Sinological phonetic notation.</comment>
+      <origin>85874207</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2072" sha1="8t3k9hfc64ea0yb2gwu5g55ky5ciotf" xml:space="preserve">{{also|ω΄|ὦ|Ω|ꞷ|ѡ|w|ധ|ယ|ო|Appendix:Variations of &quot;o&quot;}}
+{{character info}}
+{{character info/var|𝜔}}
+
+==Translingual==
+
+===Symbol===
+{{head|mul|symbol}}
+
+# {{lb|mul|physics}} [[angular velocity]]
+# {{lb|mul|thermodynamics}} [[acentric factor]]
+# {{lb|mul|mathematics|set theory}} The first ([[countably infinite|countably]]) [[infinite]] [[ordinal number]], its corresponding [[cardinal number]] [[ℵ₀|ℵ&lt;sub&gt;0&lt;/sub&gt;]] or the set of [[natural numbers]] (the latter of which are often defined to equal the former).
+# {{lb|mul|phonetics|Sinology}} A near-open back rounded vowel between {{IPAfont|[ɔ]}} and {{IPAfont|[ɒ]}}: IPA {{IPAfont|[ɔ̞]}}.
+
+===See also===
+* {{pedia}}
+
+==Ancient Greek==
+{{wp|Omega}}
+
+===Etymology===
+From Ω curved upward.&lt;ref&gt;Edward M. Thompson (1912), ''Introduction to Greek and Latin paleography'', Oxford: Clarendon. p.144&lt;/ref&gt;
+
+===Letter===
+{{head|grc|letter|lowercase||uppercase|Ω}}
+
+# Lower-case [[omega]] ({{l|grc|ὦ μέγα|tr=-}}), the 24th letter of the ancient [[Greek alphabet]]. It represented the [[w:open-mid back rounded vowel|long open-mid back rounded vowel]] {{IPAchar|/ɔː/}}. It is preceded by [[ψ]].
+
+====Derived terms====
+See also [[omega]]
+* {{l|el|ω΄}}, {{l|el|͵ω}}
+* {{l|mul|ѡ|sc=Cyrl}}, {{l|mul|Ѡ|sc=Cyrl}}; {{l|mul|ꙍ|sc=Cyrl}}, {{l|mul|Ꙍ|sc=Cyrl}} {{qualifier|[[Cyrillic]]}}
+* {{l|mul|ꞷ}}, {{l|mul|Ꞷ}} {{qualifier|[[Latin]]}}
+* {{l|cop|ⲱ|sc=Copt|tr=-}}, {{l|cop|Ⲱ|sc=Copt|tr=-}} {{qualifier|[[Coptic]]}}
+
+===See also===
+* {{Grek-script}}
+
+===References===
+&lt;references/&gt;
+
+==Greek==
+
+===Etymology 1===
+{{inh+|el|grc|ω}}.
+
+====Letter====
+{{head|el|letter|lowercase||uppercase|Ω}}
+
+# The [[lower case]] letter [[omega]] ([[ωμέγα]]), the 24th and '''last letter''' of the modern [[w:Greek alphabet|Greek alphabet]].
+
+=====Derived terms=====
+* {{l|el|ω΄|t=numeral: 800}}
+* {{l|el|͵ω|t=numeral: 800,000}}
+
+=====See also=====
+: ''see:'' [[Appendix:Greek alphabet]]
+
+===Etymology 2===
+{{inh+|el|grc|ὦ}}.
+
+====Interjection====
+{{head|el|interjection|head=ω!}}
+
+# [[oh]]!</text>
+      <sha1>8t3k9hfc64ea0yb2gwu5g55ky5ciotf</sha1>
+    </revision>
+  </page>

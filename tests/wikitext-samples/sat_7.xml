@@ -1,0 +1,60 @@
+<page>
+    <title>SAT</title>
+    <ns>0</ns>
+    <id>78442</id>
+    <revision>
+      <id>85978326</id>
+      <parentid>85211082</parentid>
+      <timestamp>2025-08-18T02:55:32Z</timestamp>
+      <contributor>
+        <username>FenaBot</username>
+        <id>4269631</id>
+      </contributor>
+      <comment>Bot: Adding audio pronunciation: added audio LL-Q1860 (eng)-Flame, not lame-SAT.wav</comment>
+      <origin>85978326</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2168" sha1="45zc5met1vwpt17ip2ee2rkmzsrtnjq" xml:space="preserve">{{also|Appendix:Variations of &quot;sat&quot;}}
+==Translingual==
+
+===Etymology===
+{{abbrev|mul|w:Boolean satisfiability problem}}.
+
+===Symbol===
+{{mul-symbol}}
+
+# {{lb|mul|computing theory}} The [[decision problem]] of deciding whether a given [[Boolean]] [[formula]] has an assignment of Boolean values to its variables that makes it true. A famous [[NP-complete]] problem.
+
+==English==
+
+===Pronunciation===
+; Initialism
+* {{IPA|en|/ˌɛsˌeɪ̯ˈti/|[ˌɛsˌeɪ̯ˈtʰi]|a=GA}}
+* {{audio|en|en-au-SAT.ogg|a=AU}}
+* {{rhymes|en|iː|s=3}}
+
+; Acronym
+* {{IPA|en|/sæt/|[sæʔ(t̚)]|a=GA}}
+* {{audio|en|en-us-sat.ogg|a=US}}
+* {{audio|en|LL-Q1860 (eng)-Flame, not lame-SAT.wav|a=US}}
+* {{rhymes|en|æt|s=1}}
+
+===Noun===
+{{en-noun|~}}
+
+# {{lb|en|atmospheric sciences}} {{init of|en|w:Temperature_measurement#Surface_air_temperature|surface air temperature}}.
+# {{lb|en|US}} {{ellipsis of|en|w:SAT Reasoning Test|addl=formerly acronyms '''{{U|scholastic}} {{U|aptitude}} {{U|test}}''' and '''{{U|scholastic}} {{U|assessment}} {{U|test}}''': a national exam taken annually by [[high school]] [[junior]]s and [[senior]]s}}.
+#: {{co|en|take the '''SAT'''}}
+#: {{co|en|take an '''SAT'''}}
+#: {{ux|en|The '''SAT'''s have gotten harder.}}
+#* {{quote-web|en|work=w:The Atlantic|title=Is This the Singularity for Standardized Tests?|author=Ian Bogost|date=2023-03-21|url=https://www.theatlantic.com/technology/archive/2023/03/open-ai-gpt4-standardized-tests-sat-ap-exams/673458/|passage=AIs are no longer just producing passable five-paragraph essays. Now they’re excelling at the '''SAT''', “earning” a score of 1410. {{...}} To score a 1410 on the '''SAT''' says something about your capacities and prospects—maybe you can get into Stanford.|archiveurl=https://archive.ph/k9CT0|archivedate=2023-03-25}}
+# {{lb|en|Australia}} {{acronym of|en|w:Scholastic Aptitude Test}}.
+# {{lb|en|British}} {{acronym of|en|w:National Curriculum assessment|Statutory Assessment Test|addl=a national curriculum assessment, or exam}}.
+
+===Anagrams===
+* {{anagrams|en|a=ast|Sta.|ats|ast|TAs|Sta|sta|AST|Ast|ATs|tas|Tas.|ATS|at's|TSA|T(S/A)|as't|TAS|T.A.s|Tas|-ast|TA's|STA}}
+
+{{cln|en|pseudo-acronyms}}</text>
+      <sha1>45zc5met1vwpt17ip2ee2rkmzsrtnjq</sha1>
+    </revision>
+  </page>

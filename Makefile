@@ -378,45 +378,20 @@ viewer-web: viewer/node_modules
 # Expected runtime: 15-30 minutes depending on network speed and CPU
 nightly: export OPENWORD_CI=1
 nightly:
-	@echo "============================================================"
-	@echo "NIGHTLY CI BUILD - Starting full pipeline"
-	@echo "============================================================"
 	@echo "Start time: $$(date)"
 	@echo "Mode: Non-interactive (OPENWORD_CI=1)"
-	@echo ""
-	@echo "[1/8] Bootstrapping environment..."
 	$(MAKE) bootstrap
-	@echo ""
-	@echo "[2/8] Fetching all source data..."
 	$(MAKE) fetch-en
-	@echo ""
-	@echo "[3/8] Building Rust scanner..."
 	$(MAKE) build-rust-scanner
-	@echo ""
-	@echo "[4/8] Running full build pipeline..."
 	$(MAKE) build-en
-	@echo ""
-	@echo "[5/8] Packaging release artifacts..."
 	$(MAKE) package
-	@echo ""
-	@echo "[6/8] Generating reports..."
 	$(MAKE) report-en
-	@echo ""
-	@echo "[7/8] Running validation checks..."
 	$(MAKE) validate-all
 	$(MAKE) validate-scanner-parity
-	@echo ""
-	@echo "[8/8] Running tests and diagnostics..."
 	$(MAKE) test
 	$(MAKE) diagnose-scanner
-	@echo ""
-	@echo "============================================================"
-	@echo "NIGHTLY CI BUILD - Complete"
-	@echo "============================================================"
 	@echo "End time: $$(date)"
-	@echo ""
 	@echo "Build artifacts:"
 	@ls -lh $(BUILD_DIR)/*.trie $(BUILD_DIR)/*.json* 2>/dev/null || true
-	@echo ""
 	@echo "Reports:"
 	@ls -lh $(REPORTS_DIR)/*.md 2>/dev/null || true

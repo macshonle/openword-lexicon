@@ -128,13 +128,21 @@ def load_wordnet(wordnet_path: Path) -> Tuple[Set[str], Dict[str, List[str]]]:
     return words, word_lexnames
 
 
-def load_wikt_lexemes(lexeme_path: Path) -> Dict[str, dict]:
-    """Load Wiktionary lexeme entries into a dictionary."""
+def load_wikt_lexemes(lexeme_path: Path) -> Tuple[Dict[str, dict], Dict[str, List[str]]]:
+    """Load Wiktionary lexeme entries into a dictionary.
+
+    Returns:
+        Tuple of:
+        - entries: Dict mapping original word (with case) -> entry
+        - norm_to_words: Dict mapping normalized word -> list of original words
+          (for matching against case-insensitive secondary sources)
+    """
     entries = {}
+    norm_to_words: Dict[str, List[str]] = {}  # normalized -> [original words]
 
     if not lexeme_path.exists():
         logger.error(f"Wiktionary lexeme file not found: {lexeme_path}")
-        return entries
+        return entries, norm_to_words
 
     logger.info(f"Loading Wiktionary lexemes from {lexeme_path}")
 
@@ -147,7 +155,8 @@ def load_wikt_lexemes(lexeme_path: Path) -> Dict[str, dict]:
 
                 try:
                     entry = json.loads(line)
-                    word = normalize_word(entry['word'])
+                    word = entry['word']  # Preserve original case
+                    norm = normalize_word(word)
 
                     # Initialize sources if not present
                     if 'sources' not in entry:
@@ -156,13 +165,20 @@ def load_wikt_lexemes(lexeme_path: Path) -> Dict[str, dict]:
                         entry['license_sources'] = {'CC-BY-SA-4.0': ['wikt']}
 
                     entries[word] = entry
+
+                    # Build reverse index for secondary source matching
+                    if norm not in norm_to_words:
+                        norm_to_words[norm] = []
+                    if word not in norm_to_words[norm]:
+                        norm_to_words[norm].append(word)
+
                     progress.update(Lines=line_num, Entries=len(entries))
                 except (json.JSONDecodeError, KeyError) as e:
                     logger.warning(f"Line {line_num}: {e}")
                     continue
 
-    logger.info(f"  -> Loaded {len(entries):,} Wiktionary entries")
-    return entries
+    logger.info(f"  -> Loaded {len(entries):,} Wiktionary entries ({len(norm_to_words):,} unique normalized forms)")
+    return entries, norm_to_words
 
 
 def add_source_to_entry(entry: dict, source: str) -> dict:
@@ -227,6 +243,7 @@ def create_secondary_entry(word: str, sources: list, lexnames: Optional[List[str
 
 def merge_sources(
     wikt_entries: Dict[str, dict],
+    norm_to_words: Dict[str, List[str]],
     eowl_words: Set[str],
     wordnet_words: Set[str],
     word_lexnames: Dict[str, List[str]],
@@ -239,6 +256,10 @@ def merge_sources(
     - Words only in secondary sources: Create new entries with no Wiktionary senses
     - Adds WordNet lexnames (semantic categories) to words in WordNet
     - Tracks source combinations for statistics
+
+    Secondary sources (EOWL, WordNet) are matched case-insensitively using
+    norm_to_words index. If "sat" is in EOWL, all Wiktionary case variants
+    (sat, Sat, SAT) will get the 'eowl' source tag.
     """
     logger.info("Merging sources...")
 
@@ -256,32 +277,38 @@ def merge_sources(
 
     # Track words not in Wiktionary that are in secondary sources
     # These need new entries created
-    secondary_only: Dict[str, list] = {}  # word -> list of sources
+    secondary_only: Dict[str, list] = {}  # normalized word -> list of sources
 
-    # Process EOWL words
+    # Process EOWL words (case-insensitive matching)
     if eowl_words:
         logger.info(f"  Processing {len(eowl_words):,} EOWL words...")
-        for word in eowl_words:
-            if word in wikt_entries:
-                wikt_entries[word] = add_source_to_entry(wikt_entries[word], 'eowl')
+        for eowl_word in eowl_words:
+            # eowl_word is already normalized (lowercase)
+            if eowl_word in norm_to_words:
+                # Add 'eowl' source to ALL case variants in Wiktionary
+                for orig_word in norm_to_words[eowl_word]:
+                    wikt_entries[orig_word] = add_source_to_entry(wikt_entries[orig_word], 'eowl')
             else:
-                if word not in secondary_only:
-                    secondary_only[word] = []
-                secondary_only[word].append('eowl')
+                if eowl_word not in secondary_only:
+                    secondary_only[eowl_word] = []
+                secondary_only[eowl_word].append('eowl')
 
-    # Process WordNet words (and add lexnames)
+    # Process WordNet words (and add lexnames) - case-insensitive matching
     if wordnet_words:
         logger.info(f"  Processing {len(wordnet_words):,} WordNet words...")
-        for word in wordnet_words:
-            if word in wikt_entries:
-                wikt_entries[word] = add_source_to_entry(wikt_entries[word], 'wordnet')
-                # Add lexnames to existing entry
-                if word in word_lexnames:
-                    wikt_entries[word]['lexnames'] = word_lexnames[word]
+        for wn_word in wordnet_words:
+            # wn_word is already normalized (lowercase)
+            if wn_word in norm_to_words:
+                # Add 'wordnet' source and lexnames to ALL case variants
+                for orig_word in norm_to_words[wn_word]:
+                    wikt_entries[orig_word] = add_source_to_entry(wikt_entries[orig_word], 'wordnet')
+                    # Add lexnames to existing entry
+                    if wn_word in word_lexnames:
+                        wikt_entries[orig_word]['lexnames'] = word_lexnames[wn_word]
             else:
-                if word not in secondary_only:
-                    secondary_only[word] = []
-                secondary_only[word].append('wordnet')
+                if wn_word not in secondary_only:
+                    secondary_only[wn_word] = []
+                secondary_only[wn_word].append('wordnet')
 
     # Create entries for words only in secondary sources
     if secondary_only:
@@ -377,7 +404,8 @@ def main():
     logger.info("")
 
     # Load Wiktionary lexemes (base)
-    wikt_entries = load_wikt_lexemes(args.wikt_lexemes)
+    # Returns entries dict and norm_to_words index for case-insensitive secondary source matching
+    wikt_entries, norm_to_words = load_wikt_lexemes(args.wikt_lexemes)
     if not wikt_entries:
         logger.error("No Wiktionary entries loaded")
         sys.exit(1)
@@ -394,7 +422,7 @@ def main():
         wordnet_words, word_lexnames = load_wordnet(args.wordnet)
 
     # Merge all sources
-    stats = merge_sources(wikt_entries, eowl_words, wordnet_words, word_lexnames, args.output)
+    stats = merge_sources(wikt_entries, norm_to_words, eowl_words, wordnet_words, word_lexnames, args.output)
 
     logger.info("")
     logger.info("Source merge complete")

@@ -1,280 +1,262 @@
 <page>
-    <title>Polish</title>
+    <title>polish</title>
     <ns>0</ns>
-    <id>1559</id>
+    <id>106909</id>
     <revision>
-      <id>87633329</id>
-      <parentid>86039781</parentid>
-      <timestamp>2025-10-28T14:28:14Z</timestamp>
+      <id>87633331</id>
+      <parentid>86587382</parentid>
+      <timestamp>2025-10-28T14:28:43Z</timestamp>
       <contributor>
         <username>Vealhurl</username>
         <id>3611421</id>
       </contributor>
-      <origin>87633329</origin>
+      <origin>87633331</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="11352" sha1="c0kcz5f1sdw1oif1boko2vsi2vb0g5d" xml:space="preserve">{{also|polish}}
+      <text bytes="10895" sha1="nxu9lb52mpv1xmj2rzlfmwz8qv0z3r3" xml:space="preserve">{{also|Polish}}
 ==English==
-{{wp}}
-{{interwiktionary|pl}}
-
-===Alternative forms===
-* {{q|abbreviation}}: {{alt|en|Pl.}}
 
 ===Etymology===
-From {{af|en|Pole|-ish}}. {{dbt|en|Poylish}}.
+{{root|en|ine-pro|*pel- (beat)}}
+From {{inh|en|enm|polishen}}, from {{der|en|fro|-}} ''poliss-'', stem of some of the conjugated forms of {{m|fro|polir}}, from {{der|en|la|polio|polīre|to polish, make smooth}}, from {{der|en|ine-pro|*pelh₂-||to drive, strike, thrust}}, from the notion of fulling cloth.
 
 ===Pronunciation===
-* {{IPA|en|/ˈpəʊlɪʃ/|a=UK}}
-* {{enPR|pōʹlĭsh|a=US}}, {{IPA|en|/ˈpoʊlɪʃ/}}
-* {{audio|en|en-us-Polish proper.ogg|a=US}}
-* {{audio|en|en-us-Polish.ogg|a=US}}
-* {{rhymes|en|əʊlɪʃ|s=2}}
-
-===Adjective===
-{{en-adj|-}}
-
-# Of, from or native to [[Poland]], or relating to the Polish language.
-#* {{quote-book|en|year=2007|author=Elazar Barkan; Elizabeth A. Cole; Kai Struve|title=Shared History, Divided Memory|page=287
-|passage=Vinokur pulled the trigger a second and third time. &quot;You're lying, you '''Polish''' cunt!&quot; he screamed.}}
-#* {{quote-book|en|year=2009|author=Stanley Marianski; Adam Marianski; Miroslaw Gebarowski|title=Polish Sausages: Authentic Recipes and Instructions|page=13
-|passage=As we mentioned the only chemical used in '''Polish''' meats or sausages was potassium nitrate even though the list of food additives allowed in Europe was long and impressive.}}
-#* {{quote-journal|en-GB|author=Shaun Walker|title=Far-right Polish MP uses fire extinguisher to put out Hanukah candles|work=w:The Guardian|date=2023-12-12|url=https://www.theguardian.com/world/2023/dec/12/far-right-polish-mp-uses-fire-extinguisher-to-put-out-hanukah-candles|issn=0261-3077|passage=A far-right '''Polish''' MP has extinguished candles on a menorah lit for Hanukah in Poland’s parliament, disrupting proceedings before a planned vote of confidence in the new government.}}
-
-====Synonyms====
-* {{l|en|Polandish}}
-* {{l|en|Polono-}} {{q|prefix}}
-
-====Derived terms====
-{{col|en|pan-Polish|Polishness|Polish victory lap|Polish notation|Polish overdrive
-|anti-Polish|Polish fire drill|Polish Lowland Sheepdog|reverse Polish notation}}
-
-====Translations====
-{{trans-top|of Poland or its language}}
-* Afrikaans: {{t+|af|Pools}}
-* Albanian: {{t+|sq|polak|m}}, {{t|sq|polake|f}} {{q|adjectives}}
-* Arabic: {{t|ar|بُولَنْدِيّ|tr=bulandiyy}}, {{t|ar|بُولَنْدِيّ|tr=bōlandiyy}}
-* Armenian: {{t+|hy|լեհական}}, {{t+|hy|լեհերեն}} {{qualifier|relating to the language}}
-* Aromanian: {{t|rup|pulunescu|m}}, {{t|rup|puluneascã|f}}
-* Asturian: {{t+|ast|polacu}}
-* Azerbaijani: {{t|az|polyak}}
-* Belarusian: {{t|be|по́льскі}}
-* Bengali: {{t+|bn|পোলীয়}}, {{t|bn|লেহিস্তানী}}
-* Breton: {{t|br|poloniat}}, {{t|br|polonek}} {{qualifier|relating to the language}}
-* Bulgarian: {{t+|bg|по́лски}}
-* Burmese: {{t|my|ပိုလန်}}
-* Carpathian Rusyn: {{t|rue|по́льскый}}
-* Catalan: {{t+|ca|polonès}}
-* Chechen: {{t|ce|польшин}}
-* Chinese:
-*: Mandarin: {{t+|cmn|波蘭|alt=波蘭的|tr=Bōlán de}}
-* Cornish: {{t|kw|polonek}}
-* Crimean Tatar: {{t|crh|Leh}}
-* Czech: {{t+|cs|polský}}
-* Danish: {{t+|da|polsk}}
-* Dutch: {{t+|nl|Pools}}
-* East Central German: {{t|gmw-ecg|pulsch}} {{q|Silesian}}
-* Esperanto: {{t+|eo|pola}}, {{t|eo|pollanda}} {{q|relating to inhabitants of Poland;  citizens}}, {{t|eo|pollingva}} {{qualifier|relating to polish language}}
-* Estonian: {{t|et|poola}}
-* Farefare: {{t|gur|pola}}
-* Faroese: {{t|fo|pólskur}}
-* Finnish: {{t+|fi|puolalainen}}
-* French: {{t+|fr|polonais}}
-* Galician: {{t+|gl|polaco}}, {{t+|gl|polonés}}
-* Georgian: {{t+|ka|პოლონური}} {{q|relating to everything except the people}}, {{t|ka|პოლონელი}} {{qualifier|relating to the people}}
-* German: {{t+|de|polnisch}}
-* Greek: {{t+|el|πολωνικός|m}}, {{t+|el|πολωνέζικος|m}}
-* Hawaiian: {{t|haw|Pōlani}}
-* Hebrew: {{t|he|פּוֹלָנִי|tr=polaní}}
-* Hindi: {{t+|hi|पोलिश}}
-* Hungarian: {{t+|hu|lengyel}}
-* Icelandic: {{t+|is|pólskur}}
-* Interlingua: {{t+|ia|polonese}}, {{t|ia|polac}}
-* Irish: {{t|ga|Polannach}}
-* Italian: {{t+|it|polacco}}
-* Japanese: {{t+|ja|ポーランド|alt=ポーランドの|tr=Pōrando no}}
-* Kashubian: {{t|csb|pòlsczi}}
-* Kazakh: {{t|kk|поляк}}
-* Khmer: {{t+|km|ប៉ូឡូញ}}
-* Korean: {{t+|ko|폴란드|alt=폴란드의}} {{q|South Korea}}, {{t+|ko|뽈스까|alt=뽈스까의}} {{q|North Korea}}
-* Kyrgyz: {{t+|ky|поляк}}
-* Lao: {{t|lo|ໂປແລັນ}}
-* Latin: {{t+|la|Polonicus|m}}
-* Latvian: {{t|lv|poļu}}, {{t|lv|polisks}}
-* Lithuanian: {{t|lt|lenkiškas}}, {{t+|lt|lenkų}}
-* Macedonian: {{t|mk|полски}}
-* Maltese: {{t|mt|Pollakk}}
-* Marathi: {{t|mr|पोलिश}}
-* Mongolian: {{t|mn|польш}}
-* Norwegian:
-*: Bokmål: {{t+|nb|polsk}}
-*: Nynorsk: {{t+|nn|polsk}}
-* Old Church Slavonic:
-*: Cyrillic: {{t|cu|пол҄ьскъ}}
-* Old East Slavic: {{t|orv|польскъ}}
-* Ottoman Turkish: {{t|ota|له|tr=leh}}
-* Pashto: {{t|ps|پولنډی|tr=polanḍáy}}
-* Persian: {{t+|fa|لهستانی|tr=lahestâni}}
-* Pitcairn-Norfolk: {{t|pih|Poelish}}
-* Polish: {{t+|pl|polski}}
-* Portuguese: {{t+|pt|polonês}}, {{t+|pt|polaco}}
-* Romanian: {{t+|ro|polonez|m}} {{t+|ro|poloneză|f}}, {{t+|ro|polon|m}}, {{t+|ro|polonă|f}} {{q|adjectives}}, {{t+|ro|leah|m}} {{q|obsolete}}, {{t+|ro|leahă|f}} {{q|obsolete}}, {{t|ro|leși|p}} {{q|obsolete}}
-* Russian: {{t+|ru|по́льский}}
-* Scottish Gaelic: {{t|gd|Pòlainneach}}
-* Serbo-Croatian:
-*: Cyrillic: {{t|sh|по̏љскӣ|sc=Cyrl}}
-*: Roman: {{t+|sh|pȍljskī}}
-* Silesian: {{t|szl|polski|m}}, {{t|szl|polsko|f}}
-* Slovak: {{t+|sk|poľský}}
-* Slovene: {{t+|sl|póljski}}
-* Sorbian:
-*: Lower Sorbian: {{t|dsb|pólski}}
-*: Upper Sorbian: {{t+|hsb|pólski}}
-* Spanish: {{t+|es|polaco}}, {{t+|es|polonés}}
-* Swahili: {{t|sw|Kipolandi}}, {{t|sw|Kipoli}}
-* Swedish: {{t+|sv|polsk}}
-* Tagalog: {{t|tl|Polako}}
-* Tajik: {{t+|tg|полякӣ}}, {{t|tg|лаҳистонӣ}}
-* Tatar: {{t|tt|поляк}}
-* Thai: {{t+|th|โปแลนด์}}
-* Turkish: {{t+|tr|Polonyalı}}, {{t+|tr|Leh}}
-* Turkmen: {{t|tk|polýak}}
-* Ukrainian: {{t+|uk|по́льський}}
-* Urdu: {{t|ur|پولش|tr=poliś}}
-* Uyghur: {{t|ug|پولەك}}
-* Uzbek: {{t+|uz|polyak}}
-* Vietnamese: {{t+|vi|Ba Lan}}
-* Welsh: {{t|cy|Pwylaidd}}
-* Yiddish: {{t|yi|פּויליש}}
-{{trans-bottom}}
+* {{enPR|pŏl'ĭsh|a=UK}}, {{IPA|en|/ˈpɒl.ɪʃ/}}
+* {{enPR|pä'lĭsh|a=US}}, {{IPA|en|/ˈpɑ.lɪʃ/}}
+* {{audio|en|en-us-polish.ogg|a=US}}
 
 ===Noun===
-{{en-noun|-}}
+{{en-noun|~}}
 
-# {{senseid|en|Q809}}The [[language]] spoken in Poland.
-#* {{quote-journal|en|author=John Malathronas|title=Which languages are easiest – and most difficult – for native English speakers to learn?|magazine=w:CNN|url=https://www.cnn.com/travel/article/learn-a-foreign-language-wellness|date=2021-04-25|passage=The big advantage of learning Russian is that, once you’re proficient, you can understand other Slav languages such as Czech, '''Polish''' or Bulgarian.}}
-# A [[breed]] of [[chicken#Noun|chickens]] with a large crest of feathers.
+# A [[substance]] used to polish.
+#: {{ux|en|A good silver '''polish''' will remove tarnish easily.}}
+# [[cleanliness|Cleanliness]]; smoothness, shininess.
+#: {{ux|en|The floor was waxed to a high '''polish'''.}}
+# [[refinement|Refinement]]; cleanliness in performance or presentation.
+#: {{ux|en|The lecturer showed a lot of '''polish''' at his last talk.}}
+
+====Synonyms====
+* {{sense|substance}} {{l|en|wax}}
+* {{sense|smoothness, shininess}} {{l|en|finish}}, {{l|en|sheen}}, {{l|en|shine}}, {{l|en|shininess}}, {{l|en|smoothness}}
+* {{sense|cleanliness in performance or presentation}} {{l|en|class}}, {{l|en|elegance}}, {{l|en|panache}}, {{l|en|refinement}}, {{l|en|style}}
 
 ====Derived terms====
-{{col|en|Polglish|Ponglish}}
+{{col|en|electropolish|micropolish|nanopolish|ultrapolish
+|apple-polish
+|depolish
+|expolish
+|French polish
+|furniture polish
+|glacial polish
+|nail polish
+|piano polish
+|polish remover
+|repolish
+|shoe polish
+|spit and polish
+|stove polish
+|varnish polish
+}}
 
 ====Related terms====
-{{sense|language}}
-* {{l|en|Middle Polish}}
-* {{l|en|Old Polish}}
+* {{l|en|polissoir}}
 
 ====Translations====
-{{trans-top|the language of Poland}}
-* Afrikaans: {{t+|af|Pools}}
-* Albanian: {{t|sq|[[gjuha]] [[polake]]|f}}, {{t|sq|polonisht}} {{q|adverb}}, {{t+|sq|polonishte|f}}
-* Arabic: {{t+|ar|بُولَنْدِيَّة|f|tr=bōlandiyya}}, {{t+|ar|بُولَنْدِيَّة|f|tr=bōlandiyya}}
-* Armenian: {{t+|hy|լեհերեն}}
-* Asturian: {{t+|ast|polacu|m}}
-* Azerbaijani: {{t|az|polyak}}, {{t|az|polyak dili}}
-* Basque: {{t+|eu|poloniera}}
-* Bavarian: {{t|bar|poinisch}}
-* Belarusian: {{t|be|по́льская мо́ва|f|sc=Cyrl}}, {{t+|be|по́льская|f}}
-* Bengali: {{t|bn|লেহিস্তানী}}
-* Breton: {{t+|br|poloneg|m}}
-* Bulgarian: {{t+|bg|по́лски|m}}
-* Catalan: {{t+|ca|polonès|m}}
-* Chechen: {{t|ce|полякийн мотт}}
-* Chinese:
-*: Mandarin: {{t+|cmn|波蘭語|tr=bōlányǔ}}
-* Cornish: {{t|kw|Polonek|m}}
-* Czech: {{t+|cs|polština|f}}
-* Danish: {{t+|da|polsk}}
-* Dutch: {{t+|nl|Pools|n}}
-* Esperanto: {{t+|eo|pola}}
-* Estonian: {{t|et|poola}}
-* Farefare: {{t|gur|polne}}
-* Faroese: {{t+|fo|pólskt|n}}
-* Finnish: {{t+|fi|puola}}, {{t|fi|[[puolan]] [[kieli]]}}
-* French: {{t+|fr|polonais|m}}
-* Galician: {{t+|gl|polaco|m}}
-* Georgian: {{t+|ka|პოლონური}}, {{t|ka|პოლონური ენა}}
-* German: {{t+|de|Polnisch|n}}
-* Greek: {{t+|el|πολωνικά|n-p}}, {{t+|el|πολωνέζικα|n-p}}
-* Greenlandic: {{t|kl|polenimiutut}}
-* Hebrew: {{t+|he|פולנית|f|tr=polanít}}
-* Hindi: {{t+|hi|पोलिश}}
-* Hungarian: {{t+|hu|lengyel}}
-* Icelandic: {{t+|is|pólska|f}}
-* Indonesian: {{t+|id|bahasa Polandia}}
-* Interlingua: {{t+|ia|polonese}}
-* Irish: {{t|ga|Polainnis}}
-* Italian: {{t+|it|polacco|m}}
-* Japanese: {{t+|ja|ポーランド語|tr=ポーランドご, pōrandogo}}
-* Kashubian: {{t|csb|pòlsczi jãzëk}}
-* Kazakh: {{t|kk|поляк тілі|sc=Cyrl}}, {{t|kk|полякша}}
-* Korean: {{t+|ko|폴란드어}}
-* Latvian: {{t|lv|poļu}}, {{t|lv|poļu valoda|f}}
-* Lithuanian: {{t+|lt|lenkų}}, {{t|lt|lenkiškai}}
-* Low German:
-*: German Low German: {{t+|nds-de|Poolsch|n}}
-* Macedonian: {{t|mk|полски|m}}
-* Malay: {{t|ms|[[bahasa]] [[Poland]]}}
-* Maltese: {{t|mt|Pollakk}}
-* Mapudungun: {{t|arn|pulska dungun}}
-* Marathi: {{t|mr|पोलिश}}
-* Mingrelian: {{t|xmf|პოლონური ნინა}}
-* Moksha: {{t|mdf|польшань}}
-* Navajo: {{t|nv|Póolish Dineʼé bizaad}}
-* Nepali: {{t|ne|पोलिश}}
-* Norwegian:
-*: Bokmål: {{t+|nb|polsk}}
-*: Nynorsk: {{t+|nn|polsk}}
-* Persian: {{t+|fa|لهستانی|tr=lahestâni}}
-* Polish: {{t|pl|[[język]] [[polski]]|m-in}}, {{t+|pl|polszczyzna|f}}
-* Portuguese: {{t+|pt|polonês|m}}, {{t+|pt|polaco|m}}
-* Romanian: {{t+|ro|poloneză|f}}, {{t+|ro|polonă|f}}
-* Russian: {{t+|ru|по́льский|m}} {{q|язы́к}}
-* Scots: {{t|sco|Pols}}
-* Scottish Gaelic: {{t|gd|Pòlainnis}}
-* Serbo-Croatian:
-*: Cyrillic: {{t|sh|по̏љскӣ|m|sc=Cyrl}}
-*: Roman: {{t+|sh|pȍljskī|m}}
-* Silesian: {{t|szl|polsko godka|f}}
-* Slovak: {{t+|sk|poľština|f}}, {{t+|sk|poľský|m}}
-* Slovene: {{t+|sl|póljščina|f}}
-* Sorbian:
-*: Lower Sorbian: {{t|dsb|pólšćina|f}}
-*: Upper Sorbian: {{t+|hsb|pólšćina|f}}
-* Spanish: {{t+|es|polaco|m}}
-* Swahili: {{t|sw|Kipolandi}}, {{t|sw|Kipoli}}
-* Swedish: {{t+|sv|polska}}
-* Tamil: {{t|ta|போலிஷ்|sc=Taml}}
-* Tatar: {{t|tt|поляк|sc=Cyrl}}
-* Thai: {{t|th|[[ภาษา]][[โปแลนด์]]|tr=paa-sǎa bpoo-lɛɛn}}
-* Tigrinya: {{t|ti|ፖሊሽ}}
-* Turkish: {{t+|tr|Lehçe}}
-* Ukrainian: {{t+|uk|по́льська мо́ва|f}}, {{t+|uk|по́льська|f}}
-* Urdu: {{t|ur|پولستانی|f|tr=polstāni|sc=ur-Arab}}
-* Uyghur: {{t|ug|پولەكچە}}
-* Uzbek: {{t+|uz|polyakcha}}
-* Vietnamese: {{t|vi|tiếng Ba-lan}}
-* Walloon: {{t+|wa|polonès}}
-* Welsh: {{t+|cy|Pwyleg|f}}
-* West Frisian: {{t+|fy|Poalsk}}
-* Zulu: {{t|zu|Isipholisha}}
+{{trans-top|substance used to polish}}
+* Armenian: {{t+|hy|լաք}}
+* Bulgarian: {{t+|bg|лак|m}}, {{t+|bg|гланц|m}}, {{t+|bg|политура|f}}
+* Catalan: {{t|ca|poliment|m}}
+* Czech: {{t|cs|leštidlo|n}}
+* Danish: {{t|da|pudsecreme|c}}, {{t|da|politur|c}}
+* Dutch: {{t+|nl|poets}}, {{t+|nl|poetsmiddel}}
+* Esperanto: {{t|eo|polurilo}}
+* Finnish: {{t|fi|kiillote}}, {{t|fi|kiillotusaine}}
+* French: {{t+|fr|vernis|m}}
+* German: {{t+|de|Politur|f}}
+* Indonesian: {{t+|id|poles}}
+* Italian: {{t+|it|lucido|m}}, {{t+|it|cera|f}}
+* Japanese: {{t|ja|研磨剤|tr=kenma-zai}}
+* Persian: {{t+|fa|پولیش|tr=poliš}}
+* Polish: {{t|pl|[[pasta]] [[do]] [[polerowanie|polerowania]]|f}}
+* Portuguese: {{t+|pt|cera|f}}, {{t+|pt|graxa|f}}
+* Romanian: {{t|ro|pastă de lustruit|f}}
+* Scottish Gaelic: {{t|gd|lìomh|f}}
+* Spanish: {{t|es|pulidor|m}}, {{t+|es|abrillantador|m}}, {{t+|es|pulimento|m}}, {{t+|es|betún|m}} {{qualifier|shoe polish}}
+* Swedish: {{t+|sv|polityr}}, {{t|sv|polermedel}}, {{t|sv|putsmedel}}
+* Turkish: {{t|tr|parlatma maddesi}}
 {{trans-bottom}}
 
-===See also===
-* {{l|en|Pole}}
-* {{l|en|Wikibooks:Polish|Wikibooks:Polish language course}}
-* {{langcat|pl}}
-* {{langlist}}
+{{trans-top|cleanliness; smoothness; shininess}}
+* Bulgarian: {{t+|bg|лъскавина|f}}, {{t+|bg|блясък|m}}
+* Danish: {{t|da|glans|c}}, {{t|da|glathed|c}}
+* Dutch: {{t+|nl|glans|m}}
+* Esperanto: {{t+|eo|poluro}}
+* Finnish: {{qualifier|shininess}} {{t+|fi|kiilto}}, {{qualifier|smoothness}} {{t+|fi|tasaisuus}}
+* German: {{t+|de|Glanz|m}}
+* Italian: {{t+|it|lucidità|f}}, {{t+|it|lucentezza|f}}, {{t+|it|brillantezza|f}}, {{t|it|levigatezza|f}}
+* Japanese: {{qualifier|cleanliness}} {{t+|ja|綺麗|tr=kirei}}, {{t|ja|清らか|tr=kiyoraka}}, {{t+|ja|清潔|tr=seiketsu}}, {{qualifier|smoothness}} {{t+|ja|平ら|tr=taira}}, {{t+|ja|平坦|tr=heitan}}, {{qualifier|shininess}} {{t+|ja|輝き|tr=kagayaki}}, {{t+|ja|つや|tr=tsuya}}, {{t+|ja|艶|tr=tsuya}}, {{t+|ja|光沢|tr=kōtaku}}
+* Polish: {{t+|pl|połysk|m}}
+* Portuguese: {{t+|pt|polimento|m}}
+* Swedish: {{t+|sv|polish}}, {{t+|sv|glans}}
+{{trans-bottom}}
+
+{{trans-top|cleanliness in performance or presentation}}
+* Danish: {{t|da|elegance|c}}, {{t|da|forfinelse|c}}
+* Finnish: {{t+|fi|viimeistely}}, {{t+|fi|selkeys}}, {{t+|fi|tyyli}}
+* German: {{t+|de|Schliff|m}}
+* Italian: {{t+|it|raffinatezza|f}}
+* Japanese: {{t+|ja|洗練|tr=senren}}
+* Portuguese: {{t+|pt|polimento|m}}
+* Swedish: {{t+|sv|finess}}, {{t+|sv|polityr}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Interlingua: {{t-check|ia|[[cera]] ([[de]] [[polimento]])}}
+* Persian: {{t+check|fa|جلا|tr=jalâ}}
+* Sikkimese: {{t+check|sip|བཀྲཁ་རྩེ}}
+{{trans-bottom}}
+
+===Verb===
+{{en-verb}}
+
+# {{lb|en|transitive}} To [[shine]]; to make a surface very [[smooth]] or shiny by rubbing, cleaning, or grinding.
+#: {{ux|en|He '''polished''' up the chrome until it gleamed.}}
+# {{senseid|en|refine; improve imperfections from}}{{lb|en|transitive}} To [[refine]]; remove imperfections from.
+#: {{ux|en|The band has '''polished''' its performance since the last concert.}}
+#* {{quote-text|en|year=1699|author={{w|Sir William Temple, 1st Baronet|William Temple}}|title=Heads designed for an essay on conversations|url=http://essays.quotidiana.org/temple/heads_for_conversation/
+|passage=Study gives strength to the mind; conversation, grace: the first apt to give stiffness, the other suppleness: one gives substance and form to the statue, the other '''polishes''' it.}}
+# {{lb|en|transitive}} To [[apply]] [[shoe polish]] to shoes.
+# {{lb|en|intransitive}} To become smooth, as from friction; to receive a gloss; to take a smooth and glossy surface.
+#: {{ux|en|Steel '''polishes''' well.}}
+#* {{quote-text|en|year=a. 1626|author=w:Francis Bacon|title=Inquisitions touching the compounding of metals
+|passage=The other [gold], whether it will polish so well Wherein for the latter [brass] it is probable it will}}
+# {{lb|en|transitive}} To [[refine]]; to wear off the rudeness, coarseness, or rusticity of; to make elegant and polite.
+#* {{RQ:Milton Paradise Lost|book=9|passage=Arts that '''polish''' Life.|year=1873}}
+
+====Synonyms====
+* {{sense|to make smooth and shiny by rubbing}} {{l|en|wax}}, {{l|en|shine}}, {{l|en|buff}}, {{l|en|furbish}}, {{l|en|burnish}}, {{l|en|smooth}}, {{l|en|bone}}
+* {{sense|refine}} {{l|en|hone}}, {{l|en|perfect}}, {{l|en|refine}}
+
+====Derived terms====
+{{col|en|overpolish|polishability
+|interpolish
+|piano-polish
+|polish a turd
+|polish off
+|polish one's rocket
+|polish the pearl
+|polish up,polish up on
+|polishable
+|polished
+|polisher
+|polishing
+|polishment
+|polishure
+|repolish&lt;!--polish again--&gt;
+|unpolish
+|unpolished
+|you can't polish shit
+|you can't polish a turd
+}}
+
+====Related terms====
+* {{l|en|polite}}&lt;!--derived from Latin for &quot;polished&quot;--&gt;
+
+====Translations====
+{{trans-top|make a surface smooth or shiny}}
+* Arabic: {{t+|ar|لَمَّعَ}}
+* Armenian: {{t+|hy|հղկել}}, {{t+|hy|ողորկել}}
+* Bulgarian: {{t+|bg|лъскам}}, {{t+|bg|полирам}}
+* Catalan: {{t+|ca|polir}}
+* Chinese:
+*: Mandarin: {{t+|cmn|擦亮|tr=cāliàng}}
+* Czech: {{t|cs|leštit}}
+* Danish: {{t+|da|polere}}, {{t|da|blanke}}, {{t|da|pudse}} {{q|make shiny}}, {{t+|da|glatte}} {{q|make smooth}}
+* Dutch: {{t+|nl|polijsten}}, {{t+|nl|poetsen}}, {{t+|nl|oppoetsen}}
+* Esperanto: {{t|eo|poluri}}
+* Finnish: {{t+|fi|kiillottaa}} {{q|make shiny}}, {{t+|fi|hioa}} {{q|make smooth}}, {{t+|fi|puunata}} {{qualifier|colloquial}}; {{t+|fi|lankata}} {{qualifier|shoes}}
+* French: {{t+|fr|polir}}
+* Galician: {{t+|gl|puír}}
+* Georgian: {{t-needed|ka}}
+* German: {{t+|de|polieren}}
+* Greek: {{t+|el|γυαλίζω}}, {{t+|el|λουστράρω}}
+* Hebrew: {{t|he|ליטש|alt=לִטֵּשׁ|tr=litésh}}, {{t+|he|מֵרֵק|tr=merék}}
+* Hungarian: {{t+|hu|kifényesít}}, {{t+|hu|políroz}}, {{t+|hu|fényez}}
+* Ido: {{t+|io|briligar}}, {{t+|io|polisar}}
+* Interlingua: {{t|ia|polir}}, {{qualifier|metal}} {{t|ia|furbir}}, {{qualifier|shoes}} {{t|ia|lustrar}}, {{qualifier|to smooth}} {{t|ia|lisiar}}
+* Italian: {{t+|it|lucidare}}, {{t+|it|levigare}}, {{t+|it|lustrare}}, {{t+|it|brillantare}}, {{t|it|tirare a lucido}}
+* Japanese: {{t+|ja|磨く|tr=migaku}}, {{qualifier|for rice}} {{t+|ja|研ぐ|tr=togu}}
+* Khmer: {{t+|km|ពួត|tr=puət|sc=Khmr}}, {{t|km|បង្ខាត់|tr=bɑŋkʰat|sc=Khmr}}, {{t+|km|ខាត់|tr=kʰat|sc=Khmr}}
+* Korean: {{t+|ko|닦다}}
+* Lao: {{t-needed|lo}}
+* Latin: {{t|la|poliō}}
+* Maori: {{t|mi|whakapiata}}, {{t|mi|whakamahine}}, {{t|mi|whakamaheni}}, {{t|mi|whakapīrata}}
+* Norman: {{t|nrf|poli}}
+* Norwegian:
+*: Bokmål: {{t|nb|polere}}, {{t+|nb|pusse}}
+* Ottoman Turkish: {{t|ota|مهره‌لمك|tr=mührelemek}}
+* Persian: {{t|fa|پولیش کردن|tr=poliš kardan}}
+* Polish: {{t+|pl|polerować}}, {{t+|pl|wygładzać}}
+* Portuguese: {{t+|pt|polir}}
+* Romanian: {{t+|ro|lustrui}}
+* Russian: {{qualifier|reflective surface}} {{t+|ru|полирова́ть}}, {{qualifier|matte surface}} {{t+|ru|шлифова́ть}}
+* Sanskrit: {{t|sa|घर्षति}}
+* Scottish Gaelic: {{t|gd|lìomh}}
+* Spanish: {{t+|es|pulir}}, {{t+|es|acicalar}}, {{t+|es|polir}} {{q|disused}}, {{t+|es|pulimentar}}, {{t+|es|lustrar}}
+* Swedish: {{t+|sv|polera}}, {{t+|sv|putsa}}
+* Thai: {{t-needed|th}}
+* Tocharian B: {{t|txb|kānt-}}
+* Turkish: {{t+|tr|parlatmak}}, {{t+|tr|mührelemek}}
+* Ukrainian: {{t|uk|полірува́ти|impf}}, {{t|uk|пополірува́ти|pf}}, {{t|uk|відполіро́вувати|impf}}, {{t|uk|відполірува́ти|pf}}, {{t|uk|шліфува́ти|impf}}, {{t|uk|пошліфува́ти|pf}}, {{t|uk|відшліфо́вувати|impf}}, {{t|uk|відшліфува́ти|pf}}
+* Vietnamese: {{t+|vi|đánh bóng}}
+{{trans-bottom}}
+
+{{trans-top|to refine; improve imperfections from}}
+* Arabic: {{t|ar|صَقَل}}
+* Catalan: {{t+|ca|polir}}
+* Danish: {{t|da|forfine}}, {{t-check|da|pudse|alt=pudse af}} &lt;!-- was &quot;[[pudse]] af&quot; - assumed inflected form or vocalised spelling; please verify if linking is acceptable. see [[User:Kephir/gadgets/xte#Translation_fixing]] --&gt;
+* Dutch: {{t+|nl|oppoetsen}}
+* Finnish: {{t+|fi|hioa}}, {{t+|fi|parannella}}, {{t+|fi|kehittää}}
+* Galician: {{t+|gl|puír}}
+* German: {{t+|de|perfektionieren}}
+* Italian: {{t+|it|perfezionare}}, {{t+|it|smussare}}, {{t+|it|levigare}}
+* Japanese: {{t|ja|洗練する|tr=senren-suru}}
+* Polish: {{t+|pl|szlifować|impf}}
+* Portuguese: {{t+|pt|polir}}
+* Romanian: {{t+|ro|perfecționa}}
+* Spanish: {{t+|es|pulir}}, {{t+|es|acicalar}}, {{t|es|[[polir]] / [[alcorzar]]}} {{q|disused}}
+* Swedish: {{t+|sv|polera}}, {{t+|sv|putsa}}
+{{trans-bottom}}
+
+{{trans-top|to apply shoe polish}}
+* Bulgarian: {{t+|bg|лъскам}}
+* Finnish: {{t|fi|[[kiillottaa]] [[kenkiä]]}}, {{t+|fi|lankata}}
+* Galician: {{t+|gl|lustrar}}
+* German: {{t+|de|wichsen}}
+* Ido: {{t+|io|cirajizar}}
+* Italian: {{t+|it|lustrare}}, {{t+|it|lucidare}}
+* Navajo: {{t|nv|náyiishį́į́h|sc=Latn}}
+* Norman: {{t|nrf|bliatchinner}}
+* Romanian: {{t+|ro|lustrui}}
+* Scottish Gaelic: {{t|gd|lìomh}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Breton: {{t+check|br|lufrañ}}, {{t-check|br|levnañ}}
+* Persian: {{t-check|fa|صیقل زدن|tr=sayqal zadan}}
+* Woiwurrung: {{t-check|wyi|boornerr-win}}
+{{trans-bottom}}
 
 ===Further reading===
-* [https://web.archive.org/web/20040411160352/http://www.websters-online-dictionary.org/definition/Polish-english/ Polish - English Dictionary]: from [https://web.archive.org/web/20120223164907/http://www.websters-online-dictionary.org/ Webster's Dictionary] - the Rosetta Edition.
-* {{ISO 639|ref=1|pl||pol}}
-* {{ethnologue|pol}}
+* {{R:Webster 1913}}
+* {{R:Century 1911}}
+* {{R:OneLook}}
 
 ===Anagrams===
 * {{anagrams|en|a=hilops|Hislop|philos}}
 
 {{cln|en|heteronyms}}
-{{C|en|Chickens|Languages|Nationalities|Poland}}</text>
-      <sha1>c0kcz5f1sdw1oif1boko2vsi2vb0g5d</sha1>
+{{C|en|Hygiene}}</text>
+      <sha1>nxu9lb52mpv1xmj2rzlfmwz8qv0z3r3</sha1>
     </revision>
   </page>

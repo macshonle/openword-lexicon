@@ -175,9 +175,15 @@ def code_to_rank(code: str) -> Tuple[int, int, int, int]:
 
 
 def assign_tier(entry: dict, ranks: Dict[str, int]) -> dict:
-    """Assign frequency rank code to an entry."""
+    """Assign frequency rank code to an entry.
+
+    Normalizes word to lowercase for lookup against frequency table,
+    which is case-insensitive. Original entry word is preserved.
+    """
     word = entry['word']
-    rank = ranks.get(word)
+    # Normalize for lookup (frequency tables are lowercase)
+    normalized = unicodedata.normalize('NFKC', word.lower())
+    rank = ranks.get(normalized)
     code = rank_to_code(rank)
 
     entry['frequency_tier'] = code

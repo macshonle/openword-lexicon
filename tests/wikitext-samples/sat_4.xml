@@ -1,0 +1,49 @@
+<page>
+    <title>Sat</title>
+    <ns>0</ns>
+    <id>155199</id>
+    <revision>
+      <id>85214716</id>
+      <parentid>80929836</parentid>
+      <timestamp>2025-06-21T03:29:36Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>add period after English uses of {{abbreviation of}} as it's no longer automatic, per [[Wiktionary:Beer parlour/2024/June#Full stops after templates like {{synonym of}}]] and general consistency with other definition-generating and etymology-generating templates; remove nodot=, nocap=, dot=; use {{place}} in some cases; misc cleanups (manually assisted)</comment>
+      <origin>85214716</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="748" sha1="6575im2fw5790ywu9lgzb757l9qll6q" xml:space="preserve">{{also|Appendix:Variations of &quot;sat&quot;}}
+==English==
+
+===Alternative forms===
+* {{l|en|Sat.}}
+
+===Noun===
+{{en-noun}}
+
+# {{abbreviation of|en|Saturday}}.
+
+====Translations====
+{{trans-top|abbreviation of Saturday}}
+* Catalan: {{t+|ca|ds.}}
+* Czech: {{t+|cs|so}}
+* Estonian: {{t+|et|L}}
+* Finnish: {{t+|fi|la}}
+* French: {{t+|fr|sam.|m}}
+* German: {{t+|de|Sa.}}
+* Hindi: {{t+|hi|शनि|m}}
+* Japanese: {{t+|ja|土|tr=do, tsuchi|sc=Jpan}}, {{t+|ja|土曜|tr=doyō|sc=Jpan}}
+* Korean: {{t+|ko|토|sc=Kore}}
+* Portuguese: {{t+|pt|sáb|m}}
+* Scottish Gaelic: {{t|gd|Dis}}
+* Vietnamese: {{t|vi|T7}}
+{{trans-bottom}}
+
+===Anagrams===
+* {{anagrams|en|a=ast|Sta.|ats|ast|TAs|Sta|sta|AST|Ast|ATs|tas|Tas.|ATS|at's|TSA|T(S/A)|as't|TAS|T.A.s|Tas|-ast|TA's|STA}}</text>
+      <sha1>6575im2fw5790ywu9lgzb757l9qll6q</sha1>
+    </revision>
+  </page>

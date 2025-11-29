@@ -1495,7 +1495,8 @@ def parse_entry(title: str, text: str) -> List[Dict]:
     temporal_tags, spelling_region, word_count, is_phrase, is_abbreviation,
     is_proper_noun, is_inflected, lemma, phrase_type, syllables, morphology.
     """
-    word = title.lower().strip()
+    # Preserve original case - downstream consumers can filter by case pattern as needed
+    word = title.strip()
 
     # CRITICAL: Extract ONLY the ==English== section
     # This prevents contamination from other language sections

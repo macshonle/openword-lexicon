@@ -1,91 +1,69 @@
-# Hotspot words for validation and testing
-# One word per line, comments start with #
-# These are words that appear in tests, docs, or have shown edge cases
-
-# === EDGE CASES - is_abbreviation ===
-acronym
-saturday
-
-# === EDGE CASES - is_informal (various patterns) ===
-dialect
-four
-hell
-poppycock
-slushpile
+a
+A
 abdominal
 abominate
-billion
-flute
-
-# === EDGE CASES - is_inflected ===
-are
-is
-beat
-
-# === EDGE CASES - Morphology ===
-dimorphemic
-footfucker
-guinea
-afghanistan
-uzbekistan
-tajikistan
-beeswax
-
-# === EDGE CASES - Regional labels ===
-indaba
-piss-easy
-
-# === EDGE CASES - is_derogatory ===
-taffy
-spade
-spook
-
-# === EDGE CASES - Polysemy (multiple entries per word) ===
-sat
-set
-sun
-may
-march
-turkey
-polish
-bat
-bank
-
-# === NON-ENGLISH - Should be excluded (non-Latin scripts) ===
-# Greek
-λ
-ω
-αὐτό
-# Cyrillic
-привет
-водка
-# Arabic
-مرحبا
-# CJK
-你好
-日本
-
-# === NON-ENGLISH - Should be excluded (Latin script, no English usage) ===
-# Polish (contains ł which is Latin Extended)
-łódź
-# Vietnamese (Latin with extensive diacritics)
-tiếng
-# Hungarian (Latin with umlauts)
-üdvözlet
-
-# === COMMON - Documentation examples ===
-dictionary
-encyclopedia
-cat
-it
-hello
-world
-
-# === COMMON - Sanity checks ===
-the
-a
+acronym
+Afghanistan
 an
+are
+bank
+bat
+beat
+beeswax
+billion
+cat
+dialect
+dictionary
+dimorphemic
+encyclopedia
+flute
+footfucker
+four
+guinea
+Guinea
+happiness
+happy
+hell
+hello
+indaba
+is
+it
+lambda
+Lambda
+łódź
+march
+March
+may
+piss-easy
+polish
+Polish
+poppycock
 run
 running
-happy
-happiness
+sat
+Sat
+SAT
+Saturday
+set
+slushpile
+spade
+spook
+sun
+taffy
+Tajikistan
+the
+tiếng
+turkey
+üdvözlet
+Uzbekistan
+world
+λ
+Λ
+λ.
+ω
+你好
+日本
+αὐτό
+водка
+مرحبا
+привет

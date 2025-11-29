@@ -1,0 +1,106 @@
+<page>
+    <title>łódź</title>
+    <ns>0</ns>
+    <id>1056379</id>
+    <revision>
+      <id>87232557</id>
+      <parentid>83281707</parentid>
+      <timestamp>2025-09-29T03:48:52Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>Polish headwords: convert separate params in {{pl-*}} to comma-separated items, use &lt;l:...&gt; instead of &lt;q:...&gt; where appropriate, misc cleanup (manually assisted)</comment>
+      <origin>87232557</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1842" sha1="ixzxnfzromkwxcgnkxfimr8ck3tq122" xml:space="preserve">{{also|Lodz|Lodž|Łodz|Łódź}}
+==Old Polish==
+
+===Alternative forms===
+* {{alt|zlw-opl|łodzia}}
+
+===Etymology===
+{{inh+|zlw-opl|sla-pro|*oldi}}.
+
+===Pronunciation===
+* {{zlw-opl-IPA}}
+
+===Noun===
+{{zlw-opl-noun|f}}
+
+# [[boat]]
+#* {{RQ:zlw-opl:Pozn|426|1400|Iacosm woyewodzini ludze polapal tedi, kedi cradly '''lodzø''' na Cussewe jezerze|Jakośm wojewodziny ludzie połapał tedy, kiedy kradli '''łodzią''' na Kuszewie jezierze|-}}
+# [[ship]] {{gl|large boat}}
+#* {{RQ:zlw-opl:Fl|103, 27|To morze welike y szyrokee..., tamo '''lodzye''' (naves) przedø|To morze wielike i szyrokie..., tamo '''łodzie''' (naves) przedą|-}}
+
+====Derived terms====
+{{col|zlw-opl|title=nouns|łodzie młynne}}
+
+====Descendants====
+* {{desc|pl|łódź}}
+
+===References===
+* {{R:zlw-opl:SPJSP}}
+
+{{C|zlw-opl|Watercraft}}
+
+==Polish==
+
+===Etymology===
+{{dercat|pl|sla-pro|inh=1}}
+{{inh+|pl|zlw-opl|łódź}}.
+
+===Pronunciation===
+{{pl-pr|a=Pl-łódź.ogg;LL-Q809 (pol)-Olaf-łódź.wav|hh=Łódź,łudź}}
+
+===Noun===
+{{pl-noun|f|dim=łódka,łódeczka}}
+
+# [[boat]]
+
+====Declension====
+{{pl-decl-noun-f}}
+
+====Derived terms====
+{{col|pl|title=nouns|łódź podwodna}}
+
+===Further reading===
+* {{R:pl:WSJP}}
+* {{R:pl:PWN}}
+
+{{C|pl|Watercraft}}
+
+==Upper Sorbian==
+
+===Etymology===
+{{inh+|hsb|sla-pro|*oldi}}.
+
+===Pronunciation===
+* {{hsb-IPA}}
+* {{rhymes|hsb|ʊt͡ʃ|s=1}}
+* {{homophone|hsb|Łódź}}
+* {{hyph|hsb|łódź}}
+* {{hyph|hsb|caption=Syllabification|łódź}}
+
+===Noun===
+{{hsb-noun|f|dim=łódźička|adj=łódźny}}
+
+# [[boat]]
+
+====Declension====
+{{hsb-ndecl|f.genplow}}
+
+====Derived terms====
+{{col|hsb|title=adjectives|łódźny}}
+{{col|hsb|title=nouns|łódźnica&lt;g:f&gt;|łódźnik&lt;g:m-pr&gt;|łódźownik&lt;g:m-pr&gt;|łódźstwo&lt;g:n&gt;|łódźička&lt;g:f&gt;}}
+{{col|hsb|title=verbs|łódźować}}
+
+===References===
+* {{R:hsb:Soblex}}
+
+{{C|hsb|Watercraft}}</text>
+      <sha1>ixzxnfzromkwxcgnkxfimr8ck3tq122</sha1>
+    </revision>
+  </page>
