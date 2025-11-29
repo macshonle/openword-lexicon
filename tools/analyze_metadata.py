@@ -538,7 +538,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         report += f"| {concrete_type} | {count:,} |\n"
     report += "\n"
 
-    # Frequency distribution (using letter-based tiers A-Z)
+    # Frequency distribution (using letter-based tiers A-L/Y/Z)
     report += "#### Frequency Distribution by Tier (Nouns Only)\n\n"
     report += "| Tier | Count | Percentage |\n"
     report += "|------|------:|-----------:|\n"

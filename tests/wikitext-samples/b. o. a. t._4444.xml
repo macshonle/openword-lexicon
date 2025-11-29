@@ -1,0 +1,26 @@
+<page>
+    <title>B. O. A. T.</title>
+    <ns>0</ns>
+    <id>10709019</id>
+    <revision>
+      <id>85329312</id>
+      <parentid>83642540</parentid>
+      <timestamp>2025-06-23T21:22:47Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>add period after English uses of {{alternative form of}}/{{alternative spelling of}}/{{alternative case form of}} and remove period after non-English uses, per [[Wiktionary:Beer parlour/2024/June#Full stops after templates like {{synonym of}}]] and general consistency with other definition-generating and etymology-generating templates; remove nodot=, nocap=, dot=; misc cleanups (manually assisted)</comment>
+      <origin>85329312</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="73" sha1="nhz3eyshzgj3uwjluezd95vki3qzuup" xml:space="preserve">==English==
+
+===Noun===
+{{en-noun|?}}
+
+# {{alternative form of|en|BOAT}}.</text>
+      <sha1>nhz3eyshzgj3uwjluezd95vki3qzuup</sha1>
+    </revision>
+  </page>

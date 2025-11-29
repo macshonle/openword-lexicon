@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-frequency_tiers.py — Assign frequency rank codes (A–Z) to lexeme entries.
+frequency_tiers.py — Assign frequency rank codes (A–L, Y, Z) to lexeme entries.
 
 Usage:
   uv run python src/openword/frequency_tiers.py \\
@@ -9,42 +9,28 @@ Usage:
 
 Reads frequency data from data/raw/{lang}/{lang}_50k.txt
 
-Rank Code System (A–Z, logarithmic scale with base B = 10^(1/4)):
-  Each letter represents a geometric band on the frequency rank scale.
-  - A: rank 1 (most frequent word)
-  - B: rank 2
-  - C: ranks 3-4
-  - D: ranks 5-7 (ultra-top function words)
-  - E: ranks 8-13 (core function words)
-  - F: ranks 14-23 (very frequent function/structure words)
-  - G: ranks 24-42 (high-frequency function + extremely common content)
-  - H: ranks 43-74 (very common grammatical items, basic content)
-  - I: ranks 75-133 (high-frequency core vocabulary)
-  - J: ranks 134-237 (core high-frequency; early "sight" vocabulary)
-  - K: ranks 238-421 (basic everyday content vocabulary)
-  - L: ranks 422-749 (common conversational words; early reader level)
-  - M: ranks 750-1333 (simple vocabulary; frequent in everyday texts)
-  - N: ranks 1334-2371 (high-frequency everyday vocabulary)
-  - O: ranks 2372-4216 (conversational fluency band)
-  - P: ranks 4217-7498 (broad conversational fluency; frequent in general prose)
-  - Q: ranks 7499-13335 (general educated vocabulary)
-  - R: ranks 13336-23713 (educated usage; lower-mid frequency)
-  - S: ranks 23714-42169 (standard educated vocabulary; mid-frequency)
-  - T: ranks 42170-74989 (extended vocabulary; literary and academic)
-  - U: ranks 74990-133352 (extended/technical vocabulary)
-  - V: ranks 133353-237137 (specialized but relatively well-attested)
-  - W: ranks 237138-421696 (rare/specialized; tail of large general lexicons)
-  - X: ranks 421697-749894 (very rare; technical terms, obscure lexemes)
-  - Y: ranks 749895-1333521 (very rare; domain-specific vocabulary, proper names)
-  - Z: ranks 1333522+ (extremely rare; highly specialized jargon, neologisms)
+Rank Code System (12-level explicit boundaries):
+  - A: ranks 1-20         Universal Anchor
+  - B: ranks 21-100       Grammatical Skeleton
+  - C: ranks 101-300      Semantic Core
+  - D: ranks 301-500      Basic Literacy
+  - E: ranks 501-1000     Elementary Vocabulary
+  - F: ranks 1001-3000    Everyday Lexicon
+  - G: ranks 3001-5000    Conversational Mastery
+  - H: ranks 5001-10000   Educated Standard
+  - I: ranks 10001-30000  Full Adult Repertoire
+  - J: ranks 30001-50000  Sophisticated/Erudite
+  - K: ranks 50001-75000  Technical/Domain-specific
+  - L: ranks 75001-100000 Archaic/Hyperspecialized
+  - Y: ranks 100001+      Known but very rare (beyond typical frequency data)
+  - Z: unknown/unranked
 """
 
 import json
 import logging
-import math
 import unicodedata
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Set, Tuple
 
 import orjson
 
@@ -89,98 +75,187 @@ def load_frequency_ranks(freq_file: Path) -> Dict[str, int]:
 
             # Normalize to match our entries
             normalized = unicodedata.normalize('NFKC', word.lower())
+
+            # Skip contraction fragments (e.g., 'll, 's, 't, 'm, 're, 've)
+            # These are not standalone words and should not affect frequency tiers
+            if _is_contraction_fragment(normalized):
+                continue
+
             ranks[normalized] = rank
 
     logger.info(f"  -> Loaded {len(ranks):,} frequency ranks")
     return ranks
 
 
+def _is_contraction_fragment(word: str) -> bool:
+    """
+    Check if word is a contraction fragment (not a standalone word).
+
+    Contraction fragments are partial word forms that can't stand alone:
+      - Clitic suffixes: 'll, 's, 't, 'm, 're, 've, 'd
+      - Clitic prefixes: 'twas, 'tis (less common)
+
+    These appear in some frequency lists but are not valid standalone words.
+    """
+    return word.startswith("'") or word.endswith("'")
+
+
+def _should_assign_frequency(word: str, lowercase_words: Set[str]) -> bool:
+    """
+    Determine if this entry should receive a frequency tier.
+
+    Case normalization logic:
+      - Lowercase words always get frequency tier
+      - Non-lowercase words only get tier if no lowercase variant exists
+
+    This ensures frequency "credit" goes to the canonical form:
+      - "boat" gets tier E, "BOAT"/"BoAT" get tier Z (lowercase exists)
+      - "NASA"/"Nasa" both get tier (no lowercase "nasa" exists)
+      - "Monday" gets tier (no lowercase "monday" exists)
+
+    Args:
+        word: The word to check
+        lowercase_words: Set of all lowercase words in the lexicon
+
+    Returns:
+        True if this entry should receive a frequency tier
+    """
+    if word.islower():
+        return True
+    return word.lower() not in lowercase_words
+
+
+# Tier thresholds: (min_rank, code, description)
+# Each tier starts at min_rank and extends to the next tier's min_rank - 1
+TIER_DEFINITIONS = [
+    (1, 'A', 'Universal Anchor'),
+    (21, 'B', 'Grammatical Skeleton'),
+    (101, 'C', 'Semantic Core'),
+    (301, 'D', 'Basic Literacy'),
+    (501, 'E', 'Elementary Vocabulary'),
+    (1001, 'F', 'Everyday Lexicon'),
+    (3001, 'G', 'Conversational Mastery'),
+    (5001, 'H', 'Educated Standard'),
+    (10001, 'I', 'Full Adult Repertoire'),
+    (30001, 'J', 'Sophisticated/Erudite'),
+    (50001, 'K', 'Technical/Domain-specific'),
+    (75001, 'L', 'Archaic/Hyperspecialized'),
+    (100001, 'Y', 'Known but very rare'),
+]
+
+# Reversed for efficient lookup (check highest thresholds first)
+_TIER_THRESHOLDS = [(t[0], t[1]) for t in reversed(TIER_DEFINITIONS)]
+
+# Valid tier codes (Y is now in TIER_DEFINITIONS, Z is for unknown/unranked)
+TIER_CODES = [t[1] for t in TIER_DEFINITIONS] + ['Z']
+
+
 def rank_to_code(rank: Optional[int]) -> str:
     """
-    Convert frequency rank to single-letter code (A–Z).
+    Convert frequency rank to single-letter code (A–L, Y, Z).
 
-    Uses logarithmic scale with base B = 10^(1/4):
-    - A = rank 1 (most frequent)
-    - B = rank 2
-    - ...
-    - M ≈ rank 1000
-    - Q ≈ rank 10000
-    - U ≈ rank 100000
-    - Z = ranks 1333522+ (extremely rare)
+    12-level explicit boundary system:
+    - A: ranks 1-20         Universal Anchor
+    - B: ranks 21-100       Grammatical Skeleton
+    - C: ranks 101-300      Semantic Core
+    - D: ranks 301-500      Basic Literacy
+    - E: ranks 501-1000     Elementary Vocabulary
+    - F: ranks 1001-3000    Everyday Lexicon
+    - G: ranks 3001-5000    Conversational Mastery
+    - H: ranks 5001-10000   Educated Standard
+    - I: ranks 10001-30000  Full Adult Repertoire
+    - J: ranks 30001-50000  Sophisticated/Erudite
+    - K: ranks 50001-75000  Technical/Domain-specific
+    - L: ranks 75001-100000 Archaic/Hyperspecialized
+    - Y: ranks 100001+      Known but very rare
+    - Z: unknown/unranked
 
     Args:
         rank: Integer rank (1-indexed), or None for unranked words
 
     Returns:
-        Single letter code A–Z
+        Single letter code A–L, Y, or Z
     """
     if rank is None or rank < 1:
-        # Unranked words get 'Z' (extremely rare)
-        return 'Z'
+        return 'Z'  # Unknown/unranked
 
-    # Base B = 10^(1/4) = 10^0.25
-    B = 10 ** 0.25
+    # Find the appropriate tier by checking thresholds from highest to lowest
+    for threshold, code in _TIER_THRESHOLDS:
+        if rank >= threshold:
+            return code
 
-    # Continuous band index on log_B scale
-    i_real = math.log(rank) / math.log(B)
-
-    # Nearest integer index
-    i = round(i_real)
-
-    # Clamp to 0..25 (A..Z)
-    i = max(0, min(25, i))
-
-    # Convert to letter
-    code = chr(ord('A') + i)
-
-    return code
+    return 'A'  # Fallback (should not reach here for valid ranks)
 
 
-def code_to_rank(code: str) -> Tuple[int, int, int, int]:
+def code_to_rank(code: str) -> Tuple[Optional[int], Optional[int]]:
     """
-    Convert letter code to band index, center rank, and rank range.
+    Convert letter code to rank range (min_rank, max_rank).
 
     Args:
-        code: Single letter A–Z
+        code: Single letter A–L, Y, or Z
 
     Returns:
-        Tuple of (band_index, center_rank, low_rank, high_rank)
-        All ranks are inclusive.
+        Tuple of (min_rank, max_rank) where:
+        - For A-L, Y: inclusive range of ranks for that tier
+        - For Z: (None, None) - unknown/unranked
 
     Raises:
-        ValueError: If code is not A–Z
+        ValueError: If code is not a valid tier code
     """
     c = code.upper()
-    i = ord(c) - ord('A')
 
-    if i < 0 or i > 25:
-        raise ValueError(f"Code must be A-Z, got: {code}")
+    if c == 'Z':
+        return (None, None)
 
-    # Base B = 10^(1/4)
-    B = 10 ** 0.25
+    # Find the tier in definitions (includes A-L and Y)
+    tier_idx = None
+    for i, (_, tier_code, _) in enumerate(TIER_DEFINITIONS):
+        if tier_code == c:
+            tier_idx = i
+            break
 
-    # Center of the band
-    center = round(B ** i)
+    if tier_idx is None:
+        raise ValueError(f"Code must be A-L, Y, or Z, got: {code}")
 
-    # Half-step boundaries
-    if i == 0:
-        low = 1
+    min_rank = TIER_DEFINITIONS[tier_idx][0]
+
+    # Max rank is one less than the next tier's min, or None for the last tier (Y)
+    if tier_idx < len(TIER_DEFINITIONS) - 1:
+        max_rank = TIER_DEFINITIONS[tier_idx + 1][0] - 1
     else:
-        low = math.ceil(B ** (i - 0.5))
-        low = max(1, low)
+        # Last tier (Y) - no upper bound
+        max_rank = None
 
-    high = math.ceil(B ** (i + 0.5)) - 1
-
-    return (i, center, low, high)
+    return (min_rank, max_rank)
 
 
-def assign_tier(entry: dict, ranks: Dict[str, int]) -> dict:
-    """Assign frequency rank code to an entry.
+def assign_tier(entry: dict, ranks: Dict[str, int], lowercase_words: Set[str]) -> dict:
+    """Assign frequency rank code to an entry with case normalization.
 
-    Normalizes word to lowercase for lookup against frequency table,
-    which is case-insensitive. Original entry word is preserved.
+    Case normalization logic:
+      - Lowercase words always get frequency tier based on lookup
+      - Non-lowercase words get tier Z if a lowercase variant exists
+      - Non-lowercase words get frequency tier if no lowercase variant exists
+
+    This ensures frequency "credit" goes to the canonical (lowercase) form
+    when it exists, while still assigning tiers to proper nouns and acronyms
+    that only exist in capitalized forms.
+
+    Args:
+        entry: Lexeme entry dict with 'word' key
+        ranks: Word to frequency rank mapping (1-indexed)
+        lowercase_words: Set of all lowercase words in the lexicon
+
+    Returns:
+        Entry dict with 'frequency_tier' assigned
     """
     word = entry['word']
+
+    # Check if this entry should receive a frequency tier
+    if not _should_assign_frequency(word, lowercase_words):
+        entry['frequency_tier'] = 'Z'
+        return entry
+
     # Normalize for lookup (frequency tables are lowercase)
     normalized = unicodedata.normalize('NFKC', word.lower())
     rank = ranks.get(normalized)
@@ -191,18 +266,26 @@ def assign_tier(entry: dict, ranks: Dict[str, int]) -> dict:
 
 
 def process_file(input_path: Path, output_path: Path, ranks: Dict[str, int]):
-    """Process a JSONL file and assign rank codes."""
+    """Process a JSONL file and assign rank codes with case normalization.
+
+    Uses a two-pass approach:
+      1. Load all entries and build set of lowercase words
+      2. Assign tiers with case-aware logic (only canonical forms get tiers)
+
+    This ensures frequency "credit" goes to lowercase forms when they exist,
+    while proper nouns and acronyms without lowercase variants still get tiers.
+    """
     if not input_path.exists():
         logger.warning(f"Input file not found: {input_path}")
         return
 
     logger.info(f"Processing {input_path.name}")
 
+    # Pass 1: Load all entries and build lowercase word set
     entries = []
-    # Initialize counts for all letter codes A-Z
-    tier_counts = {chr(ord('A') + i): 0 for i in range(26)}
+    lowercase_words: Set[str] = set()
 
-    with ProgressDisplay(f"Assigning tiers to {input_path.name}", update_interval=1000) as progress:
+    with ProgressDisplay(f"Loading {input_path.name}", update_interval=10000) as progress:
         with open(input_path, 'r', encoding='utf-8') as f:
             for line_num, line in enumerate(f, 1):
                 line = line.strip()
@@ -211,13 +294,25 @@ def process_file(input_path: Path, output_path: Path, ranks: Dict[str, int]):
 
                 try:
                     entry = json.loads(line)
-                    tiered = assign_tier(entry, ranks)
-                    tier_counts[tiered['frequency_tier']] += 1
-                    entries.append(tiered)
+                    entries.append(entry)
+                    word = entry['word']
+                    if word.islower():
+                        lowercase_words.add(word)
                     progress.update(Lines=line_num, Entries=len(entries))
                 except json.JSONDecodeError as e:
                     logger.warning(f"Line {line_num}: JSON decode error: {e}")
                     continue
+
+    logger.info(f"  Found {len(lowercase_words):,} lowercase words in lexicon")
+
+    # Pass 2: Assign tiers with case-aware logic
+    tier_counts = {code: 0 for code in TIER_CODES}
+
+    with ProgressDisplay("Assigning frequency tiers", update_interval=10000) as progress:
+        for i, entry in enumerate(entries, 1):
+            tiered = assign_tier(entry, ranks, lowercase_words)
+            tier_counts[tiered['frequency_tier']] += 1
+            progress.update(Entries=i)
 
     # Write output
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -233,8 +328,13 @@ def process_file(input_path: Path, output_path: Path, ranks: Dict[str, int]):
         count = tier_counts[code]
         if count > 0:
             # Get rank range for this code
-            _, center, low, high = code_to_rank(code)
-            logger.info(f"    {code}: {count:6,}  (ranks {low:,}-{high:,}, center ~{center:,})")
+            min_rank, max_rank = code_to_rank(code)
+            if min_rank is None:
+                logger.info(f"    {code}: {count:6,}  (unknown/unranked)")
+            elif max_rank is None:
+                logger.info(f"    {code}: {count:6,}  (ranks {min_rank:,}+)")
+            else:
+                logger.info(f"    {code}: {count:6,}  (ranks {min_rank:,}-{max_rank:,})")
     logger.info(f"  -> {output_path}")
 
 

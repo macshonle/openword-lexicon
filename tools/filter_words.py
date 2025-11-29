@@ -50,7 +50,7 @@ class FilterConfig:
     allow_mixed: bool = True
 
     # Frequency constraints
-    min_frequency_tier: str = None  # Letter code A-Z (e.g., 'M' ≈ rank 1k, 'Q' ≈ rank 10k, 'U' ≈ rank 100k)
+    min_frequency_tier: str = None  # Letter code A-L/Y/Z (e.g., 'F' ≈ rank 1k, 'I' ≈ rank 10k, 'L' ≈ rank 75k)
     prefer_common: bool = True
 
     # Regional variants
@@ -92,7 +92,7 @@ WORDLE_CONFIG = FilterConfig(
     allow_abstract=True,
     allow_mixed=True,
     require_concrete=False,
-    min_frequency_tier='U',  # U ≈ rank 100k (common words)
+    min_frequency_tier='L',  # L ≈ rank 75k (common words)
     exclude_regional=True,  # No British-only or other regional variants
     exclude_offensive=True,
     exclude_vulgar=True,
@@ -111,7 +111,7 @@ TWENTY_Q_CONFIG = FilterConfig(
     allowed_pos={'noun'},
     require_primary_pos=True,
     require_concrete=True,
-    min_frequency_tier='U',  # U ≈ rank 100k
+    min_frequency_tier='L',  # L ≈ rank 75k
     exclude_regional=False,  # Regional nouns are OK (like "lorry")
     exclude_offensive=True,
     exclude_vulgar=True,
@@ -342,11 +342,12 @@ def calculate_score(word: str, entry: Dict, config: FilterConfig) -> float:
 
     # Frequency score
     tier = entry.get('frequency_tier', 'Z')
-    # Tier scores: A (most frequent) = 100, Z (rarest) = 0
-    # Linear scale based on band index (0-25)
+    # Tier scores: A (most frequent) = 100, Z (unknown) = 0
+    # 12 main tiers (A-L) + Y (rare) + Z (unknown)
     tier_scores = {
-        chr(ord('A') + i): 100 - (i * 4)
-        for i in range(26)
+        'A': 100, 'B': 92, 'C': 84, 'D': 76, 'E': 68, 'F': 60,
+        'G': 52, 'H': 44, 'I': 36, 'J': 28, 'K': 20, 'L': 12,
+        'Y': 4, 'Z': 0
     }
     score += tier_scores.get(tier, 0) * config.frequency_weight
 

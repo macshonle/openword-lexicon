@@ -17,7 +17,7 @@ OUTPUT_FILE="kids_vocabulary.txt"
 # Filtering criteria for kids' vocabulary:
 # - Only nouns (easier to visualize/understand)
 # - Concrete (physical objects)
-# - Common words (frequency tier ≤ N, roughly top ~2,500)
+# - Common words (frequency tier ≤ G, roughly top ~5,000)
 # - Short words (3-10 characters, easier to read/spell)
 # - No phrases (single words only)
 # - Family-friendly (no vulgar/offensive labels)
@@ -28,7 +28,7 @@ echo ""
 echo "Criteria:"
 echo "  - Part of speech: noun"
 echo "  - Concreteness: concrete"
-echo "  - Frequency tier: A-N (top ~2,500 words)"
+echo "  - Frequency tier: A-G (top ~5,000 words)"
 echo "  - Word length: 3-10 characters"
 echo "  - Single words only (no phrases)"
 echo "  - Family-friendly (no vulgar/offensive)"
@@ -43,8 +43,9 @@ if [[ ! -f "$ENRICHED_JSONL" ]]; then
 fi
 
 # Filter using jq
-# Frequency tiers use A-Z scale: A is most common, Z is unranked/rare
-# Tier N is approximately rank 2,500 - good for children's vocabulary
+# Frequency tiers: A (ranks 1-20) → B (21-100) → ... → G (3001-5000) → ... → L → Y → Z
+# String comparison works: "A" < "B" < ... < "G" < ... < "Z"
+# Tier G covers up to approximately rank 5,000 - good for children's vocabulary
 jq -r 'select(
     # Must be a noun (check senses or pos field)
     ((.pos // []) | any(. == "noun")) and
@@ -52,8 +53,8 @@ jq -r 'select(
     # Must be concrete (not abstract)
     .concreteness == "concrete" and
 
-    # Must be in common frequency range (A through N, where A is most common)
-    ((.frequency_tier // "Z") <= "N") and
+    # Must be in common frequency range (A through G, where A is most common)
+    ((.frequency_tier // "Z") <= "G") and
 
     # Single word only (no phrases)
     (.is_phrase // false) == false and

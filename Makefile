@@ -371,26 +371,20 @@ viewer-web: viewer/node_modules
 # Usage:
 #   make nightly                    # Run full pipeline
 #   caffeinate -i make nightly      # Run with sleep prevention (macOS)
-#
-# Environment:
-#   OPENWORD_CI=1 is set automatically to skip interactive prompts
-#
-# Expected runtime: 15-30 minutes depending on network speed and CPU
 nightly: export OPENWORD_CI=1
+nightly: export UV_VENV_CLEAR=1
 nightly:
 	@echo "Start time: $$(date)"
-	@echo "Mode: Non-interactive (OPENWORD_CI=1)"
 	$(MAKE) bootstrap
 	$(MAKE) fetch-en
 	$(MAKE) build-rust-scanner
 	$(MAKE) build-en
-	$(MAKE) package
-	$(MAKE) report-en
-	$(MAKE) validate-all
-	$(MAKE) validate-scanner-parity
-	$(MAKE) test
-	$(MAKE) diagnose-scanner
+	$(MAKE) post-build
 	@echo "End time: $$(date)"
+
+.PHONY: post-build
+post-build: export OPENWORD_CI=1
+post-build: package report-en validate-all validate-scanner-parity test diagnose-scanner
 	@echo "Build artifacts:"
 	@ls -lh $(BUILD_DIR)/*.trie $(BUILD_DIR)/*.json* 2>/dev/null || true
 	@echo "Reports:"

@@ -37,7 +37,7 @@ After `make build-en`, you'll find:
 | `data/build/en.trie` | Full lexicon (MARISA trie) | ~4 MB |
 | `data/build/en-game.trie` | Game profile (a-z only) | ~2.5 MB |
 | `data/build/en-wordlist.txt` | Plain text word list | ~16 MB |
-| `data/build/en-frequency.json.gz` | Frequency tiers (A-Z) | ~5 MB |
+| `data/build/en-frequency.json.gz` | Frequency tiers (A-L/Y/Z) | ~5 MB |
 | `data/build/en-concreteness.json.gz` | Concreteness ratings | ~150 KB |
 | `data/build/en-syllables.json.gz` | Syllable counts | ~200 KB |
 | `data/build/en-sources.json.gz` | Source attributions | ~5 MB |
@@ -46,8 +46,8 @@ After `make build-en`, you'll find:
 
 | Use Case | Recommended Files | Filter Strategy |
 |----------|-------------------|-----------------|
-| Wordle clone | `en-game.trie` + frequency | 5 letters, tiers A-M |
-| Kids vocabulary | lexemes + concreteness | Concrete nouns, tiers A-N |
+| Wordle clone | `en-game.trie` + frequency | 5 letters, tiers A-F |
+| Kids vocabulary | lexemes + concreteness | Concrete nouns, tiers A-G |
 | Spell checker | `en.trie` | Full lexicon |
 | Profanity filter | lexemes file | Check `labels.register` for vulgar/offensive |
 | Scrabble | `en-game.trie` | Pure a-z, check proper noun flags |
@@ -82,7 +82,7 @@ See [docs/FILTERING.md](docs/FILTERING.md) for filter options.
 |--------|-------|
 | Total words | ~1,350,000 |
 | Game words (a-z only) | ~330,000 |
-| With frequency data | ~75,000 (tiers A-T) |
+| With frequency data | ~75,000 (tiers A-L) |
 | With concreteness | ~39,000 |
 | With syllable counts | ~30,000 |
 | With POS tags | ~700,000 |

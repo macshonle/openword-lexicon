@@ -286,6 +286,51 @@ def sense_is_proper_noun(sense: dict) -> bool:
 
 
 # =============================================================================
+# Word-Form Predicates
+# =============================================================================
+
+def is_contraction_fragment(word: str) -> bool:
+    """
+    Check if word is a contraction fragment (not a standalone word).
+
+    Contraction fragments are partial word forms that can't stand alone:
+      - Clitic suffixes: 'll, 's, 't, 'm, 're, 've, 'd
+      - Clitic prefixes: 'twas, 'tis (less common)
+
+    These appear in the lexicon from Wiktionary but are not valid standalone
+    words for games or vocabulary lists.
+
+    Args:
+        word: The word to check
+
+    Returns:
+        True if the word is a contraction fragment (starts or ends with apostrophe)
+    """
+    return word.startswith("'") or word.endswith("'")
+
+
+def is_valid_contraction(word: str) -> bool:
+    """
+    Check if word is a valid full contraction (not a fragment).
+
+    Valid contractions have apostrophes in the middle:
+      - "he'll", "don't", "won't", "it's", "I'm"
+
+    Invalid fragments have apostrophes at the start or end:
+      - "'ll", "'s", "'t", "'" (not standalone words)
+
+    Args:
+        word: The word to check
+
+    Returns:
+        True if the word contains an apostrophe but is not a fragment
+    """
+    if "'" not in word:
+        return False  # Not a contraction at all
+    return not is_contraction_fragment(word)
+
+
+# =============================================================================
 # Two-File Filtering Functions
 # =============================================================================
 
@@ -316,10 +361,10 @@ def filter_two_file(
         Tuples of (lexeme, matching_senses) for each lexeme that passes filters
 
     Examples:
-        # Get all nouns with frequency tier A-M
+        # Get all nouns with frequency tier A-F (top ~3000 words)
         for lexeme, senses in filter_two_file(
             lexeme_path, senses_path,
-            lexeme_predicate=lambda l: l.get('frequency_tier', 'Z') <= 'M',
+            lexeme_predicate=lambda l: l.get('frequency_tier', 'Z') <= 'F',
             sense_predicate=lambda s: s.get('pos') == 'noun'
         ):
             print(lexeme['word'])
@@ -505,25 +550,64 @@ def make_pos_predicate(required_pos: Set[str]) -> Callable[[dict], bool]:
 
 
 def make_frequency_predicate(
-    min_tier: Optional[str] = None,
-    max_tier: Optional[str] = None
+    rarest_allowed: Optional[str] = None,
+    most_common_allowed: Optional[str] = None
 ) -> Callable[[dict], bool]:
     """
     Create a lexeme predicate for frequency filtering.
 
+    Frequency tiers: A (most common) → L (rare) → Y (very rare) → Z (unknown)
+
     Args:
-        min_tier: Maximum tier letter (e.g., 'M' = exclude rarer than ~rank 1000)
-        max_tier: Minimum tier letter (e.g., 'E' = exclude more frequent than ~rank 10)
+        rarest_allowed: Include words up to this tier (e.g., 'F' includes A-F, ~top 3000)
+        most_common_allowed: Exclude words more common than this (e.g., 'C' excludes A-B)
 
     Returns:
         Function that returns True for lexemes in frequency range
+
+    Examples:
+        # Top 3000 words only (tiers A-F)
+        make_frequency_predicate(rarest_allowed='F')
+
+        # Exclude very common words, keep C-Z
+        make_frequency_predicate(most_common_allowed='C')
+
+        # Middle frequency range (D-H)
+        make_frequency_predicate(rarest_allowed='H', most_common_allowed='D')
     """
     def predicate(lexeme: dict) -> bool:
         tier = lexeme.get('frequency_tier', 'Z')
-        if min_tier and tier > min_tier:
+        if rarest_allowed and tier > rarest_allowed:
             return False
-        if max_tier and tier < max_tier:
+        if most_common_allowed and tier < most_common_allowed:
             return False
+        return True
+    return predicate
+
+
+def make_word_form_predicate(
+    exclude_fragments: bool = True,
+    pure_alpha: bool = False
+) -> Callable[[dict], bool]:
+    """
+    Create a lexeme predicate for word form filtering.
+
+    Args:
+        exclude_fragments: If True, exclude contraction fragments ('ll, 's, 't)
+        pure_alpha: If True, only allow pure alphabetic words (a-z, A-Z)
+
+    Returns:
+        Function that returns True for lexemes with valid word forms
+    """
+    def predicate(lexeme: dict) -> bool:
+        word = lexeme.get('word', '')
+
+        if exclude_fragments and is_contraction_fragment(word):
+            return False
+
+        if pure_alpha and not word.isalpha():
+            return False
+
         return True
     return predicate
 
@@ -756,28 +840,35 @@ def matches_pos(entry: dict, required_pos: Set[str]) -> bool:
     return bool(entry_pos & required_pos)
 
 
-def matches_frequency(entry: dict, min_tier: Optional[str] = None,
-                     max_tier: Optional[str] = None) -> bool:
+def matches_frequency(entry: dict, rarest_allowed: Optional[str] = None,
+                     most_common_allowed: Optional[str] = None) -> bool:
     """
-    Filter by frequency rank code.
+    Filter by frequency tier.
 
-    Rank codes: A (most frequent) < B < C < ... < Z (extremely rare)
+    Frequency tiers: A (most common) → L (rare) → Y (very rare) → Z (unknown)
 
     Args:
         entry: Entry dict from schema
-        min_tier: Minimum frequency tier (e.g., 'M' excludes words rarer than ~rank 1000)
-        max_tier: Maximum frequency tier (e.g., 'E' excludes words more frequent than ~rank 10)
+        rarest_allowed: Include words up to this tier (e.g., 'F' includes A-F, ~top 3000)
+        most_common_allowed: Exclude words more common than this (e.g., 'C' excludes A-B)
 
     Returns:
-        True if entry's frequency is within range
+        True if entry's frequency tier is within range
+
+    Examples:
+        # Top 3000 words only (tiers A-F)
+        matches_frequency(entry, rarest_allowed='F')
+
+        # Exclude very common words, keep C-Z
+        matches_frequency(entry, most_common_allowed='C')
     """
     entry_tier = entry.get('frequency_tier', 'Z')
 
-    # Simple alphabetical comparison (A < B < ... < Z)
-    if min_tier and entry_tier > min_tier:
+    # Alphabetical comparison: A < B < ... < L < Y < Z
+    if rarest_allowed and entry_tier > rarest_allowed:
         return False
 
-    if max_tier and entry_tier < max_tier:
+    if most_common_allowed and entry_tier < most_common_allowed:
         return False
 
     return True
@@ -877,6 +968,27 @@ def matches_syllables(entry: dict, min_syllables: Optional[int] = None,
         return False
 
     return True
+
+
+def is_standalone_word(entry: dict) -> bool:
+    """
+    Filter for standalone words (not contraction fragments).
+
+    Excludes words that are contraction fragments:
+      - Clitic suffixes: 'll, 's, 't, 'm, 're, 've, 'd
+      - Clitic prefixes: 'twas, 'tis
+
+    These appear in the lexicon from Wiktionary but are not valid standalone
+    words for games or vocabulary lists.
+
+    Args:
+        entry: Entry dict from schema
+
+    Returns:
+        True if word is a standalone word (not a fragment)
+    """
+    word = entry.get('word', '')
+    return not is_contraction_fragment(word)
 
 
 def has_common_usage(entry: dict) -> bool:
@@ -1038,23 +1150,27 @@ def get_preset_filters(preset: str) -> List[Callable[[dict], bool]]:
         'child-safe': [
             is_child_safe,
             is_modern,
+            is_standalone_word,  # Exclude contraction fragments
             lambda e: e.get('word_count', 1) == 1  # Single words only
         ],
         'wordle': [
             lambda e: matches_length(e, 5, 5),
             lambda e: e.get('word_count', 1) == 1,  # Single words only
-            lambda e: matches_frequency(e, max_tier='top50k'),
-            is_child_safe
+            lambda e: matches_frequency(e, rarest_allowed='J'),  # Top ~50k words
+            is_child_safe,
+            is_standalone_word  # Exclude contraction fragments
         ],
         'kids-nouns': [
             lambda e: is_concrete_noun(e, require_metadata=False),
             is_child_safe,
+            is_standalone_word,  # Exclude contraction fragments
             is_modern,
-            lambda e: matches_frequency(e, max_tier='top25k')
+            lambda e: matches_frequency(e, rarest_allowed='I')  # Top ~30k words
         ],
         'scrabble': [
             lambda e: e.get('word_count', 1) == 1,  # Single words only
             is_modern,
+            is_standalone_word,  # Exclude contraction fragments
             lambda e: not is_profanity(e)
         ],
         'profanity': [
@@ -1084,10 +1200,10 @@ def main():
                        help='Use a preset filter combination')
 
     # Lexeme-level filters
-    parser.add_argument('--min-frequency', type=str,
-                       help='Minimum frequency tier (e.g., M for top ~1000)')
-    parser.add_argument('--max-frequency', type=str,
-                       help='Maximum frequency tier (e.g., E for very common)')
+    parser.add_argument('--rarest-allowed', type=str,
+                       help='Include words up to this tier (e.g., F for top ~3000)')
+    parser.add_argument('--most-common-allowed', type=str,
+                       help='Exclude words more common than this tier (e.g., C excludes A-B)')
     parser.add_argument('--concreteness', choices=['concrete', 'mixed', 'abstract'],
                        help='Filter by concreteness category')
     parser.add_argument('--min-syllables', type=int, help='Minimum syllable count')
@@ -1130,8 +1246,8 @@ def main():
         # Build lexeme predicate
         lexeme_predicates = []
 
-        if args.min_frequency or args.max_frequency:
-            lexeme_predicates.append(make_frequency_predicate(args.min_frequency, args.max_frequency))
+        if args.rarest_allowed or args.most_common_allowed:
+            lexeme_predicates.append(make_frequency_predicate(args.rarest_allowed, args.most_common_allowed))
 
         if args.concreteness:
             lexeme_predicates.append(make_concreteness_predicate({args.concreteness}))

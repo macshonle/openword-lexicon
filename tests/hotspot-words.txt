@@ -11,6 +11,11 @@ bat
 beat
 beeswax
 billion
+boat
+BoAT
+BOAT
+B.O.A.T.
+B. O. A. T.
 cat
 dialect
 dictionary
@@ -29,6 +34,7 @@ happy
 hell
 hello
 indaba
+inscrutable
 is
 it
 lambda

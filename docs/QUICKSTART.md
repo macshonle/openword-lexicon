@@ -96,7 +96,7 @@ Create a JSON specification and run the filter:
       "char_preset": "standard"
     },
     "frequency": {
-      "max_tier": "M"
+      "rarest_allowed": "F"
     },
     "policy": {
       "family_friendly": true
@@ -136,7 +136,7 @@ wordle_words = [
     if len(entry['word']) == 5
     and entry['word'].isalpha()
     and entry['word'].islower()
-    and entry.get('frequency_tier', 'Z') <= 'M'  # Common words
+    and entry.get('frequency_tier', 'Z') <= 'F'  # Common words
 ]
 ```
 
@@ -149,7 +149,7 @@ kids_words = [
     entry['word'] for entry in load_lexemes()
     if 'noun' in entry.get('pos', [])
     and entry.get('concreteness', 0) >= 4.0  # Very concrete
-    and entry.get('frequency_tier', 'Z') <= 'N'  # Common
+    and entry.get('frequency_tier', 'Z') <= 'G'  # Common
     and len(entry['word']) <= 8
 ]
 ```

@@ -159,7 +159,7 @@ wc -l my-words.txt
 - License: Research/Educational Use
 
 **Frequency Data** - 100% coverage
-- Logarithmic tiers A-Z from OpenSubtitles 2018
+- 12-level tiers A-L (plus Y/Z for rare/unknown) from OpenSubtitles 2018
 - Modern, conversational vocabulary
 - License: CC BY-SA 4.0
 
@@ -192,11 +192,11 @@ Filter by grammatical category (requires Wiktionary or WordNet).
 **Example:** Concrete nouns for kids' games, action verbs for learning
 
 ### Frequency Filter 📊
-Filter by word frequency using logarithmic tiers (requires Frequency Data).
+Filter by word frequency tier (requires Frequency Data).
 
-**Options:** Tiers A (rank 1, most common) to Z (unranked)
+**Tiers:** A (ranks 1-20) → B (21-100) → ... → L (75k-100k) → Y (very rare) → Z (unknown)
 
-**Example:** Common words (A-E) for beginners, top 75k (A-T) for general vocab
+**Example:** Common words (A-F, top ~3000) for beginners, broader vocabulary (A-I, top ~30k) for general use
 
 ### Region Filter 🌍
 Filter by regional variants (requires Wiktionary).
@@ -306,8 +306,7 @@ The advanced builder generates JSON specifications with this structure:
       "type": "frequency",
       "mode": "include",
       "config": {
-        "minTier": "A",
-        "maxTier": "H"
+        "rarestAllowed": "H"
       }
     },
     {
@@ -435,9 +434,11 @@ Python CLI tool that:
 - Starts with / ends with / contains
 
 **Frequency Filters** (Always available):
-- 10 tiers: top10, top100, top300, top500, top1k, top3k, top10k, top25k, top50k, rare
-- Based on OpenSubtitles 2018 corpus (50,000 words)
-- Linguistically meaningful breakpoints (esp. top3k = 95% comprehension)
+- 12 tiers A-L with explicit boundaries, plus Y (very rare) and Z (unknown)
+- A: ranks 1-20, B: 21-100, C: 101-300, D: 301-500, E: 501-1000
+- F: 1001-3000, G: 3001-5000, H: 5001-10000, I: 10001-30000
+- J: 30001-50000, K: 50001-75000, L: 75001-100000, Y: 100001+
+- Based on OpenSubtitles 2018 corpus
 - 100% coverage (all words assigned a tier)
 
 **POS Filters** (~52.5% coverage):
@@ -497,7 +498,7 @@ This outputs all words from the core distribution with no filtering.
       "max_words": 1
     },
     "frequency": {
-      "tiers": ["top1k", "top3k", "top10k"]
+      "rarest_allowed": "H"
     },
     "pos": {
       "include": ["noun", "verb", "adjective"],
@@ -551,7 +552,7 @@ Or with metadata:
   {
     "word": "apple",
     "pos": ["noun"],
-    "frequency_tier": "top10k",
+    "frequency_tier": "H",
     "concreteness": "concrete"
   }
 ]
@@ -561,15 +562,15 @@ Or with metadata:
 
 ```csv
 word,frequency_tier,concreteness
-apple,top10k,concrete
-banana,top10k,concrete
+apple,H,concrete
+banana,H,concrete
 ```
 
 ### JSON Lines (JSONL)
 
 ```jsonl
-{"word":"apple","pos":["noun"],"frequency_tier":"top10k"}
-{"word":"banana","pos":["noun"],"frequency_tier":"top10k"}
+{"word":"apple","pos":["noun"],"frequency_tier":"H"}
+{"word":"banana","pos":["noun"],"frequency_tier":"H"}
 ```
 
 ---
@@ -585,7 +586,7 @@ All filters use AND logic. To get nouns that are both concrete AND common:
   "filters": {
     "pos": { "include": ["noun"] },
     "concreteness": { "values": ["concrete"] },
-    "frequency": { "tiers": ["top1k", "top10k"] }
+    "frequency": { "rarest_allowed": "H" }
   }
 }
 ```
@@ -663,7 +664,7 @@ builder
   .setDistribution('core')
   .setMetadata('My Word List', 'Custom filtering')
   .addFilter('character', 'exact_length', 5)
-  .addFilter('frequency', 'tiers', ['top1k', 'top10k'])
+  .addFilter('frequency', 'rarest_allowed', 'H')
   .setPolicyFilter('family_friendly', true)
   .setOutput({ format: 'json', limit: 100 });
 
@@ -744,7 +745,7 @@ cat > wordle-spec.json << 'EOF'
       "pattern": "^[a-z]+$"
     },
     "phrase": { "max_words": 1 },
-    "frequency": { "min_tier": "top10k" }
+    "frequency": { "rarest_allowed": "H" }
   },
   "output": {
     "sort_by": "frequency",
@@ -771,7 +772,7 @@ uv run python -m openword.owlex examples/wordlist-specs/kids-nouns.json > kids-w
 # Then select:
 # - Distribution: core
 # - Character: 3-10 length
-# - Frequency: top1k, top10k
+# - Frequency: A-H (top ~10k)
 # - POS: noun
 # - Concreteness: concrete
 # - Policy: family_friendly, modern_only

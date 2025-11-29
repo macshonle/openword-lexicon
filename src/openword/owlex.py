@@ -26,11 +26,13 @@ class OwlexFilter:
         """Initialize filter with a specification file."""
         self.spec_path = spec_path
         self.spec = self._load_spec()
-        # Tier scores: A (most frequent) = 100, Z (rarest) = 0
-        # Linear scale based on band index (0-25)
+        # Tier scores: A (most frequent) = 100, Z (rarest/unknown) = 0
+        # 12 main tiers (A-L) + Y (rare) + Z (unknown)
+        # Scale: A=100, B=92, C=84, ..., L=12, Y=4, Z=0 (~8 points per tier)
         self.tier_scores = {
-            chr(ord('A') + i): 100 - (i * 4)
-            for i in range(26)
+            'A': 100, 'B': 92, 'C': 84, 'D': 76, 'E': 68, 'F': 60,
+            'G': 52, 'H': 44, 'I': 36, 'J': 28, 'K': 20, 'L': 12,
+            'Y': 4, 'Z': 0
         }
 
     def _load_spec(self) -> Dict:

@@ -36,7 +36,7 @@ Create a JSON file describing your filters:
       "char_preset": "standard"
     },
     "frequency": {
-      "max_tier": "M"
+      "rarest_allowed": "F"
     },
     "policy": {
       "family_friendly": true
@@ -98,13 +98,15 @@ uv run python -m openword.owlex my-spec.json --verbose --output words.txt
 | Option | Type | Description |
 |--------|------|-------------|
 | `tiers` | list | Specific tiers to include (e.g., `["A", "B", "C"]`) |
-| `min_tier` | string | Most frequent tier (closer to A) |
-| `max_tier` | string | Least frequent tier (closer to Z) |
+| `rarest_allowed` | string | Include words up to this tier (e.g., 'F' = A-F, top ~3000) |
+| `most_common_allowed` | string | Exclude words more common than this tier |
+
+**Tier boundaries:** A (1-20) → B (21-100) → C (101-300) → D (301-500) → E (501-1000) → F (1001-3000) → G (3001-5000) → H (5001-10000) → I (10001-30000) → J (30001-50000) → K (50001-75000) → L (75001-100000) → Y (100001+) → Z (unknown)
 
 Example tier ranges:
-- `"max_tier": "M"` — Top ~1,300 words
-- `"max_tier": "Q"` — Top ~13,000 words
-- `"max_tier": "T"` — Top ~75,000 words
+- `"rarest_allowed": "F"` — Top ~3,000 words (tiers A-F)
+- `"rarest_allowed": "I"` — Top ~30,000 words (tiers A-I)
+- `"rarest_allowed": "L"` — Top ~100,000 words (tiers A-L)
 
 ### POS Filters
 
@@ -321,7 +323,7 @@ See [SCHEMA.md](SCHEMA.md#lexnames-wordnet-semantic-categories) for the complete
       "char_preset": "standard"
     },
     "frequency": {
-      "max_tier": "Q"
+      "rarest_allowed": "I"
     },
     "phrase": {
       "max_words": 1
@@ -356,7 +358,7 @@ See [SCHEMA.md](SCHEMA.md#lexnames-wordnet-semantic-categories) for the complete
       "values": ["concrete"]
     },
     "frequency": {
-      "max_tier": "N"
+      "rarest_allowed": "G"
     },
     "policy": {
       "family_friendly": true,
@@ -430,7 +432,7 @@ def is_wordle_word(entry):
         len(word) == 5 and
         word.isalpha() and
         word.islower() and
-        entry.get('frequency_tier', 'Z') <= 'Q'
+        entry.get('frequency_tier', 'Z') <= 'I'
     )
 
 wordle_words = [e['word'] for e in load_lexemes() if is_wordle_word(e)]
@@ -448,7 +450,7 @@ jq -r 'select(.word | length == 5) | .word' \
 # Common nouns
 jq -r 'select(
     (.pos // [] | contains(["noun"])) and
-    (.frequency_tier // "Z") <= "M"
+    (.frequency_tier // "Z") <= "F"
 ) | .word' data/intermediate/en-lexemes-enriched.jsonl
 
 # Words with concreteness data

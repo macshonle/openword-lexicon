@@ -6,7 +6,7 @@
 //! - Channel-pipeline (producer-consumer with mpsc channels)
 //! - Two-phase (read all pages, then process in parallel)
 
-use crate::{Entry, Stats, parse_page, is_englishlike};
+use crate::{Entry, Stats, parse_page, is_englishlike, classify_case, CaseForm};
 use crate::{TITLE_PATTERN, NS_PATTERN, TEXT_PATTERN, REDIRECT_PATTERN, ENGLISH_SECTION, DICT_ONLY, SPECIAL_PREFIXES};
 
 use std::io::{BufRead, Write, BufWriter};
@@ -57,6 +57,7 @@ pub struct RawPage {
 pub struct ProcessedPage {
     pub entries: Vec<Entry>,
     pub page_id: usize,
+    pub title: String,
     pub was_english: bool,
     pub was_redirect: bool,
     pub was_special: bool,
@@ -92,12 +93,14 @@ pub fn extract_pages_from_xml(page_xml: &str, page_id: usize) -> Option<RawPage>
 /// Process a raw page into entries
 pub fn process_raw_page(raw: RawPage) -> ProcessedPage {
     let page_id = raw.page_id;
+    let title = raw.title.clone();
 
     // Check for redirects
     if REDIRECT_PATTERN.is_match(&raw.text) {
         return ProcessedPage {
             entries: vec![],
             page_id,
+            title,
             was_english: false,
             was_redirect: true,
             was_special: false,
@@ -111,6 +114,7 @@ pub fn process_raw_page(raw: RawPage) -> ProcessedPage {
         return ProcessedPage {
             entries: vec![],
             page_id,
+            title,
             was_english: false,
             was_redirect: false,
             was_special: false,
@@ -124,6 +128,7 @@ pub fn process_raw_page(raw: RawPage) -> ProcessedPage {
         return ProcessedPage {
             entries: vec![],
             page_id,
+            title,
             was_english: true,
             was_redirect: false,
             was_special: false,
@@ -137,6 +142,7 @@ pub fn process_raw_page(raw: RawPage) -> ProcessedPage {
         return ProcessedPage {
             entries: vec![],
             page_id,
+            title,
             was_english: true,
             was_redirect: false,
             was_special: false,
@@ -151,6 +157,7 @@ pub fn process_raw_page(raw: RawPage) -> ProcessedPage {
     ProcessedPage {
         entries,
         page_id,
+        title,
         was_english: true,
         was_redirect: false,
         was_special: false,
@@ -174,6 +181,13 @@ fn update_stats_from_result(stats: &mut Stats, result: &ProcessedPage) {
         stats.skipped += 1;
     } else {
         stats.words_written += 1;
+        // Track case distribution for reporting
+        match classify_case(&result.title) {
+            CaseForm::Lower => stats.case_lower += 1,
+            CaseForm::Title => stats.case_title += 1,
+            CaseForm::Upper => stats.case_upper += 1,
+            CaseForm::Mixed => stats.case_mixed += 1,
+        }
     }
 }
 

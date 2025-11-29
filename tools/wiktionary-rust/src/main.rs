@@ -1346,7 +1346,7 @@ pub struct Stats {
 }
 
 /// Classify the case pattern of a word (for reporting purposes)
-fn classify_case(s: &str) -> CaseForm {
+pub fn classify_case(s: &str) -> CaseForm {
     let has_alpha = s.chars().any(|c| c.is_alphabetic());
     if !has_alpha {
         return CaseForm::Lower; // Treat non-alphabetic as lowercase
@@ -1370,7 +1370,7 @@ fn classify_case(s: &str) -> CaseForm {
 }
 
 #[derive(Debug, Clone, Copy)]
-enum CaseForm {
+pub enum CaseForm {
     Lower,
     Title,
     Upper,

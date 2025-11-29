@@ -1,0 +1,763 @@
+<page>
+    <title>boat</title>
+    <ns>0</ns>
+    <id>7377</id>
+    <revision>
+      <id>87726446</id>
+      <parentid>87316424</parentid>
+      <timestamp>2025-10-31T20:55:32Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87726446</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="24992" sha1="hnjdor8hfe9ukd3ih006kismfndsvp3" xml:space="preserve">{{also|BOAT}}
+==English==
+{{wp}}
+[[Image:ORŁ 0033 ubt.JPEG|thumb|250px|A '''boat''' kept on land]]
+
+===Etymology===
+{{root|en|ine-pro|*bʰeyd-}}
+From {{inh|en|enm|bot}}, {{m|enm|boot}}, {{m|enm|boet}}, {{m|enm|boyt|t=boat}}, from {{inh|en|ang|bāt|t=boat}}, from {{inh|en|gmw-pro|*bait}}, from {{inh|en|gem-pro|*baitaz}}, {{m|gem-pro|*baitą|t=boat, small ship}}, from {{der|en|ine-pro|*bʰeyd-|t=to break, split}} (whence also {{m|en|fissure}} via Latin). Cognate with {{cog|non|beit|t=boat}}, {{cog|dum|beitel|t=little boat}}.
+
+{{cog|non|bátr}} (whence {{cog|is|bátur}}, {{cog|no|båt}}, {{cog|da|båd}}), {{cog|nl|boot}}, {{cog|de|Boot}}, {{cog|oc|batèl}} and {{cog|fr|bateau}} are all ultimately borrowings from the Old English word.
+
+Compare typologically {{m|en|ship}} &lt;&lt; {{m+|ine-pro|*skey-}}; {{m+|ru|долблёнка}} (&lt; {{m|ru|долби́ть}}), {{m+|ru|чёлн}} (akin to {{m|ru|коло́ть}}).
+
+===Pronunciation===
+* {{enPR|bōt|a=RP}}, {{IPA|en|/bəʊt/}}
+* {{rhymes|en|əʊt|s=1}}
+* {{enPR|bōt|a=GenAm}}, {{IPA|en|/boʊt/}}
+* {{audio|en|en-us-boat.ogg|a=US}}
+* {{audio|en|EN-AU ck1 boat.ogg|a=AU}}
+
+===Noun===
+{{en-noun}}
+
+# {{senseid|en|Q35872}}A [[craft]] used for [[transportation]] of goods, fishing, racing, recreational cruising, or military use on or in the [[water]], [[propelled]] by [[oar]]s or [[outboard motor]] or inboard [[motor]] or by [[wind]].
+#: {{hyper|en|watercraft&lt;id:Q1229765&gt;|vessel&lt;id:Q1229765&gt;|&lt;|vessel&lt;id:Q16391167&gt;}}
+#: {{cot|en|ship&lt;id:Q11446&gt;}}
+#* {{RQ:Hough Purchase Price|chapter=II|text=Carried somehow, somewhither, for some reason, on these surging floods, were these travelers,{{nb...}}. Even such a '''boat''' as the ''Mount Vernon'' offered a total deck space so cramped as to leave secrecy or privacy well out of the question, even had the motley and democratic assemblage of passengers been disposed to accord either.}}
+#* {{RQ:Lincoln Pratt's Patients|chapter=8|passage=Philander went into the next room{{...}}and came back with a salt mackerel{{...}}. Next he put the mackerel in a fry-pan, and the shanty began to smell like a Banks '''boat''' just in from a v'yage.}}
+#* {{quote-journal|en|date=2013-08-03|volume=408|issue=8847|magazine=w:The Economist
+|title=[http://www.economist.com/news/leaders/21582516-worlds-thirst-oil-could-be-nearing-peak-bad-news-producers-excellent Yesterday’s fuel]
+|passage=The dawn of the oil age was fairly recent. Although the stuff was used to waterproof '''boats''' in the Middle East 6,000 years ago, extracting it in earnest began only in 1859 after an oil strike in Pennsylvania. The first barrels of crude fetched $18 (around $450 at today’s prices).}}
+# {{lb|en|poker slang}} A [[full house]].
+# A [[conveyance]], [[utensil]], or [[dish]] somewhat resembling a boat in shape.
+#: {{co|en|a stone '''boat'''; &amp;emsp; a gravy '''boat'''}}
+# {{senseid|en|large and heavy automobile}} {{lb|en|informal}} A large and heavy [[car#Noun|car]]; {{ng|the term connotes wasteful size}}.
+#: {{nearsyn|en|land yacht#Noun|sled&lt;id:car or truck, informally&gt;}}
+#: {{ux|en|He claimed to be broke but he always drove that ridiculous '''boat'''.}}
+# {{lb|en|organic compound|physical chemistry}} One of two possible [[conformation]]s of [[cyclohexane]] rings (the other being [[chair]]), shaped roughly like a boat.
+# {{lb|en|Australian politics|informal}} The refugee boats arriving in Australian waters, and by extension, refugees generally.
+#: {{rfquote-sense|en}}
+# {{lb|en|cellular automata}} In Conway’s [[Game of Life]], a particular [[still life]] consisting of a dead [[cell]] surrounded by five living cells.
+#* {{quote-newsgroup|en|date=1994-05-07|author=David Bell|title=HighLife - An Interesting Variant of Life (part 1/3)|newsgroup=comp.theory.cell-automata|url=https://groups.google.com/g/comp.theory.cell-automata/c/aetKFg0hths/m/QAPO3B6QoFsJ|text=It creates 4 blocks, a '''boat''', and a glider every 768 generations.}}
+#* {{quote-newsgroup|en|date=2004-05-24|author=Paul Chapman|title=A Prototype Programmable Universal Constructor for Conway's Life|newsgroup=comp.theory.cell-automata|url=https://groups.google.com/g/comp.theory.cell-automata/c/xiyIszapF8o/m/X_bPNmDH2ucJ|text=The program is represented as a string of '''boats''' (1s) and blocks (0s).}}
+#* {{quote-newsgroup|en|date=2005-02-23|author=Dave Greene|title=exist glider gun able of reconstruction in Life?|newsgroup=comp.theory.cell-automata|url=https://groups.google.com/g/comp.theory.cell-automata/c/Iw1hF3RcL9Q/m/-wURpW8ZzjMJ|text=For many stable patterns, by the way, there are other input glider lanes where the gliders are caught and turned into '''boats''', which are then cleanly deleted by another glider coming in on the same lane.}}
+# {{alternative form of|en|BOAT}}.
+
+====Usage notes====
+* There is no explicit limit, but the word ''boat'' usually refers to a relatively small watercraft, smaller than a [[ship]] but larger than a [[dinghy]]. It is also the normal designation for a submarine (however large), and also for [[laker]]s (ships used in the [[Great Lakes]] trade in North America).
+
+====Synonyms====
+* {{sense|craft on or in water}} {{l|en|craft}}, {{l|en|ship}}, {{l|en|vessel}}
+
+====Hyponyms====
+{{col|en|title=Terms denoting specific kinds of boat, apart from derived terms
+|{{sense|A craft on or in water}} {{q|by motive power}} {{l|en|motorboat|id=Q622416}}, {{l|en|sailboat|id=Q1075310}}, {{l|en|rowboat|id=Q1195684}}; {{q|more specifically}} {{l|en|ark}}, {{l|en|bangca}}, {{l|en|barge}},{{l|en|bugeye}}, {{l|en|canoe}}, {{l|en|catamaran}}, {{l|en|caravel}}, {{l|en|carrack}}, {{l|en|coracle}}, {{l|en|cruiser}}, {{l|en|cutter}}, {{l|en|dhow}}, {{l|en|dinghy}}, {{l|en|dory}},  {{l|en|Dutch barge}}, {{l|en|Deadrise}},{{l|en|draketail}}, {{l|en|East Indiaman}}, {{l|en|felucca}}, {{l|en|ferry}}, {{l|en|galley}}, {{l|en|galleon}}, {{l|en|gig}}, {{l|en|gondola}}, {{l|en|hovercraft}}, {{l|en|hydrofoil}}, {{l|en|hydroplane}}, {{l|en|inflatable raft}}, {{l|en|jetski}}, {{l|en|junk}}, {{l|en|caïque|caik/kaiki}}/[[kayık]], [[kayak]], [[ketch]], [[luxemotor]], [[motorsailer]], [[Norfolk wherry]], [[outrigger canoe]], [[peniche]], [[pinnace]], [[raft]], [[schooner]], [[scow]], [[sealship]], [[Seiner]], [[ship of the line]], [[skiff]],[[skipjack]], [[sloop]], [[submarine]], [[tender]], [[tjalk]], [[trawler]], [[trireme]], [[trimaran]], [[troller]], [[tug]], [[wangkang]], [[water taxi]], [[yacht]], [[yawl]]
+}}
+
+====Derived terms====
+{{col|en|Adirondack boat|York boat
+|Adirondack guide boat
+|advice boat
+|aeroboat
+|airboat
+|autoboat
+|bait boat
+|banana boat
+|bareboat
+|bass boat|white boat
+|belly boat
+|boatable
+|boatage
+|boat anchor|cannibal boat
+|boatbearer
+|boat bearer
+|boatbill
+|boatbound
+|boat boy
+|boat bug
+|boatbuilder
+|boatbuilding
+|boat cloak
+|boat conformation
+|boatcraft
+|boatel,botel
+|boater
+|boatercycle
+|boatful
+|boat hook
+|boathook|boat-puller
+|boat-hook
+|boathorse
+|boathouse
+|boatie
+|boat-in
+|boating
+|boat-in theater
+|boat-in theatre
+|boatish
+|boatkeeper
+|boatlength
+|boatless
+|boatlet
+|boat lift
+|boatlift
+|boatlike
+|boatload
+|boatmaker
+|boatmaking
+|boatman,boatsman
+|boatmanship,boatsmanship
+|boatmaster
+|boatmate
+|boat mate
+|boatmobile
+|boat money
+|boatneck
+|boatnecked
+|boat neckline
+|Boat of Garten
+|boat orchid
+|boatowner
+|boat park
+|boat people,boat person
+|boatperson
+|boat race
+|boat ramp
+|boatrope
+|boat-shaped abdomen
+|boat shed
+|boat shell
+|boat shoe
+|boat show
+|boatside
+|boatslength
+|boatslip
+|boatsmith
+|boatspeak
+|boatswain
+|boattail
+|boattailed
+|boat train
+|boat trip
+|boat truck
+|boatward
+|boatwear
+|boatwise
+|boatwoman
+|boatwright
+|boaty
+|boatyard
+|Boaty McBoatface
+|boy in the boat
+|bumboat
+|bunder boat
+|burn one's boats
+|butter boat
+|buy boat
+|chain boat
+|chopboat
+|cigarette boat
+|cigarette-boat
+|coastal motor boat
+|cock-boat
+|couta boat
+|crash boat
+|crayboat
+|creek boat
+|dayboat
+|deck boat
+|disease boat
+|dive boat
+|diving boat
+|douche boat
+|drag boat
+|drag-boat
+|drag boat racing
+|dragon boat
+|drag-racing boat
+|drag racing boat
+|dreamboat
+|dredgeboat
+|Durham boat
+|E-boat
+|eelboat
+|eyes in the boat
+|fanboat
+|ferroboat
+|ferryboat
+|ferry boat
+|ferry-boat
+|fireboat
+|fishboat
+|fisher-boat
+|fishing boat
+|flatboat
+|float someone's boat
+|flyboat
+|fly-boat
+|flying boat
+|fold boat
+|foldboat
+|folding boat
+|fresh off the boat
+|full boat
+|gas boat
+|get in the boat and row
+|get in the boat and start rowing
+|glass-bottom boat
+|goat boat
+|go-fast boat
+|gravy boat
+|guardboat
+|gun boat
+|gunboat
+|hatchboat
+|head boat
+|Higgins boat
+|hong boat
+|horseboat
+|houseboat
+|husbands' boat
+|ice boat
+|ice-boat
+|iceboat
+|iceboating
+|ice dragon boat
+|incense boat
+|inflatable boat
+|in the same boat
+|jet boat
+|jetboat
+|jolly boat
+|jump on the boat
+|keelboat
+|kick boat
+|lifeboat
+|life boat
+|lightboat
+|little man in the boat
+|lobsterboat
+|logboat
+|log boat
+|longboat
+|long-tail boat
+|longtail boat
+|love boat
+|mackinaw boat
+|mailboat
+|masoola boat
+|Massoola boat
+|maxi boat
+|Mike boat
+|miss the boat
+|monkey boat
+|motor-boat
+|motor boat,motorboat
+|motor torpedo boat
+|mudboat
+|narrowboat
+|narrow boat
+|newsboat
+|oar in someone's boat
+|oysterboat
+|packet boat
+|packet-boat
+|paddleboat
+|paddle boat
+|pap boat
+|party boat
+|passage boat
+|patrol boat
+|pedalboat
+|picket boat
+|pickle boat
+|pigboat
+|pilot boat
+|playboat
+|pleasure boat
+|poleboat
+|policeboat
+|poling boat
+|powerboat
+|PT boat
+|push the boat out
+|Q-boat
+|[[rigid-hulled inflatable boat]] ([[RIB]])
+|riverboat
+|river boat
+|rock the boat
+|rowboat
+|rowing boat
+|row in the same boat
+|safariboat
+|sailboat
+|sailing boat
+|sauce boat
+|sauceboat
+|seaboat
+|ship's boat
+|showboat
+|shrimp boat
+|ski boat
+|snag-boat
+|solar boat
+|speed boat
+|speedboat
+|spyboat
+|stake boat
+|steam-boat
+|steamboat
+|stoneboat
+|surfboat
+|surf boat
+|swamp boat
+|swan boat
+|sweepboat
+|swiftboat
+|swift boat
+|swingboat
+|swordboat
+|swordfishing boat
+|tea boat
+|the boat
+|three-men-in-a-boat
+|torpedo-boat
+|torpedo boat
+|torpedo-boat destroyer
+|torpedo boat destroyer
+|towboat
+|track-boat
+|trail boat
+|trawlboat
+|tug-boat
+|tug boat
+|tugboat
+|turn the boat
+|turn the boat around
+|twist-boat
+|U-boat
+|Una boat
+|Upper Boat
+|wager-boat
+|waistboat
+|wake boat
+|waterboat
+|weigh boat
+|weighing boat
+|well boat
+|well-boat
+|whaleboat
+|whatever floats your boat
+|workboat
+}}
+
+====Descendants====
+* {{desc|bzj|boat}}
+* {{desc|eo|obor=1|boato}}
+* {{desc|dv|bor=1|ބޯޓު}}
+* {{desc|fj|boto|bor=1}}
+* {{desc|acw|بوت|tr=bōt|bor=1}}
+* {{desc|ja|bor=1|ボート|tr=bōto}}
+* {{desc|ms|bot|bor=1}}
+* {{desc|pih|boet|bor=1}} {{q|Norfuk}}
+* {{desc|si|බෝට්‍ටුව|bor=1}}
+* {{desc|sw|boti|bor=1}}
+* {{desc|sco|boat|bote|bor=1}} {{q|compare native {{m|sco|bait}}, {{m|sco|bate}}}}
+* {{desc|ty|poti|bor=1}}
+* {{desc|tpi|bot}}
+
+====Translations====
+{{multitrans|data=
+{{trans-top-see|water craft|watercraft|vessel|ship}}
+* Afrikaans: {{tt+|af|boot}}
+* Ainu: {{tt|ain|チㇷ゚|tr=cip}}
+* Aklanon: {{tt|akl|paraw}}
+* Albanian: {{tt+|sq|anije|f}}, {{tt+|sq|lundër|f}}
+* Aleut: {{tt|ale|ayxaasix}}
+* Amharic: {{tt|am|መርከብ}}, {{tt|am|ባርካ}}
+* Arabic: {{tt+|ar|قَارِب|m}}, {{tt+|ar|مَرْكَب|m}}, {{tt|ar|زَوْرَق|m}}
+*: Egyptian Arabic: {{tt|arz|مركب|m|tr=márkeb}}, {{tt|arz|قارب|m|tr=ʔāreb}}, {{tt|arz|فلوكة|f|tr=fluka, filúka}}
+*: Hijazi Arabic: {{tt|acw|قَارِب|m|tr=gārib}}, {{tt|acw|مَرْكَب|m|tr=markab}}
+*: Moroccan Arabic: {{tt|ary|فلوكة|tr=felūka}}
+*: North Levantine Arabic: {{l|ajp|شختورة|tr=šaḵtūra}}
+*: South Levantine Arabic: {{tt+|ar|قَارِب|m}}, {{l|ajp|فلوكة|tr=flōka}} {{q|Jerusalem}}, {{l|ajp|شختورة|tr=šaḵtūra}} {{q|Galilee}}, {{l|ajp|حسكة|tr=ɧásaka}} {{q|Gaza}}
+* Aragonese: {{tt|an|barca}}
+* Aramaic:
+*: Classical Syriac: {{tt|syc|ܐܠܦܘܢܝܬܐ}}
+* Armenian: {{tt+|hy|նավակ}}, {{tt+|hy|մակույկ}}
+* Aromanian: {{tt|rup|varcã|f}}, {{tt|rup|luntri|f}}, {{tt|rup|ghimii|f}}, {{tt+|rup|nai|f}}, {{tt|rup|cãic|n}}
+* Assamese: {{tt|as|নাও}}
+* Asturian: {{tt+|ast|barcu|m}}
+* Azerbaijani: {{tt+|az|qayıq}}
+* Bashkir: {{tt|ba|кәмә}}, {{tt|ba|ҡайыҡ}}
+* Basque: {{tt|eu|txalupa}}, {{t|eu|batel}}
+* Belarusian: {{tt|be|ло́дка|f}}, {{tt|be|чо́вен|m}}
+* Belizean Creole: {{t|bzj|boat}}
+* Bengali: {{tt+|bn|নৌকা}}, {{tt+|bn|তরী}}
+* Big Nambas: {{t|nmb|nauak}}
+* Breton: {{tt+|br|bag|f}}
+* Bulgarian: {{tt+|bg|ло́дка|f}}, {{tt+|bg|ла́дия|f}}, {{tt|bg|чълн|m}} {{qualifier|obsolete}}
+* Burmese: {{tt+|my|လှေ}}
+* Buryat: {{tt|bua|онгосо}}
+* Carpathian Rusyn: {{tt|rue|чо́вен|m}}
+* Catalan: {{tt+|ca|vaixell|m}}, {{tt+|ca|barca|f}}
+* Chamicuro: {{tt|ccc|wapori}}
+* Chechen: {{tt|ce|кема}}, {{tt|ce|хӀордкема}}
+* Cherokee: {{tt|chr|ᏥᏳ}}
+* Cheyenne: {{tt|chy|sémo}}
+* Chichewa: {{tt|ny|ngalawa}}
+* Chickasaw: {{tt|cic|piini'}}
+* Chinese:
+*: Cantonese: {{tt+|yue|船|tr=syun4}}
+*: Dungan: {{tt|dng|чуан}}
+*: Eastern Min: {{tt|cdo|船|tr=sùng}}
+*: Gan: {{tt|gan|船|tr=son3}}
+*: Hakka: {{tt|hak|船|tr=sòn}}
+*: Hokkien: {{tt|nan-hbl|船|tr=chûn / soân}}
+*: Jin: {{tt|cjy|船|tr=cuan1}}
+*: Mandarin: {{tt+|cmn|船|tr=chuán}}, {{tt+|cmn|小船}}, {{tt+|cmn|舟|tr=zhōu}}, {{tt+|cmn|艇|tr=tǐng}}
+*: Northern Min: {{tt|mnp|船}}
+*: Wu: {{tt|wuu|船}}
+*: Xiang: {{tt|hsn|船|tr=jye2}}
+* Chuvash: {{tt|cv|кимӗ}}
+* Coptic: {{tt|cop|ϫⲟⲓ|m}}
+* Cornish: {{tt+|kw|skath}}
+* Crimean Tatar: {{tt|crh|qayıq}}
+* Czech: {{tt+|cs|člun|m}}, {{tt+|cs|loď|f}} {{q|ship}}
+* Dalmatian: {{tt|dlm|buarca|f}}, {{tt|dlm|buorca}}
+* Danish: {{tt+|da|båd|c}}, {{tt+|da|skib|n}}
+* Dhivehi: {{tt|dv|ދޯނި}}, {{tt|dv|ބޯޓު}}
+* Dutch: {{tt+|nl|boot|m}}, {{tt+|nl|schip|n}}
+* Egyptian: {{t-egy|dpt|f|h=d:p*t-P1}}, {{t-egy|jmw|h=i-im:m-P1:Z1}}
+* Erzya: {{tt|myv|венч}}
+* Esperanto: {{tt+|eo|boato}}
+* Estonian: {{tt+|et|paat}}
+* Even: {{tt|eve|дяв}}
+* Evenki: {{tt|evn|дяв}}
+* Faroese: {{tt+|fo|bátur|m}}
+* Fijian: {{tt|fj|waqa}}
+* Finnish: {{tt+|fi|vene}}
+* French: {{tt+|fr|bateau|m}}, {{tt+|fr|barque|f}}, {{tt+|fr|nacelle|f}}, {{t+|fr|navire|m}}
+* Friulian: {{tt|fur|barcje|f}}, {{tt|fur|barčhe|f}}
+* Galician: {{tt+|gl|barco|m}}
+* Georgian: {{tt+|ka|ნავი}}
+* German: {{tt+|de|Boot|n}}, {{tt+|de|Schiff|n}}
+* Gothic: {{tt|got|𐍃𐌺𐌹𐍀|n}}
+* Greek: {{tt+|el|βάρκα|f}}, {{tt+|el|λέμβος|f}}, {{tt+|el|καΐκι|n}}
+*: Ancient: {{tt|grc|ναῦς|f}}, {{tt|grc|πλοῖον|n}}
+* Guaraní: {{t|gn|yga}}
+* Gujarati: {{tt|gu|નાવ}}, {{tt+|gu|હોડી}}
+* Haida: {{tt|hai|tluwáay}}
+* Haitian Creole: {{tt|ht|bato}}
+* Hausa: {{tt|ha|jirgi}}
+* Hebrew: {{tt+|he|סִירָה|f|tr=sirá}}
+* Higaonon: {{tt|mba|hawang}}
+* Hindi: {{tt+|hi|कश्ती|f}}, {{qualifier|larger}} {{tt+|hi|नाव|f}}, {{tt+|hi|नौका|f}}, {{tt+|hi|डोँगी|f}}, {{tt+|hi|डोँगा|m}}, {{tt+|hi|बेड़ी|f}}, {{tt+|hi|बेड़ा|m}}
+* Hungarian: {{tt+|hu|csónak}}
+* Icelandic: {{tt+|is|bátur|m}}
+* Ido: {{tt+|io|batelo}}
+* Inari Sami: {{tt|smn|käärbis}}
+* Indonesian: {{tt+|id|perahu}}, {{tt+|id|sampan}}
+* Interlingua: {{tt|ia|barca}}
+* Irish: {{tt+|ga|bád|m}}
+* Italian: {{tt+|it|barca|f}}, {{tt+|it|nave|f}}, {{tt+|it|battello|m}}, {{tt+|it|schifo|m}}, {{tt+|it|scialuppa|f}}, {{tt+|it|lancia|f}}, {{tt+|it|natante|m}}
+* Japanese: {{tt+|ja|舟|tr=ふね, fune}}, {{tt+|ja|ボート|tr=bōto}}
+* Javanese: {{tt+|jv|prau}}
+* Jeju: {{tt|jje|베|id=boat}}
+* Kanakanabu: {{tt|xnb|'avaang}}
+* Kannada: {{tt+|kn|ದೋಣಿ}}
+* Kazakh: {{tt|kk|қайық}}
+* Khmer: {{tt+|km|ទូក}}, {{tt+|km|នាវា}}
+* Khmu: {{tt|kjg|ຈລອງ}}
+* Korean: {{tt+|ko|배}}, {{tt+|ko|보트}}
+* Kumyk: {{tt|kum|къайыкъ}}
+* Kurdish:
+*: Central Kurdish: {{tt|ckb|پاپۆڕ}}
+*: Northern Kurdish: {{tt+|kmr|qeyik}}
+* Kyrgyz: {{tt+|ky|кайык}}
+* Lao: {{tt+|lo|ເຮືອ}}
+* Latin: {{tt+|la|navis|f}}
+* Latvian: {{tt|lv|laiva|f}}
+* Lingala: {{t|ln|masuwa}}
+* Lithuanian: {{tt|lt|valtis|f}}
+* Lü: {{tt|khb|ᦵᦣᦲ}}
+* Luxembourgish: {{tt+|lb|Schëff|n}}
+* Macedonian: {{tt|mk|чамец|m}}, {{tt|mk|кајче|n}}, {{tt|mk|чун|m}}
+* Malay: {{tt+|ms|perahu}}
+* Malayalam: {{tt+|ml|വഞ്ചി}}, {{tt+|ml|വള്ളം}}
+* Maltese: {{tt|mt|dgħajsa|f}}
+* Manchu: {{tt|mnc|ᠵᠠᠶᠠ}}, {{tt|mnc|ᠵᠠᡥᡡᡩᠠᡳ}}, {{tt|mnc|ᠸᡝᡳᡥᡠ}}, {{tt|mnc|ᠴᡠᠸᠠᠨ}}
+* Mandinka: {{tt|mnk|kuluŋo}}
+* Maori: {{tt+|mi|waka}}
+* Maranao: {{tt|mrw|barangay}}
+* Marathi: {{tt+|mr|नौका}}
+* Mazanderani: {{tt|mzn|لوتکا|tr=lutkâ}}
+* Mirandese: {{t-needed|mwl}}
+* Miyako: {{tt|mvi|フニ|tr=funi}}
+* Mizo: {{tt|lus|long}}, {{tt|lus|lawng}}
+* Moksha: {{tt|mdf|венеж}}
+* Mon: {{tt+|mnw|ဂၠုၚ်}}
+* Mongolian:
+*: Cyrillic: {{tt+|mn|завь}}, {{tt+|mn|усан онгоц}}, {{tt+|mn|онгоц}}
+*: Mongolian: {{tt|mn|ᠵᠠᠪᠢ}}, {{tt|mn|ᠤᠰᠤᠨ ᠣᠩᠭᠤᠴᠠ}}, {{tt|mn|ᠣᠩᠭᠤᠴᠠ}}
+* Nanai: {{tt|gld|дяи}}, {{tt|gld|огда}}
+* Navajo: {{tt|nv|tsin naaʼeeł}}
+* Nepali: {{tt|ne|डुङ्गा}}
+* Nivkh: {{tt|niv|му}}
+* Nogai: {{tt|nog|кайык}}
+* Norman: {{tt|nrf|baté|m}}
+* North Frisian:
+*: Föhr-Amrum: {{tt|frr|buat|n}}
+*: Mooring: {{tt|frr|büütj|n}}
+*: Sylt: {{tt|frr|Buat|n}}
+* Northern Mansi: {{t-check|mns-nor|ха̄п}} {{attention|mns-nor|check that this is Northern Mansi and not some other variety}}
+* Northern Sami: {{tt|se|fanas}}
+* Northern Thai: {{tt|nod|ᩁᩮᩬᩥᩋ}}
+* Norwegian:
+*: Bokmål: {{tt+|nb|båt|m}}, {{tt|nb|farkost|m}}
+*: Nynorsk: {{tt+|nn|båt|m}}, {{tt|nn|farkost|m}}
+* Occitan: {{tt+|oc|batèl|m}}
+* Odia: {{tt+|or|ଡଙ୍ଗା}}, {{tt+|or|ବୋଇତ}}, {{tt+|or|ଗୋରାପ}}, {{tt+|or|ଜାହାଜ}}
+* Ojibwe: {{tt|oj|jiimaan}}
+* Old Church Slavonic:
+*: Cyrillic: {{tt|cu|ладии|f}}, {{tt|cu|алъдии|f}}
+* Old East Slavic: {{tt|orv|лодья|f}}, {{tt|orv|лодъка|f}}, {{tt|orv|лодь|f}}, {{tt|orv|чьлнъ|m}}
+* Old English: {{tt|ang|bāt|m}}, {{tt+|ang|sċip|n}}
+* Old Javanese: {{tt|kaw|parahu}}
+* Oroch: {{tt|oac|дяви}}, {{tt|oac|ʒãwi}}, {{tt|oac|ʒãi}}
+* Orok: {{tt|oaa|ӡаи́}}, {{tt|oaa|да̄и}}
+* Oroqen: {{tt|orh|dʒawɪ}}
+* Ottoman Turkish: {{t|ota|قایق|tr=kayık}}, {{t|ota|ناو|tr=nav}}
+* Pali: {{tt|pi|nāvā|f}}
+* Pannonian Rusyn: {{t|rsk|гайов|m}}, {{t|rsk|чамец|m}}
+* Pashto: {{tt|ps|کښتۍ|f|tr=kex̌tǝy}}
+* Persian:
+*: Classical Persian: {{t|fa-cls|قَایِق}}, {{t|fa-cls|زَوْرَق}}, {{t|fa-cls|کَشْتِی}}, {{t|fa-cls|کَرَجِی}}, {{t|fa-cls|نَاو}}
+*: Iranian Persian: {{tt|fa-ira|قایِق}}, {{tt|fa-ira|زُوْرَق}}, {{tt|fa-ira|کَشْتی}}, {{t|fa-ira|کَرَجی}}, {{t+|fa-ira|ناو}}
+* Picard: {{t|pcd|batieu}}
+* Plautdietsch: {{tt+|pdt|Boot|n}}
+* Polabian: {{tt|pox|lüďă|f}}
+* Polish: {{tt+|pl|łódź|f}}, {{tt+|pl|łódka|f}}
+* Portuguese: {{tt+|pt|barco|m}}, {{tt+|pt|bote|m}}
+* Punjabi: {{tt|pa|ਨਾਉ}}
+* Quechua: {{tt|qu|wamp'u}}
+* Romagnol: {{tt|rgn|bêrc|m}}, {{tt|rgn|bêrca|f}}
+* Romanian: {{tt+|ro|barcă|f}}, {{tt+|ro|luntre|f}}, {{tt+|ro|vapor|n}}
+* Romansch: {{tt|rm|bartga|f}}
+* Russian: {{tt+|ru|ло́дка|f}}, {{tt+|ru|шлю́пка|f}}, {{tt+|ru|бот|m}}, {{tt+|ru|чёлн|m}}, {{tt+|ru|ладья́|f}} {{qualifier|archaic}}
+* Samoan: {{tt|sm|tulula}}
+* Sango: {{t|sg|mashua}}
+* Sanskrit: {{tt+|sa|नौ|f}}, {{tt+|sa|प्लव|alt=प्लवः}}
+* Santali: {{tt|sat|ᱞᱟᱹᱣᱠᱟᱹ}}
+* Sardinian:
+*: Logudorese: {{tt|sc|feluga}}, {{tt|sc|filuga}}, {{tt|sc|feluca}}
+* Saterland Frisian: {{tt|stq|Boot}}
+* Scottish Gaelic: {{tt|gd|bàta|m|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{tt|sh|бро̑д|m}}, {{tt|sh|бро̀дица|f}}, {{tt|sh|ча́мац|m}}, {{tt|sh|чу̑н|m}}
+*: Roman: {{tt+|sh|brȏd|m}}, {{tt+|sh|bròdica|f}}, {{tt+|sh|čámac|m}}, {{tt+|sh|čȗn|m}}
+* Shan: {{tt+|shn|ႁိူဝ်း}}
+* Shor: {{tt|cjs|кебе|tr=kebe}}
+* Sicilian: {{tt+|scn|barca|f}}, {{tt+|scn|varca|f}}
+* Sindhi: {{tt|sd|ٻيڙي|f|tr=bberii|alt=ٻيڙيِ}}
+* Sinhalese: {{tt|si|බෝට්‍ටුව}}
+* Slovak: {{tt|sk|čln|m}}, {{tt+|sk|loď|f}} {{qualifier|ship}}
+* Slovene: {{tt+|sl|čoln|m}}, {{tt|sl|barka|f}}
+* Solon: {{tt|tuw-sol|дяви}}
+* Somali: {{tt+|so|doon}}
+* Sorbian:
+*: Lower Sorbian: {{tt|dsb|cołn|m}}, {{tt|dsb|łoź|f}} {{qualifier|ship}}
+*: Upper Sorbian: {{tt|hsb|łódź|f}}
+* Sotho: {{tt|st|seketswana}}
+* Southern Altai: {{t|alt|кеме}}, {{t|alt|кайык}}
+* Spanish: {{tt+|es|barca|f}}, {{tt+|es|bote|m}}, {{tt+|es|barco|m}}
+* Svan: {{tt|sva|ნა̈ვ}}
+* Swahili: {{tt+|sw|chombo}}, {{tt+|sw|mashua|c9|c10}}
+* Swedish: {{tt+|sv|båt|c}}
+* Sylheti: {{tt|syl|ꠘꠣꠅ}}
+* Tabaru: {{tt|tby|ngo'otiri}}
+* Tagalog: {{tt+|tl|bangka}}
+* Tajik: {{tt+|tg|қаиқ}}, {{tt+|tg|киштӣ}}, {{tt|tg|заврақ}}, {{t|tg|нов}}
+* Tamil: {{tt+|ta|நவாடா}}, {{tt+|ta|படகு}}
+* Taos: {{tt|twf|łòthə́na}}
+* Tarifit: {{t|rif|aɣarrabu|m}}
+* Tatar: {{tt+|tt|көймә}}
+* Tausug: {{tt|tsg|bangka}}
+* Telugu: {{tt+|te|పడవ}}, {{tt+|te|నావ}}
+* Thai: {{tt+|th|เรือ}}
+* Tibetan: {{tt|bo|གྲུ}}
+* Tigrinya: {{tt|ti|ሳምቡቕ}}
+* Tocharian B: {{tt|txb|kolmo}}, {{tt|txb|olyi}}
+* Tok Pisin: {{tt|tpi|bot}}, {{tt|tpi|sip}}
+* Tongan: {{t|to|vaka}}
+* Tsou: {{tt|tsu|'apangʉ}}
+* Turkish: {{tt+|tr|kayık}}, {{tt+|tr|sandal}}, {{tt+|tr|gemi}}
+* Turkmen: {{tt|tk|gaýyk}}
+* Tuvan: {{tt|tyv|өөш}}, {{tt|tyv|хеме}}
+* Tîrî: {{t|cir|wâ}}
+* Udihe: {{tt|ude|угда|tr=ugda}}
+* Ukrainian: {{tt|uk|чо́вен|m}}, {{tt|uk|лодь|f}}
+* Ulch: {{tt|ulc|ӡaj}}
+* Urdu: {{tt|ur|کَشْتی|f}}, {{tt|ur|ناو|f}}, {{t|ur|بیڑا|m}}, {{t|ur|بوٹ|f}}, {{t|ur|ناو|f}}, {{t|ur|زَورَق|f}}
+* Uyghur: {{tt|ug|قېيىق}}
+* Uzbek: {{tt+|uz|qayiq}}
+* Venetan: {{tt+|vec|barca}}
+* Vietnamese: {{tt+|vi|thuyền}} ({{tt|vi|船}})
+* Volapük: {{tt+|vo|bot}}
+* Walloon: {{tt+|wa|batea}}
+* Waray-Waray: {{tt|war|baluto}}
+* Welsh: {{tt+|cy|cwch}}, {{tt+|cy|bad|m}}
+* West Frisian: {{tt+|fy|boat|c}}
+* Western Bukidnon Manobo: {{tt|mbb|avang}}
+* Western Ojibwa: {{tt|ojw|cîmân}}
+* White Hmong: {{tt|mww|nkoj}}
+* Woiwurrung: {{t|wyi|koorong}}
+* Wolof: {{tt+|wo|gaal}}
+* Xhosa: {{tt|xh|isikhephe}}
+* Yakut: {{tt|sah|оҥочо}}, {{tt|sah|тыы}}
+* Yami: {{tt|tao|tatala}}
+* Yiddish: {{tt|yi|שיף|f}}, {{tt|yi|שיפֿל|n}}
+* Yoruba: {{tt|yo|ọkọ̀}}, {{tt|yo|ọkọ̀ ojú-omi}}
+* Yup'ik: {{tt|esu|angyar}}
+* Zhuang: {{tt|za|ruz}}
+* Zulu: {{tt|zu|isikebhe}}
+{{trans-bottom}}
+
+{{trans-top|poker slang: full house}}
+* Finnish: {{tt|fi|täpö}}
+* Italian: {{tt+|it|full|m}}
+* Polish: {{tt+|pl|ful}}
+{{trans-bottom}}
+
+{{trans-top|chemistry: conformation of cyclohexane}}
+* Finnish: {{tt|fi|venemuoto}}
+{{trans-bottom}}
+}}
+
+====See also====
+* [[:Category:Watercraft]]
+
+====References====
+* Weisenberg, Michael (2000) ''[http://www.poker1.com/mcu/pokerdictionary/mculib_dictionary_info.asp The Official Dictionary of Poker].'' MGI/Mike Caro University. {{ISBN|978-1880069523}}
+
+===Verb===
+{{en-verb}}
+[[File:An oar.JPG|thumb|100px|A boated oar]]
+
+# {{lb|en|intransitive}} To travel by boat.
+# {{lb|en|transitive}} To transport in a boat.
+#: {{co|en|to '''boat''' goods}}
+# {{lb|en|transitive|slang|obsolete}} To transport {{gl|deport to a penal colony}}.
+#* {{quote-book|en|year=2021|author=Graham Seal|title=Condemned|page=120
+|passage=Troy was ''''boated'''' for seven years after being found guilty of burglary and robbery.}}
+# {{lb|en|transitive}} To place in a boat.
+#: {{co|en|to '''boat''' [[oar]]s}}
+
+====Translations====
+{{multitrans|data=
+{{trans-top|travel by boat}}
+* Afrikaans: {{t+|af|vaar}}
+* Bulgarian: {{t+|bg|пла́вам|impf}}
+* Dutch: {{tt+|nl|varen}}
+* Finnish: {{tt+|fi|veneillä}}
+* Icelandic: {{tt|is|fara á báti}}, {{tt|is|flytja á báti}}
+* Slovak: {{tt|sk|člnkovať}}, {{tt|sk|splavovať}}
+* Spanish: {{tt+|es|barquear}}
+{{trans-bottom}}
+}}
+
+===Anagrams===
+* {{anagrams|en|a=abot|Bato|Tabo|atob}}
+
+{{C|en|Isomer (chemistry)|Watercraft}}
+
+==Belizean Creole==
+[[File:Belize-02-Boot-1980-gje.jpg|thumb|Boat]]
+
+===Etymology===
+From {{der|bzj|en|boat}}.
+
+===Noun===
+{{head|bzj|noun}}
+
+# {{l|en|boat}}
+
+====Derived terms====
+{{col2|bzj|boatman|flat-batam boat}}
+
+===References===
+* {{R:bzj:Dikshineri|58}}
+
+{{C|bzj|Watercraft}}
+
+==Finnish==
+
+===Noun===
+{{head|fi|noun form}}
+
+# {{infl of|fi|boa||nom|p}}
+
+===Anagrams===
+* {{anagrams|fi|a=abot|abot}}
+
+==Latin==
+
+===Verb===
+{{head|la|verb form}}
+
+# {{inflection of|la|boō||3|s|pres|actv|indc}}
+
+==Malay==
+
+===Alternative forms===
+* {{l|ms|buat}}
+
+===Etymology===
+From {{inh|ms|poz-mly-pro|*buat}}, from {{inh|ms|poz-pro|*buhat}}.
+
+===Pronunciation===
+* {{IPA|ms|/buat/}}
+* {{rhymes|ms|uat|wat|at}}
+
+===Verb===
+{{head|ms|verb|1701||used in the form|berboat}}
+
+# {{obsolete form of|ms|buat}}
+
+==West Frisian==
+
+===Pronunciation===
+* {{IPA|fy|/boə̯t/}}
+
+===Noun===
+{{fy-noun|n|boaten|boatsje|dim2=boatke}}
+
+# [[#English|boat]]
+
+====Derived terms====
+* {{l|fy|stoomboat}}
+* {{l|fy|ûnderseeboat}}
+
+====Further reading====
+* {{R:WFT|10508|I}}</text>
+      <sha1>hnjdor8hfe9ukd3ih006kismfndsvp3</sha1>
+    </revision>
+  </page>

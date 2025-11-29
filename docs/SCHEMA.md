@@ -26,7 +26,7 @@ Each line in `en-lexemes-enriched.jsonl` is a JSON object:
     "CC-BY-SA-4.0": ["wikt"],
     "CC-BY-4.0": ["wordnet"]
   },
-  "frequency_tier": "N",
+  "frequency_tier": "H",
   "concreteness": 4.97,
   "syllables": 2,
   "sense_offset": 12345,
@@ -52,7 +52,7 @@ Each line in `en-lexemes-enriched.jsonl` is a JSON object:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `frequency_tier` | string | A-Z frequency code (see below) |
+| `frequency_tier` | string | A-L/Y/Z frequency code (see below) |
 | `concreteness` | float | Brysbaert rating 1.0-5.0 |
 | `syllables` | int | Syllable count |
 | `pos` | string[] | Parts of speech |
@@ -65,40 +65,28 @@ Each line in `en-lexemes-enriched.jsonl` is a JSON object:
 | `has_proper_usage` | bool | Has proper noun usage |
 | `lexnames` | string[] | WordNet semantic categories (e.g., `["noun.animal"]`) |
 
-## Frequency Tiers (A-Z)
+## Frequency Tiers (A-L, Y, Z)
 
-Logarithmic scale based on corpus frequency rank:
+12-level explicit boundary system based on corpus frequency rank:
 
-| Tier | Rank Range | Description | Examples |
-|------|------------|-------------|----------|
-| A | 1 | Most frequent | the |
-| B | 2 | | of |
-| C | 3-4 | | and, to |
-| D | 5-7 | Ultra-top function words | a, in, is |
-| E | 8-13 | Core function words | that, it, was |
-| F | 14-23 | Very frequent | for, on, are |
-| G | 24-42 | High-frequency | with, as, his |
-| H | 43-74 | Very common | at, be, this |
-| I | 75-133 | High-frequency core | from, have, or |
-| J | 134-237 | Core vocabulary | an, which, one |
-| K | 238-421 | Basic everyday | about, would, make |
-| L | 422-749 | Common conversational | know, take, come |
-| M | 750-1,333 | Simple vocabulary | castle, river, happy |
-| N | 1,334-2,371 | Everyday vocabulary | ancient, shoulder |
-| O | 2,372-4,216 | Conversational fluency | meadow, triumph |
-| P | 4,217-7,498 | Broad fluency | squadron, remnant |
-| Q | 7,499-13,335 | Educated vocabulary | adjutant, frigate |
-| R | 13,336-23,713 | Lower-mid frequency | fuselage, parapet |
-| S | 23,714-42,169 | Standard educated | sextant, galley |
-| T | 42,170-74,989 | Extended vocabulary | cutlass, schooner |
-| U | 74,990-133,352 | Technical vocabulary | |
-| V | 133,353-237,137 | Specialized | |
-| W | 237,138-421,696 | Rare | |
-| X | 421,697-749,894 | Very rare | |
-| Y | 749,895-1,333,521 | Domain-specific | |
-| Z | 1,333,522+ | Extremely rare / unranked | zugzwang |
+| Tier | Rank Range | Description |
+|------|------------|-------------|
+| A | 1-20 | Universal Anchor |
+| B | 21-100 | Grammatical Skeleton |
+| C | 101-300 | Semantic Core |
+| D | 301-500 | Basic Literacy |
+| E | 501-1,000 | Elementary Vocabulary |
+| F | 1,001-3,000 | Everyday Lexicon |
+| G | 3,001-5,000 | Conversational Mastery |
+| H | 5,001-10,000 | Educated Standard |
+| I | 10,001-30,000 | Full Adult Repertoire |
+| J | 30,001-50,000 | Sophisticated/Erudite |
+| K | 50,001-75,000 | Technical/Domain-specific |
+| L | 75,001-100,000 | Archaic/Hyperspecialized |
+| Y | 100,001+ | Known but very rare |
+| Z | unranked | Unknown/unranked |
 
-**Rule of thumb**: Tiers A-M cover the top ~1,300 most frequent words. Tiers A-Q cover the top ~13,000.
+**Rule of thumb**: Tiers A-F cover the top ~3,000 most frequent words. Tiers A-I cover the top ~30,000.
 
 ## Part of Speech Tags
 
@@ -310,7 +298,7 @@ Separate JSON files for specific metadata (gzipped):
 ```json
 {
   "the": "A",
-  "castle": "N",
+  "castle": "H",
   "zugzwang": "Z"
 }
 ```
