@@ -1,0 +1,29 @@
+<page>
+    <title>λ.</title>
+    <ns>0</ns>
+    <id>5093556</id>
+    <revision>
+      <id>85217985</id>
+      <parentid>54602299</parentid>
+      <timestamp>2025-06-21T04:35:40Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>add period after English uses of {{abbreviation of}} as it's no longer automatic, per [[Wiktionary:Beer parlour/2024/June#Full stops after templates like {{synonym of}}]] and general consistency with other definition-generating and etymology-generating templates; remove nodot=, nocap=, dot=; use {{place}} in some cases; misc cleanups (manually assisted)</comment>
+      <origin>85217985</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="162" sha1="m1j7l7rpgttg48qx2nwlqr7kx7lrrhv" xml:space="preserve">{{also|λ|Λ}}
+==Greek==
+
+===Noun===
+{{el-noun|f}}
+
+# {{lb|el|grammar|linguistics}} {{abbreviation of|el|λέξη}}: [[word]]
+
+{{cln|el|dictionary abbreviations}}</text>
+      <sha1>m1j7l7rpgttg48qx2nwlqr7kx7lrrhv</sha1>
+    </revision>
+  </page>

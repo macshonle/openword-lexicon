@@ -1,0 +1,33 @@
+<page>
+    <title>T.A.</title>
+    <ns>0</ns>
+    <id>732603</id>
+    <revision>
+      <id>85204064</id>
+      <parentid>69053682</parentid>
+      <timestamp>2025-06-20T23:59:08Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>add period after English uses of {{initialism of}} as it's no longer automatic, per [[Wiktionary:Beer parlour/2024/June#Full stops after templates like {{synonym of}}]] and general consistency with other definition-generating and etymology-generating templates; remove nodot=, nocap=, dot=; use {{place}} in some cases; misc cleanups (manually assisted)</comment>
+      <origin>85204064</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="216" sha1="8ebnkc1uv91jg6dwo6v19wlwaby1xlb" xml:space="preserve">{{also|Appendix:Variations of &quot;ta&quot;}}
+==English==
+
+===Alternative forms===
+* {{l|en|TA}}
+
+===Noun===
+{{en-noun}}
+
+# {{initialism of|en|teaching assistant}}.
+
+===Anagrams===
+* {{anagrams|en|a=at|'at|A-T|A/T|AT|at|at-}}</text>
+      <sha1>8ebnkc1uv91jg6dwo6v19wlwaby1xlb</sha1>
+    </revision>
+  </page>

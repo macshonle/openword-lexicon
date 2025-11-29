@@ -1,0 +1,47 @@
+<page>
+    <title>FOR</title>
+    <ns>0</ns>
+    <id>193844</id>
+    <revision>
+      <id>87776711</id>
+      <parentid>85248014</parentid>
+      <timestamp>2025-10-31T22:15:12Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87776711</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="607" sha1="tjck7blq4l05i6by81irfe8bwxzx65n" xml:space="preserve">{{also|Appendix:Variations of &quot;for&quot;}}
+==Translingual==
+
+===Symbol===
+{{mul-symbol}}
+
+# {{IATA|Fortaleza Airport||Fortaleza||Ceará||Brazil}}
+
+==English==
+{{wp}}
+
+===Noun===
+{{head|en|noun}}
+
+# {{init of|en|[[field]] Of [[research]]}}.
+# {{init of|en|frame of reference}}.
+
+===Proper noun===
+{{en-proper noun}}
+
+# {{init of|en|[[w:Fellowship of Reconciliation|Fellowship of Reconciliation]]}}, any of a number of [[religious]] [[nonviolent]] [[organization]]s, particularly in English-speaking countries.
+
+===Anagrams===
+* {{anagrams|en|a=for|'fro|ORF|fro|orf}}
+
+{{cln|en|initialisms}}
+{{C|en|Organizations}}</text>
+      <sha1>tjck7blq4l05i6by81irfe8bwxzx65n</sha1>
+    </revision>
+  </page>

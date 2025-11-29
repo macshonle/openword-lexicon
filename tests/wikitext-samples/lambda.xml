@@ -1,0 +1,335 @@
+<page>
+    <title>lambda</title>
+    <ns>0</ns>
+    <id>28940</id>
+    <revision>
+      <id>87767666</id>
+      <parentid>87570358</parentid>
+      <timestamp>2025-10-31T22:00:36Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax (3); convert {{wikipedia}} to {{wp}} (3); convert {{wp}} to new syntax</comment>
+      <origin>87767666</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="8261" sha1="syzrzsflx27sklrrxjvieyw363po7k1" xml:space="preserve">{{also|Lambda|Λ|λ}}
+==English==
+{{letter disp2|kappa|[[image:Greek uc lambda.svg|42px]][[image:Greek lc lamda.svg|30px]]|mu|λάμβδα|Λ|λ}}
+
+===Etymology===
+From {{bor|en|grc|λάμβδα}}. {{doublet|en|lamed}}.
+
+===Pronunciation===
+* {{IPA|en|/ˈlæm.də/|a=UK,US}}
+* {{audio|en|en-us-lambda.ogg|a=US}}
+
+===Noun===
+{{en-noun}}
+
+# The eleventh letter of the [[Classical Greek|Classical]] and [[Modern Greek|Modern Greek]] alphabet, the twelfth of the [[Old Greek|Old Greek]] alphabet.
+# {{lb|en|physics|mathematics}} Unit representation of wavelength.{{rfex|en}}
+# {{lb|en|physics}} The [[cosmological constant]].
+# {{lb|en|physics}} {{ellipsis of|en|lambda baryon}}.
+# {{lb|en|programming}} {{ellipsis of|en|lambda expression}}.
+# {{lb|en|programming}} {{ellipsis of|en|lambda function}}.
+# {{lb|en|anatomy}} The junction of the [[lambdoid]] and [[sagittal]] [[suture]]s of the [[cranium]].
+# {{lb|en|finance}} The percentage change in an [[option]] value divided by the percentage change in the [[underlying]] [[asset]]'s [[price]].
+
+====Synonyms====
+* {{sense|measure of derivative price sensitivity}} {{l|en|elasticity}}, {{l|en|omega}}
+
+====Hypernyms====
+* {{sense|measure of derivative price sensitivity}} {{l|en|Greeks}} {{qualifier|includes list of coordinate terms}}
+
+====Derived terms====
+{{col|en|antilambda
+|kilolambda
+|lambda calculus
+|lambdacism
+|lambda expression|Goodman and Kruskal's lambda
+|lambda moth
+|lambdoid|lambda leak
+|lamda
+|lambda abstraction|lambda function|lambda hyperon|lambda particle|lambda point|lambda probe|lambda term|Tukey lambda distribution
+}}
+
+====Related terms====
+* {{l|en|lambdacism}}
+
+====Translations====
+{{trans-top|name of the Greek letter}}
+* Arabic: {{t|ar|لَامْدَا|f}}
+* Armenian: {{t|hy|լամբդա}}
+* Asturian: {{t+|ast|lambda}}
+* Catalan: {{t+|ca|lambda|f}}
+* Chinese:
+*: Mandarin: {{t|cmn|拉姆達|tr=lāmǔdá}},, {{t|cmn|蘭布達|tr=lánbùdá}}, {{t+|cmn|蘭姆打|tr=lánmǔdǎ}}
+* Czech: {{t|cs|lambda}}
+* Dutch: {{t+|nl|lambda|m|f}}, {{t|nl|labda|m|f}}
+* Esperanto: {{t+|eo|lambdo}}
+* Finnish: {{t+|fi|lambda}}
+* French: {{t+|fr|lambda|m}}
+* Georgian: {{t|ka|ლამბდა}}
+* German: {{t+|de|Lambda|n}}
+* Greek: {{t+|el|λάμδα|n}}, {{t+|el|λάμβδα|n}}
+*: Ancient: {{t|grc|λάμβδα|n}}, {{t|grc|λάβδα|n}}
+* Hebrew: {{t|he|לַמְדָּא|f|tr=lámda}}
+* Hungarian: {{t+|hu|lambda}}
+* Interlingua: {{t|ia|lambda}}
+* Italian: {{t+|it|lambda}}
+* Japanese: {{t+|ja|ラムダ|tr=ramuda|sc=Jpan}}
+* Korean: {{t+|ko|람다}}
+* Macedonian: {{t|mk|ламбда|f}}
+* Malay: {{t|ms|lambda}}
+* Maori: {{t|mi|rāmana}}
+* Marathi: {{t|mr|लाम्बडा|n}}
+* Persian: {{t|fa|لاندا|tr=lândâ}}
+* Polish: {{t+|pl|lambda|f}}
+* Portuguese: {{t+|pt|lambda|m}}
+* Russian: {{t+|ru|ля́мбда|f}}, {{t|ru|ла́мбда|f}}
+* Spanish: {{t+|es|lambda|f}}
+* Swedish: {{t+|sv|lambda|n}}
+* Tagalog: {{t|tl|lamda}}
+* Telugu: {{t|te|లామ్డా}}
+* Thai: {{t|th|แลมบ์ดา}}
+{{trans-bottom}}
+
+====See also====
+{{list:Greek script letter names/en}}
+
+{{C|en|Greek letter names}}
+
+==Catalan==
+
+===Pronunciation===
+* {{ca-IPA}}
+
+===Noun===
+{{ca-noun|f}}
+
+# {{l|en|lambda}}; the [[Appendix:Greek script|Greek]] letter [[Λ]] (lowercase [[λ]])
+
+{{C|ca|Greek letter names}}
+
+==Czech==
+
+===Pronunciation===
+* {{cs-IPA}}
+
+===Noun===
+{{cs-noun|n,f}}
+
+# {{l|en|lambda}} {{gloss|Greek letter}}
+
+====Declension====
+''when feminine:''
+{{cs-ndecl|f}}
+''Indeclinable when neuter.''
+
+{{cln|cs|indeclinable nouns}}
+{{C|cs|Greek letter names}}
+
+==Dutch==
+
+===Etymology===
+From {{bor|nl|grc|λάμβδα}}. {{doublet|nl|lamed}}.
+
+===Pronunciation===
+* {{audio|nl|Nl-lambda.ogg}}
+
+===Noun===
+{{nl-noun|f|-'s|+}}
+
+# {{C|nl|Greek letter names}} {{l|en|lambda}} {{gloss|letter of the Greek alphabet}}
+
+====Derived terms====
+{{col|nl
+|lambdacalculus
+|lambda-expressie
+}}
+
+===Further reading===
+* {{pedia|lang=nl}}
+
+==Finnish==
+
+===Etymology===
+&lt; {{bor|fi|grc|λάμβδα}}
+{{enum|fi|kappa|myy|Greek letter|Λλ}}
+{{wp|fi:}}
+
+===Pronunciation===
+{{fi-p||lamda}}
+
+===Noun===
+{{fi-noun}}
+
+# [[lambda#English|lambda]] {{gloss|Greek letter}}
+
+====Declension====
+{{fi-decl-kala|lambd|||a}}
+
+====Derived terms====
+{{col|fi|title=compounds
+|lambda-anturi
+|lambdakalkyyli
+|lambdatunnistin
+}}
+
+{{C|fi|Greek letter names}}
+
+==French==
+
+===Etymology===
+{{bor+|fr|grc|λάμβδα}}.
+
+===Pronunciation===
+* {{fr-IPA|lambda|lanmbda|lanmda}}
+* {{audio|fr|LL-Q150 (fra)-0x010C-lambda.wav}}
+* {{audio|fr|LL-Q150 (fra)-DenisdeShawi-lambda.wav|a=&lt;&lt;Canada&gt;&gt; (&lt;&lt;Shawinigan&gt;&gt;)}}
+* {{audio|fr|LL-Q150 (fra)-Poslovitch-lambda.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Vosges&gt;&gt;)}}
+* {{audio|fr|LL-Q150 (fra)-WikiLucas00-lambda.wav|a=&lt;&lt;France&gt;&gt; (&lt;&lt;Lyon&gt;&gt;)}}
+
+===Noun===
+{{fr-noun|m|#,+}}
+
+# {{l|en|lambda}} {{gloss|Greek letter}}
+# {{lb|fr|finance}} [[price]] [[elasticity]] of an [[option]] in relation to that of its holder{{attention|fr|check translation of definition from Wiktionaire}}
+# {{lb|fr|ethology}} the most [[ordinary]] [[member]] of a [[group]]
+# a former [[unit]] of [[capacity]] or [[volume]] equivalent to a [[microliter]], whose symbol is [[λ]]
+# {{lb|fr|acoustics}} a level of [[intensity]] equivalent to forty [[decibel]]s above the threshold for hearing a sound with a frequency of one [[kilohertz]]
+# [[Silver Y]] ([[moth]])
+#: {{syn|fr|noctuelle gamma}}
+
+====Usage notes====
+* Traditionally and most commonly, the plural is spelled without an ''s''. However, according to the 1990 spelling reform, the plural should be spelled with an ''s''.
+
+===Adjective===
+{{fr-adj|mf|pl=lambdas,lambda}}
+
+# [[common]], [[usual]] {{gl|especially of a person}}
+#* {{RQ:Despentes King Kong|page=127|chapter=King Kong Girl|text=Mais c'est rare d'être Bukowski, la plupart du temps, c'est juste des tocards '''lambda'''.}}
+#* {{RQ:Despentes Vernon Subutex|passage=Branché sur une pulsation souterraine, que l'humain '''lambda''' ne perçoit pas.}}
+#* {{quote-journal|fr|work=La Provence|date=2024-04-12|title=Marc Morelli, le chirurgien des machines à coudre|author=L. Ro.|quotee=Marc Morelli|page=7|passage=Je dirais qu'aujourd'hui 20 à 30 % de ma clientèle confectionnent des robes d'Arlésienne, mais finalement, le plus gros de mes ventes est réalisé par des personnes '''lambda''' pour de la couture libre, des vêtements pour enfants par exemple.}}
+#* {{quote-journal|fr|work=w:Le Monde diplomatique|year=2025|month=June|page=21|title=Tous influenceurs !|issn=0026-9395|author=Benoît Bréville|passage=« ''Il faut pas être un mec '''lambda''''' », explique un ''streamer'' jeux vidéo, qui a décidé de miser sur une caractéristique physique {{...}}.}}
+
+===Further reading===
+* {{R:fr:TLFi}}
+
+{{C|fr|Greek letter names}}
+
+==Hungarian==
+{{wp|hu:}}
+
+===Etymology===
+From {{der|hu|grc|λάμβδα}}.
+
+===Pronunciation===
+* {{hu-IPA}}
+* {{hyphenation|hu|lamb|da}}
+* {{rhymes|hu|dɒ|s=2}}
+
+===Noun===
+{{hu-noun|pl=lambdák}}
+
+# {{l|en|lambda}} {{gloss|Greek letter}}
+
+====Declension====
+{{hu-infl-nom|lambdá|o}}{{hu-pos-tok|lambdá}}
+
+{{topics|hu|Greek letter names}}
+
+==Icelandic==
+
+===Noun===
+{{is-noun|@@}}
+
+# {{l|en|lambda}} {{gloss|Greek letter}}
+
+====Declension====
+{{is-ndecl|n|f}}
+
+{{C|is|Greek letter names}}
+
+==Italian==
+{{wp|it:}}
+
+===Noun===
+{{it-noun|mf|#}}
+
+# {{l|en|lambda}} (Greek letter)
+
+===Noun===
+{{it-noun|m|#}}
+
+# {{lb|it|anatomy}} {{l|en|lambda}}
+
+{{C|it|Greek letter names}}
+
+==Polish==
+{{wp|pl:}}
+
+===Etymology===
+{{lbor|pl|grc|λάμβδα}}, from {{der|pl|phn|𐤋‬|ts=lāmed}}.
+
+===Pronunciation===
+{{pl-pr|a=Pl-lambda.ogg}}
+
+===Noun===
+{{pl-noun|f}}
+
+# {{l|en|lambda}} {{gl|Greek letter Λ, λ}}
+# {{lb|pl|physics}} [[lambda baryon]]
+
+====Declension====
+{{pl-decl-noun-f}}
+
+===Further reading===
+* {{R:pl:PWN}}
+
+{{C|pl|Baryons|Greek letter names}}
+
+==Portuguese==
+
+===Pronunciation===
+{{pt-IPA|lambi^da}}
+* {{hyph|pt|lamb|da}}
+
+===Noun===
+{{pt-noun|m}}
+
+# {{l|en|lambda}} {{gloss|name of the Greek letter Λ, λ}}
+
+==Romanian==
+
+===Etymology===
+{{bor+|ro|el|λάμβδα}}.
+
+===Noun===
+{{ro-noun|m|lambda}}
+
+# {{l|en|lambda}}
+
+====Declension====
+{{ro-noun-m|pl=lambda}}
+
+==Spanish==
+
+===Pronunciation===
+{{es-pr|lamda}}
+
+===Noun===
+{{es-noun|f}}
+
+# {{l|en|lambda}}; the Greek letter [[Λ]], [[λ]]
+
+===Further reading===
+* {{R:es:DRAE}}
+
+{{C|es|Greek letter names}}</text>
+      <sha1>syzrzsflx27sklrrxjvieyw363po7k1</sha1>
+    </revision>
+  </page>

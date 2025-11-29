@@ -1,0 +1,44 @@
+<page>
+    <title>teaching assistant</title>
+    <ns>0</ns>
+    <id>6218911</id>
+    <revision>
+      <id>87757071</id>
+      <parentid>82002043</parentid>
+      <timestamp>2025-10-31T21:43:53Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87757071</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="942" sha1="fxn69s5v58wdq7skoa5h1wyglk4jobu" xml:space="preserve">==English==
+{{wp}}
+
+===Noun===
+{{en-noun}}
+
+# {{lb|en|education}} A person who assists a [[teacher]] with [[instructional]] [[responsibility|responsibilities]], often by supporting students with [[learning disability|learning disabilities]] or physical disabilities.
+#: {{syn|en|education assistant|teacher's aide|team teacher|paraprofessional educator|para}}
+
+====Translations====
+{{trans-top|individual who assists a teacher}}
+* Chinese:
+*: Mandarin: {{t+|cmn|助教|tr=zhùjiào}}
+* Danish: {{t|da|instruktor|c}}
+* Finnish: {{t+|fi|koulunkäyntiavustaja}}
+* French: {{t|fr|auxiliaire d'enseignement|m|f}}, {{t|fr|assistant d'enseignement|m}}, {{t|fr|assistante d'enseignement|f}}
+* Hungarian: {{t+|hu|gyakornok}}
+* Irish: {{t|ga|múinteoir cúnta|m}}
+* Portuguese: {{t|pt|professor assistente|m}}, {{t|pt|professora assistente|f}}
+* Spanish: {{t-needed|es}}
+* Swedish: {{t|sv|skolassistent|c}}
+{{trans-bottom}}
+
+{{C|en|Occupations|People}}</text>
+      <sha1>fxn69s5v58wdq7skoa5h1wyglk4jobu</sha1>
+    </revision>
+  </page>

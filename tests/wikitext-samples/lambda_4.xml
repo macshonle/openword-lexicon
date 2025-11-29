@@ -1,0 +1,48 @@
+<page>
+    <title>Lambda</title>
+    <ns>0</ns>
+    <id>1138103</id>
+    <revision>
+      <id>88031051</id>
+      <parentid>86921986</parentid>
+      <timestamp>2025-11-01T08:10:44Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>88031051</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="579" sha1="ejtsa3fcxzxx311yt710l3uqne0s7v6" xml:space="preserve">{{also|lambda}}
+==English==
+
+===Proper noun===
+{{en-proper noun}}
+
+# {{given name|en|female}}.
+#* {{quote-book|en|year=2022| title=The Chosen Twelve|author=James Breakwell | page=| passage='''Lambda''', on the other hand, was practically giddy when she finished crawling through the lander.}}
+
+==German==
+{{wp|de:}}
+
+===Pronunciation===
+* {{audio|de|De-Lambda.ogg|a=&lt;&lt;Germany&gt;&gt; (&lt;&lt;Berlin&gt;&gt;)}}
+
+===Noun===
+{{de-noun|n,(s),s}}
+
+# [[lambda]] (Greek letter)
+
+====Declension====
+{{de-ndecl|n,(s),s}}
+
+===Further reading===
+* {{R:de:Duden}}
+* {{R:de:DWDS}}
+
+{{C|de|Greek letter names}}</text>
+      <sha1>ejtsa3fcxzxx311yt710l3uqne0s7v6</sha1>
+    </revision>
+  </page>

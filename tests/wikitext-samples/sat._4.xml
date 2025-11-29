@@ -1,0 +1,32 @@
+<page>
+    <title>Sat.</title>
+    <ns>0</ns>
+    <id>186744</id>
+    <revision>
+      <id>85214845</id>
+      <parentid>83603663</parentid>
+      <timestamp>2025-06-21T03:33:19Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>add period after English uses of {{abbreviation of}} as it's no longer automatic, per [[Wiktionary:Beer parlour/2024/June#Full stops after templates like {{synonym of}}]] and general consistency with other definition-generating and etymology-generating templates; remove nodot=, nocap=, dot=; use {{place}} in some cases; misc cleanups (manually assisted)</comment>
+      <origin>85214845</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="297" sha1="i5u2887a0oq4jhw9qs8zxe1yqvljwym" xml:space="preserve">{{also|Appendix:Variations of &quot;sat&quot;}}
+==English==
+
+===Proper noun===
+{{en-proper noun}}
+
+# {{abbreviation of|en|Saturday}}.
+
+===Anagrams===
+* {{anagrams|en|a=ast|Sta.|ats|ast|TAs|Sta|sta|AST|Ast|ATs|tas|Tas.|ATS|at's|TSA|T(S/A)|as't|TAS|T.A.s|Tas|-ast|TA's|STA}}
+
+{{cln|en|3-letter abbreviations}}</text>
+      <sha1>i5u2887a0oq4jhw9qs8zxe1yqvljwym</sha1>
+    </revision>
+  </page>
