@@ -1,5 +1,7 @@
 a
 A
+abderian
+Abderian
 abdominal
 abominate
 acronym
@@ -8,6 +10,7 @@ an
 are
 bank
 bat
+batsman
 beat
 beeswax
 billion
@@ -36,6 +39,7 @@ hello
 indaba
 inscrutable
 is
+Isle of Man
 it
 lambda
 Lambda
@@ -44,6 +48,7 @@ march
 March
 may
 piss-easy
+plankton
 polish
 Polish
 poppycock
@@ -68,6 +73,7 @@ teaching assistants
 the
 tiếng
 turkey
+uncouthly
 üdvözlet
 Uzbekistan
 world

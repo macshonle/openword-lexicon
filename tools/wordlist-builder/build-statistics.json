@@ -1,15 +1,15 @@
 {
-  "total_words": 1386451,
-  "generated_at": "2025-11-29T12:37:52.092279",
+  "total_words": 1386453,
+  "generated_at": "2025-11-29T21:19:06.176486",
   "sources": {
-    "wikt": 1328250,
+    "wikt": 1328251,
     "wordnet": 161870,
-    "eowl": 142308,
-    "brysbaert": 44717
+    "eowl": 142307,
+    "brysbaert": 44716
   },
   "source_combinations": {
     "wikt": {
-      "count": 1126847,
+      "count": 1126849,
       "licenses": "CC-BY-SA-4.0"
     },
     "eowl,wikt": {
@@ -17,7 +17,7 @@
       "licenses": "CC-BY-SA-4.0,UKACD"
     },
     "wordnet": {
-      "count": 53981,
+      "count": 53982,
       "licenses": "CC-BY-4.0"
     },
     "wikt,wordnet": {
@@ -25,7 +25,7 @@
       "licenses": "CC-BY-4.0,CC-BY-SA-4.0"
     },
     "brysbaert,eowl,wikt,wordnet": {
-      "count": 26048,
+      "count": 26047,
       "licenses": "Brysbaert-Research,CC-BY-4.0,CC-BY-SA-4.0,UKACD"
     },
     "eowl,wikt,wordnet": {
@@ -63,15 +63,15 @@
   },
   "metadata_coverage": {
     "syllables": {
-      "count": 54376,
-      "percentage": 3.9
+      "count": 105289,
+      "percentage": 7.6
     },
     "concreteness": {
-      "count": 44717,
+      "count": 44716,
       "percentage": 3.2
     },
     "frequency_tier": {
-      "count": 1386451,
+      "count": 1386453,
       "percentage": 100.0
     },
     "multi_word_phrases": {
@@ -79,7 +79,7 @@
       "percentage": 24.7
     },
     "total_senses": {
-      "count": 1662038,
+      "count": 1662039,
       "avg_per_word": 1.2
     },
     "pos_tags": {
@@ -93,28 +93,28 @@
   },
   "metadata_by_source": {
     "wikt": {
-      "total": 1328250,
+      "total": 1328251,
       "concreteness": {
-        "count": 44454,
+        "count": 44453,
         "percentage": 3.3
       },
       "frequency_tier": {
-        "count": 1328250,
+        "count": 1328251,
         "percentage": 100.0
       },
       "syllables": {
-        "count": 54376,
-        "percentage": 4.1
+        "count": 105289,
+        "percentage": 7.9
       },
       "senses": {
-        "count": 1328250,
+        "count": 1328251,
         "percentage": 100.0
       }
     },
     "wordnet": {
       "total": 161870,
       "concreteness": {
-        "count": 37081,
+        "count": 37080,
         "percentage": 22.9
       },
       "frequency_tier": {
@@ -122,49 +122,49 @@
         "percentage": 100.0
       },
       "syllables": {
-        "count": 25010,
-        "percentage": 15.5
+        "count": 43381,
+        "percentage": 26.8
       },
       "senses": {
-        "count": 107545,
+        "count": 107544,
         "percentage": 66.4
       }
     },
     "brysbaert": {
-      "total": 44717,
+      "total": 44716,
       "concreteness": {
-        "count": 44717,
+        "count": 44716,
         "percentage": 100.0
       },
       "frequency_tier": {
-        "count": 44717,
+        "count": 44716,
         "percentage": 100.0
       },
       "syllables": {
-        "count": 15658,
-        "percentage": 35.0
+        "count": 24060,
+        "percentage": 53.8
       },
       "senses": {
-        "count": 44454,
+        "count": 44453,
         "percentage": 99.4
       }
     },
     "eowl": {
-      "total": 142308,
+      "total": 142307,
       "concreteness": {
-        "count": 29553,
+        "count": 29552,
         "percentage": 20.8
       },
       "frequency_tier": {
-        "count": 142308,
+        "count": 142307,
         "percentage": 100.0
       },
       "syllables": {
-        "count": 27992,
-        "percentage": 19.7
+        "count": 44447,
+        "percentage": 31.2
       },
       "senses": {
-        "count": 138350,
+        "count": 138349,
         "percentage": 97.2
       }
     }
@@ -182,11 +182,11 @@
     "H": 4969,
     "I": 18912,
     "J": 16904,
-    "Z": 1340691
+    "Z": 1340693
   },
   "concreteness_distribution": {
     "abstract": 16168,
-    "concrete": 16554,
+    "concrete": 16553,
     "mixed": 11995
   },
   "label_categories": {}

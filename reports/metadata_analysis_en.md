@@ -11,7 +11,7 @@ This consolidated report analyzes metadata coverage, quality, and filtering capa
 
 ---
 
-**Total entries:** 1,386,451
+**Total entries:** 1,386,453
 
 ---
 
@@ -29,21 +29,21 @@ This consolidated report analyzes metadata coverage, quality, and filtering capa
 | H | 4,969 | 0.4% |
 | I | 18,912 | 1.4% |
 | J | 16,904 | 1.2% |
-| Z | 1,340,691 | 96.7% |
+| Z | 1,340,693 | 96.7% |
 
 ### Sample Words by Tier
 
-**Tier A:** (18 words) `you`, `that`, `what`, `and`, `a`  
-**Tier B:** (76 words) `no`, `them`, `look`, `she`, `how`  
-**Tier C:** (193 words) `girl`, `off`, `both`, `has`, `much`  
-**Tier D:** (199 words) `somebody`, `open`, `having`, `days`, `hands`  
-**Tier E:** (494 words) `laugh`, `lose`, `agent`, `hospital`, `thinks`  
-**Tier F:** (1,998 words) `Marty`, `powers`, `fishing`, `checked`, `johnny`  
-**Tier G:** (1,997 words) `rumbling`, `forbidden`, `masters`, `symptoms`, `confirm`  
-**Tier H:** (4,969 words) `Malone`, `Gideon`, `desperately`, `hoo`, `Florence`  
-**Tier I:** (18,912 words) `fifi`, `prevails`, `nationals`, `mortar`, `grants`  
-**Tier J:** (16,904 words) `pillaging`, `ions`, `sundaes`, `rebar`, `Dunlop`  
-**Tier Z:** (1,340,691 words) `faithlessly`, `mesocoxae`, `etybenzatropine`, `given it large`, `gourou`  
+**Tier A:** (18 words) `that`, `the`, `a`, `and`, `of`  
+**Tier B:** (76 words) `let`, `they`, `were`, `be`, `think`  
+**Tier C:** (193 words) `huh`, `coming`, `sorry`, `way`, `looking`  
+**Tier D:** (199 words) `dear`, `change`, `true`, `fucking`, `read`  
+**Tier E:** (494 words) `eight`, `hair`, `return`, `serious`, `changed`  
+**Tier F:** (1,998 words) `headed`, `grant`, `ours`, `friendly`, `van`  
+**Tier G:** (1,997 words) `nest`, `magical`, `delay`, `climbing`, `eva`  
+**Tier H:** (4,969 words) `aisle`, `burgers`, `Austin`, `knocks`, `compound`  
+**Tier I:** (18,912 words) `networks`, `unfulfilled`, `kaji`, `Pasadena`, `individually`  
+**Tier J:** (16,904 words) `ips`, `everyman`, `fantastical`, `pervs`, `microbe`  
+**Tier Z:** (1,340,693 words) `accipitaries`, `Central City`, `lithaemias`, `untransformability`, `bureaucratist`  
 
 ---
 
@@ -53,20 +53,20 @@ This consolidated report analyzes metadata coverage, quality, and filtering capa
 
 | Source | Words |
 |--------|------:|
-| wikt | 1,328,250 |
+| wikt | 1,328,251 |
 | wordnet | 161,870 |
-| eowl | 142,308 |
-| brysbaert | 44,717 |
+| eowl | 142,307 |
+| brysbaert | 44,716 |
 
 ### Source Combinations
 
 | Sources | Words |
 |---------|------:|
-| wikt | 1,126,847 |
+| wikt | 1,126,849 |
 | eowl, wikt | 86,223 |
-| wordnet | 53,981 |
+| wordnet | 53,982 |
 | wikt, wordnet | 48,151 |
-| brysbaert, eowl, wikt, wordnet | 26,048 |
+| brysbaert, eowl, wikt, wordnet | 26,047 |
 | eowl, wikt, wordnet | 22,575 |
 | brysbaert, wikt, wordnet | 10,771 |
 | brysbaert, wikt | 4,131 |
@@ -81,8 +81,8 @@ This consolidated report analyzes metadata coverage, quality, and filtering capa
 
 | Metadata Type | Entries | Percentage |
 |--------------|--------:|-----------:|
-| POS tags | 1,328,250 | 95.8% |
-| Any labels | 1,328,250 | 95.8% |
+| POS tags | 1,328,251 | 95.8% |
+| Any labels | 1,328,251 | 95.8% |
 | Register labels | 42,491 | 3.1% |
 | Domain labels | 43,033 | 3.1% |
 | Region labels | 25,190 | 1.8% |
@@ -178,15 +178,15 @@ This section analyzes metadata coverage for word game filtering needs.
 
 ### Field Coverage
 
-**Total entries:** 1,386,451
+**Total entries:** 1,386,453
 
 | Field | Coverage | Percentage |
 |-------|------:|----------:|
-| POS tags | 1,328,250 | 95.8% |
-| Concreteness | 44,717 | 3.2% |
-| Frequency tier | 1,386,451 | 100.0% |
-| Labels | 1,328,250 | 95.8% |
-| Syllables | 54,376 | 3.9% |
+| POS tags | 1,328,251 | 95.8% |
+| Concreteness | 44,716 | 3.2% |
+| Frequency tier | 1,386,453 | 100.0% |
+| Labels | 1,328,251 | 95.8% |
+| Syllables | 105,289 | 7.6% |
 | Gloss | 0 | 0.0% |
 
 ### Noun Analysis
@@ -202,47 +202,47 @@ This section analyzes metadata coverage for word game filtering needs.
 
 ### Syllable Analysis
 
-**Words with syllable data:** 54,376 (3.9%)
+**Words with syllable data:** 105,289 (7.6%)
 
 #### Syllable Distribution
 
 | Syllables | Count | Percentage |
 |-----------|------:|-----------:|
-| 1 | 10,586 | 19.5% |
-| 2 | 21,177 | 38.9% |
-| 3 | 9,544 | 17.6% |
-| 4 | 6,972 | 12.8% |
-| 5 | 3,786 | 7.0% |
-| 6 | 1,546 | 2.8% |
-| 7 | 552 | 1.0% |
-| 8 | 135 | 0.2% |
-| 9 | 43 | 0.1% |
-| 10 | 11 | 0.0% |
-| 11 | 13 | 0.0% |
-| 12 | 5 | 0.0% |
-| 13 | 2 | 0.0% |
-| 14 | 2 | 0.0% |
-| 15 | 1 | 0.0% |
+| 1 | 12,426 | 11.8% |
+| 2 | 37,142 | 35.3% |
+| 3 | 26,491 | 25.2% |
+| 4 | 16,896 | 16.0% |
+| 5 | 7,712 | 7.3% |
+| 6 | 2,995 | 2.8% |
+| 7 | 1,033 | 1.0% |
+| 8 | 333 | 0.3% |
+| 9 | 130 | 0.1% |
+| 10 | 55 | 0.1% |
+| 11 | 38 | 0.0% |
+| 12 | 16 | 0.0% |
+| 13 | 9 | 0.0% |
+| 14 | 4 | 0.0% |
+| 15 | 7 | 0.0% |
 
-**Average syllables:** 2.64  
+**Average syllables:** 2.88  
 **Max syllables:** 19  
 
 #### Sample Words by Syllable Count
 
 *(Excludes proverbs and long phrases with >5 words)*
 
-**1 syllable:** `japes`, `dap`, `checks`, `hums`, `yooge`  
-**2 syllables:** `greaser`, `Germans`, `getcho`, `Ave`, `shader`  
-**3 syllables:** `finial`, `historic`, `emplastic`, `axilla`, `briary`  
-**4 syllables:** `malefactor`, `Ortonian`, `Shinobu`, `sonography`, `Cinquecentist`  
-**5 syllables:** `antinational`, `monomaniac`, `dronification`, `distomedial`, `Caltanissetta`  
+**1 syllable:** `cueing`, `biffed`, `siong`, `trey`, `capped`  
+**2 syllables:** `Celbridge`, `AJATT`, `Longwick`, `capsize`, `Kremlin`  
+**3 syllables:** `Malagash`, `Newtownards`, `chemically`, `hardiment`, `aurific`  
+**4 syllables:** `apologist`, `fenproporex`, `castratrices`, `irredundant`, `congregation`  
+**5 syllables:** `quintessentially`, `indefectible`, `synonymizer`, `cartilaginous`, `dysinnervation`  
 
 #### Complete Enumeration for Rare Syllable Counts
 
-**12 syllables:** (5 words) `Canadian Aboriginal Syllabics`, `a contented mind is a perpetual feast` (proverb, 7 words), `esophagogastroduodenoscopy`, `hysterosalpingo-oophorectomy`, `methylenetetrahydrofolatereductase`  
-**13 syllables:** (2 words) `hexahectaenneacontakaiheptagon`, `honorificabilitudinitatibus`  
-**14 syllables:** (2 words) `hexakosioihexekontahexaphobia`, `supercalifragilisticexpialidocious`  
-**15 syllables:** (1 word) `hippopotomonstrosesquipedaliophobia`  
+**13 syllables:** (9 words) `a spoonful of sugar helps the medicine go down` (proverb, 9 words), `behind every successful man there stands a woman` (proverb, 8 words), `cyclohexyloxycarbonyloxyethyl`, `fibrodysplasia ossificans progressiva`, `hexahectaenneacontakaiheptagon`, `honorificabilitudinitatibus`, `levatores palpebrarum superiorum`, `methylenetetrahydrofolatereductase`, `sufficient unto the day is the evil thereof` (proverb, 8 words)  
+**14 syllables:** (4 words) `Dadra and Nagar Haveli and Daman and Diu` (8 words), `a woman needs a man like a fish needs a bicycle` (11 words), `hexakosioihexekontahexaphobia`, `supercalifragilisticexpialidocious`  
+**15 syllables:** (7 words) `Lake Chargoggagoggmanchauggagoggchaubunagungamaugg`, `Russian Soviet Federative Socialist Republic` (5 words), `United Kingdom of Great Britain and Northern Ireland` (8 words), `dimethylamidophenyldimethylpyrazolon`, `encephalomyeloradiculoneuropathy`, `enneahectaenneacontakaienneagon`, `hippopotomonstrosesquipedaliophobia`  
+**16 syllables:** (1 word) `Stanley Bridge, Hope River, Bayview, Cavendish and North Rustico` (9 words)  
 **19 syllables:** (1 word) `pneumonoultramicroscopicsilicovolcanoconiosis`  
 
 ### Concreteness Distribution
@@ -417,9 +417,9 @@ Even with good filters, manual review is essential:
 
 Representative samples from different source combinations:
 
-### wikt (1,126,847 entries)
+### wikt (1,126,849 entries)
 
-**`uniformisable`**
+**`calcarate`**
 ```json
 {
   "frequency_tier": "Z",
@@ -439,16 +439,16 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 1387486,
+  "sense_offset": 431545,
   "sources": [
     "wikt"
   ],
-  "word": "uniformisable",
+  "word": "calcarate",
   "word_count": 1
 }
 ```
 
-**`goutless`**
+**`feigner`**
 ```json
 {
   "frequency_tier": "Z",
@@ -464,37 +464,38 @@ Representative samples from different source combinations:
     ]
   },
   "morphology": {
-    "base": "gout",
+    "base": "feign",
     "components": [
-      "gout",
-      "-less"
+      "feign",
+      "-er"
     ],
-    "etymology_template": "{{suffix|en|gout|less}}",
+    "etymology_template": "{{suffix|en|feign|er|id2=agent noun}}",
     "is_compound": false,
     "prefixes": [],
     "suffixes": [
-      "-less"
+      "-er"
     ],
     "type": "suffixed"
   },
   "pos": [
-    "adjective"
+    "noun"
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 709270,
+  "sense_offset": 643721,
   "sources": [
     "wikt"
   ],
-  "word": "goutless",
+  "word": "feigner",
   "word_count": 1
 }
 ```
 
-**`historized`**
+**`thrown gas on the fire`**
 ```json
 {
   "frequency_tier": "Z",
+  "is_phrase": true,
   "labels": {
     "domain": [],
     "region": [],
@@ -511,19 +512,19 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 749498,
+  "sense_offset": 1332227,
   "sources": [
     "wikt"
   ],
-  "word": "historized",
-  "word_count": 1
+  "word": "thrown gas on the fire",
+  "word_count": 5
 }
 ```
 
 
 ### eowl, wikt (86,223 entries)
 
-**`plowmen`**
+**`bumpered`**
 ```json
 {
   "frequency_tier": "Z",
@@ -542,28 +543,26 @@ Representative samples from different source combinations:
     ]
   },
   "pos": [
-    "noun"
+    "verb"
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 1063930,
+  "sense_offset": 423615,
   "sources": [
     "eowl",
     "wikt"
   ],
-  "word": "plowmen",
+  "word": "bumpered",
   "word_count": 1
 }
 ```
 
-**`villous`**
+**`evens`**
 ```json
 {
-  "frequency_tier": "Z",
+  "frequency_tier": "J",
   "labels": {
-    "domain": [
-      "biology"
-    ],
+    "domain": [],
     "region": [],
     "register": [],
     "temporal": []
@@ -577,21 +576,22 @@ Representative samples from different source combinations:
     ]
   },
   "pos": [
-    "adjective"
+    "noun",
+    "verb"
   ],
-  "sense_count": 2,
+  "sense_count": 3,
   "sense_length": 2,
-  "sense_offset": 1415747,
+  "sense_offset": 626665,
   "sources": [
     "eowl",
     "wikt"
   ],
-  "word": "villous",
+  "word": "evens",
   "word_count": 1
 }
 ```
 
-**`freewomen`**
+**`turbocar`**
 ```json
 {
   "frequency_tier": "Z",
@@ -609,50 +609,39 @@ Representative samples from different source combinations:
       "eowl"
     ]
   },
+  "morphology": {
+    "base": "car",
+    "components": [
+      "turbo-",
+      "car"
+    ],
+    "etymology_template": "{{af|en|turbo-|car}}",
+    "is_compound": false,
+    "prefixes": [
+      "turbo-"
+    ],
+    "suffixes": [],
+    "type": "prefixed"
+  },
   "pos": [
     "noun"
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 672950,
+  "sense_offset": 1364486,
   "sources": [
     "eowl",
     "wikt"
   ],
-  "word": "freewomen",
+  "word": "turbocar",
   "word_count": 1
 }
 ```
 
 
-### wordnet (53,981 entries)
+### wordnet (53,982 entries)
 
-**`united states government`**
-```json
-{
-  "frequency_tier": "Z",
-  "labels": {},
-  "lexnames": [
-    "noun.group"
-  ],
-  "license_sources": {
-    "CC-BY-4.0": [
-      "wordnet"
-    ]
-  },
-  "pos": [],
-  "sense_count": 0,
-  "sense_length": 0,
-  "sense_offset": 0,
-  "sources": [
-    "wordnet"
-  ],
-  "word": "united states government",
-  "word_count": 3
-}
-```
-
-**`bitternut hickory`**
+**`water carpet`**
 ```json
 {
   "frequency_tier": "Z",
@@ -672,18 +661,18 @@ Representative samples from different source combinations:
   "sources": [
     "wordnet"
   ],
-  "word": "bitternut hickory",
+  "word": "water carpet",
   "word_count": 2
 }
 ```
 
-**`ar rimsal`**
+**`corylus cornuta`**
 ```json
 {
   "frequency_tier": "Z",
   "labels": {},
   "lexnames": [
-    "noun.location"
+    "noun.plant"
   ],
   "license_sources": {
     "CC-BY-4.0": [
@@ -697,7 +686,32 @@ Representative samples from different source combinations:
   "sources": [
     "wordnet"
   ],
-  "word": "ar rimsal",
+  "word": "corylus cornuta",
+  "word_count": 2
+}
+```
+
+**`genus corallorhiza`**
+```json
+{
+  "frequency_tier": "Z",
+  "labels": {},
+  "lexnames": [
+    "noun.plant"
+  ],
+  "license_sources": {
+    "CC-BY-4.0": [
+      "wordnet"
+    ]
+  },
+  "pos": [],
+  "sense_count": 0,
+  "sense_length": 0,
+  "sense_offset": 0,
+  "sources": [
+    "wordnet"
+  ],
+  "word": "genus corallorhiza",
   "word_count": 2
 }
 ```
@@ -705,10 +719,10 @@ Representative samples from different source combinations:
 
 ### wikt, wordnet (48,151 entries)
 
-**`GSR`**
+**`stand-in`**
 ```json
 {
-  "frequency_tier": "J",
+  "frequency_tier": "I",
   "labels": {
     "domain": [],
     "region": [],
@@ -716,7 +730,7 @@ Representative samples from different source combinations:
     "temporal": []
   },
   "lexnames": [
-    "noun.act"
+    "noun.person"
   ],
   "license_sources": {
     "CC-BY-4.0": [
@@ -729,22 +743,22 @@ Representative samples from different source combinations:
   "pos": [
     "noun"
   ],
-  "sense_count": 1,
+  "sense_count": 2,
   "sense_length": 1,
-  "sense_offset": 95649,
+  "sense_offset": 1263662,
   "sources": [
     "wikt",
     "wordnet"
   ],
-  "word": "GSR",
+  "word": "stand-in",
   "word_count": 1
 }
 ```
 
-**`trumped-up`**
+**`coordinative`**
 ```json
 {
-  "frequency_tier": "J",
+  "frequency_tier": "Z",
   "labels": {
     "domain": [],
     "region": [],
@@ -762,26 +776,39 @@ Representative samples from different source combinations:
       "wikt"
     ]
   },
+  "morphology": {
+    "base": "coordinate",
+    "components": [
+      "coordinate",
+      "-ive"
+    ],
+    "etymology_template": "{{suffix|en|coordinate|ive}}",
+    "is_compound": false,
+    "prefixes": [],
+    "suffixes": [
+      "-ive"
+    ],
+    "type": "suffixed"
+  },
   "pos": [
     "adjective"
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 1361412,
+  "sense_offset": 501498,
   "sources": [
     "wikt",
     "wordnet"
   ],
-  "word": "trumped-up",
+  "word": "coordinative",
   "word_count": 1
 }
 ```
 
-**`cocoa butter`**
+**`Upanishad`**
 ```json
 {
   "frequency_tier": "Z",
-  "is_phrase": true,
   "labels": {
     "domain": [],
     "region": [],
@@ -789,8 +816,7 @@ Representative samples from different source combinations:
     "temporal": []
   },
   "lexnames": [
-    "noun.food",
-    "noun.substance"
+    "noun.communication"
   ],
   "license_sources": {
     "CC-BY-4.0": [
@@ -805,32 +831,463 @@ Representative samples from different source combinations:
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 481010,
+  "sense_offset": 267375,
   "sources": [
     "wikt",
     "wordnet"
   ],
-  "syllables": 4,
-  "word": "cocoa butter",
-  "word_count": 2
+  "word": "Upanishad",
+  "word_count": 1
 }
 ```
 
 
-### brysbaert, eowl, wikt, wordnet (26,048 entries)
+### brysbaert, eowl, wikt, wordnet (26,047 entries)
 
-**`styling`**
+**`uncouthly`**
 ```json
 {
-  "concreteness": "mixed",
-  "concreteness_rating": 3.03,
-  "concreteness_sd": 1.25,
+  "concreteness": "abstract",
+  "concreteness_rating": 2.04,
+  "concreteness_sd": 1.22,
+  "frequency_tier": "Z",
+  "labels": {
+    "domain": [],
+    "region": [],
+    "register": [],
+    "temporal": []
+  },
+  "lexnames": [
+    "adv.all"
+  ],
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-4.0": [
+      "wordnet"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "morphology": {
+    "base": "uncouth",
+    "components": [
+      "uncouth",
+      "-ly"
+    ],
+    "etymology_template": "{{suffix|en|uncouth|ly}}",
+    "is_compound": false,
+    "prefixes": [],
+    "suffixes": [
+      "-ly"
+    ],
+    "type": "suffixed"
+  },
+  "pos": [
+    "adverb"
+  ],
+  "sense_count": 1,
+  "sense_length": 1,
+  "sense_offset": 1377063,
+  "sources": [
+    "brysbaert",
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
+  "word": "uncouthly",
+  "word_count": 1
+}
+```
+
+**`rim`**
+```json
+{
+  "concreteness": "concrete",
+  "concreteness_rating": 4.62,
+  "concreteness_sd": 0.88,
+  "frequency_tier": "I",
+  "labels": {
+    "domain": [],
+    "region": [
+      "en-GB"
+    ],
+    "register": [
+      "slang",
+      "vulgar"
+    ],
+    "temporal": [
+      "obsolete"
+    ]
+  },
+  "lexnames": [
+    "noun.artifact",
+    "noun.shape",
+    "verb.motion",
+    "verb.possession",
+    "verb.stative"
+  ],
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-4.0": [
+      "wordnet"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "pos": [
+    "noun",
+    "verb"
+  ],
+  "sense_count": 11,
+  "sense_length": 5,
+  "sense_offset": 1164863,
+  "sources": [
+    "brysbaert",
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
+  "syllables": 1,
+  "word": "rim",
+  "word_count": 1
+}
+```
+
+**`statesman`**
+```json
+{
+  "concreteness": "concrete",
+  "concreteness_rating": 3.76,
+  "concreteness_sd": 1.38,
   "frequency_tier": "I",
   "labels": {
     "domain": [],
     "region": [],
     "register": [],
     "temporal": []
+  },
+  "lexnames": [
+    "noun.person"
+  ],
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-4.0": [
+      "wordnet"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "morphology": {
+    "base": "state",
+    "components": [
+      "state",
+      "-s-",
+      "-man"
+    ],
+    "etymology_template": "{{af|en|state|-s-|-man}}",
+    "interfixes": [
+      "-s-"
+    ],
+    "is_compound": false,
+    "prefixes": [],
+    "suffixes": [
+      "-man"
+    ],
+    "type": "suffixed"
+  },
+  "pos": [
+    "noun"
+  ],
+  "sense_count": 3,
+  "sense_length": 1,
+  "sense_offset": 1265656,
+  "sources": [
+    "brysbaert",
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
+  "syllables": 2,
+  "word": "statesman",
+  "word_count": 1
+}
+```
+
+
+### eowl, wikt, wordnet (22,575 entries)
+
+**`spewer`**
+```json
+{
+  "frequency_tier": "Z",
+  "labels": {
+    "domain": [],
+    "region": [],
+    "register": [],
+    "temporal": []
+  },
+  "lexnames": [
+    "noun.person"
+  ],
+  "license_sources": {
+    "CC-BY-4.0": [
+      "wordnet"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "morphology": {
+    "base": "spew",
+    "components": [
+      "spew",
+      "-er"
+    ],
+    "etymology_template": "{{suffix|en|spew|er}}",
+    "is_compound": false,
+    "prefixes": [],
+    "suffixes": [
+      "-er"
+    ],
+    "type": "suffixed"
+  },
+  "pos": [
+    "noun"
+  ],
+  "sense_count": 1,
+  "sense_length": 1,
+  "sense_offset": 1253050,
+  "sources": [
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
+  "word": "spewer",
+  "word_count": 1
+}
+```
+
+**`overtaking`**
+```json
+{
+  "frequency_tier": "J",
+  "labels": {
+    "domain": [],
+    "region": [],
+    "register": [],
+    "temporal": []
+  },
+  "lexnames": [
+    "noun.act"
+  ],
+  "license_sources": {
+    "CC-BY-4.0": [
+      "wordnet"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "pos": [
+    "noun",
+    "verb"
+  ],
+  "sense_count": 2,
+  "sense_length": 2,
+  "sense_offset": 1008092,
+  "sources": [
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
+  "word": "overtaking",
+  "word_count": 1
+}
+```
+
+**`fadedness`**
+```json
+{
+  "frequency_tier": "Z",
+  "labels": {
+    "domain": [],
+    "region": [],
+    "register": [],
+    "temporal": []
+  },
+  "lexnames": [
+    "noun.attribute"
+  ],
+  "license_sources": {
+    "CC-BY-4.0": [
+      "wordnet"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ],
+    "UKACD": [
+      "eowl"
+    ]
+  },
+  "morphology": {
+    "base": "faded",
+    "components": [
+      "faded",
+      "-ness"
+    ],
+    "etymology_template": "{{suffix|en|faded|ness}}",
+    "is_compound": false,
+    "prefixes": [],
+    "suffixes": [
+      "-ness"
+    ],
+    "type": "suffixed"
+  },
+  "pos": [
+    "noun"
+  ],
+  "sense_count": 1,
+  "sense_length": 1,
+  "sense_offset": 636268,
+  "sources": [
+    "eowl",
+    "wikt",
+    "wordnet"
+  ],
+  "word": "fadedness",
+  "word_count": 1
+}
+```
+
+
+### brysbaert, wikt, wordnet (10,771 entries)
+
+**`crime wave`**
+```json
+{
+  "concreteness": "abstract",
+  "concreteness_rating": 2.39,
+  "concreteness_sd": 1.13,
+  "frequency_tier": "Z",
+  "is_phrase": true,
+  "labels": {
+    "domain": [],
+    "region": [],
+    "register": [],
+    "temporal": []
+  },
+  "lexnames": [
+    "noun.event"
+  ],
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-4.0": [
+      "wordnet"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ]
+  },
+  "pos": [
+    "noun"
+  ],
+  "sense_count": 1,
+  "sense_length": 1,
+  "sense_offset": 516642,
+  "sources": [
+    "brysbaert",
+    "wikt",
+    "wordnet"
+  ],
+  "word": "crime wave",
+  "word_count": 2
+}
+```
+
+**`apologetics`**
+```json
+{
+  "concreteness": "abstract",
+  "concreteness_rating": 1.76,
+  "concreteness_sd": 1.09,
+  "frequency_tier": "Z",
+  "labels": {
+    "domain": [],
+    "region": [],
+    "register": [],
+    "temporal": []
+  },
+  "lexnames": [
+    "noun.cognition"
+  ],
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-4.0": [
+      "wordnet"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ]
+  },
+  "pos": [
+    "noun"
+  ],
+  "sense_count": 1,
+  "sense_length": 1,
+  "sense_offset": 335702,
+  "sources": [
+    "brysbaert",
+    "wikt",
+    "wordnet"
+  ],
+  "word": "apologetics",
+  "word_count": 1
+}
+```
+
+**`video game`**
+```json
+{
+  "concreteness": "concrete",
+  "concreteness_rating": 4.79,
+  "concreteness_sd": 0.56,
+  "frequency_tier": "Z",
+  "is_phrase": true,
+  "labels": {
+    "domain": [],
+    "region": [],
+    "register": [],
+    "temporal": [
+      "rare"
+    ]
   },
   "lexnames": [
     "noun.act"
@@ -844,462 +1301,46 @@ Representative samples from different source combinations:
     ],
     "CC-BY-SA-4.0": [
       "wikt"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "pos": [
-    "noun",
-    "verb"
-  ],
-  "sense_count": 2,
-  "sense_length": 2,
-  "sense_offset": 1279215,
-  "sources": [
-    "brysbaert",
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": 2,
-  "word": "styling",
-  "word_count": 1
-}
-```
-
-**`listing`**
-```json
-{
-  "concreteness": "mixed",
-  "concreteness_rating": 3.15,
-  "concreteness_sd": 1.38,
-  "frequency_tier": "I",
-  "labels": {
-    "domain": [
-      "computing"
-    ],
-    "region": [],
-    "register": [],
-    "temporal": []
-  },
-  "lexnames": [
-    "noun.act",
-    "noun.communication"
-  ],
-  "license_sources": {
-    "Brysbaert-Research": [
-      "brysbaert"
-    ],
-    "CC-BY-4.0": [
-      "wordnet"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "pos": [
-    "adjective",
-    "noun",
-    "verb"
-  ],
-  "sense_count": 7,
-  "sense_length": 4,
-  "sense_offset": 852572,
-  "sources": [
-    "brysbaert",
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": 2,
-  "word": "listing",
-  "word_count": 1
-}
-```
-
-**`crustacean`**
-```json
-{
-  "concreteness": "concrete",
-  "concreteness_rating": 4.66,
-  "concreteness_sd": 0.86,
-  "frequency_tier": "J",
-  "labels": {
-    "domain": [],
-    "region": [],
-    "register": [],
-    "temporal": []
-  },
-  "lexnames": [
-    "adj.pert",
-    "noun.animal"
-  ],
-  "license_sources": {
-    "Brysbaert-Research": [
-      "brysbaert"
-    ],
-    "CC-BY-4.0": [
-      "wordnet"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "morphology": {
-    "base": "Crustacea",
-    "components": [
-      "Crustacea",
-      "-an"
-    ],
-    "etymology_template": "{{suffix|en|Crustacea|an}}",
-    "is_compound": false,
-    "prefixes": [],
-    "suffixes": [
-      "-an"
-    ],
-    "type": "suffixed"
-  },
-  "pos": [
-    "noun"
-  ],
-  "sense_count": 1,
-  "sense_length": 1,
-  "sense_offset": 520901,
-  "sources": [
-    "brysbaert",
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": 3,
-  "word": "crustacean",
-  "word_count": 1
-}
-```
-
-
-### eowl, wikt, wordnet (22,575 entries)
-
-**`carabinier`**
-```json
-{
-  "frequency_tier": "Z",
-  "labels": {
-    "domain": [],
-    "region": [],
-    "register": [],
-    "temporal": []
-  },
-  "lexnames": [
-    "noun.person"
-  ],
-  "license_sources": {
-    "CC-BY-4.0": [
-      "wordnet"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "pos": [
-    "noun"
-  ],
-  "sense_count": 1,
-  "sense_length": 1,
-  "sense_offset": 438343,
-  "sources": [
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
-  "word": "carabinier",
-  "word_count": 1
-}
-```
-
-**`swaggie`**
-```json
-{
-  "frequency_tier": "Z",
-  "labels": {
-    "domain": [],
-    "region": [],
-    "register": [
-      "colloquial"
-    ],
-    "temporal": []
-  },
-  "lexnames": [
-    "noun.person"
-  ],
-  "license_sources": {
-    "CC-BY-4.0": [
-      "wordnet"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "morphology": {
-    "base": "swag",
-    "components": [
-      "swag",
-      "-ie"
-    ],
-    "etymology_template": "{{suffix|en|swag|ie|alt1=swag(man)}}",
-    "is_compound": false,
-    "prefixes": [],
-    "suffixes": [
-      "-ie"
-    ],
-    "type": "suffixed"
-  },
-  "pos": [
-    "noun"
-  ],
-  "sense_count": 1,
-  "sense_length": 1,
-  "sense_offset": 1298071,
-  "sources": [
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
-  "word": "swaggie",
-  "word_count": 1
-}
-```
-
-**`erg`**
-```json
-{
-  "frequency_tier": "Z",
-  "labels": {
-    "domain": [],
-    "region": [],
-    "register": [
-      "slang"
-    ],
-    "temporal": []
-  },
-  "lexnames": [
-    "noun.quantity"
-  ],
-  "license_sources": {
-    "CC-BY-4.0": [
-      "wordnet"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ],
-    "UKACD": [
-      "eowl"
-    ]
-  },
-  "pos": [
-    "noun",
-    "verb"
-  ],
-  "sense_count": 4,
-  "sense_length": 3,
-  "sense_offset": 620764,
-  "sources": [
-    "eowl",
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": 1,
-  "word": "erg",
-  "word_count": 1
-}
-```
-
-
-### brysbaert, wikt, wordnet (10,771 entries)
-
-**`set apart`**
-```json
-{
-  "concreteness": "mixed",
-  "concreteness_rating": 2.83,
-  "concreteness_sd": 1.36,
-  "frequency_tier": "Z",
-  "is_phrase": true,
-  "labels": {
-    "domain": [],
-    "region": [],
-    "register": [],
-    "temporal": []
-  },
-  "lexnames": [
-    "verb.change",
-    "verb.cognition"
-  ],
-  "license_sources": {
-    "Brysbaert-Research": [
-      "brysbaert"
-    ],
-    "CC-BY-4.0": [
-      "wordnet"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ]
-  },
-  "pos": [
-    "verb"
-  ],
-  "sense_count": 4,
-  "sense_length": 1,
-  "sense_offset": 1208487,
-  "sources": [
-    "brysbaert",
-    "wikt",
-    "wordnet"
-  ],
-  "word": "set apart",
-  "word_count": 2
-}
-```
-
-**`pyrotechnic`**
-```json
-{
-  "concreteness": "concrete",
-  "concreteness_rating": 3.96,
-  "concreteness_sd": 1.02,
-  "frequency_tier": "Z",
-  "labels": {
-    "domain": [],
-    "region": [],
-    "register": [],
-    "temporal": []
-  },
-  "lexnames": [
-    "adj.all",
-    "adj.pert",
-    "noun.artifact"
-  ],
-  "license_sources": {
-    "Brysbaert-Research": [
-      "brysbaert"
-    ],
-    "CC-BY-4.0": [
-      "wordnet"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ]
-  },
-  "morphology": {
-    "base": "technic",
-    "components": [
-      "pyro-",
-      "technic"
-    ],
-    "etymology_template": "{{prefix|en|pyro|technic}}",
-    "is_compound": false,
-    "prefixes": [
-      "pyro-"
-    ],
-    "suffixes": [],
-    "type": "prefixed"
-  },
-  "pos": [
-    "adjective"
-  ],
-  "sense_count": 4,
-  "sense_length": 1,
-  "sense_offset": 1115319,
-  "sources": [
-    "brysbaert",
-    "wikt",
-    "wordnet"
-  ],
-  "syllables": 4,
-  "word": "pyrotechnic",
-  "word_count": 1
-}
-```
-
-**`firecracker`**
-```json
-{
-  "concreteness": "concrete",
-  "concreteness_rating": 4.68,
-  "concreteness_sd": 0.9,
-  "frequency_tier": "I",
-  "labels": {
-    "domain": [],
-    "region": [],
-    "register": [
-      "slang"
-    ],
-    "temporal": []
-  },
-  "lexnames": [
-    "noun.artifact"
-  ],
-  "license_sources": {
-    "Brysbaert-Research": [
-      "brysbaert"
-    ],
-    "CC-BY-4.0": [
-      "wordnet"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
     ]
   },
   "morphology": {
     "components": [
-      "fire",
-      "cracker"
+      "video",
+      "game"
     ],
-    "etymology_template": "{{compound|en|fire|cracker}}",
+    "etymology_template": "{{compound|en|video|game|notext=1|type=endocentric}}",
     "is_compound": true,
     "prefixes": [],
     "suffixes": [],
     "type": "compound"
   },
   "pos": [
-    "noun"
+    "noun",
+    "verb"
   ],
-  "sense_count": 3,
+  "sense_count": 2,
   "sense_length": 2,
-  "sense_offset": 651876,
+  "sense_offset": 1414775,
   "sources": [
     "brysbaert",
     "wikt",
     "wordnet"
   ],
-  "word": "firecracker",
-  "word_count": 1
+  "syllables": 3,
+  "word": "video game",
+  "word_count": 2
 }
 ```
 
 
 ### brysbaert, wikt (4,131 entries)
 
-**`reacceptance`**
+**`inkless`**
 ```json
 {
   "concreteness": "abstract",
-  "concreteness_rating": 1.67,
-  "concreteness_sd": 0.73,
+  "concreteness_rating": 2.36,
+  "concreteness_sd": 1.37,
   "frequency_tier": "Z",
   "labels": {
     "domain": [],
@@ -1316,95 +1357,43 @@ Representative samples from different source combinations:
     ]
   },
   "morphology": {
-    "base": "acceptance",
+    "base": "ink",
     "components": [
-      "re-",
-      "acceptance"
+      "ink",
+      "-less"
     ],
-    "etymology_template": "{{prefix|en|re|acceptance}}",
-    "is_compound": false,
-    "prefixes": [
-      "re-"
-    ],
-    "suffixes": [],
-    "type": "prefixed"
-  },
-  "pos": [
-    "noun"
-  ],
-  "sense_count": 1,
-  "sense_length": 1,
-  "sense_offset": 1131285,
-  "sources": [
-    "brysbaert",
-    "wikt"
-  ],
-  "word": "reacceptance",
-  "word_count": 1
-}
-```
-
-**`exaggerator`**
-```json
-{
-  "concreteness": "abstract",
-  "concreteness_rating": 2.27,
-  "concreteness_sd": 1.12,
-  "frequency_tier": "Z",
-  "labels": {
-    "domain": [],
-    "region": [],
-    "register": [],
-    "temporal": []
-  },
-  "license_sources": {
-    "Brysbaert-Research": [
-      "brysbaert"
-    ],
-    "CC-BY-SA-4.0": [
-      "wikt"
-    ]
-  },
-  "morphology": {
-    "base": "exaggerate",
-    "components": [
-      "exaggerate",
-      "-or"
-    ],
-    "etymology_template": "{{affix|en|exaggerate|-or}}",
+    "etymology_template": "{{suffix|en|ink|less}}",
     "is_compound": false,
     "prefixes": [],
     "suffixes": [
-      "-or"
+      "-less"
     ],
     "type": "suffixed"
   },
   "pos": [
-    "noun"
+    "adjective"
   ],
   "sense_count": 1,
   "sense_length": 1,
-  "sense_offset": 627844,
+  "sense_offset": 790087,
   "sources": [
     "brysbaert",
     "wikt"
   ],
-  "word": "exaggerator",
+  "word": "inkless",
   "word_count": 1
 }
 ```
 
-**`remobilization`**
+**`ultraliberal`**
 ```json
 {
   "concreteness": "abstract",
-  "concreteness_rating": 2.32,
-  "concreteness_sd": 1.44,
+  "concreteness_rating": 2.04,
+  "concreteness_sd": 1.22,
   "frequency_tier": "Z",
   "labels": {
-    "domain": [
-      "medicine"
-    ],
+    "domain": [],
     "region": [],
     "register": [],
     "temporal": []
@@ -1418,31 +1407,82 @@ Representative samples from different source combinations:
     ]
   },
   "morphology": {
-    "base": "mobilization",
+    "base": "liberal",
     "components": [
-      "re-",
-      "mobilization"
+      "ultra-",
+      "liberal"
     ],
-    "etymology_template": "{{prefix|en|re|mobilization}}",
+    "etymology_template": "{{prefix|en|ultra|liberal}}",
     "is_compound": false,
     "prefixes": [
-      "re-"
+      "ultra-"
     ],
     "suffixes": [],
     "type": "prefixed"
   },
   "pos": [
+    "adjective",
     "noun"
   ],
   "sense_count": 2,
   "sense_length": 2,
-  "sense_offset": 1148183,
+  "sense_offset": 1370601,
   "sources": [
     "brysbaert",
     "wikt"
   ],
-  "syllables": 6,
-  "word": "remobilization",
+  "word": "ultraliberal",
+  "word_count": 1
+}
+```
+
+**`refillable`**
+```json
+{
+  "concreteness": "mixed",
+  "concreteness_rating": 3.41,
+  "concreteness_sd": 1.45,
+  "frequency_tier": "Z",
+  "labels": {
+    "domain": [],
+    "region": [],
+    "register": [],
+    "temporal": []
+  },
+  "license_sources": {
+    "Brysbaert-Research": [
+      "brysbaert"
+    ],
+    "CC-BY-SA-4.0": [
+      "wikt"
+    ]
+  },
+  "morphology": {
+    "base": "refill",
+    "components": [
+      "refill",
+      "-able"
+    ],
+    "etymology_template": "{{suffix|en|refill|able}}",
+    "is_compound": false,
+    "prefixes": [],
+    "suffixes": [
+      "-able"
+    ],
+    "type": "suffixed"
+  },
+  "pos": [
+    "adjective",
+    "noun"
+  ],
+  "sense_count": 2,
+  "sense_length": 2,
+  "sense_offset": 1142051,
+  "sources": [
+    "brysbaert",
+    "wikt"
+  ],
+  "word": "refillable",
   "word_count": 1
 }
 ```
@@ -1512,13 +1552,14 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 10,
   "sense_length": 8,
-  "sense_offset": 298122,
+  "sense_offset": 298112,
   "sources": [
     "brysbaert",
     "eowl",
     "wikt",
     "wordnet"
   ],
+  "syllables": 3,
   "word": "activate",
   "word_count": 1
 }
@@ -1574,7 +1615,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 17,
   "sense_length": 10,
-  "sense_offset": 547563,
+  "sense_offset": 547555,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1645,13 +1686,14 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 41,
   "sense_length": 11,
-  "sense_offset": 654634,
+  "sense_offset": 654626,
   "sources": [
     "brysbaert",
     "eowl",
     "wikt",
     "wordnet"
   ],
+  "syllables": 1,
   "word": "flag",
   "word_count": 1
 }
@@ -1716,7 +1758,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 27,
   "sense_length": 14,
-  "sense_offset": 1074959,
+  "sense_offset": 1074954,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1828,7 +1870,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 11,
   "sense_length": 9,
-  "sense_offset": 78673,
+  "sense_offset": 78672,
   "sources": [
     "eowl",
     "wikt",
@@ -1899,7 +1941,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 46,
   "sense_length": 13,
-  "sense_offset": 366756,
+  "sense_offset": 366746,
   "sources": [
     "brysbaert",
     "eowl",
@@ -1978,7 +2020,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 53,
   "sense_length": 17,
-  "sense_offset": 369319,
+  "sense_offset": 369309,
   "sources": [
     "brysbaert",
     "eowl",
@@ -2050,7 +2092,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 44,
   "sense_length": 14,
-  "sense_offset": 519969,
+  "sense_offset": 519960,
   "sources": [
     "brysbaert",
     "eowl",
@@ -2113,7 +2155,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   ],
   "sense_count": 27,
   "sense_length": 11,
-  "sense_offset": 944379,
+  "sense_offset": 944373,
   "sources": [
     "brysbaert",
     "eowl",
