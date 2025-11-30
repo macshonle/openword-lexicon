@@ -1,0 +1,54 @@
+<page>
+    <title>abderian</title>
+    <ns>0</ns>
+    <id>3600003</id>
+    <revision>
+      <id>86706943</id>
+      <parentid>85542254</parentid>
+      <timestamp>2025-09-10T01:26:41Z</timestamp>
+      <contributor>
+        <username>ExcarnateSojourner</username>
+        <id>3854170</id>
+      </contributor>
+      <comment>/* English */ + en homophone (using [[MediaWiki:Gadget-AjaxEdit.js|AjaxEdit]])</comment>
+      <origin>86706943</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="827" sha1="4xi3ydad3zy8sselapiqgozop4txayg" xml:space="preserve">{{also|Abderian}}
+==English==
+
+===Etymology===
+From {{m|en|Abderian}}, from {{m|en|Abdera}} (the town in [[Thrace]] where [[Democritus]], the [[laughing|Laughing]] [[philosopher|Philosopher]], lived) {{suffix|en||ian}}.
+
+===Pronunciation===
+* {{IPA|en|/æbˈdɪɹ.i.ən/|a=US|ref={{R:MW3 1976|page=2}}}}
+* {{hmp|en|Abderian}}
+
+===Adjective===
+{{en-adj}}
+
+# Foolish; [[absurd]]; [[ridiculous]]; inclined to incessant merriment or laughter.
+#: ''an '''abderian''' temperament''
+
+====Antonyms====
+* {{l|en|agelastic}}
+
+====Translations====
+{{trans-top|foolish, ridiculous}}
+* Greek: {{t+|el|αβδηρίτης|m}}
+* Norwegian:
+*: Bokmål: {{t|nb|abderittisk}}
+* Swedish: {{t+|sv|abderitisk}}
+{{trans-bottom}}
+
+===See also===
+* {{l|en|abderite}}
+
+===References===
+&lt;references/&gt;
+
+===Anagrams===
+* {{anagrams|en|a=aabdeinr|Beardian}}</text>
+      <sha1>4xi3ydad3zy8sselapiqgozop4txayg</sha1>
+    </revision>
+  </page>

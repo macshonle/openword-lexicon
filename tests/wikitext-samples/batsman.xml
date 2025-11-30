@@ -1,0 +1,92 @@
+<page>
+    <title>batsman</title>
+    <ns>0</ns>
+    <id>40019</id>
+    <revision>
+      <id>87818595</id>
+      <parentid>86829971</parentid>
+      <timestamp>2025-10-31T23:21:42Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax; convert {{wikipedia}} to {{wp}}</comment>
+      <origin>87818595</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2829" sha1="fqtk2uwqimn9332l6o6tl3q3yjxeys5" xml:space="preserve">==English==
+{{wp}}
+
+===Etymology===
+From {{compound|en|bat|-s-|-man}}.
+
+===Pronunciation===
+* {{IPA|en|/ˈbætsmən/}}
+* {{audio|en|en-au-batsman.ogg|a=AU}}
+
+===Noun===
+{{en-noun|batsmen}}
+
+# {{lb|en|cricket}} A [[player]] of the [[batting]] [[side]] now on the [[field]].
+# {{lb|en|cricket}} The [[player]] now [[receiving]] [[strike]]; the [[striker]].
+#* {{quote-web|en|author=w:Julia Price|title=Julia's Ashes Diary 2001 |work=Women's Cricket in Australia -Ashes Tour 2001|url=http://www.southernstars.org.au/ukdiary2001.htm|archiveurl=https://web.archive.org/web/20150322193830/http://www.southernstars.org.au/ukdiary2001.htm|archivedate=22 March 2015|publisher=southernstars.org|date=19 June 2001|accessdate=22 March 2015|passage=The '''batsman''', Kathryn Leng, (who has played for quite a few years for England) asked the umpire dumbfounded if Charlie was going to bowl with a helmet on.}}
+# {{lb|en|cricket}} Any player selected for his or her [[team]] principally to [[bat]], as opposed to a [[bowler]].
+# {{lb|en|baseball|now rare}} A [[hitter]].
+# {{lb|en|aviation|historical}} An [[officer]] who used a pair of hand-held bats to [[signal]] to [[aircraft]] as they came in to land on the [[flight deck]].
+
+====Usage notes====
+* The term batsman is applied to both male and female cricketers; {{m|en|batswoman}} is much rarer.
+* In baseball, ''batsman'' is rarely used outside of the phrase 'hit batsman'.
+
+====Synonyms====
+* {{sense|baseball}} {{l|en|hitter}}, {{l|en|batter}}
+* {{sense|cricket}} {{l|en|batter}} {{gloss|both male and female}}
+
+====Antonyms====
+* {{antsense|cricket}} {{l|en|batswoman}} {{gloss|female}} {{q|when &quot;batsman&quot; is treated as only male}}
+
+====Hypernyms====
+* {{sense|male cricketer}} {{l|en|batter}} {{gloss|both male and female}}
+* {{sense|cricket}} {{l|en|cricketer}}
+
+====Hyponyms====
+* {{sense|cricket}} {{l|en|batswoman}} {{gloss|female}} {{q|when &quot;batsman&quot; is treated as both male and female}}
+
+====Derived terms====
+{{col2|en|batsmanship|batswoman|hit batsman|opening batsman}}
+
+====Related terms====
+* {{l|en|bat}}
+
+====Translations====
+{{trans-top|cricket: player of the batting side on the field}}
+* Bulgarian:  {{t-needed|bg}}
+* Italian: {{t+|it|battitore|m}}
+* Maori: {{t|mi|kaihauhau}}
+{{trans-bottom}}
+
+{{trans-top|cricket: striker}}
+* Bulgarian:  {{t-needed|bg}}
+* Catalan: {{t+|ca|batedor|m}}
+* Finnish: {{t+|fi|lyöjä}}
+* Italian: {{t|it|colpitore|m}}
+{{trans-bottom}}
+
+{{trans-top|cricket: player principally selected to bat}}
+* Bulgarian:  {{t-needed|bg}}
+* Finnish: {{t+|fi|lyöjä}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Russian: {{t-check|ru|бэ́тсмен|m|tr=bɛ́tsmɛn}}, {{t+|ru|бэ́ттер|m|tr=bɛ́ttɛr}}
+* Swedish: {{t-check|sv|slagman|c}}
+{{trans-bottom}}
+
+===Anagrams===
+* {{anagrams|en|a=aabmnst|Bantams|Batmans|bantams|batmans}}
+
+{{C|en|People}}</text>
+      <sha1>fqtk2uwqimn9332l6o6tl3q3yjxeys5</sha1>
+    </revision>
+  </page>

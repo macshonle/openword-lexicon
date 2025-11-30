@@ -241,3 +241,4 @@ pnpm-lock.yaml
 viewer/data/
 viewer/dist/
 .claude/settings.local.json
+/data/benchmark

@@ -1,0 +1,37 @@
+<page>
+    <title>uncouthly</title>
+    <ns>0</ns>
+    <id>695626</id>
+    <revision>
+      <id>86697789</id>
+      <parentid>81110424</parentid>
+      <timestamp>2025-09-08T21:12:03Z</timestamp>
+      <contributor>
+        <username>FenaBot</username>
+        <id>4269631</id>
+      </contributor>
+      <comment>AudioBot: added audio LL-Q1860 (eng)-Vealhurl-uncouthly.wav; added missing pronunciation section</comment>
+      <origin>86697789</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="377" sha1="h64bmxubaqyp4d0ec7kst7xav91trrw" xml:space="preserve">==English==
+
+===Etymology===
+From {{suffix|en|uncouth|ly}}.
+
+===Pronunciation===
+* {{audio|en|LL-Q1860 (eng)-Vealhurl-uncouthly.wav|a=Southern England}}
+
+===Adverb===
+{{en-adv}}
+
+# In an [[uncouth]] manner.
+
+====Translations====
+{{trans-top|in an uncouth manner}}
+* Finnish: {{t+|fi|kömpelösti}}, {{t+|fi|tökerösti}}
+* Russian: {{t+|ru|неуклю́же}}
+{{trans-bottom}}</text>
+      <sha1>h64bmxubaqyp4d0ec7kst7xav91trrw</sha1>
+    </revision>
+  </page>

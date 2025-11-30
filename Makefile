@@ -14,8 +14,9 @@ REPORTS_DIR := reports
 
 # Build artifacts (language-prefixed filenames in flat directories)
 WIKTIONARY_DUMP := $(RAW_DIR)/$(LEXICON_LANG)wiktionary-latest-pages-articles.xml.bz2
-WIKTIONARY_JSON := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-wikt.jsonl
-WIKTIONARY_JSON_SORTED := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-wikt-sorted.jsonl
+WIKTIONARY_JSON_PARENT :=$(INTERMEDIATE_DIR)
+WIKTIONARY_JSON := $(WIKTIONARY_JSON_PARENT)/$(LEXICON_LANG)-wikt.jsonl
+WIKTIONARY_JSON_SORTED := $(WIKTIONARY_JSON_PARENT)/$(LEXICON_LANG)-wikt-sorted.jsonl
 FREQUENCY_DATA := $(RAW_DIR)/$(LEXICON_LANG)_50k.txt
 WORDNET_ARCHIVE := $(RAW_DIR)/english-wordnet-2024.tar.gz
 UNIFIED_TRIE := $(BUILD_DIR)/$(LEXICON_LANG).trie
@@ -38,7 +39,8 @@ RUST_SCANNER := tools/wiktionary-rust/target/release/wiktionary-rust
 # Benchmark outputs
 BENCHMARK_DIR := data/benchmark
 
-.PHONY: bootstrap venv deps fmt lint test clean scrub fetch-en \
+.PHONY: bootstrap venv deps fmt lint test test-python test-rust test-full \
+		clean scrub fetch-en \
         build-en build-rust-scanner build-trie build-metadata \
 		package report-en diagnose-scanner \
 		validate-all validate-enable validate-profanity validate-childish \
@@ -71,9 +73,23 @@ fmt:
 lint:
 	$(UV) run ruff check .
 
-# Tests (includes scanner parity validation if Wiktionary dump available)
-test: validate-scanner-parity
-	$(UV) run pytest -q || true
+# Run all tests (Python + Rust unit tests)
+# For full parity validation, use: make test-full
+test: test-python test-rust
+
+# Python unit tests only
+test-python:
+	@echo "Running Python tests..."
+	$(UV) run pytest
+
+# Rust unit tests only (requires cargo)
+test-rust: | check-cargo
+	@echo "Running Rust tests..."
+	(cd tools/wiktionary-rust; cargo test)
+
+# Full test suite including scanner parity validation
+# Requires Wiktionary dump to be present
+test-full: test validate-scanner-parity
 
 # ===========================
 # Data Fetching
@@ -100,7 +116,7 @@ check-pnpm:
 	}
 
 # Install dependencies when package.json changes
-%/node_modules: %/package.json check-pnpm
+%/node_modules: %/package.json | check-pnpm
 	@echo "Installing dependencies in $*..."
 	(cd $*; pnpm install)
 	@touch $@
@@ -167,14 +183,16 @@ build-en: fetch-en $(LEXEMES_JSON) $(SENSES_JSON)
 		--senses $(SENSES_JSON) --gzip
 	$(UV) run python src/openword/generate_statistics.py
 
+$(WIKTIONARY_JSON_PARENT):
+	@mkdir -p "$(WIKTIONARY_JSON_PARENT)"
+
 # Build and sort Wiktionary JSONL using Rust scanner
 # 1. Extract from XML dump to unsorted JSONL (kept for traceability)
 # 2. Sort lexicographically by word (ensures duplicate entries are consecutive,
 #    trie ordinal = line number, matches Python's default lexicographic sort)
 # Uses channel-pipeline strategy with 4 threads (1.32x faster than sequential)
-$(WIKTIONARY_JSON_SORTED): $(WIKTIONARY_DUMP) $(RUST_SCANNER)
+$(WIKTIONARY_JSON_SORTED): $(WIKTIONARY_DUMP) $(RUST_SCANNER) | $(WIKTIONARY_JSON_PARENT)
 	@echo "Extracting Wiktionary (using Rust scanner, channel-pipeline)..."
-	@mkdir -p "$(dir $(WIKTIONARY_JSON))"
 	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" "$(WIKTIONARY_JSON)" \
 		--strategy channel-pipeline --threads 4
 	@echo "Sorting Wiktionary entries by word..."
@@ -197,7 +215,7 @@ $(LEXEMES_JSON) $(SENSES_JSON): $(WIKTIONARY_JSON_SORTED)
 		-v
 
 # Build compact trie for browser visualization
-build-trie: $(WORDLIST_TXT) viewer/node_modules
+build-trie: $(WORDLIST_TXT) viewer/node_modules | check-pnpm
 	@echo "Building browser-compatible trie..."
 	@echo "Building binary trie from $(WORDLIST_TXT)..."
 	(cd viewer; pnpm run build-trie ../$(WORDLIST_TXT) data/$(LEXICON_LANG).trie.bin)
@@ -276,15 +294,15 @@ validate-childish: deps
 	@$(UV) run python tools/validate_childish_terms.py
 
 # Validate Python/Rust scanner parity
-# Runs both scanners on 500000 entries and compares outputs word-by-word
+# Runs both scanners on 900000 entries and compares outputs word-by-word
 # Skips gracefully if Wiktionary dump not available
 validate-scanner-parity: $(WIKTIONARY_DUMP) $(RUST_SCANNER) deps
-	echo "Running Python scanner (500000 entries)..."
+	@echo "Running Python scanner (900000 entries)..."
 	$(UV) run python tools/wiktionary_scanner_parser.py \
-		"$(WIKTIONARY_DUMP)" /tmp/parity-python.jsonl --limit 500000
-	echo "Running Rust scanner (500000 entries)..."
-	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" /tmp/parity-rust.jsonl --limit 500000
-	echo "Validating parity..."
+		"$(WIKTIONARY_DUMP)" /tmp/parity-python.jsonl --limit 900000
+	@echo "Running Rust scanner (900000 entries)..."
+	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" /tmp/parity-rust.jsonl --limit 900000
+	@echo "Validating parity..."
 	$(UV) run python tools/wiktionary-rust/scripts/validate_parity.py \
 		--python-output /tmp/parity-python.jsonl \
 		--rust-output /tmp/parity-rust.jsonl
@@ -306,17 +324,17 @@ diagnose-scanner: $(WIKTIONARY_DUMP) $(RUST_SCANNER)
 # Run complete benchmarks on full Wiktionary dataset
 # Tests all parallelization strategies with thread counts: 4, 8, 16, 32
 # Output: data/benchmark/en-wikt-{timestamp}-{strategy}[-t{threads}].jsonl
-#
 # For overnight runs, use:
 #   caffeinate -i make benchmark-rust-scanner
-benchmark-rust-scanner: $(WIKTIONARY_DUMP) $(RUST_SCANNER)
+benchmark-rust-scanner: $(WIKTIONARY_DUMP) $(RUST_SCANNER) | $(BENCHMARK_DIR)
 	@echo "Running complete Rust scanner benchmarks..."
-	@mkdir -p $(BENCHMARK_DIR)
 	$(UV) run python tools/wiktionary-rust/scripts/run_full_benchmark.py \
 		--input "$(WIKTIONARY_DUMP)" \
 		--output-dir "$(BENCHMARK_DIR)" \
 		--scanner "$(RUST_SCANNER)"
-	@echo "Benchmark complete. Results in: $(BENCHMARK_DIR)/"
+
+$(BENCHMARK_DIR):
+	@mkdir -p "$(BENCHMARK_DIR)"
 
 # Validate that all benchmark outputs are identical (when sorted)
 benchmark-validate:
@@ -330,14 +348,14 @@ benchmark-validate:
 # ===========================
 
 # Word list builder - create filtered word lists via web UI
-wordlist-builder-web: tools/wordlist-builder/node_modules
+wordlist-builder-web: tools/wordlist-builder/node_modules | check-pnpm
 	@echo "Starting web-based word list builder..."
 	@echo "  Server will start at: http://localhost:8000"
 	@echo "  Press Ctrl+C to stop the server"
 	(cd tools/wordlist-builder; pnpm start)
 
 # Trie viewer - explore lexicon interactively
-viewer-web: viewer/node_modules
+viewer-web: viewer/node_modules | check-pnpm
 	@echo "Starting interactive trie viewer..."
 	@if [ ! -f "$(WORDLIST_TXT)" ]; then \
 		echo "Error: Wordlist not found at $(WORDLIST_TXT)"; \
@@ -384,8 +402,11 @@ nightly:
 
 .PHONY: post-build
 post-build: export OPENWORD_CI=1
-post-build: package report-en validate-all validate-scanner-parity test diagnose-scanner
+post-build: package report-en validate-all test-full diagnose-scanner
 	@echo "Build artifacts:"
 	@ls -lh $(BUILD_DIR)/*.trie $(BUILD_DIR)/*.json* 2>/dev/null || true
 	@echo "Reports:"
 	@ls -lh $(REPORTS_DIR)/*.md 2>/dev/null || true
+
+.PHONY: benchmark
+benchmark: benchmark-rust-scanner benchmark-validate

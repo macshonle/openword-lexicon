@@ -9,6 +9,7 @@
 use crate::{Entry, Stats, parse_page, is_englishlike, classify_case, CaseForm};
 use crate::{TITLE_PATTERN, NS_PATTERN, TEXT_PATTERN, REDIRECT_PATTERN, ENGLISH_SECTION, DICT_ONLY, SPECIAL_PREFIXES};
 
+use std::collections::BTreeMap;
 use std::io::{BufRead, Write, BufWriter};
 use std::sync::mpsc::{sync_channel, Receiver, SyncSender};
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -56,8 +57,8 @@ pub struct RawPage {
 #[derive(Debug)]
 pub struct ProcessedPage {
     pub entries: Vec<Entry>,
-    pub page_id: usize,
     pub title: String,
+    pub page_id: usize,
     pub was_english: bool,
     pub was_redirect: bool,
     pub was_special: bool,
@@ -92,15 +93,15 @@ pub fn extract_pages_from_xml(page_xml: &str, page_id: usize) -> Option<RawPage>
 
 /// Process a raw page into entries
 pub fn process_raw_page(raw: RawPage) -> ProcessedPage {
-    let page_id = raw.page_id;
     let title = raw.title.clone();
+    let page_id = raw.page_id;
 
     // Check for redirects
     if REDIRECT_PATTERN.is_match(&raw.text) {
         return ProcessedPage {
             entries: vec![],
-            page_id,
             title,
+            page_id,
             was_english: false,
             was_redirect: true,
             was_special: false,
@@ -113,8 +114,8 @@ pub fn process_raw_page(raw: RawPage) -> ProcessedPage {
     if !ENGLISH_SECTION.is_match(&raw.text) {
         return ProcessedPage {
             entries: vec![],
-            page_id,
             title,
+            page_id,
             was_english: false,
             was_redirect: false,
             was_special: false,
@@ -127,8 +128,8 @@ pub fn process_raw_page(raw: RawPage) -> ProcessedPage {
     if DICT_ONLY.is_match(&raw.text) {
         return ProcessedPage {
             entries: vec![],
-            page_id,
             title,
+            page_id,
             was_english: true,
             was_redirect: false,
             was_special: false,
@@ -141,8 +142,8 @@ pub fn process_raw_page(raw: RawPage) -> ProcessedPage {
     if !is_englishlike(&raw.title) {
         return ProcessedPage {
             entries: vec![],
-            page_id,
             title,
+            page_id,
             was_english: true,
             was_redirect: false,
             was_special: false,
@@ -156,8 +157,8 @@ pub fn process_raw_page(raw: RawPage) -> ProcessedPage {
 
     ProcessedPage {
         entries,
-        page_id,
         title,
+        page_id,
         was_english: true,
         was_redirect: false,
         was_special: false,
@@ -332,13 +333,15 @@ fn process_batch_threaded(batch: &[String], base_id: usize, num_threads: usize) 
 
 /// Strategy 2: Channel-Pipeline Processing using std::sync::mpsc
 /// Producer thread reads XML, worker threads process pages, writer collects results
+/// Results are buffered and sorted by page_id to ensure deterministic output order
 pub fn process_channel_pipeline<W: Write + Send + 'static>(
     reader: impl BufRead + Send + 'static,
     writer: W,
     config: &ParallelConfig,
     limit: Option<usize>,
 ) -> std::io::Result<Stats> {
-    let (page_tx, page_rx): (SyncSender<String>, Receiver<String>) =
+    // Channel now sends (page_id, xml) tuples to track original order
+    let (page_tx, page_rx): (SyncSender<(usize, String)>, Receiver<(usize, String)>) =
         sync_channel(config.channel_buffer);
     let (result_tx, result_rx): (SyncSender<ProcessedPage>, Receiver<ProcessedPage>) =
         sync_channel(config.channel_buffer);
@@ -369,8 +372,8 @@ pub fn process_channel_pipeline<W: Write + Send + 'static>(
     // Drop extra sender so channel closes when workers finish
     drop(result_tx);
 
-    // Writer in main thread
-    let final_stats = write_results(result_rx, writer, limit, &limit_reached)?;
+    // Writer in main thread - buffers and sorts results for deterministic output
+    let final_stats = write_results_sorted(result_rx, writer, limit, &limit_reached)?;
 
     // Wait for threads
     reader_handle.join().ok();
@@ -385,12 +388,12 @@ pub fn process_channel_pipeline<W: Write + Send + 'static>(
 
 fn read_pages_to_channel(
     mut reader: impl BufRead,
-    tx: SyncSender<String>,
+    tx: SyncSender<(usize, String)>,
     limit_reached: &AtomicBool,
 ) -> std::io::Result<usize> {
     let mut buffer = String::new();
     let mut chunk = vec![0u8; 1024 * 1024];
-    let mut count = 0;
+    let mut page_id: usize = 0;
 
     loop {
         if limit_reached.load(Ordering::Relaxed) {
@@ -410,10 +413,10 @@ fn read_pages_to_channel(
                 let page_xml = buffer[start..end].to_string();
                 buffer.drain(..end);
 
-                if tx.send(page_xml).is_err() {
-                    return Ok(count);
+                if tx.send((page_id, page_xml)).is_err() {
+                    return Ok(page_id);
                 }
-                count += 1;
+                page_id += 1;
             } else {
                 buffer.drain(..start);
                 break;
@@ -425,42 +428,45 @@ fn read_pages_to_channel(
         }
     }
 
-    Ok(count)
+    Ok(page_id)
 }
 
 fn process_pages_worker(
-    rx: Arc<Mutex<Receiver<String>>>,
+    rx: Arc<Mutex<Receiver<(usize, String)>>>,
     tx: SyncSender<ProcessedPage>,
     limit_reached: &AtomicBool,
 ) {
-    let mut page_id = 0;
     loop {
         if limit_reached.load(Ordering::Relaxed) {
             break;
         }
 
         // Try to get next page from shared receiver
-        let xml = {
+        let item = {
             let lock = rx.lock().ok();
             lock.and_then(|guard| guard.recv().ok())
         };
 
-        match xml {
-            Some(xml) => {
+        match item {
+            Some((page_id, xml)) => {
                 if let Some(raw) = extract_pages_from_xml(&xml, page_id) {
                     let result = process_raw_page(raw);
                     if tx.send(result).is_err() {
                         break;
                     }
                 }
-                page_id += 1;
             }
             None => break,
         }
     }
 }
 
-fn write_results<W: Write>(
+/// Write results in deterministic order using a streaming reorder buffer.
+///
+/// Uses a BTreeMap to buffer out-of-order results while writing in-order results
+/// immediately. This minimizes memory usage when results arrive roughly in order,
+/// only buffering entries that arrive before their predecessors complete.
+fn write_results_sorted<W: Write>(
     rx: Receiver<ProcessedPage>,
     writer: W,
     limit: Option<usize>,
@@ -469,9 +475,20 @@ fn write_results<W: Write>(
     let mut writer = BufWriter::with_capacity(256 * 1024, writer);
     let mut stats = Stats::default();
 
-    while let Ok(result) = rx.recv() {
+    // Reorder buffer: holds results that arrived before their turn
+    let mut pending: BTreeMap<usize, ProcessedPage> = BTreeMap::new();
+    // Next page_id we're waiting to write
+    let mut next_expected: usize = 0;
+    // Track max buffer size for debugging/monitoring
+    let mut _max_buffer_size: usize = 0;
+
+    // Helper closure to write a single result and update stats
+    // Returns true if limit was reached
+    let write_result = |result: ProcessedPage,
+                            stats: &mut Stats,
+                            writer: &mut BufWriter<W>| -> std::io::Result<bool> {
         stats.pages_processed += 1;
-        update_stats_from_result(&mut stats, &result);
+        update_stats_from_result(stats, &result);
 
         for entry in result.entries {
             if let Ok(json) = serde_json::to_string(&entry) {
@@ -480,11 +497,50 @@ fn write_results<W: Write>(
 
                 if let Some(l) = limit {
                     if stats.senses_written >= l {
-                        limit_reached.store(true, Ordering::SeqCst);
-                        writer.flush()?;
-                        return Ok(stats);
+                        return Ok(true); // limit reached
                     }
                 }
+            }
+        }
+        Ok(false)
+    };
+
+    // Process results as they arrive
+    for result in rx {
+        let page_id = result.page_id;
+
+        if page_id == next_expected {
+            // This is the next result we're waiting for - write it immediately
+            if write_result(result, &mut stats, &mut writer)? {
+                limit_reached.store(true, Ordering::SeqCst);
+                writer.flush()?;
+                return Ok(stats);
+            }
+            next_expected += 1;
+
+            // Drain any buffered results that are now ready
+            while let Some(buffered) = pending.remove(&next_expected) {
+                if write_result(buffered, &mut stats, &mut writer)? {
+                    limit_reached.store(true, Ordering::SeqCst);
+                    writer.flush()?;
+                    return Ok(stats);
+                }
+                next_expected += 1;
+            }
+        } else {
+            // This result arrived out of order - buffer it
+            pending.insert(page_id, result);
+            _max_buffer_size = _max_buffer_size.max(pending.len());
+        }
+    }
+
+    // Drain any remaining buffered results (shouldn't happen if all pages processed)
+    while let Some((&page_id, _)) = pending.first_key_value() {
+        if let Some(result) = pending.remove(&page_id) {
+            if write_result(result, &mut stats, &mut writer)? {
+                limit_reached.store(true, Ordering::SeqCst);
+                writer.flush()?;
+                return Ok(stats);
             }
         }
     }

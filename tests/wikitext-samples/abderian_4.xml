@@ -1,0 +1,64 @@
+<page>
+    <title>Abderian</title>
+    <ns>0</ns>
+    <id>318</id>
+    <revision>
+      <id>86706938</id>
+      <parentid>85358549</parentid>
+      <timestamp>2025-09-10T01:26:13Z</timestamp>
+      <contributor>
+        <username>ExcarnateSojourner</username>
+        <id>3854170</id>
+      </contributor>
+      <comment>/* English */ + en homophone (using [[MediaWiki:Gadget-AjaxEdit.js|AjaxEdit]])</comment>
+      <origin>86706938</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1277" sha1="fgk4yg0k422oxw8upl3iem5nd1jp98t" xml:space="preserve">{{also|abderian}}
+==English==
+
+===Etymology===
+From {{suffix|en|Abdera|t1=a town in [[Thrace]]|ian}}.
+
+===Pronunciation===
+* {{IPA|en|/æbˈdɪɹ.i.ən/|/æbˈdɛɹ.i.ən/|a=US}}
+* {{audio|en|LL-Q1860 (eng)-Vealhurl-Abderian.wav|a=Southern England}}
+* {{hmp|en|abderian}}
+
+===Adjective===
+{{en-adj}}
+
+# Of or belonging to [[Abdera]] or its people.
+# {{alternative form of|en|abderian}}.
+
+====Derived terms====
+* {{l|en|abderian}}
+
+====Translations====
+{{trans-top|of or belonging to Abdera}}
+* Polish: {{t+|pl|abderycki}}
+* Swedish: {{t+|sv|abderitisk}}
+{{trans-bottom}}
+
+===Noun===
+{{en-noun}}
+
+# An inhabitant or native of [[Abdera]].
+#: {{syn|en|Abderite}}
+#* {{quote-book|en|year=1872|author=Stephen Smith|title=Doctor in Medicine: and Other Papers on Professional Subjects|passage=He regrets that his lines had not fallen in the pleasant places of the past — among the intelligent '''Abderians''' of whom it is said, when Hippocrates came to their city to cure Democritus of his madness, not only the men, but also the women and children {{...}} went forth to meet him.}}
+
+====Translations====
+{{trans-see|Abderite}}
+
+===Further reading===
+* {{R:Webster 1913}}
+* {{R:Century 1911}}
+* {{R:OneLook}}
+
+===Anagrams===
+* {{anagrams|en|a=aabdeinr|Beardian}}
+
+{{C|en|Demonyms}}</text>
+      <sha1>fgk4yg0k422oxw8upl3iem5nd1jp98t</sha1>
+    </revision>
+  </page>

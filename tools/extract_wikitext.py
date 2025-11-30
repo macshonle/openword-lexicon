@@ -30,17 +30,13 @@ Options:
     --update    Skip words that already have .xml files in OUTPUT_DIR
 
 Examples:
-    # Extract specific words (case-sensitive)
-    python tools/extract_wikitext.py data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
-        tests/wikitext-samples sat Sat SAT
+    # Update mode: only extract missing words
+    uv run python tools/extract_wikitext.py data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
+        tests/wikitext-samples --words-file tests/hotspot-words.txt --update
 
     # Extract from hotspot list
-    python tools/extract_wikitext.py data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
+    uv run python tools/extract_wikitext.py data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
         tests/wikitext-samples --words-file tests/hotspot-words.txt
-
-    # Update mode: only extract missing words
-    python tools/extract_wikitext.py data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
-        tests/wikitext-samples --words-file tests/hotspot-words.txt --update
 """
 
 import bz2

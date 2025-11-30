@@ -1,0 +1,321 @@
+<page>
+    <title>plankton</title>
+    <ns>0</ns>
+    <id>3809</id>
+    <revision>
+      <id>87695703</id>
+      <parentid>87562585</parentid>
+      <timestamp>2025-10-31T20:06:40Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>convert {{wikipedia}} to new syntax (4); convert {{wikipedia}} to {{wp}} (4); convert {{wp}} to new syntax (5)</comment>
+      <origin>87695703</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6699" sha1="s990mmsvderjnsu2r3k123tei1ttzrb" xml:space="preserve">{{also|Plankton}}
+==English==
+
+===Etymology===
+Borrowed from {{bor|en|de|Plankton}}, {{coin|en|Victor Hensen|nat=German|occ=zoologist and marine biologist|nocat=1|nocap=1}}. {{surf|en|grc:πλαγκτός|t1=[[drifter#English|drifter]]|-on|id2=unit}}.
+
+===Pronunciation===
+* {{IPA|en|/ˈplæŋk.tən/}}
+* {{audio|en|LL-Q1860 (eng)-Vealhurl-plankton.wav|a=Southern England}}
+* {{audio|en|LL-Q1860 (eng)-Wodencafe-plankton.wav|a=US}}
+
+===Noun===
+{{en-noun|-|s|*}}
+
+# {{lb|en|uncountable}} [[organism|Organism]]s, especially small and microscopic ones, that [[drift#Verb|drift]] in water.
+#: {{ux|en|Whales feed on tiny '''plankton''' drifting in the ocean.}}
+#: {{ux|en|The lake water was full of microscopic '''plankton'''.}}
+#: {{ux|en|The study focused on the role of '''plankton''' in the food chain.}}
+# {{lb|en|countable}} A [[plankter]], any single organism that drifts in water.
+
+====Coordinate terms====
+* {{l|en|nekton}}
+* {{l|en|neuston}}
+* {{l|en|psammon}}
+* {{l|en|pleuston}}
+* {{l|en|seston}}
+* {{l|en|benthon}}
+
+====Derived terms====
+{{col|en|euplankton|geoplankton|ichthyoplankton|mixoplankton|nonplankton|paleoplankton|planktivore|planktivorous|planktonivore|planktonology|planktonophagous|ultraplankton
+|aeroplankton
+|bacterioplankton
+|epiplankton
+|femtoplankton
+|holoplankton
+|jellyplankton
+|macroplankton
+|megaplankton
+|meroplankton
+|mesoplankton
+|microplankton
+|mycoplankton
+|nanoplankton
+|office plankton
+|phytoplankton
+|picoplankton
+|planktonic
+|pseudoplankton
+|tychoplankton
+|zooplankton
+|limnoplankton
+|haliplankton
+|potamoplankton
+|bathyplankton
+|protozooplankton
+|archaeoplankton
+|planktonivory
+|nektoplankton}}
+
+====Related terms====
+{{col3|en|plankter
+|planktic
+|planktology
+|planktotrophic}}
+
+====Descendants====
+* {{desc|ga|planctón|bor=1}}
+* {{desc|th|แพลงก์ตอน|bor=1}}
+
+====Translations====
+{{trans-top|generic term for all the organisms that float in the sea}}
+* Arabic: {{t|ar|عَوَالِق|m-p}}
+* Catalan: {{t|ca|plàncton|m}}
+* Chinese:
+*: Mandarin: {{t+|cmn|浮游生物|tr=fúyóu shēngwù}}
+* Czech: {{t|cs|plankton|m}}
+* Danish: {{t+|da|plankton|n}}
+* Esperanto: {{t|eo|planktono}}
+* Estonian: {{t|et|hõljum}}
+* Finnish: {{t+|fi|plankton}}, {{t+|fi|keijusto}}
+* French: {{t+|fr|plancton|m}}
+* Galician: {{t+|gl|plancto|m}}
+* German: {{t+|de|Plankton|n}}
+* Greek: {{t+|el|πλαγκτόν|n}}
+* Hindi: {{t+|hi|प्लवक|m}}
+* Hungarian: {{t+|hu|plankton}}
+* Ido: {{t+|io|planktono}}, {{t+|io|plankton}}
+* Indonesian: {{t+|id|plankton}}
+* Interlingua: {{t|ia|plancton}}
+* Irish: {{t|ga|planctón|m}}
+* Italian: {{t+|it|plancton|m}}
+* Japanese: {{t+|ja|浮遊生物|tr=ふゆうせいぶつ, fuyūseibutsu|sc=Jpan}}, {{t+|ja|プランクトン|tr=purankuton|sc=Jpan}}
+* Kazakh: {{t|kk|планктон}}
+* Korean: {{t|ko|플랑크톤}}
+* Maori: {{t|mi|meroiti}}
+* Norwegian: {{t+|no|plankton|n}}
+* Polish: {{t+|pl|plankton|m-in}}
+* Portuguese: {{t+|pt|plâncton|m}}
+* Romanian: {{t+|ro|plancton|n}}
+* Russian: {{t+|ru|планкто́н|m}}
+* Spanish: {{t|es|plancton|m}}
+* Swedish: {{t+|sv|plankton|n}}
+* Thai: {{t|th|แพลงก์ตอน}}
+* Urdu: {{t|ur|پیراکو|m|tr=pirākū}}
+* Vietnamese: {{t|vi|sinh vật phù du}}
+{{trans-bottom}}
+
+===References===
+* {{R:OneLook}}
+* {{pedia}}
+
+{{C|en|Marine biology}}
+
+==Danish==
+{{wp|da:}}
+
+===Etymology===
+From {{der|da|grc|πλαγκτός}}.
+
+===Noun===
+{{da-noun|et|-}}
+
+# {{lb|da|uncountable}} {{l|en|plankton}}
+# {{lb|da|countable}} a {{l|en|plankton}}
+#: {{syn|da|svæv|q1=rare}}
+
+====Declension====
+{{da-noun-infl|et|n=sg}}
+
+===References===
+* {{R:DDO}}
+
+{{C|da|Animals|Plants}}
+
+==Estonian==
+
+===Etymology===
+From {{der|et|grc|πλαγκτός||drifter}}, via {{m+|de|Plankton}}.
+
+===Pronunciation===
+* {{et-IPA}}
+* {{rhymes|et|ɑnkton|s=2}}
+* {{hyph|et|plank|ton}}
+
+===Noun===
+{{et-noun|planktoni|planktonit}}
+
+# {{lb|et|marine biology}} [[#English|plankton]] {{gl|a collection of immobile or slightly mobile organisms floating in a body of water}}
+#: {{syn|et|hõljum}}
+
+====Declension====
+{{et-decl-õpik|plankton|i}}
+
+===References===
+* {{R:Sõnaveeb}}
+* {{R:et:EKSS}}
+
+==Finnish==
+
+===Etymology===
+{{internationalism|fi}} (see {{cog|de|Plankton}}), ultimately from {{der|fi|grc|πλαγκτός}}.
+
+===Pronunciation===
+{{fi-pronunciation}}
+
+===Noun===
+{{fi-noun}}
+
+# [[#English|plankton]]
+
+====Declension====
+{{fi-decl-paperi|plankton|a|i=0}}
+
+====Synonyms====
+* {{l|fi|keijusto}}
+* {{l|fi|kellujaelosto}}
+
+====Derived terms====
+{{col|fi|title=compounds
+|eläinplankton
+|kasviplankton
+|planktonlevä
+}}
+
+===Further reading===
+* {{R:KTSK|accessdate=2023-07-03}}
+
+{{C|fi|Marine biology}}
+
+==Norwegian Bokmål==
+{{wp|no:}}
+
+===Etymology===
+From {{der|nb|grc|πλαγκτός}}.
+
+===Noun===
+{{nb-noun-nu}}
+
+# {{l|en|plankton}}
+
+====Derived terms====
+* {{l|nb|dyreplankton}}
+
+===References===
+* {{R:The Bokmål Dictionary}}
+
+{{C|nb|Marine biology}}
+
+==Norwegian Nynorsk==
+{{wp|nn:}}
+
+===Etymology===
+From {{der|nn|grc|πλαγκτός}}.
+
+===Noun===
+{{nn-noun-nu}}
+
+# {{l|en|plankton}}
+
+====Derived terms====
+* {{l|nn|dyreplankton}}
+
+===References===
+* {{R:The Nynorsk Dictionary}}
+
+{{C|nn|Marine biology}}
+
+==Polish==
+{{wp|pl:}}
+[[File:Plankton collage.jpg|thumb|plankton]]
+
+===Etymology===
+{{intnat|pl}}; compare {{cog|en|plankton}}, {{cog|fr|plancton}}, {{cog|de|Plankton}}, ultimately from {{der|pl|grc|πλαγκτός}}.
+
+===Pronunciation===
+{{pl-pr|a=LL-Q809 (pol)-Olaf-plankton.wav}}
+
+===Noun===
+{{pl-noun|m-in|adj=planktonowy,planktoniczny}}
+
+# {{lb|pl|marine biology}} {{l|en|plankton}} {{gl|generic term for all the organisms that float in the sea}}
+# {{lb|pl|figurative}} {{l|en|plankton}} {{gl|totality of individuals, institutions, and organizations that have little importance in a given sphere of social life}}
+
+====Declension====
+{{pl-decl-noun-m-in|tantum=s}}
+
+====Derived terms====
+{{col|pl|title=adjective|planktonożerny}}
+{{col|pl|title=nouns|plankton wirówkowy|planktoniarnia}}
+
+====Related terms====
+{{col|pl|title=nouns|planktolog|planktologia|planktonolog|planktonologia}}
+
+===Further reading===
+* {{R:pl:WSJP}}
+* {{R:pl:PWN}}
+
+{{C|pl|Collectives}}
+
+==Serbo-Croatian==
+{{wp|sh:}}
+{{wp|sr:}}
+{{wp|hr:}}
+{{wp|bs:}}
+
+===Pronunciation===
+* {{IPA|sh|/plǎnktoːn/}}
+* {{hyphenation|sh|plank|ton}}
+
+===Noun===
+{{sh-noun|plànktōn|m-in}}
+
+# {{l|en|plankton}}
+
+====Declension====
+{{sh-decl-noun-unc
+|plànktōn
+|planktóna
+|planktonu
+|plankton
+|planktone
+|planktonu
+|planktonom
+}}
+
+==Swedish==
+{{wp|sv:}}
+
+===Noun===
+{{sv-noun|n}}
+
+# {{lb|sv|uncountable}} {{l|en|plankton}}
+# {{lb|sv|countable}} a {{l|en|plankton}}
+
+====Declension====
+{{sv-infl-noun-n-zero}}
+
+===References===
+* {{R:svenska.se|so}}
+* {{R:svenska.se|saol}}
+* {{R:svenska.se|saob}}</text>
+      <sha1>s990mmsvderjnsu2r3k123tei1ttzrb</sha1>
+    </revision>
+  </page>

@@ -27,6 +27,7 @@ import sys
 import time
 import unicodedata as ud
 from pathlib import Path
+from dataclasses import dataclass
 from typing import Dict, List, Set, Optional
 from rich.live import Live
 from rich.table import Table
@@ -37,6 +38,217 @@ from rich import box
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Wikitext Parser Data Structures
+# ─────────────────────────────────────────────────────────────────────────────
+
+@dataclass
+class Wikilink:
+    """Represents a parsed wikilink: [[target#anchor|display]]"""
+    target: str
+    anchor: Optional[str] = None
+    display: Optional[str] = None
+
+    def text(self) -> str:
+        """Return display text if present, otherwise target."""
+        return self.display if self.display is not None else self.target
+
+
+@dataclass
+class Template:
+    """Represents a parsed template: {{name|param1|param2|...}}"""
+    name: str
+    params: List[str]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Wikitext Recursive Descent Parser
+# ─────────────────────────────────────────────────────────────────────────────
+
+class WikitextParser:
+    """
+    Recursive descent parser for Wiktionary template parameters.
+
+    Uses the call stack for nesting - no explicit depth counters.
+    Each parse method returns structured data; callers decide what to do with it.
+
+    Grammar:
+        params          ::= param ("|" param)*
+        param           ::= element*
+        element         ::= template | wikilink | char
+        template        ::= "{{" template_body "}}"
+        template_body   ::= (template | wikilink | template_char)*
+        wikilink        ::= "[[" target ("#" anchor)? ("|" display)? "]]"
+        target          ::= target_char+
+        anchor          ::= anchor_char+
+        display         ::= display_char+
+    """
+
+    def __init__(self, text: str):
+        self.text = text
+        self.pos = 0
+
+    def peek(self, n: int = 1) -> str:
+        """Look ahead n characters without consuming."""
+        return self.text[self.pos:self.pos + n]
+
+    def consume(self, n: int = 1) -> str:
+        """Consume and return n characters."""
+        result = self.text[self.pos:self.pos + n]
+        self.pos += n
+        return result
+
+    def at_end(self) -> bool:
+        """Check if we've reached end of input."""
+        return self.pos >= len(self.text)
+
+    # ─────────────────────────────────────────────────────────────
+    # Top-level entry point: params ::= param ("|" param)*
+    # ─────────────────────────────────────────────────────────────
+    def parse_params(self) -> List[str]:
+        """Parse template parameters separated by |."""
+        params = []
+        while not self.at_end():
+            param = self.parse_param()
+            params.append(param)
+            if self.peek() == "|":
+                self.consume()
+            else:
+                break
+        return params
+
+    # ─────────────────────────────────────────────────────────────
+    # param ::= element*  (terminated by | or end)
+    # ─────────────────────────────────────────────────────────────
+    def parse_param(self) -> str:
+        """Parse elements until | or end of input."""
+        result = ""
+        while not self.at_end() and self.peek() != "|":
+            if self.peek(2) == "[[":
+                wikilink = self.parse_wikilink()
+                result += wikilink.text()  # Extract display or target
+            elif self.peek(2) == "{{":
+                template = self.parse_template()
+                # For morphology params, nested templates are metadata - discard
+                _ = template
+            else:
+                result += self.consume()
+        return result.strip()
+
+    # ─────────────────────────────────────────────────────────────
+    # wikilink ::= "[[" target ("#" anchor)? ("|" display)? "]]"
+    # ─────────────────────────────────────────────────────────────
+    def parse_wikilink(self) -> Wikilink:
+        """Parse [[target#anchor|display]] -> Wikilink object."""
+        self.consume(2)  # consume "[["
+
+        target = self.parse_target()
+        anchor = None
+        display = None
+
+        # Optional: "#" anchor
+        if self.peek() == "#":
+            self.consume()
+            anchor = self.parse_anchor()
+
+        # Optional: "|" display
+        if self.peek() == "|":
+            self.consume()
+            display = self.parse_display()
+
+        # Consume "]]"
+        if self.peek(2) == "]]":
+            self.consume(2)
+
+        return Wikilink(target=target, anchor=anchor, display=display)
+
+    def parse_target(self) -> str:
+        """target ::= target_char+  where target_char = [^#|\\]]"""
+        result = ""
+        while not self.at_end() and self.peek() not in "#|]":
+            result += self.consume()
+        return result
+
+    def parse_anchor(self) -> str:
+        """anchor ::= anchor_char+  where anchor_char = [^|\\]]"""
+        result = ""
+        while not self.at_end() and self.peek() not in "|]":
+            result += self.consume()
+        return result
+
+    def parse_display(self) -> str:
+        """display ::= display_char+  where display_char = [^\\]]"""
+        result = ""
+        while not self.at_end() and self.peek() != "]":
+            result += self.consume()
+        return result
+
+    # ─────────────────────────────────────────────────────────────
+    # template ::= "{{" params "}}"
+    # (reuses param parsing - templates have same structure!)
+    # ─────────────────────────────────────────────────────────────
+    def parse_template(self) -> Template:
+        """
+        Parse {{name|param1|param2|...}} -> Template object.
+        RECURSIVELY handles nested templates via parse_template_param_inner().
+        """
+        self.consume(2)  # consume "{{"
+
+        # Parse template contents as params (recursive!)
+        params = self.parse_template_params_inner()
+
+        if self.peek(2) == "}}":
+            self.consume(2)
+
+        # First param is template name, rest are params
+        name = params[0] if params else ""
+        return Template(name=name, params=params[1:])
+
+    def parse_template_params_inner(self) -> List[str]:
+        """Parse params inside a template (terminated by }})."""
+        params = []
+        while not self.at_end() and self.peek(2) != "}}":
+            param = self.parse_template_param_inner()
+            params.append(param)
+            if self.peek() == "|":
+                self.consume()
+            else:
+                break
+        return params
+
+    def parse_template_param_inner(self) -> str:
+        """Parse a single param inside a template (terminated by | or }})."""
+        result = ""
+        while not self.at_end() and self.peek() != "|" and self.peek(2) != "}}":
+            if self.peek(2) == "[[":
+                wikilink = self.parse_wikilink()
+                result += wikilink.text()
+            elif self.peek(2) == "{{":
+                template = self.parse_template()  # RECURSIVE!
+                # Nested templates produce no text for our purposes
+                _ = template
+            else:
+                result += self.consume()
+        return result.strip()
+
+
+def parse_template_params(content: str) -> List[str]:
+    """
+    Parse template parameters with proper bracket handling.
+
+    This is the main entry point for parsing template content.
+    Handles nested [[wikilinks]] and {{templates}} correctly.
+
+    Args:
+        content: The inner content of a template (without outer {{ }})
+
+    Returns:
+        List of parsed parameter strings with wikilink display text extracted
+    """
+    parser = WikitextParser(content)
+    return parser.parse_params()
 
 
 class BZ2StreamReader:
@@ -133,6 +345,10 @@ HYPHENATION_TEMPLATE = re.compile(r'\{\{(?:hyphenation|hyph)\|en\|([^}]+)\}\}', 
 RHYMES_SYLLABLE = re.compile(r'\{\{rhymes\|en\|[^}]*\|s=(\d+)', re.IGNORECASE)
 # Extract syllable count from category labels (e.g., "Category:English 3-syllable words")
 SYLLABLE_CATEGORY = re.compile(r'\[\[Category:English\s+(\d+)-syllable\s+words?\]\]', re.IGNORECASE)
+# IPA extraction pattern - matches {{IPA|en|/transcription/}} or {{IPA|en|[transcription]}}
+IPA_TEMPLATE = re.compile(r'\{\{IPA\|en\|([^}]+)\}\}', re.IGNORECASE)
+# Extract transcription from slashes or brackets
+IPA_TRANSCRIPTION = re.compile(r'[/\[]([^/\[\]]+)[/\]]')
 
 # Etymology section extraction (for morphology analysis)
 ETYMOLOGY_SECTION = re.compile(r'===+\s*Etymology\s*\d*\s*===+\s*\n(.+?)(?=\n===|\Z)', re.DOTALL | re.IGNORECASE)
@@ -172,6 +388,16 @@ CONFIX_TEMPLATE = re.compile(r'\{\{confix\|en\|([^}|]+)\|([^}|]+)\|([^}|]+)(?:\|
 LANG_CODE_PREFIX = re.compile(r'^[a-z]{2,4}:', re.IGNORECASE)  # Language codes like grc:, la:, ang:
 WIKILINK_PATTERN = re.compile(r'\[\[([^\]|]+)(?:\|[^\]]+)?\]\]')  # [[word]] or [[word|display]]
 HTML_ENTITY_PATTERN = re.compile(r'<[^>]+>')  # <tag>, <id:...>, etc.
+
+
+def strip_wikilinks(s: str) -> str:
+    """Strip wikilink markup from a string: [[word]] -> word, [[word|display]] -> word."""
+    if '[[' in s or ']]' in s:
+        result = WIKILINK_PATTERN.sub(r'\1', s)
+        return result.replace(']]', '')
+    return s
+
+
 PARAM_KEY_PATTERN = re.compile(r'^(t|gloss|pos|alt|id|lit|tr|ts|sc|nocap|nocat|notext)\d*=', re.IGNORECASE)  # Common parameter keys
 
 # Known language codes for hyphenation templates
@@ -613,18 +839,115 @@ def extract_syllable_count_from_categories(text: str) -> Optional[int]:
     return None
 
 
+def count_syllables_from_ipa(ipa: str) -> int:
+    """
+    Count syllables from IPA transcription.
+
+    Counts vowel nuclei (monophthongs and diphthongs) plus syllabic consonants.
+    Handles diphthongs by only skipping high/central vowels as off-glides.
+
+    Args:
+        ipa: IPA transcription string (without surrounding slashes/brackets)
+
+    Returns:
+        Number of syllables counted
+    """
+    # IPA vowels (monophthongs) - includes common English vowels and variants
+    vowels = set('iɪeɛæaɑɒɔoʊuʌəɜɝɐᵻᵿɚ')
+
+    # Syllabic consonant marker (combining character U+0329)
+    syllabic_marker = '\u0329'
+
+    # Off-glide vowels (second element of diphthongs)
+    offglides = set('ɪʊəɐ')
+
+    count = 0
+    chars = list(ipa)
+    i = 0
+
+    while i < len(chars):
+        ch = chars[i]
+
+        # Check for syllabic consonant (consonant followed by syllabic marker)
+        if i + 1 < len(chars) and chars[i + 1] == syllabic_marker:
+            count += 1
+            i += 2  # Skip consonant and marker
+            continue
+
+        # Check for vowel
+        if ch in vowels:
+            count += 1
+            i += 1
+
+            # Skip diphthong off-glides and modifiers
+            vowel_skipped = False
+            while i < len(chars):
+                next_ch = chars[i]
+                if next_ch in ('ː', 'ˑ', '\u0303', '\u032F', '\u0361', '̯'):
+                    # Length markers and diacritics
+                    i += 1
+                elif not vowel_skipped and next_ch in offglides:
+                    # Skip off-glide vowels (second element of diphthongs)
+                    vowel_skipped = True
+                    i += 1
+                else:
+                    break
+            continue
+
+        i += 1
+
+    return count
+
+
+def extract_syllable_count_from_ipa(text: str) -> Optional[int]:
+    """
+    Extract syllable count from IPA transcription.
+
+    Parses {{IPA|en|/transcription/}} templates and counts syllables
+    based on vowel nuclei and syllabic consonants.
+
+    Args:
+        text: The Wiktionary page text
+
+    Returns:
+        Number of syllables if IPA found and valid, None otherwise
+    """
+    # Find IPA template
+    match = IPA_TEMPLATE.search(text)
+    if not match:
+        return None
+
+    template_content = match.group(1)
+
+    # Extract the first transcription (between / / or [ ])
+    transcription_match = IPA_TRANSCRIPTION.search(template_content)
+    if not transcription_match:
+        return None
+
+    ipa = transcription_match.group(1)
+
+    # Count syllables
+    count = count_syllables_from_ipa(ipa)
+
+    # Return None for implausible counts (0 or very high)
+    if count == 0 or count > 15:
+        return None
+
+    return count
+
+
 def clean_template_components(parts: List[str], template_type: str = 'affix') -> List[str]:
     """
     Clean template parameters to extract only morphological components.
 
     Filters out template metadata like gloss=, pos=, t=, alt=, language codes (grc:),
-    wikilink markup ([[...]]), HTML entities (<...>), and other non-morpheme content.
+    HTML entities (<...>), and other non-morpheme content.
 
-    This addresses parameter pollution issues where template parameters get mixed with
-    actual morphological components (e.g., ['lexico-', 'pos1=prefix', '-graphy']).
+    Note: Wikilink handling ([[...]]) is now done by the WikitextParser during parsing,
+    so this function only handles post-parsing cleanup.
 
     Args:
-        parts: Raw component parts from template split
+        parts: Component parts from template parsing (wikilinks already extracted)
         template_type: Type of template being cleaned ('affix', 'compound', etc.)
 
     Returns:
@@ -634,8 +957,8 @@ def clean_template_components(parts: List[str], template_type: str = 'affix') ->
         >>> clean_template_components(['lexico-', 'pos1=prefix meaning...', '-graphy'])
         ['lexico-', '-graphy']
 
-        >>> clean_template_components(['grc:πλαγκτός', 't1=[[drifter]]', '-on'])
-        ['-on']  # Excludes non-English roots
+        >>> clean_template_components(['grc:πλαγκτός', 'drifter', '-on'])
+        ['drifter', '-on']  # Excludes non-English roots
 
         >>> clean_template_components(['bi-', 'gloss1=two', '-illion'])
         ['bi-', '-illion']
@@ -657,16 +980,6 @@ def clean_template_components(parts: List[str], template_type: str = 'affix') ->
         # These indicate non-English etymological roots
         if LANG_CODE_PREFIX.match(part):
             continue
-
-        # Clean wikilink markup [[word]] or [[word|display]]
-        # Extract the actual word from the markup
-        if '[[' in part or ']]' in part:
-            # Remove wikilinks but keep the text
-            cleaned_part = WIKILINK_PATTERN.sub(r'\1', part)
-            # If it's all markup (nothing left), skip
-            if not cleaned_part or cleaned_part in [']]', '[[', '|']:
-                continue
-            part = cleaned_part
 
         # Decode HTML entities (&lt; -> <, &gt; -> >, &amp; -> &)
         if '&lt;' in part or '&gt;' in part or '&amp;' in part:
@@ -736,8 +1049,8 @@ def extract_morphology(text: str) -> Optional[Dict]:
     # 1. Check for suffix template: {{suffix|en|base|suffix}}
     suffix_match = SUFFIX_TEMPLATE.search(etymology_text)
     if suffix_match:
-        base = suffix_match.group(1).strip()
-        suffix = suffix_match.group(2).strip()
+        base = strip_wikilinks(suffix_match.group(1).strip())
+        suffix = strip_wikilinks(suffix_match.group(2).strip())
 
         # Normalize suffix format (add leading hyphen if missing)
         if not suffix.startswith('-'):
@@ -756,8 +1069,8 @@ def extract_morphology(text: str) -> Optional[Dict]:
     # 2. Check for prefix template: {{prefix|en|prefix|base}}
     prefix_match = PREFIX_TEMPLATE.search(etymology_text)
     if prefix_match:
-        prefix = prefix_match.group(1).strip()
-        base = prefix_match.group(2).strip()
+        prefix = strip_wikilinks(prefix_match.group(1).strip())
+        base = strip_wikilinks(prefix_match.group(2).strip())
 
         # Normalize prefix format (add trailing hyphen if missing)
         if not prefix.endswith('-'):
@@ -776,9 +1089,9 @@ def extract_morphology(text: str) -> Optional[Dict]:
     # 3. Check for confix template: {{confix|en|prefix|base|suffix}}
     confix_match = CONFIX_TEMPLATE.search(etymology_text)
     if confix_match:
-        prefix = confix_match.group(1).strip()
-        base = confix_match.group(2).strip()
-        suffix = confix_match.group(3).strip()
+        prefix = strip_wikilinks(confix_match.group(1).strip())
+        base = strip_wikilinks(confix_match.group(2).strip())
+        suffix = strip_wikilinks(confix_match.group(3).strip())
 
         # Normalize affix formats
         if not prefix.endswith('-'):
@@ -799,13 +1112,16 @@ def extract_morphology(text: str) -> Optional[Dict]:
     # 4. Check for compound template: {{compound|en|word1|word2|...}}
     compound_match = COMPOUND_TEMPLATE.search(etymology_text)
     if compound_match:
-        # Split on | and get all components after 'en'
-        parts = [p.strip() for p in compound_match.group(1).split('|')]
-        # Clean parameters using helper function
+        # Parse with bracket-aware parser (handles [[wikilinks]] and {{nested templates}})
+        parts = parse_template_params(compound_match.group(1))
+        # Clean parameters (filter out key=value, language prefixes, etc.)
         components = clean_template_components(parts, template_type='compound')
 
         if len(components) >= 2:
-            return {
+            # Extract interfixes (components with both leading and trailing hyphens)
+            interfixes = [c for c in components if c.startswith('-') and c.endswith('-')]
+
+            result = {
                 'type': 'compound',
                 'components': components,
                 'prefixes': [],
@@ -814,12 +1130,18 @@ def extract_morphology(text: str) -> Optional[Dict]:
                 'etymology_template': compound_match.group(0)
             }
 
+            # Add interfixes if present
+            if interfixes:
+                result['interfixes'] = interfixes
+
+            return result
+
     # 5. Check for affix template: {{affix|en|part1|part2|...}}
     affix_match = AFFIX_TEMPLATE.search(etymology_text)
     if affix_match:
-        # Split on | and parse components
-        parts = [p.strip() for p in affix_match.group(1).split('|')]
-        # Clean parameters using helper function
+        # Parse with bracket-aware parser (handles [[wikilinks]] and {{nested templates}})
+        parts = parse_template_params(affix_match.group(1))
+        # Clean parameters (filter out key=value, language prefixes, etc.)
         components = clean_template_components(parts, template_type='affix')
 
         if len(components) >= 2:
@@ -887,9 +1209,9 @@ def extract_morphology(text: str) -> Optional[Dict]:
     # 6. Check for surf template: {{surf|en|part1|part2|...}}
     surf_match = SURF_TEMPLATE.search(etymology_text)
     if surf_match:
-        # Similar to affix template but more lenient
-        parts = [p.strip() for p in surf_match.group(1).split('|')]
-        # Clean parameters using helper function
+        # Parse with bracket-aware parser (handles [[wikilinks]] and {{nested templates}})
+        parts = parse_template_params(surf_match.group(1))
+        # Clean parameters (filter out key=value, language prefixes, etc.)
         components = clean_template_components(parts, template_type='surf')
 
         if len(components) >= 2:
@@ -1466,20 +1788,41 @@ def has_english_categories(text: str) -> bool:
     return any(pattern.lower() in text_lower for pattern in english_pos_patterns)
 
 
+# Pattern to extract {{tlb|en|...}} or {{lb|en|...}} from text
+TLB_TEMPLATE = re.compile(r'\{\{(?:tlb|lb)\|en\|([^}]+)\}\}', re.IGNORECASE)
+
+# Spelling variant labels - maps label text to region code
+# These appear in {{tlb|en|American spelling}} templates on head lines
+SPELLING_LABELS = {
+    "american spelling": "en-US",
+    "us spelling": "en-US",
+    "british spelling": "en-GB",
+    "uk spelling": "en-GB",
+    "commonwealth spelling": "en-GB",
+    "canadian spelling": "en-CA",
+    "australian spelling": "en-AU",
+    "irish spelling": "en-IE",
+    "new zealand spelling": "en-NZ",
+    "south african spelling": "en-ZA",
+    "indian spelling": "en-IN",
+}
+
+
 def extract_spelling_region(text: str) -> Optional[str]:
     """
     Extract regional spelling variant from the page text.
     Returns region code like "en-US" or "en-GB" if found.
+
+    Searches through {{tlb|en|...}} and {{lb|en|...}} templates,
+    checking each label within the template for spelling variants.
     """
-    # Check for American/British spelling templates on head lines
-    if re.search(r'\{\{(?:tlb|lb)\|en\|(?:American|US) spelling', text, re.IGNORECASE):
-        return "en-US"
-    if re.search(r'\{\{(?:tlb|lb)\|en\|(?:British|UK) spelling', text, re.IGNORECASE):
-        return "en-GB"
-    if re.search(r'\{\{(?:tlb|lb)\|en\|(?:Australian) spelling', text, re.IGNORECASE):
-        return "en-AU"
-    if re.search(r'\{\{(?:tlb|lb)\|en\|(?:Canadian) spelling', text, re.IGNORECASE):
-        return "en-CA"
+    for match in TLB_TEMPLATE.finditer(text):
+        # Get all labels in this template
+        for label in match.group(1).split('|'):
+            label = label.strip().lower()
+            # Check if this is a spelling variant label
+            if label in SPELLING_LABELS:
+                return SPELLING_LABELS[label]
     return None
 
 
@@ -1508,18 +1851,22 @@ def parse_entry(title: str, text: str) -> List[Dict]:
     word_count = len(word.split())
     phrase_type = extract_phrase_type(english_text) if word_count > 1 else None
 
-    # Extract syllable count from multiple sources, trying in priority order
-    syllable_count = None
-    hyph_count = extract_syllable_count_from_hyphenation(english_text, word)
+    # Extract syllable count from multiple sources
+    # Priority order: rhymes (explicit) > IPA (parsed) > categories > hyphenation (least reliable)
     rhymes_count = extract_syllable_count_from_rhymes(english_text)
+    ipa_count = extract_syllable_count_from_ipa(english_text)
     cat_count = extract_syllable_count_from_categories(english_text)
+    hyph_count = extract_syllable_count_from_hyphenation(english_text, word)
 
-    if hyph_count is not None:
-        syllable_count = hyph_count
-    elif rhymes_count is not None:
+    syllable_count = None
+    if rhymes_count is not None:
         syllable_count = rhymes_count
+    elif ipa_count is not None:
+        syllable_count = ipa_count
     elif cat_count is not None:
         syllable_count = cat_count
+    elif hyph_count is not None:
+        syllable_count = hyph_count
 
     # Extract morphology from etymology section
     morphology = extract_morphology(english_text)

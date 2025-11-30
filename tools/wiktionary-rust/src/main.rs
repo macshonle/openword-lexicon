@@ -57,6 +57,10 @@ struct Args {
     #[arg(long)]
     limit: Option<usize>,
 
+    /// Limit number of pages to scan (for testing with raw dumps)
+    #[arg(long)]
+    page_limit: Option<usize>,
+
     /// Run all strategies and compare (benchmark mode)
     #[arg(long)]
     benchmark: bool,
@@ -64,6 +68,10 @@ struct Args {
     /// Quiet mode - minimal output
     #[arg(short, long)]
     quiet: bool,
+
+    /// Syllable validation mode - outputs all syllable sources for cross-validation
+    #[arg(long)]
+    syllable_validation: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -129,6 +137,18 @@ struct PosSection {
     definitions: Vec<String>,  // Raw definition lines
 }
 
+/// Syllable validation record - shows all sources for cross-validation
+#[derive(Debug, Serialize, Deserialize)]
+struct SyllableValidation {
+    word: String,
+    rhymes: Option<usize>,
+    ipa: Option<usize>,
+    category: Option<usize>,
+    hyphenation: Option<usize>,
+    final_value: Option<usize>,
+    has_disagreement: bool,
+}
+
 /// Word-level data extracted once and shared across senses
 struct WordData {
     word: String,
@@ -173,10 +193,19 @@ lazy_static! {
     static ref INFLECTION_TEMPLATE_EXISTS: Regex = Regex::new(r"(?i)\{\{(?:plural of|past tense of|past participle of|present participle of|comparative of|superlative of|inflection of)\|en\|").unwrap();
     pub static ref DICT_ONLY: Regex = Regex::new(r"(?i)\{\{no entry\|en").unwrap();
 
+    // Definition-generating templates that indicate English content (even without POS headers)
+    // These are tertiary validation signals for entries that have definitions but no POS headers
+    static ref DEFINITION_TEMPLATES: Regex = Regex::new(r"(?i)\{\{(?:abbr of|abbreviation of|abbrev of|initialism of|acronym of|alternative form of|alt form|alt sp|plural of|past tense of|past participle of|present participle of|en-(?:noun|verb|adj|adv|past of))\|en\|").unwrap();
+
     // Syllable extraction patterns
     static ref HYPHENATION_TEMPLATE: Regex = Regex::new(r"(?i)\{\{(?:hyphenation|hyph)\|en\|([^}]+)\}\}").unwrap();
     static ref RHYMES_SYLLABLE: Regex = Regex::new(r"(?i)\{\{rhymes\|en\|[^}]*\|s=(\d+)").unwrap();
     static ref SYLLABLE_CATEGORY: Regex = Regex::new(r"(?i)\[\[Category:English\s+(\d+)-syllable\s+words?\]\]").unwrap();
+
+    // IPA extraction pattern - matches {{IPA|en|/transcription/}} or {{IPA|en|[transcription]}}
+    static ref IPA_TEMPLATE: Regex = Regex::new(r"(?i)\{\{IPA\|en\|([^}]+)\}\}").unwrap();
+    // Extract transcription from slashes or brackets
+    static ref IPA_TRANSCRIPTION: Regex = Regex::new(r"[/\[]([^/\[\]]+)[/\]]").unwrap();
 
     // Phrase type patterns
     static ref PREP_PHRASE_TEMPLATE: Regex = Regex::new(r"(?i)\{\{en-prepphr\b").unwrap();
@@ -193,6 +222,9 @@ lazy_static! {
     static ref CONFIX_TEMPLATE: Regex = Regex::new(r"(?i)\{\{confix\|en\|([^}|]+)\|([^}|]+)\|([^}|]+)(?:\|([^}|]+))?\}\}").unwrap();
     // Language code prefix pattern (e.g., "pt:", "grc:", "ang:") - matches Python's LANG_CODE_PREFIX
     static ref LANG_CODE_PREFIX: Regex = Regex::new(r"(?i)^[a-z]{2,4}:").unwrap();
+    // Wikilink pattern - matches [[word]] or [[word|display]] and extracts the target
+    // Used to strip wikilink markup from morphology components
+    static ref WIKILINK_PATTERN: Regex = Regex::new(r"\[\[([^\]|]+)(?:\|[^\]]+)?\]\]").unwrap();
 
     // POS mapping
     static ref POS_MAP: HashMap<&'static str, &'static str> = {
@@ -571,6 +603,137 @@ fn extract_syllable_count_from_categories(text: &str) -> Option<usize> {
         .and_then(|cap| cap[1].parse::<usize>().ok())
 }
 
+/// Count syllables from IPA transcription
+/// Counts vowel nuclei (monophthongs and diphthongs) plus syllabic consonants
+fn count_syllables_from_ipa(ipa: &str) -> usize {
+    let mut count = 0;
+    let chars: Vec<char> = ipa.chars().collect();
+    let mut i = 0;
+
+    // IPA vowels (monophthongs) - includes common English vowels and their variants
+    let vowels: &[char] = &[
+        'i', 'ɪ', 'e', 'ɛ', 'æ', 'a', 'ɑ', 'ɒ', 'ɔ', 'o', 'ʊ', 'u', 'ʌ', 'ə', 'ɜ', 'ɝ', 'ɐ',
+        'ᵻ', 'ᵿ', // barred vowels (used in some transcriptions)
+        'ɚ',      // rhotic schwa (American English, as in "butter" /bʌtɚ/)
+    ];
+
+    // Syllabic consonant marker (combining character U+0329)
+    let syllabic_marker = '\u{0329}';
+
+    while i < chars.len() {
+        let ch = chars[i];
+
+        // Check for syllabic consonant (consonant followed by syllabic marker)
+        if i + 1 < chars.len() && chars[i + 1] == syllabic_marker {
+            count += 1;
+            i += 2; // Skip consonant and marker
+            continue;
+        }
+
+        // Check for vowel
+        if vowels.contains(&ch) {
+            count += 1;
+            i += 1;
+
+            // Skip diphthong off-glides and modifiers
+            // Only skip high/central vowels (ɪ, ʊ, ə) that serve as off-glides
+            // Don't skip full vowels like æ, ɛ, ɔ which start new syllables
+            let offglides: &[char] = &['ɪ', 'ʊ', 'ə', 'ɐ'];
+            let mut vowel_skipped = false;
+            while i < chars.len() {
+                let next = chars[i];
+                if next == 'ː'  // length marker
+                    || next == 'ˑ'  // half-long
+                    || next == '\u{0303}'  // combining tilde (nasalization)
+                    || next == '\u{032F}'  // combining inverted breve (non-syllabic)
+                    || next == '\u{0361}'  // combining double inverted breve (tie bar)
+                    || next == '̯'  // non-syllabic diacritic
+                {
+                    i += 1;
+                } else if !vowel_skipped && offglides.contains(&next) {
+                    // Skip off-glide vowels (second element of diphthongs)
+                    vowel_skipped = true;
+                    i += 1;
+                } else {
+                    break;
+                }
+            }
+            continue;
+        }
+
+        i += 1;
+    }
+
+    count
+}
+
+/// Extract syllable count from IPA transcription
+fn extract_syllable_count_from_ipa(text: &str) -> Option<usize> {
+    // Find IPA template
+    let cap = IPA_TEMPLATE.captures(text)?;
+    let template_content = &cap[1];
+
+    // Extract the first transcription (between / / or [ ])
+    let transcription = IPA_TRANSCRIPTION.captures(template_content)?;
+    let ipa = &transcription[1];
+
+    // Count syllables
+    let count = count_syllables_from_ipa(ipa);
+
+    // Return None for implausible counts (0 or very high)
+    if count == 0 || count > 15 {
+        None
+    } else {
+        Some(count)
+    }
+}
+
+/// Extract syllable validation data from a page (for cross-validation analysis)
+fn extract_syllable_validation(title: &str, text: &str) -> Option<SyllableValidation> {
+    // Extract English section
+    let english_text = extract_english_section(text)?;
+
+    // Get all syllable counts from different sources
+    let rhymes = extract_syllable_count_from_rhymes(&english_text);
+    let ipa = extract_syllable_count_from_ipa(&english_text);
+    let category = extract_syllable_count_from_categories(&english_text);
+    let hyphenation = extract_syllable_count_from_hyphenation(&english_text);
+
+    // If no syllable data at all, skip
+    if rhymes.is_none() && ipa.is_none() && category.is_none() && hyphenation.is_none() {
+        return None;
+    }
+
+    // Calculate final value using priority order
+    let final_value = rhymes
+        .or(ipa)
+        .or(category)
+        .or(hyphenation);
+
+    // Check for disagreement - collect all non-None values and compare
+    let values: Vec<usize> = [rhymes, ipa, category, hyphenation]
+        .iter()
+        .filter_map(|&v| v)
+        .collect();
+
+    let has_disagreement = if values.len() <= 1 {
+        false
+    } else {
+        let first = values[0];
+        values.iter().any(|&v| v != first)
+    };
+
+    Some(SyllableValidation {
+        word: title.to_string(),
+        rhymes,
+        ipa,
+        category,
+        hyphenation,
+        final_value,
+        has_disagreement,
+    })
+}
+
 /// Extract regional spelling variant from head lines
 /// Looks for {{tlb|en|American spelling}} or similar patterns
 fn extract_spelling_region(text: &str) -> Option<String> {
@@ -723,10 +886,246 @@ fn extract_phrase_type(text: &str) -> Option<String> {
     None
 }
 
-fn clean_template_components(parts: &[&str]) -> Vec<String> {
+// ─────────────────────────────────────────────────────────────────────────────
+// Wikitext Recursive Descent Parser
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Parsed wikilink: [[target#anchor|display]]
+struct Wikilink {
+    target: String,
+    anchor: Option<String>,
+    display: Option<String>,
+}
+
+impl Wikilink {
+    /// Return display text if present, otherwise target
+    fn text(&self) -> &str {
+        self.display.as_deref().unwrap_or(&self.target)
+    }
+}
+
+/// Parsed template: {{name|param1|param2|...}}
+struct ParsedTemplate {
+    name: String,
+    params: Vec<String>,
+}
+
+/// Recursive descent parser for Wiktionary template parameters.
+/// Uses the call stack for nesting - no explicit depth counters.
+struct WikitextParser<'a> {
+    text: &'a str,
+    pos: usize,
+}
+
+impl<'a> WikitextParser<'a> {
+    fn new(text: &'a str) -> Self {
+        WikitextParser { text, pos: 0 }
+    }
+
+    fn peek(&self, n: usize) -> &str {
+        // n is character count, not byte count
+        let remaining = &self.text[self.pos..];
+        let end_offset: usize = remaining.chars().take(n).map(|c| c.len_utf8()).sum();
+        &remaining[..end_offset]
+    }
+
+    fn peek_char(&self) -> Option<char> {
+        self.text[self.pos..].chars().next()
+    }
+
+    fn consume(&mut self, n: usize) -> &str {
+        // n is character count, not byte count
+        let remaining = &self.text[self.pos..];
+        let byte_len: usize = remaining.chars().take(n).map(|c| c.len_utf8()).sum();
+        let result = &self.text[self.pos..self.pos + byte_len];
+        self.pos += byte_len;
+        result
+    }
+
+    fn consume_char(&mut self) -> Option<char> {
+        let c = self.peek_char()?;
+        self.pos += c.len_utf8();
+        Some(c)
+    }
+
+    fn at_end(&self) -> bool {
+        self.pos >= self.text.len()
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Top-level entry point: params ::= param ("|" param)*
+    // ─────────────────────────────────────────────────────────────
+    fn parse_params(&mut self) -> Vec<String> {
+        let mut params = Vec::new();
+        while !self.at_end() {
+            let param = self.parse_param();
+            params.push(param);
+            if self.peek(1) == "|" {
+                self.consume(1);
+            } else {
+                break;
+            }
+        }
+        params
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // param ::= element*  (terminated by | or end)
+    // ─────────────────────────────────────────────────────────────
+    fn parse_param(&mut self) -> String {
+        let mut result = String::new();
+        while !self.at_end() && self.peek(1) != "|" {
+            if self.peek(2) == "[[" {
+                let wikilink = self.parse_wikilink();
+                result.push_str(wikilink.text());
+            } else if self.peek(2) == "{{" {
+                let template = self.parse_template();
+                // For morphology params, nested templates are metadata - discard
+                let _ = template;
+            } else {
+                if let Some(c) = self.consume_char() {
+                    result.push(c);
+                }
+            }
+        }
+        result.trim().to_string()
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // wikilink ::= "[[" target ("#" anchor)? ("|" display)? "]]"
+    // ─────────────────────────────────────────────────────────────
+    fn parse_wikilink(&mut self) -> Wikilink {
+        self.consume(2); // consume "[["
+
+        let target = self.parse_target();
+        let mut anchor = None;
+        let mut display = None;
+
+        // Optional: "#" anchor
+        if self.peek(1) == "#" {
+            self.consume(1);
+            anchor = Some(self.parse_anchor());
+        }
+
+        // Optional: "|" display
+        if self.peek(1) == "|" {
+            self.consume(1);
+            display = Some(self.parse_display());
+        }
+
+        // Consume "]]"
+        if self.peek(2) == "]]" {
+            self.consume(2);
+        }
+
+        Wikilink { target, anchor, display }
+    }
+
+    fn parse_target(&mut self) -> String {
+        let mut result = String::new();
+        while !self.at_end() {
+            let c = self.peek_char();
+            match c {
+                Some('#') | Some('|') | Some(']') => break,
+                Some(ch) => {
+                    self.consume_char();
+                    result.push(ch);
+                }
+                None => break,
+            }
+        }
+        result
+    }
+
+    fn parse_anchor(&mut self) -> String {
+        let mut result = String::new();
+        while !self.at_end() {
+            let c = self.peek_char();
+            match c {
+                Some('|') | Some(']') => break,
+                Some(ch) => {
+                    self.consume_char();
+                    result.push(ch);
+                }
+                None => break,
+            }
+        }
+        result
+    }
+
+    fn parse_display(&mut self) -> String {
+        let mut result = String::new();
+        while !self.at_end() && self.peek(1) != "]" {
+            if let Some(c) = self.consume_char() {
+                result.push(c);
+            }
+        }
+        result
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // template ::= "{{" params "}}"
+    // ─────────────────────────────────────────────────────────────
+    fn parse_template(&mut self) -> ParsedTemplate {
+        self.consume(2); // consume "{{"
+
+        let params = self.parse_template_params_inner();
+
+        if self.peek(2) == "}}" {
+            self.consume(2);
+        }
+
+        let name = params.first().cloned().unwrap_or_default();
+        let params = params.into_iter().skip(1).collect();
+        ParsedTemplate { name, params }
+    }
+
+    fn parse_template_params_inner(&mut self) -> Vec<String> {
+        let mut params = Vec::new();
+        while !self.at_end() && self.peek(2) != "}}" {
+            let param = self.parse_template_param_inner();
+            params.push(param);
+            if self.peek(1) == "|" {
+                self.consume(1);
+            } else {
+                break;
+            }
+        }
+        params
+    }
+
+    fn parse_template_param_inner(&mut self) -> String {
+        let mut result = String::new();
+        while !self.at_end() && self.peek(1) != "|" && self.peek(2) != "}}" {
+            if self.peek(2) == "[[" {
+                let wikilink = self.parse_wikilink();
+                result.push_str(wikilink.text());
+            } else if self.peek(2) == "{{" {
+                let template = self.parse_template(); // RECURSIVE!
+                // Nested templates produce no text for our purposes
+                let _ = template;
+            } else {
+                if let Some(c) = self.consume_char() {
+                    result.push(c);
+                }
+            }
+        }
+        result.trim().to_string()
+    }
+}
+
+/// Parse template parameters with proper bracket handling.
+fn parse_template_params(content: &str) -> Vec<String> {
+    let mut parser = WikitextParser::new(content);
+    parser.parse_params()
+}
+
+fn clean_template_components(parts: &[String]) -> Vec<String> {
     // Regex to strip XML/HTML tags like <id:...>, <t:...>, etc.
     let tag_pattern = Regex::new(r"<[^>]+>").unwrap();
 
+    // Note: Wikilink handling ([[...]]) is now done by WikitextParser during parsing,
+    // so this function only handles post-parsing cleanup.
     parts
         .iter()
         .filter_map(|part| {
@@ -755,6 +1154,16 @@ fn clean_template_components(parts: &[&str]) -> Vec<String> {
         .collect()
 }
 
+/// Strip wikilink markup from a string: [[word]] -> word, [[word|display]] -> word
+fn strip_wikilinks(s: &str) -> String {
+    if s.contains("[[") || s.contains("]]") {
+        let result = WIKILINK_PATTERN.replace_all(s, "$1").to_string();
+        result.replace("]]", "")
+    } else {
+        s.to_string()
+    }
+}
+
 fn extract_morphology(text: &str) -> Option<Morphology> {
     let etym_match = ETYMOLOGY_SECTION.captures(text)?;
     let mut etymology_text = etym_match[1].to_string();
@@ -767,8 +1176,8 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
 
     // Try suffix template
     if let Some(cap) = SUFFIX_TEMPLATE.captures(etymology_text) {
-        let base = cap[1].trim().to_string();
-        let mut suffix = cap[2].trim().to_string();
+        let base = strip_wikilinks(cap[1].trim());
+        let mut suffix = strip_wikilinks(cap[2].trim());
         if !suffix.starts_with('-') {
             suffix = format!("-{}", suffix);
         }
@@ -786,8 +1195,8 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
 
     // Try prefix template
     if let Some(cap) = PREFIX_TEMPLATE.captures(etymology_text) {
-        let mut prefix = cap[1].trim().to_string();
-        let base = cap[2].trim().to_string();
+        let mut prefix = strip_wikilinks(cap[1].trim());
+        let base = strip_wikilinks(cap[2].trim());
         if !prefix.ends_with('-') {
             prefix = format!("{}-", prefix);
         }
@@ -805,9 +1214,9 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
 
     // Try confix template
     if let Some(cap) = CONFIX_TEMPLATE.captures(etymology_text) {
-        let mut prefix = cap[1].trim().to_string();
-        let base = cap[2].trim().to_string();
-        let mut suffix = cap[3].trim().to_string();
+        let mut prefix = strip_wikilinks(cap[1].trim());
+        let base = strip_wikilinks(cap[2].trim());
+        let mut suffix = strip_wikilinks(cap[3].trim());
         if !prefix.ends_with('-') {
             prefix = format!("{}-", prefix);
         }
@@ -828,7 +1237,9 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
 
     // Try compound template
     if let Some(cap) = COMPOUND_TEMPLATE.captures(etymology_text) {
-        let parts: Vec<&str> = cap[1].split('|').collect();
+        // Parse with bracket-aware parser (handles [[wikilinks]] and {{nested templates}})
+        let parts = parse_template_params(&cap[1]);
+        // Clean parameters (filter out key=value, language prefixes, etc.)
         let components = clean_template_components(&parts);
         if components.len() >= 2 {
             // Extract interfixes (components with both leading and trailing hyphens)
@@ -853,7 +1264,9 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
     // Try affix or surf templates
     for (template_re, _template_name) in [(&*AFFIX_TEMPLATE, "affix"), (&*SURF_TEMPLATE, "surf")] {
         if let Some(cap) = template_re.captures(etymology_text) {
-            let parts: Vec<&str> = cap[1].split('|').collect();
+            // Parse with bracket-aware parser (handles [[wikilinks]] and {{nested templates}})
+            let parts = parse_template_params(&cap[1]);
+            // Clean parameters (filter out key=value, language prefixes, etc.)
             let components = clean_template_components(&parts);
 
             if components.len() >= 2 {
@@ -933,9 +1346,11 @@ pub fn parse_page(title: &str, text: &str) -> Vec<Entry> {
         None
     };
 
-    let syllables = extract_syllable_count_from_hyphenation(&english_text)
-        .or_else(|| extract_syllable_count_from_rhymes(&english_text))
-        .or_else(|| extract_syllable_count_from_categories(&english_text));
+    // Priority order: rhymes (explicit) > IPA (parsed) > categories > hyphenation (least reliable)
+    let syllables = extract_syllable_count_from_rhymes(&english_text)
+        .or_else(|| extract_syllable_count_from_ipa(&english_text))
+        .or_else(|| extract_syllable_count_from_categories(&english_text))
+        .or_else(|| extract_syllable_count_from_hyphenation(&english_text));
 
     let morphology = extract_morphology(&english_text);
     // Detect abbreviations via templates only
@@ -980,10 +1395,14 @@ pub fn parse_page(title: &str, text: &str) -> Vec<Entry> {
     // If no POS sections found, try to create a single entry with unknown POS
     if pos_sections.is_empty() {
         // Check for English categories or templates as validation
-        let has_categories = text.to_lowercase().contains("category:english");
-        let has_en_templates = text.contains("{{en-");
+        let has_categories = english_text.to_lowercase().contains("category:english");
+        let has_en_templates = english_text.contains("{{en-noun")
+            || english_text.contains("{{en-verb")
+            || english_text.contains("{{en-adj")
+            || english_text.contains("{{en-adv");
+        let has_definition_templates = DEFINITION_TEMPLATES.is_match(&english_text);
 
-        if has_categories || has_en_templates {
+        if has_categories || has_en_templates || has_definition_templates {
             // Create a single entry with unknown POS
             return vec![Entry {
                 word: word_data.word,
@@ -1218,6 +1637,166 @@ fn run_sequential(
     Ok(stats)
 }
 
+/// Run syllable validation mode - extract all syllable sources for cross-validation
+fn run_syllable_validation(
+    reader: impl BufRead,
+    writer: &mut BufWriter<File>,
+    page_limit: Option<usize>,
+    quiet: bool,
+) -> std::io::Result<SyllableValidationStats> {
+    let start_time = Instant::now();
+    let mut stats = SyllableValidationStats::default();
+
+    let pb = if quiet {
+        ProgressBar::hidden()
+    } else {
+        let pb = ProgressBar::new_spinner();
+        pb.set_style(
+            ProgressStyle::default_spinner()
+                .template("{spinner} {msg}")
+                .unwrap()
+        );
+        pb
+    };
+
+    let limit_reached = std::cell::Cell::new(false);
+
+    scan_pages(reader, |page_xml| {
+        if limit_reached.get() {
+            return false;
+        }
+
+        stats.pages_scanned += 1;
+
+        // Check page limit
+        if let Some(limit) = page_limit {
+            if stats.pages_scanned >= limit {
+                limit_reached.set(true);
+                return false;
+            }
+        }
+
+        if !quiet && stats.pages_scanned % 10000 == 0 {
+            let elapsed = start_time.elapsed().as_secs_f64();
+            let rate = stats.pages_scanned as f64 / elapsed;
+            pb.set_message(format!(
+                "Pages: {} | With syllables: {} | Disagreements: {} | Rate: {:.0} pg/s",
+                stats.pages_scanned, stats.words_with_syllables, stats.disagreements, rate
+            ));
+        }
+
+        // Extract title
+        let title = match TITLE_PATTERN.captures(&page_xml) {
+            Some(cap) => cap[1].to_string(),
+            None => return true,
+        };
+
+        // Check namespace
+        if let Some(cap) = NS_PATTERN.captures(&page_xml) {
+            if &cap[1] != "0" {
+                return true;
+            }
+        }
+
+        // Check for special prefixes
+        if SPECIAL_PREFIXES.iter().any(|prefix| title.starts_with(prefix)) {
+            return true;
+        }
+
+        // Check for redirects
+        if REDIRECT_PATTERN.is_match(&page_xml) {
+            return true;
+        }
+
+        // Extract text
+        let text = match TEXT_PATTERN.captures(&page_xml) {
+            Some(cap) => cap[1].to_string(),
+            None => return true,
+        };
+
+        // Check for English section
+        if !ENGLISH_SECTION.is_match(&text) {
+            return true;
+        }
+
+        // Check if English-like
+        if !is_englishlike(&title) {
+            return true;
+        }
+
+        // Extract syllable validation data
+        if let Some(validation) = extract_syllable_validation(&title, &text) {
+            stats.words_with_syllables += 1;
+
+            // Track source coverage
+            if validation.rhymes.is_some() { stats.has_rhymes += 1; }
+            if validation.ipa.is_some() { stats.has_ipa += 1; }
+            if validation.category.is_some() { stats.has_category += 1; }
+            if validation.hyphenation.is_some() { stats.has_hyphenation += 1; }
+
+            if validation.has_disagreement {
+                stats.disagreements += 1;
+            }
+
+            // Write the validation record
+            if let Ok(json) = serde_json::to_string(&validation) {
+                writeln!(writer, "{}", json).ok();
+            }
+        }
+
+        true
+    })?;
+
+    writer.flush()?;
+
+    if limit_reached.get() && !quiet {
+        pb.finish_with_message(format!("Reached page limit of {}", page_limit.unwrap()));
+    } else {
+        pb.finish_and_clear();
+    }
+
+    stats.elapsed = start_time.elapsed();
+    Ok(stats)
+}
+
+#[derive(Default)]
+struct SyllableValidationStats {
+    pages_scanned: usize,
+    words_with_syllables: usize,
+    has_rhymes: usize,
+    has_ipa: usize,
+    has_category: usize,
+    has_hyphenation: usize,
+    disagreements: usize,
+    elapsed: Duration,
+}
+
+fn print_syllable_validation_stats(stats: &SyllableValidationStats) {
+    println!();
+    println!("============================================================");
+    println!("Syllable Validation Results");
+    println!("============================================================");
+    println!("Pages scanned: {}", stats.pages_scanned);
+    println!("Words with syllable data: {}", stats.words_with_syllables);
+    println!();
+    println!("Source coverage:");
+    println!("  Rhymes (s=): {} ({:.1}%)", stats.has_rhymes,
+        100.0 * stats.has_rhymes as f64 / stats.words_with_syllables.max(1) as f64);
+    println!("  IPA: {} ({:.1}%)", stats.has_ipa,
+        100.0 * stats.has_ipa as f64 / stats.words_with_syllables.max(1) as f64);
+    println!("  Category: {} ({:.1}%)", stats.has_category,
+        100.0 * stats.has_category as f64 / stats.words_with_syllables.max(1) as f64);
+    println!("  Hyphenation: {} ({:.1}%)", stats.has_hyphenation,
+        100.0 * stats.has_hyphenation as f64 / stats.words_with_syllables.max(1) as f64);
+    println!();
+    println!("Disagreements: {} ({:.2}%)", stats.disagreements,
+        100.0 * stats.disagreements as f64 / stats.words_with_syllables.max(1) as f64);
+    println!();
+    println!("Time: {}m {}s", stats.elapsed.as_secs() / 60, stats.elapsed.as_secs() % 60);
+    println!("Rate: {:.0} pages/sec", stats.pages_scanned as f64 / stats.elapsed.as_secs_f64());
+    println!("============================================================");
+}
+
 fn print_stats(stats: &Stats, strategy_name: &str) {
     println!();
     println!("============================================================");
@@ -1247,6 +1826,36 @@ fn print_stats(stats: &Stats, strategy_name: &str) {
 fn main() -> std::io::Result<()> {
     let args = Args::parse();
 
+    // Handle syllable validation mode
+    if args.syllable_validation {
+        if !args.quiet {
+            println!("Syllable Validation Mode");
+            println!("Input: {}", args.input.display());
+            println!("Output: {}", args.output.display());
+            if let Some(limit) = args.page_limit {
+                println!("Page limit: {}", limit);
+            }
+            println!();
+        }
+
+        let file = File::open(&args.input)?;
+        let reader: Box<dyn BufRead> = if args.input.to_string_lossy().ends_with(".bz2") {
+            Box::new(BufReader::with_capacity(256 * 1024, BzDecoder::new(file)))
+        } else {
+            Box::new(BufReader::with_capacity(256 * 1024, file))
+        };
+        let output = File::create(&args.output)?;
+        let mut writer = BufWriter::with_capacity(256 * 1024, output);
+
+        let stats = run_syllable_validation(reader, &mut writer, args.page_limit, args.quiet)?;
+
+        if !args.quiet {
+            print_syllable_validation_stats(&stats);
+        }
+
+        return Ok(());
+    }
+
     // Build parallel config
     let mut config = ParallelConfig::default();
     if args.threads > 0 {
@@ -1265,6 +1874,9 @@ fn main() -> std::io::Result<()> {
         }
         if let Some(limit) = args.limit {
             println!("Limit: {} entries", limit);
+        }
+        if let Some(limit) = args.page_limit {
+            println!("Page limit: {}", limit);
         }
         println!();
     }
@@ -1375,4 +1987,329 @@ pub enum CaseForm {
     Title,
     Upper,
     Mixed,
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tests for WikitextParser
+// ─────────────────────────────────────────────────────────────────────────────
+
+#[cfg(test)]
+mod wikitext_parser_tests {
+    use super::*;
+
+    // ─────────────────────────────────────────────────────────────
+    // Wikilink struct tests
+    // ─────────────────────────────────────────────────────────────
+
+    #[test]
+    fn wikilink_text_returns_display_when_present() {
+        let wl = Wikilink {
+            target: "isle".to_string(),
+            anchor: None,
+            display: Some("Isle".to_string()),
+        };
+        assert_eq!(wl.text(), "Isle");
+    }
+
+    #[test]
+    fn wikilink_text_returns_target_when_no_display() {
+        let wl = Wikilink {
+            target: "word".to_string(),
+            anchor: None,
+            display: None,
+        };
+        assert_eq!(wl.text(), "word");
+    }
+
+    #[test]
+    fn wikilink_anchor_preserved() {
+        let wl = Wikilink {
+            target: "Man".to_string(),
+            anchor: Some("Etymology 2".to_string()),
+            display: Some("Man".to_string()),
+        };
+        assert_eq!(wl.anchor, Some("Etymology 2".to_string()));
+        assert_eq!(wl.text(), "Man");
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Basic parameter parsing
+    // ─────────────────────────────────────────────────────────────
+
+    #[test]
+    fn simple_params() {
+        let result = parse_template_params("en|word|suffix");
+        assert_eq!(result, vec!["en", "word", "suffix"]);
+    }
+
+    #[test]
+    fn empty_string() {
+        let result = parse_template_params("");
+        assert!(result.is_empty() || result == vec![""]);
+    }
+
+    #[test]
+    fn single_param() {
+        let result = parse_template_params("word");
+        assert_eq!(result, vec!["word"]);
+    }
+
+    #[test]
+    fn whitespace_trimming() {
+        let result = parse_template_params("  en  |  word  |  suffix  ");
+        assert_eq!(result, vec!["en", "word", "suffix"]);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Wikilink parsing
+    // ─────────────────────────────────────────────────────────────
+
+    #[test]
+    fn simple_wikilink() {
+        let result = parse_template_params("[[cat]]");
+        assert_eq!(result, vec!["cat"]);
+    }
+
+    #[test]
+    fn wikilink_with_display() {
+        let result = parse_template_params("[[isle|Isle]]");
+        assert_eq!(result, vec!["Isle"]);
+    }
+
+    #[test]
+    fn wikilink_with_anchor() {
+        let result = parse_template_params("[[Man#Etymology 2]]");
+        assert_eq!(result, vec!["Man"]);
+    }
+
+    #[test]
+    fn wikilink_with_anchor_and_display() {
+        let result = parse_template_params("[[Man#Etymology 2|Man]]");
+        assert_eq!(result, vec!["Man"]);
+    }
+
+    #[test]
+    fn isle_of_man_example() {
+        // The motivating example: {{af|en|[[isle|Isle]]|of|[[Man#Etymology 2|Man]]}}
+        let result = parse_template_params("en|[[isle|Isle]]|of|[[Man#Etymology 2|Man]]");
+        assert_eq!(result, vec!["en", "Isle", "of", "Man"]);
+    }
+
+    #[test]
+    fn multiple_wikilinks() {
+        let result = parse_template_params("[[a|A]]|[[b|B]]|[[c|C]]");
+        assert_eq!(result, vec!["A", "B", "C"]);
+    }
+
+    #[test]
+    fn mixed_wikilinks_and_text() {
+        let result = parse_template_params("prefix|[[word|Word]]|suffix");
+        assert_eq!(result, vec!["prefix", "Word", "suffix"]);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Nested template handling
+    // ─────────────────────────────────────────────────────────────
+
+    #[test]
+    fn nested_template_discarded() {
+        let result = parse_template_params("foo|{{q|qualifier}}|bar");
+        assert_eq!(result, vec!["foo", "", "bar"]);
+    }
+
+    #[test]
+    fn deeply_nested_templates() {
+        let result = parse_template_params("foo|{{a|{{b|{{c|d}}}}}}|bar");
+        assert_eq!(result, vec!["foo", "", "bar"]);
+    }
+
+    #[test]
+    fn template_with_wikilink_inside() {
+        let result = parse_template_params("foo|{{m|en|[[word]]}}|bar");
+        assert_eq!(result, vec!["foo", "", "bar"]);
+    }
+
+    #[test]
+    fn wikilink_after_template() {
+        let result = parse_template_params("{{info}}|[[word|Word]]");
+        assert_eq!(result, vec!["", "Word"]);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // UTF-8 handling (the bug we fixed!)
+    // ─────────────────────────────────────────────────────────────
+
+    #[test]
+    fn latin_extended_characters() {
+        let result = parse_template_params("nāsus|-o-");
+        assert_eq!(result, vec!["nāsus", "-o-"]);
+    }
+
+    #[test]
+    fn alphabeticus_example() {
+        // The case that caused the panic
+        let result = parse_template_params("lang1=la|alphabēticus|-al");
+        assert_eq!(result, vec!["lang1=la", "alphabēticus", "-al"]);
+    }
+
+    #[test]
+    fn greek_characters() {
+        let result = parse_template_params("en|λόγος");
+        assert_eq!(result, vec!["en", "λόγος"]);
+    }
+
+    #[test]
+    fn cyrillic_characters() {
+        let result = parse_template_params("en|слово");
+        assert_eq!(result, vec!["en", "слово"]);
+    }
+
+    #[test]
+    fn mixed_scripts_in_wikilink() {
+        let result = parse_template_params("[[word|café]]");
+        assert_eq!(result, vec!["café"]);
+    }
+
+    #[test]
+    fn utf8_in_anchor() {
+        let result = parse_template_params("[[page#Étymologie|display]]");
+        assert_eq!(result, vec!["display"]);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Edge cases
+    // ─────────────────────────────────────────────────────────────
+
+    #[test]
+    fn unclosed_wikilink() {
+        let result = parse_template_params("[[word");
+        assert_eq!(result, vec!["word"]);
+    }
+
+    #[test]
+    fn unclosed_template() {
+        let result = parse_template_params("{{template");
+        assert_eq!(result, vec![""]);
+    }
+
+    #[test]
+    fn empty_wikilink() {
+        let result = parse_template_params("[[]]");
+        assert_eq!(result, vec![""]);
+    }
+
+    #[test]
+    fn consecutive_pipes() {
+        let result = parse_template_params("a||b");
+        assert_eq!(result, vec!["a", "", "b"]);
+    }
+
+    #[test]
+    fn wikilink_with_only_anchor() {
+        let result = parse_template_params("[[#section]]");
+        // Target is empty, anchor is "section", no display
+        assert_eq!(result, vec![""]);
+    }
+
+    #[test]
+    fn wikilink_with_empty_display() {
+        let result = parse_template_params("[[word|]]");
+        assert_eq!(result, vec![""]);
+    }
+
+    #[test]
+    fn special_characters_in_text() {
+        let result = parse_template_params("word's|don't|it-self");
+        assert_eq!(result, vec!["word's", "don't", "it-self"]);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Real-world examples
+    // ─────────────────────────────────────────────────────────────
+
+    #[test]
+    fn batsman_compound() {
+        // batsman: {{compound|en|bat|-s-|-man}}
+        let result = parse_template_params("bat|-s-|-man");
+        assert_eq!(result, vec!["bat", "-s-", "-man"]);
+    }
+
+    #[test]
+    fn affix_with_link() {
+        let result = parse_template_params("[[un-]]|[[happy]]");
+        assert_eq!(result, vec!["un-", "happy"]);
+    }
+
+    #[test]
+    fn suffix_template() {
+        let result = parse_template_params("beauty|-ful");
+        assert_eq!(result, vec!["beauty", "-ful"]);
+    }
+
+    #[test]
+    fn prefix_template() {
+        let result = parse_template_params("un-|happy");
+        assert_eq!(result, vec!["un-", "happy"]);
+    }
+
+    #[test]
+    fn confix_template() {
+        let result = parse_template_params("bio-|chemistry|-ist");
+        assert_eq!(result, vec!["bio-", "chemistry", "-ist"]);
+    }
+
+    #[test]
+    fn pictograph_style() {
+        // Pattern like pictograph: {{affix|en|la:pictus|-o-|graph}}
+        let result = parse_template_params("la:pictus|-o-|graph");
+        assert_eq!(result, vec!["la:pictus", "-o-", "graph"]);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Parser internal tests
+    // ─────────────────────────────────────────────────────────────
+
+    #[test]
+    fn parser_peek_multibyte() {
+        let parser = WikitextParser::new("café");
+        // Should handle multi-byte UTF-8 correctly
+        assert_eq!(parser.peek(1), "c");
+        assert_eq!(parser.peek(4), "café");
+    }
+
+    #[test]
+    fn parser_consume_multibyte() {
+        let mut parser = WikitextParser::new("café");
+        assert_eq!(parser.consume(1), "c");
+        assert_eq!(parser.consume(1), "a");
+        assert_eq!(parser.consume(1), "f");
+        assert_eq!(parser.consume(1), "é");
+        assert!(parser.at_end());
+    }
+
+    #[test]
+    fn parser_wikilink_all_parts() {
+        let mut parser = WikitextParser::new("[[Man#Etymology 2|Man]]");
+        let wl = parser.parse_wikilink();
+        assert_eq!(wl.target, "Man");
+        assert_eq!(wl.anchor, Some("Etymology 2".to_string()));
+        assert_eq!(wl.display, Some("Man".to_string()));
+    }
+
+    #[test]
+    fn parser_template_simple() {
+        let mut parser = WikitextParser::new("{{m|en|word}}");
+        let tmpl = parser.parse_template();
+        assert_eq!(tmpl.name, "m");
+        assert_eq!(tmpl.params, vec!["en", "word"]);
+    }
+
+    #[test]
+    fn parser_template_nested() {
+        let mut parser = WikitextParser::new("{{outer|{{inner|a|b}}}}");
+        let tmpl = parser.parse_template();
+        assert_eq!(tmpl.name, "outer");
+        // Inner template is parsed but its text is discarded
+        assert_eq!(tmpl.params, vec![""]);
+    }
 }
