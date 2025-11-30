@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 """
-package_release.py — Package distributions into versioned release archives.
+package_release.py — Package language lexicons into versioned release archives.
 
 Reads:
-  - data/build/{core,plus}/*.{trie,json}
-  - data/{core,plus}/LICENSE
-  - ATTRIBUTION.md
+  - data/build/en.trie (full profile)
+  - data/build/en-game.trie (game profile)
+  - data/build/en-*.json.gz (modular metadata)
 
 Outputs:
-  - data/artifacts/releases/openword-lexicon-core-{version}.tar.zst
-  - data/artifacts/releases/openword-lexicon-plus-{version}.tar.zst
+  - data/artifacts/releases/openword-lexicon-en-{version}.tar.zst
   - data/artifacts/releases/*.sha256
 
 Each tarball contains:
-  - {distribution}.trie
-  - {distribution}.meta.json
-  - LICENSE
-  - ATTRIBUTION.md
+  - en.trie (full profile)
+  - en-game.trie (game profile)
+  - en-*.json.gz (6 metadata modules)
   - README.txt (quickstart)
 """
 
@@ -25,11 +23,9 @@ import logging
 import shutil
 import subprocess
 import tarfile
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import List
 
-import orjson
 import tomllib
 
 
@@ -52,65 +48,76 @@ def load_version() -> str:
 
 VERSION = load_version()
 
+# Expected metadata modules
+METADATA_MODULES = [
+    'frequency',
+    'sources',
+    'lemmas',
+    'syllables',
+    'concreteness',
+    'lemma-groups',
+]
 
-def create_readme(distribution: str) -> str:
+
+def create_readme(lang: str, files: list[str]) -> str:
     """Generate a quickstart README for the distribution."""
-    license_type = "CC BY 4.0" if distribution == "core" else "CC BY-SA 4.0"
+    file_list = "\n".join(f"- `{f}`" for f in sorted(files))
 
-    return f"""# Openword Lexicon — {distribution.upper()} Distribution
+    return f"""# Openword Lexicon — {lang.upper()} Distribution
 
 Version: {VERSION}
-License: {license_type}
-Generated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC
+Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC
 
 ## Contents
 
-- `{distribution}.trie` — Compact MARISA trie for fast word lookups
-- `{distribution}.meta.json` — Full entry metadata (JSON array)
-- `LICENSE` — Full license text
-- `ATTRIBUTION.md` — Source attributions
+{file_list}
+
+## Profiles
+
+- `{lang}.trie` — Full profile: all words from lexicon
+- `{lang}-game.trie` — Game profile: pure lowercase a-z only (for word games)
+
+## Metadata Modules
+
+- `{lang}-frequency.json.gz` — Frequency tier assignments (A-P scale)
+- `{lang}-sources.json.gz` — Source attribution per word
+- `{lang}-lemmas.json.gz` — Base lemma forms
+- `{lang}-syllables.json.gz` — Syllable count data
+- `{lang}-concreteness.json.gz` — Concreteness ratings
+- `{lang}-lemma-groups.json.gz` — Lemma groupings
 
 ## Quick Start (Python)
 
 ```python
 import marisa_trie
+import gzip
 import json
 
-# Load trie
+# Load trie (game profile for word games)
 trie = marisa_trie.Trie()
-trie.load('{distribution}.trie')
+trie.load('{lang}-game.trie')
 
 # Check if word exists
 if 'castle' in trie:
     print("Found!")
 
-# Pick a word and fetch its metadata
-word = 'castle'
-idx = trie[word][0]  # First match
+# Load frequency metadata
+with gzip.open('{lang}-frequency.json.gz', 'rt') as f:
+    frequency = json.load(f)
 
-# Load metadata
-with open('{distribution}.meta.json', 'r') as f:
-    metadata = json.load(f)
-
-# Get entry
-entry = metadata[idx]
-print(entry)
+# Get frequency tier for a word
+tier = frequency.get('castle')  # Returns tier like 'D' or None
 ```
 
 ## Statistics
 
-Run `wc -l {distribution}.meta.json` to see entry count.
-Run `du -h {distribution}.trie` to see trie size.
-
-## License & Attribution
-
-See LICENSE and ATTRIBUTION.md for full details.
+Run `wc -l` on decompressed metadata to see entry counts.
+Run `du -h *.trie` to see trie sizes.
 
 ## Support
 
 - Repository: https://github.com/macshonle/openword-lexicon
 - Issues: https://github.com/macshonle/openword-lexicon/issues
-- Documentation: https://github.com/macshonle/openword-lexicon/blob/main/README.md
 """
 
 
@@ -125,59 +132,69 @@ def compute_sha256(filepath: Path) -> str:
     return sha256.hexdigest()
 
 
-def package_distribution(distribution: str, version: str,
-                        project_root: Path, output_dir: Path) -> Path:
+def package_language(lang: str, version: str,
+                     project_root: Path, output_dir: Path) -> Path | None:
     """
-    Package a distribution into a versioned tarball.
+    Package a language lexicon into a versioned tarball.
 
-    Returns: path to created tarball
+    Returns: path to created tarball, or None if required files missing
     """
-    logger.info(f"Packaging {distribution} distribution (v{version})")
+    logger.info(f"Packaging {lang} lexicon (v{version})")
 
-    # Paths
-    build_dir = project_root / "data" / "build" / distribution
-    license_path = project_root / "data" / distribution / "LICENSE"
-    attribution_path = project_root / "ATTRIBUTION.md"
+    build_dir = project_root / "data" / "build"
 
-    # Check required files exist
-    trie_file = build_dir / f"{distribution}.trie"
-    meta_file = build_dir / f"{distribution}.meta.json"
+    # Check required trie files exist
+    trie_full = build_dir / f"{lang}.trie"
+    trie_game = build_dir / f"{lang}-game.trie"
 
-    if not trie_file.exists():
-        logger.error(f"Missing trie file: {trie_file}")
+    if not trie_full.exists():
+        logger.error(f"Missing trie file: {trie_full}")
         return None
 
-    if not meta_file.exists():
-        logger.error(f"Missing metadata file: {meta_file}")
+    if not trie_game.exists():
+        logger.error(f"Missing game trie file: {trie_game}")
         return None
+
+    # Collect all files to package
+    files_to_package = [
+        (trie_full, f"{lang}.trie"),
+        (trie_game, f"{lang}-game.trie"),
+    ]
+
+    # Add metadata modules
+    for module in METADATA_MODULES:
+        meta_file = build_dir / f"{lang}-{module}.json.gz"
+        if meta_file.exists():
+            files_to_package.append((meta_file, meta_file.name))
+        else:
+            logger.warning(f"  Missing optional metadata: {meta_file.name}")
 
     # Create staging directory
-    stage_dir = output_dir / f"openword-lexicon-{distribution}-{version}"
+    stage_dir = output_dir / f"openword-lexicon-{lang}-{version}"
     stage_dir.mkdir(parents=True, exist_ok=True)
 
     # Copy files to staging
-    shutil.copy2(trie_file, stage_dir / f"{distribution}.trie")
-    shutil.copy2(meta_file, stage_dir / f"{distribution}.meta.json")
-
-    if license_path.exists():
-        shutil.copy2(license_path, stage_dir / "LICENSE")
-
-    if attribution_path.exists():
-        shutil.copy2(attribution_path, stage_dir / "ATTRIBUTION.md")
+    staged_files = []
+    for src_path, dest_name in files_to_package:
+        dest_path = stage_dir / dest_name
+        shutil.copy2(src_path, dest_path)
+        staged_files.append(dest_name)
+        logger.info(f"  Added: {dest_name}")
 
     # Create README
-    readme_content = create_readme(distribution)
-    with open(stage_dir / "README.txt", 'w') as f:
+    readme_content = create_readme(lang, staged_files)
+    readme_path = stage_dir / "README.txt"
+    with open(readme_path, 'w') as f:
         f.write(readme_content)
+    staged_files.append("README.txt")
 
     # Create tarball
-    tarball_name = f"openword-lexicon-{distribution}-{version}.tar.zst"
+    tarball_name = f"openword-lexicon-{lang}-{version}.tar.zst"
     tarball_path = output_dir / tarball_name
 
     logger.info(f"  Creating tarball: {tarball_name}")
 
-    # Use tar with zstd compression
-    # Fall back to gzip if zstd not available
+    # Use tar with zstd compression, fall back to gzip if zstd not available
     try:
         subprocess.run([
             'tar',
@@ -190,7 +207,7 @@ def package_distribution(distribution: str, version: str,
     except (subprocess.CalledProcessError, FileNotFoundError):
         # Fall back to gzip
         logger.warning("  zstd not available, using gzip")
-        tarball_name = f"openword-lexicon-{distribution}-{version}.tar.gz"
+        tarball_name = f"openword-lexicon-{lang}-{version}.tar.gz"
         tarball_path = output_dir / tarball_name
 
         with tarfile.open(tarball_path, 'w:gz') as tar:
@@ -217,7 +234,7 @@ def package_distribution(distribution: str, version: str,
     return tarball_path
 
 
-def verify_package(tarball_path: Path) -> bool:
+def verify_package(tarball_path: Path, lang: str) -> bool:
     """Verify package can be unpacked and contains expected files."""
     logger.info(f"Verifying package: {tarball_path.name}")
 
@@ -226,14 +243,24 @@ def verify_package(tarball_path: Path) -> bool:
     temp_dir.mkdir(exist_ok=True)
 
     try:
-        # Extract
-        if tarball_path.suffix == '.zst':
-            subprocess.run([
-                'tar',
-                '-C', str(temp_dir),
-                '-xf', str(tarball_path),
-                '--use-compress-program=zstd'
-            ], check=True, capture_output=True)
+        # Extract using zstd pipe for compatibility
+        if tarball_path.name.endswith('.tar.zst'):
+            # Use zstd -d -c | tar x for better cross-platform compatibility
+            zstd_proc = subprocess.Popen(
+                ['zstd', '-d', '-c', str(tarball_path)],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
+            tar_proc = subprocess.Popen(
+                ['tar', '-xf', '-', '-C', str(temp_dir)],
+                stdin=zstd_proc.stdout,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
+            zstd_proc.stdout.close()
+            tar_proc.communicate()
+            if tar_proc.returncode != 0:
+                raise subprocess.CalledProcessError(tar_proc.returncode, 'tar')
         else:
             with tarfile.open(tarball_path, 'r:*') as tar:
                 tar.extractall(temp_dir)
@@ -247,14 +274,16 @@ def verify_package(tarball_path: Path) -> bool:
         extracted_dir = extracted_dirs[0]
 
         # Check required files
-        required_files = ['README.txt', 'LICENSE', 'ATTRIBUTION.md']
-        distribution = 'core' if 'core' in tarball_path.name else 'plus'
-        required_files.extend([f'{distribution}.trie', f'{distribution}.meta.json'])
+        required_files = [
+            'README.txt',
+            f'{lang}.trie',
+            f'{lang}-game.trie',
+        ]
 
         for filename in required_files:
             filepath = extracted_dir / filename
             if not filepath.exists():
-                logger.error(f"  Missing file: {filename}")
+                logger.error(f"  Missing required file: {filename}")
                 return False
 
         logger.info("  All required files present")
@@ -263,17 +292,22 @@ def verify_package(tarball_path: Path) -> bool:
         try:
             import marisa_trie
             trie = marisa_trie.Trie()
-            trie.load(str(extracted_dir / f'{distribution}.trie'))
+            trie.load(str(extracted_dir / f'{lang}.trie'))
 
             # Test lookup
             if len(trie) > 0:
-                # Get first word
                 for word in list(trie)[:1]:
                     if word in trie:
                         logger.info(f"  Trie lookup works: '{word}' found")
                     break
 
-            logger.info(f"  Trie contains {len(trie):,} words")
+            logger.info(f"  Full trie contains {len(trie):,} words")
+
+            # Also check game trie
+            game_trie = marisa_trie.Trie()
+            game_trie.load(str(extracted_dir / f'{lang}-game.trie'))
+            logger.info(f"  Game trie contains {len(game_trie):,} words")
+
         except Exception as e:
             logger.error(f"  Trie verification failed: {e}")
             return False
@@ -296,24 +330,17 @@ def main():
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    logger.info("Packaging & releases")
+    logger.info("Packaging lexicon release")
     logger.info(f"Version: {VERSION}")
     logger.info("")
 
-    # Package core distribution
-    core_tarball = package_distribution('core', VERSION, project_root, output_dir)
+    # Package English lexicon
+    lang = 'en'
+    tarball = package_language(lang, VERSION, project_root, output_dir)
 
-    if core_tarball:
+    if tarball:
         logger.info("")
-        verify_package(core_tarball)
-
-    # Package plus distribution
-    logger.info("")
-    plus_tarball = package_distribution('plus', VERSION, project_root, output_dir)
-
-    if plus_tarball:
-        logger.info("")
-        verify_package(plus_tarball)
+        verify_package(tarball, lang)
 
     logger.info("")
     logger.info("Packaging complete")

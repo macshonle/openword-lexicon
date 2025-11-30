@@ -233,7 +233,6 @@ $(WORDLIST_TXT): $(UNIFIED_TRIE)
 
 # Package release artifacts
 package:
-	$(UV) run python src/openword/manifest.py
 	$(UV) run python src/openword/package_release.py
 
 # ===========================
@@ -244,8 +243,7 @@ clean:
 	rm -rf build dist .pytest_cache .ruff_cache
 	find . -name '__pycache__' -type d -prune -exec rm -rf '{}' +
 	find . -name '*.egg-info' -type d -prune -exec rm -rf '{}' +
-	rm -rf data/intermediate data/filtered data/build data/artifacts \
-		ATTRIBUTION.md MANIFEST.json
+	rm -rf data/intermediate data/filtered data/build data/artifacts
 	rm -rf viewer/node_modules viewer/pnpm-lock.yaml viewer/data viewer/dist
 	@if [ -d tools/wiktionary-rust/target ]; then \
 		echo "Cleaning Rust build artifacts..."; \
