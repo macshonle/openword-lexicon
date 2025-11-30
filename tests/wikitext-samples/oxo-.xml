@@ -1,0 +1,65 @@
+<page>
+    <title>oxo-</title>
+    <ns>0</ns>
+    <id>225014</id>
+    <revision>
+      <id>82612502</id>
+      <parentid>79346902</parentid>
+      <timestamp>2024-11-10T17:51:24Z</timestamp>
+      <contributor>
+        <username>Flame, not lame</username>
+        <id>4017496</id>
+      </contributor>
+      <comment>/* Pronunciation */</comment>
+      <origin>82612502</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="832" sha1="39znabj9zeigul3qv5pz3thzke5xchn" xml:space="preserve">{{also|Oxo|oxo}}
+==English==
+
+===Alternative forms===
+* {{alter|en|ox-}} {{q|before vowels}}
+
+===Etymology===
+From {{af|en|oxygen|-o-}}.
+
+===Pronunciation===
+* {{IPA|en|/ɒk.sə(ʊ)/|a=RP}}
+* {{IPA|en|/ɑk.soʊ/|/ɑk.sə/|a=GA}}
+* {{audio|en|LL-Q1860 (eng)-Flame, not lame-oxo-.wav|a=US}}
+
+===Prefix===
+{{en-prefix}}
+
+# {{lb|en|chemistry}} [[oxygen|Oxygen]].
+#: {{syn|en|oxy-}}
+# {{lb|en|organic chemistry}} Having a [[methylene]] group replaced by a [[carbonyl]] group.
+#: {{syn|en|-one|-al}}
+
+====Derived terms====
+{{prefixsee|en}}
+
+====Related terms====
+* {{l|en|oxa-}}
+* {{l|en|oxy-}}
+
+====Translations====
+{{trans-top}}
+* Danish: {{t|da|oxo-}}
+{{trans-bottom}}
+
+===References===
+* {{R:MWO|ox-}}
+
+===Anagrams===
+* {{anagrams|en|a=oox|ǃXóõ}}
+
+==Danish==
+
+===Prefix===
+{{da-prefix}}
+
+# {{lb|da|organic chemistry}} {{l|en|oxo-}}</text>
+      <sha1>39znabj9zeigul3qv5pz3thzke5xchn</sha1>
+    </revision>
+  </page>

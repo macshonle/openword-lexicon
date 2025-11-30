@@ -1,0 +1,73 @@
+<page>
+    <title>naso-</title>
+    <ns>0</ns>
+    <id>44101</id>
+    <revision>
+      <id>80552976</id>
+      <parentid>79387858</parentid>
+      <timestamp>2024-06-30T02:10:30Z</timestamp>
+      <contributor>
+        <username>KovachevBot</username>
+        <id>3834987</id>
+      </contributor>
+      <comment>Added anagrams (Onas, SONA, Naos) to English section</comment>
+      <origin>80552976</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="870" sha1="rapixmnhmt52xtd2tfwpnun38yuj2s4" xml:space="preserve">{{also|naso}}
+==English==
+
+===Etymology===
+From {{af|en|nāsus|-o-|lang1=la|t1=nose}}.
+
+===Pronunciation===
+* {{IPA|en|/neɪ.zə(ʊ)/|a=RP}}
+* {{IPA|en|/neɪ.zoʊ/|/neɪ.zə/|a=GA}}
+
+===Prefix===
+{{en-prefix}}
+
+# {{lb|en|anatomy}} Relating to the [[nose]].
+#: {{syn|en|rhino-|q1=Greek root}}
+
+====Derived terms====
+{{prefixsee|en}}
+
+====Translations====
+{{trans-top}}
+* Italian: {{t|it|naso-}}
+* Spanish: {{t|es|naso-}}
+{{trans-bottom}}
+
+===References===
+* {{R:Lexico}}
+* {{R:MWO}}
+
+===Anagrams===
+* {{anagrams|en|a=anos|-sona|Naos|naos|ONAs|Onas|Noas|AONs|sona|SONA|Sona|Sano}}
+
+==Italian==
+
+===Prefix===
+{{head|it|prefix}}
+
+# {{l|en|naso-}}
+
+====Derived terms====
+{{prefixsee|it}}
+
+===Anagrams===
+* {{anagrams|it|a=anos|Naos|Sanò|Sona|anso|ansò|sano|sanò|sona}}
+
+==Spanish==
+
+===Prefix===
+{{head|es|prefix}}
+
+# {{l|en|naso-}}
+
+====Derived terms====
+{{prefixsee|es}}</text>
+      <sha1>rapixmnhmt52xtd2tfwpnun38yuj2s4</sha1>
+    </revision>
+  </page>
