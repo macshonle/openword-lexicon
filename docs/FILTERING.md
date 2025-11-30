@@ -2,12 +2,70 @@
 
 Create custom word lists by filtering the lexicon.
 
+## Quick Start
+
+```bash
+# Generate word list from YAML spec
+owlex examples/wordlist-specs/wordle.yaml --output words.txt
+
+# With enriched metadata sidecar
+owlex wordle.yaml --output words.txt --enriched enriched.jsonl
+
+# Extract specific fields with jq
+owlex wordle.yaml --enriched data.jsonl --jq '{word, syllables, pos}'
+```
+
 ## Methods
 
-1. **Web Builder** — Interactive visual interface
-2. **JSON Specs** — Reusable filter configurations
-3. **Python** — Direct filtering in code
-4. **jq** — Command-line JSON processing
+1. **owlex CLI** — Generate word lists from YAML specifications
+2. **Web Builder** — Interactive visual interface
+3. **Makefile** — Pre-configured targets
+4. **Python** — Direct filtering in code
+
+## owlex CLI
+
+The `owlex` command is the primary tool for generating filtered word lists.
+
+```bash
+# Basic usage - outputs to stdout
+owlex examples/wordlist-specs/wordle.yaml
+
+# Save to file
+owlex wordle.yaml --output words.txt
+
+# With enriched metadata sidecar (JSONL)
+owlex wordle.yaml --output words.txt --enriched enriched.jsonl
+
+# Extract specific fields with jq projection
+owlex wordle.yaml --enriched data.jsonl --jq '{word, syllables}'
+
+# Verbose mode (shows filter statistics)
+owlex wordle.yaml --output words.txt --verbose
+```
+
+## YAML Specifications
+
+Create a YAML file with your filters. The spec body IS the filters - no wrapper needed:
+
+```yaml
+# wordle.yaml - 5-letter common words
+
+character:
+  exact_length: 5
+  pattern: "^[a-z]+$"
+
+phrase:
+  max_words: 1
+
+frequency:
+  min_tier: A
+  max_tier: I
+```
+
+This simplified format:
+- No `version`, `distribution`, or `output` sections needed
+- Output format controlled via CLI flags (`--output`, `--enriched`, `--jq`)
+- Filters are the entire spec body
 
 ## Web Builder
 
@@ -19,398 +77,274 @@ make wordlist-builder-web
 The web builder lets you:
 - Select filter criteria visually
 - See live word count estimates
-- Export JSON specifications
+- Export YAML specifications
 - Download filtered word lists
 
-## JSON Specifications
+## Makefile Targets
 
-Create a JSON file describing your filters:
-
-```json
-{
-  "version": "1.0",
-  "distribution": "en",
-  "filters": {
-    "character": {
-      "exact_length": 5,
-      "char_preset": "standard"
-    },
-    "frequency": {
-      "rarest_allowed": "F"
-    },
-    "policy": {
-      "family_friendly": true
-    }
-  },
-  "output": {
-    "format": "text",
-    "sort_by": "alphabetical"
-  }
-}
-```
-
-Run with:
+Generate word lists using make:
 
 ```bash
-uv run python -m openword.owlex my-spec.json > words.txt
-uv run python -m openword.owlex my-spec.json --verbose --output words.txt
+# Generate all example word lists
+make wordlists
+
+# Individual targets
+make wordlist-wordle      # 5-letter common words
+make wordlist-kids-nouns  # Concrete nouns for children
+make wordlist-scrabble    # Scrabble dictionary
+make wordlist-profanity   # Profanity blocklist
+
+# Custom spec with enriched output
+make wordlist-enriched SPEC=my-spec.yaml NAME=my-words
 ```
 
 ## Filter Reference
 
 ### Character Filters
 
+```yaml
+character:
+  exact_length: 5       # Exactly N characters
+  min_length: 3         # At least N characters
+  max_length: 10        # At most N characters
+  pattern: "^[a-z]+$"   # Regex pattern to match
+  starts_with: [un, re] # Prefix(es) - matches any
+  ends_with: [ing, ed]  # Suffix(es) - matches any
+  contains: [tion]      # Substring(s) - must have all
+```
+
 | Option | Type | Description |
 |--------|------|-------------|
 | `exact_length` | int | Exact character count |
 | `min_length` | int | Minimum characters |
 | `max_length` | int | Maximum characters |
-| `char_preset` | string | Character set (see below) |
 | `pattern` | string | Regex pattern to match |
-| `starts_with` | string/list | Required prefix(es) |
-| `ends_with` | string/list | Required suffix(es) |
-| `contains` | string/list | Required substring(s) |
-| `exclude_starts_with` | string/list | Excluded prefix(es) |
-| `exclude_ends_with` | string/list | Excluded suffix(es) |
-| `exclude_contains` | string | Excluded characters |
-
-**Character Presets**:
-
-| Preset | Allowed Characters |
-|--------|-------------------|
-| `standard` | a-z only |
-| `contractions` | a-z and apostrophe |
-| `hyphenated` | a-z and hyphen |
-| `common-punct` | a-z, apostrophe, hyphen |
-| `alphanumeric` | a-z and digits |
-| `any` | All characters |
+| `starts_with` | list | Required prefix(es) - matches any |
+| `ends_with` | list | Required suffix(es) - matches any |
+| `contains` | list | Required substring(s) - must have all |
 
 ### Phrase Filters
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `min_words` | int | Minimum word count |
-| `max_words` | int | Maximum word count |
-| `is_phrase` | bool | true = multi-word only, false = single words |
+```yaml
+phrase:
+  max_words: 1    # Single words only
+  min_words: 2    # Multi-word phrases only
+```
 
 ### Frequency Filters
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `tiers` | list | Specific tiers to include (e.g., `["A", "B", "C"]`) |
-| `rarest_allowed` | string | Include words up to this tier (e.g., 'F' = A-F, top ~3000) |
-| `most_common_allowed` | string | Exclude words more common than this tier |
+```yaml
+frequency:
+  min_tier: A     # Most common tier to include
+  max_tier: I     # Least common tier to include
+```
 
-**Tier boundaries:** A (1-20) → B (21-100) → C (101-300) → D (301-500) → E (501-1000) → F (1001-3000) → G (3001-5000) → H (5001-10000) → I (10001-30000) → J (30001-50000) → K (50001-75000) → L (75001-100000) → Y (100001+) → Z (unknown)
+**Tier ranges:** A (most common) through Z (unknown)
+- A: rank 1 (the, be, to, of, and, a, in, that, have, I)
+- B: rank 2-3
+- C: rank 4-5
+- D: rank 6-10
+- E: rank 11-17
+- F: rank 18-31
+- G: rank 32-56
+- H: rank 57-100
+- I: rank 101-175
+- J: rank 176-316
+- K: rank 317-562
+- L: rank 563-1000
+- M: rank 1001-1778
+- N-W: progressively less common
+- Z: unknown/unranked
 
-Example tier ranges:
-- `"rarest_allowed": "F"` — Top ~3,000 words (tiers A-F)
-- `"rarest_allowed": "I"` — Top ~30,000 words (tiers A-I)
-- `"rarest_allowed": "L"` — Top ~100,000 words (tiers A-L)
+Example ranges:
+- `min_tier: A, max_tier: I` — Top ~30,000 words
+- `min_tier: A, max_tier: F` — Top ~3,000 words
+- `min_tier: A, max_tier: C` — Top ~500 words
 
 ### POS Filters
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `include` | list | Required POS tags (any match) |
-| `exclude` | list | Excluded POS tags (all excluded) |
-| `require_pos` | bool | Require POS data to exist |
+```yaml
+pos:
+  include: [noun, verb]        # Must have one of these
+  exclude: [interjection]      # Must not have any of these
+```
 
 POS tags: `noun`, `verb`, `adjective`, `adverb`, `pronoun`, `preposition`, `conjunction`, `interjection`, `determiner`, `particle`, `proper noun`
 
 ### Concreteness Filters
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `values` | list | Allowed classifications |
-| `require_concreteness` | bool | Require concreteness data |
+```yaml
+concreteness:
+  values: [concrete]    # concrete, mixed, or abstract
+```
 
-Values: `"concrete"` (4.0+), `"abstract"` (<2.5), `"mixed"` (2.5-4.0)
+Values: `concrete` (4.0+), `abstract` (<2.5), `mixed` (2.5-4.0)
 
 ### Label Filters
 
-Filter by register, region, domain, or temporal labels:
-
-```json
-{
-  "labels": {
-    "register": {
-      "exclude": ["vulgar", "offensive", "derogatory"]
-    },
-    "temporal": {
-      "exclude": ["archaic", "obsolete"]
-    },
-    "region": {
-      "include": ["en-US"]
-    }
-  }
-}
+```yaml
+labels:
+  register:
+    include: [slang]
+    exclude: [vulgar, offensive, derogatory]
+  domain:
+    exclude: [medical, legal, technical]
+  region:
+    include: [en-US]
 ```
 
-### Policy Filters
+**Register labels:** vulgar, offensive, slang, informal, formal, colloquial, dialectal, technical, literary, humorous, derogatory, euphemistic
 
-Shorthand for common label combinations:
+### Temporal Filters
 
-| Option | Effect |
-|--------|--------|
-| `family_friendly` | Exclude vulgar, offensive, derogatory |
-| `modern_only` | Exclude archaic, obsolete, dated |
-| `no_jargon` | Exclude medical, legal, technical, scientific |
-
-### Source Filters
-
-```json
-{
-  "sources": {
-    "include": ["eowl", "wordnet"],
-    "exclude": ["wikt"]
-  }
-}
+```yaml
+temporal:
+  exclude: [archaic, obsolete, dated]
 ```
 
-### Spelling Region Filters
-
-For regional spelling variants (color/colour):
-
-```json
-{
-  "spelling_region": {
-    "region": "en-US",
-    "include_universal": true
-  }
-}
-```
+**Temporal labels:** archaic, obsolete, dated, rare
 
 ### Syllable Filters
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `min` | int | Minimum syllables |
-| `max` | int | Maximum syllables |
-| `exact` | int | Exact syllable count |
-| `require_syllables` | bool | Require syllable data |
-
-### Lemma Filters
-
-Filter based on word forms and their base (dictionary) forms:
-
-| Option | Type | Description |
-|--------|------|-------------|
-| `base_forms_only` | bool | Exclude inflected forms (plurals, conjugations) |
-| `exclude_inflected` | bool | Same as `base_forms_only` |
-
-**Examples:**
-
-Get only base forms (dictionary entries, no "cats", "running", "went"):
-```json
-{
-  "lemma": {
-    "base_forms_only": true
-  }
-}
+```yaml
+syllables:
+  exact: 2              # Exactly N syllables
+  min: 1                # At least N syllables
+  max: 3                # At most N syllables
+  require_syllables: true  # Only words with syllable data
 ```
 
-**Advanced: Two-File Filtering**
+### Source Filters (for licensing)
 
-For precise lemma-based filtering using sense-level data:
+Control which data sources are used:
 
-```bash
-python -m openword.filters INPUT OUTPUT \
-    --senses data/intermediate/en-senses.jsonl \
-    --base-forms-only
+```yaml
+sources:
+  include: [wordnet]     # Only words from these sources
+  enrichment: [frequency]  # Allow these sources for filtering only
 ```
 
-This uses the senses file which contains per-sense lemma data, correctly handling words like "left" that have multiple lemmas depending on meaning.
+This is useful for license compliance - e.g., creating a WordNet-only word list:
 
-### Lexname Filters (Semantic Categories)
+```yaml
+# wordnet-only.yaml - CC-BY-4.0 compliant
+sources:
+  include: [wordnet]
+  enrichment: [frequency]
 
-Filter by WordNet semantic category using the `lexnames` field:
+character:
+  min_length: 3
+  max_length: 10
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `include` | string[] | Include words with any of these lexnames |
-| `exclude` | string[] | Exclude words with any of these lexnames |
-| `require_lexnames` | bool | Only include words with lexname data |
-
-**Examples:**
-
-Get only animal words:
-```json
-{
-  "lexnames": {
-    "include": ["noun.animal"]
-  }
-}
+frequency:
+  min_tier: A
+  max_tier: H
 ```
 
-Get concrete nouns (good for children's games):
-```json
-{
-  "lexnames": {
-    "include": [
-      "noun.animal",
-      "noun.artifact",
-      "noun.body",
-      "noun.food",
-      "noun.plant",
-      "noun.object"
-    ]
-  }
-}
+### Proper Noun Filters
+
+```yaml
+proper_noun:
+  require_common_usage: true  # "bill" OK, "Aaron" excluded
 ```
-
-Get all words except abstract concepts:
-```json
-{
-  "lexnames": {
-    "exclude": [
-      "noun.cognition",
-      "noun.feeling",
-      "noun.state",
-      "noun.attribute"
-    ]
-  }
-}
-```
-
-**Command-line filtering:**
-
-```bash
-# Get all animal words
-jq -r 'select(.lexnames // [] | any(. == "noun.animal")) | .word' \
-    data/intermediate/en-lexemes-enriched.jsonl
-
-# Get all food and plant words
-jq -r 'select(.lexnames // [] | any(. == "noun.food" or . == "noun.plant")) | .word' \
-    data/intermediate/en-lexemes-enriched.jsonl
-```
-
-See [SCHEMA.md](SCHEMA.md#lexnames-wordnet-semantic-categories) for the complete list of 45 lexname categories.
-
-## Output Options
-
-```json
-{
-  "output": {
-    "format": "text",
-    "sort_by": "alphabetical",
-    "limit": 1000,
-    "include_metadata": false,
-    "metadata_fields": ["word", "frequency_tier", "pos"]
-  }
-}
-```
-
-| Option | Values |
-|--------|--------|
-| `format` | `text`, `json`, `jsonl`, `csv`, `tsv` |
-| `sort_by` | `alphabetical`, `frequency`, `score`, `length` |
-| `limit` | Maximum words to output |
-| `include_metadata` | Include metadata in output |
-| `metadata_fields` | Which fields to include |
 
 ## Example Specifications
 
 ### Wordle (5-letter common words)
 
-```json
-{
-  "version": "1.0",
-  "distribution": "en",
-  "filters": {
-    "character": {
-      "exact_length": 5,
-      "char_preset": "standard"
-    },
-    "frequency": {
-      "rarest_allowed": "I"
-    },
-    "phrase": {
-      "max_words": 1
-    },
-    "policy": {
-      "family_friendly": true
-    }
-  },
-  "output": {
-    "format": "text",
-    "sort_by": "frequency"
-  }
-}
+```yaml
+# wordle.yaml
+character:
+  exact_length: 5
+  pattern: "^[a-z]+$"
+
+phrase:
+  max_words: 1
+
+frequency:
+  min_tier: A
+  max_tier: I
 ```
 
-### Kids Vocabulary
+**Expected:** ~3,000 words
 
-```json
-{
-  "version": "1.0",
-  "distribution": "en",
-  "filters": {
-    "character": {
-      "min_length": 3,
-      "max_length": 8,
-      "char_preset": "standard"
-    },
-    "pos": {
-      "include": ["noun"]
-    },
-    "concreteness": {
-      "values": ["concrete"]
-    },
-    "frequency": {
-      "rarest_allowed": "G"
-    },
-    "policy": {
-      "family_friendly": true,
-      "modern_only": true
-    }
-  }
-}
+### Kids Vocabulary (Concrete Nouns)
+
+```yaml
+# kids-nouns.yaml
+character:
+  min_length: 3
+  max_length: 10
+
+phrase:
+  max_words: 1
+
+pos:
+  include: [noun]
+
+concreteness:
+  values: [concrete]
+
+frequency:
+  min_tier: A
+  max_tier: G
+
+labels:
+  register:
+    exclude: [vulgar, offensive, derogatory, slang]
+
+temporal:
+  exclude: [archaic, obsolete, dated]
 ```
 
-### Scrabble Dictionary
+### Poetry (5-syllable words)
 
-```json
-{
-  "version": "1.0",
-  "distribution": "en",
-  "filters": {
-    "character": {
-      "min_length": 2,
-      "max_length": 15,
-      "char_preset": "standard"
-    },
-    "phrase": {
-      "max_words": 1
-    },
-    "proper_noun": {
-      "require_common_usage": true
-    }
-  },
-  "output": {
-    "format": "text",
-    "sort_by": "alphabetical"
-  }
-}
+```yaml
+# poetry-5syllable.yaml
+syllables:
+  exact: 5
+
+temporal:
+  exclude: [archaic, obsolete]
+
+labels:
+  register:
+    exclude: [vulgar, offensive]
 ```
 
 ### Profanity Blocklist
 
-```json
-{
-  "version": "1.0",
-  "distribution": "en",
-  "filters": {
-    "labels": {
-      "register": {
-        "include": ["vulgar", "offensive", "derogatory"]
-      }
-    }
-  },
-  "output": {
-    "format": "text"
-  }
-}
+```yaml
+# profanity-blocklist.yaml
+labels:
+  register:
+    include: [vulgar, offensive, derogatory]
+```
+
+## Enriched Output
+
+The `--enriched` flag creates a JSONL sidecar file with full metadata:
+
+```bash
+owlex wordle.yaml --output words.txt --enriched enriched.jsonl
+```
+
+Each line in `enriched.jsonl` contains:
+- `word` - The word
+- `pos` - Part of speech tags (aggregated from senses)
+- `syllables` - Syllable data
+- `frequency_tier` - Frequency tier
+- `concreteness` - Concreteness rating
+- `sources` - Contributing sources
+
+Use `--jq` to project specific fields:
+
+```bash
+# Extract word + syllables only
+owlex wordle.yaml --enriched data.jsonl --jq '{word, syllables}'
+
+# Morphology lookup
+owlex wordle.yaml --enriched data.jsonl --jq '{word, pos, lemmas}'
 ```
 
 ## Python Filtering
@@ -462,12 +396,16 @@ jq -r 'select(.concreteness != null) | "\(.word)\t\(.concreteness)"' \
 
 Example specs in `examples/wordlist-specs/`:
 
-| File | Description |
-|------|-------------|
-| `wordle.json` | 5-letter common words |
-| `kids-nouns.json` | Concrete nouns for children |
-| `scrabble.json` | Single words for Scrabble |
-| `profanity-blocklist.json` | Flagged inappropriate words |
+| File | Description | Expected Words |
+|------|-------------|----------------|
+| `wordle.yaml` | 5-letter common words | ~3,000 |
+| `kids-nouns.yaml` | Concrete nouns for children | ~500-1,000 |
+| `children-2syllable.yaml` | Two-syllable concrete nouns | ~200-500 |
+| `poetry-5syllable.yaml` | Five-syllable words | ~50-200 |
+| `simple-words.yaml` | Simple words for beginners | ~1,000-3,000 |
+| `scrabble.yaml` | Single words for Scrabble | ~100,000+ |
+| `profanity-blocklist.yaml` | Vulgar/offensive words | ~10,000 |
+| `wordnet-only.yaml` | CC-BY-4.0 compliant | ~50,000+ |
 
 ## Coverage Notes
 
@@ -477,9 +415,21 @@ Not all words have all metadata:
 |-------|----------|
 | `frequency_tier` | 100% (unranked = Z) |
 | `sources` | 100% |
-| `pos` | ~52% |
+| `pos` | ~98% |
+| `labels` | ~11% |
 | `concreteness` | ~3% (~39K words) |
 | `syllables` | ~2% (~30K words) |
-| `labels` | ~11% |
 
 When filtering by optional fields, consider using `require_*` options to exclude words without data, or accept that some words may pass filters by default.
+
+## Two-File Pipeline
+
+For advanced filtering that requires sense-level data (POS per sense, per-sense labels), use the two-file pipeline with `filters.py`:
+
+```bash
+python -m openword.filters INPUT OUTPUT \
+    --senses data/intermediate/en-senses.jsonl \
+    --pos noun --no-profanity
+```
+
+This uses the senses file which contains per-sense data, correctly handling words like "left" that have multiple parts of speech.

@@ -1,0 +1,17 @@
+# WordNet words only (CC-BY-4.0 license)
+# Example of license-compliant filtering
+
+sources:
+  include: [wordnet]
+  enrichment: [frequency]  # frequency data used for filtering only
+
+character:
+  min_length: 3
+  max_length: 10
+
+phrase:
+  max_words: 1
+
+frequency:
+  min_tier: A
+  max_tier: H

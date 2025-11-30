@@ -1,0 +1,20 @@
+# Mini test spec: Very small 5-letter word list for manual inspection
+# Uses ONLY fields that exist in en-lexemes-enriched.jsonl
+
+character:
+  exact_length: 5
+  pattern: "^[a-z]+$"
+
+phrase:
+  max_words: 1
+
+frequency:
+  min_tier: A
+  max_tier: B  # Only tier A and B (very common)
+
+# Expected output: ~50-100 words
+# These should be very common 5-letter single words like:
+# about, after, again, being, could, every, first, found, great, house, etc.
+
+# NOTE: Cannot use POS, labels, or concreteness filters here
+# because those fields are NOT in the lexemes file (they're in senses)

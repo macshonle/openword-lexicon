@@ -1,0 +1,26 @@
+# Two-syllable concrete nouns for children's word games
+# Perfect for games like word matching, picture identification, pronunciation practice
+
+syllables:
+  exact: 2
+  require_syllables: true
+
+pos:
+  include: [noun]
+
+concreteness:
+  values: [concrete]
+
+frequency:
+  min_tier: A
+  max_tier: I  # common words
+
+phrase:
+  max_words: 1
+
+labels:
+  register:
+    exclude: [slang, vulgar, offensive, derogatory]
+
+temporal:
+  exclude: [archaic, obsolete]

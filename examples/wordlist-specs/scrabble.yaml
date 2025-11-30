@@ -1,0 +1,9 @@
+# Single words suitable for Scrabble
+# Allows archaic/obsolete (valid in Scrabble dictionaries)
+# Requires common usage (excludes pure proper nouns)
+
+phrase:
+  max_words: 1  # single words only
+
+proper_noun:
+  require_common_usage: true  # "bill" OK, "Aaron" excluded

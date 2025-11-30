@@ -1,207 +1,272 @@
 # Example Word List Specifications
 
-This directory contains example JSON specifications for common word list filtering scenarios.
+This directory contains example YAML specifications for common word list filtering scenarios.
 
 ## Usage
 
-To generate a word list from any of these specifications:
+Generate a word list from any specification:
 
 ```bash
-# Using owlex directly
-uv run python -m openword.owlex examples/wordlist-specs/wordle.json > wordle-words.txt
+# Basic usage - outputs to stdout
+owlex examples/wordlist-specs/wordle.yaml
+
+# Save to file
+owlex examples/wordlist-specs/wordle.yaml --output wordle-words.txt
+
+# With enriched sidecar JSONL (includes POS, syllables, etc.)
+owlex wordle.yaml --output words.txt --enriched enriched.jsonl
+
+# With jq projection
+owlex wordle.yaml --enriched syllables.jsonl --jq '{word, syllables, pos}'
+
+# Verbose mode
+owlex examples/wordlist-specs/wordle.yaml --verbose
 ```
 
 ## Available Examples
 
-### `wordle.json`
-**Distribution**: Core
-**Target**: Wordle-style word guessing games
-**Filters**:
-- Exactly 5 letters
-- Only lowercase alphabetic characters
+### `wordle.yaml`
+5-letter common words for Wordle-style games.
+- Exactly 5 letters, lowercase alphabetic
 - Single words only
-- Top 10k frequency or better
+- Top ~30k frequency (tiers A-I)
 
-**Expected results**: ~2,000-3,000 words
+**Expected**: ~3,000 words
 
 ---
 
-### `kids-nouns.json`
-**Distribution**: Core
-**Target**: Children's educational games
-**Filters**:
+### `kids-nouns.yaml`
+Concrete nouns for children's games.
 - 3-10 characters
-- Concrete nouns only
-- Top 1k-10k frequency
-- Family-friendly (no profanity)
-- Modern language only
+- Concrete nouns (requires concreteness data)
+- Family-friendly (excludes vulgar/offensive)
+- Modern language (excludes archaic)
 
-**Expected results**: ~500-1,000 words
-
-**Note**: Requires WordNet enrichment (automatic during build)
+**Expected**: ~500-1,000 words with concreteness data
 
 ---
 
-### `profanity-blocklist.json`
-**Distribution**: Plus (requires Wiktionary)
-**Target**: Content filtering systems
-**Filters**:
-- Words labeled as vulgar, offensive, or derogatory
+### `children-2syllable.yaml`
+Two-syllable concrete nouns for children's word games.
+- Exactly 2 syllables (requires syllable data)
+- Concrete nouns
+- Family-friendly, modern
 
-**Expected results**: ~10,000 words
-
-**Note**:
-- Must build Plus distribution first: `make build-plus`
-- Coverage is ~11% - some inappropriate words may not be labeled
-- Combine with external blocklists for production use
+**Expected**: ~200-500 words with syllable data
 
 ---
 
-### `scrabble.json`
-**Distribution**: Core
-**Target**: Scrabble and word games
-**Filters**:
-- Single words only (no phrases)
-- Top 100k frequency or better
+### `poetry-5syllable.yaml`
+Five-syllable words for poetry (haiku, meter work).
+- Exactly 5 syllables (requires syllable data)
+- Modern, non-offensive
 
-**Expected results**: ~100,000-150,000 words
+**Expected**: ~50-200 words with syllable data
+
+---
+
+### `simple-words.yaml`
+Simple words for beginning readers and ESL learners.
+- 1-3 syllables
+- High frequency
+- 3-10 characters
+- No jargon or technical terms
+
+**Expected**: ~1,000-3,000 words with syllable data
+
+---
+
+### `scrabble.yaml`
+Words suitable for Scrabble.
+- Single words only
+- Requires common usage (excludes pure proper nouns)
+- Allows archaic/obsolete (valid in Scrabble)
+
+**Expected**: ~100,000+ words
+
+---
+
+### `profanity-blocklist.yaml`
+Words for content filtering blocklists.
+- Words labeled vulgar, offensive, or derogatory
+
+**Expected**: ~10,000 words with labels
+
+---
+
+### `wordnet-only.yaml`
+License-compliant example using only WordNet (CC-BY-4.0).
+- Words that exist in WordNet source
+- 3-10 characters, common frequency
+
+**Expected**: ~50,000+ words from WordNet
+
+---
+
+## Simplified Spec Format
+
+Specs use a filters-only YAML format - the spec body IS the filters:
+
+```yaml
+# Comment: what this spec does
+
+character:
+  exact_length: 5
+  pattern: "^[a-z]+$"
+
+phrase:
+  max_words: 1
+
+frequency:
+  min_tier: A
+  max_tier: I
+
+labels:
+  register:
+    exclude: [vulgar, offensive, derogatory]
+
+temporal:
+  exclude: [archaic, obsolete]
+```
+
+No `version`, `distribution`, or `output` sections needed. Output format is controlled via CLI flags.
+
+---
+
+## Filter Reference
+
+### Character Filters
+```yaml
+character:
+  exact_length: 5       # Exactly N characters
+  min_length: 3         # At least N characters
+  max_length: 10        # At most N characters
+  pattern: "^[a-z]+$"   # Regex pattern to match
+```
+
+### Phrase Filters
+```yaml
+phrase:
+  max_words: 1          # Single words only
+  min_words: 2          # Multi-word phrases only
+```
+
+### Frequency Filters
+```yaml
+frequency:
+  min_tier: A           # Most common tier to include
+  max_tier: I           # Least common tier to include
+  # Tiers: A (most common) → J → Z (rarest/unknown)
+```
+
+### Syllable Filters
+```yaml
+syllables:
+  exact: 2              # Exactly N syllables
+  min: 1                # At least N syllables
+  max: 3                # At most N syllables
+  require_syllables: true  # Only words with syllable data
+```
+
+### POS Filters
+```yaml
+pos:
+  include: [noun, verb]  # Must have one of these POS
+  exclude: [interjection]
+```
+
+### Concreteness Filters
+```yaml
+concreteness:
+  values: [concrete]     # concrete, mixed, or abstract
+```
+
+### Label Filters
+```yaml
+labels:
+  register:
+    include: [slang]     # Must have these labels
+    exclude: [vulgar, offensive, derogatory]
+  domain:
+    exclude: [medical, legal, technical]
+  region:
+    include: [en-US]     # Only US regional words
+```
+
+### Temporal Filters
+```yaml
+temporal:
+  exclude: [archaic, obsolete, dated]
+```
+
+### Source Filters (for licensing)
+```yaml
+sources:
+  include: [wordnet]     # Only words from these sources
+  enrichment: [frequency]  # Allow data from these for filtering
+```
+
+### Proper Noun Filters
+```yaml
+proper_noun:
+  require_common_usage: true  # "bill" OK, "Aaron" excluded
+```
+
+---
+
+## Limitations
+
+Some filters require data from the senses file:
+- **POS filtering**: POS tags are in senses, not lexemes
+- **Label filtering**: Labels are in senses file
+- **Concreteness**: Only ~3% of words have concreteness data
+
+For full sense-level filtering, use the two-file pipeline in `filters.py`:
+```bash
+python -m openword.filters INPUT OUTPUT --senses SENSES --pos noun --no-profanity
+```
 
 ---
 
 ## Creating Your Own
 
-### Method 1: Web Interface
+### Method 1: Copy and Modify
+```bash
+cp examples/wordlist-specs/wordle.yaml my-spec.yaml
+# Edit my-spec.yaml
+owlex my-spec.yaml --output my-words.txt
+```
 
+### Method 2: Web Interface
 ```bash
 make wordlist-builder-web
 ```
 
 Use the visual form to configure filters and download the specification.
 
-### Method 2: Copy and Modify
-
-Copy one of these examples and edit:
-
-```bash
-cp examples/wordlist-specs/wordle.json my-spec.json
-# Edit my-spec.json
-uv run python -m openword.owlex my-spec.json > my-words.txt
-```
-
----
-
-## Schema Reference
-
-All specifications must follow this structure:
-
-```json
-{
-  "version": "1.0",           // Required: schema version
-  "name": "...",              // Optional: human-readable name
-  "description": "...",       // Optional: description
-  "distribution": "core",     // Required: "core" or "plus"
-  "filters": {                // Optional: filter criteria
-    "character": {...},
-    "phrase": {...},
-    "frequency": {...},
-    "pos": {...},
-    "concreteness": {...},
-    "labels": {...},
-    "policy": {...}
-  },
-  "output": {                 // Optional: output configuration
-    "format": "text",
-    "sort_by": "alphabetical",
-    "limit": 1000
-  }
-}
-```
-
-See [docs/schema/wordlist_spec.schema.json](../../docs/schema/wordlist_spec.schema.json) for complete schema.
-
----
-
-## Testing Specifications
-
-Test your specification before generating large lists:
-
-```bash
-# Preview first 20 results
-uv run python -m openword.owlex my-spec.json | head -20
-
-# Count total matches
-uv run python -m openword.owlex my-spec.json | wc -l
-
-# Verbose mode for debugging
-uv run python -m openword.owlex my-spec.json --verbose | head -20
-```
-
 ---
 
 ## Tips
 
 ### Combining Specifications
-
-You can combine multiple filtered lists:
-
 ```bash
-# Generate individual lists
-uv run python -m openword.owlex examples/wordlist-specs/wordle.json > wordle.txt
-uv run python -m openword.owlex my-hard-words.json > hard.txt
-
-# Combine
+owlex wordle.yaml --output wordle.txt
+owlex hard-words.yaml --output hard.txt
 cat wordle.txt hard.txt | sort -u > combined.txt
 ```
 
-### Excluding Words
-
-To exclude profanity from your list:
-
+### Excluding Profanity
 ```bash
-# Generate main list
-uv run python -m openword.owlex my-spec.json > words.txt
-
-# Generate blocklist (requires Plus)
-uv run python -m openword.owlex examples/wordlist-specs/profanity-blocklist.json > blocked.txt
-
-# Remove blocked words
+owlex my-spec.yaml --output words.txt
+owlex profanity-blocklist.yaml --output blocked.txt
 grep -vFxf blocked.txt words.txt > clean-words.txt
 ```
 
-### Performance
-
-For very large lists, use JSONL output for better performance:
-
-```json
-{
-  "output": {
-    "format": "jsonl",
-    "include_metadata": false
-  }
-}
-```
-
-Then extract words:
-
+### Enriched Output with jq Projection
 ```bash
-uv run python -m openword.owlex my-spec.json | jq -r '.word' > words.txt
+# Extract word + syllables only
+owlex wordle.yaml --enriched data.jsonl --jq '{word, syllables}'
+
+# Morphology lookup
+owlex wordle.yaml --enriched data.jsonl --jq '{word, pos, lemmas}'
 ```
-
----
-
-## Documentation
-
-- [Word List Builder README](../README.md) - Complete builder documentation
-- [Filter Capabilities](../../docs/FILTER_CAPABILITIES.md) - Available filters and coverage
-- [JSON Schema](../../docs/schema/wordlist_spec.schema.json) - Specification format
-
----
-
-## Contributing
-
-Have a useful specification? Submit a pull request!
-
-1. Create your specification in this directory
-2. Add documentation to this README
-3. Test that it works on both Core and Plus (if applicable)
-4. Submit PR with description of use case

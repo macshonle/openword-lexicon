@@ -891,6 +891,9 @@ fn extract_phrase_type(text: &str) -> Option<String> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Parsed wikilink: [[target#anchor|display]]
+/// Note: anchor is parsed for completeness but not currently used
+#[derive(Debug)]
+#[allow(dead_code)]
 struct Wikilink {
     target: String,
     anchor: Option<String>,
@@ -905,6 +908,9 @@ impl Wikilink {
 }
 
 /// Parsed template: {{name|param1|param2|...}}
+/// Note: Nested templates are parsed but discarded (treated as metadata)
+#[derive(Debug)]
+#[allow(dead_code)]
 struct ParsedTemplate {
     name: String,
     params: Vec<String>,

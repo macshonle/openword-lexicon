@@ -245,7 +245,7 @@
 
                     <div class="export-actions">
                         <button class="btn btn-primary" id="btn-view-spec">
-                            View JSON Specification
+                            View YAML Specification
                         </button>
                         <button class="btn btn-secondary" id="btn-download-spec">
                             Download as File
@@ -273,22 +273,22 @@
         </div>
     </div>
 
-    <!-- JSON Viewer Popup -->
-    <div class="popup-overlay" id="json-popup">
+    <!-- YAML Spec Viewer Popup -->
+    <div class="popup-overlay" id="spec-popup">
         <div class="popup-container large">
             <div class="popup-header">
-                <h3>JSON Specification</h3>
-                <button class="popup-close" id="json-popup-close">&times;</button>
+                <h3>YAML Specification</h3>
+                <button class="popup-close" id="spec-popup-close">&times;</button>
             </div>
             <div class="popup-body">
-                <p class="hint">Use this specification with the OpenWord Lexicon filter tool:</p>
-                <pre id="json-output" class="json-output"></pre>
+                <p class="hint">Save this file and run: <code>owlex your-spec.yaml --output words.txt</code></p>
+                <pre id="spec-output" class="json-output"></pre>
                 <div class="json-actions">
-                    <button class="btn btn-secondary" id="btn-copy-json">Copy to Clipboard</button>
+                    <button class="btn btn-secondary" id="btn-copy-spec">Copy to Clipboard</button>
                 </div>
             </div>
             <div class="popup-footer">
-                <button class="btn btn-primary" id="json-popup-close-btn">Close</button>
+                <button class="btn btn-primary" id="spec-popup-close-btn">Close</button>
             </div>
         </div>
     </div>

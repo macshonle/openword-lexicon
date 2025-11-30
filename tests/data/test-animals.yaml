@@ -1,0 +1,18 @@
+# Test spec: Common animal words
+# Small word list for manual inspection
+
+character:
+  min_length: 3
+  max_length: 8
+  pattern: "^[a-z]+$"
+
+phrase:
+  max_words: 1
+
+frequency:
+  min_tier: A
+  max_tier: G  # Top ~5000 words
+
+# Expected behavior:
+# - cat, dog, bird, fish, horse, cow, pig, sheep, goat, duck, bear, etc.
+# - Should exclude: multi-word phrases, rare animals, words with special chars

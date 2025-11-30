@@ -1,0 +1,16 @@
+# Five-syllable words for poetry composition
+# Useful for haiku (5-7-5 pattern), meter, and creative writing
+
+syllables:
+  exact: 5
+  require_syllables: true
+
+phrase:
+  max_words: 1
+
+labels:
+  register:
+    exclude: [vulgar, offensive, derogatory]
+
+temporal:
+  exclude: [archaic, obsolete]

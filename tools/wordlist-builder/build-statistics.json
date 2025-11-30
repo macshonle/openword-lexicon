@@ -1,6 +1,6 @@
 {
   "total_words": 1386453,
-  "generated_at": "2025-11-29T21:19:06.176486",
+  "generated_at": "2025-11-30T15:33:44.215469",
   "sources": {
     "wikt": 1328251,
     "wordnet": 161870,
@@ -83,12 +83,28 @@
       "avg_per_word": 1.2
     },
     "pos_tags": {
-      "count": 0,
-      "percentage": 0
+      "count": 1328251,
+      "percentage": 95.8
     },
     "any_labels": {
-      "count": 0,
-      "percentage": 0
+      "count": 148080,
+      "percentage": 10.7
+    },
+    "register_labels": {
+      "count": 42491,
+      "percentage": 3.1
+    },
+    "domain_labels": {
+      "count": 43033,
+      "percentage": 3.1
+    },
+    "region_labels": {
+      "count": 25190,
+      "percentage": 1.8
+    },
+    "temporal_labels": {
+      "count": 65716,
+      "percentage": 4.7
     }
   },
   "metadata_by_source": {
@@ -109,6 +125,14 @@
       "senses": {
         "count": 1328251,
         "percentage": 100.0
+      },
+      "pos_tags": {
+        "count": 1328251,
+        "percentage": 100.0
+      },
+      "any_labels": {
+        "count": 148080,
+        "percentage": 11.1
       }
     },
     "wordnet": {
@@ -128,6 +152,14 @@
       "senses": {
         "count": 107544,
         "percentage": 66.4
+      },
+      "pos_tags": {
+        "count": 107544,
+        "percentage": 66.4
+      },
+      "any_labels": {
+        "count": 26657,
+        "percentage": 16.5
       }
     },
     "brysbaert": {
@@ -147,6 +179,14 @@
       "senses": {
         "count": 44453,
         "percentage": 99.4
+      },
+      "pos_tags": {
+        "count": 44453,
+        "percentage": 99.4
+      },
+      "any_labels": {
+        "count": 13587,
+        "percentage": 30.4
       }
     },
     "eowl": {
@@ -166,11 +206,30 @@
       "senses": {
         "count": 138349,
         "percentage": 97.2
+      },
+      "pos_tags": {
+        "count": 138349,
+        "percentage": 97.2
+      },
+      "any_labels": {
+        "count": 27230,
+        "percentage": 19.1
       }
     }
   },
   "enrichment_impact": {},
-  "pos_distribution": {},
+  "pos_distribution": {
+    "noun": 958839,
+    "verb": 213895,
+    "adjective": 179463,
+    "adverb": 26908,
+    "phrase": 9273,
+    "interjection": 4591,
+    "affix": 3517,
+    "pronoun": 893,
+    "preposition": 846,
+    "numeral": 438
+  },
   "frequency_distribution": {
     "A": 18,
     "B": 76,
@@ -189,5 +248,47 @@
     "concrete": 16553,
     "mixed": 11995
   },
-  "label_categories": {}
+  "label_categories": {
+    "register": {
+      "slang": 20618,
+      "informal": 15124,
+      "colloquial": 5700,
+      "derogatory": 5690,
+      "vulgar": 3741,
+      "humorous": 3475,
+      "offensive": 1626,
+      "euphemistic": 1038,
+      "literary": 687,
+      "formal": 601
+    },
+    "domain": {
+      "medicine": 9378,
+      "computing": 7015,
+      "biology": 5886,
+      "chemistry": 5845,
+      "physics": 4716,
+      "military": 3782,
+      "nautical": 3371,
+      "mathematics": 3265,
+      "sports": 1712,
+      "aviation": 1657
+    },
+    "region": {
+      "en-GB": 11615,
+      "en-US": 11399,
+      "en-AU": 2602,
+      "en-IE": 2306,
+      "en-IN": 1826,
+      "en-ZA": 873,
+      "en-NZ": 746,
+      "en-CA": 64
+    },
+    "temporal": {
+      "obsolete": 24081,
+      "rare": 16120,
+      "historical": 13994,
+      "archaic": 13202,
+      "dated": 8905
+    }
+  }
 }

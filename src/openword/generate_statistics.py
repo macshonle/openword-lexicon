@@ -58,7 +58,8 @@ def main():
     """Generate build statistics from final enriched entries."""
     parser = argparse.ArgumentParser(description='Generate build statistics for word list builder')
     parser.add_argument('--lang', default='en', help='Language code (default: en)')
-    parser.add_argument('--input', type=Path, help='Input JSONL file (overrides default path)')
+    parser.add_argument('--input', type=Path, help='Input lexemes JSONL file (overrides default path)')
+    parser.add_argument('--senses', type=Path, help='Input senses JSONL file (for POS/labels stats)')
     args = parser.parse_args()
 
     # Determine paths (flat structure with language-prefixed files)
@@ -66,7 +67,7 @@ def main():
     intermediate_dir = project_root / "data" / "intermediate"
     output_file = project_root / "tools" / "wordlist-builder" / "build-statistics.json"
 
-    # Determine input file
+    # Determine input files
     if args.input:
         input_file = args.input
     else:
@@ -79,6 +80,12 @@ def main():
             logger.error("  make build-en")
             return 1
 
+    # Determine senses file
+    if args.senses:
+        senses_file = args.senses
+    else:
+        senses_file = intermediate_dir / f"{args.lang}-senses.jsonl"
+
     # Verify input file exists
     if not input_file.exists():
         logger.error(f"Input file not found: {input_file}")
@@ -90,8 +97,9 @@ def main():
     logger.info("=" * 80)
     logger.info("GENERATING BUILD STATISTICS")
     logger.info("=" * 80)
-    logger.info(f"  Input:  {input_file}")
-    logger.info(f"  Output: {output_file}")
+    logger.info(f"  Lexemes: {input_file}")
+    logger.info(f"  Senses:  {senses_file}" + (" (not found)" if not senses_file.exists() else ""))
+    logger.info(f"  Output:  {output_file}")
     logger.info("")
 
     # Load entries from final enriched file
@@ -101,10 +109,20 @@ def main():
         logger.error("No entries loaded - cannot generate statistics")
         return 1
 
+    # Load senses file if available (for POS and labels stats)
+    senses_by_word = None
+    if senses_file.exists():
+        logger.info(f"Loading senses from {senses_file}")
+        senses_by_word = build_stats.load_senses_by_word(senses_file)
+        logger.info(f"  Loaded senses for {len(senses_by_word):,} words")
+    else:
+        logger.warning("Senses file not found - POS and label statistics will be empty")
+        logger.warning(f"  Expected: {senses_file}")
+
     # Generate and write statistics
     logger.info("")
     logger.info("Computing statistics...")
-    stats = build_stats.generate_and_write_statistics(entries, output_file)
+    stats = build_stats.generate_and_write_statistics(entries, output_file, senses_by_word)
 
     # Report summary
     logger.info("")

@@ -46,6 +46,8 @@ BENCHMARK_DIR := data/benchmark
 		validate-all validate-enable validate-profanity validate-childish \
 		validate-scanner-parity \
         wordlist-builder-web viewer-web \
+		wordlists wordlist-wordle wordlist-kids-nouns wordlist-scrabble \
+		wordlist-profanity wordlist-enriched \
 		benchmark-rust-scanner benchmark-validate \
 		nightly
 
@@ -366,6 +368,67 @@ viewer-web: viewer/node_modules | check-pnpm
 	@echo "    /index.html        - Dynamic trie builder"
 	@echo "    /index-binary.html - Binary trie loader"
 	(cd viewer; pnpm start)
+
+# ===========================
+# Word List Generation
+# ===========================
+
+# Output directory for generated word lists
+WORDLISTS_DIR := data/wordlists
+
+$(WORDLISTS_DIR):
+	@mkdir -p $(WORDLISTS_DIR)
+
+# Generate all example word lists
+.PHONY: wordlists wordlist-wordle wordlist-kids-nouns wordlist-scrabble wordlist-profanity
+wordlists: wordlist-wordle wordlist-kids-nouns wordlist-scrabble wordlist-profanity
+	@echo "Generated word lists in $(WORDLISTS_DIR)/"
+	@ls -lh $(WORDLISTS_DIR)/*.txt
+
+# Wordle words (5-letter common words)
+wordlist-wordle: $(LEXEMES_ENRICHED) | $(WORDLISTS_DIR)
+	@echo "Generating Wordle word list..."
+	$(UV) run owlex examples/wordlist-specs/wordle.yaml \
+		--output $(WORDLISTS_DIR)/wordle.txt
+	@wc -l $(WORDLISTS_DIR)/wordle.txt
+
+# Kids vocabulary (concrete nouns)
+wordlist-kids-nouns: $(LEXEMES_ENRICHED) | $(WORDLISTS_DIR)
+	@echo "Generating kids nouns word list..."
+	$(UV) run owlex examples/wordlist-specs/kids-nouns.yaml \
+		--output $(WORDLISTS_DIR)/kids-nouns.txt
+	@wc -l $(WORDLISTS_DIR)/kids-nouns.txt
+
+# Scrabble words
+wordlist-scrabble: $(LEXEMES_ENRICHED) | $(WORDLISTS_DIR)
+	@echo "Generating Scrabble word list..."
+	$(UV) run owlex examples/wordlist-specs/scrabble.yaml \
+		--output $(WORDLISTS_DIR)/scrabble.txt
+	@wc -l $(WORDLISTS_DIR)/scrabble.txt
+
+# Profanity blocklist
+wordlist-profanity: $(LEXEMES_ENRICHED) | $(WORDLISTS_DIR)
+	@echo "Generating profanity blocklist..."
+	$(UV) run owlex examples/wordlist-specs/profanity-blocklist.yaml \
+		--output $(WORDLISTS_DIR)/profanity-blocklist.txt
+	@wc -l $(WORDLISTS_DIR)/profanity-blocklist.txt
+
+# Generate word list with enriched sidecar (for any spec)
+# Usage: make wordlist-enriched SPEC=examples/wordlist-specs/wordle.yaml NAME=wordle
+.PHONY: wordlist-enriched
+wordlist-enriched: $(LEXEMES_ENRICHED) | $(WORDLISTS_DIR)
+ifndef SPEC
+	$(error SPEC is required. Usage: make wordlist-enriched SPEC=path/to/spec.yaml NAME=output-name)
+endif
+ifndef NAME
+	$(error NAME is required. Usage: make wordlist-enriched SPEC=path/to/spec.yaml NAME=output-name)
+endif
+	@echo "Generating $(NAME) with enriched data..."
+	$(UV) run owlex $(SPEC) \
+		--output $(WORDLISTS_DIR)/$(NAME).txt \
+		--enriched $(WORDLISTS_DIR)/$(NAME)-enriched.jsonl
+	@wc -l $(WORDLISTS_DIR)/$(NAME).txt
+	@wc -l $(WORDLISTS_DIR)/$(NAME)-enriched.jsonl
 
 # ===========================
 # Nightly CI Build

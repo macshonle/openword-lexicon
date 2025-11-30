@@ -2,17 +2,31 @@
 """
 OpenWord Lexicon Extended (owlex) - Command-line tool for filtering word lists.
 
-This tool reads JSON specifications created by the interactive builder and
-generates filtered word lists based on the specified criteria.
+This tool reads YAML/JSON specifications and generates filtered word lists.
+Supports a simplified "filters-only" format where the spec body IS the filters.
+
+Output modes:
+  --output FILE     Plain text word list (one word per line)
+  --enriched FILE   JSONL with aggregated sense data per word
+  --jq EXPR         Apply jq expression to each enriched entry (requires jq)
 """
 
 import json
 import re
 import sys
+import subprocess
+import shutil
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Set
+from collections import defaultdict
 import argparse
 import logging
+
+try:
+    import yaml
+    HAS_YAML = True
+except ImportError:
+    HAS_YAML = False
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -27,41 +41,112 @@ class OwlexFilter:
         self.spec_path = spec_path
         self.spec = self._load_spec()
         # Tier scores: A (most frequent) = 100, Z (rarest/unknown) = 0
-        # 12 main tiers (A-L) + Y (rare) + Z (unknown)
-        # Scale: A=100, B=92, C=84, ..., L=12, Y=4, Z=0 (~8 points per tier)
+        # Full tier progression: A-Z with scores from 100 down to 0
         self.tier_scores = {
-            'A': 100, 'B': 92, 'C': 84, 'D': 76, 'E': 68, 'F': 60,
-            'G': 52, 'H': 44, 'I': 36, 'J': 28, 'K': 20, 'L': 12,
+            'A': 100, 'B': 96, 'C': 92, 'D': 88, 'E': 84, 'F': 80,
+            'G': 76, 'H': 72, 'I': 68, 'J': 64, 'K': 60, 'L': 56,
+            'M': 52, 'N': 48, 'O': 44, 'P': 40, 'Q': 36, 'R': 32,
+            'S': 28, 'T': 24, 'U': 20, 'V': 16, 'W': 12, 'X': 8,
             'Y': 4, 'Z': 0
         }
 
     def _load_spec(self) -> Dict:
-        """Load and validate specification."""
+        """Load and validate specification.
+
+        Supports:
+        - JSON files (.json)
+        - YAML files (.yaml, .yml) - requires PyYAML
+        - Simplified "filters-only" format where the spec body IS the filters
+        """
+        suffix = self.spec_path.suffix.lower()
+
         try:
             with open(self.spec_path) as f:
-                spec = json.load(f)
-        except json.JSONDecodeError as e:
-            logger.error(f"Invalid JSON in specification: {e}")
+                if suffix in ('.yaml', '.yml'):
+                    if not HAS_YAML:
+                        logger.error("YAML support requires PyYAML. Install with: pip install pyyaml")
+                        sys.exit(1)
+                    spec = yaml.safe_load(f)
+                else:
+                    spec = json.load(f)
+        except (json.JSONDecodeError, yaml.YAMLError) as e:
+            logger.error(f"Invalid specification: {e}")
             sys.exit(1)
         except FileNotFoundError:
             logger.error(f"Specification file not found: {self.spec_path}")
             sys.exit(1)
 
-        # Validate required fields
-        if 'version' not in spec:
-            logger.error("Specification missing 'version' field")
+        if spec is None:
+            logger.error("Specification is empty")
             sys.exit(1)
 
-        # Support both old format (distribution) and new format (sources)
-        if 'distribution' not in spec and 'sources' not in spec:
-            logger.error("Specification missing 'distribution' or 'sources' field")
-            sys.exit(1)
-
-        # Normalize new format to old format for backward compatibility
-        if 'sources' in spec and 'distribution' not in spec:
-            spec = self._normalize_new_format(spec)
+        # Detect and normalize spec format
+        spec = self._normalize_spec_format(spec)
 
         return spec
+
+    def _normalize_spec_format(self, spec: Dict) -> Dict:
+        """Normalize various spec formats to internal format.
+
+        Supports:
+        1. Legacy format: {"version": "1.0", "distribution": "en", "filters": {...}}
+        2. Web builder format: {"version": "1.0", "sources": [...], "filters": [...]}
+        3. Simplified format: filters-only body (what the plan recommends)
+        """
+        # Check if this is a simplified "filters-only" format
+        # Simplified format has no 'version', 'distribution', or 'filters' key at the root
+        # Instead, the root keys are filter types like 'character', 'frequency', 'pos', etc.
+        filter_type_keys = {
+            'character', 'phrase', 'frequency', 'pos', 'concreteness',
+            'labels', 'temporal', 'sources', 'syllables', 'region',
+            'proper_noun', 'lemma', 'policy'  # policy kept for backward compat
+        }
+
+        is_simplified = (
+            'version' not in spec and
+            'distribution' not in spec and
+            'filters' not in spec and
+            any(key in filter_type_keys for key in spec.keys())
+        )
+
+        if is_simplified:
+            # Simplified format: the spec body IS the filters
+            # Extract sources filter if present, use rest as filters
+            normalized = {
+                'version': '2.0',
+                'distribution': 'en',
+                'filters': {}
+            }
+
+            for key, value in spec.items():
+                if key == 'sources':
+                    # Handle sources filter for licensing compliance
+                    normalized['_sources_filter'] = value
+                else:
+                    normalized['filters'][key] = value
+
+            return normalized
+
+        # Legacy format with version
+        if 'version' in spec:
+            # Support both old format (distribution) and new format (sources array at root)
+            if 'distribution' not in spec and 'sources' not in spec:
+                # Default to 'en' distribution
+                spec['distribution'] = 'en'
+
+            # Normalize web builder format to internal format
+            if 'sources' in spec and isinstance(spec['sources'], list) and 'distribution' not in spec:
+                spec = self._normalize_new_format(spec)
+
+            return spec
+
+        # Unknown format - try to use as-is with defaults
+        logger.warning("Unknown spec format, using defaults")
+        return {
+            'version': '1.0',
+            'distribution': 'en',
+            'filters': spec.get('filters', {})
+        }
 
     def _normalize_new_format(self, spec: Dict) -> Dict:
         """
@@ -210,16 +295,30 @@ class OwlexFilter:
         if not self._check_label_filters(entry, filters.get('labels', {})):
             return False
 
-        # Policy filters (expanded to label filters)
+        # Temporal filters (explicit, not via policy)
+        if not self._check_temporal_filters(entry, filters.get('temporal', {})):
+            return False
+
+        # Policy filters (legacy - expanded to label filters)
         if not self._check_policy_filters(entry, filters.get('policy', {})):
             return False
 
-        # Source filters
+        # Source filters (from filters section)
         if not self._check_source_filters(entry, filters.get('sources', {})):
             return False
 
+        # Source filters (from simplified format's _sources_filter)
+        sources_filter = self.spec.get('_sources_filter', {})
+        if sources_filter:
+            if not self._check_sources_licensing_filter(entry, sources_filter):
+                return False
+
         # Spelling region filters
         if not self._check_spelling_region_filters(entry, filters.get('spelling_region', {})):
+            return False
+
+        # Region filters (simplified format - same as spelling_region)
+        if not self._check_spelling_region_filters(entry, filters.get('region', {})):
             return False
 
         # Proper noun filters
@@ -354,28 +453,41 @@ class OwlexFilter:
         return True
 
     def _check_frequency_filters(self, entry: Dict, filters: Dict) -> bool:
-        """Apply frequency tier filters."""
+        """Apply frequency tier filters.
+
+        Tier naming follows alphabetical convention:
+        - A = most common/frequent
+        - Z = rarest/unranked
+
+        Filter semantics:
+        - min_tier: Most common tier to include (e.g., "A" = include A and rarer)
+        - max_tier: Least common tier to include (e.g., "I" = include I and more common)
+
+        Example: min_tier=A, max_tier=I means "include tiers A through I"
+        """
         tier = entry.get('frequency_tier', 'Z')  # Z = extremely rare/unranked
+        tier_score = self.tier_scores.get(tier, 0)
 
         if 'tiers' in filters:
             if tier not in filters['tiers']:
                 return False
 
+        # min_tier: the MOST common tier to include
+        # Words must be this tier OR less common (lower score is OK)
         if 'min_tier' in filters:
-            # More frequent tier (higher score) is minimum
-            min_score = self.tier_scores.get(filters['min_tier'], 0)
-            if self.tier_scores.get(tier, 0) < min_score:
+            min_tier_score = self.tier_scores.get(filters['min_tier'], 100)
+            if tier_score > min_tier_score:
                 return False
 
+        # max_tier: the LEAST common tier to include
+        # Words must be this tier OR more common (higher score is OK)
         if 'max_tier' in filters:
-            # Less frequent tier (lower score) is maximum
-            max_score = self.tier_scores.get(filters['max_tier'], 100)
-            if self.tier_scores.get(tier, 0) > max_score:
+            max_tier_score = self.tier_scores.get(filters['max_tier'], 0)
+            if tier_score < max_tier_score:
                 return False
 
         if 'min_score' in filters:
-            score = self.tier_scores.get(tier, 0)
-            if score < filters['min_score']:
+            if tier_score < filters['min_score']:
                 return False
 
         return True
@@ -461,6 +573,66 @@ class OwlexFilter:
             # Exclude technical domains
             if domain_labels & {'medical', 'legal', 'technical', 'scientific'}:
                 return False
+
+        return True
+
+    def _check_temporal_filters(self, entry: Dict, filters: Dict) -> bool:
+        """Apply temporal filters (archaic, obsolete, dated, etc.).
+
+        This is the explicit version - separate from policy.modern_only.
+
+        Examples:
+          temporal:
+            exclude: [archaic, obsolete]
+          temporal:
+            include: [historical]  # Only historical words
+        """
+        if not filters:
+            return True
+
+        # Get temporal labels from entry
+        labels = entry.get('labels', {})
+        temporal_labels = set(labels.get('temporal', []))
+
+        # Include filter - must have at least one of these labels
+        if 'include' in filters:
+            include_set = set(filters['include'])
+            if not (temporal_labels & include_set):
+                return False
+
+        # Exclude filter - must NOT have any of these labels
+        if 'exclude' in filters:
+            exclude_set = set(filters['exclude'])
+            if temporal_labels & exclude_set:
+                return False
+
+        return True
+
+    def _check_sources_licensing_filter(self, entry: Dict, sources_filter: Dict) -> bool:
+        """Apply sources filter for licensing compliance.
+
+        The simplified format supports:
+          sources:
+            include: [wordnet, eowl]      # Word must exist in these sources
+            enrichment: [frequency]        # Allow using data from these sources
+
+        This enables generating word lists with specific license requirements.
+        """
+        if not sources_filter:
+            return True
+
+        entry_sources = set(entry.get('sources', []))
+
+        # Include filter - word must exist in at least one of these sources
+        if 'include' in sources_filter:
+            include_set = set(sources_filter['include'])
+            if not (entry_sources & include_set):
+                return False
+
+        # Note: 'enrichment' field is informational - it doesn't filter words,
+        # it just indicates which enrichment data is acceptable to use.
+        # The actual enrichment data is always in the entry; this field documents
+        # which sources' data the user considers acceptable for their licensing.
 
         return True
 
@@ -628,6 +800,178 @@ class OwlexFilter:
 
         return True
 
+    def get_senses_file(self) -> Optional[Path]:
+        """Determine senses JSONL file based on distribution."""
+        dist = self.spec['distribution']
+
+        # Try senses file in flat structure
+        candidates = [
+            Path(f'data/intermediate/{dist}-senses.jsonl'),
+            Path(f'data/intermediate/{dist}/senses.jsonl'),  # Legacy
+        ]
+
+        for path in candidates:
+            if path.exists():
+                return path
+
+        return None
+
+    def _requires_senses_data(self) -> bool:
+        """Check if any active filters require senses file data.
+
+        Senses file contains POS, labels (register_tags, temporal_tags, etc.)
+        which are NOT in the lexemes file.
+        """
+        filters = self.spec.get('filters', {})
+
+        # POS filters need senses
+        if filters.get('pos'):
+            return True
+
+        # Label filters need senses
+        if filters.get('labels'):
+            return True
+
+        # Temporal filters need senses
+        if filters.get('temporal'):
+            return True
+
+        # Policy filters expand to label checks
+        policy = filters.get('policy', {})
+        if policy.get('family_friendly') or policy.get('modern_only') or policy.get('no_jargon'):
+            return True
+
+        return False
+
+    def _augment_entry_for_filtering(self, entry: Dict, senses: List[Dict]) -> Dict:
+        """Augment a lexeme entry with aggregated senses data for filtering.
+
+        This adds fields that exist in senses but not in lexemes:
+        - pos: aggregated POS tags
+        - labels: aggregated register/temporal/domain/region labels
+        """
+        # Start with a copy of the entry
+        augmented = entry.copy()
+
+        if not senses:
+            return augmented
+
+        # Aggregate POS from senses
+        pos_set = set()
+        register_tags = set()
+        temporal_tags = set()
+        domain_tags = set()
+        region_tags = set()
+
+        for sense in senses:
+            if sense.get('pos'):
+                pos_set.add(sense['pos'])
+
+            # Aggregate label tags
+            if sense.get('register_tags'):
+                register_tags.update(sense['register_tags'])
+            if sense.get('temporal_tags'):
+                temporal_tags.update(sense['temporal_tags'])
+            if sense.get('domain_tags'):
+                domain_tags.update(sense['domain_tags'])
+            if sense.get('region_tags'):
+                region_tags.update(sense['region_tags'])
+
+        # Add aggregated POS
+        if pos_set:
+            augmented['pos'] = sorted(pos_set)
+
+        # Build labels structure matching filter expectations
+        labels = {}
+        if register_tags:
+            labels['register'] = sorted(register_tags)
+        if temporal_tags:
+            labels['temporal'] = sorted(temporal_tags)
+        if domain_tags:
+            labels['domain'] = sorted(domain_tags)
+        if region_tags:
+            labels['region'] = sorted(region_tags)
+
+        if labels:
+            augmented['labels'] = labels
+
+        return augmented
+
+    def load_senses_by_word(self, senses_path: Path) -> Dict[str, List[Dict]]:
+        """Load senses from JSONL file and group by word."""
+        senses_by_word: Dict[str, List[Dict]] = defaultdict(list)
+
+        with open(senses_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                try:
+                    sense = json.loads(line)
+                    word = sense.get('word')
+                    if word:
+                        senses_by_word[word].append(sense)
+                except json.JSONDecodeError:
+                    continue
+
+        return dict(senses_by_word)
+
+    def aggregate_entry_with_senses(self, entry: Dict, senses: List[Dict]) -> Dict:
+        """Aggregate an entry with its senses for enriched output.
+
+        Creates a combined view with:
+        - Word-level data from lexeme entry
+        - Aggregated POS array (unique values)
+        - Aggregated lemmas array (unique values)
+        - Full senses array with sense-level details
+        """
+        # Start with word-level data
+        result = {
+            'word': entry['word'],
+            'frequency_tier': entry.get('frequency_tier', 'Z'),
+            'sources': entry.get('sources', []),
+        }
+
+        # Add optional word-level fields if present
+        if 'syllables' in entry:
+            result['syllables'] = entry['syllables']
+        if 'concreteness' in entry:
+            result['concreteness'] = entry['concreteness']
+
+        # Aggregate POS from senses
+        pos_set = set()
+        lemmas_set = set()
+        sense_data = []
+
+        for sense in senses:
+            if sense.get('pos'):
+                pos_set.add(sense['pos'])
+
+            lemma = sense.get('lemma', entry['word'])
+            lemmas_set.add(lemma)
+
+            # Build sense detail object
+            sense_detail = {'pos': sense.get('pos')}
+            if sense.get('lemma') and sense['lemma'] != entry['word']:
+                sense_detail['lemma'] = sense['lemma']
+            if sense.get('is_inflected'):
+                sense_detail['is_inflected'] = True
+            if sense.get('definition'):
+                sense_detail['definition'] = sense['definition']
+
+            sense_data.append(sense_detail)
+
+        # Add aggregated arrays
+        if pos_set:
+            result['pos'] = sorted(pos_set)
+        if lemmas_set and lemmas_set != {entry['word']}:
+            result['lemmas'] = sorted(lemmas_set)
+
+        # Include senses array if there's meaningful data
+        if sense_data:
+            result['senses'] = sense_data
+
+        return result
+
     def calculate_score(self, entry: Dict) -> float:
         """Calculate score for an entry."""
         score = 0.0
@@ -737,14 +1081,48 @@ class OwlexFilter:
 
         return '\n'.join(entry['word'] for entry in entries)
 
-    def run(self, output_path: Optional[Path] = None, verbose: bool = False) -> int:
-        """Run the filter and generate output."""
+    def run(
+        self,
+        output_path: Optional[Path] = None,
+        enriched_path: Optional[Path] = None,
+        jq_expr: Optional[str] = None,
+        verbose: bool = False
+    ) -> int:
+        """Run the filter and generate output.
+
+        Args:
+            output_path: Path for plain text word list (one word per line)
+            enriched_path: Path for enriched JSONL with aggregated sense data
+            jq_expr: jq expression to apply to each enriched entry (requires jq)
+            verbose: Enable verbose logging
+        """
         input_file = self.get_input_file()
 
         if verbose:
             logger.info(f"Loading specification: {self.spec_path}")
             logger.info(f"Distribution: {self.spec['distribution']}")
             logger.info(f"Input file: {input_file}")
+
+        # Check if senses data is needed for filtering or enriched output
+        needs_senses_for_filtering = self._requires_senses_data()
+        needs_senses = needs_senses_for_filtering or enriched_path
+
+        # Load senses if needed
+        senses_by_word: Dict[str, List[Dict]] = {}
+        if needs_senses:
+            senses_file = self.get_senses_file()
+            if senses_file:
+                if verbose:
+                    reason = "filtering" if needs_senses_for_filtering else "enriched output"
+                    logger.info(f"Loading senses for {reason}: {senses_file}")
+                senses_by_word = self.load_senses_by_word(senses_file)
+                if verbose:
+                    logger.info(f"Loaded senses for {len(senses_by_word):,} words")
+            else:
+                if needs_senses_for_filtering:
+                    logger.warning("Senses file not found - POS/label filters may not work correctly")
+                else:
+                    logger.warning("Senses file not found - enriched output will have limited data")
 
         # Read and filter entries
         filtered = []
@@ -755,7 +1133,17 @@ class OwlexFilter:
                 total += 1
                 try:
                     entry = json.loads(line)
-                    if self.filter_entry(entry):
+
+                    # Augment entry with senses data if needed for filtering
+                    if needs_senses_for_filtering:
+                        word = entry.get('word', '')
+                        senses = senses_by_word.get(word, [])
+                        entry_for_filter = self._augment_entry_for_filtering(entry, senses)
+                    else:
+                        entry_for_filter = entry
+
+                    if self.filter_entry(entry_for_filter):
+                        # Store original entry (not augmented) for output
                         filtered.append(entry)
                 except json.JSONDecodeError:
                     if verbose:
@@ -782,65 +1170,163 @@ class OwlexFilter:
                             logger.warning("Warning: Description mentions profanity/family-friendly but no filter is set")
                             logger.warning("  -> Consider adding: filters.policy.family_friendly = true")
 
-        # Format output
-        output = self.format_output(filtered, verbose)
+        # Write enriched output if requested
+        if enriched_path:
+            enriched_path.parent.mkdir(parents=True, exist_ok=True)
+            self._write_enriched_output(filtered, senses_by_word, enriched_path, jq_expr, verbose)
 
-        # Write output
+        # Write plain text output if requested
         if output_path:
+            output = self.format_output(filtered, verbose)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             output_path.write_text(output + '\n')
             if verbose:
                 logger.info(f"Output written to: {output_path}")
-        else:
+
+        # If neither output specified, write to stdout (legacy behavior)
+        if not output_path and not enriched_path:
+            output = self.format_output(filtered, verbose)
             print(output)
 
         return 0
+
+    def _write_enriched_output(
+        self,
+        filtered: List[Dict],
+        senses_by_word: Dict[str, List[Dict]],
+        enriched_path: Path,
+        jq_expr: Optional[str],
+        verbose: bool
+    ) -> None:
+        """Write enriched JSONL output, optionally filtering through jq."""
+        # Aggregate entries with senses
+        enriched_entries = []
+        for entry in filtered:
+            word = entry['word']
+            senses = senses_by_word.get(word, [])
+            enriched = self.aggregate_entry_with_senses(entry, senses)
+            enriched_entries.append(enriched)
+
+        # If jq expression provided, pipe through jq
+        if jq_expr:
+            self._write_with_jq(enriched_entries, enriched_path, jq_expr, verbose)
+        else:
+            # Write directly
+            with open(enriched_path, 'w', encoding='utf-8') as f:
+                for entry in enriched_entries:
+                    f.write(json.dumps(entry, sort_keys=True) + '\n')
+
+        if verbose:
+            logger.info(f"Enriched output written to: {enriched_path}")
+
+    def _write_with_jq(
+        self,
+        entries: List[Dict],
+        output_path: Path,
+        jq_expr: str,
+        verbose: bool
+    ) -> None:
+        """Write entries through jq filter."""
+        # Check if jq is available
+        if not shutil.which('jq'):
+            logger.error("jq not found. Install jq or remove --jq flag.")
+            logger.error("  macOS: brew install jq")
+            logger.error("  Ubuntu: apt install jq")
+            sys.exit(1)
+
+        if verbose:
+            logger.info(f"Applying jq filter: {jq_expr}")
+
+        # Build JSONL input
+        jsonl_input = '\n'.join(json.dumps(e) for e in entries)
+
+        # Run jq with compact output (-c) for JSONL
+        try:
+            result = subprocess.run(
+                ['jq', '-c', jq_expr],
+                input=jsonl_input,
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            output_path.write_text(result.stdout)
+        except subprocess.CalledProcessError as e:
+            logger.error(f"jq error: {e.stderr}")
+            sys.exit(1)
 
 
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description='Filter word lists using JSON specifications',
+        description='Filter word lists using YAML/JSON specifications',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Generate filtered word list
-  owlex wordlist-spec.json
+  # Basic: word list only (to stdout)
+  owlex wordle.yaml
 
-  # Save to file
-  owlex wordlist-spec.json --output kids-words.txt
+  # Save word list to file
+  owlex wordle.yaml --output words.txt
 
-  # Verbose output
-  owlex wordlist-spec.json --verbose
+  # With enriched sidecar JSONL
+  owlex kids-nouns.yaml --output words.txt --enriched enriched.jsonl
 
-  # Create specification with web interface
-  open tools/wordlist-builder/web-builder.html
+  # Just enriched JSONL (no plain text)
+  owlex kids-nouns.yaml --enriched enriched.jsonl
+
+  # With inline jq projection
+  owlex kids-nouns.yaml --enriched syllables.jsonl --jq '{word, syllables}'
+
+  # Morphology lookup
+  owlex kids-nouns.yaml --enriched morph.jsonl --jq '{word, pos}'
         """
     )
 
     parser.add_argument(
         'spec',
         type=Path,
-        help='Path to JSON specification file'
+        help='Path to YAML or JSON specification file'
     )
 
     parser.add_argument(
         '-o', '--output',
         type=Path,
-        help='Output file path (default: stdout)'
+        help='Plain text word list output file (one word per line)'
+    )
+
+    parser.add_argument(
+        '-e', '--enriched',
+        type=Path,
+        help='Enriched JSONL output file with aggregated sense data'
+    )
+
+    parser.add_argument(
+        '--jq',
+        type=str,
+        metavar='EXPR',
+        help='jq expression to apply to each enriched entry (requires jq installed)'
     )
 
     parser.add_argument(
         '-v', '--verbose',
         action='store_true',
-        help='Verbose output'
+        help='Enable verbose output'
     )
 
     args = parser.parse_args()
 
+    # Validate --jq requires --enriched
+    if args.jq and not args.enriched:
+        parser.error("--jq requires --enriched output file")
+
     # Run filter
     filter_engine = OwlexFilter(args.spec)
-    return filter_engine.run(args.output, args.verbose)
+    return filter_engine.run(
+        output_path=args.output,
+        enriched_path=args.enriched,
+        jq_expr=args.jq,
+        verbose=args.verbose
+    )
 
 
 if __name__ == '__main__':

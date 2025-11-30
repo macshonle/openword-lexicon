@@ -1,0 +1,28 @@
+# Concrete nouns appropriate for children's games
+# Uses explicit filters instead of "policy" shortcut
+
+character:
+  min_length: 3
+  max_length: 10
+
+phrase:
+  max_words: 1  # single words only
+
+pos:
+  include: [noun]
+
+concreteness:
+  values: [concrete]
+
+frequency:
+  min_tier: A
+  max_tier: G  # top common words
+
+# Explicit family-friendly filters (replaces policy.family_friendly)
+labels:
+  register:
+    exclude: [vulgar, offensive, derogatory, slang]
+
+# Explicit modern-only filter (replaces policy.modern_only)
+temporal:
+  exclude: [archaic, obsolete, dated]

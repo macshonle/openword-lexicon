@@ -6,14 +6,14 @@ Computes comprehensive statistics from lexeme entries and generates a JSON file
 for the web-based word list builder to provide accurate estimates.
 
 Supports both:
-  - Two-file format: en-lexeme-enriched.jsonl (current pipeline)
+  - Two-file format: en-lexeme-enriched.jsonl + en-senses.jsonl (current pipeline)
   - Single-file format: entries with sources/labels/pos (owlex format)
 """
 
 import json
 import datetime
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List, Optional
 from collections import defaultdict
 
 
@@ -26,8 +26,83 @@ def detect_format(entries: Dict[str, dict]) -> str:
     return 'single_file'
 
 
-def compute_statistics_lexeme(entries: Dict[str, dict]) -> dict:
-    """Compute statistics from two-file lexeme format with multi-source support."""
+def load_senses_by_word(senses_path: Path) -> Dict[str, List[dict]]:
+    """
+    Load senses from JSONL file and group by word.
+
+    Returns:
+        Dictionary mapping word -> list of sense entries
+    """
+    senses_by_word: Dict[str, List[dict]] = defaultdict(list)
+
+    with open(senses_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            if not line.strip():
+                continue
+            try:
+                sense = json.loads(line)
+                word = sense.get('word')
+                if word:
+                    senses_by_word[word].append(sense)
+            except json.JSONDecodeError:
+                continue
+
+    return dict(senses_by_word)
+
+
+def aggregate_sense_stats(senses: List[dict]) -> dict:
+    """
+    Aggregate statistics from multiple senses for a single word.
+
+    Returns dict with:
+        - pos: list of unique POS tags
+        - has_register: bool
+        - has_domain: bool
+        - has_region: bool
+        - has_temporal: bool
+        - register_tags: list of all register tags
+        - domain_tags: list of all domain tags
+        - region_tags: list of all region tags
+        - temporal_tags: list of all temporal tags
+    """
+    pos_set = set()
+    register_tags = []
+    domain_tags = []
+    region_tags = []
+    temporal_tags = []
+
+    for sense in senses:
+        # POS
+        pos = sense.get('pos')
+        if pos:
+            pos_set.add(pos)
+
+        # Tags - aggregate all
+        register_tags.extend(sense.get('register_tags', []))
+        domain_tags.extend(sense.get('domain_tags', []))
+        region_tags.extend(sense.get('region_tags', []))
+        temporal_tags.extend(sense.get('temporal_tags', []))
+
+    return {
+        'pos': list(pos_set),
+        'has_register': len(register_tags) > 0,
+        'has_domain': len(domain_tags) > 0,
+        'has_region': len(region_tags) > 0,
+        'has_temporal': len(temporal_tags) > 0,
+        'register_tags': register_tags,
+        'domain_tags': domain_tags,
+        'region_tags': region_tags,
+        'temporal_tags': temporal_tags,
+    }
+
+
+def compute_statistics_lexeme(entries: Dict[str, dict], senses_by_word: Optional[Dict[str, List[dict]]] = None) -> dict:
+    """Compute statistics from two-file lexeme format with multi-source support.
+
+    Args:
+        entries: Dictionary of lexeme entries (word -> entry dict)
+        senses_by_word: Optional dictionary of senses grouped by word (from senses file)
+    """
     stats = {
         'total_words': len(entries),
         'generated_at': None,
@@ -36,7 +111,7 @@ def compute_statistics_lexeme(entries: Dict[str, dict]) -> dict:
         'metadata_coverage': {},
         'metadata_by_source': {},  # Metadata coverage broken down by source
         'enrichment_impact': {},
-        'pos_distribution': {},  # POS is in senses file, not available here
+        'pos_distribution': {},
         'frequency_distribution': {},
         'concreteness_distribution': {},
         'label_categories': {},
@@ -46,6 +121,7 @@ def compute_statistics_lexeme(entries: Dict[str, dict]) -> dict:
     concrete_counts = defaultdict(int)
     source_counts = defaultdict(int)
     source_combo_counts = defaultdict(lambda: {'count': 0, 'licenses': set()})
+    pos_counts = defaultdict(int)
 
     # Per-source metadata tracking
     source_metadata = defaultdict(lambda: {
@@ -54,6 +130,8 @@ def compute_statistics_lexeme(entries: Dict[str, dict]) -> dict:
         'with_frequency': 0,
         'with_syllables': 0,
         'with_senses': 0,
+        'with_pos': 0,
+        'with_labels': 0,
     })
 
     with_syllables = 0
@@ -62,8 +140,23 @@ def compute_statistics_lexeme(entries: Dict[str, dict]) -> dict:
     multi_word = 0
     total_senses = 0
 
+    # Sense-level counters (from senses file)
+    with_pos = 0
+    with_any_labels = 0
+    with_register = 0
+    with_domain = 0
+    with_region = 0
+    with_temporal = 0
+    label_category_counts = {
+        'register': defaultdict(int),
+        'domain': defaultdict(int),
+        'region': defaultdict(int),
+        'temporal': defaultdict(int),
+    }
+
     entries_list = entries.values() if isinstance(entries, dict) else entries
     for entry in entries_list:
+        word = entry.get('word', '')
         # Source tracking
         sources = entry.get('sources', ['wikt'])  # Default to wikt for backwards compat
         sources_key = ','.join(sorted(sources))
@@ -112,6 +205,47 @@ def compute_statistics_lexeme(entries: Dict[str, dict]) -> dict:
             for src in sources:
                 source_metadata[src]['with_senses'] += 1
 
+        # Process sense-level data if available
+        if senses_by_word and word in senses_by_word:
+            word_senses = senses_by_word[word]
+            sense_stats = aggregate_sense_stats(word_senses)
+
+            # POS
+            if sense_stats['pos']:
+                with_pos += 1
+                for pos in sense_stats['pos']:
+                    pos_counts[pos] += 1
+                for src in sources:
+                    source_metadata[src]['with_pos'] += 1
+
+            # Labels
+            has_labels = (sense_stats['has_register'] or sense_stats['has_domain'] or
+                         sense_stats['has_region'] or sense_stats['has_temporal'])
+            if has_labels:
+                with_any_labels += 1
+                for src in sources:
+                    source_metadata[src]['with_labels'] += 1
+
+            if sense_stats['has_register']:
+                with_register += 1
+                for tag in sense_stats['register_tags']:
+                    label_category_counts['register'][tag] += 1
+
+            if sense_stats['has_domain']:
+                with_domain += 1
+                for tag in sense_stats['domain_tags']:
+                    label_category_counts['domain'][tag] += 1
+
+            if sense_stats['has_region']:
+                with_region += 1
+                for tag in sense_stats['region_tags']:
+                    label_category_counts['region'][tag] += 1
+
+            if sense_stats['has_temporal']:
+                with_temporal += 1
+                for tag in sense_stats['temporal_tags']:
+                    label_category_counts['temporal'][tag] += 1
+
     total = stats['total_words']
 
     # Convert source counts
@@ -149,6 +283,14 @@ def compute_statistics_lexeme(entries: Dict[str, dict]) -> dict:
                 'count': meta['with_senses'],
                 'percentage': round(100 * meta['with_senses'] / src_total, 1) if src_total > 0 else 0
             },
+            'pos_tags': {
+                'count': meta['with_pos'],
+                'percentage': round(100 * meta['with_pos'] / src_total, 1) if src_total > 0 else 0
+            },
+            'any_labels': {
+                'count': meta['with_labels'],
+                'percentage': round(100 * meta['with_labels'] / src_total, 1) if src_total > 0 else 0
+            },
         }
 
     stats['metadata_coverage'] = {
@@ -172,23 +314,60 @@ def compute_statistics_lexeme(entries: Dict[str, dict]) -> dict:
             'count': total_senses,
             'avg_per_word': round(total_senses / total, 2) if total > 0 else 0
         },
-        # Fields for UI compatibility
-        'pos_tags': {'count': 0, 'percentage': 0},
-        'any_labels': {'count': 0, 'percentage': 0},
+        'pos_tags': {
+            'count': with_pos,
+            'percentage': round(100 * with_pos / total, 1) if total > 0 else 0
+        },
+        'any_labels': {
+            'count': with_any_labels,
+            'percentage': round(100 * with_any_labels / total, 1) if total > 0 else 0
+        },
+        'register_labels': {
+            'count': with_register,
+            'percentage': round(100 * with_register / total, 1) if total > 0 else 0
+        },
+        'domain_labels': {
+            'count': with_domain,
+            'percentage': round(100 * with_domain / total, 1) if total > 0 else 0
+        },
+        'region_labels': {
+            'count': with_region,
+            'percentage': round(100 * with_region / total, 1) if total > 0 else 0
+        },
+        'temporal_labels': {
+            'count': with_temporal,
+            'percentage': round(100 * with_temporal / total, 1) if total > 0 else 0
+        },
     }
+
+    # POS distribution (top 10)
+    stats['pos_distribution'] = dict(
+        sorted(pos_counts.items(), key=lambda x: -x[1])[:10]
+    )
 
     stats['frequency_distribution'] = dict(sorted(freq_counts.items()))
     stats['concreteness_distribution'] = dict(concrete_counts)
 
+    # Label categories (top 10 per category)
+    stats['label_categories'] = {
+        category: dict(sorted(counts.items(), key=lambda x: -x[1])[:10])
+        for category, counts in label_category_counts.items()
+    }
+
     return stats
 
 
-def compute_statistics(entries: Dict[str, dict]) -> dict:
-    """Compute comprehensive statistics from entries (auto-detects format)."""
+def compute_statistics(entries: Dict[str, dict], senses_by_word: Optional[Dict[str, List[dict]]] = None) -> dict:
+    """Compute comprehensive statistics from entries (auto-detects format).
+
+    Args:
+        entries: Dictionary of word entries (word -> entry dict)
+        senses_by_word: Optional dictionary of senses grouped by word (for two-file format)
+    """
     # Detect format and dispatch
     fmt = detect_format(entries)
     if fmt == 'lexeme':
-        return compute_statistics_lexeme(entries)
+        return compute_statistics_lexeme(entries, senses_by_word)
 
     # Single-file format processing below
     stats = {
@@ -527,19 +706,24 @@ def compute_statistics(entries: Dict[str, dict]) -> dict:
     return stats
 
 
-def generate_and_write_statistics(entries: Dict[str, dict], output_path: Path) -> dict:
+def generate_and_write_statistics(
+    entries: Dict[str, dict],
+    output_path: Path,
+    senses_by_word: Optional[Dict[str, List[dict]]] = None
+) -> dict:
     """
     Generate statistics from entries and write to JSON file.
 
     Args:
         entries: Dictionary of word entries (word -> entry dict)
         output_path: Path to write JSON statistics file
+        senses_by_word: Optional dictionary of senses grouped by word (for two-file format)
 
     Returns:
         Statistics dictionary (same as what's written to file)
     """
     # Compute statistics
-    stats = compute_statistics(entries)
+    stats = compute_statistics(entries, senses_by_word)
 
     # Add timestamp
     stats['generated_at'] = datetime.datetime.now().isoformat()
