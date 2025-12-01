@@ -1,0 +1,38 @@
+<page>
+    <title>-xizu-</title>
+    <ns>0</ns>
+    <id>1668571</id>
+    <revision>
+      <id>82004351</id>
+      <parentid>76290480</parentid>
+      <timestamp>2024-09-27T12:53:27Z</timestamp>
+      <contributor>
+        <username>WingerBot</username>
+        <id>2024159</id>
+      </contributor>
+      <minor />
+      <comment>templatize topical categories for langcode=en using {{C}}</comment>
+      <origin>82004351</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="427" sha1="20a2ly7hb8rf1hy8ihl14p4zwaeznva" xml:space="preserve">==English==
+
+===Etymology===
+From {{affix|en|-xi-|-zu-}}.
+
+===Infix===
+{{head|en|infix}}
+
+# {{lb|en|pharmacology}} A hybrid [[monoclonal antibody]], derived from both [[chimeric]] and [[humanized]] sources.
+
+====Derived terms====
+* {{l|en|dorlixizumab}}
+* {{l|en|otelixizumab}}
+
+====Related terms====
+* {{l|en|-mab}} is the base suffix common to all monoclonal antibodies. (See that entry for full paradigm.)
+
+{{C|en|Medicine}}</text>
+      <sha1>20a2ly7hb8rf1hy8ihl14p4zwaeznva</sha1>
+    </revision>
+  </page>
