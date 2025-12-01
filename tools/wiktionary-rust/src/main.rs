@@ -1174,6 +1174,122 @@ fn strip_wikilinks(s: &str) -> String {
     }
 }
 
+/// Classify morphology components and build a unified Morphology result.
+///
+/// Classification is purely based on hyphen patterns:
+/// - Ends with '-' (but doesn't start with '-'): prefix
+/// - Starts with '-' (but doesn't end with '-'): suffix
+/// - Starts and ends with '-': interfix
+/// - No hyphens: base word
+fn classify_morphology(components: Vec<String>, etymology_template: String) -> Morphology {
+    // Classify components by hyphen pattern in a single pass
+    let (prefixes, suffixes, interfixes, bases) = components.iter().fold(
+        (Vec::new(), Vec::new(), Vec::new(), Vec::new()),
+        |(mut pre, mut suf, mut inter, mut base), c| {
+            match (c.starts_with('-'), c.ends_with('-')) {
+                (false, true) => pre.push(c.clone()),   // prefix: "un-"
+                (true, false) => suf.push(c.clone()),   // suffix: "-ness"
+                (true, true) => inter.push(c.clone()),  // interfix: "-s-"
+                (false, false) => base.push(c.clone()), // base: "happy"
+            }
+            (pre, suf, inter, base)
+        },
+    );
+
+    // Determine morphology type based on what we found
+    let has_prefix = !prefixes.is_empty();
+    let has_suffix = !suffixes.is_empty();
+
+    let (morph_type, is_compound) = match (has_prefix, has_suffix) {
+        (true, true) => ("affixed", false),
+        (true, false) => ("prefixed", false),
+        (false, true) => ("suffixed", false),
+        (false, false) if bases.len() >= 2 => ("compound", true),
+        _ => ("simple", false),
+    };
+
+    // Determine base word
+    // For derivations: first base word is the root
+    // For compounds: no single base (all parts are equal constituents)
+    let base = if !is_compound { bases.first().cloned() } else { None };
+
+    Morphology {
+        morph_type: morph_type.to_string(),
+        base,
+        components,
+        prefixes,
+        suffixes,
+        interfixes,
+        is_compound,
+        etymology_template,
+    }
+}
+
+/// Extract normalized morphology components from any etymology template.
+///
+/// Tries each template type in priority order and normalizes to a common
+/// component format where affixes are marked with hyphens.
+///
+/// Returns (components, raw_template) or None if no template found.
+fn extract_morphology_components(etymology_text: &str) -> Option<(Vec<String>, String)> {
+    // 1. Try suffix template: {{suffix|en|base|suffix}}
+    if let Some(cap) = SUFFIX_TEMPLATE.captures(etymology_text) {
+        let base = strip_wikilinks(cap[1].trim());
+        let mut suffix = strip_wikilinks(cap[2].trim());
+        // Normalize: add leading hyphen if missing
+        if !suffix.starts_with('-') {
+            suffix = format!("-{}", suffix);
+        }
+        return Some((vec![base, suffix], cap[0].to_string()));
+    }
+
+    // 2. Try prefix template: {{prefix|en|prefix|base}}
+    if let Some(cap) = PREFIX_TEMPLATE.captures(etymology_text) {
+        let mut prefix = strip_wikilinks(cap[1].trim());
+        let base = strip_wikilinks(cap[2].trim());
+        // Normalize: add trailing hyphen if missing
+        if !prefix.ends_with('-') {
+            prefix = format!("{}-", prefix);
+        }
+        return Some((vec![prefix, base], cap[0].to_string()));
+    }
+
+    // 3. Try confix template: {{confix|en|prefix|base|suffix}}
+    if let Some(cap) = CONFIX_TEMPLATE.captures(etymology_text) {
+        let mut prefix = strip_wikilinks(cap[1].trim());
+        let base = strip_wikilinks(cap[2].trim());
+        let mut suffix = strip_wikilinks(cap[3].trim());
+        // Normalize affix hyphens
+        if !prefix.ends_with('-') {
+            prefix = format!("{}-", prefix);
+        }
+        if !suffix.starts_with('-') {
+            suffix = format!("-{}", suffix);
+        }
+        return Some((vec![prefix, base, suffix], cap[0].to_string()));
+    }
+
+    // 4-6. Try variable-arg templates: compound, affix, surf
+    // These use parse_template_params for bracket-aware parsing
+    for template_re in [&*COMPOUND_TEMPLATE, &*AFFIX_TEMPLATE, &*SURF_TEMPLATE] {
+        if let Some(cap) = template_re.captures(etymology_text) {
+            let parts = parse_template_params(&cap[1]);
+            let components = clean_template_components(&parts);
+            if components.len() >= 2 {
+                return Some((components, cap[0].to_string()));
+            }
+        }
+    }
+
+    None
+}
+
+/// Extract morphological structure from Wiktionary etymology sections.
+///
+/// This is the main entry point for morphology extraction. It uses a unified
+/// approach that:
+/// 1. Extracts and normalizes components from any morphology template
+/// 2. Classifies the morphology type based on hyphen patterns
 fn extract_morphology(text: &str) -> Option<Morphology> {
     let etym_match = ETYMOLOGY_SECTION.captures(text)?;
     let mut etymology_text = etym_match[1].to_string();
@@ -1184,161 +1300,31 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
 
     let etymology_text = etymology_text.as_str();
 
-    // Try suffix template
-    if let Some(cap) = SUFFIX_TEMPLATE.captures(etymology_text) {
-        let base = strip_wikilinks(cap[1].trim());
-        let mut suffix = strip_wikilinks(cap[2].trim());
-        if !suffix.starts_with('-') {
-            suffix = format!("-{}", suffix);
-        }
-        return Some(Morphology {
-            morph_type: "suffixed".to_string(),
-            base: Some(base.clone()),
-            components: vec![base, suffix.clone()],
-            prefixes: vec![],
-            suffixes: vec![suffix],
-            interfixes: vec![],
-            is_compound: false,
-            etymology_template: cap[0].to_string(),
-        });
-    }
+    // Extract and normalize components from any template type
+    let (components, template_str) = extract_morphology_components(etymology_text)?;
 
-    // Try prefix template
-    if let Some(cap) = PREFIX_TEMPLATE.captures(etymology_text) {
-        let mut prefix = strip_wikilinks(cap[1].trim());
-        let base = strip_wikilinks(cap[2].trim());
-        if !prefix.ends_with('-') {
-            prefix = format!("{}-", prefix);
-        }
-        return Some(Morphology {
-            morph_type: "prefixed".to_string(),
-            base: Some(base.clone()),
-            components: vec![prefix.clone(), base],
-            prefixes: vec![prefix],
-            suffixes: vec![],
-            interfixes: vec![],
-            is_compound: false,
-            etymology_template: cap[0].to_string(),
-        });
-    }
+    // Special case: confix template should be classified as 'circumfixed'
+    // We detect this by checking if the template is confix
+    if template_str.to_lowercase().contains("confix") {
+        // Build circumfixed result directly
+        let prefix = components.get(0).cloned().unwrap_or_default();
+        let base = components.get(1).cloned();
+        let suffix = components.get(2).cloned();
 
-    // Try confix template
-    if let Some(cap) = CONFIX_TEMPLATE.captures(etymology_text) {
-        let mut prefix = strip_wikilinks(cap[1].trim());
-        let base = strip_wikilinks(cap[2].trim());
-        let mut suffix = strip_wikilinks(cap[3].trim());
-        if !prefix.ends_with('-') {
-            prefix = format!("{}-", prefix);
-        }
-        if !suffix.starts_with('-') {
-            suffix = format!("-{}", suffix);
-        }
         return Some(Morphology {
             morph_type: "circumfixed".to_string(),
-            base: Some(base.clone()),
-            components: vec![prefix.clone(), base, suffix.clone()],
+            base,
+            components,
             prefixes: vec![prefix],
-            suffixes: vec![suffix],
+            suffixes: suffix.map(|s| vec![s]).unwrap_or_default(),
             interfixes: vec![],
             is_compound: false,
-            etymology_template: cap[0].to_string(),
+            etymology_template: template_str,
         });
     }
 
-    // Try compound template
-    if let Some(cap) = COMPOUND_TEMPLATE.captures(etymology_text) {
-        // Parse with bracket-aware parser (handles [[wikilinks]] and {{nested templates}})
-        let parts = parse_template_params(&cap[1]);
-        // Clean parameters (filter out key=value, language prefixes, etc.)
-        let components = clean_template_components(&parts);
-        if components.len() >= 2 {
-            // Extract interfixes (components with both leading and trailing hyphens)
-            let interfixes: Vec<String> = components
-                .iter()
-                .filter(|c| c.starts_with('-') && c.ends_with('-'))
-                .cloned()
-                .collect();
-            return Some(Morphology {
-                morph_type: "compound".to_string(),
-                base: None,
-                components,
-                prefixes: vec![],
-                suffixes: vec![],
-                interfixes,
-                is_compound: true,
-                etymology_template: cap[0].to_string(),
-            });
-        }
-    }
-
-    // Try affix or surf templates
-    for (template_re, _template_name) in [(&*AFFIX_TEMPLATE, "affix"), (&*SURF_TEMPLATE, "surf")] {
-        if let Some(cap) = template_re.captures(etymology_text) {
-            // Parse with bracket-aware parser (handles [[wikilinks]] and {{nested templates}})
-            let parts = parse_template_params(&cap[1]);
-            // Clean parameters (filter out key=value, language prefixes, etc.)
-            let components = clean_template_components(&parts);
-
-            if components.len() >= 2 {
-                let prefixes: Vec<String> = components
-                    .iter()
-                    .filter(|c| c.ends_with('-') && !c.starts_with('-'))
-                    .cloned()
-                    .collect();
-
-                let suffixes: Vec<String> = components
-                    .iter()
-                    .filter(|c| c.starts_with('-') && !c.ends_with('-'))
-                    .cloned()
-                    .collect();
-
-                // Interfixes have both leading and trailing hyphens (e.g., -s-, -i-)
-                let interfixes: Vec<String> = components
-                    .iter()
-                    .filter(|c| c.starts_with('-') && c.ends_with('-'))
-                    .cloned()
-                    .collect();
-
-                let bases: Vec<String> = components
-                    .iter()
-                    .filter(|c| !c.starts_with('-') && !c.ends_with('-'))
-                    .cloned()
-                    .collect();
-
-                let (morph_type, is_compound, base) = if !prefixes.is_empty() && !suffixes.is_empty() {
-                    ("affixed", false, bases.first().cloned())
-                } else if !prefixes.is_empty() {
-                    ("prefixed", false, bases.first().cloned())
-                } else if !suffixes.is_empty() {
-                    ("suffixed", false, bases.first().cloned())
-                } else if !interfixes.is_empty() && bases.len() >= 2 {
-                    // Compound with interfixes (e.g., "beeswax" = bee + -s- + wax)
-                    ("compound", true, None)
-                } else if bases.len() >= 2 {
-                    ("compound", true, None)
-                } else if !bases.is_empty() || !interfixes.is_empty() {
-                    // Single base with interfix(es), or only interfixes
-                    // e.g., {{af|en|oxygen|-o-}} or {{affix|en|-xi-|-zu-}}
-                    ("simple", false, bases.first().cloned())
-                } else {
-                    continue;
-                };
-
-                return Some(Morphology {
-                    morph_type: morph_type.to_string(),
-                    base,
-                    components,
-                    prefixes,
-                    suffixes,
-                    interfixes,
-                    is_compound,
-                    etymology_template: cap[0].to_string(),
-                });
-            }
-        }
-    }
-
-    None
+    // Classify morphology based on component hyphen patterns
+    Some(classify_morphology(components, template_str))
 }
 
 /// Parse a page and return multiple entries (one per sense)
@@ -2325,5 +2311,198 @@ mod wikitext_parser_tests {
         assert_eq!(tmpl.name, "outer");
         // Inner template is parsed but its text is discarded
         assert_eq!(tmpl.params, vec![""]);
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tests for Morphology Extraction
+// ─────────────────────────────────────────────────────────────────────────────
+
+#[cfg(test)]
+mod morphology_tests {
+    use super::*;
+
+    // ─────────────────────────────────────────────────────────────
+    // classify_morphology tests
+    // ─────────────────────────────────────────────────────────────
+
+    #[test]
+    fn classify_suffixed() {
+        let result = classify_morphology(
+            vec!["happy".to_string(), "-ness".to_string()],
+            "{{test}}".to_string()
+        );
+        assert_eq!(result.morph_type, "suffixed");
+        assert_eq!(result.base, Some("happy".to_string()));
+        assert_eq!(result.suffixes, vec!["-ness"]);
+        assert!(!result.is_compound);
+    }
+
+    #[test]
+    fn classify_prefixed() {
+        let result = classify_morphology(
+            vec!["un-".to_string(), "happy".to_string()],
+            "{{test}}".to_string()
+        );
+        assert_eq!(result.morph_type, "prefixed");
+        assert_eq!(result.base, Some("happy".to_string()));
+        assert_eq!(result.prefixes, vec!["un-"]);
+        assert!(!result.is_compound);
+    }
+
+    #[test]
+    fn classify_affixed() {
+        let result = classify_morphology(
+            vec!["un-".to_string(), "break".to_string(), "-able".to_string()],
+            "{{test}}".to_string()
+        );
+        assert_eq!(result.morph_type, "affixed");
+        assert_eq!(result.base, Some("break".to_string()));
+        assert_eq!(result.prefixes, vec!["un-"]);
+        assert_eq!(result.suffixes, vec!["-able"]);
+        assert!(!result.is_compound);
+    }
+
+    #[test]
+    fn classify_compound() {
+        let result = classify_morphology(
+            vec!["sun".to_string(), "flower".to_string()],
+            "{{test}}".to_string()
+        );
+        assert_eq!(result.morph_type, "compound");
+        assert_eq!(result.base, None);
+        assert!(result.is_compound);
+    }
+
+    #[test]
+    fn classify_compound_with_interfix() {
+        let result = classify_morphology(
+            vec!["bee".to_string(), "-s-".to_string(), "wax".to_string()],
+            "{{test}}".to_string()
+        );
+        assert_eq!(result.morph_type, "compound");
+        assert_eq!(result.base, None);
+        assert_eq!(result.interfixes, vec!["-s-"]);
+        assert!(result.is_compound);
+    }
+
+    #[test]
+    fn classify_multiple_suffixes() {
+        let result = classify_morphology(
+            vec!["dict".to_string(), "-ion".to_string(), "-ary".to_string()],
+            "{{test}}".to_string()
+        );
+        assert_eq!(result.suffixes, vec!["-ion", "-ary"]);
+        assert_eq!(result.base, Some("dict".to_string()));
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // extract_morphology tests
+    // ─────────────────────────────────────────────────────────────
+
+    #[test]
+    fn extract_suffix_template() {
+        let text = "===Etymology===\n{{suffix|en|happy|ness}}";
+        let result = extract_morphology(text).unwrap();
+        assert_eq!(result.morph_type, "suffixed");
+        assert_eq!(result.components, vec!["happy", "-ness"]);
+        assert_eq!(result.base, Some("happy".to_string()));
+    }
+
+    #[test]
+    fn extract_prefix_template() {
+        let text = "===Etymology===\n{{prefix|en|un|happy}}";
+        let result = extract_morphology(text).unwrap();
+        assert_eq!(result.morph_type, "prefixed");
+        assert_eq!(result.components, vec!["un-", "happy"]);
+        assert_eq!(result.base, Some("happy".to_string()));
+    }
+
+    #[test]
+    fn extract_confix_template() {
+        let text = "===Etymology===\n{{confix|en|en|light|ment}}";
+        let result = extract_morphology(text).unwrap();
+        assert_eq!(result.morph_type, "circumfixed");
+        assert_eq!(result.components, vec!["en-", "light", "-ment"]);
+        assert_eq!(result.base, Some("light".to_string()));
+    }
+
+    #[test]
+    fn extract_compound_template() {
+        let text = "===Etymology===\n{{compound|en|sun|flower}}";
+        let result = extract_morphology(text).unwrap();
+        assert_eq!(result.morph_type, "compound");
+        assert_eq!(result.components, vec!["sun", "flower"]);
+        assert!(result.is_compound);
+    }
+
+    #[test]
+    fn extract_affix_template_suffixed() {
+        let text = "===Etymology===\n{{af|en|happy|-ness}}";
+        let result = extract_morphology(text).unwrap();
+        assert_eq!(result.morph_type, "suffixed");
+        assert_eq!(result.components, vec!["happy", "-ness"]);
+    }
+
+    #[test]
+    fn extract_affix_template_prefixed() {
+        let text = "===Etymology===\n{{af|en|un-|happy}}";
+        let result = extract_morphology(text).unwrap();
+        assert_eq!(result.morph_type, "prefixed");
+        assert_eq!(result.components, vec!["un-", "happy"]);
+    }
+
+    #[test]
+    fn extract_affix_template_affixed() {
+        let text = "===Etymology===\n{{af|en|un-|break|-able}}";
+        let result = extract_morphology(text).unwrap();
+        assert_eq!(result.morph_type, "affixed");
+        assert_eq!(result.prefixes, vec!["un-"]);
+        assert_eq!(result.suffixes, vec!["-able"]);
+    }
+
+    #[test]
+    fn extract_affix_template_compound() {
+        let text = "===Etymology===\n{{af|en|sun|flower}}";
+        let result = extract_morphology(text).unwrap();
+        assert_eq!(result.morph_type, "compound");
+        assert!(result.is_compound);
+    }
+
+    #[test]
+    fn extract_surf_template() {
+        let text = "===Etymology===\n{{surf|en|heli|copter}}";
+        let result = extract_morphology(text).unwrap();
+        assert_eq!(result.morph_type, "compound");
+        assert_eq!(result.components, vec!["heli", "copter"]);
+    }
+
+    #[test]
+    fn extract_with_wikilinks() {
+        let text = "===Etymology===\n{{af|en|[[isle|Isle]]|of|[[Man#Etymology 2|Man]]}}";
+        let result = extract_morphology(text).unwrap();
+        assert_eq!(result.components, vec!["Isle", "of", "Man"]);
+    }
+
+    #[test]
+    fn extract_speedometer() {
+        let text = "===Etymology===\n{{af|en|speed|-o-|meter}}";
+        let result = extract_morphology(text).unwrap();
+        assert_eq!(result.morph_type, "compound");
+        assert_eq!(result.interfixes, vec!["-o-"]);
+    }
+
+    #[test]
+    fn no_etymology_section() {
+        let text = "===Pronunciation===\nSome pronunciation info";
+        let result = extract_morphology(text);
+        assert!(result.is_none());
+    }
+
+    #[test]
+    fn no_morphology_template() {
+        let text = "===Etymology===\nFrom Old English word.";
+        let result = extract_morphology(text);
+        assert!(result.is_none());
     }
 }

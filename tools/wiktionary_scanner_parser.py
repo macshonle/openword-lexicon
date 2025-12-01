@@ -28,7 +28,7 @@ import time
 import unicodedata as ud
 from pathlib import Path
 from dataclasses import dataclass
-from typing import Dict, List, Set, Optional
+from typing import Dict, List, Set, Optional, Tuple
 from rich.live import Live
 from rich.table import Table
 from rich.panel import Panel
@@ -936,7 +936,7 @@ def extract_syllable_count_from_ipa(text: str) -> Optional[int]:
     return count
 
 
-def clean_template_components(parts: List[str], template_type: str = 'affix') -> List[str]:
+def clean_template_components(parts: List[str]) -> List[str]:
     """
     Clean template parameters to extract only morphological components.
 
@@ -948,7 +948,6 @@ def clean_template_components(parts: List[str], template_type: str = 'affix') ->
 
     Args:
         parts: Component parts from template parsing (wikilinks already extracted)
-        template_type: Type of template being cleaned ('affix', 'compound', etc.)
 
     Returns:
         List of clean morphological components only
@@ -1006,12 +1005,142 @@ def clean_template_components(parts: List[str], template_type: str = 'affix') ->
     return cleaned
 
 
+def classify_morphology(components: List[str], etymology_template: str) -> Dict:
+    """
+    Classify morphology components and build a unified Morphology result.
+
+    Classification is purely based on hyphen patterns:
+    - Ends with '-' (but doesn't start with '-'): prefix
+    - Starts with '-' (but doesn't end with '-'): suffix
+    - Starts and ends with '-': interfix
+    - No hyphens: base word
+
+    Args:
+        components: List of cleaned morphological components
+        etymology_template: Raw template string for reference
+
+    Returns:
+        Dictionary with unified morphology structure
+    """
+    # Classify components by hyphen pattern
+    prefixes = [c for c in components if c.endswith('-') and not c.startswith('-')]
+    suffixes = [c for c in components if c.startswith('-') and not c.endswith('-')]
+    interfixes = [c for c in components if c.startswith('-') and c.endswith('-')]
+    bases = [c for c in components if not c.startswith('-') and not c.endswith('-')]
+
+    # Determine morphology type based on what we found
+    if prefixes and suffixes:
+        morph_type = 'affixed'
+    elif prefixes:
+        morph_type = 'prefixed'
+    elif suffixes:
+        morph_type = 'suffixed'
+    elif len(bases) >= 2:
+        morph_type = 'compound'
+    else:
+        morph_type = 'simple'
+
+    # Determine base word
+    # For derivations: first base word is the root
+    # For compounds: no single base (all parts are equal constituents)
+    is_compound = morph_type == 'compound'
+    base = bases[0] if bases and not is_compound else None
+
+    # Build result
+    result = {
+        'type': morph_type,
+        'components': components,
+        'prefixes': prefixes,
+        'suffixes': suffixes,
+        'is_compound': is_compound,
+        'etymology_template': etymology_template
+    }
+
+    # Add optional fields only if present
+    if base:
+        result['base'] = base
+    if interfixes:
+        result['interfixes'] = interfixes
+
+    return result
+
+
+def extract_morphology_components(etymology_text: str) -> Optional[Tuple[List[str], str]]:
+    """
+    Extract normalized morphology components from any etymology template.
+
+    Tries each template type in priority order and normalizes to a common
+    component format where affixes are marked with hyphens.
+
+    Templates handled (in priority order):
+    1. {{suffix|en|base|suffix}} - Fixed positional args
+    2. {{prefix|en|prefix|base}} - Fixed positional args
+    3. {{confix|en|prefix|base|suffix}} - Fixed positional args
+    4. {{compound|en|...}} - Variable args
+    5. {{affix|en|...}} or {{af|en|...}} - Variable args
+    6. {{surf|en|...}} - Variable args
+
+    Args:
+        etymology_text: The etymology section text to search
+
+    Returns:
+        Tuple of (components, raw_template) or None if no template found.
+        Components are normalized with hyphens indicating affix type.
+    """
+    # 1. Try suffix template: {{suffix|en|base|suffix}}
+    match = SUFFIX_TEMPLATE.search(etymology_text)
+    if match:
+        base = strip_wikilinks(match.group(1).strip())
+        suffix = strip_wikilinks(match.group(2).strip())
+        # Normalize: add leading hyphen if missing
+        if not suffix.startswith('-'):
+            suffix = f'-{suffix}'
+        return [base, suffix], match.group(0)
+
+    # 2. Try prefix template: {{prefix|en|prefix|base}}
+    match = PREFIX_TEMPLATE.search(etymology_text)
+    if match:
+        prefix = strip_wikilinks(match.group(1).strip())
+        base = strip_wikilinks(match.group(2).strip())
+        # Normalize: add trailing hyphen if missing
+        if not prefix.endswith('-'):
+            prefix = f'{prefix}-'
+        return [prefix, base], match.group(0)
+
+    # 3. Try confix template: {{confix|en|prefix|base|suffix}}
+    match = CONFIX_TEMPLATE.search(etymology_text)
+    if match:
+        prefix = strip_wikilinks(match.group(1).strip())
+        base = strip_wikilinks(match.group(2).strip())
+        suffix = strip_wikilinks(match.group(3).strip())
+        # Normalize affix hyphens
+        if not prefix.endswith('-'):
+            prefix = f'{prefix}-'
+        if not suffix.startswith('-'):
+            suffix = f'-{suffix}'
+        return [prefix, base, suffix], match.group(0)
+
+    # 4-6. Try variable-arg templates: compound, affix, surf
+    # These use parse_template_params for bracket-aware parsing
+    for template_re in [COMPOUND_TEMPLATE, AFFIX_TEMPLATE, SURF_TEMPLATE]:
+        match = template_re.search(etymology_text)
+        if match:
+            parts = parse_template_params(match.group(1))
+            components = clean_template_components(parts)
+            if len(components) >= 2:
+                return components, match.group(0)
+
+    return None
+
+
 def extract_morphology(text: str) -> Optional[Dict]:
     """
     Extract morphological structure from Wiktionary etymology sections.
 
-    Parses etymology templates to identify derivation relationships and compound structures.
-    Handles suffix, prefix, affix, compound, surf, and confix templates.
+    This is the main entry point for morphology extraction. It uses a unified
+    approach that:
+    1. Extracts and normalizes components from any morphology template
+    2. Classifies the morphology type based on hyphen patterns
 
     Templates parsed:
     - {{suffix|en|happy|ness}} -> happiness = happy + -ness
@@ -1028,238 +1157,51 @@ def extract_morphology(text: str) -> Optional[Dict]:
         Dictionary with morphology structure, or None if no etymology data found.
         Structure:
         {
-            'type': 'suffixed' | 'prefixed' | 'affixed' | 'compound' | 'circumfixed',
-            'base': str (base word, optional for compounds),
+            'type': 'suffixed' | 'prefixed' | 'affixed' | 'compound' | 'circumfixed' | 'simple',
+            'base': str (base word, optional - None for compounds),
             'components': [str] (all morphological parts in order),
             'prefixes': [str] (prefix morphemes with trailing hyphen),
             'suffixes': [str] (suffix morphemes with leading hyphen),
+            'interfixes': [str] (interfix morphemes with leading and trailing hyphen, optional),
             'is_compound': bool,
             'etymology_template': str (raw template for reference)
         }
     """
-    # Try to find etymology section
+    # Find etymology section
     etym_match = ETYMOLOGY_SECTION.search(text)
     if not etym_match:
         return None
 
     etymology_text = etym_match.group(1)
 
-    # Try each template type in priority order
+    # Extract and normalize components from any template type
+    result = extract_morphology_components(etymology_text)
+    if result is None:
+        return None
 
-    # 1. Check for suffix template: {{suffix|en|base|suffix}}
-    suffix_match = SUFFIX_TEMPLATE.search(etymology_text)
-    if suffix_match:
-        base = strip_wikilinks(suffix_match.group(1).strip())
-        suffix = strip_wikilinks(suffix_match.group(2).strip())
+    components, template_str = result
 
-        # Normalize suffix format (add leading hyphen if missing)
-        if not suffix.startswith('-'):
-            suffix = f'-{suffix}'
+    # Special case: confix template should be classified as 'circumfixed'
+    # We detect this by checking if the template is confix
+    if 'confix' in template_str.lower():
+        # Build circumfixed result directly
+        prefix = components[0]
+        base = components[1]
+        suffix = components[2] if len(components) > 2 else None
 
-        return {
-            'type': 'suffixed',
-            'base': base,
-            'components': [base, suffix],
-            'prefixes': [],
-            'suffixes': [suffix],
-            'is_compound': False,
-            'etymology_template': suffix_match.group(0)
-        }
-
-    # 2. Check for prefix template: {{prefix|en|prefix|base}}
-    prefix_match = PREFIX_TEMPLATE.search(etymology_text)
-    if prefix_match:
-        prefix = strip_wikilinks(prefix_match.group(1).strip())
-        base = strip_wikilinks(prefix_match.group(2).strip())
-
-        # Normalize prefix format (add trailing hyphen if missing)
-        if not prefix.endswith('-'):
-            prefix = f'{prefix}-'
-
-        return {
-            'type': 'prefixed',
-            'base': base,
-            'components': [prefix, base],
-            'prefixes': [prefix],
-            'suffixes': [],
-            'is_compound': False,
-            'etymology_template': prefix_match.group(0)
-        }
-
-    # 3. Check for confix template: {{confix|en|prefix|base|suffix}}
-    confix_match = CONFIX_TEMPLATE.search(etymology_text)
-    if confix_match:
-        prefix = strip_wikilinks(confix_match.group(1).strip())
-        base = strip_wikilinks(confix_match.group(2).strip())
-        suffix = strip_wikilinks(confix_match.group(3).strip())
-
-        # Normalize affix formats
-        if not prefix.endswith('-'):
-            prefix = f'{prefix}-'
-        if not suffix.startswith('-'):
-            suffix = f'-{suffix}'
-
-        return {
+        result_dict = {
             'type': 'circumfixed',
             'base': base,
-            'components': [prefix, base, suffix],
+            'components': components,
             'prefixes': [prefix],
-            'suffixes': [suffix],
+            'suffixes': [suffix] if suffix else [],
             'is_compound': False,
-            'etymology_template': confix_match.group(0)
+            'etymology_template': template_str
         }
+        return result_dict
 
-    # 4. Check for compound template: {{compound|en|word1|word2|...}}
-    compound_match = COMPOUND_TEMPLATE.search(etymology_text)
-    if compound_match:
-        # Parse with bracket-aware parser (handles [[wikilinks]] and {{nested templates}})
-        parts = parse_template_params(compound_match.group(1))
-        # Clean parameters (filter out key=value, language prefixes, etc.)
-        components = clean_template_components(parts, template_type='compound')
-
-        if len(components) >= 2:
-            # Extract interfixes (components with both leading and trailing hyphens)
-            interfixes = [c for c in components if c.startswith('-') and c.endswith('-')]
-
-            result = {
-                'type': 'compound',
-                'components': components,
-                'prefixes': [],
-                'suffixes': [],
-                'is_compound': True,
-                'etymology_template': compound_match.group(0)
-            }
-
-            # Add interfixes if present
-            if interfixes:
-                result['interfixes'] = interfixes
-
-            return result
-
-    # 5. Check for affix template: {{affix|en|part1|part2|...}}
-    affix_match = AFFIX_TEMPLATE.search(etymology_text)
-    if affix_match:
-        # Parse with bracket-aware parser (handles [[wikilinks]] and {{nested templates}})
-        parts = parse_template_params(affix_match.group(1))
-        # Clean parameters (filter out key=value, language prefixes, etc.)
-        components = clean_template_components(parts, template_type='affix')
-
-        if len(components) >= 2:
-            # Analyze components to determine type
-            prefixes = []
-            suffixes = []
-            interfixes = []
-            bases = []
-
-            for comp in components:
-                if comp.endswith('-') and not comp.startswith('-'):
-                    # Prefix (has trailing hyphen, no leading hyphen)
-                    prefixes.append(comp)
-                elif comp.startswith('-') and not comp.endswith('-'):
-                    # Suffix (has leading hyphen, no trailing hyphen)
-                    suffixes.append(comp)
-                elif comp.startswith('-') and comp.endswith('-'):
-                    # Interfix (both leading and trailing hyphens)
-                    # These are linking morphemes like -s- in "beeswax"
-                    interfixes.append(comp)
-                else:
-                    # No hyphens - this is a base word
-                    bases.append(comp)
-
-            # Determine morphology type based on affixes
-            if prefixes and suffixes:
-                morph_type = 'affixed'
-            elif prefixes:
-                morph_type = 'prefixed'
-            elif suffixes:
-                morph_type = 'suffixed'
-            elif interfixes and len(bases) >= 2:
-                # Compound with interfixes (e.g., "beeswax" = bee + -s- + wax)
-                morph_type = 'compound'
-            elif len(bases) >= 2:
-                # Simple compound
-                morph_type = 'compound'
-            else:
-                # Single base, no affixes - shouldn't happen but handle gracefully
-                morph_type = 'simple'
-
-            # Identify primary base word (first non-affix component for derived words)
-            # For compounds, base is None (all parts in 'bases' list)
-            base = bases[0] if bases and morph_type != 'compound' else None
-
-            result = {
-                'type': morph_type,
-                'components': components,
-                'prefixes': prefixes,
-                'suffixes': suffixes,
-                'is_compound': (morph_type == 'compound'),
-                'etymology_template': affix_match.group(0)
-            }
-
-            # Add base if identified (single base for derivations, None for compounds)
-            if base:
-                result['base'] = base
-
-            # Add interfixes if present
-            if interfixes:
-                result['interfixes'] = interfixes
-
-            return result
-
-    # 6. Check for surf template: {{surf|en|part1|part2|...}}
-    surf_match = SURF_TEMPLATE.search(etymology_text)
-    if surf_match:
-        # Parse with bracket-aware parser (handles [[wikilinks]] and {{nested templates}})
-        parts = parse_template_params(surf_match.group(1))
-        # Clean parameters (filter out key=value, language prefixes, etc.)
-        components = clean_template_components(parts, template_type='surf')
-
-        if len(components) >= 2:
-            # Analyze components similar to affix
-            prefixes = [c for c in components if c.endswith('-') and not c.startswith('-')]
-            suffixes = [c for c in components if c.startswith('-') and not c.endswith('-')]
-            interfixes = [c for c in components if c.startswith('-') and c.endswith('-')]
-            bases = [c for c in components if not c.startswith('-') and not c.endswith('-')]
-
-            # Determine type
-            if prefixes and suffixes:
-                morph_type = 'affixed'
-                base = bases[0] if bases else None
-            elif prefixes:
-                morph_type = 'prefixed'
-                base = bases[0] if bases else None
-            elif suffixes:
-                morph_type = 'suffixed'
-                base = bases[0] if bases else None
-            elif interfixes and len(bases) >= 2:
-                morph_type = 'compound'
-                base = None
-            elif len(bases) >= 2:
-                morph_type = 'compound'
-                base = None
-            else:
-                morph_type = 'simple'
-                base = bases[0] if bases else None
-
-            result = {
-                'type': morph_type,
-                'components': components,
-                'prefixes': prefixes,
-                'suffixes': suffixes,
-                'is_compound': (morph_type == 'compound'),
-                'etymology_template': surf_match.group(0)
-            }
-
-            if base:
-                result['base'] = base
-
-            # Add interfixes if present
-            if interfixes:
-                result['interfixes'] = interfixes
-
-            return result
-
-    return None
+    # Classify morphology based on component hyphen patterns
+    return classify_morphology(components, template_str)
 
 
 def extract_page_content(page_xml: str) -> Optional[tuple]:
