@@ -84,7 +84,7 @@ def write_entries(entries: List[Dict], output_file: Path):
     with ProgressDisplay(f"Writing entries", update_interval=1000) as progress:
         with open(output_file, 'w', encoding='utf-8') as f:
             for i, entry in enumerate(entries, start=1):
-                json.dump(entry, f, ensure_ascii=False, sort_keys=True)
+                json.dump(entry, f, ensure_ascii=False)
                 f.write('\n')
                 progress.update(Written=i)
 

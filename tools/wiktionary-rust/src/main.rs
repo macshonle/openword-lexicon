@@ -90,42 +90,46 @@ struct Morphology {
 }
 
 /// Flat entry structure - one per sense (definition line)
+/// Field order is normalized for consistent JSON output across Python/Rust scanners
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Entry {
+    // Core identifiers
     word: String,
     pos: String,  // Single POS, not Vec
-
-    // Flat label arrays (not nested HashMap)
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    register_tags: Vec<String>,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    region_tags: Vec<String>,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    domain_tags: Vec<String>,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    temporal_tags: Vec<String>,
-
-    // Regional spelling variant (e.g., "en-US" for American spelling, "en-GB" for British)
-    // Extracted from {{tlb|en|American spelling}} or similar on head lines
-    #[serde(skip_serializing_if = "Option::is_none")]
-    spelling_region: Option<String>,
-
-    // Word-level fields (duplicated across senses)
     word_count: usize,
-    is_phrase: bool,
+
+    // Boolean predicates (alphabetical order)
     is_abbreviation: bool,
-    is_proper_noun: bool,
     is_inflected: bool,
+    is_phrase: bool,
+    is_proper_noun: bool,
+
+    // Syllables and phrase type (before lemma)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    syllables: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    phrase_type: Option<String>,
 
     // Lemma (base form) for inflected words
     // Extracted from templates like {{plural of|en|cat}} → "cat"
     #[serde(skip_serializing_if = "Option::is_none")]
     lemma: Option<String>,
 
+    // Tag arrays (alphabetical order)
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    domain_tags: Vec<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    region_tags: Vec<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    register_tags: Vec<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    temporal_tags: Vec<String>,
+
+    // Regional spelling variant (e.g., "en-US" for American spelling, "en-GB" for British)
     #[serde(skip_serializing_if = "Option::is_none")]
-    phrase_type: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    syllables: Option<usize>,
+    spelling_region: Option<String>,
+
+    // Morphology (last)
     #[serde(skip_serializing_if = "Option::is_none")]
     morphology: Option<Morphology>,
 }
@@ -1312,6 +1316,10 @@ fn extract_morphology(text: &str) -> Option<Morphology> {
                     ("compound", true, None)
                 } else if bases.len() >= 2 {
                     ("compound", true, None)
+                } else if !bases.is_empty() || !interfixes.is_empty() {
+                    // Single base with interfix(es), or only interfixes
+                    // e.g., {{af|en|oxygen|-o-}} or {{affix|en|-xi-|-zu-}}
+                    ("simple", false, bases.first().cloned())
                 } else {
                     continue;
                 };
@@ -1413,19 +1421,19 @@ pub fn parse_page(title: &str, text: &str) -> Vec<Entry> {
             return vec![Entry {
                 word: word_data.word,
                 pos: "unknown".to_string(),
-                register_tags: vec![],
-                region_tags: vec![],
+                word_count: word_data.word_count,
+                is_abbreviation: word_data.is_abbreviation,
+                is_inflected: word_data.is_inflected,
+                is_phrase: word_data.is_phrase,
+                is_proper_noun: false,
+                syllables: word_data.syllables,
+                phrase_type: word_data.phrase_type,
+                lemma: word_data.lemma,
                 domain_tags: vec![],
+                region_tags: vec![],
+                register_tags: vec![],
                 temporal_tags: vec![],
                 spelling_region: word_data.spelling_region,
-                word_count: word_data.word_count,
-                is_phrase: word_data.is_phrase,
-                is_abbreviation: word_data.is_abbreviation,
-                is_proper_noun: false,
-                is_inflected: word_data.is_inflected,
-                lemma: word_data.lemma,
-                phrase_type: word_data.phrase_type,
-                syllables: word_data.syllables,
                 morphology: word_data.morphology,
             }];
         }
@@ -1443,19 +1451,19 @@ pub fn parse_page(title: &str, text: &str) -> Vec<Entry> {
             entries.push(Entry {
                 word: word_data.word.clone(),
                 pos: section.pos.clone(),
-                register_tags,
-                region_tags,
+                word_count: word_data.word_count,
+                is_abbreviation: word_data.is_abbreviation,
+                is_inflected: word_data.is_inflected,
+                is_phrase: word_data.is_phrase,
+                is_proper_noun: section.is_proper_noun,
+                syllables: word_data.syllables,
+                phrase_type: word_data.phrase_type.clone(),
+                lemma: word_data.lemma.clone(),
                 domain_tags,
+                region_tags,
+                register_tags,
                 temporal_tags,
                 spelling_region: word_data.spelling_region.clone(),
-                word_count: word_data.word_count,
-                is_phrase: word_data.is_phrase,
-                is_abbreviation: word_data.is_abbreviation,
-                is_proper_noun: section.is_proper_noun,
-                is_inflected: word_data.is_inflected,
-                lemma: word_data.lemma.clone(),
-                phrase_type: word_data.phrase_type.clone(),
-                syllables: word_data.syllables,
                 morphology: word_data.morphology.clone(),
             });
         }

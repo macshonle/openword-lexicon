@@ -1826,6 +1826,77 @@ def extract_spelling_region(text: str) -> Optional[str]:
     return None
 
 
+def build_ordered_entry(
+    word: str,
+    pos: str,
+    word_count: int,
+    is_abbreviation: bool,
+    is_inflected: bool,
+    is_phrase: bool,
+    is_proper_noun: bool,
+    syllables: Optional[int] = None,
+    phrase_type: Optional[str] = None,
+    lemma: Optional[str] = None,
+    domain_tags: Optional[List[str]] = None,
+    region_tags: Optional[List[str]] = None,
+    register_tags: Optional[List[str]] = None,
+    temporal_tags: Optional[List[str]] = None,
+    spelling_region: Optional[str] = None,
+    morphology: Optional[Dict] = None,
+) -> Dict:
+    """
+    Build an entry dict with normalized field order for consistent JSON output.
+
+    Field order:
+    1. word, pos, word_count (core identifiers)
+    2. is_abbreviation, is_inflected, is_phrase, is_proper_noun (boolean predicates)
+    3. syllables (if present)
+    4. phrase_type (if present)
+    5. lemma (if present)
+    6. domain_tags, region_tags, register_tags, temporal_tags (if present)
+    7. spelling_region (if present)
+    8. morphology (if present)
+    """
+    entry = {}
+
+    # Core fields (always present)
+    entry['word'] = word
+    entry['pos'] = pos
+    entry['word_count'] = word_count
+
+    # Boolean predicates (always present)
+    entry['is_abbreviation'] = is_abbreviation
+    entry['is_inflected'] = is_inflected
+    entry['is_phrase'] = is_phrase
+    entry['is_proper_noun'] = is_proper_noun
+
+    # Optional fields in specified order
+    if syllables is not None:
+        entry['syllables'] = syllables
+    if phrase_type is not None:
+        entry['phrase_type'] = phrase_type
+    if lemma is not None:
+        entry['lemma'] = lemma
+
+    # Tag arrays
+    if domain_tags:
+        entry['domain_tags'] = domain_tags
+    if region_tags:
+        entry['region_tags'] = region_tags
+    if register_tags:
+        entry['register_tags'] = register_tags
+    if temporal_tags:
+        entry['temporal_tags'] = temporal_tags
+
+    # Remaining optional fields
+    if spelling_region is not None:
+        entry['spelling_region'] = spelling_region
+    if morphology is not None:
+        entry['morphology'] = morphology
+
+    return entry
+
+
 def parse_entry(title: str, text: str) -> List[Dict]:
     """
     Parse a single Wiktionary page and return multiple entries (one per sense).
@@ -1915,27 +1986,21 @@ def parse_entry(title: str, text: str) -> List[Dict]:
         has_definition_templates = bool(DEFINITION_TEMPLATES.search(english_text))
 
         if has_categories or has_en_templates or has_definition_templates:
-            # Create a single entry with unknown POS
-            entry = {
-                'word': word,
-                'pos': 'unknown',
-                'word_count': word_data['word_count'],
-                'is_phrase': word_data['is_phrase'],
-                'is_abbreviation': word_data['is_abbreviation'],
-                'is_proper_noun': False,
-                'is_inflected': word_data['is_inflected'],
-            }
-            # Add optional fields
-            if 'lemma' in word_data:
-                entry['lemma'] = word_data['lemma']
-            if 'phrase_type' in word_data:
-                entry['phrase_type'] = word_data['phrase_type']
-            if 'syllables' in word_data:
-                entry['syllables'] = word_data['syllables']
-            if 'morphology' in word_data:
-                entry['morphology'] = word_data['morphology']
-            if 'spelling_region' in word_data:
-                entry['spelling_region'] = word_data['spelling_region']
+            # Create a single entry with unknown POS using ordered builder
+            entry = build_ordered_entry(
+                word=word,
+                pos='unknown',
+                word_count=word_data['word_count'],
+                is_abbreviation=word_data['is_abbreviation'],
+                is_inflected=word_data['is_inflected'],
+                is_phrase=word_data['is_phrase'],
+                is_proper_noun=False,
+                syllables=word_data.get('syllables'),
+                phrase_type=word_data.get('phrase_type'),
+                lemma=word_data.get('lemma'),
+                spelling_region=word_data.get('spelling_region'),
+                morphology=word_data.get('morphology'),
+            )
             return [entry]
         return []
 
@@ -1946,37 +2011,25 @@ def parse_entry(title: str, text: str) -> List[Dict]:
         for def_line in section.definitions:
             register_tags, region_tags, domain_tags, temporal_tags = extract_labels_from_line(def_line)
 
-            entry = {
-                'word': word,
-                'pos': section.pos,
-                'word_count': word_data['word_count'],
-                'is_phrase': word_data['is_phrase'],
-                'is_abbreviation': word_data['is_abbreviation'],
-                'is_proper_noun': section.is_proper_noun,
-                'is_inflected': word_data['is_inflected'],
-            }
-
-            # Add tag arrays only if non-empty (matches Rust's skip_serializing_if)
-            if register_tags:
-                entry['register_tags'] = register_tags
-            if region_tags:
-                entry['region_tags'] = region_tags
-            if domain_tags:
-                entry['domain_tags'] = domain_tags
-            if temporal_tags:
-                entry['temporal_tags'] = temporal_tags
-
-            # Add optional word-level fields
-            if 'lemma' in word_data:
-                entry['lemma'] = word_data['lemma']
-            if 'phrase_type' in word_data:
-                entry['phrase_type'] = word_data['phrase_type']
-            if 'syllables' in word_data:
-                entry['syllables'] = word_data['syllables']
-            if 'morphology' in word_data:
-                entry['morphology'] = word_data['morphology']
-            if 'spelling_region' in word_data:
-                entry['spelling_region'] = word_data['spelling_region']
+            # Use ordered builder for consistent field order
+            entry = build_ordered_entry(
+                word=word,
+                pos=section.pos,
+                word_count=word_data['word_count'],
+                is_abbreviation=word_data['is_abbreviation'],
+                is_inflected=word_data['is_inflected'],
+                is_phrase=word_data['is_phrase'],
+                is_proper_noun=section.is_proper_noun,
+                syllables=word_data.get('syllables'),
+                phrase_type=word_data.get('phrase_type'),
+                lemma=word_data.get('lemma'),
+                domain_tags=domain_tags if domain_tags else None,
+                region_tags=region_tags if region_tags else None,
+                register_tags=register_tags if register_tags else None,
+                temporal_tags=temporal_tags if temporal_tags else None,
+                spelling_region=word_data.get('spelling_region'),
+                morphology=word_data.get('morphology'),
+            )
 
             entries.append(entry)
 
@@ -2230,7 +2283,7 @@ def parse_wiktionary_dump(xml_path: Path, output_path: Path, limit: int = None, 
                         metrics["Words"] = words_written
                         limit_reached = False
                         for entry in entries_list:
-                            out.write(json.dumps(entry, ensure_ascii=False, sort_keys=True) + '\n')
+                            out.write(json.dumps(entry, ensure_ascii=False) + '\n')
                             senses_written += 1
                             metrics["Senses"] = senses_written
                             # Check limit after each sense (matches Rust scanner precision)
