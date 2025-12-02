@@ -192,11 +192,10 @@ $(WIKTIONARY_JSON_PARENT):
 # 1. Extract from XML dump to unsorted JSONL (kept for traceability)
 # 2. Sort lexicographically by word (ensures duplicate entries are consecutive,
 #    trie ordinal = line number, matches Python's default lexicographic sort)
-# Uses channel-pipeline strategy with 4 threads (1.32x faster than sequential)
+# Default: channel-pipeline strategy with 4 threads (1.32x faster than sequential)
 $(WIKTIONARY_JSON_SORTED): $(WIKTIONARY_DUMP) $(RUST_SCANNER) | $(WIKTIONARY_JSON_PARENT)
-	@echo "Extracting Wiktionary (using Rust scanner, channel-pipeline)..."
-	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" "$(WIKTIONARY_JSON)" \
-		--strategy channel-pipeline --threads 4
+	@echo "Extracting Wiktionary (using Rust scanner)..."
+	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" "$(WIKTIONARY_JSON)"
 	@echo "Sorting Wiktionary entries by word..."
 	$(UV) run python src/openword/wikt_sort.py \
 		--input $(WIKTIONARY_JSON) \
@@ -254,6 +253,7 @@ clean:
 
 scrub: clean
 	rm -rf .venv
+	rm -rf $(BENCHMARK_DIR)
 
 # ===========================
 # Reports & Validation
@@ -296,12 +296,14 @@ validate-childish: deps
 # Validate Python/Rust scanner parity
 # Runs both scanners on 900000 entries and compares outputs word-by-word
 # Skips gracefully if Wiktionary dump not available
+# Note: Uses sequential mode with --limit for efficient early termination
 validate-scanner-parity: $(WIKTIONARY_DUMP) $(RUST_SCANNER) deps
 	@echo "Running Python scanner (900000 entries)..."
 	$(UV) run python tools/wiktionary_scanner_parser.py \
 		"$(WIKTIONARY_DUMP)" /tmp/parity-python.jsonl --limit 900000
 	@echo "Running Rust scanner (900000 entries)..."
-	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" /tmp/parity-rust.jsonl --limit 900000
+	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" /tmp/parity-rust.jsonl \
+		--strategy sequential --limit 900000
 	@echo "Validating parity..."
 	$(UV) run python tools/wiktionary-rust/scripts/validate_parity.py \
 		--python-output /tmp/parity-python.jsonl \
@@ -312,9 +314,11 @@ validate-scanner-parity: $(WIKTIONARY_DUMP) $(RUST_SCANNER) deps
 # ===========================
 
 # Run Rust scanner on limited entries for quick testing
+# Note: Uses sequential mode with --limit for efficient early termination
 diagnose-scanner: $(WIKTIONARY_DUMP) $(RUST_SCANNER)
 	@echo "Running Rust scanner with limit (first 10000 entries)..."
-	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" /tmp/scanner_diagnostic.jsonl --limit 10000
+	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" /tmp/scanner_diagnostic.jsonl \
+		--strategy sequential --limit 10000
 	@echo "Output written to: /tmp/scanner_diagnostic.jsonl"
 
 # ===========================

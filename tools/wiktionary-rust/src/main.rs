@@ -38,11 +38,11 @@ struct Args {
     output: PathBuf,
 
     /// Processing strategy
-    #[arg(short, long, value_enum, default_value_t = Strategy::Sequential)]
+    #[arg(short, long, value_enum, default_value_t = Strategy::ChannelPipeline)]
     strategy: Strategy,
 
-    /// Number of threads (0 = auto-detect)
-    #[arg(short, long, default_value_t = 0)]
+    /// Number of threads (4 = default, 0 = auto-detect)
+    #[arg(short, long, default_value_t = 4)]
     threads: usize,
 
     /// Batch size for batch-parallel strategy
@@ -1844,6 +1844,16 @@ fn main() -> std::io::Result<()> {
         }
 
         return Ok(());
+    }
+
+    // Validate: --limit requires sequential mode for efficient early termination
+    if args.limit.is_some() && args.strategy != Strategy::Sequential {
+        eprintln!(
+            "Error: --limit requires --strategy sequential for efficient early termination.\n\
+             Parallel strategies must process pages out of order and reorder results,\n\
+             which means they cannot stop early when the limit is reached."
+        );
+        std::process::exit(1);
     }
 
     // Build parallel config
