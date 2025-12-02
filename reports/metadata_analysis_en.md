@@ -94,9 +94,10 @@ This consolidated report analyzes metadata coverage, quality, and filtering capa
 
 | POS | Count |
 |-----|------:|
-| noun | 958,839 |
+| noun | 788,642 |
 | verb | 213,895 |
 | adjective | 179,463 |
+| proper | 178,119 |
 | adverb | 26,908 |
 | phrase | 9,273 |
 | interjection | 4,591 |
@@ -108,7 +109,6 @@ This consolidated report analyzes metadata coverage, quality, and filtering capa
 | determiner | 313 |
 | symbol | 255 |
 | particle | 93 |
-| letter | 70 |
 
 ⚠️  **Missing POS tags:** auxiliary  
 *These POS tags are defined in the schema but have zero occurrences in the data.*
@@ -191,13 +191,13 @@ This section analyzes metadata coverage for word game filtering needs.
 
 ### Noun Analysis
 
-**Total nouns:** 958,839
-**Concrete nouns:** 15,310
-**Abstract nouns:** 7,848
-**Mixed nouns:** 8,232
-**Nouns without concreteness data:** 927,449
+**Total nouns:** 788,642
+**Concrete nouns:** 13,250
+**Abstract nouns:** 7,336
+**Mixed nouns:** 7,466
+**Nouns without concreteness data:** 760,590
 
-⚠️  **96.7%** of nouns lack concreteness metadata!
+⚠️  **96.4%** of nouns lack concreteness metadata!
 
 
 ### Syllable Analysis
@@ -249,10 +249,10 @@ This section analyzes metadata coverage for word game filtering needs.
 
 | Type | Count |
 |------|------:|
-| unknown | 927,449 |
-| concrete | 15,310 |
-| mixed | 8,232 |
-| abstract | 7,848 |
+| unknown | 760,590 |
+| concrete | 13,250 |
+| mixed | 7,466 |
+| abstract | 7,336 |
 
 #### Frequency Distribution by Tier (Nouns Only)
 
@@ -262,15 +262,15 @@ This section analyzes metadata coverage for word game filtering needs.
 | B | 63 | 0.0% |
 | C | 146 | 0.0% |
 | D | 161 | 0.0% |
-| E | 404 | 0.0% |
-| F | 1,638 | 0.2% |
-| G | 1,644 | 0.2% |
-| H | 4,071 | 0.4% |
-| I | 14,889 | 1.6% |
-| J | 13,011 | 1.4% |
-| Z | 922,800 | 96.2% |
+| E | 402 | 0.1% |
+| F | 1,581 | 0.2% |
+| G | 1,510 | 0.2% |
+| H | 3,570 | 0.5% |
+| I | 12,183 | 1.5% |
+| J | 9,710 | 1.2% |
+| Z | 759,304 | 96.3% |
 
-**Total nouns with frequency tier:** 958,839  
+**Total nouns with frequency tier:** 788,642  
 
 ---
 
@@ -287,7 +287,7 @@ The current format merges all senses of a word into a single entry:
 - Downstream filtering cannot distinguish between word senses
 
 **Statistics:**
-- **65,751** words have multiple POS tags (potential for sense splitting)
+- **72,101** words have multiple POS tags (potential for sense splitting)
 - **25,190** words have regional labels
 
 ### Proposed Sense-Based Format
@@ -366,7 +366,7 @@ Examples of words that would benefit from sense splitting:
 - **'cos**: adverb, conjunction
 - **'dis**: determiner, pronoun
 - **'ere**: adverb, interjection
-- **'gram**: noun, verb
+- **'gram**: noun, proper, verb
 - **'it**: noun, verb
 
 ---
@@ -375,7 +375,7 @@ Examples of words that would benefit from sense splitting:
 
 ### 1. Improve Concreteness Detection
 
-927,449 nouns lack concreteness data. Options:
+760,590 nouns lack concreteness data. Options:
 
 - **Heuristic-based:** Infer from word endings, domains, etc.
 - **ML-based:** Train classifier on known concrete/abstract words
@@ -1814,6 +1814,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "pos": [
     "adjective",
     "noun",
+    "proper",
     "verb"
   ],
   "sense_count": 105,
@@ -1866,7 +1867,8 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     ]
   },
   "pos": [
-    "noun"
+    "noun",
+    "proper"
   ],
   "sense_count": 11,
   "sense_length": 9,

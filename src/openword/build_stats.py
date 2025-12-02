@@ -340,17 +340,17 @@ def compute_statistics_lexeme(entries: Dict[str, dict], senses_by_word: Optional
         },
     }
 
-    # POS distribution (top 10)
+    # POS distribution (all POS tags, sorted by count)
     stats['pos_distribution'] = dict(
-        sorted(pos_counts.items(), key=lambda x: -x[1])[:10]
+        sorted(pos_counts.items(), key=lambda x: -x[1])
     )
 
     stats['frequency_distribution'] = dict(sorted(freq_counts.items()))
     stats['concreteness_distribution'] = dict(concrete_counts)
 
-    # Label categories (top 10 per category)
+    # Label categories (top 15 per category to capture most labels)
     stats['label_categories'] = {
-        category: dict(sorted(counts.items(), key=lambda x: -x[1])[:10])
+        category: dict(sorted(counts.items(), key=lambda x: -x[1])[:15])
         for category, counts in label_category_counts.items()
     }
 
@@ -690,9 +690,9 @@ def compute_statistics(entries: Dict[str, dict], senses_by_word: Optional[Dict[s
                 'frequency_percentage': round(100 * impact_data['entries_with_frequency'] / total_entries, 1) if total_entries > 0 else 0,
             }
 
-    # POS distribution (top 10)
+    # POS distribution (all POS tags, sorted by count)
     stats['pos_distribution'] = dict(
-        sorted(pos_counts.items(), key=lambda x: -x[1])[:10]
+        sorted(pos_counts.items(), key=lambda x: -x[1])
     )
 
     # Frequency distribution

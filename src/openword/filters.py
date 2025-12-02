@@ -281,8 +281,8 @@ def sense_is_abbreviation(sense: dict) -> bool:
 
 
 def sense_is_proper_noun(sense: dict) -> bool:
-    """Check if sense is marked as proper noun."""
-    return sense.get('is_proper_noun', False)
+    """Check if sense is a proper noun (names, places, etc.)."""
+    return sense.get('pos') == 'proper'
 
 
 # =============================================================================

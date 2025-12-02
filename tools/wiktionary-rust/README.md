@@ -121,25 +121,19 @@ The output JSONL format is compatible with the Python version:
 ```json
 {
   "word": "example",
-  "pos": ["noun"],
-  "labels": {
-    "register": ["informal"]
-  },
+  "pos": "noun",
   "word_count": 1,
   "is_phrase": false,
   "is_abbreviation": false,
-  "is_proper_noun": false,
-  "is_vulgar": false,
-  "is_archaic": false,
-  "is_rare": false,
-  "is_informal": true,
-  "is_technical": false,
-  "is_regional": false,
   "is_inflected": false,
-  "is_dated": false,
-  "sources": ["wikt"]
+  "register_tags": ["informal"],
+  "domain_tags": [],
+  "region_tags": [],
+  "temporal_tags": []
 }
 ```
+
+Note: Proper nouns use `pos: "proper"` instead of a separate flag.
 
 ## Next Steps
 

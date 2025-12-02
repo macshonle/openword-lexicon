@@ -48,9 +48,9 @@ def load_senses(senses_path: Path) -> Dict[str, Dict[str, Any]]:
     """Load senses file and aggregate sense-level data per word.
 
     The senses file contains one entry per sense with:
-    - pos (string)
+    - pos (string, including 'proper' for proper nouns)
     - register_tags, domain_tags, region_tags, temporal_tags (arrays)
-    - is_proper_noun, is_abbreviation, is_inflected (booleans)
+    - is_abbreviation, is_inflected (booleans)
 
     Returns a dict with aggregated data per word:
     {

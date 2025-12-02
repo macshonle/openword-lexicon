@@ -102,7 +102,6 @@ pub struct Entry {
     is_abbreviation: bool,
     is_inflected: bool,
     is_phrase: bool,
-    is_proper_noun: bool,
 
     // Syllables and phrase type (before lemma)
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -137,7 +136,6 @@ pub struct Entry {
 /// Represents a POS section with its definitions
 struct PosSection {
     pos: String,
-    is_proper_noun: bool,
     definitions: Vec<String>,  // Raw definition lines
 }
 
@@ -234,9 +232,9 @@ lazy_static! {
     static ref POS_MAP: HashMap<&'static str, &'static str> = {
         let mut m = HashMap::new();
         m.insert("noun", "noun");
-        m.insert("proper noun", "noun");
-        m.insert("proper name", "noun");
-        m.insert("propernoun", "noun");
+        m.insert("proper noun", "proper");
+        m.insert("proper name", "proper");
+        m.insert("propernoun", "proper");
         m.insert("verb", "verb");
         m.insert("verb form", "verb");
         m.insert("participle", "verb");
@@ -509,30 +507,25 @@ fn parse_pos_sections(english_text: &str) -> Vec<PosSection> {
     let mut sections = Vec::new();
 
     // Find all POS headers and their positions
-    let headers: Vec<(usize, &str, bool)> = POS_HEADER
+    let headers: Vec<(usize, &str)> = POS_HEADER
         .captures_iter(english_text)
         .filter_map(|cap| {
             let full_match = cap.get(0)?;
             let header_text = cap.get(1)?.as_str().to_lowercase();
             let header_normalized = header_text.split_whitespace().collect::<Vec<_>>().join(" ");
 
-            // Check if it's a proper noun
-            let is_proper = header_normalized.contains("proper noun") ||
-                           header_normalized.contains("proper name");
-
-            // Map to normalized POS
+            // Map to normalized POS (proper noun -> proper, etc.)
             if let Some(&mapped_pos) = POS_MAP.get(header_normalized.as_str()) {
-                Some((full_match.start(), mapped_pos, is_proper))
+                Some((full_match.start(), mapped_pos))
             } else {
                 None
             }
         })
-        .map(|(pos, mapped, is_proper)| (pos, mapped, is_proper))
         .collect();
 
     // For each POS header, extract definitions until next header
     for i in 0..headers.len() {
-        let (start_pos, pos, is_proper) = headers[i];
+        let (start_pos, pos) = headers[i];
         let section_start = start_pos;
         let section_end = if i + 1 < headers.len() {
             headers[i + 1].0
@@ -551,7 +544,6 @@ fn parse_pos_sections(english_text: &str) -> Vec<PosSection> {
         if !definitions.is_empty() {
             sections.push(PosSection {
                 pos: pos.to_string(),
-                is_proper_noun: is_proper,
                 definitions,
             });
         }
@@ -1411,7 +1403,6 @@ pub fn parse_page(title: &str, text: &str) -> Vec<Entry> {
                 is_abbreviation: word_data.is_abbreviation,
                 is_inflected: word_data.is_inflected,
                 is_phrase: word_data.is_phrase,
-                is_proper_noun: false,
                 syllables: word_data.syllables,
                 phrase_type: word_data.phrase_type,
                 lemma: word_data.lemma,
@@ -1441,7 +1432,6 @@ pub fn parse_page(title: &str, text: &str) -> Vec<Entry> {
                 is_abbreviation: word_data.is_abbreviation,
                 is_inflected: word_data.is_inflected,
                 is_phrase: word_data.is_phrase,
-                is_proper_noun: section.is_proper_noun,
                 syllables: word_data.syllables,
                 phrase_type: word_data.phrase_type.clone(),
                 lemma: word_data.lemma.clone(),

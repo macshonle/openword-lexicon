@@ -102,7 +102,7 @@ Each line in `en-lexemes-enriched.jsonl` is a JSON object:
 | `interjection` | Interjection | wow, ouch |
 | `determiner` | Determiner | the, a |
 | `particle` | Particle | up (in "give up") |
-| `proper noun` | Proper noun | London, John |
+| `proper` | Proper noun | London, John |
 
 ## Labels
 
@@ -263,10 +263,9 @@ Each line in `en-senses.jsonl` is a JSON object:
 | Field | Type | Description |
 |-------|------|-------------|
 | `word` | string | The word this sense belongs to |
-| `pos` | string | Part of speech for this sense |
+| `pos` | string | Part of speech for this sense (`proper` for proper nouns) |
 | `is_inflected` | bool | True if this is an inflected form |
 | `is_abbreviation` | bool | True if this is an abbreviation |
-| `is_proper_noun` | bool | True if this is a proper noun |
 | `lemma` | string? | Base form for inflected words (null for base forms) |
 | `register_tags` | string[] | Register labels for this sense |
 | `region_tags` | string[] | Region labels for this sense |

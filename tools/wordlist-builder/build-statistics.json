@@ -1,6 +1,6 @@
 {
   "total_words": 1386453,
-  "generated_at": "2025-11-30T15:33:44.215469",
+  "generated_at": "2025-12-01T16:08:15.361834",
   "sources": {
     "wikt": 1328251,
     "wordnet": 161870,
@@ -219,16 +219,25 @@
   },
   "enrichment_impact": {},
   "pos_distribution": {
-    "noun": 958839,
+    "noun": 788642,
     "verb": 213895,
     "adjective": 179463,
+    "proper": 178119,
     "adverb": 26908,
     "phrase": 9273,
     "interjection": 4591,
     "affix": 3517,
     "pronoun": 893,
     "preposition": 846,
-    "numeral": 438
+    "numeral": 438,
+    "conjunction": 355,
+    "determiner": 313,
+    "symbol": 255,
+    "particle": 93,
+    "letter": 70,
+    "unknown": 68,
+    "article": 23,
+    "multiple": 7
   },
   "frequency_distribution": {
     "A": 18,
@@ -259,7 +268,10 @@
       "offensive": 1626,
       "euphemistic": 1038,
       "literary": 687,
-      "formal": 601
+      "formal": 601,
+      "childish": 574,
+      "baby talk": 5,
+      "puerile": 2
     },
     "domain": {
       "medicine": 9378,
@@ -271,7 +283,8 @@
       "nautical": 3371,
       "mathematics": 3265,
       "sports": 1712,
-      "aviation": 1657
+      "aviation": 1657,
+      "law": 1607
     },
     "region": {
       "en-GB": 11615,

@@ -58,7 +58,7 @@ def compare_entries(py_entries, rust_entries, sample_size=100):
 
         # Compare each field
         for field in ['pos', 'labels', 'word_count', 'is_phrase', 'is_abbreviation',
-                      'is_proper_noun', 'is_vulgar', 'is_archaic', 'is_rare',
+                      'is_vulgar', 'is_archaic', 'is_rare',
                       'is_informal', 'is_technical', 'is_regional', 'is_inflected',
                       'is_dated', 'sources', 'phrase_type', 'syllables', 'morphology']:
 

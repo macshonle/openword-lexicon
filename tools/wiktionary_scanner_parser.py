@@ -454,9 +454,9 @@ REGION_LABELS = {
 # POS mapping
 POS_MAP = {
     'noun': 'noun',
-    'proper noun': 'noun',
-    'proper name': 'noun',             # Alternative form of proper noun
-    'propernoun': 'noun',              # Proper noun without space (typo in some entries)
+    'proper noun': 'proper',           # Proper nouns get their own POS
+    'proper name': 'proper',           # Alternative form of proper noun
+    'propernoun': 'proper',            # Proper noun without space (typo in some entries)
     'verb': 'verb',
     'verb form': 'verb',               # Verb inflections
     'participle': 'verb',              # Participles treated as verb forms
@@ -575,7 +575,7 @@ def extract_pos_tags(text: str) -> List[str]:
                 'verb': 'verb',
                 'adj': 'adjective',
                 'adv': 'adverb',
-                'prop': 'noun',  # {{en-prop}} is for proper nouns
+                'prop': 'proper',  # {{en-prop}} is for proper nouns
                 'pron': 'pronoun',
             }
             if pos in pos_mapping:
@@ -603,16 +603,15 @@ DEFINITION_LINE = re.compile(r'^#\s+(.+)$', re.MULTILINE)
 
 class PosSection:
     """Represents a POS section with its definitions."""
-    def __init__(self, pos: str, is_proper_noun: bool, definitions: List[str]):
+    def __init__(self, pos: str, definitions: List[str]):
         self.pos = pos
-        self.is_proper_noun = is_proper_noun
         self.definitions = definitions
 
 
 def parse_pos_sections(english_text: str) -> List[PosSection]:
     """
     Parse POS sections and their definitions from English text.
-    Returns list of PosSection, each containing pos, is_proper_noun, and definitions.
+    Returns list of PosSection, each containing pos and definitions.
     """
     sections = []
 
@@ -622,16 +621,13 @@ def parse_pos_sections(english_text: str) -> List[PosSection]:
         header_text = match.group(1).lower().strip()
         header_normalized = ' '.join(header_text.split())
 
-        # Check if it's a proper noun
-        is_proper = 'proper noun' in header_normalized or 'proper name' in header_normalized
-
-        # Map to normalized POS
+        # Map to normalized POS (proper nouns get pos='proper')
         if header_normalized in POS_MAP:
             mapped_pos = POS_MAP[header_normalized]
-            headers.append((match.start(), mapped_pos, is_proper))
+            headers.append((match.start(), mapped_pos))
 
     # For each POS header, extract definitions until next header
-    for i, (start_pos, pos, is_proper) in enumerate(headers):
+    for i, (start_pos, pos) in enumerate(headers):
         section_start = start_pos
         section_end = headers[i + 1][0] if i + 1 < len(headers) else len(english_text)
 
@@ -641,7 +637,7 @@ def parse_pos_sections(english_text: str) -> List[PosSection]:
         definitions = [m.group(1) for m in DEFINITION_LINE.finditer(section_text)]
 
         if definitions:
-            sections.append(PosSection(pos, is_proper, definitions))
+            sections.append(PosSection(pos, definitions))
 
     return sections
 
@@ -1775,7 +1771,6 @@ def build_ordered_entry(
     is_abbreviation: bool,
     is_inflected: bool,
     is_phrase: bool,
-    is_proper_noun: bool,
     syllables: Optional[int] = None,
     phrase_type: Optional[str] = None,
     lemma: Optional[str] = None,
@@ -1791,7 +1786,7 @@ def build_ordered_entry(
 
     Field order:
     1. word, pos, word_count (core identifiers)
-    2. is_abbreviation, is_inflected, is_phrase, is_proper_noun (boolean predicates)
+    2. is_abbreviation, is_inflected, is_phrase (boolean predicates)
     3. syllables (if present)
     4. phrase_type (if present)
     5. lemma (if present)
@@ -1810,7 +1805,6 @@ def build_ordered_entry(
     entry['is_abbreviation'] = is_abbreviation
     entry['is_inflected'] = is_inflected
     entry['is_phrase'] = is_phrase
-    entry['is_proper_noun'] = is_proper_noun
 
     # Optional fields in specified order
     if syllables is not None:
@@ -1847,9 +1841,9 @@ def parse_entry(title: str, text: str) -> List[Dict]:
     contamination from other language sections (French, Translingual, etc.).
 
     Returns a list of Entry dicts, one for each (POS, definition) pair.
-    Each entry has: word, pos (string), register_tags, region_tags, domain_tags,
-    temporal_tags, spelling_region, word_count, is_phrase, is_abbreviation,
-    is_proper_noun, is_inflected, lemma, phrase_type, syllables, morphology.
+    Each entry has: word, pos (string, 'proper' for proper nouns), register_tags,
+    region_tags, domain_tags, temporal_tags, spelling_region, word_count, is_phrase,
+    is_abbreviation, is_inflected, lemma, phrase_type, syllables, morphology.
     """
     # Preserve original case - downstream consumers can filter by case pattern as needed
     word = title.strip()
@@ -1936,7 +1930,6 @@ def parse_entry(title: str, text: str) -> List[Dict]:
                 is_abbreviation=word_data['is_abbreviation'],
                 is_inflected=word_data['is_inflected'],
                 is_phrase=word_data['is_phrase'],
-                is_proper_noun=False,
                 syllables=word_data.get('syllables'),
                 phrase_type=word_data.get('phrase_type'),
                 lemma=word_data.get('lemma'),
@@ -1961,7 +1954,6 @@ def parse_entry(title: str, text: str) -> List[Dict]:
                 is_abbreviation=word_data['is_abbreviation'],
                 is_inflected=word_data['is_inflected'],
                 is_phrase=word_data['is_phrase'],
-                is_proper_noun=section.is_proper_noun,
                 syllables=word_data.get('syllables'),
                 phrase_type=word_data.get('phrase_type'),
                 lemma=word_data.get('lemma'),

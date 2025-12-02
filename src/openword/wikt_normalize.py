@@ -59,7 +59,6 @@ def sense_projection(sense: Dict[str, Any]) -> Tuple:
         tuple(sorted(sense.get('temporal_tags', []))),
         sense.get('is_abbreviation', False),
         sense.get('is_inflected', False),
-        sense.get('is_proper_noun', False),
         sense.get('lemma'),  # Include lemma - different lemmas = different senses
     )
 
@@ -111,8 +110,6 @@ def aggregate_word_senses(
                 sense_entry['is_abbreviation'] = True
             if sense.get('is_inflected', False):
                 sense_entry['is_inflected'] = True
-            if sense.get('is_proper_noun', False):
-                sense_entry['is_proper_noun'] = True
 
             # Add lemma (base form) for inflected words
             lemma = sense.get('lemma')
