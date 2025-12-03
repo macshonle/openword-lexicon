@@ -85,17 +85,19 @@ The spec editor lets you:
 Generate word lists using make:
 
 ```bash
-# Generate all example word lists
+# Generate all word lists from specs in examples/wordlist-specs/
 make wordlists
 
-# Individual targets
-make wordlist-wordle      # 5-letter common words
-make wordlist-kids-nouns  # Concrete nouns for children
-make wordlist-scrabble    # Scrabble dictionary
-make wordlist-profanity   # Profanity blocklist
+# Add custom specs to examples/wordlist-specs/ and they'll be auto-discovered
+```
 
-# Custom spec with enriched output
-make wordlist-enriched SPEC=my-spec.yaml NAME=my-words
+Word lists are output to `data/wordlists/` with the same name as the spec file.
+
+For enriched output (JSONL sidecar with metadata), use `owlex` directly:
+
+```bash
+# Generate word list with enriched metadata
+uv run owlex my-spec.yaml --output words.txt --enriched enriched.jsonl
 ```
 
 ## Filter Reference

@@ -72,9 +72,9 @@ BENCHMARK_DIR := data/benchmark
 		validate-all validate-enable validate-profanity validate-childish \
 		validate-scanner-parity \
         spec-editor-web viewer-web \
-		wordlists wordlist-enriched \
+		wordlists \
 		benchmark-rust-scanner benchmark-validate \
-		nightly
+		nightly weekly
 
 # ===========================
 # Development Environment
@@ -427,23 +427,6 @@ $(WORDLISTS_DIR)/%.txt: $(WORDLIST_SPECS_DIR)/%.yaml $(LEXEMES_ENRICHED) | $(WOR
 $(WORDLISTS_DIR):
 	@mkdir -p "$@"
 
-# Generate word list with enriched sidecar (for any spec)
-# Usage: make wordlist-enriched SPEC=examples/wordlist-specs/wordle.yaml NAME=wordle
-.PHONY: wordlist-enriched
-wordlist-enriched: $(LEXEMES_ENRICHED) | $(WORDLISTS_DIR)
-ifndef SPEC
-	$(error SPEC is required. Usage: make wordlist-enriched SPEC=path/to/spec.yaml NAME=output-name)
-endif
-ifndef NAME
-	$(error NAME is required. Usage: make wordlist-enriched SPEC=path/to/spec.yaml NAME=output-name)
-endif
-	@echo "Generating $(NAME) with enriched data..."
-	$(UV) run owlex $(SPEC) \
-		--output $(WORDLISTS_DIR)/$(NAME).txt \
-		--enriched $(WORDLISTS_DIR)/$(NAME)-enriched.jsonl
-	@wc -l $(WORDLISTS_DIR)/$(NAME).txt
-	@wc -l $(WORDLISTS_DIR)/$(NAME)-enriched.jsonl
-
 # ===========================
 # Nightly CI Build
 # ===========================
@@ -464,20 +447,21 @@ endif
 # Usage:
 #   make nightly                    # Run full pipeline
 #   caffeinate -i make nightly      # Run with sleep prevention (macOS)
-nightly: export OPENWORD_CI=1
-nightly: export UV_VENV_CLEAR=1
 nightly:
 	@echo "Start time: $$(date)"
-	$(MAKE) bootstrap
-	$(MAKE) fetch-en
-	$(MAKE) build-rust-scanner
-	$(MAKE) build-en
+	$(MAKE) build-and-prereqs
 	$(MAKE) post-build
 	@echo "End time: $$(date)"
 
+weekly: build-and-prereqs post-build corpus-stats
+
+.PHONY: build-and-prereqs
+build-and-prereqs: export UV_VENV_CLEAR=1
+build-and-prereqs: bootstrap fetch-en build-rust-scanner build-en
+
 .PHONY: post-build
 post-build: export OPENWORD_CI=1
-post-build: package report-en validate-all test-full diagnose-scanner
+post-build: package report-en validate-all test-full diagnose-scanner wordlists
 	@echo "Build artifacts:"
 	@ls -lh $(BUILD_DIR)/*.trie $(BUILD_DIR)/*.json* 2>/dev/null || true
 	@echo "Reports:"
