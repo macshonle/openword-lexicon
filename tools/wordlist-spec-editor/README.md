@@ -2,13 +2,9 @@
 
 A web UI for creating wordlist filter specifications (YAML/JSON) for the OpenWord Lexicon. Design filter specs visually, then use them with the `owlex` CLI to generate word lists for games, educational apps, language learning tools, and more.
 
-This directory contains two web interfaces:
-- **[index.html](index.html)** - Advanced builder with dynamic filters and source selection (recommended)
-- **[web-builder.html](web-builder.html)** - Basic builder with form-based interface
-
 ---
 
-## Quick Start (New Advanced Builder)
+## Quick Start
 
 1. **Start the server**: Run `make spec-editor-web` from the project root
 2. **Select sources**: Choose word sources in the left panel (EOWL + Wiktionary checked by default)
@@ -349,12 +345,10 @@ Statistics shown in the builder:
 
 ## Architecture
 
-This directory contains two builder implementations:
-
-### New Advanced Builder (index.html, styles.css, app.js)
+### Web Builder (index.html, styles.css, app.js)
 
 **Features:**
-- Pure vanilla JavaScript (~850 lines total logic)
+- Pure vanilla JavaScript (~2000 lines)
 - Client-side state management
 - Dynamic filter add/remove system
 - Real-time statistics updates
@@ -362,42 +356,14 @@ This directory contains two builder implementations:
 - Modern responsive design
 
 **Files:**
-- `index.html` - Main UI structure (~400 lines)
+- `index.html` - Main UI structure (~300 lines)
 - `styles.css` - Complete styling (~600 lines)
-- `app.js` - State management and logic (~850 lines)
+- `app.js` - State management and logic (~2000 lines)
+- `build-statistics.json` - Actual word counts and metadata coverage
 
 **Browser Requirements:** ES6+ support (Chrome 60+, Firefox 60+, Safari 12+, Edge 79+)
 
-### Basic Builder (web-builder.html, spec-builder.js)
-
-The word list builder consists of three main components:
-
-### 1. Specification Schema (`docs/schema/wordlist_spec.schema.json`)
-
-Defines the JSON format for word list specifications. Includes:
-- Distribution selection (core vs plus)
-- Filter categories (character, frequency, POS, etc.)
-- Output configuration (format, sorting, limits)
-
-### 2. Decision Engine (`spec-builder.js`)
-
-JavaScript library that:
-- Works in both Node.js and browser environments
-- Validates filter availability per distribution
-- Provides capability metadata
-- Expands policy filters to concrete criteria
-- Estimates result counts
-
-### 3. Interactive Builder
-
-**Web Builder** (`web-builder.html`):
-- Visual form-based interface
-- Real-time validation and feedback
-- See all available options at once
-- Download or copy specification
-- Works offline (no server required)
-
-### 4. Filter Engine (`owlex.py`)
+### Filter Engine (`owlex`)
 
 Python CLI tool that:
 - Reads JSON specifications
@@ -651,36 +617,6 @@ This excludes words without POS or concreteness data.
 
 ## Programmatic Usage
 
-### JavaScript (Node.js or Browser)
-
-```javascript
-const { SpecBuilder, helpers } = require('./spec-builder.js');
-
-// Create builder
-const builder = new SpecBuilder();
-
-// Configure
-builder
-  .setDistribution('core')
-  .setMetadata('My Word List', 'Custom filtering')
-  .addFilter('character', 'exact_length', 5)
-  .addFilter('frequency', 'rarest_allowed', 'H')
-  .setPolicyFilter('family_friendly', true)
-  .setOutput({ format: 'json', limit: 100 });
-
-// Build and validate
-const { spec, validation } = builder.build();
-
-// Check for warnings
-if (validation.warnings.length > 0) {
-  console.log('Warnings:', validation.warnings);
-}
-
-// Export
-const json = builder.toJSON();
-console.log(json);
-```
-
 ### Python
 
 ```python
@@ -818,15 +754,15 @@ uv run python -m openword.owlex profanity-spec.json > profanity-blocklist.txt
 
 To add new filter types:
 
-1. Update `spec-builder.js` CAPABILITIES
-2. Update `owlex.py` filter methods
+1. Update `app.js` FILTER_TYPES
+2. Update `owlex` CLI filter methods
 3. Update `wordlist_spec.schema.json`
 4. Update documentation
 
-To add new presets:
+To add new demo presets:
 
-1. Add to `CAPABILITIES.presets` in `spec-builder.js`
-2. Update this README
+1. Add to `DEMOS` in `app.js`
+2. Add option to demo-select dropdown in `index.html`
 
 ---
 

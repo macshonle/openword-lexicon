@@ -1,5 +1,17 @@
 # Changelog - Wordlist Spec Editor
 
+## [1.3.0] - 2025-12-03
+
+### Removed
+- **Legacy builder files**: Removed `web-builder.html` and `spec-builder.js`
+  - All functionality consolidated in `index.html` + `app.js`
+  - The advanced builder is now the only interface
+
+### Notes
+- YAML is now the primary export format (vs JSON in legacy)
+- Source-level selection replaces distribution concept
+- 8 demo presets (vs 5 in legacy)
+
 ## [1.2.0] - 2025-11-17
 
 ### Changed
@@ -21,8 +33,8 @@
 ### Initial Release
 - Web-based builder interface
 - JSON specification schema
-- JavaScript decision engine (spec-builder.js)
-- Python filter engine (owlex.py)
+- JavaScript decision engine
+- Python filter engine (owlex)
 - Complete documentation
 - Example specifications
 - Makefile integration
