@@ -19,6 +19,9 @@ from wiktionary_scanner_parser import (
     Wikilink,
     Template,
     parse_template_params,
+    extract_head_template_content,
+    extract_pos_from_head_template,
+    find_head_template_pos_values,
 )
 
 
@@ -275,3 +278,235 @@ class TestRealWorldExamples:
         """Pattern like pictograph: {{affix|en|la:pictus|-o-|graph}}"""
         result = parse_template_params("la:pictus|-o-|graph")
         assert result == ["la:pictus", "-o-", "graph"]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Head Template POS Extraction Tests
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestExtractHeadTemplateContent:
+    """Test bracket-balanced template content extraction."""
+
+    def test_simple_template(self):
+        """Simple template without nesting."""
+        text = "{{head|en|noun form|head=cats}}"
+        # Start after '{{head|en|'
+        content = extract_head_template_content(text, 10)
+        assert content == "noun form|head=cats"
+
+    def test_nested_template(self):
+        """Template with nested template inside."""
+        text = "{{head|en|noun|head={{m|en|word}}}}"
+        content = extract_head_template_content(text, 10)
+        assert content == "noun|head={{m|en|word}}"
+
+    def test_wikilink_inside(self):
+        """Template with wikilink (doesn't affect bracket counting)."""
+        text = "{{head|en|noun|head=[[word]]}}"
+        content = extract_head_template_content(text, 10)
+        assert content == "noun|head=[[word]]"
+
+    def test_deeply_nested(self):
+        """Multiple levels of nested templates."""
+        text = "{{head|en|noun|head={{a|{{b|c}}}}}}"
+        content = extract_head_template_content(text, 10)
+        assert content == "noun|head={{a|{{b|c}}}}"
+
+    def test_unclosed_template(self):
+        """Unclosed template returns what we have."""
+        text = "{{head|en|noun|head=word"
+        content = extract_head_template_content(text, 10)
+        assert content == "noun|head=word"
+
+
+class TestExtractPosFromHeadTemplate:
+    """Test POS extraction from parsed template content."""
+
+    def test_simple_pos(self):
+        """Simple POS as first param."""
+        pos = extract_pos_from_head_template("noun")
+        assert pos == "noun"
+
+    def test_pos_with_named_params_after(self):
+        """POS followed by named params."""
+        pos = extract_pos_from_head_template("noun form|head=cats")
+        assert pos == "noun form"
+
+    def test_named_param_first_then_pos(self):
+        """Named param comes before POS - should skip to POS.
+
+        This is the key bug fix - templates like:
+        {{head|en|head=kris kringles|noun form}}
+        Should return 'noun form', not 'head=kris kringles'
+        """
+        pos = extract_pos_from_head_template("head=kris kringles|noun form")
+        assert pos == "noun form"
+
+    def test_wikilink_in_named_param(self):
+        """Wikilink inside named param shouldn't confuse parser."""
+        pos = extract_pos_from_head_template("head=[[word]]|noun")
+        assert pos == "noun"
+
+    def test_multiple_named_params_before_pos(self):
+        """Multiple named params before POS."""
+        pos = extract_pos_from_head_template("head=word|sort=sort key|noun")
+        assert pos == "noun"
+
+    def test_proper_noun_pos(self):
+        """Multi-word POS like 'proper noun'."""
+        pos = extract_pos_from_head_template("proper noun|head=[[United States]]")
+        assert pos == "proper noun"
+
+    def test_pos_with_nested_template(self):
+        """POS with nested template in another param."""
+        pos = extract_pos_from_head_template("verb|head={{m|en|word}}")
+        assert pos == "verb"
+
+    def test_only_named_params_returns_none(self):
+        """Only named params with no positional returns None."""
+        pos = extract_pos_from_head_template("head=word|sort=key")
+        assert pos is None
+
+    def test_empty_content_returns_none(self):
+        """Empty content returns None."""
+        pos = extract_pos_from_head_template("")
+        assert pos is None
+
+    def test_case_normalization(self):
+        """POS is returned lowercase."""
+        pos = extract_pos_from_head_template("Noun Form")
+        assert pos == "noun form"
+
+
+class TestFindHeadTemplatePosValues:
+    """Test finding all POS values in text using proper parsing."""
+
+    def test_simple_head_template(self):
+        """Simple {{head|en|noun}} template."""
+        text = "Some text {{head|en|noun}} more text"
+        result = find_head_template_pos_values(text)
+        assert result == ["noun"]
+
+    def test_head_template_with_named_param_first(self):
+        """{{head|en|head=...|POS}} - the key bug case."""
+        text = "{{head|en|head=kris kringles|noun form}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["noun form"]
+
+    def test_wikilink_in_head_param(self):
+        """Wikilink in head= param shouldn't break parsing."""
+        text = "{{head|en|head=[[w:nikon|Nikon]]|proper noun}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["proper noun"]
+
+    def test_multiple_head_templates(self):
+        """Multiple head templates in same text."""
+        text = """
+        ===Noun===
+        {{head|en|noun}}
+
+        ===Verb===
+        {{head|en|verb}}
+        """
+        result = find_head_template_pos_values(text)
+        assert result == ["noun", "verb"]
+
+    def test_deduplication(self):
+        """Same POS appears twice - should be deduplicated."""
+        text = "{{head|en|noun}} and {{head|en|noun}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["noun"]
+
+    def test_en_head_variant(self):
+        """{{en-head|en|...}} variant."""
+        text = "{{en-head|en|adjective}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["adjective"]
+
+    def test_head_lite_variant(self):
+        """{{head-lite|en|...}} variant."""
+        text = "{{head-lite|en|adverb}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["adverb"]
+
+    def test_nested_template_in_head(self):
+        """Nested template in head param doesn't break bracket counting."""
+        text = "{{head|en|noun|head={{m|en|[[word]]}}}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["noun"]
+
+    def test_complex_wikilink_pattern(self):
+        """Complex wikilink pattern from real data."""
+        text = "{{head|en|noun form|head=[[druid]][[-'s|'s]] [[grove]]}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["noun form"]
+
+    def test_no_head_templates(self):
+        """Text with no head templates."""
+        text = "Just some text without templates"
+        result = find_head_template_pos_values(text)
+        assert result == []
+
+    def test_other_templates_ignored(self):
+        """Non-head templates are ignored."""
+        text = "{{en-noun}} {{lb|en|slang}} {{head|en|verb}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["verb"]
+
+
+class TestRealWorldPOSBugs:
+    """
+    Tests for real bugs found in corpus scan output.
+
+    These are actual malformed POS values that appeared due to
+    the regex-based parsing:
+    - head=kris kringles
+    - head=[[w:nikon
+    - head=[[druid]][[-'s
+    - head=laffy taffies
+    - head=[[mind]][[-'s
+    """
+
+    def test_kris_kringles_bug(self):
+        """The 'head=kris kringles' bug case."""
+        text = "{{head|en|head=kris kringles|noun form}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["noun form"]
+        assert "head=kris kringles" not in result
+
+    def test_nikon_wikilink_bug(self):
+        """The 'head=[[w:nikon' unclosed wikilink bug."""
+        # This was captured because regex stopped at first |
+        text = "{{head|en|head=[[w:Nikon|Nikon]]|proper noun}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["proper noun"]
+
+    def test_druids_possessive_bug(self):
+        """The 'head=[[druid]][[-'s' complex wikilink bug."""
+        text = "{{head|en|noun form|head=[[druid]][[-'s|'s]]}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["noun form"]
+
+    def test_laffy_taffies_bug(self):
+        """The 'head=laffy taffies' bug case."""
+        text = "{{head|en|head=Laffy Taffies|noun form}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["noun form"]
+
+    def test_minds_ear_bug(self):
+        """The 'head=[[minds]]' [[ear]]' complex pattern."""
+        text = "{{head|en|noun|head=[[mind]][[-'s|'s]] [[ear]]}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["noun"]
+
+    def test_dash_only_pos(self):
+        """The '-' POS edge case (used for some entries)."""
+        text = "{{head|en|-}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["-"]
+
+    def test_nf_abbreviation(self):
+        """The 'nf' POS (noun form abbreviation)."""
+        text = "{{head|en|nf}}"
+        result = find_head_template_pos_values(text)
+        assert result == ["nf"]

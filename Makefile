@@ -42,7 +42,7 @@ BENCHMARK_DIR := data/benchmark
 .PHONY: bootstrap venv deps fmt lint test test-python test-rust test-full \
 		clean scrub fetch-en \
         build-en build-rust-scanner build-trie build-metadata \
-		package report-en diagnose-scanner \
+		package report-en diagnose-scanner corpus-stats \
 		validate-all validate-enable validate-profanity validate-childish \
 		validate-scanner-parity \
         wordlist-builder-web viewer-web \
@@ -254,6 +254,28 @@ clean:
 scrub: clean
 	rm -rf .venv
 	rm -rf $(BENCHMARK_DIR)
+
+# ===========================
+# Corpus Analysis
+# ===========================
+
+# Intermediate file for corpus stats
+CORPUS_STATS_FILE := /tmp/corpus-stats.tsv
+CORPUS_DOC := docs/WIKTIONARY-CORPUS.md
+
+# Generate Wiktionary corpus statistics
+# Updates docs/WIKTIONARY-CORPUS.md with current POS distribution
+corpus-stats: $(WIKTIONARY_DUMP)
+	@echo "Collecting POS statistics from Wiktionary dump..."
+	@echo "This scans ~10M pages and takes ~15 minutes."
+	$(UV) run python tools/collect_pos.py "$(WIKTIONARY_DUMP)" \
+		--stats-output "$(CORPUS_STATS_FILE)"
+	@echo ""
+	@echo "Updating $(CORPUS_DOC)..."
+	$(UV) run python tools/update_corpus_doc.py \
+		"$(CORPUS_STATS_FILE)" "$(CORPUS_DOC)"
+	@echo ""
+	@echo "Done! Review changes with: git diff $(CORPUS_DOC)"
 
 # ===========================
 # Reports & Validation

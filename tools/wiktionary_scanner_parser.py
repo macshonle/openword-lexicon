@@ -251,6 +251,129 @@ def parse_template_params(content: str) -> List[str]:
     return parser.parse_params()
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Head Template POS Extraction - Proper parsing for {{head|en|POS|...}}
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Regex to find head templates and capture their FULL content (greedy but balanced)
+# This matches {{head|en|...}}, {{en-head|en|...}}, {{head-lite|en|...}}
+# We capture everything after the template name up to the closing }}
+# Note: This is a two-phase approach:
+#   1. Find potential head templates with a simple regex
+#   2. Use WikitextParser to properly extract parameters
+HEAD_TEMPLATE_FINDER = re.compile(
+    r'\{\{(head|en-head|head-lite)\|en\|',
+    re.IGNORECASE
+)
+
+
+def extract_head_template_content(text: str, start_pos: int) -> Optional[str]:
+    """
+    Extract the full content of a template starting at start_pos.
+
+    Uses bracket counting to handle nested templates correctly.
+
+    Args:
+        text: Full text to search in
+        start_pos: Position right after '{{head|en|' (where content begins)
+
+    Returns:
+        Template content (without {{ and }}) or None if malformed
+    """
+    depth = 1  # We're inside one {{ already
+    pos = start_pos
+    content_start = start_pos
+
+    while pos < len(text) and depth > 0:
+        if text[pos:pos + 2] == '{{':
+            depth += 1
+            pos += 2
+        elif text[pos:pos + 2] == '}}':
+            depth -= 1
+            if depth == 0:
+                return text[content_start:pos]
+            pos += 2
+        else:
+            pos += 1
+
+    # Unclosed template - return what we have
+    return text[content_start:pos] if pos > content_start else None
+
+
+def extract_pos_from_head_template(template_content: str) -> Optional[str]:
+    """
+    Extract the POS from head template content using proper parsing.
+
+    The POS is the first positional parameter (no '=' in it).
+    Named parameters like 'head=...', 'sort=...' are skipped.
+
+    Args:
+        template_content: Content after '{{head|en|' and before '}}'
+
+    Returns:
+        The POS string (lowercase) or None if not found
+
+    Examples:
+        >>> extract_pos_from_head_template("noun form|head=kris kringles")
+        'noun form'
+        >>> extract_pos_from_head_template("head=[[word]]|noun")
+        'noun'
+        >>> extract_pos_from_head_template("proper noun|head=[[United States]]")
+        'proper noun'
+    """
+    # Parse using WikitextParser for proper bracket handling
+    params = parse_template_params(template_content)
+
+    # Find first positional parameter (no '=' in it)
+    for param in params:
+        if '=' not in param and param.strip():
+            return param.strip().lower()
+
+    return None
+
+
+def find_head_template_pos_values(text: str) -> List[str]:
+    """
+    Find all POS values from {{head|en|...}} templates in text.
+
+    Uses proper parsing to correctly handle:
+    - Named parameters like head=...
+    - Nested templates
+    - Wikilinks in parameters
+
+    Args:
+        text: Wikitext to search
+
+    Returns:
+        List of POS values found (lowercase, deduplicated by order)
+
+    Examples:
+        >>> find_head_template_pos_values("{{head|en|noun form|head=cats}}")
+        ['noun form']
+        >>> find_head_template_pos_values("{{head|en|head=[[word]]|verb}}")
+        ['verb']
+    """
+    pos_values = []
+    seen = set()
+
+    for match in HEAD_TEMPLATE_FINDER.finditer(text):
+        # Position right after '{{head|en|'
+        content_start = match.end()
+
+        # Extract full template content with bracket balancing
+        content = extract_head_template_content(text, content_start)
+        if not content:
+            continue
+
+        # Parse to get POS
+        pos = extract_pos_from_head_template(content)
+        if pos and pos not in seen:
+            seen.add(pos)
+            pos_values.append(pos)
+
+    return pos_values
+
+
 class BZ2StreamReader:
     """Streaming BZ2 decompressor with progress feedback."""
 
@@ -318,8 +441,8 @@ class BZ2StreamReader:
 ENGLISH_SECTION = re.compile(r'==\s*English\s*==', re.IGNORECASE)
 LANGUAGE_SECTION = re.compile(r'^==\s*([^=]+?)\s*==$', re.MULTILINE)
 POS_HEADER = re.compile(r'^===+\s*(.+?)\s*===+\s*$', re.MULTILINE)  # Already flexible with \s*
-# Fallback: extract POS from {{head|en|POS}} templates when section headers missing
-HEAD_TEMPLATE = re.compile(r'\{\{(?:head|en-head|head-lite)\|en\|([^}|]+)', re.IGNORECASE)
+# NOTE: POS extraction from {{head|en|POS}} templates now uses proper bracket-aware
+# parsing via find_head_template_pos_values() - see HEAD_TEMPLATE_FINDER and helpers
 # Extract POS from {{en-POS}} templates (e.g., {{en-noun}}, {{en-verb}}, {{en-prop}})
 EN_POS_TEMPLATE = re.compile(r'\{\{en-(noun|verb|adj|adv|prop|pron)\b', re.IGNORECASE)
 # Check for abbreviation templates
@@ -552,9 +675,9 @@ def extract_pos_tags(text: str) -> List[str]:
             pos_tags.append(POS_MAP[header])
 
     # Fallback: If no section headers found, try {{head|en|POS}} templates
+    # Uses proper bracket-aware parsing to handle named params, nested templates, etc.
     if not pos_tags:
-        for match in HEAD_TEMPLATE.finditer(text):
-            pos = match.group(1).lower().strip()
+        for pos in find_head_template_pos_values(text):
             if pos in POS_MAP:
                 pos_tags.append(POS_MAP[pos])
             # Handle special cases
@@ -1361,9 +1484,8 @@ def extract_phrase_type(text: str) -> Optional[str]:
         if header in ['saying', 'adage']:
             return 'proverb'  # Sayings/adages are proverb-like
 
-    # Check {{head}} templates
-    for match in HEAD_TEMPLATE.finditer(text):
-        pos = match.group(1).lower().strip()
+    # Check {{head}} templates using proper bracket-aware parsing
+    for pos in find_head_template_pos_values(text):
         if pos in ['idiom', 'proverb', 'prepositional phrase', 'adverbial phrase',
                    'verb phrase', 'noun phrase', 'saying', 'adage']:
             return 'proverb' if pos in ['saying', 'adage'] else pos

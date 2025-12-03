@@ -1,0 +1,977 @@
+#!/usr/bin/env python3
+"""
+wiktionary_categories.py - Wiktionary category computation module
+
+Computes categories for English Wiktionary entries by porting logic from
+Wiktionary's Lua modules. Categories in the raw XML dump are auto-generated
+by templates at render time, so we must compute them ourselves.
+
+This module implements category rules from:
+- Module:en-headword (English-specific headword handling)
+- Module:headword (base category generation)
+- Module:labels/data (grammatical labels → category mappings)
+
+Design: Builder Pattern for extensible category computation.
+Each category type is computed independently and accumulated.
+
+References:
+- https://en.wiktionary.org/wiki/Module:en-headword
+- https://en.wiktionary.org/wiki/Module:headword
+- https://en.wiktionary.org/wiki/Module:labels/data
+"""
+
+from dataclasses import dataclass, field
+from typing import List, Optional, Set, Tuple
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Phrasal Verb Detection - Ported from Module:en-headword
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Phrasal adverbs from Module:en-headword (44 total)
+# These are common particles that form phrasal verbs when combined with verbs.
+# From: https://en.wiktionary.org/wiki/Module:en-headword
+#
+# NOTE: The Lua source comments say this should only contain common phrasal
+# adverbs, not random words like "low", "adrift", etc.
+PHRASAL_ADVERBS: Set[str] = {
+    "aback",
+    "about",
+    "above",
+    "across",
+    "after",
+    "against",
+    "ahead",
+    "along",
+    "apart",
+    "around",
+    "as",
+    "aside",
+    "at",
+    "away",
+    "back",
+    "before",
+    "behind",
+    "below",
+    "between",
+    "beyond",
+    "by",
+    "down",
+    "for",
+    "forth",
+    "from",
+    "in",
+    "into",
+    "of",
+    "off",
+    "on",
+    "onto",
+    "out",
+    "over",
+    "past",
+    "round",
+    "through",
+    "to",
+    "together",
+    "towards",
+    "under",
+    "up",
+    "upon",
+    "with",
+    "without",
+}
+
+# Allowed non-adverb placeholder words
+# These can appear in phrasal verbs but don't themselves make a verb "phrasal"
+# From Module:en-headword: "it", "one", "oneself"
+PHRASAL_PLACEHOLDERS: Set[str] = {
+    "it",
+    "one",
+    "oneself",
+}
+
+
+def detect_phrasal_verb(word: str, pos: str) -> Tuple[bool, List[str]]:
+    """
+    Detect if a verb entry is a phrasal verb.
+
+    Ported from Module:en-headword. A verb is phrasal if it consists of a single
+    base verb followed exclusively by either:
+    - Adverbs from PHRASAL_ADVERBS, or
+    - Placeholder words from PHRASAL_PLACEHOLDERS
+
+    And at least one following word must be from PHRASAL_ADVERBS
+    (hence "can it" is not a phrasal verb).
+
+    Args:
+        word: The headword (e.g., "give up", "look forward to")
+        pos: The part of speech (must be "verb" for detection)
+
+    Returns:
+        Tuple of (is_phrasal, adverbs_found) where adverbs_found is the list
+        of phrasal adverbs in the order they appear (left to right).
+
+    Examples:
+        >>> detect_phrasal_verb("give up", "verb")
+        (True, ["up"])
+        >>> detect_phrasal_verb("look forward to", "verb")
+        (True, ["forward", "to"])
+        >>> detect_phrasal_verb("freak out", "verb")
+        (True, ["out"])
+        >>> detect_phrasal_verb("can it", "verb")
+        (False, [])  # "it" is placeholder, no adverb
+        >>> detect_phrasal_verb("run", "verb")
+        (False, [])  # single word, not phrasal
+        >>> detect_phrasal_verb("give up", "noun")
+        (False, [])  # not a verb
+    """
+    # Only check verbs
+    if pos != "verb":
+        return (False, [])
+
+    # Single-word verbs are not phrasal
+    if " " not in word:
+        return (False, [])
+
+    # Parse from right to left, collecting adverbs
+    # The Lua code does: while base:match("^(.+) (.-)$")
+    parts = word.split()
+    if len(parts) < 2:
+        return (False, [])
+
+    base = parts[0]  # The base verb
+    following = parts[1:]  # Words after the base
+
+    seen_adverbs: List[str] = []
+
+    for part in following:
+        part_lower = part.lower()
+        if part_lower in PHRASAL_ADVERBS:
+            seen_adverbs.append(part_lower)
+        elif part_lower in PHRASAL_PLACEHOLDERS:
+            # Placeholder - allowed but doesn't count as adverb
+            pass
+        else:
+            # Unknown word - not a valid phrasal verb pattern
+            return (False, [])
+
+    # Must have at least one phrasal adverb
+    if not seen_adverbs:
+        return (False, [])
+
+    return (True, seen_adverbs)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Multiword Term Detection - Ported from Module:headword
+# ─────────────────────────────────────────────────────────────────────────────
+
+def is_multiword_term(word: str) -> bool:
+    """
+    Detect if a word is a multiword term (contains spaces).
+
+    From Module:headword: Terms with spaces get "English multiword terms" category.
+
+    Args:
+        word: The headword
+
+    Returns:
+        True if the word contains spaces
+
+    Examples:
+        >>> is_multiword_term("ice cream")
+        True
+        >>> is_multiword_term("running")
+        False
+    """
+    return " " in word
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# POS Category Generation - Ported from Module:headword
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Mapping from POS to category suffix (pluralized form)
+# From Module:headword: insert(data.categories, full_langname .. " " .. postype .. "s")
+POS_TO_CATEGORY: dict[str, str] = {
+    "noun": "nouns",
+    "verb": "verbs",
+    "adjective": "adjectives",
+    "adverb": "adverbs",
+    "pronoun": "pronouns",
+    "preposition": "prepositions",
+    "conjunction": "conjunctions",
+    "interjection": "interjections",
+    "determiner": "determiners",
+    "article": "articles",
+    "particle": "particles",
+    "numeral": "numerals",
+    "symbol": "symbols",
+    "letter": "letters",
+    "phrase": "phrases",
+    "proverb": "proverbs",
+    "proper": "proper nouns",  # Special case: "proper" → "proper nouns"
+    "affix": "affixes",
+}
+
+
+def get_pos_category(pos: str) -> Optional[str]:
+    """
+    Get the Wiktionary category name for a POS.
+
+    Args:
+        pos: The normalized POS (e.g., "noun", "verb", "proper")
+
+    Returns:
+        Category name without "English " prefix (e.g., "nouns", "verbs")
+        or None if POS is not recognized.
+
+    Examples:
+        >>> get_pos_category("noun")
+        "nouns"
+        >>> get_pos_category("proper")
+        "proper nouns"
+        >>> get_pos_category("unknown")
+        None
+    """
+    return POS_TO_CATEGORY.get(pos)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Category Builder - Builder Pattern for accumulating categories
+# ─────────────────────────────────────────────────────────────────────────────
+
+@dataclass
+class CategoryBuilder:
+    """
+    Builder for computing Wiktionary categories for an entry.
+
+    Uses the Builder Pattern to accumulate categories from various sources.
+    Each computation method adds categories to the internal list.
+
+    Usage:
+        builder = CategoryBuilder(word="give up", pos="verb")
+        builder.add_pos_category()
+        builder.add_multiword_category()
+        builder.add_phrasal_verb_categories()
+        builder.add_label_categories(["transitive"])
+        categories = builder.build()
+
+    Or use the convenience method:
+        categories = CategoryBuilder.compute_all(word="give up", pos="verb", labels=["transitive"])
+    """
+
+    word: str
+    pos: str
+    labels: List[str] = field(default_factory=list)
+    comparability: Optional["ComparabilityInfo"] = None
+    categories: List[str] = field(default_factory=list)
+
+    def add_pos_category(self) -> "CategoryBuilder":
+        """
+        Add the base POS category (e.g., "English nouns").
+
+        From Module:headword:
+            insert(data.categories, full_langname .. " " .. postype .. "s")
+        """
+        cat = get_pos_category(self.pos)
+        if cat:
+            self.categories.append(f"English {cat}")
+        return self
+
+    def add_multiword_category(self) -> "CategoryBuilder":
+        """
+        Add "English multiword terms" if the word contains spaces.
+
+        From Module:headword:
+            if data.heads[1]:find(" ") then
+                insert(data.categories, full_langname .. " multiword terms")
+        """
+        if is_multiword_term(self.word):
+            self.categories.append("English multiword terms")
+        return self
+
+    def add_phrasal_verb_categories(self) -> "CategoryBuilder":
+        """
+        Add phrasal verb categories if applicable.
+
+        From Module:en-headword:
+            insert(data.categories, langname .. " phrasal verbs")
+            insert(data.categories, langname .. ' phrasal verbs formed with "' .. adverb .. '"')
+
+        Categories added:
+            - "English phrasal verbs"
+            - "English phrasal verbs formed with \"up\"" (for each adverb)
+        """
+        is_phrasal, adverbs = detect_phrasal_verb(self.word, self.pos)
+        if is_phrasal:
+            self.categories.append("English phrasal verbs")
+            for adverb in adverbs:
+                self.categories.append(f'English phrasal verbs formed with "{adverb}"')
+        return self
+
+    def add_label_categories(self) -> "CategoryBuilder":
+        """
+        Add categories based on grammatical labels from {{lb|en|...}} templates.
+
+        From Module:labels/data, labels map to pos_categories:
+            - "transitive" → "English transitive verbs"
+            - "countable" → "English countable nouns"
+            - "ambitransitive" → ["English transitive verbs", "English intransitive verbs"]
+
+        Uses the labels stored in self.labels (set at construction or via compute_all).
+        """
+        for label in self.labels:
+            for cat in get_categories_for_label(label):
+                full_cat = f"English {cat}"
+                if full_cat not in self.categories:
+                    self.categories.append(full_cat)
+        return self
+
+    def add_comparability_category(self) -> "CategoryBuilder":
+        """
+        Add comparability category for adjectives/adverbs.
+
+        From Module:en-headword:
+            - "English uncomparable adjectives" ({{en-adj|-}})
+            - "English comparative-only adjectives" ({{en-adj|componly=1}})
+            - "English superlative-only adjectives" ({{en-adj|suponly=1}})
+
+        Uses the comparability info stored in self.comparability.
+        """
+        if self.comparability:
+            cat = get_comparability_category(self.pos, self.comparability)
+            if cat:
+                full_cat = f"English {cat}"
+                if full_cat not in self.categories:
+                    self.categories.append(full_cat)
+        return self
+
+    def add_regional_categories(self) -> "CategoryBuilder":
+        """
+        Add regional dialect categories from labels.
+
+        From Module:labels/data/lang/en, regional labels map to categories:
+            - "US" → "American English"
+            - "UK" / "British" → "British English"
+            - "Australia" → "Australian English"
+
+        Uses the labels stored in self.labels.
+        """
+        for label in self.labels:
+            cat = get_regional_category(label)
+            if cat and cat not in self.categories:
+                self.categories.append(cat)
+        return self
+
+    def build(self) -> List[str]:
+        """
+        Return the accumulated categories.
+
+        Returns:
+            List of category names (with "English " prefix)
+        """
+        return self.categories.copy()
+
+    @classmethod
+    def compute_all(
+        cls,
+        word: str,
+        pos: str,
+        labels: Optional[List[str]] = None,
+        comparability: Optional["ComparabilityInfo"] = None,
+    ) -> List[str]:
+        """
+        Convenience method to compute all categories for an entry.
+
+        Args:
+            word: The headword
+            pos: The normalized POS
+            labels: Optional list of grammatical labels from {{lb|en|...}}
+            comparability: Optional comparability info from {{en-adj}} or {{en-adv}}
+
+        Returns:
+            List of all applicable categories
+
+        Examples:
+            >>> CategoryBuilder.compute_all("give up", "verb")
+            ['English verbs', 'English multiword terms', 'English phrasal verbs',
+             'English phrasal verbs formed with "up"']
+            >>> CategoryBuilder.compute_all("eat", "verb", labels=["transitive"])
+            ['English verbs', 'English transitive verbs']
+            >>> CategoryBuilder.compute_all("cat", "adjective",
+            ...     comparability=ComparabilityInfo(uncomparable=True))
+            ['English adjectives', 'English uncomparable adjectives']
+        """
+        builder = cls(word=word, pos=pos, labels=labels or [], comparability=comparability)
+        builder.add_pos_category()
+        builder.add_multiword_category()
+        builder.add_phrasal_verb_categories()
+        builder.add_label_categories()
+        builder.add_comparability_category()
+        builder.add_regional_categories()
+        return builder.build()
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Label → Category Mappings - Ported from Module:labels/data
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Label data extracted from https://en.wiktionary.org/wiki/Module:labels/data
+# Each entry maps a label (and its aliases) to pos_categories.
+#
+# Format: label -> (aliases, categories)
+# where categories is either a string or list of strings
+#
+# Corpus analysis (200k sample) shows usage frequency:
+#   transitive: 17,759    intransitive: 8,697    countable: 5,018
+#   uncountable: 4,685    ambitransitive: 919    not comparable: 308
+#
+# We port the most frequently used labels that have pos_categories mappings.
+
+LABEL_TO_CATEGORIES: dict[str, tuple[set[str], list[str]]] = {
+    # === Verb transitivity (most common: 27,375 total) ===
+    "transitive": (
+        set(),
+        ["transitive verbs"],
+    ),
+    "intransitive": (
+        {"not transitive"},
+        ["intransitive verbs"],
+    ),
+    "ambitransitive": (
+        set(),
+        ["transitive verbs", "intransitive verbs"],  # Both categories!
+    ),
+    "ditransitive": (
+        set(),
+        ["ditransitive verbs"],
+    ),
+
+    # === Noun countability (9,703 total) ===
+    "countable": (
+        set(),
+        ["countable nouns"],
+    ),
+    "uncountable": (
+        {"not countable"},
+        ["uncountable nouns"],
+    ),
+
+    # === Verb types ===
+    "auxiliary": (
+        set(),
+        ["auxiliary verbs"],
+    ),
+    "modal": (
+        {"modal verb"},
+        ["modal verbs"],
+    ),
+    "copulative": (
+        {"copular"},
+        ["copulative verbs"],
+    ),
+    "reflexive": (
+        set(),
+        ["reflexive verbs"],
+    ),
+    "reciprocal": (
+        set(),
+        ["reciprocal verbs"],
+    ),
+    "impersonal": (
+        set(),
+        ["impersonal verbs"],
+    ),
+    "ergative": (
+        set(),
+        ["ergative verbs"],
+    ),
+    "stative": (
+        set(),
+        ["stative verbs"],
+    ),
+    "causative verb": (
+        {"causative"},
+        ["causative verbs"],
+    ),
+    "inchoative": (
+        set(),
+        ["inchoative verbs"],
+    ),
+    "frequentative": (
+        set(),
+        ["frequentative verbs"],
+    ),
+    "iterative": (
+        set(),
+        ["iterative verbs"],
+    ),
+    "defective verb": (
+        {"defective v", "defective vb", "defective verbs"},
+        ["defective verbs"],
+    ),
+
+    # === Noun types ===
+    "collective": (
+        {"collectively"},
+        ["collective nouns"],
+    ),
+    "abstract noun": (
+        {"abstract"},
+        ["abstract nouns"],
+    ),
+    "plural only": (
+        {"plurale tantum", "pluralia tantum"},
+        ["pluralia tantum"],
+    ),
+    "singular only": (
+        {"singulare tantum", "singularia tantum"},
+        ["singularia tantum"],
+    ),
+
+    # === Abbreviations ===
+    "abbreviation": (
+        {"abbreviations", "abbreviated"},
+        ["abbreviations"],
+    ),
+    "acronym": (
+        set(),
+        ["acronyms"],
+    ),
+    "initialism": (
+        set(),
+        ["initialisms"],
+    ),
+    "contraction": (
+        {"contractions", "contracted"},
+        ["contractions"],
+    ),
+
+    # === Number types ===
+    "cardinal": (
+        {"cardinal number", "cardinal numeral"},
+        ["cardinal numbers"],
+    ),
+    "ordinal": (
+        {"ordinal number", "ordinal numeral"},
+        ["ordinal numbers"],
+    ),
+
+    # === Other grammatical features ===
+    "idiomatic": (
+        {"idiom"},
+        ["idioms"],
+    ),
+    "onomatopoeia": (
+        {"onomatopoeic"},
+        ["onomatopoeias"],
+    ),
+}
+
+
+def _build_label_lookup() -> dict[str, list[str]]:
+    """
+    Build a fast lookup table from label (including aliases) to categories.
+
+    Returns:
+        Dict mapping each label/alias to its category list
+    """
+    lookup: dict[str, list[str]] = {}
+    for label, (aliases, categories) in LABEL_TO_CATEGORIES.items():
+        lookup[label] = categories
+        for alias in aliases:
+            lookup[alias] = categories
+    return lookup
+
+
+# Pre-built lookup table for fast access
+_LABEL_LOOKUP = _build_label_lookup()
+
+
+def get_categories_for_label(label: str) -> list[str]:
+    """
+    Get the Wiktionary categories for a grammatical label.
+
+    Args:
+        label: The label from {{lb|en|...}} template (lowercase)
+
+    Returns:
+        List of category names (without "English " prefix),
+        or empty list if label has no category mapping.
+
+    Examples:
+        >>> get_categories_for_label("transitive")
+        ["transitive verbs"]
+        >>> get_categories_for_label("ambitransitive")
+        ["transitive verbs", "intransitive verbs"]
+        >>> get_categories_for_label("slang")
+        []  # "slang" has no pos_categories
+    """
+    return _LABEL_LOOKUP.get(label.lower(), [])
+
+
+def get_categories_for_labels(labels: list[str]) -> list[str]:
+    """
+    Get all Wiktionary categories for a list of labels.
+
+    Args:
+        labels: List of labels from {{lb|en|...}} template
+
+    Returns:
+        Deduplicated list of category names (without "English " prefix)
+
+    Examples:
+        >>> get_categories_for_labels(["transitive", "figurative"])
+        ["transitive verbs"]  # "figurative" has no categories
+        >>> get_categories_for_labels(["countable", "collective"])
+        ["countable nouns", "collective nouns"]
+    """
+    seen: set[str] = set()
+    result: list[str] = []
+    for label in labels:
+        for cat in get_categories_for_label(label):
+            if cat not in seen:
+                seen.add(cat)
+                result.append(cat)
+    return result
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Adjective/Adverb Comparability - Ported from Module:en-headword
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Comparability categories from Module:en-headword:
+#   "English uncomparable adjectives" / "English uncomparable adverbs"
+#   "English comparative-only adjectives" / "English comparative-only adverbs"
+#   "English superlative-only adjectives" / "English superlative-only adverbs"
+#
+# Corpus analysis (200k sample):
+#   Adjectives: 6,939 uncomparable (75.6%), 4 comparative-only, 0 superlative-only
+#   Adverbs: 1,449 uncomparable (86.0%), 1 comparative-only, 0 superlative-only
+#
+# Detection from {{en-adj|...}} / {{en-adv|...}} templates:
+#   - "-" as first param (alone) → uncomparable
+#   - componly=1 → comparative-only
+#   - suponly=1 → superlative-only
+
+
+@dataclass
+class ComparabilityInfo:
+    """
+    Comparability information extracted from {{en-adj}} or {{en-adv}} templates.
+
+    From Module:en-headword, comparability affects category assignment:
+    - uncomparable: Adjective/adverb has no comparative/superlative forms
+    - componly: Entry is a comparative form only (e.g., "larger-than-life")
+    - suponly: Entry is a superlative form only (extremely rare)
+    """
+    uncomparable: bool = False
+    componly: bool = False
+    suponly: bool = False
+
+
+def parse_adj_adv_comparability(template_params: str) -> ComparabilityInfo:
+    """
+    Parse comparability from {{en-adj}} or {{en-adv}} template parameters.
+
+    Args:
+        template_params: The content between {{en-adj| and }} (e.g., "-" or "componly=1")
+
+    Returns:
+        ComparabilityInfo with parsed flags
+
+    Examples:
+        >>> parse_adj_adv_comparability("-")
+        ComparabilityInfo(uncomparable=True, componly=False, suponly=False)
+        >>> parse_adj_adv_comparability("componly=1")
+        ComparabilityInfo(uncomparable=False, componly=True, suponly=False)
+        >>> parse_adj_adv_comparability("er|more")
+        ComparabilityInfo(uncomparable=False, componly=False, suponly=False)
+    """
+    result = ComparabilityInfo()
+
+    parts = template_params.split('|')
+    positional = []
+
+    for part in parts:
+        part = part.strip()
+        if not part:
+            continue
+
+        if '=' in part:
+            key = part.split('=')[0].strip().lower()
+            if key == 'componly':
+                result.componly = True
+            elif key == 'suponly':
+                result.suponly = True
+        else:
+            positional.append(part)
+
+    # First positional param of "-" alone means uncomparable
+    if positional and positional[0] == '-' and len(positional) == 1:
+        result.uncomparable = True
+
+    return result
+
+
+def get_comparability_category(pos: str, info: ComparabilityInfo) -> Optional[str]:
+    """
+    Get the comparability category for an adjective or adverb.
+
+    Args:
+        pos: The POS ("adjective" or "adverb")
+        info: ComparabilityInfo with parsed flags
+
+    Returns:
+        Category name (without "English " prefix) or None
+
+    Examples:
+        >>> get_comparability_category("adjective", ComparabilityInfo(uncomparable=True))
+        "uncomparable adjectives"
+        >>> get_comparability_category("adverb", ComparabilityInfo(componly=True))
+        "comparative-only adverbs"
+    """
+    if pos not in ("adjective", "adverb"):
+        return None
+
+    plpos = "adjectives" if pos == "adjective" else "adverbs"
+
+    if info.uncomparable:
+        return f"uncomparable {plpos}"
+    if info.componly:
+        return f"comparative-only {plpos}"
+    if info.suponly:
+        return f"superlative-only {plpos}"
+
+    return None
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Regional Dialect Categories - Ported from Module:labels/data/lang/en
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Regional dialect labels from Module:labels/data/lang/en
+# These generate categories like "American English", "British English", etc.
+#
+# Format: label -> (aliases, regional_category)
+# where regional_category is the adjective form (e.g., "American" → "American English")
+#
+# Corpus analysis (200k sample) shows usage frequency:
+#   US: 4,529    UK: 3,347    British: 1,484    Australia: 1,273
+#   Scotland: 1,105    Ireland: 815    Canada: 708    Philippines: 464
+
+REGIONAL_LABELS: dict[str, tuple[set[str], str]] = {
+    # Major English varieties
+    "US": (
+        {"U.S.", "United States", "USA", "America", "American", "American English", "US English"},
+        "American English",
+    ),
+    "UK": (
+        {"United Kingdom", "British"},
+        "British English",
+    ),
+    "Australia": (
+        {"Australian", "AU", "AuE", "Aus", "AusE", "General Australian"},
+        "Australian English",
+    ),
+    "Canada": (
+        {"Canadian", "CA", "CanE", "Canadian English"},
+        "Canadian English",
+    ),
+    "Ireland": (
+        {"Irish", "Hiberno-English"},
+        "Irish English",
+    ),
+    "Scotland": (
+        {"Scottish", "Scots English"},
+        "Scottish English",
+    ),
+    "New Zealand": (
+        {"NZ", "NZE", "New Zealand English"},
+        "New Zealand English",
+    ),
+    "South Africa": (
+        {"South African", "SAE", "South African English"},
+        "South African English",
+    ),
+    "India": (
+        {"Indian", "Indian English"},
+        "Indian English",
+    ),
+    "Philippines": (
+        {"Philippine", "Philippine English", "Filipino English"},
+        "Philippine English",
+    ),
+    "Singapore": (
+        {"Singaporean", "Singapore English", "Singlish"},
+        "Singapore English",
+    ),
+    "Hong Kong": (
+        {"HK", "Hong Kong English"},
+        "Hong Kong English",
+    ),
+    "Malaysia": (
+        {"Malaysian", "Malaysian English"},
+        "Malaysian English",
+    ),
+    "Jamaica": (
+        {"Jamaican", "Jamaican English"},
+        "Jamaican English",
+    ),
+    "Nigeria": (
+        {"Nigerian", "Nigerian English"},
+        "Nigerian English",
+    ),
+    "Pakistan": (
+        {"Pakistani", "Pakistani English"},
+        "Pakistani English",
+    ),
+    "Caribbean": (
+        {"Caribbean English"},
+        "Caribbean English",
+    ),
+    # Sub-regional varieties
+    "North America": (
+        {"North American"},
+        "North American English",
+    ),
+    "Northern England": (
+        {"Northern English"},
+        "Northern English",
+    ),
+    "Southern US": (
+        {"Southern American", "Southern US English"},
+        "Southern US English",
+    ),
+    "Appalachia": (
+        {"Appalachian", "Appalachian English"},
+        "Appalachian English",
+    ),
+    "New England": (
+        {"New England English"},
+        "New England English",
+    ),
+    "Geordie": (
+        set(),
+        "Geordie English",
+    ),
+    "Yorkshire": (
+        set(),
+        "Yorkshire English",
+    ),
+    "Cockney": (
+        set(),
+        "Cockney",
+    ),
+    "RP": (
+        {"Received Pronunciation"},
+        "Received Pronunciation",
+    ),
+}
+
+
+def _build_regional_lookup() -> dict[str, str]:
+    """
+    Build a fast lookup table from regional label (including aliases) to category.
+
+    Returns:
+        Dict mapping each label/alias to its regional category
+    """
+    lookup: dict[str, str] = {}
+    for label, (aliases, category) in REGIONAL_LABELS.items():
+        lookup[label.lower()] = category
+        for alias in aliases:
+            lookup[alias.lower()] = category
+    return lookup
+
+
+# Pre-built lookup table for fast access
+_REGIONAL_LOOKUP = _build_regional_lookup()
+
+
+def get_regional_category(label: str) -> Optional[str]:
+    """
+    Get the regional dialect category for a label.
+
+    Args:
+        label: The regional label (case-insensitive)
+
+    Returns:
+        Regional category name (e.g., "American English") or None
+
+    Examples:
+        >>> get_regional_category("US")
+        "American English"
+        >>> get_regional_category("British")
+        "British English"
+        >>> get_regional_category("Australia")
+        "Australian English"
+        >>> get_regional_category("slang")
+        None
+    """
+    return _REGIONAL_LOOKUP.get(label.lower())
+
+
+def get_regional_categories(labels: list[str]) -> list[str]:
+    """
+    Get all regional dialect categories for a list of labels.
+
+    Args:
+        labels: List of labels from {{lb|en|...}} template
+
+    Returns:
+        Deduplicated list of regional category names
+
+    Examples:
+        >>> get_regional_categories(["US", "informal"])
+        ["American English"]
+        >>> get_regional_categories(["UK", "Australia"])
+        ["British English", "Australian English"]
+    """
+    seen: set[str] = set()
+    result: list[str] = []
+    for label in labels:
+        cat = get_regional_category(label)
+        if cat and cat not in seen:
+            seen.add(cat)
+            result.append(cat)
+    return result
+
+
+if __name__ == "__main__":
+    # Quick test
+    print("=== Basic Category Tests ===")
+    test_cases = [
+        ("give up", "verb", []),
+        ("look forward to", "verb", []),
+        ("freak out", "verb", []),
+        ("can it", "verb", []),
+        ("run", "verb", []),
+        ("ice cream", "noun", []),
+        ("United States", "proper", []),
+    ]
+
+    for word, pos, labels in test_cases:
+        categories = CategoryBuilder.compute_all(word, pos, labels)
+        print(f"\n{word!r} ({pos}):")
+        for cat in categories:
+            print(f"  - {cat}")
+
+    print("\n\n=== Label → Category Tests ===")
+    label_tests = [
+        ("eat", "verb", ["transitive"]),
+        ("sleep", "verb", ["intransitive"]),
+        ("run", "verb", ["ambitransitive"]),  # Both transitive & intransitive
+        ("information", "noun", ["uncountable"]),
+        ("cat", "noun", ["countable"]),
+        ("be", "verb", ["auxiliary", "copulative"]),
+        ("scissors", "noun", ["plural only"]),
+        ("NASA", "noun", ["acronym"]),
+    ]
+
+    for word, pos, labels in label_tests:
+        categories = CategoryBuilder.compute_all(word, pos, labels)
+        print(f"\n{word!r} ({pos}, labels={labels}):")
+        for cat in categories:
+            print(f"  - {cat}")
