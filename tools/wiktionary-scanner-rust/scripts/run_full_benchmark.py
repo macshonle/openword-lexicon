@@ -10,19 +10,19 @@ Tests all parallelization strategies with varying thread counts:
 
 Usage:
     # Run benchmarks
-    uv run python tools/wiktionary-rust/scripts/run_full_benchmark.py \
+    uv run python tools/wiktionary-scanner-rust/scripts/run_full_benchmark.py \
         --input data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
         --output-dir data/benchmark \
-        --scanner tools/wiktionary-rust/target/release/wiktionary-rust
+        --scanner tools/wiktionary-scanner-rust/target/release/wiktionary-scanner-rust
 
     # With caffeinate for overnight runs
-    caffeinate -i uv run python tools/wiktionary-rust/scripts/run_full_benchmark.py \
+    caffeinate -i uv run python tools/wiktionary-scanner-rust/scripts/run_full_benchmark.py \
         --input data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
         --output-dir data/benchmark \
-        --scanner tools/wiktionary-rust/target/release/wiktionary-rust
+        --scanner tools/wiktionary-scanner-rust/target/release/wiktionary-scanner-rust
 
     # Validate outputs are identical
-    uv run python tools/wiktionary-rust/scripts/run_full_benchmark.py \
+    uv run python tools/wiktionary-scanner-rust/scripts/run_full_benchmark.py \
         --output-dir data/benchmark \
         --validate-only
 """
@@ -238,7 +238,7 @@ def main():
     parser.add_argument(
         "--scanner",
         type=Path,
-        help="Path to wiktionary-rust binary",
+        help="Path to wiktionary-scanner-rust binary",
     )
     parser.add_argument(
         "--validate-only",

@@ -67,14 +67,14 @@ This simplified format:
 - Output format controlled via CLI flags (`--output`, `--enriched`, `--jq`)
 - Filters are the entire spec body
 
-## Web Builder
+## Spec Editor (Web UI)
 
 ```bash
-make wordlist-builder-web
+make spec-editor-web
 # Opens http://localhost:8000
 ```
 
-The web builder lets you:
+The spec editor lets you:
 - Select filter criteria visually
 - See live word count estimates
 - Export YAML specifications

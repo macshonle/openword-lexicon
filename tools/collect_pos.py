@@ -26,8 +26,8 @@ from collections import Counter
 from datetime import date
 from pathlib import Path
 
-# Import infrastructure from existing scanner
-from wiktionary_scanner_parser import (
+# Import infrastructure from scanner package
+from wiktionary_scanner_python.scanner import (
     BZ2StreamReader,
     scan_pages,
     find_head_template_pos_values,  # Proper parsing function

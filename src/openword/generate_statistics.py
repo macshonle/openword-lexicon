@@ -65,7 +65,7 @@ def main():
     # Determine paths (flat structure with language-prefixed files)
     project_root = Path(__file__).parent.parent.parent
     intermediate_dir = project_root / "data" / "intermediate"
-    output_file = project_root / "tools" / "wordlist-builder" / "build-statistics.json"
+    output_file = project_root / "tools" / "wordlist-spec-editor" / "build-statistics.json"
 
     # Determine input files
     if args.input:

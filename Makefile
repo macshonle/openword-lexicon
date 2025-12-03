@@ -13,10 +13,10 @@ BUILD_DIR := data/build
 REPORTS_DIR := reports
 
 # Build artifacts (language-prefixed filenames in flat directories)
-WIKTIONARY_DUMP := $(RAW_DIR)/$(LEXICON_LANG)wiktionary-latest-pages-articles.xml.bz2
-WIKTIONARY_JSON_PARENT :=$(INTERMEDIATE_DIR)
-WIKTIONARY_JSON := $(WIKTIONARY_JSON_PARENT)/$(LEXICON_LANG)-wikt.jsonl
-WIKTIONARY_JSON_SORTED := $(WIKTIONARY_JSON_PARENT)/$(LEXICON_LANG)-wikt-sorted.jsonl
+WIKT_DUMP := $(RAW_DIR)/$(LEXICON_LANG)wiktionary-latest-pages-articles.xml.bz2
+WIKT_JSON_PARENT :=$(INTERMEDIATE_DIR)
+WIKT_JSON := $(WIKT_JSON_PARENT)/$(LEXICON_LANG)-wikt.jsonl
+WIKT_JSON_SORTED := $(WIKT_JSON_PARENT)/$(LEXICON_LANG)-wikt-sorted.jsonl
 FREQUENCY_DATA := $(RAW_DIR)/$(LEXICON_LANG)_50k.txt
 WORDNET_ARCHIVE := $(RAW_DIR)/english-wordnet-2024.tar.gz
 UNIFIED_TRIE := $(BUILD_DIR)/$(LEXICON_LANG).trie
@@ -34,7 +34,33 @@ LEXEMES_ENRICHED := $(INTERMEDIATE_DIR)/$(LEXICON_LANG)-lexemes-enriched.jsonl
 EOWL_FILE := $(RAW_DIR)/eowl.txt
 
 # Rust tools
-RUST_SCANNER := tools/wiktionary-rust/target/release/wiktionary-rust
+RUST_RELEASE_DIR := tools/wiktionary-scanner-rust/target/release
+RUST_SCANNER := $(RUST_RELEASE_DIR)/wiktionary-scanner-rust
+
+# Python scripts (src/openword/)
+RUN_PYTHON := $(UV) run python
+SOURCE_MERGE := $(RUN_PYTHON) src/openword/source_merge.py
+BRYSBAERT_ENRICH := $(RUN_PYTHON) src/openword/brysbaert_enrich.py
+FREQUENCY_TIERS := $(RUN_PYTHON) src/openword/frequency_tiers.py
+TRIE_BUILD := $(RUN_PYTHON) src/openword/trie_build.py
+EXPORT_METADATA := $(RUN_PYTHON) src/openword/export_metadata.py
+EXPORT_LEMMA_GROUPS := $(RUN_PYTHON) src/openword/export_lemma_groups.py
+EXPORT_WORDLIST := $(RUN_PYTHON) src/openword/export_wordlist.py
+GENERATE_STATISTICS := $(RUN_PYTHON) src/openword/generate_statistics.py
+WIKT_SORT := $(RUN_PYTHON) src/openword/wikt_sort.py
+WIKT_NORMALIZE := $(RUN_PYTHON) src/openword/wikt_normalize.py
+PACKAGE_RELEASE := $(RUN_PYTHON) src/openword/package_release.py
+
+# Python scripts (tools/)
+PYTHON_SCANNER := $(RUN_PYTHON) tools/wiktionary_scanner_python/scanner.py
+COLLECT_POS := $(RUN_PYTHON) tools/collect_pos.py
+UPDATE_CORPUS_DOC := $(RUN_PYTHON) tools/update_corpus_doc.py
+GENERATE_REPORTS := $(RUN_PYTHON) tools/generate_reports.py
+VALIDATE_ENABLE := $(RUN_PYTHON) tools/validate_enable_coverage.py
+VALIDATE_PROFANITY := $(RUN_PYTHON) tools/validate_profanity_coverage.py
+VALIDATE_CHILDISH := $(RUN_PYTHON) tools/validate_childish_terms.py
+VALIDATE_PARITY := $(RUN_PYTHON) tools/wiktionary-scanner-rust/scripts/validate_parity.py
+RUN_BENCHMARK := $(RUN_PYTHON) tools/wiktionary-scanner-rust/scripts/run_full_benchmark.py
 
 # Benchmark outputs
 BENCHMARK_DIR := data/benchmark
@@ -45,9 +71,8 @@ BENCHMARK_DIR := data/benchmark
 		package report-en diagnose-scanner corpus-stats \
 		validate-all validate-enable validate-profanity validate-childish \
 		validate-scanner-parity \
-        wordlist-builder-web viewer-web \
-		wordlists wordlist-wordle wordlist-kids-nouns wordlist-scrabble \
-		wordlist-profanity wordlist-enriched \
+        spec-editor-web viewer-web \
+		wordlists wordlist-enriched \
 		benchmark-rust-scanner benchmark-validate \
 		nightly
 
@@ -61,7 +86,7 @@ bootstrap: venv deps
 # Create/refresh project venv
 venv:
 	$(UV) venv --python $(PY_VERSION)
-	@$(UV) run python -c "import sys; print('Python', sys.version)"
+	@$(RUN_PYTHON) -c "import sys; print('Python', sys.version)"
 
 # Install dependencies
 deps:
@@ -87,7 +112,7 @@ test-python:
 # Rust unit tests only (requires cargo)
 test-rust: | check-cargo
 	@echo "Running Rust tests..."
-	(cd tools/wiktionary-rust; cargo test)
+	(cd tools/wiktionary-scanner-rust; cargo test)
 
 # Full test suite including scanner parity validation
 # Requires Wiktionary dump to be present
@@ -135,12 +160,12 @@ check-cargo:
 	}
 
 # Build Rust-based Wiktionary scanner
-# This is a high-performance replacement for tools/wiktionary_scanner_parser.py
+# This is a high-performance replacement for tools/wiktionary-scanner-python/scanner.py
 # The Rust version is faster (typically 4-5x) and produces identical output.
-# Binary output: tools/wiktionary-rust/target/release/wiktionary-rust
-$(RUST_SCANNER): tools/wiktionary-rust/Cargo.toml tools/wiktionary-rust/src/main.rs | check-cargo
+# Binary output: tools/wiktionary-scanner-rust/target/release/wiktionary-scanner-rust
+$(RUST_SCANNER): tools/wiktionary-scanner-rust/Cargo.toml tools/wiktionary-scanner-rust/src/main.rs | check-cargo
 	@echo "Building Rust scanner (release mode)..."
-	(cd tools/wiktionary-rust; cargo build --release)
+	(cd tools/wiktionary-scanner-rust; cargo build --release)
 
 # Convenience target for building Rust scanner
 build-rust-scanner: $(RUST_SCANNER)
@@ -160,46 +185,36 @@ build-rust-scanner: $(RUST_SCANNER)
 #   6. Generate statistics
 build-en: fetch-en $(LEXEMES_JSON) $(SENSES_JSON)
 	@echo "Merging sources (EOWL, WordNet)..."
-	$(UV) run python src/openword/source_merge.py \
+	$(SOURCE_MERGE) \
 		--wikt-lexemes $(LEXEMES_JSON) \
 		--eowl $(EOWL_FILE) \
 		--wordnet $(WORDNET_ARCHIVE) \
 		--output $(LEXEMES_MERGED)
 	@echo "Enriching lexemes file..."
-	$(UV) run python src/openword/brysbaert_enrich.py \
-		--input $(LEXEMES_MERGED) \
-		--output $(LEXEMES_ENRICHED)
-	$(UV) run python src/openword/frequency_tiers.py \
-		--input $(LEXEMES_ENRICHED) \
-		--output $(LEXEMES_ENRICHED)
+	$(BRYSBAERT_ENRICH) --input $(LEXEMES_MERGED) --output $(LEXEMES_ENRICHED)
+	$(FREQUENCY_TIERS) --input $(LEXEMES_ENRICHED) --output $(LEXEMES_ENRICHED)
 	@echo "Building tries..."
-	$(UV) run python src/openword/trie_build.py \
-		--input $(LEXEMES_ENRICHED) --profile full
-	$(UV) run python src/openword/trie_build.py \
-		--input $(LEXEMES_ENRICHED) --profile game
+	$(TRIE_BUILD) --input $(LEXEMES_ENRICHED) --profile full
+	$(TRIE_BUILD) --input $(LEXEMES_ENRICHED) --profile game
 	@echo "Exporting metadata modules..."
-	$(UV) run python src/openword/export_metadata.py \
-		--input $(LEXEMES_ENRICHED) --modules all --gzip
+	$(EXPORT_METADATA) --input $(LEXEMES_ENRICHED) --modules all --gzip
 	@echo "Exporting lemma metadata..."
-	$(UV) run python src/openword/export_lemma_groups.py \
-		--senses $(SENSES_JSON) --gzip
-	$(UV) run python src/openword/generate_statistics.py
+	$(EXPORT_LEMMA_GROUPS) --senses $(SENSES_JSON) --gzip
+	$(GENERATE_STATISTICS)
 
-$(WIKTIONARY_JSON_PARENT):
-	@mkdir -p "$(WIKTIONARY_JSON_PARENT)"
+$(WIKT_JSON_PARENT):
+	@mkdir -p "$(WIKT_JSON_PARENT)"
 
 # Build and sort Wiktionary JSONL using Rust scanner
 # 1. Extract from XML dump to unsorted JSONL (kept for traceability)
 # 2. Sort lexicographically by word (ensures duplicate entries are consecutive,
 #    trie ordinal = line number, matches Python's default lexicographic sort)
 # Default: channel-pipeline strategy with 4 threads (1.32x faster than sequential)
-$(WIKTIONARY_JSON_SORTED): $(WIKTIONARY_DUMP) $(RUST_SCANNER) | $(WIKTIONARY_JSON_PARENT)
+$(WIKT_JSON_SORTED): $(WIKT_DUMP) $(RUST_SCANNER) | $(WIKT_JSON_PARENT)
 	@echo "Extracting Wiktionary (using Rust scanner)..."
-	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" "$(WIKTIONARY_JSON)"
+	$(RUST_SCANNER) "$(WIKT_DUMP)" "$(WIKT_JSON)"
 	@echo "Sorting Wiktionary entries by word..."
-	$(UV) run python src/openword/wikt_sort.py \
-		--input $(WIKTIONARY_JSON) \
-		--output $(WIKTIONARY_JSON_SORTED)
+	$(WIKT_SORT) --input $(WIKT_JSON) --output $(WIKT_JSON_SORTED)
 
 # Normalize into two-file format: lexemes + senses
 # This step:
@@ -207,10 +222,10 @@ $(WIKTIONARY_JSON_SORTED): $(WIKTIONARY_DUMP) $(RUST_SCANNER) | $(WIKTIONARY_JSO
 #   2. Extracts word-level properties into lexeme entries
 #   3. Deduplicates senses by projection (pos, tags, flags)
 #   4. Writes offset/length linking between files
-$(LEXEMES_JSON) $(SENSES_JSON): $(WIKTIONARY_JSON_SORTED)
+$(LEXEMES_JSON) $(SENSES_JSON): $(WIKT_JSON_SORTED)
 	@echo "Normalizing Wiktionary into lexemes + senses tables..."
-	$(UV) run python src/openword/wikt_normalize.py \
-		--input $(WIKTIONARY_JSON_SORTED) \
+	$(WIKT_NORMALIZE) \
+		--input $(WIKT_JSON_SORTED) \
 		--lexemes-output $(LEXEMES_JSON) \
 		--senses-output $(SENSES_JSON) \
 		-v
@@ -225,16 +240,15 @@ build-trie: $(WORDLIST_TXT) viewer/node_modules | check-pnpm
 # Creates gzipped JSON files in data/build/{lang}-{module}.json.gz
 build-metadata: $(LEXEMES_ENRICHED)
 	@echo "Exporting metadata modules (gzipped)..."
-	$(UV) run python src/openword/export_metadata.py \
-		--input $(LEXEMES_ENRICHED) --modules all --gzip
+	$(EXPORT_METADATA) --input $(LEXEMES_ENRICHED) --modules all --gzip
 
 # Export trie to plain text wordlist
 $(WORDLIST_TXT): $(UNIFIED_TRIE)
-	$(UV) run python src/openword/export_wordlist.py
+	$(EXPORT_WORDLIST)
 
 # Package release artifacts
 package:
-	$(UV) run python src/openword/package_release.py
+	$(PACKAGE_RELEASE)
 
 # ===========================
 # Cleanup
@@ -246,9 +260,9 @@ clean:
 	find . -name '*.egg-info' -type d -prune -exec rm -rf '{}' +
 	rm -rf data/intermediate data/filtered data/build data/artifacts
 	rm -rf viewer/node_modules viewer/pnpm-lock.yaml viewer/data viewer/dist
-	@if [ -d tools/wiktionary-rust/target ]; then \
+	@if [ -d tools/wiktionary-scanner-rust/target ]; then \
 		echo "Cleaning Rust build artifacts..."; \
-		(cd tools/wiktionary-rust; cargo clean); \
+		(cd tools/wiktionary-scanner-rust; cargo clean); \
 	fi
 
 scrub: clean
@@ -265,16 +279,9 @@ CORPUS_DOC := docs/WIKTIONARY-CORPUS.md
 
 # Generate Wiktionary corpus statistics
 # Updates docs/WIKTIONARY-CORPUS.md with current POS distribution
-corpus-stats: $(WIKTIONARY_DUMP)
-	@echo "Collecting POS statistics from Wiktionary dump..."
-	@echo "This scans ~10M pages and takes ~15 minutes."
-	$(UV) run python tools/collect_pos.py "$(WIKTIONARY_DUMP)" \
-		--stats-output "$(CORPUS_STATS_FILE)"
-	@echo ""
-	@echo "Updating $(CORPUS_DOC)..."
-	$(UV) run python tools/update_corpus_doc.py \
-		"$(CORPUS_STATS_FILE)" "$(CORPUS_DOC)"
-	@echo ""
+corpus-stats: $(WIKT_DUMP)
+	$(COLLECT_POS) "$(WIKT_DUMP)" --stats-output "$(CORPUS_STATS_FILE)"
+	$(UPDATE_CORPUS_DOC) "$(CORPUS_STATS_FILE)" "$(CORPUS_DOC)"
 	@echo "Done! Review changes with: git diff $(CORPUS_DOC)"
 
 # ===========================
@@ -284,7 +291,7 @@ corpus-stats: $(WIKTIONARY_DUMP)
 # Generate comprehensive analysis reports for English
 report-en: deps
 	@echo "Generating English Lexicon Reports..."
-	$(UV) run python tools/generate_reports.py
+	$(GENERATE_REPORTS)
 	@ls -lh $(REPORTS_DIR)/*.md 2>/dev/null || true
 
 # Run all validation checks
@@ -296,7 +303,7 @@ validate-enable: deps
 	@bash scripts/fetch/fetch_enable.sh || echo "Warning: ENABLE fetch failed (GitHub CDN issue?)"
 	@if [ -f data/raw/en/enable1.txt ]; then \
 		echo "Running validation..."; \
-		$(UV) run python tools/validate_enable_coverage.py; \
+		$(VALIDATE_ENABLE); \
 	else \
 		echo "Error: ENABLE not available for validation."; \
 		echo "This is expected if GitHub CDN is having issues."; \
@@ -307,27 +314,24 @@ validate-enable: deps
 # WARNING: Downloads and analyzes lists with explicit/offensive content
 validate-profanity: deps
 	@bash scripts/fetch/fetch_profanity_lists.sh
-	@echo "Running validation..."
-	@$(UV) run python tools/validate_profanity_coverage.py
+	@$(VALIDATE_PROFANITY)
 
 # Validate childish term labeling
 validate-childish: deps
-	@echo "Validating childish term labeling..."
-	@$(UV) run python tools/validate_childish_terms.py
+	@$(VALIDATE_CHILDISH)
 
 # Validate Python/Rust scanner parity
 # Runs both scanners on 900000 entries and compares outputs word-by-word
 # Skips gracefully if Wiktionary dump not available
 # Note: Uses sequential mode with --limit for efficient early termination
-validate-scanner-parity: $(WIKTIONARY_DUMP) $(RUST_SCANNER) deps
+validate-scanner-parity: $(WIKT_DUMP) $(RUST_SCANNER) deps
 	@echo "Running Python scanner (900000 entries)..."
-	$(UV) run python tools/wiktionary_scanner_parser.py \
-		"$(WIKTIONARY_DUMP)" /tmp/parity-python.jsonl --limit 900000
+	$(PYTHON_SCANNER) "$(WIKT_DUMP)" /tmp/parity-python.jsonl --limit 900000
 	@echo "Running Rust scanner (900000 entries)..."
-	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" /tmp/parity-rust.jsonl \
+	$(RUST_SCANNER) "$(WIKT_DUMP)" /tmp/parity-rust.jsonl \
 		--strategy sequential --limit 900000
 	@echo "Validating parity..."
-	$(UV) run python tools/wiktionary-rust/scripts/validate_parity.py \
+	$(VALIDATE_PARITY) \
 		--python-output /tmp/parity-python.jsonl \
 		--rust-output /tmp/parity-rust.jsonl
 
@@ -337,9 +341,9 @@ validate-scanner-parity: $(WIKTIONARY_DUMP) $(RUST_SCANNER) deps
 
 # Run Rust scanner on limited entries for quick testing
 # Note: Uses sequential mode with --limit for efficient early termination
-diagnose-scanner: $(WIKTIONARY_DUMP) $(RUST_SCANNER)
+diagnose-scanner: $(WIKT_DUMP) $(RUST_SCANNER)
 	@echo "Running Rust scanner with limit (first 10000 entries)..."
-	$(RUST_SCANNER) "$(WIKTIONARY_DUMP)" /tmp/scanner_diagnostic.jsonl \
+	$(RUST_SCANNER) "$(WIKT_DUMP)" /tmp/scanner_diagnostic.jsonl \
 		--strategy sequential --limit 10000
 	@echo "Output written to: /tmp/scanner_diagnostic.jsonl"
 
@@ -352,10 +356,10 @@ diagnose-scanner: $(WIKTIONARY_DUMP) $(RUST_SCANNER)
 # Output: data/benchmark/en-wikt-{timestamp}-{strategy}[-t{threads}].jsonl
 # For overnight runs, use:
 #   caffeinate -i make benchmark-rust-scanner
-benchmark-rust-scanner: $(WIKTIONARY_DUMP) $(RUST_SCANNER) | $(BENCHMARK_DIR)
+benchmark-rust-scanner: $(WIKT_DUMP) $(RUST_SCANNER) | $(BENCHMARK_DIR)
 	@echo "Running complete Rust scanner benchmarks..."
-	$(UV) run python tools/wiktionary-rust/scripts/run_full_benchmark.py \
-		--input "$(WIKTIONARY_DUMP)" \
+	$(RUN_BENCHMARK) \
+		--input "$(WIKT_DUMP)" \
 		--output-dir "$(BENCHMARK_DIR)" \
 		--scanner "$(RUST_SCANNER)"
 
@@ -364,21 +368,18 @@ $(BENCHMARK_DIR):
 
 # Validate that all benchmark outputs are identical (when sorted)
 benchmark-validate:
-	@echo "Validating benchmark outputs..."
-	$(UV) run python tools/wiktionary-rust/scripts/run_full_benchmark.py \
-		--output-dir "$(BENCHMARK_DIR)" \
-		--validate-only
+	$(RUN_BENCHMARK) --output-dir "$(BENCHMARK_DIR)" --validate-only
 
 # ===========================
 # Web Tools
 # ===========================
 
-# Word list builder - create filtered word lists via web UI
-wordlist-builder-web: tools/wordlist-builder/node_modules | check-pnpm
-	@echo "Starting web-based word list builder..."
+# Spec editor - web UI for creating wordlist filter YAML specs
+spec-editor-web: tools/wordlist-spec-editor/node_modules | check-pnpm
+	@echo "Starting wordlist spec editor..."
 	@echo "  Server will start at: http://localhost:8000"
 	@echo "  Press Ctrl+C to stop the server"
-	(cd tools/wordlist-builder; pnpm start)
+	(cd tools/wordlist-spec-editor; pnpm start)
 
 # Trie viewer - explore lexicon interactively
 viewer-web: viewer/node_modules | check-pnpm
@@ -399,45 +400,32 @@ viewer-web: viewer/node_modules | check-pnpm
 # Word List Generation
 # ===========================
 
-# Output directory for generated word lists
+# Directory containing the YAML specs understood by `owlex`
+WORDLIST_SPECS_DIR := examples/wordlist-specs
+
+# Directory where generated word lists will be written
 WORDLISTS_DIR := data/wordlists
 
-$(WORDLISTS_DIR):
-	@mkdir -p $(WORDLISTS_DIR)
+# Discover all YAML specs and derive output filenames
+WORDLIST_SPEC_YAMLS := $(wildcard $(WORDLIST_SPECS_DIR)/*.yaml)
+WORDLIST_TXTS := $(patsubst $(WORDLIST_SPECS_DIR)/%.yaml, \
+                            $(WORDLISTS_DIR)/%.txt, \
+                            $(WORDLIST_SPEC_YAMLS))
 
-# Generate all example word lists
-.PHONY: wordlists wordlist-wordle wordlist-kids-nouns wordlist-scrabble wordlist-profanity
-wordlists: wordlist-wordle wordlist-kids-nouns wordlist-scrabble wordlist-profanity
+# Aggregate target: generate all word lists from specs
+.PHONY: wordlists
+wordlists: $(WORDLIST_TXTS)
 	@echo "Generated word lists in $(WORDLISTS_DIR)/"
 	@ls -lh $(WORDLISTS_DIR)/*.txt
 
-# Wordle words (5-letter common words)
-wordlist-wordle: $(LEXEMES_ENRICHED) | $(WORDLISTS_DIR)
-	@echo "Generating Wordle word list..."
-	$(UV) run owlex examples/wordlist-specs/wordle.yaml \
-		--output $(WORDLISTS_DIR)/wordle.txt
-	@wc -l $(WORDLISTS_DIR)/wordle.txt
+# Pattern rule: YAML spec -> TXT word list
+$(WORDLISTS_DIR)/%.txt: $(WORDLIST_SPECS_DIR)/%.yaml $(LEXEMES_ENRICHED) | $(WORDLISTS_DIR)
+	@echo "Generating $(@F)..."
+	$(UV) run owlex $< --output $@
+	@wc -l $@
 
-# Kids vocabulary (concrete nouns)
-wordlist-kids-nouns: $(LEXEMES_ENRICHED) | $(WORDLISTS_DIR)
-	@echo "Generating kids nouns word list..."
-	$(UV) run owlex examples/wordlist-specs/kids-nouns.yaml \
-		--output $(WORDLISTS_DIR)/kids-nouns.txt
-	@wc -l $(WORDLISTS_DIR)/kids-nouns.txt
-
-# Scrabble words
-wordlist-scrabble: $(LEXEMES_ENRICHED) | $(WORDLISTS_DIR)
-	@echo "Generating Scrabble word list..."
-	$(UV) run owlex examples/wordlist-specs/scrabble.yaml \
-		--output $(WORDLISTS_DIR)/scrabble.txt
-	@wc -l $(WORDLISTS_DIR)/scrabble.txt
-
-# Profanity blocklist
-wordlist-profanity: $(LEXEMES_ENRICHED) | $(WORDLISTS_DIR)
-	@echo "Generating profanity blocklist..."
-	$(UV) run owlex examples/wordlist-specs/profanity-blocklist.yaml \
-		--output $(WORDLISTS_DIR)/profanity-blocklist.txt
-	@wc -l $(WORDLISTS_DIR)/profanity-blocklist.txt
+$(WORDLISTS_DIR):
+	@mkdir -p "$@"
 
 # Generate word list with enriched sidecar (for any spec)
 # Usage: make wordlist-enriched SPEC=examples/wordlist-specs/wordle.yaml NAME=wordle

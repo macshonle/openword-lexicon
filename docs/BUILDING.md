@@ -59,7 +59,7 @@ Downloads:
 
 ```bash
 # Automatic via make build-en, or manually:
-./tools/wiktionary-rust/target/release/wiktionary-rust \
+./tools/wiktionary-scanner-rust/target/release/wiktionary-scanner-rust \
     data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
     data/intermediate/en-wikt.jsonl
 ```
@@ -215,7 +215,7 @@ After build, you'll find:
 rustc --version
 
 # Build manually
-cd tools/wiktionary-rust
+cd tools/wiktionary-scanner-rust
 cargo build --release
 ```
 

@@ -247,6 +247,6 @@ Part of the OpenWord Lexicon project. See main repository for license details.
 
 ## See Also
 
-- [Word List Builder](../tools/wordlist-builder/) - Create custom filtered word lists
+- [Wordlist Spec Editor](../tools/wordlist-spec-editor/) - Web UI for creating filter specs
 - [Main README](../README.md) - Project overview
 - [SOURCES.md](../docs/SOURCES.md) - Data sources and licensing

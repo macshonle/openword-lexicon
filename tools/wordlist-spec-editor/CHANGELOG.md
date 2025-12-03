@@ -1,4 +1,4 @@
-# Changelog - Word List Builder
+# Changelog - Wordlist Spec Editor
 
 ## [1.2.0] - 2025-11-17
 
@@ -9,7 +9,7 @@
   - Web interface allows users to see all options at once
   - Users prefer visual form over navigating CLI menus
 - **Simplified documentation**: Updated all docs to reference web interface only
-- **Streamlined Makefile**: Removed `wordlist-builder-cli` and `wordlist-builder-install` targets
+- **Streamlined Makefile**: Removed CLI/install targets, web-only
 
 ### Notes
 - JSON specifications remain fully compatible
@@ -36,7 +36,7 @@
 The CLI builder has been removed. Use the web interface instead:
 
 ```bash
-make wordlist-builder-web
+make spec-editor-web
 ```
 
 All existing JSON specifications remain compatible - no changes needed.

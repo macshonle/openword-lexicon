@@ -18,8 +18,8 @@ import time
 from collections import Counter, defaultdict
 from pathlib import Path
 
-# Import infrastructure from existing scanner
-from wiktionary_scanner_parser import BZ2StreamReader, scan_pages
+# Import infrastructure from scanner package
+from wiktionary_scanner_python.scanner import BZ2StreamReader, scan_pages
 
 # Patterns
 TITLE_PATTERN = re.compile(r'<title>([^<]+)</title>')

@@ -22,7 +22,7 @@ from pathlib import Path
 tools_path = Path(__file__).parent.parent / "tools"
 sys.path.insert(0, str(tools_path))
 
-from wiktionary_categories import (
+from wiktionary_scanner_python.categories import (
     CategoryBuilder,
     ComparabilityInfo,
     detect_phrasal_verb,
@@ -493,22 +493,22 @@ class TestLabelWithNoCategory:
 
     def test_slang_no_category(self):
         """'slang' has no pos_categories mapping."""
-        from wiktionary_categories import get_categories_for_label
+        from wiktionary_scanner_python.categories import get_categories_for_label
         assert get_categories_for_label("slang") == []
 
     def test_informal_no_category(self):
         """'informal' has no pos_categories mapping."""
-        from wiktionary_categories import get_categories_for_label
+        from wiktionary_scanner_python.categories import get_categories_for_label
         assert get_categories_for_label("informal") == []
 
     def test_figurative_no_category(self):
         """'figurative' has no pos_categories mapping."""
-        from wiktionary_categories import get_categories_for_label
+        from wiktionary_scanner_python.categories import get_categories_for_label
         assert get_categories_for_label("figurative") == []
 
     def test_unknown_label_no_category(self):
         """Unknown labels return empty list."""
-        from wiktionary_categories import get_categories_for_label
+        from wiktionary_scanner_python.categories import get_categories_for_label
         assert get_categories_for_label("nonexistent_label") == []
 
 

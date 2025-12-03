@@ -11,7 +11,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCANNER="${SCRIPT_DIR}/../target/release/wiktionary-rust"
+SCANNER="${SCRIPT_DIR}/../target/release/wiktionary-scanner-rust"
 
 # Default input file
 DEFAULT_INPUT="${SCRIPT_DIR}/../../../data/raw/en/enwiktionary-latest-pages-articles.xml.bz2"

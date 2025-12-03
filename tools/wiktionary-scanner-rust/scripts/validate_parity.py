@@ -9,7 +9,7 @@ Performs line-by-line comparison of JSONL outputs:
 - Reports all property differences, not just word/POS
 
 Usage:
-    uv run python tools/wiktionary-rust/scripts/validate_parity.py \
+    uv run python tools/wiktionary-scanner-rust/scripts/validate_parity.py \
         --python-output /tmp/parity-python.jsonl \
         --rust-output /tmp/parity-rust.jsonl
 """

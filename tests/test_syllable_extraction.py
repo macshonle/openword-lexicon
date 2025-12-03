@@ -9,10 +9,10 @@ matching language codes were incorrectly filtered out.
 import sys
 from pathlib import Path
 
-# Add tools directory to path for importing wiktionary_scanner_parser
+# Add tools directory to path for importing wiktionary_scanner_python
 sys.path.insert(0, str(Path(__file__).parent.parent / "tools"))
 
-from wiktionary_scanner_parser import (
+from wiktionary_scanner_python.scanner import (
     extract_syllable_count_from_hyphenation,
     extract_syllable_count_from_rhymes,
     extract_syllable_count_from_categories,

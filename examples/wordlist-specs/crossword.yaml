@@ -1,0 +1,21 @@
+# Words and phrases for crossword puzzles
+# Allows archaic/obscure words (common in crosswords)
+# Allows multi-word phrases (crossword answers can span multiple words)
+
+character:
+  min_length: 3
+  max_length: 15
+
+phrase:
+  max_words: 3  # multi-word answers allowed
+
+pos:
+  include: [noun, verb, adjective, adverb]
+
+# No frequency filter - obscure words are fair game in crosswords
+
+labels:
+  register:
+    exclude: [vulgar, derogatory]  # offensive may appear if clued appropriately
+
+# Archaic/obsolete words are valid crossword answers (no temporal exclusion)

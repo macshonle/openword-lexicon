@@ -89,7 +89,7 @@ class TestLemmaTemplatePatterns:
         sys.path.insert(0, str(tools_path))
 
         try:
-            from wiktionary_scanner_parser import INFLECTION_TEMPLATES
+            from wiktionary_scanner_python.scanner import INFLECTION_TEMPLATES
             return INFLECTION_TEMPLATES
         except ImportError:
             pytest.skip("Python scanner not available")

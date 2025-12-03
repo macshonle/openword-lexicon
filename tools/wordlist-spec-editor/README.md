@@ -1,6 +1,6 @@
-# OpenWord Lexicon - Advanced Word List Builder
+# OpenWord Lexicon - Wordlist Spec Editor
 
-An interactive web-based tool for building custom word lists from the OpenWord Lexicon. Create filtered word lists for games, educational apps, language learning tools, and more.
+A web UI for creating wordlist filter specifications (YAML/JSON) for the OpenWord Lexicon. Design filter specs visually, then use them with the `owlex` CLI to generate word lists for games, educational apps, language learning tools, and more.
 
 This directory contains two web interfaces:
 - **[index.html](index.html)** - Advanced builder with dynamic filters and source selection (recommended)
@@ -10,7 +10,7 @@ This directory contains two web interfaces:
 
 ## Quick Start (New Advanced Builder)
 
-1. **Start the server**: Run `make wordlist-builder-web` from the project root
+1. **Start the server**: Run `make spec-editor-web` from the project root
 2. **Select sources**: Choose word sources in the left panel (EOWL + Wiktionary checked by default)
 3. **Add filters**: Click filter type buttons to add filters dynamically
 4. **Configure filters**: Set each filter to "Must Include" or "Must Not Include" mode
@@ -18,7 +18,7 @@ This directory contains two web interfaces:
 
 ```bash
 # Start the web server (from project root)
-make wordlist-builder-web
+make spec-editor-web
 
 # Server will start at: http://localhost:8000
 # Requires: pnpm (install with: npm install -g pnpm)
@@ -49,7 +49,7 @@ Statistics are automatically generated during the build process:
 make build-en
 ```
 
-This creates/updates `tools/wordlist-builder/build-statistics.json` with:
+This creates/updates `tools/wordlist-spec-editor/build-statistics.json` with:
 - **Total word counts** by source combination
 - **License requirements** distribution
 - **Metadata coverage** percentages (POS tags, labels, concreteness, etc.)
@@ -121,7 +121,7 @@ uv run python -m openword.owlex wordlist-spec.json --verbose --output words.txt
 make build-en
 
 # 2. Create a specification with web interface
-make wordlist-builder-web
+make spec-editor-web
 
 # 3. Generate the word list
 uv run python -m openword.owlex wordlist-spec.json > my-words.txt
@@ -767,8 +767,8 @@ head wordle-words.txt
 # Use example preset
 uv run python -m openword.owlex examples/wordlist-specs/kids-nouns.json > kids-words.txt
 
-# Or use web builder to create custom specification:
-# make wordlist-builder-web
+# Or use spec editor to create custom specification:
+# make spec-editor-web
 # Then select:
 # - Distribution: core
 # - Character: 3-10 length

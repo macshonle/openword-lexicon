@@ -115,12 +115,12 @@ Save as `my-filter.json` and run:
 uv run python -m openword.owlex my-filter.json > words.txt
 ```
 
-## Option 4: Interactive Web Builder
+## Option 4: Interactive Spec Editor
 
 Build filter specs visually:
 
 ```bash
-make wordlist-builder-web
+make spec-editor-web
 # Opens http://localhost:8000
 ```
 

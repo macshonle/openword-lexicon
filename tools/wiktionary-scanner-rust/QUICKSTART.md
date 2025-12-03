@@ -7,7 +7,7 @@ High-performance Rust implementation of the Wiktionary XML parser, now integrate
 ## Files
 
 ```
-tools/wiktionary-rust/
+tools/wiktionary-scanner-rust/
 ├── Cargo.toml              # Rust dependencies and build config
 ├── src/
 │   └── main.rs             # Complete parser implementation (~850 lines)
@@ -21,18 +21,18 @@ To build or rebuild the Rust scanner:
 
 1. **Verify it builds:**
    ```bash
-   cd tools/wiktionary-rust
+   cd tools/wiktionary-scanner-rust
    cargo build --release
    ```
 
 2. **Check the binary exists:**
    ```bash
-   ls -lh target/release/wiktionary-rust
+   ls -lh target/release/wiktionary-scanner-rust
    ```
 
 3. **See help text:**
    ```bash
-   ./target/release/wiktionary-rust --help
+   ./target/release/wiktionary-scanner-rust --help
    ```
 
 ## Usage
@@ -48,7 +48,7 @@ Or run directly:
 
 ```bash
 # From repo root
-tools/wiktionary-rust/target/release/wiktionary-rust \
+tools/wiktionary-scanner-rust/target/release/wiktionary-scanner-rust \
     data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
     data/intermediate/en/wikt.jsonl
 ```
@@ -87,12 +87,12 @@ tools/wiktionary-rust/target/release/wiktionary-rust \
 
 ```bash
 # Test both versions on 1000 entries
-time tools/wiktionary-rust/target/release/wiktionary-rust \
+time tools/wiktionary-scanner-rust/target/release/wiktionary-scanner-rust \
     --limit 1000 \
     data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
     /tmp/rust-1k.jsonl
 
-time uv run python tools/wiktionary_scanner_parser.py \
+time uv run python tools/wiktionary_scanner_python/scanner.py \
     --limit 1000 \
     data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
     /tmp/python-1k.jsonl

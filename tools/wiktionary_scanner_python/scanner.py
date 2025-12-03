@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-wiktionary_scanner_parser.py - Lightweight scanner-based Wiktionary parser
+scanner.py - Lightweight scanner-based Wiktionary parser
 
-This is the Python reference implementation of the Wiktionary scanner.
-A Rust implementation is also available at tools/wiktionary-rust/ which is
-significantly faster (typically 5-10x). Both produce identical output.
+Part of tools/wiktionary_scanner_python/ - the Python reference implementation
+of the Wiktionary scanner. A Rust implementation is available at
+tools/wiktionary-scanner-rust/ which is significantly faster (typically 5-10x).
+Both produce identical output.
 
 Production builds use the Rust version via `make build-wiktionary-json`.
 This Python version serves as a readable reference and for testing/development.
@@ -16,7 +17,7 @@ No XML validation, no DOM building, no namespace overhead - just fast
 extraction of the data we need.
 
 Usage:
-    python wiktionary_scanner_parser.py INPUT.xml.bz2 OUTPUT.jsonl [--limit N]
+    python -m wiktionary_scanner_python.scanner INPUT.xml.bz2 OUTPUT.jsonl [--limit N]
 """
 
 import bz2

@@ -231,7 +231,7 @@ class TestRustPythonScannerParity:
         sys.path.insert(0, str(tools_path))
 
         try:
-            from wiktionary_scanner_parser import extract_lemma
+            from wiktionary_scanner_python.scanner import extract_lemma
 
             # Test with the sample text containing {{plural of|en|cat}}
             text_with_plural = "# {{plural of|en|cat}}"
@@ -257,7 +257,7 @@ class TestRustPythonScannerParity:
         sys.path.insert(0, str(tools_path))
 
         try:
-            from wiktionary_scanner_parser import extract_lemma
+            from wiktionary_scanner_python.scanner import extract_lemma
 
             test_cases = [
                 ("{{plural of|en|dog}}", "dog"),

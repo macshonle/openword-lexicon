@@ -239,7 +239,7 @@ owlex my-spec.yaml --output my-words.txt
 
 ### Method 2: Web Interface
 ```bash
-make wordlist-builder-web
+make spec-editor-web
 ```
 
 Use the visual form to configure filters and download the specification.

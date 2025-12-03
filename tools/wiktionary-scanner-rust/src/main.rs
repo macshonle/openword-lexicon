@@ -28,7 +28,7 @@ pub enum Strategy {
 }
 
 #[derive(Parser)]
-#[command(name = "wiktionary-rust")]
+#[command(name = "wiktionary-scanner-rust")]
 #[command(about = "Fast Rust-based Wiktionary XML parser - outputs one entry per sense")]
 struct Args {
     /// Input XML file (.xml or .xml.bz2)

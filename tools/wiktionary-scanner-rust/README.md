@@ -38,18 +38,18 @@ and idioms with commas).
 ### Build
 
 ```bash
-cd tools/wiktionary-rust
+cd tools/wiktionary-scanner-rust
 cargo build --release
 ```
 
-The compiled binary will be at: `target/release/wiktionary-rust`
+The compiled binary will be at: `target/release/wiktionary-scanner-rust`
 
 ## Usage
 
 Basic usage:
 
 ```bash
-./target/release/wiktionary-rust \
+./target/release/wiktionary-scanner-rust \
     data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
     data/intermediate/en/wikt-rust.jsonl
 ```
@@ -57,7 +57,7 @@ Basic usage:
 With entry limit (for testing):
 
 ```bash
-./target/release/wiktionary-rust \
+./target/release/wiktionary-scanner-rust \
     --limit 10000 \
     data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
     data/intermediate/en/wikt-rust.jsonl
@@ -91,7 +91,7 @@ To use the Rust parser in your build pipeline:
 # Add to Makefile
 data/intermediate/en/wikt.jsonl: data/raw/en/enwiktionary-latest-pages-articles.xml.bz2
 	@echo "Extracting Wiktionary (Rust version)..."
-	tools/wiktionary-rust/target/release/wiktionary-rust $< $@
+	tools/wiktionary-scanner-rust/target/release/wiktionary-scanner-rust $< $@
 ```
 
 ## Development

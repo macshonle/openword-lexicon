@@ -57,8 +57,8 @@ After `make build-en`, you'll find:
 Use the interactive web builder or command-line tool:
 
 ```bash
-# Web interface
-make wordlist-builder-web
+# Web interface for creating filter specs
+make spec-editor-web
 
 # Command line with JSON spec
 uv run python -m openword.owlex examples/wordlist-specs/wordle.json
