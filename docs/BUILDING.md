@@ -268,4 +268,4 @@ PROFILES = {
 
 ### Modify Frequency Tiers
 
-Edit `src/openword/frequency_tiers.py` to change the A-L tier boundaries.
+Edit `src/openword/frequency_tiers.py` to change the A-X tier boundaries (see `TIER_DEFINITIONS`).

@@ -8,7 +8,7 @@ syllables:
 
 frequency:
   min_tier: A
-  max_tier: I  # common words
+  max_tier: L  # top ~10k common words
 
 character:
   min_length: 3

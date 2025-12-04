@@ -138,30 +138,45 @@ phrase:
 ```yaml
 frequency:
   min_tier: A     # Most common tier to include
-  max_tier: I     # Least common tier to include
+  max_tier: L     # Least common tier to include
 ```
 
 **Tier ranges:** A (most common) through Z (unknown)
-- A: rank 1 (the, be, to, of, and, a, in, that, have, I)
-- B: rank 2-3
-- C: rank 4-5
-- D: rank 6-10
-- E: rank 11-17
-- F: rank 18-31
-- G: rank 32-56
-- H: rank 57-100
-- I: rank 101-175
-- J: rank 176-316
-- K: rank 317-562
-- L: rank 563-1000
-- M: rank 1001-1778
-- N-W: progressively less common
-- Z: unknown/unranked
+
+| Tier | Rank Range | Description |
+|------|------------|-------------|
+| A | 1-20 | Top 20 words |
+| B | 21-100 | Top 100 |
+| C | 101-200 | Top 200 |
+| D | 201-300 | Top 300 |
+| E | 301-400 | Top 400 |
+| F | 401-500 | Top 500 |
+| G | 501-1,000 | Top 1,000 |
+| H | 1,001-2,000 | Top 2,000 |
+| I | 2,001-3,000 | Top 3,000 |
+| J | 3,001-4,000 | Top 4,000 |
+| K | 4,001-5,000 | Top 5,000 |
+| L | 5,001-10,000 | Top 10,000 |
+| M | 10,001-20,000 | Top 20,000 |
+| N | 20,001-30,000 | Top 30,000 |
+| O | 30,001-40,000 | Top 40,000 |
+| P | 40,001-50,000 | Top 50,000 |
+| Q-U | 50,001-100,000 | Top 100,000 |
+| V-X | 100,001-400,000 | Rare but ranked |
+| Y | 400,001+ | Very rare but ranked |
+| Z | — | Unknown/unranked |
 
 Example ranges:
-- `min_tier: A, max_tier: I` — Top ~30,000 words
-- `min_tier: A, max_tier: F` — Top ~3,000 words
-- `min_tier: A, max_tier: C` — Top ~500 words
+- `min_tier: A, max_tier: L` — Top ~10,000 words
+- `min_tier: A, max_tier: G` — Top ~1,000 words
+- `min_tier: A, max_tier: F` — Top ~500 words
+
+**Note:** Frequency is just one signal for word commonality. For puzzle games, you may also want to consider:
+- **Temporal labels** (`archaic`, `obsolete`, `dated`) — exclude old-fashioned words
+- **Register labels** (`rare`, `literary`, `technical`) — exclude specialized vocabulary
+- **Concreteness** — prefer concrete nouns for visual games
+
+A word can be high-frequency but still inappropriate (e.g., archaic words in historical texts), or low-frequency but perfectly suitable (e.g., concrete nouns like "giraffe").
 
 ### POS Filters
 
@@ -245,9 +260,12 @@ frequency:
 
 ### Proper Noun Filters
 
+> **Note:** Proper noun filtering is not yet fully implemented. The `has_common_usage` field is not currently populated in the data pipeline. For now, use WordNet `lexnames` to identify proper nouns (words with only `noun.person` or `noun.location` categories).
+
 ```yaml
-proper_noun:
-  require_common_usage: true  # "bill" OK, "Aaron" excluded
+# NOT YET IMPLEMENTED - will error
+# proper_noun:
+#   require_common_usage: true  # "bill" OK, "Aaron" excluded
 ```
 
 ## Example Specifications

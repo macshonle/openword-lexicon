@@ -10,7 +10,7 @@ phrase:
 
 frequency:
   min_tier: A
-  max_tier: I   # top ~30k words
+  max_tier: N   # top ~30k words
 
 labels:
   register:

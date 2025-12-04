@@ -33,6 +33,167 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 
+# =============================================================================
+# Lexeme Entry Schema
+# =============================================================================
+# This schema defines all valid fields in enriched lexeme entries.
+# Used for validation and to auto-populate defaults for missing fields.
+
+LEXEME_SCHEMA = {
+    # Required fields
+    'word': {'type': str, 'required': True},
+
+    # Core metadata (always present after enrichment)
+    'frequency_tier': {'type': str, 'default': 'Z'},
+    'sources': {'type': list, 'default': []},
+    'license_sources': {'type': dict, 'default': {}},
+    'sense_count': {'type': int, 'default': 0},
+    'sense_offset': {'type': int, 'default': 0},
+    'sense_length': {'type': int, 'default': 0},
+    'word_count': {'type': int, 'default': 1},
+
+    # Optional enrichment fields
+    'syllables': {'type': int, 'default': None},
+    'concreteness': {'type': str, 'default': None},  # 'concrete', 'mixed', 'abstract'
+    'concreteness_rating': {'type': float, 'default': None},
+    'concreteness_sd': {'type': float, 'default': None},
+    'spelling_region': {'type': str, 'default': None},  # 'us', 'gb', etc.
+    'lexnames': {'type': list, 'default': None},  # WordNet semantic categories
+    'morphology': {'type': dict, 'default': None},
+    'phrase_type': {'type': str, 'default': None},
+    'is_phrase': {'type': bool, 'default': False},
+    'labels': {'type': dict, 'default': {}},
+    'pos': {'type': list, 'default': []},
+
+    # Lemma/inflection fields (from sense-level aggregation)
+    'is_inflected': {'type': bool, 'default': False},
+    'is_inflected_any': {'type': bool, 'default': False},
+
+    # Proper noun fields - NOT YET IMPLEMENTED in data pipeline
+    # These are defined here for documentation but will fail validation
+    # until the enrichment pipeline populates them
+    # 'has_common_usage': {'type': bool, 'default': False},
+    # 'has_proper_usage': {'type': bool, 'default': False},
+}
+
+# Map filter options to the entry fields they require
+# Format: {filter_category: {filter_option: [required_fields]}}
+FILTER_FIELD_REQUIREMENTS = {
+    'proper_noun': {
+        'require_common_usage': ['has_common_usage'],
+        'exclude_pure_proper_nouns': ['has_common_usage'],
+        'allow_proper_usage': ['has_proper_usage'],
+    },
+    'frequency': {
+        'min_tier': ['frequency_tier'],
+        'max_tier': ['frequency_tier'],
+        'tiers': ['frequency_tier'],
+        'min_score': ['frequency_tier'],
+        'max_score': ['frequency_tier'],
+    },
+    'syllables': {
+        'min': ['syllables'],
+        'max': ['syllables'],
+        'exact': ['syllables'],
+        'require_syllables': ['syllables'],
+    },
+    'concreteness': {
+        'categories': ['concreteness'],
+        'min_rating': ['concreteness_rating'],
+        'max_rating': ['concreteness_rating'],
+    },
+    'character': {
+        'min_length': ['word'],
+        'max_length': ['word'],
+        'exact_length': ['word'],
+        'char_preset': ['word'],
+        'allowed_chars': ['word'],
+        'must_contain': ['word'],
+        'must_not_contain': ['word'],
+        'pattern': ['word'],
+    },
+    'phrase': {
+        'min_words': ['word_count'],
+        'max_words': ['word_count'],
+        'is_phrase': ['word_count'],
+        'phrase_type': ['phrase_type'],
+    },
+    'sources': {
+        'include': ['sources'],
+        'exclude': ['sources'],
+        'enrichment': ['sources'],
+    },
+    'region': {
+        'include': ['spelling_region'],
+        'exclude': ['spelling_region'],
+        'allow_universal': ['spelling_region'],
+    },
+    'spelling_region': {
+        'include': ['spelling_region'],
+        'exclude': ['spelling_region'],
+        'allow_universal': ['spelling_region'],
+    },
+    'labels': {
+        'exclude_archaic': ['labels'],
+        'exclude_obsolete': ['labels'],
+        'exclude_slang': ['labels'],
+        'exclude_offensive': ['labels'],
+        'exclude_vulgar': ['labels'],
+        'require_standard': ['labels'],
+    },
+    'temporal': {
+        'exclude_archaic': ['labels'],
+        'exclude_obsolete': ['labels'],
+    },
+    'lemma': {
+        'base_forms_only': ['is_inflected', 'is_inflected_any'],
+        'exclude_inflections': ['is_inflected', 'is_inflected_any'],
+    },
+    'pos': {
+        'include': ['pos'],
+        'exclude': ['pos'],
+    },
+}
+
+
+def get_available_fields() -> Set[str]:
+    """Return the set of field names available in the lexeme schema."""
+    return set(LEXEME_SCHEMA.keys())
+
+
+def validate_filter_fields(filters: Dict[str, Any], spec_path: Optional[Path] = None) -> List[str]:
+    """
+    Validate that filter options don't reference unavailable entry fields.
+
+    Returns a list of error messages (empty if valid).
+    """
+    errors = []
+    available = get_available_fields()
+
+    for filter_category, filter_options in filters.items():
+        if not isinstance(filter_options, dict):
+            continue
+
+        requirements = FILTER_FIELD_REQUIREMENTS.get(filter_category, {})
+
+        for option_name, option_value in filter_options.items():
+            if option_name not in requirements:
+                # Unknown filter option - could warn but not error
+                continue
+
+            required_fields = requirements[option_name]
+            for field in required_fields:
+                if field not in available:
+                    location = f" in {spec_path}" if spec_path else ""
+                    errors.append(
+                        f"Filter '{filter_category}.{option_name}' requires field '{field}' "
+                        f"which is not available in the lexeme data{location}. "
+                        f"This field may not be implemented yet in the data pipeline."
+                    )
+
+    return errors
+
+
 class OwlexFilter:
     """Filter engine for word list specifications."""
 
@@ -82,6 +243,14 @@ class OwlexFilter:
 
         # Detect and normalize spec format
         spec = self._normalize_spec_format(spec)
+
+        # Validate that filters don't reference unavailable fields
+        filters = spec.get('filters', {})
+        validation_errors = validate_filter_fields(filters, self.spec_path)
+        if validation_errors:
+            for error in validation_errors:
+                logger.error(error)
+            sys.exit(1)
 
         return spec
 

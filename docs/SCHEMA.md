@@ -52,7 +52,7 @@ Each line in `en-lexemes-enriched.jsonl` is a JSON object:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `frequency_tier` | string | A-L/Y/Z frequency code (see below) |
+| `frequency_tier` | string | A-Z frequency code (see below) |
 | `concreteness` | float | Brysbaert rating 1.0-5.0 |
 | `syllables` | int | Syllable count |
 | `pos` | string[] | Parts of speech |
@@ -61,32 +61,44 @@ Each line in `en-lexemes-enriched.jsonl` is a JSON object:
 | `sense_length` | int | Number of senses |
 | `license_sources` | object | License -> sources mapping |
 | `spelling_region` | string | Regional spelling variant (e.g., `"en-US"`, `"en-GB"`) |
-| `has_common_usage` | bool | Has non-proper-noun usage |
-| `has_proper_usage` | bool | Has proper noun usage |
 | `lexnames` | string[] | WordNet semantic categories (e.g., `["noun.animal"]`) |
 
-## Frequency Tiers (A-L, Y, Z)
+## Frequency Tiers (A-X, Y, Z)
 
-12-level explicit boundary system based on corpus frequency rank:
+24-tier system based on corpus frequency rank:
 
 | Tier | Rank Range | Description |
 |------|------------|-------------|
-| A | 1-20 | Universal Anchor |
-| B | 21-100 | Grammatical Skeleton |
-| C | 101-300 | Semantic Core |
-| D | 301-500 | Basic Literacy |
-| E | 501-1,000 | Elementary Vocabulary |
-| F | 1,001-3,000 | Everyday Lexicon |
-| G | 3,001-5,000 | Conversational Mastery |
-| H | 5,001-10,000 | Educated Standard |
-| I | 10,001-30,000 | Full Adult Repertoire |
-| J | 30,001-50,000 | Sophisticated/Erudite |
-| K | 50,001-75,000 | Technical/Domain-specific |
-| L | 75,001-100,000 | Archaic/Hyperspecialized |
-| Y | 100,001+ | Known but very rare |
+| A | 1-20 | Top 20 |
+| B | 21-100 | Top 100 |
+| C | 101-200 | Top 200 |
+| D | 201-300 | Top 300 |
+| E | 301-400 | Top 400 |
+| F | 401-500 | Top 500 |
+| G | 501-1,000 | Top 1,000 |
+| H | 1,001-2,000 | Top 2,000 |
+| I | 2,001-3,000 | Top 3,000 |
+| J | 3,001-4,000 | Top 4,000 |
+| K | 4,001-5,000 | Top 5,000 |
+| L | 5,001-10,000 | Top 10,000 |
+| M | 10,001-20,000 | Top 20,000 |
+| N | 20,001-30,000 | Top 30,000 |
+| O | 30,001-40,000 | Top 40,000 |
+| P | 40,001-50,000 | Top 50,000 |
+| Q | 50,001-60,000 | Top 60,000 |
+| R | 60,001-70,000 | Top 70,000 |
+| S | 70,001-80,000 | Top 80,000 |
+| T | 80,001-90,000 | Top 90,000 |
+| U | 90,001-100,000 | Top 100,000 |
+| V | 100,001-200,000 | Top 200,000 |
+| W | 200,001-300,000 | Top 300,000 |
+| X | 300,001-400,000 | Top 400,000 |
+| Y | 400,001+ | Known but very rare |
 | Z | unranked | Unknown/unranked |
 
-**Rule of thumb**: Tiers A-F cover the top ~3,000 most frequent words. Tiers A-I cover the top ~30,000.
+**Rule of thumb**: Tier F = top 500, Tier L = top 10,000, Tier P = top 50,000.
+
+**Note**: Frequency is just one signal. Also consider temporal labels (`archaic`, `obsolete`) and register labels (`rare`, `literary`) for word selection.
 
 ## Part of Speech Tags
 

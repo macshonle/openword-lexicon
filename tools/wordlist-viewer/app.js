@@ -350,6 +350,15 @@ class LOUDSBinaryTrie {
         this._collectWords(nodeId, prefix, results, limit);
         return results;
     }
+
+    getStats() {
+        return {
+            wordCount: this.wordCount,
+            nodeCount: this.nodeCount,
+            sizeBytes: null,
+            bytesPerWord: null
+        };
+    }
 }
 
 // ============================================================================

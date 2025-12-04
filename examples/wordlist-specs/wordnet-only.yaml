@@ -14,4 +14,4 @@ phrase:
 
 frequency:
   min_tier: A
-  max_tier: H
+  max_tier: L  # top ~10k words

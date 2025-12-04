@@ -46,9 +46,9 @@ import json
 with gzip.open('data/build/en-frequency.json.gz', 'rt') as f:
     frequency = json.load(f)
 
-print(frequency.get('the'))     # 'A' (most frequent)
-print(frequency.get('castle'))  # 'N' (common)
-print(frequency.get('zugzwang')) # 'Z' (rare)
+print(frequency.get('the'))     # 'A' (top 20)
+print(frequency.get('castle'))  # 'H' (top 2,000)
+print(frequency.get('zugzwang')) # 'Z' (unranked)
 
 # Load concreteness ratings
 with gzip.open('data/build/en-concreteness.json.gz', 'rt') as f:

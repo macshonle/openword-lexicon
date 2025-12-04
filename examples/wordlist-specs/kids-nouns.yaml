@@ -16,7 +16,7 @@ concreteness:
 
 frequency:
   min_tier: A
-  max_tier: G  # top common words
+  max_tier: L  # top ~10k common words
 
 # Explicit family-friendly filters (replaces policy.family_friendly)
 labels:

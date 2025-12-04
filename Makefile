@@ -235,9 +235,9 @@ $(LEXEMES_JSON) $(SENSES_JSON): $(WIKT_JSON_SORTED)
 		--senses-output $(SENSES_JSON) \
 		-v
 
-# Build compact trie for browser visualization
+# Build compact trie for browser visualization (DAWG v4 format with varint deltas)
 build-trie: $(WORDLIST_TXT) tools/wordlist-viewer/node_modules | check-pnpm
-	(cd tools/wordlist-viewer; pnpm run build-trie ../../$(WORDLIST_TXT) data/$(LEXICON_LANG).trie.bin)
+	(cd tools/wordlist-viewer; pnpm run build-trie --format=v4 ../../$(WORDLIST_TXT) data/$(LEXICON_LANG).trie.bin)
 
 # Export modular metadata layers (frequency, concreteness, syllables, sources)
 # Creates gzipped JSON files in data/build/{lang}-{module}.json.gz

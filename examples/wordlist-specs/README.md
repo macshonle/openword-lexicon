@@ -78,11 +78,11 @@ Simple words for beginning readers and ESL learners.
 
 ### `scrabble.yaml`
 Words suitable for Scrabble.
-- Single words only
-- Requires common usage (excludes pure proper nouns)
-- Allows archaic/obsolete (valid in Scrabble)
+- Single words only (a-z characters)
+- Allows archaic/obsolete (valid in Scrabble dictionaries)
+- TODO: Add lexnames filter to exclude pure proper nouns
 
-**Expected**: ~100,000+ words
+**Expected**: ~700,000+ words (before proper noun filtering)
 
 ---
 
@@ -155,9 +155,15 @@ phrase:
 ```yaml
 frequency:
   min_tier: A           # Most common tier to include
-  max_tier: I           # Least common tier to include
-  # Tiers: A (most common) → J → Z (rarest/unknown)
+  max_tier: L           # Least common tier to include
+  # Tiers: A (top 20) → L (top 10k) → Z (unknown)
+  # See docs/FILTERING.md for full tier table
 ```
+
+**Note:** Frequency is just one signal. Consider also using:
+- `temporal: exclude: [archaic, obsolete]` for modern vocabulary
+- `labels: register: exclude: [rare, literary]` for common words
+- `concreteness: values: [concrete]` for tangible nouns
 
 ### Syllable Filters
 ```yaml
@@ -207,9 +213,12 @@ sources:
 ```
 
 ### Proper Noun Filters
+
+> **Not yet implemented** — The `has_common_usage` field is not populated in the data pipeline. See docs/FILTERING.md for alternatives using WordNet `lexnames`.
+
 ```yaml
-proper_noun:
-  require_common_usage: true  # "bill" OK, "Aaron" excluded
+# proper_noun:
+#   require_common_usage: true  # "bill" OK, "Aaron" excluded
 ```
 
 ---

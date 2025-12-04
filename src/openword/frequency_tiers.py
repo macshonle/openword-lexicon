@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-frequency_tiers.py — Assign frequency rank codes (A–L, Y, Z) to lexeme entries.
+frequency_tiers.py — Assign frequency rank codes (A–X, Y, Z) to lexeme entries.
 
 Usage:
   uv run python src/openword/frequency_tiers.py \\
@@ -9,20 +9,32 @@ Usage:
 
 Reads frequency data from data/raw/{lang}/{lang}_50k.txt
 
-Rank Code System (12-level explicit boundaries):
-  - A: ranks 1-20         Universal Anchor
-  - B: ranks 21-100       Grammatical Skeleton
-  - C: ranks 101-300      Semantic Core
-  - D: ranks 301-500      Basic Literacy
-  - E: ranks 501-1000     Elementary Vocabulary
-  - F: ranks 1001-3000    Everyday Lexicon
-  - G: ranks 3001-5000    Conversational Mastery
-  - H: ranks 5001-10000   Educated Standard
-  - I: ranks 10001-30000  Full Adult Repertoire
-  - J: ranks 30001-50000  Sophisticated/Erudite
-  - K: ranks 50001-75000  Technical/Domain-specific
-  - L: ranks 75001-100000 Archaic/Hyperspecialized
-  - Y: ranks 100001+      Known but very rare (beyond typical frequency data)
+Rank Code System (24 tiers A-X, plus Y for rare and Z for unknown):
+  - A: ranks 1-20         (top 20)
+  - B: ranks 21-100       (top 100)
+  - C: ranks 101-200      (top 200)
+  - D: ranks 201-300      (top 300)
+  - E: ranks 301-400      (top 400)
+  - F: ranks 401-500      (top 500)
+  - G: ranks 501-1000     (top 1,000)
+  - H: ranks 1001-2000    (top 2,000)
+  - I: ranks 2001-3000    (top 3,000)
+  - J: ranks 3001-4000    (top 4,000)
+  - K: ranks 4001-5000    (top 5,000)
+  - L: ranks 5001-10000   (top 10,000)
+  - M: ranks 10001-20000  (top 20,000)
+  - N: ranks 20001-30000  (top 30,000)
+  - O: ranks 30001-40000  (top 40,000)
+  - P: ranks 40001-50000  (top 50,000)
+  - Q: ranks 50001-60000  (top 60,000)
+  - R: ranks 60001-70000  (top 70,000)
+  - S: ranks 70001-80000  (top 80,000)
+  - T: ranks 80001-90000  (top 90,000)
+  - U: ranks 90001-100000 (top 100,000)
+  - V: ranks 100001-200000 (top 200,000)
+  - W: ranks 200001-300000 (top 300,000)
+  - X: ranks 300001-400000 (top 400,000)
+  - Y: ranks 400001+      (known but very rare)
   - Z: unknown/unranked
 """
 
@@ -128,19 +140,31 @@ def _should_assign_frequency(word: str, lowercase_words: Set[str]) -> bool:
 # Tier thresholds: (min_rank, code, description)
 # Each tier starts at min_rank and extends to the next tier's min_rank - 1
 TIER_DEFINITIONS = [
-    (1, 'A', 'Universal Anchor'),
-    (21, 'B', 'Grammatical Skeleton'),
-    (101, 'C', 'Semantic Core'),
-    (301, 'D', 'Basic Literacy'),
-    (501, 'E', 'Elementary Vocabulary'),
-    (1001, 'F', 'Everyday Lexicon'),
-    (3001, 'G', 'Conversational Mastery'),
-    (5001, 'H', 'Educated Standard'),
-    (10001, 'I', 'Full Adult Repertoire'),
-    (30001, 'J', 'Sophisticated/Erudite'),
-    (50001, 'K', 'Technical/Domain-specific'),
-    (75001, 'L', 'Archaic/Hyperspecialized'),
-    (100001, 'Y', 'Known but very rare'),
+    (1, 'A', 'top 20'),
+    (21, 'B', 'top 100'),
+    (101, 'C', 'top 200'),
+    (201, 'D', 'top 300'),
+    (301, 'E', 'top 400'),
+    (401, 'F', 'top 500'),
+    (501, 'G', 'top 1,000'),
+    (1001, 'H', 'top 2,000'),
+    (2001, 'I', 'top 3,000'),
+    (3001, 'J', 'top 4,000'),
+    (4001, 'K', 'top 5,000'),
+    (5001, 'L', 'top 10,000'),
+    (10001, 'M', 'top 20,000'),
+    (20001, 'N', 'top 30,000'),
+    (30001, 'O', 'top 40,000'),
+    (40001, 'P', 'top 50,000'),
+    (50001, 'Q', 'top 60,000'),
+    (60001, 'R', 'top 70,000'),
+    (70001, 'S', 'top 80,000'),
+    (80001, 'T', 'top 90,000'),
+    (90001, 'U', 'top 100,000'),
+    (100001, 'V', 'top 200,000'),
+    (200001, 'W', 'top 300,000'),
+    (300001, 'X', 'top 400,000'),
+    (400001, 'Y', 'known but very rare'),
 ]
 
 # Reversed for efficient lookup (check highest thresholds first)
@@ -152,29 +176,41 @@ TIER_CODES = [t[1] for t in TIER_DEFINITIONS] + ['Z']
 
 def rank_to_code(rank: Optional[int]) -> str:
     """
-    Convert frequency rank to single-letter code (A–L, Y, Z).
+    Convert frequency rank to single-letter code (A–X, Y, Z).
 
-    12-level explicit boundary system:
-    - A: ranks 1-20         Universal Anchor
-    - B: ranks 21-100       Grammatical Skeleton
-    - C: ranks 101-300      Semantic Core
-    - D: ranks 301-500      Basic Literacy
-    - E: ranks 501-1000     Elementary Vocabulary
-    - F: ranks 1001-3000    Everyday Lexicon
-    - G: ranks 3001-5000    Conversational Mastery
-    - H: ranks 5001-10000   Educated Standard
-    - I: ranks 10001-30000  Full Adult Repertoire
-    - J: ranks 30001-50000  Sophisticated/Erudite
-    - K: ranks 50001-75000  Technical/Domain-specific
-    - L: ranks 75001-100000 Archaic/Hyperspecialized
-    - Y: ranks 100001+      Known but very rare
+    24-tier system (A-X) plus Y for rare ranked words and Z for unknown:
+    - A: ranks 1-20         (top 20)
+    - B: ranks 21-100       (top 100)
+    - C: ranks 101-200      (top 200)
+    - D: ranks 201-300      (top 300)
+    - E: ranks 301-400      (top 400)
+    - F: ranks 401-500      (top 500)
+    - G: ranks 501-1000     (top 1,000)
+    - H: ranks 1001-2000    (top 2,000)
+    - I: ranks 2001-3000    (top 3,000)
+    - J: ranks 3001-4000    (top 4,000)
+    - K: ranks 4001-5000    (top 5,000)
+    - L: ranks 5001-10000   (top 10,000)
+    - M: ranks 10001-20000  (top 20,000)
+    - N: ranks 20001-30000  (top 30,000)
+    - O: ranks 30001-40000  (top 40,000)
+    - P: ranks 40001-50000  (top 50,000)
+    - Q: ranks 50001-60000  (top 60,000)
+    - R: ranks 60001-70000  (top 70,000)
+    - S: ranks 70001-80000  (top 80,000)
+    - T: ranks 80001-90000  (top 90,000)
+    - U: ranks 90001-100000 (top 100,000)
+    - V: ranks 100001-200000 (top 200,000)
+    - W: ranks 200001-300000 (top 300,000)
+    - X: ranks 300001-400000 (top 400,000)
+    - Y: ranks 400001+      (known but very rare)
     - Z: unknown/unranked
 
     Args:
         rank: Integer rank (1-indexed), or None for unranked words
 
     Returns:
-        Single letter code A–L, Y, or Z
+        Single letter code A–X, Y, or Z
     """
     if rank is None or rank < 1:
         return 'Z'  # Unknown/unranked
@@ -192,11 +228,11 @@ def code_to_rank(code: str) -> Tuple[Optional[int], Optional[int]]:
     Convert letter code to rank range (min_rank, max_rank).
 
     Args:
-        code: Single letter A–L, Y, or Z
+        code: Single letter A–X, Y, or Z
 
     Returns:
         Tuple of (min_rank, max_rank) where:
-        - For A-L, Y: inclusive range of ranks for that tier
+        - For A-Y: inclusive range of ranks for that tier
         - For Z: (None, None) - unknown/unranked
 
     Raises:
@@ -207,7 +243,7 @@ def code_to_rank(code: str) -> Tuple[Optional[int], Optional[int]]:
     if c == 'Z':
         return (None, None)
 
-    # Find the tier in definitions (includes A-L and Y)
+    # Find the tier in definitions (includes A-X and Y)
     tier_idx = None
     for i, (_, tier_code, _) in enumerate(TIER_DEFINITIONS):
         if tier_code == c:
@@ -215,7 +251,7 @@ def code_to_rank(code: str) -> Tuple[Optional[int], Optional[int]]:
             break
 
     if tier_idx is None:
-        raise ValueError(f"Code must be A-L, Y, or Z, got: {code}")
+        raise ValueError(f"Code must be A-Y or Z, got: {code}")
 
     min_rank = TIER_DEFINITIONS[tier_idx][0]
 

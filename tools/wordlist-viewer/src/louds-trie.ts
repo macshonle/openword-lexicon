@@ -120,11 +120,12 @@ export class LOUDSTrie {
     }
 
     // Phase 2: Count nodes via BFS
+    // Note: Use index-based iteration instead of shift() for O(n) vs O(n²)
     let nodeCount = 0;
     let edgeCount = 0;
     const countQueue: TrieNode[] = [root];
-    while (countQueue.length > 0) {
-      const node = countQueue.shift()!;
+    for (let qi = 0; qi < countQueue.length; qi++) {
+      const node = countQueue[qi];
       nodeCount++;
       edgeCount += node.children.size;
       // Sort children by code point for consistent order
@@ -155,11 +156,12 @@ export class LOUDSTrie {
     const nodeIds = new Map<TrieNode, number>();
     nodeIds.set(root, 1); // root is node 1
 
+    // Note: Use index-based iteration instead of shift() for O(n) vs O(n²)
     const queue: TrieNode[] = [root];
     let nextNodeId = 2; // Next node to assign
 
-    while (queue.length > 0) {
-      const node = queue.shift()!;
+    for (let qi = 0; qi < queue.length; qi++) {
+      const node = queue[qi];
       const currentNodeId = nodeIds.get(node)!;
 
       // Mark terminal
@@ -476,6 +478,24 @@ export class LOUDSTrie {
       terminalSize: terminalBytes.length,
       labelsSize,
       totalSize: 16 + 4 + bitsBytes.length + 4 + terminalBytes.length + labelsSize,
+    };
+  }
+
+  /**
+   * Get statistics in the format expected by app.js.
+   */
+  getStats(): {
+    wordCount: number;
+    nodeCount: number;
+    sizeBytes: number;
+    bytesPerWord: string;
+  } {
+    const s = this.stats();
+    return {
+      wordCount: s.wordCount,
+      nodeCount: s.nodeCount,
+      sizeBytes: s.totalSize,
+      bytesPerWord: (s.totalSize / s.wordCount).toFixed(2),
     };
   }
 }

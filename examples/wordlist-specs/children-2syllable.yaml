@@ -13,7 +13,7 @@ concreteness:
 
 frequency:
   min_tier: A
-  max_tier: I  # common words
+  max_tier: L  # top ~10k common words
 
 phrase:
   max_words: 1
