@@ -141,10 +141,12 @@ def analyze_frequency_tiers(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         tier_counts[tier] += 1
 
     report = "## Frequency Tier Distribution\n\n"
-    report += "| Tier | Count | Percentage |\n"
-    report += "|------|------:|-----------:|\n"
+    report += "| Tier | Count | Percentage (of Ranked) |\n"
+    report += "|------|------:|-----------------------:|\n"
 
     total = sum(tier_counts.values())
+    # Calculate total of ranked entries (excluding Z tier)
+    ranked_total = sum(count for tier, count in tier_counts.items() if tier != 'Z' and tier is not None)
 
     # Sort by tier number (None at end)
     sorted_tiers = sorted([t for t in tier_counts.keys() if t is not None])
@@ -153,11 +155,16 @@ def analyze_frequency_tiers(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
 
     for tier in sorted_tiers:
         count = tier_counts[tier]
-        pct = (count / total * 100) if total > 0 else 0
+        # For Z tier, show N/A for percentage; for others, calculate % of ranked entries
+        if tier == 'Z':
+            pct_display = "N/A"
+        else:
+            pct = (count / ranked_total * 100) if ranked_total > 0 else 0
+            pct_display = f"{pct:.1f}%"
         tier_display = tier if tier is not None else 'N/A'
-        report += f"| {tier_display} | {count:,} | {pct:.1f}% |\n"
+        report += f"| {tier_display} | {count:,} | {pct_display} |\n"
 
-    report += "\n"
+    report += f"\n*Ranked entries: {ranked_total:,} | Unranked (Z): {tier_counts.get('Z', 0):,}*\n\n"
 
     # Sample words from each tier - show ALL tiers, enumerate when count < 10
     report += "### Sample Words by Tier\n\n"
@@ -807,6 +814,91 @@ def sample_rich_entries(metadata: Dict[str, Any]) -> str:
     return report
 
 
+def _is_contraction_fragment(word: str) -> bool:
+    """Check if word is a contraction fragment (not a standalone word).
+
+    Matches the logic from frequency_tiers.py.
+    """
+    return word.startswith("'") or word.endswith("'")
+
+
+def analyze_unmatched_frequency_entries(metadata: Dict[str, Any], language: str = 'en') -> str:
+    """Analyze frequency entries that don't result in tier assignments.
+
+    This helps explain discrepancies like tier A having 18 words instead of 20,
+    because some high-frequency entries (like `'t` from `don't`) are contraction
+    fragments that are skipped during tier assignment.
+
+    An entry is "unmatched" if:
+    1. It's a contraction fragment (filtered out by frequency_tiers.py), OR
+    2. It doesn't match any lexeme in the dataset
+    """
+    import unicodedata
+
+    # Load frequency data
+    freq_file = Path(f'data/raw/{language}/{language}_50k.txt')
+    if not freq_file.exists():
+        return ""
+
+    # Build set of normalized lexeme words
+    lexeme_words = set()
+    for word in metadata.keys():
+        normalized = unicodedata.normalize('NFKC', word.lower())
+        lexeme_words.add(normalized)
+
+    # Find unmatched frequency entries
+    unmatched = []
+
+    with open(freq_file, 'r', encoding='utf-8') as f:
+        for rank, line in enumerate(f, start=1):
+            line = line.strip()
+            if not line:
+                continue
+
+            parts = line.split()
+            if not parts:
+                continue
+
+            word = parts[0]
+            freq = int(parts[1]) if len(parts) > 1 else 0
+            normalized = unicodedata.normalize('NFKC', word.lower())
+
+            # Check if this entry is skipped during tier assignment
+            is_contraction = _is_contraction_fragment(normalized)
+            is_missing_lexeme = normalized not in lexeme_words
+
+            if is_contraction or is_missing_lexeme:
+                reason = "contraction" if is_contraction else "no lexeme"
+                unmatched.append((rank, word, freq, reason))
+
+            # Stop after checking enough to get 100 unmatched
+            if len(unmatched) >= 100:
+                break
+
+    if not unmatched:
+        return ""
+
+    report = "## Unmatched Frequency Entries\n\n"
+    report += "These entries appear in the frequency data but do not result in tier assignments.\n"
+    report += "This explains discrepancies like tier A having 18 words instead of 20.\n\n"
+    report += "Entries are excluded from tier assignment when:\n"
+    report += "- **Contraction fragments:** `'t` (from `don't`), `'s` (from `it's`), `'ll`, `'re`, etc.\n"
+    report += "- **No matching lexeme:** The word doesn't exist in the lexicon\n\n"
+
+    report += "### First 100 Excluded Entries (by frequency rank)\n\n"
+    report += "| Rank | Word | Frequency Count | Reason |\n"
+    report += "|-----:|------|----------------:|--------|\n"
+
+    for rank, word, freq, reason in unmatched:
+        # Escape pipe characters in words for markdown table
+        word_escaped = word.replace('|', '\\|')
+        report += f"| {rank} | `{word_escaped}` | {freq:,} | {reason} |\n"
+
+    report += "\n"
+
+    return report
+
+
 def generate_report(language: str = 'en'):
     """Generate comprehensive metadata analysis report for a language."""
     # Try new lexemes-enriched format first (flat structure with language-prefixed files)
@@ -852,6 +944,12 @@ def generate_report(language: str = 'en'):
         # Frequency analysis
         freq_report, freq_stats = analyze_frequency_tiers(metadata)
         report += freq_report
+
+        # Unmatched frequency entries (explains tier discrepancies)
+        unmatched_report = analyze_unmatched_frequency_entries(metadata, language)
+        if unmatched_report:
+            report += unmatched_report
+
         report += "---\n\n"
 
         # Source distribution
