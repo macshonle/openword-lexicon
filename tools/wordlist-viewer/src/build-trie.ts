@@ -2,19 +2,21 @@
 /**
  * build-trie.ts - Build compact binary trie from wordlist
  *
- * Creates a DAWG (Directed Acyclic Word Graph) and serializes it to a
- * compact binary format optimized for browser consumption.
+ * Creates a DAWG (Directed Acyclic Word Graph) or LOUDS trie and serializes
+ * it to a compact binary format optimized for browser consumption.
  *
  * Format versions:
- *   v2: 16-bit absolute node IDs (max 65K nodes, 3 bytes/child)
- *   v4: varint delta node IDs (unlimited nodes, ~2 bytes/child avg)
+ *   v2: DAWG with 16-bit absolute node IDs (max 65K nodes, 3 bytes/child)
+ *   v4: DAWG with varint delta node IDs (unlimited nodes, ~2 bytes/child avg)
+ *   v5: LOUDS trie with bitvectors + labels (word ID support, ~1.5 bytes/char)
  *
  * The builder auto-selects the best format based on node count,
- * or you can force a specific version with --format=v2|v4
+ * or you can force a specific version with --format=v2|v4|v5
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { LOUDSTrie } from './louds-trie.js';
 
 // DAWG node for building
 class DAWGNode {
@@ -206,7 +208,7 @@ function serializeV4(nodes: DAWGNode[], wordCount: number): Uint8Array {
   return buffer;
 }
 
-type FormatVersion = 'v2' | 'v4' | 'auto';
+type FormatVersion = 'v2' | 'v4' | 'v5' | 'auto';
 
 // Select best format and serialize
 function serializeDAWG(nodes: DAWGNode[], wordCount: number, format: FormatVersion = 'auto'): { buffer: Uint8Array; version: number } {
@@ -240,10 +242,10 @@ function parseArgs(args: string[]): { inputPath: string; outputPath: string; for
   for (const arg of args) {
     if (arg.startsWith('--format=')) {
       const fmt = arg.slice(9);
-      if (fmt === 'v2' || fmt === 'v4' || fmt === 'auto') {
+      if (fmt === 'v2' || fmt === 'v4' || fmt === 'v5' || fmt === 'auto') {
         format = fmt;
       } else {
-        console.error(`Invalid format: ${fmt}. Use v2, v4, or auto.`);
+        console.error(`Invalid format: ${fmt}. Use v2, v4, v5, or auto.`);
         process.exit(1);
       }
     } else if (!arg.startsWith('--')) {
@@ -274,51 +276,97 @@ async function main() {
 
   console.log(`Loaded ${words.length.toLocaleString()} words`);
 
-  // Build DAWG
-  console.log('Building DAWG...');
-  const builder = new DAWGBuilder();
-
-  for (const word of words) {
-    builder.addWord(word.trim());
-  }
-
-  // Minimize (deduplicate nodes with same suffixes)
-  console.log('Minimizing...');
-  const nodes = builder.minimize();
-
-  console.log(`DAWG has ${nodes.length.toLocaleString()} unique nodes`);
-
-  // Serialize to binary
-  console.log('Serializing...');
-  const { buffer: binary, version } = serializeDAWG(nodes, words.length, format);
-
   // Ensure output directory exists
   const outputDir = path.dirname(outputPath);
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  // Write output
-  fs.writeFileSync(outputPath, binary);
-
-  // Statistics
   const inputSize = Buffer.byteLength(wordlistText, 'utf-8');
-  const outputSize = binary.length;
-  const ratio = ((outputSize / inputSize) * 100).toFixed(1);
-  const bytesPerWord = (outputSize / words.length).toFixed(2);
+  let binary: Uint8Array;
+  let version: number;
+  let nodeCount: number;
 
-  console.log();
-  console.log('='.repeat(50));
-  console.log('Statistics:');
-  console.log('='.repeat(50));
-  console.log(`Format version:  v${version}`);
-  console.log(`Input size:      ${inputSize.toLocaleString()} bytes (${(inputSize / 1024).toFixed(1)} KB)`);
-  console.log(`Output size:     ${outputSize.toLocaleString()} bytes (${(outputSize / 1024).toFixed(1)} KB)`);
-  console.log(`Compression:     ${ratio}% of original`);
-  console.log(`Bytes/word:      ${bytesPerWord}`);
-  console.log(`Unique nodes:    ${nodes.length.toLocaleString()}`);
-  console.log(`Avg children:    ${(nodes.reduce((sum, n) => sum + n.children.size, 0) / nodes.length).toFixed(2)}`);
-  console.log('='.repeat(50));
+  if (format === 'v5') {
+    // Build LOUDS trie (v5 format)
+    console.log('Building LOUDS trie...');
+    const trie = LOUDSTrie.build(words.map(w => w.trim()));
+
+    console.log(`LOUDS trie has ${trie.nodeCount.toLocaleString()} nodes`);
+
+    // Serialize to binary
+    console.log('Serializing...');
+    binary = trie.serialize();
+    version = 5;
+    nodeCount = trie.nodeCount;
+
+    // Write output
+    fs.writeFileSync(outputPath, binary);
+
+    // Statistics
+    const outputSize = binary.length;
+    const ratio = ((outputSize / inputSize) * 100).toFixed(1);
+    const bytesPerWord = (outputSize / words.length).toFixed(2);
+    const stats = trie.stats();
+
+    console.log();
+    console.log('='.repeat(50));
+    console.log('Statistics:');
+    console.log('='.repeat(50));
+    console.log(`Format version:  v${version}`);
+    console.log(`Input size:      ${inputSize.toLocaleString()} bytes (${(inputSize / 1024).toFixed(1)} KB)`);
+    console.log(`Output size:     ${outputSize.toLocaleString()} bytes (${(outputSize / 1024).toFixed(1)} KB)`);
+    console.log(`Compression:     ${ratio}% of original`);
+    console.log(`Bytes/word:      ${bytesPerWord}`);
+    console.log(`Nodes:           ${nodeCount.toLocaleString()}`);
+    console.log(`Edges:           ${stats.edgeCount.toLocaleString()}`);
+    console.log(`LOUDS bits:      ${stats.bitsSize.toLocaleString()} bytes`);
+    console.log(`Terminal bits:   ${stats.terminalSize.toLocaleString()} bytes`);
+    console.log(`Labels:          ${stats.labelsSize.toLocaleString()} bytes`);
+    console.log('='.repeat(50));
+  } else {
+    // Build DAWG (v2/v4 format)
+    console.log('Building DAWG...');
+    const builder = new DAWGBuilder();
+
+    for (const word of words) {
+      builder.addWord(word.trim());
+    }
+
+    // Minimize (deduplicate nodes with same suffixes)
+    console.log('Minimizing...');
+    const nodes = builder.minimize();
+
+    console.log(`DAWG has ${nodes.length.toLocaleString()} unique nodes`);
+
+    // Serialize to binary
+    console.log('Serializing...');
+    const result = serializeDAWG(nodes, words.length, format);
+    binary = result.buffer;
+    version = result.version;
+    nodeCount = nodes.length;
+
+    // Write output
+    fs.writeFileSync(outputPath, binary);
+
+    // Statistics
+    const outputSize = binary.length;
+    const ratio = ((outputSize / inputSize) * 100).toFixed(1);
+    const bytesPerWord = (outputSize / words.length).toFixed(2);
+
+    console.log();
+    console.log('='.repeat(50));
+    console.log('Statistics:');
+    console.log('='.repeat(50));
+    console.log(`Format version:  v${version}`);
+    console.log(`Input size:      ${inputSize.toLocaleString()} bytes (${(inputSize / 1024).toFixed(1)} KB)`);
+    console.log(`Output size:     ${outputSize.toLocaleString()} bytes (${(outputSize / 1024).toFixed(1)} KB)`);
+    console.log(`Compression:     ${ratio}% of original`);
+    console.log(`Bytes/word:      ${bytesPerWord}`);
+    console.log(`Unique nodes:    ${nodeCount.toLocaleString()}`);
+    console.log(`Avg children:    ${(nodes.reduce((sum, n) => sum + n.children.size, 0) / nodes.length).toFixed(2)}`);
+    console.log('='.repeat(50));
+  }
 }
 
 main().catch(console.error);

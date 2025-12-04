@@ -57,12 +57,13 @@ The `.trie.bin` files use a custom compact DAWG format:
 
 **Current Versions:**
 
-The builder auto-selects the best format, or use `--format=v2|v4`:
+The builder auto-selects between v2/v4 for DAWG, or use `--format=v2|v4|v5`:
 
-| Version | Node IDs | Characters | Best For | Bytes/Child |
-|---------|----------|------------|----------|-------------|
-| v2 | 16-bit absolute | 8-bit | ≤65K nodes | 3 |
-| v4 | varint delta | varint | Any size | ~2-3 avg |
+| Version | Structure | Node IDs | Best For | Bytes/Word |
+|---------|-----------|----------|----------|------------|
+| v2 | DAWG | 16-bit absolute | ≤65K nodes | ~3 |
+| v4 | DAWG | varint delta | Any size | ~2-3 |
+| v5 | LOUDS trie | bitvector | Word ID mapping | ~1.5-2 |
 
 **v2 Format (compact, limited):**
 - Flags byte: bit 0 = is_terminal
@@ -77,12 +78,46 @@ The builder auto-selects the best format, or use `--format=v2|v4`:
 - Delta = parentId - childId (always positive in post-order)
 - Full Unicode support via varint code points
 
-**DAWG Optimization:**
+**v5 Format (LOUDS trie with word IDs):**
+
+LOUDS (Level-Order Unary Degree Sequence) is a succinct data structure that
+encodes tree topology using bitvectors with O(1) rank and O(log n) select.
+
+Header (16 bytes):
+- Magic: "OWTRIE" (6 bytes)
+- Version: uint16 = 5 (2 bytes)
+- Word count: uint32 (4 bytes)
+- Node count: uint32 (4 bytes)
+
+Body:
+- LOUDS bitvector (packed bits + rank directory)
+- Terminal bitvector (marks end-of-word nodes)
+- Labels array (varint-encoded Unicode code points)
+
+Key features:
+- **Word ID mapping**: Each word maps to a sequential 0-indexed ID via
+  `wordId = rank1(terminal, nodePosition) - 1`. IDs are assigned in BFS
+  (level-order) traversal, enabling dense array lookups for enrichment data.
+- **Prefix search**: Navigate via `findChild()` with binary search on labels
+- **Compact**: ~1.5-2 bytes per word (vs ~2-3 for v4)
+
+Build with `--format=v5`:
+```bash
+pnpm run build-trie wordlist.txt output.bin --format=v5
+```
+
+References:
+- Jacobson, G. (1989) "Space-efficient Static Trees and Graphs" - FOCS 1989
+- Delpratt, O., Rahman, N., Raman, R. (2006) "Engineering the LOUDS
+  Succinct Tree Representation" - WEA 2006
+- Hanov, S. "Succinct Data Structures" - stevehanov.ca/blog/?id=120
+
+**DAWG Optimization (v2/v4):**
 - Nodes with identical suffixes are merged (deduplication)
 - Children sorted by character for consistency
 - Node IDs assigned in post-order (root is last node)
 
-**Supported Versions:** v2, v4 (v1/v3 were deprecated and removed)
+**Supported Versions:** v2, v4, v5 (v1/v3 were deprecated and removed)
 
 See `src/build-trie.ts` for implementation details.
 
@@ -90,16 +125,23 @@ See `src/build-trie.ts` for implementation details.
 
 ```
 tools/wordlist-viewer/
-├── index.html          # Single entry point
-├── styles.css          # Stylesheet
-├── app.js              # Main application (unified trie loader)
+├── index.html              # Single entry point
+├── styles.css              # Stylesheet
+├── app.js                  # Main application (unified trie loader)
 ├── src/
-│   └── build-trie.ts   # Binary trie builder (Node.js/tsx)
-├── package.json        # Dependencies and scripts
-├── tsconfig.json       # TypeScript configuration
-├── data/               # Generated binary tries (gitignored)
+│   ├── build-trie.ts       # Binary trie builder (Node.js/tsx)
+│   ├── build-trie.test.ts  # Builder tests
+│   ├── bitvector.ts        # Rank/select bitvector for LOUDS
+│   ├── bitvector.test.ts   # Bitvector tests
+│   ├── louds.ts            # LOUDS tree encoding
+│   ├── louds.test.ts       # LOUDS tree tests
+│   ├── louds-trie.ts       # LOUDS trie with word ID mapping
+│   └── louds-trie.test.ts  # LOUDS trie tests
+├── package.json            # Dependencies and scripts
+├── tsconfig.json           # TypeScript configuration
+├── data/                   # Generated binary tries (gitignored)
 │   └── en.trie.bin
-└── README.md           # This file
+└── README.md               # This file
 ```
 
 ## Development
@@ -110,8 +152,14 @@ tools/wordlist-viewer/
 # Install dependencies
 pnpm install
 
-# Build binary trie from wordlist
+# Build binary trie from wordlist (auto-selects v2/v4 DAWG)
 pnpm run build-trie [input.txt] [output.bin]
+
+# Build LOUDS trie with word ID support (v5)
+pnpm run build-trie [input.txt] [output.bin] --format=v5
+
+# Run tests
+pnpm test
 
 # Start development server
 pnpm start
@@ -162,9 +210,11 @@ The viewer must be served via HTTP, not opened as `file://`.
 - **Lexicon Exploration**: Browse the full word list interactively
 - **Word Validation**: Check if words exist in the lexicon
 - **Prefix Analysis**: See all words with a given prefix
+- **Enrichment Data Lookup**: Use v5 word IDs to index into dense arrays of
+  metadata (definitions, frequencies, etc.) stored in companion files
 - **Vocabulary Games**: Random word generation
 - **Debugging**: Verify build output
-- **Education**: Visualize trie/DAWG data structures
+- **Education**: Visualize trie/DAWG and LOUDS succinct data structures
 
 ## See Also
 
