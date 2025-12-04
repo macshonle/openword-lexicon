@@ -68,7 +68,7 @@ Entries are excluded from tier assignment when:
 - **Contraction fragments:** `'t` (from `don't`), `'s` (from `it's`), `'ll`, `'re`, etc.
 - **No matching lexeme:** The word doesn't exist in the lexicon
 
-### First 100 Excluded Entries (by frequency rank)
+### First 20 Excluded Entries (by frequency rank)
 
 | Rank | Word | Frequency Count | Reason |
 |-----:|------|----------------:|--------|
@@ -92,86 +92,6 @@ Entries are excluded from tier assignment when:
 | 1158 | `hadn` | 44,545 | no lexeme |
 | 1167 | `'ii` | 44,152 | contraction |
 | 1606 | `'all` | 30,283 | contraction |
-| 1797 | `ohh` | 26,185 | no lexeme |
-| 2055 | `'clock` | 22,311 | contraction |
-| 2465 | `'mon` | 17,576 | contraction |
-| 2510 | `mustn` | 17,276 | no lexeme |
-| 2832 | `'you` | 14,441 | contraction |
-| 2854 | `'i` | 14,312 | contraction |
-| 2898 | `you-` | 14,035 | no lexeme |
-| 3179 | `chffffff` | 12,527 | no lexeme |
-| 3218 | `just-` | 12,321 | no lexeme |
-| 3235 | `somethin` | 12,242 | no lexeme |
-| 3579 | `talkin` | 10,729 | no lexeme |
-| 3778 | `'s-` | 9,936 | contraction |
-| 3780 | `'the` | 9,928 | contraction |
-| 3798 | `'and` | 9,866 | contraction |
-| 3924 | `von` | 9,519 | no lexeme |
-| 4319 | `uh-` | 8,443 | no lexeme |
-| 4322 | `iike` | 8,435 | no lexeme |
-| 4515 | `mmm-hmm` | 7,965 | no lexeme |
-| 4561 | `'t-` | 7,884 | contraction |
-| 4886 | `and-` | 7,169 | no lexeme |
-| 5020 | `yöu` | 6,891 | no lexeme |
-| 5121 | `that-` | 6,685 | no lexeme |
-| 5336 | `tryin` | 6,290 | no lexeme |
-| 5868 | `it-` | 5,522 | no lexeme |
-| 6054 | `'but` | 5,303 | contraction |
-| 6112 | `needn` | 5,234 | no lexeme |
-| 6165 | `sayin` | 5,174 | no lexeme |
-| 6211 | `i-i-i` | 5,126 | no lexeme |
-| 6332 | `eun` | 5,008 | no lexeme |
-| 6363 | `'it` | 4,985 | contraction |
-| 6405 | `me-` | 4,933 | no lexeme |
-| 6432 | `don`t` | 4,911 | no lexeme |
-| 6457 | `ofthe` | 4,893 | no lexeme |
-| 6489 | `joon` | 4,857 | no lexeme |
-| 6805 | `'em` | 4,505 | contraction |
-| 6896 | `thinkin` | 4,404 | no lexeme |
-| 6902 | `y-you` | 4,399 | no lexeme |
-| 7026 | `wh` | 4,287 | no lexeme |
-| 7342 | `ahhh` | 4,023 | no lexeme |
-| 7371 | `this-` | 3,995 | no lexeme |
-| 7404 | `'we` | 3,974 | contraction |
-| 7433 | `'a` | 3,942 | contraction |
-| 7490 | `know-` | 3,890 | no lexeme |
-| 7533 | `ch00ffff` | 3,849 | no lexeme |
-| 7633 | `roberto` | 3,768 | no lexeme |
-| 7686 | `yeah.` | 3,737 | no lexeme |
-| 7799 | `what-` | 3,661 | no lexeme |
-| 7802 | `ha-ha-ha` | 3,660 | no lexeme |
-| 7825 | `'m-` | 3,651 | contraction |
-| 7853 | `was-` | 3,629 | no lexeme |
-| 7882 | `'er` | 3,608 | contraction |
-| 7904 | `'know` | 3,588 | contraction |
-| 7982 | `i--i` | 3,527 | no lexeme |
-| 8009 | `like-` | 3,508 | no lexeme |
-| 8082 | `philippe` | 3,462 | no lexeme |
-| 8083 | `workin` | 3,462 | no lexeme |
-| 8115 | `ifyou` | 3,447 | no lexeme |
-| 8154 | `yes.` | 3,423 | no lexeme |
-| 8216 | `iet` | 3,384 | no lexeme |
-| 8263 | `ohhh` | 3,352 | no lexeme |
-| 8269 | `so-` | 3,348 | no lexeme |
-| 8293 | `'m-i` | 3,337 | contraction |
-| 8429 | `feelin` | 3,253 | no lexeme |
-| 8449 | `and-and` | 3,241 | no lexeme |
-| 8474 | `yοu` | 3,225 | no lexeme |
-| 8533 | `o.r.` | 3,197 | no lexeme |
-| 8536 | `iove` | 3,196 | no lexeme |
-| 8618 | `'brien` | 3,149 | contraction |
-| 8689 | `'he` | 3,111 | contraction |
-| 8845 | `you.` | 3,027 | no lexeme |
-| 8853 | `j.r.` | 3,021 | no lexeme |
-| 8894 | `'in` | 3,002 | contraction |
-| 8921 | `w-what` | 2,990 | no lexeme |
-| 8950 | `nköö` | 2,973 | no lexeme |
-| 8951 | `you-you` | 2,972 | no lexeme |
-| 9017 | `alberto` | 2,927 | no lexeme |
-| 9063 | `buenos` | 2,901 | no lexeme |
-| 9185 | `not-` | 2,846 | no lexeme |
-| 9224 | `runnin` | 2,825 | no lexeme |
-| 9273 | `know.` | 2,800 | no lexeme |
 
 ---
 

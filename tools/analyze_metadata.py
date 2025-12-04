@@ -871,8 +871,8 @@ def analyze_unmatched_frequency_entries(metadata: Dict[str, Any], language: str 
                 reason = "contraction" if is_contraction else "no lexeme"
                 unmatched.append((rank, word, freq, reason))
 
-            # Stop after checking enough to get 100 unmatched
-            if len(unmatched) >= 100:
+            # Stop after checking enough to get 20 unmatched
+            if len(unmatched) >= 20:
                 break
 
     if not unmatched:
@@ -885,7 +885,7 @@ def analyze_unmatched_frequency_entries(metadata: Dict[str, Any], language: str 
     report += "- **Contraction fragments:** `'t` (from `don't`), `'s` (from `it's`), `'ll`, `'re`, etc.\n"
     report += "- **No matching lexeme:** The word doesn't exist in the lexicon\n\n"
 
-    report += "### First 100 Excluded Entries (by frequency rank)\n\n"
+    report += "### First 20 Excluded Entries (by frequency rank)\n\n"
     report += "| Rank | Word | Frequency Count | Reason |\n"
     report += "|-----:|------|----------------:|--------|\n"
 
