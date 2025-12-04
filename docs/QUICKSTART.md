@@ -25,11 +25,11 @@ print(list(trie.keys('cast'))[:5])  # ['cast', 'caste', 'casted', 'caster', ...]
 
 ### Check if a Word Exists (JavaScript)
 
-For browser use, see the [viewer/](../viewer/) directory which includes a binary trie loader.
+For browser use, see the [tools/wordlist-viewer/](../tools/wordlist-viewer/) directory which includes a binary trie loader.
 
 ```javascript
-// Using the binary trie loader
-import { BinaryTrie } from './binary-trie.js';
+// Using the binary trie loader (see tools/wordlist-viewer/app.js for full implementation)
+import { BinaryTrie } from './app.js';
 
 const trie = await BinaryTrie.load('en.trie.bin');
 console.log(trie.has('castle'));  // true

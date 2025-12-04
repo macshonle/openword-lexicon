@@ -1,11 +1,12 @@
 {
-  "name": "openword-lexicon-viewer",
+  "name": "wordlist-viewer",
   "version": "0.1.0",
-  "description": "Interactive trie viewer for Openword Lexicon",
+  "description": "Interactive trie viewer for OpenWord Lexicon",
   "type": "module",
   "scripts": {
     "build-trie": "tsx src/build-trie.ts",
-    "start": "http-server . -p 8080 -o --cors"
+    "start": "http-server . -p 8080 -o /index.html --cors",
+    "test": "tsx --test src/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

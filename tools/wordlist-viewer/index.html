@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenWord Lexicon - Interactive Trie Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>OpenWord Lexicon - Interactive Trie Viewer</h1>
+        <div class="status loading" id="status">Loading...</div>
+    </header>
+
+    <div class="container">
+        <div class="input-section">
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Type to explore the lexicon..."
+                disabled
+                autocomplete="off"
+                spellcheck="false"
+            >
+        </div>
+
+        <div class="display-section" id="displaySection">
+            <div class="typed-text" id="typedDisplay">
+                <span style="color: #999;">Start typing to explore...</span>
+            </div>
+        </div>
+
+        <div class="load-mode" id="loadMode"></div>
+    </div>
+
+    <div class="container random-section">
+        <div class="random-header">
+            <h2>Random Words</h2>
+            <button id="refreshBtn" disabled>Refresh</button>
+        </div>
+        <div class="random-words" id="randomWords"></div>
+    </div>
+
+    <div class="container">
+        <h2>Statistics</h2>
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">Total Words</div>
+                <div class="stat-value" id="totalWords">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Node Count</div>
+                <div class="stat-value" id="nodeCount">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Current State</div>
+                <div class="stat-value" id="currentState">-</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -65,13 +65,13 @@ RUN_BENCHMARK := $(RUN_PYTHON) tools/wiktionary-scanner-rust/scripts/run_full_be
 # Benchmark outputs
 BENCHMARK_DIR := data/benchmark
 
-.PHONY: bootstrap venv deps fmt lint test test-python test-rust test-full \
+.PHONY: bootstrap venv deps fmt lint test test-python test-rust test-js test-full \
 		clean scrub fetch-en \
         build-en build-rust-scanner build-trie build-metadata \
 		package report-en diagnose-scanner corpus-stats \
 		validate-all validate-enable validate-profanity validate-childish \
 		validate-scanner-parity \
-        spec-editor-web viewer-web \
+        spec-editor-web wordlist-viewer-web \
 		wordlists \
 		benchmark-rust-scanner benchmark-validate \
 		nightly weekly
@@ -100,9 +100,9 @@ fmt:
 lint:
 	$(UV) run ruff check .
 
-# Run all tests (Python + Rust unit tests)
+# Run all tests (Python + Rust + JavaScript unit tests)
 # For full parity validation, use: make test-full
-test: test-python test-rust
+test: test-python test-rust test-js
 
 # Python unit tests only
 test-python:
@@ -113,6 +113,11 @@ test-python:
 test-rust: | check-cargo
 	@echo "Running Rust tests..."
 	(cd tools/wiktionary-scanner-rust; cargo test)
+
+# JavaScript/TypeScript unit tests (wordlist-viewer)
+test-js: tools/wordlist-viewer/node_modules | check-pnpm
+	@echo "Running JavaScript tests..."
+	(cd tools/wordlist-viewer; pnpm test)
 
 # Full test suite including scanner parity validation
 # Requires Wiktionary dump to be present
@@ -231,10 +236,8 @@ $(LEXEMES_JSON) $(SENSES_JSON): $(WIKT_JSON_SORTED)
 		-v
 
 # Build compact trie for browser visualization
-build-trie: $(WORDLIST_TXT) viewer/node_modules | check-pnpm
-	@echo "Building browser-compatible trie..."
-	@echo "Building binary trie from $(WORDLIST_TXT)..."
-	(cd viewer; pnpm run build-trie ../$(WORDLIST_TXT) data/$(LEXICON_LANG).trie.bin)
+build-trie: $(WORDLIST_TXT) tools/wordlist-viewer/node_modules | check-pnpm
+	(cd tools/wordlist-viewer; pnpm run build-trie ../../$(WORDLIST_TXT) data/$(LEXICON_LANG).trie.bin)
 
 # Export modular metadata layers (frequency, concreteness, syllables, sources)
 # Creates gzipped JSON files in data/build/{lang}-{module}.json.gz
@@ -259,7 +262,7 @@ clean:
 	find . -name '__pycache__' -type d -prune -exec rm -rf '{}' +
 	find . -name '*.egg-info' -type d -prune -exec rm -rf '{}' +
 	rm -rf data/intermediate data/filtered data/build data/artifacts
-	rm -rf viewer/node_modules viewer/pnpm-lock.yaml viewer/data viewer/dist
+	rm -rf tools/wordlist-viewer/node_modules tools/wordlist-viewer/pnpm-lock.yaml tools/wordlist-viewer/data tools/wordlist-viewer/dist
 	@if [ -d tools/wiktionary-scanner-rust/target ]; then \
 		echo "Cleaning Rust build artifacts..."; \
 		(cd tools/wiktionary-scanner-rust; cargo clean); \
@@ -381,9 +384,9 @@ spec-editor-web: tools/wordlist-spec-editor/node_modules | check-pnpm
 	@echo "  Press Ctrl+C to stop the server"
 	(cd tools/wordlist-spec-editor; pnpm start)
 
-# Trie viewer - explore lexicon interactively
-viewer-web: viewer/node_modules | check-pnpm
-	@echo "Starting interactive trie viewer..."
+# Wordlist viewer - explore lexicon interactively
+wordlist-viewer-web: tools/wordlist-viewer/node_modules | check-pnpm
+	@echo "Starting interactive wordlist viewer..."
 	@if [ ! -f "$(WORDLIST_TXT)" ]; then \
 		echo "Error: Wordlist not found at $(WORDLIST_TXT)"; \
 		echo "Run 'make build-en' first to generate the lexicon."; \
@@ -391,10 +394,7 @@ viewer-web: viewer/node_modules | check-pnpm
 	fi
 	@echo "  Server will start at: http://localhost:8080"
 	@echo "  Press Ctrl+C to stop the server"
-	@echo "  Available pages:"
-	@echo "    /index.html        - Dynamic trie builder"
-	@echo "    /index-binary.html - Binary trie loader"
-	(cd viewer; pnpm start)
+	(cd tools/wordlist-viewer; pnpm start)
 
 # ===========================
 # Word List Generation
@@ -437,7 +437,7 @@ $(WORDLISTS_DIR):
 # Pipeline stages:
 #   1. Bootstrap: Set up Python environment and dependencies
 #   2. Fetch: Download all source data (Wiktionary, WordNet, frequency lists, etc.)
-#   3. Build: Compile Rust scanner, run full build-en pipeline
+#   3. Build: Compile Rust scanner, run full build-en pipeline, build browser trie
 #   4. Package: Create release artifacts with manifest
 #   5. Report: Generate comprehensive analysis reports
 #   6. Validate: Run all validation checks (ENABLE coverage, profanity, childish terms)
@@ -457,7 +457,7 @@ weekly: build-and-prereqs post-build corpus-stats
 
 .PHONY: build-and-prereqs
 build-and-prereqs: export UV_VENV_CLEAR=1
-build-and-prereqs: bootstrap fetch-en build-rust-scanner build-en
+build-and-prereqs: bootstrap fetch-en build-rust-scanner build-en build-trie
 
 .PHONY: post-build
 post-build: export OPENWORD_CI=1
