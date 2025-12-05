@@ -4,7 +4,7 @@ This document captures key statistics and findings about the English Wiktionary 
 It is a "living document" - regenerate by running `make corpus-stats`.
 
 <!-- AUTO:last_updated -->
-**Last updated:** 2025-12-03
+**Last updated:** 2025-12-04
 <!-- /AUTO:last_updated -->
 **Source dump:** `enwiktionary-latest-pages-articles.xml.bz2`
 
@@ -68,10 +68,10 @@ These are the raw `===Header===` values found in English sections, normalized to
 <!-- AUTO:headers_structural -->
 | Count | Header |
 |------:|--------|
-| 454,837 | etymology |
+| 490,542 | etymology (all) |
+| 146,336 | pronunciation (all) |
 | 242,637 | anagrams |
 | 160,702 | translations |
-| 146,320 | pronunciation |
 | 96,143 | derived terms |
 | 75,608 | alternative forms |
 | 72,416 | references |
@@ -80,69 +80,51 @@ These are the raw `===Header===` values found in English sections, normalized to
 | 53,218 | further reading |
 | 49,687 | synonyms |
 | 35,051 | statistics |
-| 15,542 | etymology 1 |
-| 15,542 | etymology 2 |
 | 15,287 | usage notes |
 | 9,609 | antonyms |
 | 9,213 | coordinate terms |
 | 5,189 | hypernyms |
 | 4,927 | hyponyms |
 | 3,879 | descendants |
-| 2,991 | etymology 3 |
 | 2,014 | quotations |
-| 975 | etymology 4 |
 | 539 | conjugation |
 | 479 | meronyms |
-| 380 | etymology 5 |
 | 338 | holonyms |
 | 217 | collocations |
 | 171 | notes |
-| 159 | etymology 6 |
 | 79 | abbreviations |
 | 70 | gallery |
-| 69 | etymology 7 |
 | 49 | trivia |
 | 45 | paronyms |
 | 36 | external links |
-| 24 | etymology 8 |
 | 12 | troponyms |
 | 12 | citations |
-| 11 | etymology 9 |
 | 7 | multiple parts of speech |
-| 7 | pronunciation 1 |
-| 7 | pronunciation 2 |
-| 4 | etymology 10 |
-| 2 | etymology 11 |
-| 1 | etymology 12 |
-| 1 | etymology 13 |
-| 1 | etymology 14 |
-| 1 | etymology 15 |
-| 1 | etymology 16 |
-| 1 | etymology 17 |
-| 1 | pronunciation 3 |
-| 1 | pronunciation 4 |
 <!-- /AUTO:headers_structural -->
 
 ### Typos and Variants
 
-These appear to be typos or non-standard headers in the corpus:
+These appear to be typos or non-standard headers in the corpus.
+Page names use wiki link format for easy editing on Wiktionary.
 
-| Count | Header | Likely Intended |
-|------:|--------|-----------------|
-| 3 | pronounciation | pronunciation |
-| 2 | pronuciation | pronunciation |
-| 1 | pronuncation | pronunciation |
-| 1 | pronunciaation | pronunciation |
-| 1 | tranlsations | translations |
-| 1 | coordiante terms | coordinate terms |
-| 1 | synoynms | synonyms |
-| 1 | hyopernyms | hypernyms |
-| 1 | relatd terms | related terms |
-| 1 | alterative forms | alternative forms |
-| 1 | alernative forms | alternative forms |
-| 1 | eymology | etymology |
-| 1 | etymologyp | etymology |
-| 1 | proerp noun | proper noun |
+<!-- AUTO:header_typos -->
+| Count | Header | Likely Intended | Pages |
+|------:|--------|-----------------|-------|
+| 3 | pronounciation | pronunciation | [[fearology]], [[fearologist]], [[take a tinkle]] |
+| 2 | pronuciation | pronunciation | [[rex]], [[Greatorex]] |
+| 1 | alernative forms | alternative forms | [[Housty]] |
+| 1 | alterative forms | alternative forms | [[ʔaq̓am]] |
+| 1 | coordiante terms | coordinate terms | [[MFH]] |
+| 1 | etymologyp | etymology | [[/p]] |
+| 1 | eymology | etymology | [[blackula]] |
+| 1 | hyopernyms | hypernyms | [[cronut]] |
+| 1 | proerp noun | proper noun | [[Gros Ventre]] |
+| 1 | pronuncation | pronunciation | [[Picardy]] |
+| 1 | pronunciaation | pronunciation | [[qiran]] |
+| 1 | relatd terms | related terms | [[broad brush]] |
+| 1 | synoynms | synonyms | [[sponge down]] |
+| 1 | tranlsations | translations | [[corroboree]] |
+<!-- /AUTO:header_typos -->
 
 ## Template POS Values
 
@@ -257,6 +239,61 @@ not stored in the raw dump. Only manually-added `[[Category:English X]]` tags ap
 | 1 | determiners |
 | 1 | possessive determiners |
 <!-- /AUTO:categories -->
+
+## POS Analysis Details
+
+### Pseudo-POS Only Entries
+
+Entries with "pseudo-POS" headers (participle, contraction, letter) that have no real POS.
+These indicate entries that may need additional analysis.
+
+<!-- AUTO:pseudo_pos_analysis -->
+Pages that have **only** pseudo-POS headers (no real POS like noun, verb, etc.):
+
+| Pseudo-POS | Count | Sample Entries |
+|------------|------:|----------------|
+| contraction | 725 | he'd, I'd, we'd, she'd, you'd |
+| letter | 92 | z, yi, è, æ, þ |
+| participle | 28 | beflain, setten fire to, setten on fire, setten fire in, setten fire upon |
+<!-- /AUTO:pseudo_pos_analysis -->
+
+### Phrase Type Breakdown
+
+Individual counts for phrase-type headers (kept separate for analysis):
+
+<!-- AUTO:phrase_types -->
+| Phrase Type | Count |
+|-------------|------:|
+| idiom | 10 |
+| phrase | 4,892 |
+| prepositional phrase | 2,928 |
+| proverb | 1,519 |
+<!-- /AUTO:phrase_types -->
+
+### Aggregate POS Groupings
+
+Shows what counts would look like if certain POS types were merged:
+
+<!-- AUTO:aggregate_groups -->
+Potential groupings for normalization:
+
+| Grouping | Components | Total |
+|----------|------------|------:|
+| Affix | prefix, suffix, infix, interfix, circumfix, affix | 3,837 |
+| Symbol | symbol, punctuation mark, diacritical mark | 547 |
+| Determiner | determiner, article | 346 |
+| Determiner/Numeral | determiner, article, numeral | 798 |
+<!-- /AUTO:aggregate_groups -->
+
+### Unknown POS Entries
+
+Pages that have section headers but none match our known POS types:
+
+<!-- AUTO:unknown_pos -->
+Pages with section headers but no recognized POS: **34**
+
+Sample entries: supposed to, sixty-eight, sixty-five, thirty-nine, forty-one, forty-three, forty-nine, fifty-one, fifty-two, fifty-three
+<!-- /AUTO:unknown_pos -->
 
 ## Key Findings
 

@@ -33,6 +33,11 @@ EXPECTED_SECTIONS = {
     'headers_structural',
     'template_pos',
     'categories',
+    'pseudo_pos_analysis',
+    'phrase_types',
+    'aggregate_groups',
+    'unknown_pos',
+    'header_typos',
 }
 
 # POS headers - these go in headers_pos section
@@ -125,12 +130,17 @@ def generate_headers_pos(stats: dict) -> str:
 
 
 def generate_headers_structural(stats: dict) -> str:
-    """Generate structural (non-POS) headers table."""
+    """Generate structural (non-POS) headers table.
+
+    Groups numbered variants (etymology 1, etymology 2, etc.) into a single
+    'etymology (all)' entry with combined count.
+    """
     headers = stats.get('HEADERS', [])
 
-    # Non-POS headers to include
+    # Non-POS headers to include (excluding etymology/pronunciation base forms
+    # which we'll handle specially)
     structural_headers = {
-        'etymology', 'anagrams', 'translations', 'pronunciation',
+        'anagrams', 'translations',
         'derived terms', 'alternative forms', 'references', 'related terms',
         'see also', 'further reading', 'synonyms', 'statistics',
         'usage notes', 'antonyms', 'coordinate terms', 'hypernyms',
@@ -139,20 +149,38 @@ def generate_headers_structural(stats: dict) -> str:
         'trivia', 'paronyms', 'external links', 'troponyms', 'citations',
         'multiple parts of speech',
     }
-    # Also include etymology N and pronunciation N patterns
-    etymology_pattern = re.compile(r'^etymology \d+$')
-    pronunciation_pattern = re.compile(r'^pronunciation \d+$')
+    # Patterns for numbered variants
+    etymology_pattern = re.compile(r'^etymology( \d+)?$')
+    pronunciation_pattern = re.compile(r'^pronunciation( \d+)?$')
 
-    lines = ['| Count | Header |', '|------:|--------|']
+    # First pass: aggregate etymology and pronunciation counts
+    etymology_total = 0
+    pronunciation_total = 0
+    other_structural = []
+
     for line in headers:
         count, header = line.split('\t', 1)
-        is_structural = (
-            header in structural_headers or
-            etymology_pattern.match(header) or
-            pronunciation_pattern.match(header)
-        )
-        if is_structural:
-            lines.append(f'| {format_number(int(count))} | {header} |')
+        count_int = int(count)
+
+        if etymology_pattern.match(header):
+            etymology_total += count_int
+        elif pronunciation_pattern.match(header):
+            pronunciation_total += count_int
+        elif header in structural_headers:
+            other_structural.append((count_int, header))
+
+    # Build output with aggregated entries first, then others sorted by count
+    lines = ['| Count | Header |', '|------:|--------|']
+
+    # Add aggregated entries
+    if etymology_total > 0:
+        lines.append(f'| {format_number(etymology_total)} | etymology (all) |')
+    if pronunciation_total > 0:
+        lines.append(f'| {format_number(pronunciation_total)} | pronunciation (all) |')
+
+    # Add other structural headers sorted by count (descending)
+    for count_int, header in sorted(other_structural, key=lambda x: -x[0]):
+        lines.append(f'| {format_number(count_int)} | {header} |')
 
     return '\n'.join(lines) + '\n'
 
@@ -187,6 +215,135 @@ def generate_categories(stats: dict) -> str:
     for line in categories:
         count, cat = line.split('\t', 1)
         lines.append(f'| {format_number(int(count))} | {cat} |')
+
+    return '\n'.join(lines) + '\n'
+
+
+def generate_pseudo_pos_analysis(stats: dict) -> str:
+    """Generate pseudo-POS analysis section."""
+    pseudo_data = stats.get('PSEUDO_POS_ONLY', [])
+
+    lines = [
+        'Pages that have **only** pseudo-POS headers (no real POS like noun, verb, etc.):',
+        '',
+        '| Pseudo-POS | Count | Sample Entries |',
+        '|------------|------:|----------------|',
+    ]
+
+    for line in pseudo_data:
+        parts = line.split('\t')
+        if len(parts) >= 2:
+            pseudo_type = parts[0]
+            count = int(parts[1])
+            samples = parts[2] if len(parts) > 2 else ''
+            # Show first 5 samples
+            sample_list = samples.split(',')[:5] if samples else []
+            samples_str = ', '.join(sample_list) if sample_list else '(none)'
+            lines.append(f'| {pseudo_type} | {format_number(count)} | {samples_str} |')
+
+    return '\n'.join(lines) + '\n'
+
+
+def generate_phrase_types(stats: dict) -> str:
+    """Generate phrase type breakdown section."""
+    phrase_data = stats.get('PHRASE_TYPES', [])
+
+    lines = [
+        '| Phrase Type | Count |',
+        '|-------------|------:|',
+    ]
+
+    for line in phrase_data:
+        parts = line.split('\t')
+        if len(parts) >= 2:
+            phrase_type = parts[0]
+            count = int(parts[1])
+            lines.append(f'| {phrase_type} | {format_number(count)} |')
+
+    return '\n'.join(lines) + '\n'
+
+
+def generate_aggregate_groups(stats: dict) -> str:
+    """Generate aggregate groupings section."""
+    agg_data = stats.get('AGGREGATE_GROUPS', [])
+
+    # Parse into dict
+    agg_dict = {}
+    for line in agg_data:
+        parts = line.split('\t')
+        if len(parts) >= 2:
+            agg_dict[parts[0]] = int(parts[1])
+
+    lines = [
+        'Potential groupings for normalization:',
+        '',
+        '| Grouping | Components | Total |',
+        '|----------|------------|------:|',
+        f"| Affix | prefix, suffix, infix, interfix, circumfix, affix | {format_number(agg_dict.get('affix', 0))} |",
+        f"| Symbol | symbol, punctuation mark, diacritical mark | {format_number(agg_dict.get('symbol', 0))} |",
+        f"| Determiner | determiner, article | {format_number(agg_dict.get('determiner', 0))} |",
+        f"| Determiner/Numeral | determiner, article, numeral | {format_number(agg_dict.get('determiner_numeral', 0))} |",
+    ]
+
+    return '\n'.join(lines) + '\n'
+
+
+def generate_unknown_pos(stats: dict) -> str:
+    """Generate unknown POS entries section."""
+    unknown_data = stats.get('UNKNOWN_POS', [])
+
+    # Parse count and samples
+    count = 0
+    samples = []
+    for line in unknown_data:
+        parts = line.split('\t', 1)
+        if parts[0] == 'count':
+            count = int(parts[1]) if len(parts) > 1 else 0
+        elif parts[0] == 'samples':
+            samples = parts[1].split(',') if len(parts) > 1 else []
+
+    lines = [
+        f'Pages with section headers but no recognized POS: **{format_number(count)}**',
+        '',
+    ]
+
+    if samples:
+        lines.append('Sample entries: ' + ', '.join(samples[:10]))
+    else:
+        lines.append('No samples collected.')
+
+    return '\n'.join(lines) + '\n'
+
+
+def generate_header_typos(stats: dict) -> str:
+    """Generate header typos table with page lists for wiki editing."""
+    typo_data = stats.get('HEADER_TYPOS', [])
+
+    lines = [
+        '| Count | Header | Likely Intended | Pages |',
+        '|------:|--------|-----------------|-------|',
+    ]
+
+    # Parse typo data: typo<TAB>intended<TAB>count<TAB>pages
+    typos_with_pages = []
+    for line in typo_data:
+        parts = line.split('\t')
+        if len(parts) >= 3:
+            typo = parts[0]
+            intended = parts[1]
+            count = int(parts[2])
+            pages = parts[3].split(',') if len(parts) > 3 and parts[3] else []
+            if count > 0:
+                typos_with_pages.append((count, typo, intended, pages))
+
+    # Sort by count descending
+    for count, typo, intended, pages in sorted(typos_with_pages, key=lambda x: -x[0]):
+        # Format pages as wiki links
+        page_links = ', '.join(f'[[{p}]]' for p in pages)
+        lines.append(f'| {count} | {typo} | {intended} | {page_links} |')
+
+    if len(lines) == 2:  # Only header rows
+        lines.append('| - | (none found) | - | - |')
 
     return '\n'.join(lines) + '\n'
 
@@ -253,6 +410,11 @@ def main():
         'headers_structural': generate_headers_structural,
         'template_pos': generate_template_pos,
         'categories': generate_categories,
+        'pseudo_pos_analysis': generate_pseudo_pos_analysis,
+        'phrase_types': generate_phrase_types,
+        'aggregate_groups': generate_aggregate_groups,
+        'unknown_pos': generate_unknown_pos,
+        'header_typos': generate_header_typos,
     }
 
     missing_sections = []
