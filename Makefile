@@ -129,12 +129,7 @@ test-full: test validate-scanner-parity
 
 # Fetch all English language sources
 fetch-en:
-	@echo "Fetching English Language Sources..."
-	bash scripts/fetch/fetch_eowl.sh
-	bash scripts/fetch/fetch_wiktionary.sh
-	bash scripts/fetch/fetch_wordnet.sh
-	bash scripts/fetch/fetch_frequency.sh
-	bash scripts/fetch/fetch_brysbaert.sh
+	$(UV) run scripts/fetch/fetch_sources.py
 
 # ===========================
 # Frontend Dependencies
@@ -316,7 +311,7 @@ validate-enable: deps
 # Validate profanity/offensive term labeling
 # WARNING: Downloads and analyzes lists with explicit/offensive content
 validate-profanity: deps
-	@bash scripts/fetch/fetch_profanity_lists.sh
+	@$(UV) run scripts/fetch/fetch_sources.py --group profanity
 	@$(VALIDATE_PROFANITY)
 
 # Validate childish term labeling
