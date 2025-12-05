@@ -28,11 +28,20 @@ fi
 
 # Clone repository (shallow clone to save bandwidth)
 if [[ -d "$TEMP_DIR" ]]; then
+    echo "  Removing stale temp directory..."
     rm -rf "$TEMP_DIR"
 fi
 
 echo "  Cloning repository..."
-git clone --depth 1 --quiet "$FREQ_REPO" "$TEMP_DIR"
+# Use --progress to show download progress (helpful for debugging hangs)
+if ! git clone --depth 1 --progress "$FREQ_REPO" "$TEMP_DIR"; then
+    echo "Error: git clone failed"
+    echo "  This may be due to network issues or the repository being unavailable."
+    echo "  Cleaning up..."
+    rm -rf "$TEMP_DIR"
+    exit 1
+fi
+echo "  Clone completed successfully."
 
 # Find the English frequency file
 # Try different possible paths
