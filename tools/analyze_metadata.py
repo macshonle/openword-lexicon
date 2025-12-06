@@ -17,7 +17,32 @@ import json
 import random
 from pathlib import Path
 from collections import Counter, defaultdict
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, Set
+
+import yaml
+
+
+def load_pos_codes() -> Set[str]:
+    """Load POS codes from schema/pos.yaml.
+
+    Raises:
+        SystemExit: If schema file is not found.
+    """
+    schema_paths = [
+        Path(__file__).parent.parent / "schema" / "pos.yaml",
+        Path("schema/pos.yaml"),
+    ]
+    for schema_path in schema_paths:
+        if schema_path.exists():
+            with open(schema_path) as f:
+                schema = yaml.safe_load(f)
+            return {pos['code'] for pos in schema.get('pos_classes', [])}
+
+    # Schema not found - exit with error
+    import sys
+    print(f"Error: Could not find schema/pos.yaml", file=sys.stderr)
+    print(f"Searched paths: {[str(p) for p in schema_paths]}", file=sys.stderr)
+    sys.exit(1)
 
 
 def load_metadata(meta_path: Path) -> Dict[str, Any]:
@@ -307,9 +332,8 @@ def analyze_labels(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         for pos, count in pos_counts.most_common(15):
             report += f"| {pos} | {count:,} |\n"
 
-        # Check for expected but missing POS tags
-        all_expected_pos = {'noun', 'verb', 'adjective', 'adverb', 'pronoun', 'preposition',
-                           'conjunction', 'interjection', 'determiner', 'particle', 'auxiliary'}
+        # Check for expected but missing POS tags (using 3-letter codes from schema)
+        all_expected_pos = load_pos_codes()
         missing_pos = all_expected_pos - set(pos_counts.keys())
 
         if missing_pos:
@@ -374,8 +398,8 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     has_gloss = sum(1 for e in metadata.values() if e.get('gloss'))
     has_syllables = sum(1 for e in metadata.values() if e.get('syllables'))
 
-    # Count nouns
-    nouns = [e for e in metadata.values() if 'noun' in e.get('pos', [])]
+    # Count nouns (using 3-letter POS code)
+    nouns = [e for e in metadata.values() if 'NOU' in e.get('pos', [])]
     concrete_nouns = [e for e in nouns if e.get('concreteness') == 'concrete']
     abstract_nouns = [e for e in nouns if e.get('concreteness') == 'abstract']
     mixed_nouns = [e for e in nouns if e.get('concreteness') == 'mixed']
@@ -390,7 +414,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     # Concreteness distribution
     concrete_dist = Counter()
     for entry in metadata.values():
-        if 'noun' in entry.get('pos', []):
+        if 'NOU' in entry.get('pos', []):
             concrete_dist[entry.get('concreteness', 'unknown')] += 1
 
     report = "## Game-Specific Metadata Analysis\n\n"
@@ -545,7 +569,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         report += f"| {concrete_type} | {count:,} |\n"
     report += "\n"
 
-    # Frequency distribution (using letter-based tiers A-L/Y/Z)
+    # Frequency distribution (using letter-based tiers A-Z)
     report += "#### Frequency Distribution by Tier (Nouns Only)\n\n"
     report += "| Tier | Count | Percentage |\n"
     report += "|------|------:|-----------:|\n"

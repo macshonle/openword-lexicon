@@ -143,10 +143,10 @@ def print_report(analysis: dict):
         for pos in info['pos'] or ['(no POS)']:
             by_pos[pos].append(word)
 
-    for pos in ['noun', 'verb', 'adjective', 'interjection']:
+    for pos in ['NOU', 'VRB', 'ADJ', 'ITJ']:
         if pos in by_pos:
             words = by_pos[pos][:10]
-            print(f"  {pos.upper()}:")
+            print(f"  {pos}:")
             for word in words:
                 info = analysis['childish_words'][word]
                 labels = info['labels']

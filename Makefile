@@ -70,7 +70,7 @@ BENCHMARK_DIR := data/benchmark
         build-en build-rust-scanner build-trie build-metadata \
 		package report-en diagnose-scanner corpus-stats \
 		validate-all validate-enable validate-profanity validate-childish \
-		validate-scanner-parity \
+		validate-scanner-parity validate-scanner-parity-full \
         spec-editor-web wordlist-viewer-web \
 		wordlists \
 		benchmark-rust-scanner benchmark-validate \
@@ -325,20 +325,32 @@ validate-profanity: deps
 validate-childish: deps
 	@$(VALIDATE_CHILDISH)
 
-# Validate Python/Rust scanner parity
-# Runs both scanners on 900000 entries and compares outputs word-by-word
-# Skips gracefully if Wiktionary dump not available
+# Validate Python/Rust scanner parity (quick - for nightly)
+# Runs both scanners on 200k entries and compares outputs word-by-word
 # Note: Uses sequential mode with --limit for efficient early termination
 validate-scanner-parity: $(WIKT_DUMP) $(RUST_SCANNER) deps
-	@echo "Running Python scanner (900000 entries)..."
-	$(PYTHON_SCANNER) "$(WIKT_DUMP)" /tmp/parity-python.jsonl --limit 900000
-	@echo "Running Rust scanner (900000 entries)..."
+	@echo "Running Python scanner (200000 entries)..."
+	$(PYTHON_SCANNER) "$(WIKT_DUMP)" /tmp/parity-python.jsonl --limit 200000
+	@echo "Running Rust scanner (200000 entries)..."
 	$(RUST_SCANNER) "$(WIKT_DUMP)" /tmp/parity-rust.jsonl \
-		--strategy sequential --limit 900000
+		--strategy sequential --limit 200000
 	@echo "Validating parity..."
 	$(VALIDATE_PARITY) \
 		--python-output /tmp/parity-python.jsonl \
 		--rust-output /tmp/parity-rust.jsonl
+
+# Validate Python/Rust scanner parity (full - for weekly)
+# Runs both scanners on ALL entries - slower but catches edge cases
+# Note: Uses channel-pipeline for Rust (faster), sequential not needed without limit
+validate-scanner-parity-full: $(WIKT_DUMP) $(RUST_SCANNER) deps
+	@echo "Running Python scanner (full corpus)..."
+	$(PYTHON_SCANNER) "$(WIKT_DUMP)" /tmp/parity-python-full.jsonl
+	@echo "Running Rust scanner (full corpus)..."
+	$(RUST_SCANNER) "$(WIKT_DUMP)" /tmp/parity-rust-full.jsonl
+	@echo "Validating full parity..."
+	$(VALIDATE_PARITY) \
+		--python-output /tmp/parity-python-full.jsonl \
+		--rust-output /tmp/parity-rust-full.jsonl
 
 # ===========================
 # Diagnostics
@@ -455,7 +467,7 @@ nightly:
 	$(MAKE) post-build
 	@echo "End time: $$(date)"
 
-weekly: build-and-prereqs post-build corpus-stats
+weekly: build-and-prereqs post-build corpus-stats validate-scanner-parity-full
 
 .PHONY: build-and-prereqs
 build-and-prereqs: export UV_VENV_CLEAR=1

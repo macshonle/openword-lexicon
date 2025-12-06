@@ -106,28 +106,28 @@ def detect_phrasal_verb(word: str, pos: str) -> Tuple[bool, List[str]]:
 
     Args:
         word: The headword (e.g., "give up", "look forward to")
-        pos: The part of speech (must be "verb" for detection)
+        pos: The part of speech (must be "VRB" for detection)
 
     Returns:
         Tuple of (is_phrasal, adverbs_found) where adverbs_found is the list
         of phrasal adverbs in the order they appear (left to right).
 
     Examples:
-        >>> detect_phrasal_verb("give up", "verb")
+        >>> detect_phrasal_verb("give up", "VRB")
         (True, ["up"])
-        >>> detect_phrasal_verb("look forward to", "verb")
+        >>> detect_phrasal_verb("look forward to", "VRB")
         (True, ["forward", "to"])
-        >>> detect_phrasal_verb("freak out", "verb")
+        >>> detect_phrasal_verb("freak out", "VRB")
         (True, ["out"])
-        >>> detect_phrasal_verb("can it", "verb")
+        >>> detect_phrasal_verb("can it", "VRB")
         (False, [])  # "it" is placeholder, no adverb
-        >>> detect_phrasal_verb("run", "verb")
+        >>> detect_phrasal_verb("run", "VRB")
         (False, [])  # single word, not phrasal
-        >>> detect_phrasal_verb("give up", "noun")
+        >>> detect_phrasal_verb("give up", "NOU")
         (False, [])  # not a verb
     """
     # Only check verbs
-    if pos != "verb":
+    if pos != "VRB":
         return (False, [])
 
     # Single-word verbs are not phrasal
@@ -192,27 +192,25 @@ def is_multiword_term(word: str) -> bool:
 # POS Category Generation - Ported from Module:headword
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Mapping from POS to category suffix (pluralized form)
+# Mapping from POS code to category suffix (pluralized form)
 # From Module:headword: insert(data.categories, full_langname .. " " .. postype .. "s")
 POS_TO_CATEGORY: dict[str, str] = {
-    "noun": "nouns",
-    "verb": "verbs",
-    "adjective": "adjectives",
-    "adverb": "adverbs",
-    "pronoun": "pronouns",
-    "preposition": "prepositions",
-    "conjunction": "conjunctions",
-    "interjection": "interjections",
-    "determiner": "determiners",
-    "article": "articles",
-    "particle": "particles",
-    "numeral": "numerals",
-    "symbol": "symbols",
-    "letter": "letters",
-    "phrase": "phrases",
-    "proverb": "proverbs",
-    "proper": "proper nouns",  # Special case: "proper" → "proper nouns"
-    "affix": "affixes",
+    "NOU": "nouns",
+    "VRB": "verbs",
+    "ADJ": "adjectives",
+    "ADV": "adverbs",
+    "PRN": "pronouns",
+    "ADP": "prepositions",
+    "CNJ": "conjunctions",
+    "ITJ": "interjections",
+    "DET": "determiners",
+    "PRT": "particles",
+    "NUM": "numerals",
+    "SYM": "symbols",
+    "PHR": "phrases",
+    "PRV": "proverbs",
+    "NAM": "proper nouns",  # Proper nouns
+    "AFX": "affixes",
 }
 
 
@@ -221,16 +219,16 @@ def get_pos_category(pos: str) -> Optional[str]:
     Get the Wiktionary category name for a POS.
 
     Args:
-        pos: The normalized POS (e.g., "noun", "verb", "proper")
+        pos: The POS code (e.g., "NOU", "VRB", "NAM")
 
     Returns:
         Category name without "English " prefix (e.g., "nouns", "verbs")
         or None if POS is not recognized.
 
     Examples:
-        >>> get_pos_category("noun")
+        >>> get_pos_category("NOU")
         "nouns"
-        >>> get_pos_category("proper")
+        >>> get_pos_category("NAM")
         "proper nouns"
         >>> get_pos_category("unknown")
         None
@@ -251,7 +249,7 @@ class CategoryBuilder:
     Each computation method adds categories to the internal list.
 
     Usage:
-        builder = CategoryBuilder(word="give up", pos="verb")
+        builder = CategoryBuilder(word="give up", pos="VRB")
         builder.add_pos_category()
         builder.add_multiword_category()
         builder.add_phrasal_verb_categories()
@@ -259,7 +257,7 @@ class CategoryBuilder:
         categories = builder.build()
 
     Or use the convenience method:
-        categories = CategoryBuilder.compute_all(word="give up", pos="verb", labels=["transitive"])
+        categories = CategoryBuilder.compute_all(word="give up", pos="VRB", labels=["transitive"])
     """
 
     word: str
@@ -395,12 +393,12 @@ class CategoryBuilder:
             List of all applicable categories
 
         Examples:
-            >>> CategoryBuilder.compute_all("give up", "verb")
+            >>> CategoryBuilder.compute_all("give up", "VRB")
             ['English verbs', 'English multiword terms', 'English phrasal verbs',
              'English phrasal verbs formed with "up"']
-            >>> CategoryBuilder.compute_all("eat", "verb", labels=["transitive"])
+            >>> CategoryBuilder.compute_all("eat", "VRB", labels=["transitive"])
             ['English verbs', 'English transitive verbs']
-            >>> CategoryBuilder.compute_all("cat", "adjective",
+            >>> CategoryBuilder.compute_all("cat", "ADJ",
             ...     comparability=ComparabilityInfo(uncomparable=True))
             ['English adjectives', 'English uncomparable adjectives']
         """
@@ -721,22 +719,22 @@ def get_comparability_category(pos: str, info: ComparabilityInfo) -> Optional[st
     Get the comparability category for an adjective or adverb.
 
     Args:
-        pos: The POS ("adjective" or "adverb")
+        pos: The POS code ("ADJ" or "ADV")
         info: ComparabilityInfo with parsed flags
 
     Returns:
         Category name (without "English " prefix) or None
 
     Examples:
-        >>> get_comparability_category("adjective", ComparabilityInfo(uncomparable=True))
+        >>> get_comparability_category("ADJ", ComparabilityInfo(uncomparable=True))
         "uncomparable adjectives"
-        >>> get_comparability_category("adverb", ComparabilityInfo(componly=True))
+        >>> get_comparability_category("ADV", ComparabilityInfo(componly=True))
         "comparative-only adverbs"
     """
-    if pos not in ("adjective", "adverb"):
+    if pos not in ("ADJ", "ADV"):
         return None
 
-    plpos = "adjectives" if pos == "adjective" else "adverbs"
+    plpos = "adjectives" if pos == "ADJ" else "adverbs"
 
     if info.uncomparable:
         return f"uncomparable {plpos}"
@@ -944,13 +942,13 @@ if __name__ == "__main__":
     # Quick test
     print("=== Basic Category Tests ===")
     test_cases = [
-        ("give up", "verb", []),
-        ("look forward to", "verb", []),
-        ("freak out", "verb", []),
-        ("can it", "verb", []),
-        ("run", "verb", []),
-        ("ice cream", "noun", []),
-        ("United States", "proper", []),
+        ("give up", "VRB", []),
+        ("look forward to", "VRB", []),
+        ("freak out", "VRB", []),
+        ("can it", "VRB", []),
+        ("run", "VRB", []),
+        ("ice cream", "NOU", []),
+        ("United States", "NAM", []),
     ]
 
     for word, pos, labels in test_cases:
@@ -961,14 +959,14 @@ if __name__ == "__main__":
 
     print("\n\n=== Label → Category Tests ===")
     label_tests = [
-        ("eat", "verb", ["transitive"]),
-        ("sleep", "verb", ["intransitive"]),
-        ("run", "verb", ["ambitransitive"]),  # Both transitive & intransitive
-        ("information", "noun", ["uncountable"]),
-        ("cat", "noun", ["countable"]),
-        ("be", "verb", ["auxiliary", "copulative"]),
-        ("scissors", "noun", ["plural only"]),
-        ("NASA", "noun", ["acronym"]),
+        ("eat", "VRB", ["transitive"]),
+        ("sleep", "VRB", ["intransitive"]),
+        ("run", "VRB", ["ambitransitive"]),  # Both transitive & intransitive
+        ("information", "NOU", ["uncountable"]),
+        ("cat", "NOU", ["countable"]),
+        ("be", "VRB", ["auxiliary", "copulative"]),
+        ("scissors", "NOU", ["plural only"]),
+        ("NASA", "NOU", ["acronym"]),
     ]
 
     for word, pos, labels in label_tests:

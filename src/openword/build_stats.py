@@ -13,8 +13,120 @@ Supports both:
 import json
 import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 from collections import defaultdict
+
+import yaml
+
+
+def _find_schema_file(filename: str) -> Path:
+    """Find a schema file in the schema/ directory."""
+    # Try relative to this file (src/openword/ -> schema/)
+    candidates = [
+        Path(__file__).parent.parent.parent / "schema" / filename,
+        Path("schema") / filename,
+    ]
+    for path in candidates:
+        if path.exists():
+            return path
+    raise FileNotFoundError(
+        f"Could not find schema/{filename}. Searched: {[str(p) for p in candidates]}"
+    )
+
+
+def load_code_lookups() -> Dict[str, Any]:
+    """
+    Load code lookup tables from schema files.
+
+    Returns a dictionary with:
+    - pos: POS code → {name, description}
+    - frequency: Frequency tier → {name, range}
+    - register: Register label → {name, description}
+    """
+    lookups: Dict[str, Any] = {}
+
+    # Load POS codes from pos.yaml
+    try:
+        pos_path = _find_schema_file("pos.yaml")
+        with open(pos_path) as f:
+            pos_schema = yaml.safe_load(f)
+
+        lookups["pos"] = {}
+        for pos_class in pos_schema.get("pos_classes", []):
+            code = pos_class.get("code")
+            if code:
+                lookups["pos"][code] = {
+                    "name": pos_class.get("name", code),
+                    "description": pos_class.get("short_description", pos_class.get("description", "")),
+                }
+    except (FileNotFoundError, yaml.YAMLError):
+        lookups["pos"] = {}
+
+    # Load labels from labels.yaml
+    try:
+        labels_path = _find_schema_file("labels.yaml")
+        with open(labels_path) as f:
+            labels_schema = yaml.safe_load(f)
+
+        # Register labels
+        lookups["register"] = {
+            label: {"name": label.title(), "description": f"{label.title()} vocabulary style"}
+            for label in labels_schema.get("register_labels", [])
+        }
+
+        # Temporal labels
+        lookups["temporal"] = {
+            label: {"name": label.title(), "description": f"{label.title()} usage status"}
+            for label in labels_schema.get("temporal_labels", [])
+        }
+
+        # Domain labels
+        lookups["domain"] = {
+            label: {"name": label.title(), "description": f"{label.title()} subject area"}
+            for label in labels_schema.get("domain_labels", [])
+        }
+
+        # Region labels (label → ISO code)
+        lookups["region"] = {}
+        for label, iso_code in labels_schema.get("region_labels", {}).items():
+            lookups["region"][iso_code] = {
+                "name": label.title(),
+                "iso_code": iso_code,
+            }
+    except (FileNotFoundError, yaml.YAMLError):
+        lookups["register"] = {}
+        lookups["temporal"] = {}
+        lookups["domain"] = {}
+        lookups["region"] = {}
+
+    # Frequency tier definitions from frequency_tiers.py
+    # Import here to avoid circular imports
+    from openword.frequency_tiers import TIER_DEFINITIONS
+
+    lookups["frequency"] = {}
+    for i, (min_rank, code, description) in enumerate(TIER_DEFINITIONS):
+        # Calculate max_rank from next tier's min_rank
+        if i < len(TIER_DEFINITIONS) - 1:
+            max_rank = TIER_DEFINITIONS[i + 1][0] - 1
+            range_str = f"{min_rank:,}-{max_rank:,}"
+        else:
+            # Last tier (Y) has no upper bound
+            range_str = f"{min_rank:,}+"
+
+        lookups["frequency"][code] = {
+            "name": description.replace("top ", "Top ").title() if "top" in description else description.title(),
+            "range": range_str,
+            "description": description,
+        }
+
+    # Add Z tier (unknown/unranked) - not in TIER_DEFINITIONS
+    lookups["frequency"]["Z"] = {
+        "name": "Unknown",
+        "range": "unranked",
+        "description": "Unknown or unranked frequency",
+    }
+
+    return lookups
 
 
 def detect_format(entries: Dict[str, dict]) -> str:
@@ -464,7 +576,7 @@ def compute_statistics(entries: Dict[str, dict], senses_by_word: Optional[Dict[s
             for pos in pos_tags:
                 pos_counts[pos] += 1
 
-        is_noun = 'noun' in pos_tags
+        is_noun = 'NOU' in pos_tags
         if is_noun:
             nouns += 1
             if entry.get('concreteness'):
@@ -727,6 +839,9 @@ def generate_and_write_statistics(
 
     # Add timestamp
     stats['generated_at'] = datetime.datetime.now().isoformat()
+
+    # Add code lookups from schema files
+    stats['code_lookups'] = load_code_lookups()
 
     # Write to file
     output_path.parent.mkdir(parents=True, exist_ok=True)

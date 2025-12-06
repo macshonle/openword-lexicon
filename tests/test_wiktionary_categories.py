@@ -51,7 +51,7 @@ class TestPhrasalVerbDetection:
     like "it", "one", "oneself" may appear but don't make a verb phrasal.
 
     The detection requires:
-    1. POS must be "verb"
+    1. POS must be "VRB"
     2. Word must contain spaces
     3. All words after the base must be either phrasal adverbs or placeholders
     4. At least one phrasal adverb must be present
@@ -65,53 +65,53 @@ class TestPhrasalVerbDetection:
 
     def test_simple_phrasal_verb(self):
         """Basic phrasal verb: base verb + single adverb."""
-        is_phrasal, adverbs = detect_phrasal_verb("give up", "verb")
+        is_phrasal, adverbs = detect_phrasal_verb("give up", "VRB")
         assert is_phrasal is True
         assert adverbs == ["up"]
 
     def test_phrasal_verb_with_out(self):
         """Phrasal verb with 'out' particle."""
-        is_phrasal, adverbs = detect_phrasal_verb("freak out", "verb")
+        is_phrasal, adverbs = detect_phrasal_verb("freak out", "VRB")
         assert is_phrasal is True
         assert adverbs == ["out"]
 
     def test_phrasal_verb_multiple_adverbs(self):
         """Phrasal verb with multiple adverbs: put up with."""
-        is_phrasal, adverbs = detect_phrasal_verb("put up with", "verb")
+        is_phrasal, adverbs = detect_phrasal_verb("put up with", "VRB")
         assert is_phrasal is True
         assert adverbs == ["up", "with"]
 
     def test_phrasal_verb_with_placeholder(self):
         """Phrasal verb containing placeholder word 'it'."""
         # "psych oneself up" - has placeholder "oneself" and adverb "up"
-        is_phrasal, adverbs = detect_phrasal_verb("psych oneself up", "verb")
+        is_phrasal, adverbs = detect_phrasal_verb("psych oneself up", "VRB")
         assert is_phrasal is True
         assert adverbs == ["up"]
 
     def test_placeholder_only_not_phrasal(self):
         """Word with only placeholder is NOT phrasal."""
         # "can it" has "it" which is placeholder but no adverb
-        is_phrasal, adverbs = detect_phrasal_verb("can it", "verb")
+        is_phrasal, adverbs = detect_phrasal_verb("can it", "VRB")
         assert is_phrasal is False
         assert adverbs == []
 
     def test_single_word_verb_not_phrasal(self):
         """Single-word verb is never phrasal."""
-        is_phrasal, adverbs = detect_phrasal_verb("run", "verb")
+        is_phrasal, adverbs = detect_phrasal_verb("run", "VRB")
         assert is_phrasal is False
         assert adverbs == []
 
     def test_non_verb_pos_not_phrasal(self):
         """Non-verb POS is never detected as phrasal."""
         # "give up" as a noun should not be phrasal
-        is_phrasal, adverbs = detect_phrasal_verb("give up", "noun")
+        is_phrasal, adverbs = detect_phrasal_verb("give up", "NOU")
         assert is_phrasal is False
         assert adverbs == []
 
     def test_unknown_word_breaks_pattern(self):
         """Unknown word in the pattern breaks phrasal detection."""
         # "run quickly away" - "quickly" is not in phrasal adverbs or placeholders
-        is_phrasal, adverbs = detect_phrasal_verb("run quickly away", "verb")
+        is_phrasal, adverbs = detect_phrasal_verb("run quickly away", "VRB")
         assert is_phrasal is False
         assert adverbs == []
 
@@ -125,7 +125,7 @@ class TestPhrasalVerbDetection:
         "look forward to" is detected by Wiktionary via a different mechanism
         (direct category tagging in the entry template).
         """
-        is_phrasal, adverbs = detect_phrasal_verb("look forward to", "verb")
+        is_phrasal, adverbs = detect_phrasal_verb("look forward to", "VRB")
         # "forward" is NOT in the adverb list, so this breaks the pattern
         assert is_phrasal is False
 
@@ -144,7 +144,7 @@ class TestPhrasalVerbDetection:
             ("bring up", ["up"]),
         ]
         for word, expected_adverbs in common_phrasal_verbs:
-            is_phrasal, adverbs = detect_phrasal_verb(word, "verb")
+            is_phrasal, adverbs = detect_phrasal_verb(word, "VRB")
             assert is_phrasal is True, f"{word} should be phrasal"
             assert adverbs == expected_adverbs, f"{word} should have adverbs {expected_adverbs}"
 
@@ -233,20 +233,20 @@ class TestPOSCategoryGeneration:
     """
 
     def test_noun_category(self):
-        """Noun → 'nouns'."""
-        assert get_pos_category("noun") == "nouns"
+        """NOU → 'nouns'."""
+        assert get_pos_category("NOU") == "nouns"
 
     def test_verb_category(self):
-        """Verb → 'verbs'."""
-        assert get_pos_category("verb") == "verbs"
+        """VRB → 'verbs'."""
+        assert get_pos_category("VRB") == "verbs"
 
     def test_adjective_category(self):
-        """Adjective → 'adjectives'."""
-        assert get_pos_category("adjective") == "adjectives"
+        """ADJ → 'adjectives'."""
+        assert get_pos_category("ADJ") == "adjectives"
 
     def test_proper_noun_special_case(self):
-        """Proper noun uses 'proper nouns' not 'propers'."""
-        assert get_pos_category("proper") == "proper nouns"
+        """NAM (proper noun) uses 'proper nouns' not 'propers'."""
+        assert get_pos_category("NAM") == "proper nouns"
 
     def test_unknown_pos_returns_none(self):
         """Unknown POS returns None."""
@@ -268,24 +268,24 @@ class TestCategoryBuilder:
 
     def test_simple_noun(self):
         """Simple noun gets only POS category."""
-        categories = CategoryBuilder.compute_all("cat", "noun")
+        categories = CategoryBuilder.compute_all("cat", "NOU")
         assert categories == ["English nouns"]
 
     def test_multiword_noun(self):
         """Multiword noun gets POS + multiword categories."""
-        categories = CategoryBuilder.compute_all("ice cream", "noun")
+        categories = CategoryBuilder.compute_all("ice cream", "NOU")
         assert "English nouns" in categories
         assert "English multiword terms" in categories
         assert len(categories) == 2
 
     def test_simple_verb(self):
         """Simple verb gets only POS category."""
-        categories = CategoryBuilder.compute_all("run", "verb")
+        categories = CategoryBuilder.compute_all("run", "VRB")
         assert categories == ["English verbs"]
 
     def test_phrasal_verb(self):
         """Phrasal verb gets POS + multiword + phrasal categories."""
-        categories = CategoryBuilder.compute_all("give up", "verb")
+        categories = CategoryBuilder.compute_all("give up", "VRB")
         assert "English verbs" in categories
         assert "English multiword terms" in categories
         assert "English phrasal verbs" in categories
@@ -294,24 +294,24 @@ class TestCategoryBuilder:
 
     def test_phrasal_verb_multiple_adverbs(self):
         """Phrasal verb with multiple adverbs gets category for each."""
-        categories = CategoryBuilder.compute_all("put up with", "verb")
+        categories = CategoryBuilder.compute_all("put up with", "VRB")
         assert 'English phrasal verbs formed with "up"' in categories
         assert 'English phrasal verbs formed with "with"' in categories
 
     def test_proper_noun(self):
         """Proper noun gets correct category name."""
-        categories = CategoryBuilder.compute_all("London", "proper")
+        categories = CategoryBuilder.compute_all("London", "NAM")
         assert categories == ["English proper nouns"]
 
     def test_multiword_proper_noun(self):
         """Multiword proper noun gets both categories."""
-        categories = CategoryBuilder.compute_all("United States", "proper")
+        categories = CategoryBuilder.compute_all("United States", "NAM")
         assert "English proper nouns" in categories
         assert "English multiword terms" in categories
 
     def test_builder_pattern_fluent_api(self):
         """Builder supports fluent API for manual category computation."""
-        builder = CategoryBuilder(word="give up", pos="verb")
+        builder = CategoryBuilder(word="give up", pos="VRB")
         result = (
             builder
             .add_pos_category()
@@ -342,7 +342,7 @@ class TestRealWorldExamples:
         Expected categories: English verbs, English phrasal verbs,
                             English phrasal verbs formed with "up"
         """
-        categories = CategoryBuilder.compute_all("give up", "verb")
+        categories = CategoryBuilder.compute_all("give up", "VRB")
         assert "English verbs" in categories
         assert "English phrasal verbs" in categories
         assert 'English phrasal verbs formed with "up"' in categories
@@ -352,7 +352,7 @@ class TestRealWorldExamples:
 
         Wiktionary page: https://en.wiktionary.org/wiki/break_down
         """
-        categories = CategoryBuilder.compute_all("break down", "verb")
+        categories = CategoryBuilder.compute_all("break down", "VRB")
         assert "English phrasal verbs" in categories
         assert 'English phrasal verbs formed with "down"' in categories
 
@@ -361,7 +361,7 @@ class TestRealWorldExamples:
 
         Wiktionary page: https://en.wiktionary.org/wiki/freak_out
         """
-        categories = CategoryBuilder.compute_all("freak out", "verb")
+        categories = CategoryBuilder.compute_all("freak out", "VRB")
         assert "English phrasal verbs" in categories
         assert 'English phrasal verbs formed with "out"' in categories
 
@@ -371,7 +371,7 @@ class TestRealWorldExamples:
         Wiktionary page: https://en.wiktionary.org/wiki/ice_cream
         Expected categories: English nouns, English multiword terms
         """
-        categories = CategoryBuilder.compute_all("ice cream", "noun")
+        categories = CategoryBuilder.compute_all("ice cream", "NOU")
         assert categories == ["English nouns", "English multiword terms"]
 
     def test_run_simple_verb(self):
@@ -379,7 +379,7 @@ class TestRealWorldExamples:
 
         Wiktionary page: https://en.wiktionary.org/wiki/run
         """
-        categories = CategoryBuilder.compute_all("run", "verb")
+        categories = CategoryBuilder.compute_all("run", "VRB")
         assert categories == ["English verbs"]
         assert "English phrasal verbs" not in categories
 
@@ -406,13 +406,13 @@ class TestLabelCategoryMappings:
 
         This is the most common grammatical label (~17,759 occurrences in 200k sample).
         """
-        categories = CategoryBuilder.compute_all("eat", "verb", labels=["transitive"])
+        categories = CategoryBuilder.compute_all("eat", "VRB", labels=["transitive"])
         assert "English verbs" in categories
         assert "English transitive verbs" in categories
 
     def test_intransitive_verb(self):
         """'intransitive' label adds intransitive verbs category."""
-        categories = CategoryBuilder.compute_all("sleep", "verb", labels=["intransitive"])
+        categories = CategoryBuilder.compute_all("sleep", "VRB", labels=["intransitive"])
         assert "English intransitive verbs" in categories
 
     def test_ambitransitive_verb(self):
@@ -423,63 +423,63 @@ class TestLabelCategoryMappings:
 
         This is correct behavior - ambitransitive verbs can be used both ways.
         """
-        categories = CategoryBuilder.compute_all("run", "verb", labels=["ambitransitive"])
+        categories = CategoryBuilder.compute_all("run", "VRB", labels=["ambitransitive"])
         assert "English transitive verbs" in categories
         assert "English intransitive verbs" in categories
 
     def test_countable_noun(self):
         """'countable' label adds countable nouns category."""
-        categories = CategoryBuilder.compute_all("cat", "noun", labels=["countable"])
+        categories = CategoryBuilder.compute_all("cat", "NOU", labels=["countable"])
         assert "English countable nouns" in categories
 
     def test_uncountable_noun(self):
         """'uncountable' label adds uncountable nouns category."""
-        categories = CategoryBuilder.compute_all("information", "noun", labels=["uncountable"])
+        categories = CategoryBuilder.compute_all("information", "NOU", labels=["uncountable"])
         assert "English uncountable nouns" in categories
 
     def test_uncountable_alias(self):
         """'not countable' is an alias for 'uncountable'."""
-        categories = CategoryBuilder.compute_all("information", "noun", labels=["not countable"])
+        categories = CategoryBuilder.compute_all("information", "NOU", labels=["not countable"])
         assert "English uncountable nouns" in categories
 
     def test_plural_only_noun(self):
         """'plural only' label adds pluralia tantum category."""
-        categories = CategoryBuilder.compute_all("scissors", "noun", labels=["plural only"])
+        categories = CategoryBuilder.compute_all("scissors", "NOU", labels=["plural only"])
         assert "English pluralia tantum" in categories
 
     def test_plural_only_alias(self):
         """'plurale tantum' is an alias for 'plural only'."""
-        categories = CategoryBuilder.compute_all("pants", "noun", labels=["plurale tantum"])
+        categories = CategoryBuilder.compute_all("pants", "NOU", labels=["plurale tantum"])
         assert "English pluralia tantum" in categories
 
     def test_auxiliary_verb(self):
         """'auxiliary' label adds auxiliary verbs category."""
-        categories = CategoryBuilder.compute_all("have", "verb", labels=["auxiliary"])
+        categories = CategoryBuilder.compute_all("have", "VRB", labels=["auxiliary"])
         assert "English auxiliary verbs" in categories
 
     def test_modal_verb(self):
         """'modal' label adds modal verbs category."""
-        categories = CategoryBuilder.compute_all("can", "verb", labels=["modal"])
+        categories = CategoryBuilder.compute_all("can", "VRB", labels=["modal"])
         assert "English modal verbs" in categories
 
     def test_collective_noun(self):
         """'collective' label adds collective nouns category."""
-        categories = CategoryBuilder.compute_all("flock", "noun", labels=["collective"])
+        categories = CategoryBuilder.compute_all("flock", "NOU", labels=["collective"])
         assert "English collective nouns" in categories
 
     def test_acronym(self):
         """'acronym' label adds acronyms category."""
-        categories = CategoryBuilder.compute_all("NASA", "noun", labels=["acronym"])
+        categories = CategoryBuilder.compute_all("NASA", "NOU", labels=["acronym"])
         assert "English acronyms" in categories
 
     def test_initialism(self):
         """'initialism' label adds initialisms category."""
-        categories = CategoryBuilder.compute_all("FBI", "noun", labels=["initialism"])
+        categories = CategoryBuilder.compute_all("FBI", "NOU", labels=["initialism"])
         assert "English initialisms" in categories
 
     def test_abbreviation(self):
         """'abbreviation' label adds abbreviations category."""
-        categories = CategoryBuilder.compute_all("etc", "noun", labels=["abbreviation"])
+        categories = CategoryBuilder.compute_all("etc", "NOU", labels=["abbreviation"])
         assert "English abbreviations" in categories
 
 
@@ -518,7 +518,7 @@ class TestMultipleLabels:
     def test_multiple_verb_labels(self):
         """Verb with multiple labels gets all applicable categories."""
         categories = CategoryBuilder.compute_all(
-            "be", "verb", labels=["auxiliary", "copulative", "intransitive"]
+            "be", "VRB", labels=["auxiliary", "copulative", "intransitive"]
         )
         assert "English auxiliary verbs" in categories
         assert "English copulative verbs" in categories
@@ -527,7 +527,7 @@ class TestMultipleLabels:
     def test_mixed_labels_some_with_categories(self):
         """Only labels with pos_categories mappings add categories."""
         categories = CategoryBuilder.compute_all(
-            "eat", "verb", labels=["transitive", "informal", "slang"]
+            "eat", "VRB", labels=["transitive", "informal", "slang"]
         )
         # Only "transitive" has a category mapping
         assert "English transitive verbs" in categories
@@ -539,7 +539,7 @@ class TestMultipleLabels:
         """Duplicate categories from multiple labels are deduplicated."""
         # Both "ambitransitive" and "transitive" would add "transitive verbs"
         categories = CategoryBuilder.compute_all(
-            "run", "verb", labels=["ambitransitive", "transitive"]
+            "run", "VRB", labels=["ambitransitive", "transitive"]
         )
         # Should only have one "English transitive verbs"
         assert categories.count("English transitive verbs") == 1
@@ -634,49 +634,49 @@ class TestComparabilityCategoryGeneration:
     def test_uncomparable_adjective_category(self):
         """Uncomparable adjective gets 'uncomparable adjectives' category."""
         info = ComparabilityInfo(uncomparable=True)
-        cat = get_comparability_category("adjective", info)
+        cat = get_comparability_category("ADJ", info)
         assert cat == "uncomparable adjectives"
 
     def test_uncomparable_adverb_category(self):
         """Uncomparable adverb gets 'uncomparable adverbs' category."""
         info = ComparabilityInfo(uncomparable=True)
-        cat = get_comparability_category("adverb", info)
+        cat = get_comparability_category("ADV", info)
         assert cat == "uncomparable adverbs"
 
     def test_comparative_only_adjective_category(self):
         """Comparative-only adjective gets 'comparative-only adjectives' category."""
         info = ComparabilityInfo(componly=True)
-        cat = get_comparability_category("adjective", info)
+        cat = get_comparability_category("ADJ", info)
         assert cat == "comparative-only adjectives"
 
     def test_comparative_only_adverb_category(self):
         """Comparative-only adverb gets 'comparative-only adverbs' category."""
         info = ComparabilityInfo(componly=True)
-        cat = get_comparability_category("adverb", info)
+        cat = get_comparability_category("ADV", info)
         assert cat == "comparative-only adverbs"
 
     def test_superlative_only_adjective_category(self):
         """Superlative-only adjective gets 'superlative-only adjectives' category."""
         info = ComparabilityInfo(suponly=True)
-        cat = get_comparability_category("adjective", info)
+        cat = get_comparability_category("ADJ", info)
         assert cat == "superlative-only adjectives"
 
     def test_noun_no_comparability_category(self):
         """Nouns don't get comparability categories."""
         info = ComparabilityInfo(uncomparable=True)
-        cat = get_comparability_category("noun", info)
+        cat = get_comparability_category("NOU", info)
         assert cat is None
 
     def test_verb_no_comparability_category(self):
         """Verbs don't get comparability categories."""
         info = ComparabilityInfo(uncomparable=True)
-        cat = get_comparability_category("verb", info)
+        cat = get_comparability_category("VRB", info)
         assert cat is None
 
     def test_no_flags_no_category(self):
         """Default comparable has no special category."""
         info = ComparabilityInfo()
-        cat = get_comparability_category("adjective", info)
+        cat = get_comparability_category("ADJ", info)
         assert cat is None
 
 
@@ -692,7 +692,7 @@ class TestComparabilityIntegration:
     def test_uncomparable_adjective_via_builder(self):
         """Uncomparable adjective via CategoryBuilder.compute_all."""
         categories = CategoryBuilder.compute_all(
-            "alphabetical", "adjective",
+            "alphabetical", "ADJ",
             comparability=ComparabilityInfo(uncomparable=True)
         )
         assert "English adjectives" in categories
@@ -701,7 +701,7 @@ class TestComparabilityIntegration:
     def test_uncomparable_adverb_via_builder(self):
         """Uncomparable adverb via CategoryBuilder.compute_all."""
         categories = CategoryBuilder.compute_all(
-            "gratis", "adverb",
+            "gratis", "ADV",
             comparability=ComparabilityInfo(uncomparable=True)
         )
         assert "English adverbs" in categories
@@ -710,7 +710,7 @@ class TestComparabilityIntegration:
     def test_comparative_only_adjective_via_builder(self):
         """Comparative-only adjective like 'larger-than-life'."""
         categories = CategoryBuilder.compute_all(
-            "larger-than-life", "adjective",
+            "larger-than-life", "ADJ",
             comparability=ComparabilityInfo(componly=True)
         )
         assert "English adjectives" in categories
@@ -719,7 +719,7 @@ class TestComparabilityIntegration:
     def test_regular_adjective_no_extra_category(self):
         """Regular comparable adjective has no comparability category."""
         categories = CategoryBuilder.compute_all(
-            "happy", "adjective",
+            "happy", "ADJ",
             comparability=ComparabilityInfo()
         )
         assert "English adjectives" in categories
@@ -728,14 +728,14 @@ class TestComparabilityIntegration:
 
     def test_adjective_without_comparability_info(self):
         """Adjective without comparability info provided."""
-        categories = CategoryBuilder.compute_all("tall", "adjective")
+        categories = CategoryBuilder.compute_all("tall", "ADJ")
         assert "English adjectives" in categories
         assert "English uncomparable adjectives" not in categories
 
     def test_uncomparable_adjective_with_labels(self):
         """Uncomparable adjective can have labels too."""
         categories = CategoryBuilder.compute_all(
-            "portmanteau", "adjective",
+            "portmanteau", "ADJ",
             labels=["attributive"],
             comparability=ComparabilityInfo(uncomparable=True)
         )
@@ -756,7 +756,7 @@ class TestComparabilityRealWorldExamples:
         """'portmanteau' as adjective is uncomparable ({{en-adj|-}})."""
         info = parse_adj_adv_comparability("-")
         categories = CategoryBuilder.compute_all(
-            "portmanteau", "adjective", comparability=info
+            "portmanteau", "ADJ", comparability=info
         )
         assert "English uncomparable adjectives" in categories
 
@@ -764,7 +764,7 @@ class TestComparabilityRealWorldExamples:
         """'gratis' as adverb is uncomparable."""
         info = parse_adj_adv_comparability("-")
         categories = CategoryBuilder.compute_all(
-            "gratis", "adverb", comparability=info
+            "gratis", "ADV", comparability=info
         )
         assert "English uncomparable adverbs" in categories
 
@@ -772,7 +772,7 @@ class TestComparabilityRealWorldExamples:
         """'larger-than-life' is comparative-only ({{en-adj|componly=1}})."""
         info = parse_adj_adv_comparability("componly=1")
         categories = CategoryBuilder.compute_all(
-            "larger-than-life", "adjective", comparability=info
+            "larger-than-life", "ADJ", comparability=info
         )
         assert "English comparative-only adjectives" in categories
 
@@ -780,7 +780,7 @@ class TestComparabilityRealWorldExamples:
         """'FTL' (faster-than-light) is comparative-only."""
         info = parse_adj_adv_comparability("componly=1")
         categories = CategoryBuilder.compute_all(
-            "FTL", "adjective", comparability=info
+            "FTL", "ADJ", comparability=info
         )
         assert "English comparative-only adjectives" in categories
 
@@ -928,7 +928,7 @@ class TestRegionalCategoryIntegration:
     def test_us_slang_noun(self):
         """US slang noun gets POS + regional categories."""
         categories = CategoryBuilder.compute_all(
-            "dude", "noun", labels=["US", "slang"]
+            "dude", "NOU", labels=["US", "slang"]
         )
         assert "English nouns" in categories
         assert "American English" in categories
@@ -936,7 +936,7 @@ class TestRegionalCategoryIntegration:
     def test_british_informal_verb(self):
         """British informal verb gets POS + regional categories."""
         categories = CategoryBuilder.compute_all(
-            "snog", "verb", labels=["UK", "informal"]
+            "snog", "VRB", labels=["UK", "informal"]
         )
         assert "English verbs" in categories
         assert "British English" in categories
@@ -944,7 +944,7 @@ class TestRegionalCategoryIntegration:
     def test_australian_noun(self):
         """Australian noun gets regional category."""
         categories = CategoryBuilder.compute_all(
-            "arvo", "noun", labels=["Australia"]
+            "arvo", "NOU", labels=["Australia"]
         )
         assert "English nouns" in categories
         assert "Australian English" in categories
@@ -952,7 +952,7 @@ class TestRegionalCategoryIntegration:
     def test_multiple_regions(self):
         """Word used in multiple regions gets both categories."""
         categories = CategoryBuilder.compute_all(
-            "colour", "noun", labels=["UK", "Australia", "Canada"]
+            "colour", "NOU", labels=["UK", "Australia", "Canada"]
         )
         assert "British English" in categories
         assert "Australian English" in categories
@@ -961,7 +961,7 @@ class TestRegionalCategoryIntegration:
     def test_regional_with_grammatical_labels(self):
         """Regional labels combined with grammatical labels."""
         categories = CategoryBuilder.compute_all(
-            "reckon", "verb", labels=["US", "transitive"]
+            "reckon", "VRB", labels=["US", "transitive"]
         )
         assert "English verbs" in categories
         assert "English transitive verbs" in categories
@@ -970,7 +970,7 @@ class TestRegionalCategoryIntegration:
     def test_no_regional_labels(self):
         """Entry without regional labels has no regional categories."""
         categories = CategoryBuilder.compute_all(
-            "cat", "noun", labels=["countable"]
+            "cat", "NOU", labels=["countable"]
         )
         assert "English countable nouns" in categories
         # No regional categories

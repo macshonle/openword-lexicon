@@ -79,7 +79,7 @@ Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC
 
 ## Metadata Modules
 
-- `{lang}-frequency.json.gz` — Frequency tier assignments (A-P scale)
+- `{lang}-frequency.json.gz` — Frequency tier assignments (A-Z scale)
 - `{lang}-sources.json.gz` — Source attribution per word
 - `{lang}-lemmas.json.gz` — Base lemma forms
 - `{lang}-syllables.json.gz` — Syllable count data

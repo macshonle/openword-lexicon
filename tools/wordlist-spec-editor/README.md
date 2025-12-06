@@ -155,7 +155,7 @@ wc -l my-words.txt
 - License: Research/Educational Use
 
 **Frequency Data** - 100% coverage
-- 12-level tiers A-L (plus Y/Z for rare/unknown) from OpenSubtitles 2018
+- 26-level tiers A-Z from OpenSubtitles 2018
 - Modern, conversational vocabulary
 - License: CC BY-SA 4.0
 
@@ -190,9 +190,9 @@ Filter by grammatical category (requires Wiktionary or WordNet).
 ### Frequency Filter 📊
 Filter by word frequency tier (requires Frequency Data).
 
-**Tiers:** A (ranks 1-20) → B (21-100) → ... → L (75k-100k) → Y (very rare) → Z (unknown)
+**Tiers:** A (ranks 1-20) → B (21-100) → ... → P (top 50k) → ... → X (top 400k) → Y (very rare) → Z (unknown)
 
-**Example:** Common words (A-F, top ~3000) for beginners, broader vocabulary (A-I, top ~30k) for general use
+**Example:** Common words (A-I, top ~3000) for beginners, broader vocabulary (A-L, top ~10k) for general use
 
 ### Region Filter 🌍
 Filter by regional variants (requires Wiktionary).
@@ -400,10 +400,11 @@ Python CLI tool that:
 - Starts with / ends with / contains
 
 **Frequency Filters** (Always available):
-- 12 tiers A-L with explicit boundaries, plus Y (very rare) and Z (unknown)
-- A: ranks 1-20, B: 21-100, C: 101-300, D: 301-500, E: 501-1000
-- F: 1001-3000, G: 3001-5000, H: 5001-10000, I: 10001-30000
-- J: 30001-50000, K: 50001-75000, L: 75001-100000, Y: 100001+
+- 26 tiers A-Z with explicit boundaries
+- A: ranks 1-20, B: 21-100, C: 101-200, D: 201-300, E: 301-400, F: 401-500
+- G: 501-1000, H: 1001-2000, I: 2001-3000, J: 3001-4000, K: 4001-5000
+- L: 5001-10000, M: 10001-20000, N: 20001-30000, O: 30001-40000, P: 40001-50000
+- Q-X: extended range up to 400k, Y: 400001+ (very rare), Z: unknown/unranked
 - Based on OpenSubtitles 2018 corpus
 - 100% coverage (all words assigned a tier)
 

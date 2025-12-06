@@ -1,0 +1,89 @@
+# English Category Mappings
+#
+# This file externalizes category-based POS detection from the scanners.
+# It consolidates the 21-category whitelist and other category mappings
+# used when section headers are missing or for validation.
+#
+# All category suffixes are relative to "Category:English " prefix.
+
+# Primary POS categories
+# Maps POS code to list of category suffixes that indicate that POS.
+# Used for:
+#   1. has_english_categories() validation (determining if page is English)
+#   2. Fallback POS detection when no section headers found
+pos_categories:
+  NOU:
+    - nouns
+    - noun forms
+  NAM:
+    - proper nouns
+  VRB:
+    - verbs
+    - verb forms
+  ADJ:
+    - adjectives
+    - adjective forms
+  ADV:
+    - adverbs
+    - adverb forms
+  PRN:
+    - pronouns
+  ADP:
+    - prepositions
+  CNJ:
+    - conjunctions
+  ITJ:
+    - interjections
+  DET:
+    - determiners
+    - articles
+  CTN:
+    - contractions
+
+  # Phrase types (split for granular classification)
+  PHR:
+    - phrases
+    - verb phrases
+    - adverbial phrases
+    - noun phrases
+  PRV:
+    - proverbs
+    - sayings
+  PPP:
+    - prepositional phrases
+  IDM:
+    - idioms
+
+# Abbreviation-related categories
+# Entries in these categories get is_abbreviation: true
+abbreviation_categories:
+  - abbreviations
+  - initialisms
+  - acronyms
+  - Stenoscript abbreviations
+
+# Inflected form categories
+# Entries in these categories get is_inflected: true
+inflected_form_categories:
+  - verb forms
+  - noun forms
+  - adjective forms
+  - adverb forms
+  - plurals
+
+# {{en-X}} template abbreviations
+# Maps POS code to template abbreviation used in {{en-X}} patterns
+# e.g., {{en-adj}} → ADJ, {{en-prop}} → NAM
+en_templates:
+  NOU:
+    - noun
+  VRB:
+    - verb
+  ADJ:
+    - adj
+  ADV:
+    - adv
+  NAM:
+    - prop
+  PRN:
+    - pron

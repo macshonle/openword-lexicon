@@ -1,15 +1,15 @@
 {
-  "total_words": 1392434,
-  "generated_at": "2025-12-05T19:38:43.358194",
+  "total_words": 1392342,
+  "generated_at": "2025-12-06T10:35:18.426929",
   "sources": {
-    "wikt": 1334417,
+    "wikt": 1334325,
     "wordnet": 161758,
     "eowl": 142370,
     "brysbaert": 44739
   },
   "source_combinations": {
     "wikt": {
-      "count": 1132902,
+      "count": 1132810,
       "licenses": "CC-BY-SA-4.0"
     },
     "eowl,wikt": {
@@ -63,7 +63,7 @@
   },
   "metadata_coverage": {
     "syllables": {
-      "count": 106080,
+      "count": 106075,
       "percentage": 7.6
     },
     "concreteness": {
@@ -71,31 +71,31 @@
       "percentage": 3.2
     },
     "frequency_tier": {
-      "count": 1392434,
+      "count": 1392342,
       "percentage": 100.0
     },
     "multi_word_phrases": {
-      "count": 344273,
+      "count": 344268,
       "percentage": 24.7
     },
     "total_senses": {
-      "count": 1669851,
+      "count": 1669752,
       "avg_per_word": 1.2
     },
     "pos_tags": {
-      "count": 1334417,
+      "count": 1334325,
       "percentage": 95.8
     },
     "any_labels": {
-      "count": 148861,
+      "count": 148844,
       "percentage": 10.7
     },
     "register_labels": {
-      "count": 42757,
+      "count": 42756,
       "percentage": 3.1
     },
     "domain_labels": {
-      "count": 43207,
+      "count": 43206,
       "percentage": 3.1
     },
     "region_labels": {
@@ -103,35 +103,35 @@
       "percentage": 1.8
     },
     "temporal_labels": {
-      "count": 66115,
+      "count": 66100,
       "percentage": 4.7
     }
   },
   "metadata_by_source": {
     "wikt": {
-      "total": 1334417,
+      "total": 1334325,
       "concreteness": {
         "count": 44478,
         "percentage": 3.3
       },
       "frequency_tier": {
-        "count": 1334417,
+        "count": 1334325,
         "percentage": 100.0
       },
       "syllables": {
-        "count": 106080,
+        "count": 106075,
         "percentage": 7.9
       },
       "senses": {
-        "count": 1334417,
+        "count": 1334325,
         "percentage": 100.0
       },
       "pos_tags": {
-        "count": 1334417,
+        "count": 1334325,
         "percentage": 100.0
       },
       "any_labels": {
-        "count": 148861,
+        "count": 148844,
         "percentage": 11.2
       }
     },
@@ -219,25 +219,27 @@
   },
   "enrichment_impact": {},
   "pos_distribution": {
-    "noun": 791890,
-    "verb": 214643,
-    "proper": 180009,
-    "adjective": 179981,
-    "adverb": 26957,
-    "phrase": 9327,
-    "interjection": 4620,
-    "affix": 3568,
-    "pronoun": 900,
-    "preposition": 843,
-    "numeral": 444,
-    "conjunction": 359,
-    "determiner": 318,
-    "symbol": 246,
+    "NOU": 791851,
+    "VRB": 213904,
+    "NAM": 179987,
+    "ADJ": 179980,
+    "ADV": 26957,
+    "PHR": 4872,
+    "ITJ": 4619,
+    "AFX": 3567,
+    "PPP": 2941,
+    "PRV": 1510,
+    "PRN": 900,
+    "ADP": 844,
+    "CTN": 746,
+    "NUM": 444,
+    "CNJ": 359,
+    "DET": 341,
+    "SYM": 290,
     "unknown": 95,
-    "particle": 93,
-    "letter": 72,
-    "article": 23,
-    "multiple": 2
+    "PRT": 93,
+    "IDM": 10,
+    "MLT": 2
   },
   "frequency_distribution": {
     "A": 18,
@@ -256,7 +258,7 @@
     "N": 9227,
     "O": 8746,
     "P": 8167,
-    "Z": 1346657
+    "Z": 1346565
   },
   "concreteness_distribution": {
     "abstract": 16171,
@@ -267,8 +269,8 @@
     "register": {
       "slang": 20697,
       "informal": 15248,
-      "derogatory": 5755,
-      "colloquial": 5733,
+      "derogatory": 5754,
+      "colloquial": 5734,
       "vulgar": 3737,
       "humorous": 3507,
       "offensive": 1636,
@@ -280,7 +282,7 @@
       "puerile": 2
     },
     "domain": {
-      "medicine": 9419,
+      "medicine": 9418,
       "computing": 7041,
       "biology": 5897,
       "chemistry": 5870,
@@ -304,10 +306,386 @@
     },
     "temporal": {
       "obsolete": 24175,
-      "rare": 16240,
-      "historical": 14119,
+      "rare": 16239,
+      "historical": 14118,
       "archaic": 13266,
-      "dated": 8966
+      "dated": 8954
+    }
+  },
+  "code_lookups": {
+    "pos": {
+      "NOU": {
+        "name": "Noun",
+        "description": "Person, place, or thing"
+      },
+      "NAM": {
+        "name": "Proper Noun",
+        "description": "Name of specific entity"
+      },
+      "VRB": {
+        "name": "Verb",
+        "description": "Action or state"
+      },
+      "ADJ": {
+        "name": "Adjective",
+        "description": "Describes a noun"
+      },
+      "ADV": {
+        "name": "Adverb",
+        "description": "Modifies verbs or adjectives"
+      },
+      "PRN": {
+        "name": "Pronoun",
+        "description": "Substitutes for a noun"
+      },
+      "DET": {
+        "name": "Determiner",
+        "description": "Introduces a noun"
+      },
+      "ADP": {
+        "name": "Adposition",
+        "description": "Spatial or temporal relation"
+      },
+      "CNJ": {
+        "name": "Conjunction",
+        "description": "Connects words or clauses"
+      },
+      "PRT": {
+        "name": "Particle",
+        "description": "Function word"
+      },
+      "ITJ": {
+        "name": "Interjection",
+        "description": "Exclamation"
+      },
+      "PHR": {
+        "name": "Phrase",
+        "description": "Multi-word expression"
+      },
+      "PRV": {
+        "name": "Proverb",
+        "description": "Traditional saying"
+      },
+      "PPP": {
+        "name": "Prepositional Phrase",
+        "description": "Phrase with preposition"
+      },
+      "IDM": {
+        "name": "Idiom",
+        "description": "Non-literal expression"
+      },
+      "AFX": {
+        "name": "Affix",
+        "description": "Word-forming element"
+      },
+      "NUM": {
+        "name": "Numeral",
+        "description": "Number word"
+      },
+      "SYM": {
+        "name": "Symbol",
+        "description": "Symbol or letter"
+      },
+      "MLT": {
+        "name": "Multiple",
+        "description": "Multiple parts of speech"
+      },
+      "CTN": {
+        "name": "Contraction",
+        "description": "Shortened word form"
+      }
+    },
+    "register": {
+      "informal": {
+        "name": "Informal",
+        "description": "Informal vocabulary style"
+      },
+      "colloquial": {
+        "name": "Colloquial",
+        "description": "Colloquial vocabulary style"
+      },
+      "slang": {
+        "name": "Slang",
+        "description": "Slang vocabulary style"
+      },
+      "vulgar": {
+        "name": "Vulgar",
+        "description": "Vulgar vocabulary style"
+      },
+      "offensive": {
+        "name": "Offensive",
+        "description": "Offensive vocabulary style"
+      },
+      "derogatory": {
+        "name": "Derogatory",
+        "description": "Derogatory vocabulary style"
+      },
+      "formal": {
+        "name": "Formal",
+        "description": "Formal vocabulary style"
+      },
+      "euphemistic": {
+        "name": "Euphemistic",
+        "description": "Euphemistic vocabulary style"
+      },
+      "humorous": {
+        "name": "Humorous",
+        "description": "Humorous vocabulary style"
+      },
+      "literary": {
+        "name": "Literary",
+        "description": "Literary vocabulary style"
+      },
+      "childish": {
+        "name": "Childish",
+        "description": "Childish vocabulary style"
+      },
+      "baby talk": {
+        "name": "Baby Talk",
+        "description": "Baby Talk vocabulary style"
+      },
+      "infantile": {
+        "name": "Infantile",
+        "description": "Infantile vocabulary style"
+      },
+      "puerile": {
+        "name": "Puerile",
+        "description": "Puerile vocabulary style"
+      }
+    },
+    "temporal": {
+      "archaic": {
+        "name": "Archaic",
+        "description": "Archaic usage status"
+      },
+      "obsolete": {
+        "name": "Obsolete",
+        "description": "Obsolete usage status"
+      },
+      "dated": {
+        "name": "Dated",
+        "description": "Dated usage status"
+      },
+      "historical": {
+        "name": "Historical",
+        "description": "Historical usage status"
+      },
+      "rare": {
+        "name": "Rare",
+        "description": "Rare usage status"
+      }
+    },
+    "domain": {
+      "computing": {
+        "name": "Computing",
+        "description": "Computing subject area"
+      },
+      "mathematics": {
+        "name": "Mathematics",
+        "description": "Mathematics subject area"
+      },
+      "medicine": {
+        "name": "Medicine",
+        "description": "Medicine subject area"
+      },
+      "biology": {
+        "name": "Biology",
+        "description": "Biology subject area"
+      },
+      "chemistry": {
+        "name": "Chemistry",
+        "description": "Chemistry subject area"
+      },
+      "physics": {
+        "name": "Physics",
+        "description": "Physics subject area"
+      },
+      "law": {
+        "name": "Law",
+        "description": "Law subject area"
+      },
+      "military": {
+        "name": "Military",
+        "description": "Military subject area"
+      },
+      "nautical": {
+        "name": "Nautical",
+        "description": "Nautical subject area"
+      },
+      "aviation": {
+        "name": "Aviation",
+        "description": "Aviation subject area"
+      },
+      "sports": {
+        "name": "Sports",
+        "description": "Sports subject area"
+      }
+    },
+    "region": {
+      "en-GB": {
+        "name": "Uk",
+        "iso_code": "en-GB"
+      },
+      "en-US": {
+        "name": "American",
+        "iso_code": "en-US"
+      },
+      "en-CA": {
+        "name": "Canadian",
+        "iso_code": "en-CA"
+      },
+      "en-AU": {
+        "name": "Australian",
+        "iso_code": "en-AU"
+      },
+      "en-NZ": {
+        "name": "New Zealand",
+        "iso_code": "en-NZ"
+      },
+      "en-IE": {
+        "name": "Irish",
+        "iso_code": "en-IE"
+      },
+      "en-ZA": {
+        "name": "South Africa",
+        "iso_code": "en-ZA"
+      },
+      "en-IN": {
+        "name": "Indian",
+        "iso_code": "en-IN"
+      }
+    },
+    "frequency": {
+      "A": {
+        "name": "Top 20",
+        "range": "1-20",
+        "description": "top 20"
+      },
+      "B": {
+        "name": "Top 100",
+        "range": "21-100",
+        "description": "top 100"
+      },
+      "C": {
+        "name": "Top 200",
+        "range": "101-200",
+        "description": "top 200"
+      },
+      "D": {
+        "name": "Top 300",
+        "range": "201-300",
+        "description": "top 300"
+      },
+      "E": {
+        "name": "Top 400",
+        "range": "301-400",
+        "description": "top 400"
+      },
+      "F": {
+        "name": "Top 500",
+        "range": "401-500",
+        "description": "top 500"
+      },
+      "G": {
+        "name": "Top 1,000",
+        "range": "501-1,000",
+        "description": "top 1,000"
+      },
+      "H": {
+        "name": "Top 2,000",
+        "range": "1,001-2,000",
+        "description": "top 2,000"
+      },
+      "I": {
+        "name": "Top 3,000",
+        "range": "2,001-3,000",
+        "description": "top 3,000"
+      },
+      "J": {
+        "name": "Top 4,000",
+        "range": "3,001-4,000",
+        "description": "top 4,000"
+      },
+      "K": {
+        "name": "Top 5,000",
+        "range": "4,001-5,000",
+        "description": "top 5,000"
+      },
+      "L": {
+        "name": "Top 10,000",
+        "range": "5,001-10,000",
+        "description": "top 10,000"
+      },
+      "M": {
+        "name": "Top 20,000",
+        "range": "10,001-20,000",
+        "description": "top 20,000"
+      },
+      "N": {
+        "name": "Top 30,000",
+        "range": "20,001-30,000",
+        "description": "top 30,000"
+      },
+      "O": {
+        "name": "Top 40,000",
+        "range": "30,001-40,000",
+        "description": "top 40,000"
+      },
+      "P": {
+        "name": "Top 50,000",
+        "range": "40,001-50,000",
+        "description": "top 50,000"
+      },
+      "Q": {
+        "name": "Top 60,000",
+        "range": "50,001-60,000",
+        "description": "top 60,000"
+      },
+      "R": {
+        "name": "Top 70,000",
+        "range": "60,001-70,000",
+        "description": "top 70,000"
+      },
+      "S": {
+        "name": "Top 80,000",
+        "range": "70,001-80,000",
+        "description": "top 80,000"
+      },
+      "T": {
+        "name": "Top 90,000",
+        "range": "80,001-90,000",
+        "description": "top 90,000"
+      },
+      "U": {
+        "name": "Top 100,000",
+        "range": "90,001-100,000",
+        "description": "top 100,000"
+      },
+      "V": {
+        "name": "Top 200,000",
+        "range": "100,001-200,000",
+        "description": "top 200,000"
+      },
+      "W": {
+        "name": "Top 300,000",
+        "range": "200,001-300,000",
+        "description": "top 300,000"
+      },
+      "X": {
+        "name": "Top 400,000",
+        "range": "300,001-400,000",
+        "description": "top 400,000"
+      },
+      "Y": {
+        "name": "Known But Very Rare",
+        "range": "400,001+",
+        "description": "known but very rare"
+      },
+      "Z": {
+        "name": "Unknown",
+        "range": "unranked",
+        "description": "Unknown or unranked frequency"
+      }
     }
   }
 }

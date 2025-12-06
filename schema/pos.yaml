@@ -1,0 +1,227 @@
+# Part of Speech (POS) Definitions
+#
+# This file is the single source of truth for POS classification.
+# Both the Rust and Python scanners read this file to build their mappings.
+#
+# Structure:
+#   - code: Three-letter uppercase canonical code used in output
+#   - name: Human-readable name for documentation
+#   - description: What this POS class encompasses
+#   - short_description: Brief label for UI display (used in code_lookups)
+#   - variants: Wiktionary header/template values that map to this code
+
+pos_classes:
+
+  # === Core Parts of Speech ===
+
+  - code: NOU
+    name: Noun
+    description: Common nouns (not proper nouns)
+    short_description: Person, place, or thing
+    variants:
+      - noun
+      - nouns
+      - noun form
+      - noun forms
+      - "n"
+      - nf
+
+  - code: NAM
+    name: Proper Noun
+    description: Names of specific people, places, organizations, etc.
+    short_description: Name of specific entity
+    variants:
+      - proper noun
+      - proper name
+      - propernoun
+      - proper nouns
+      - proper noun form
+      - prop
+      - pn
+
+  - code: VRB
+    name: Verb
+    description: Verbs including inflected forms, participles, and auxiliaries
+    short_description: Action or state
+    variants:
+      - verb
+      - verbs
+      - verb form
+      - verb forms
+      - participle
+      - auxiliary
+
+  - code: ADJ
+    name: Adjective
+    description: Words that modify nouns
+    short_description: Describes a noun
+    variants:
+      - adjective
+      - adjectives
+      - adjective form
+      - superlative adjective
+      - comparative adjective
+      - adj
+
+  - code: ADV
+    name: Adverb
+    description: Words that modify verbs, adjectives, or other adverbs
+    short_description: Modifies verbs or adjectives
+    variants:
+      - adverb
+      - adverbs
+      - adverb form
+      - superlative adverb
+      - comparative adverb
+      - adv
+
+  # === Pronouns & Determiners ===
+
+  - code: PRN
+    name: Pronoun
+    description: Words that substitute for nouns
+    short_description: Substitutes for a noun
+    variants:
+      - pronoun
+      - pronouns
+      - pronoun form
+
+  - code: DET
+    name: Determiner
+    description: Words that introduce nouns (the, a, this, some) including articles
+    short_description: Introduces a noun
+    variants:
+      - determiner
+      - determiners
+      - article
+      - articles
+
+  # === Connecting Words ===
+
+  - code: ADP
+    name: Adposition
+    description: Words expressing spatial/temporal relations (prepositions, postpositions)
+    short_description: Spatial or temporal relation
+    variants:
+      - preposition
+      - prepositions
+      - postposition
+
+  - code: CNJ
+    name: Conjunction
+    description: Words that connect clauses or phrases
+    short_description: Connects words or clauses
+    variants:
+      - conjunction
+      - conjunctions
+      - conj
+
+  - code: PRT
+    name: Particle
+    description: Function words that don't fit other categories
+    short_description: Function word
+    variants:
+      - particle
+      - particles
+
+  - code: ITJ
+    name: Interjection
+    description: Exclamations and discourse markers
+    short_description: Exclamation
+    variants:
+      - interjection
+      - interjections
+      - int
+      - intj
+
+  # === Phrases ===
+
+  - code: PHR
+    name: Phrase
+    description: Multi-word expressions (generic phrases, verb phrases)
+    short_description: Multi-word expression
+    variants:
+      - phrase
+      - verb phrase
+      - verb phrase form
+      - adverbial phrase
+      - noun phrase
+      - phr
+
+  - code: PRV
+    name: Proverb
+    description: Traditional sayings expressing common truths
+    short_description: Traditional saying
+    variants:
+      - proverb
+
+  - code: PPP
+    name: Prepositional Phrase
+    description: Phrases beginning with a preposition
+    short_description: Phrase with preposition
+    variants:
+      - prepositional phrase
+
+  - code: IDM
+    name: Idiom
+    description: Expressions with non-literal meanings
+    short_description: Non-literal expression
+    variants:
+      - idiom
+
+  # === Affixes ===
+
+  - code: AFX
+    name: Affix
+    description: Bound morphemes (prefixes, suffixes, infixes, etc.)
+    short_description: Word-forming element
+    variants:
+      - prefix
+      - prefixes
+      - suffix
+      - suffixes
+      - suffix form
+      - prefix form
+      - infix
+      - circumfix
+      - combining form
+      - interfix
+      - affix
+
+  # === Special Categories ===
+
+  - code: NUM
+    name: Numeral
+    description: Words representing numbers
+    short_description: Number word
+    variants:
+      - numeral
+      - numerals
+      - numeral form
+
+  - code: SYM
+    name: Symbol
+    description: Non-alphabetic symbols, letters, and punctuation
+    short_description: Symbol or letter
+    variants:
+      - symbol
+      - symbols
+      - letter
+      - letters
+      - punctuation mark
+      - diacritical mark
+
+  - code: MLT
+    name: Multiple
+    description: Entries with multiple parts of speech not yet disambiguated
+    short_description: Multiple parts of speech
+    variants:
+      - multiple parts of speech
+
+  - code: CTN
+    name: Contraction
+    description: Shortened forms combining multiple words
+    short_description: Shortened word form
+    variants:
+      - contraction
+      - contractions

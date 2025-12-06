@@ -7,7 +7,7 @@
 //! - Two-phase (read all pages, then process in parallel)
 
 use crate::{Entry, Stats, parse_page, is_englishlike, classify_case, CaseForm};
-use crate::{TITLE_PATTERN, NS_PATTERN, TEXT_PATTERN, REDIRECT_PATTERN, ENGLISH_SECTION, DICT_ONLY, SPECIAL_PREFIXES};
+use crate::{TITLE_PATTERN, NS_PATTERN, TEXT_PATTERN, REDIRECT_PATTERN, ENGLISH_SECTION, DICT_ONLY, get_special_prefixes};
 
 use std::collections::BTreeMap;
 use std::io::{BufRead, Write, BufWriter};
@@ -80,7 +80,7 @@ pub fn extract_pages_from_xml(page_xml: &str, page_id: usize) -> Option<RawPage>
     }
 
     // Check for special prefixes
-    if SPECIAL_PREFIXES.iter().any(|prefix| title.starts_with(prefix)) {
+    if get_special_prefixes().iter().any(|prefix| title.starts_with(prefix)) {
         return None;
     }
 

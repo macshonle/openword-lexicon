@@ -183,12 +183,12 @@ def sense_matches_pos(sense: dict, required_pos: Set[str]) -> bool:
 
     Args:
         sense: Sense dict from senses file
-        required_pos: Set of required POS tags (e.g., {'noun', 'verb'})
+        required_pos: Set of required POS tags (e.g., {'NOU', 'VRB'})
 
     Returns:
         True if sense's POS is in required set
     """
-    return sense.get('pos', '').lower() in required_pos
+    return sense.get('pos', '') in required_pos
 
 
 def sense_matches_region(sense: dict, preferred_regions: Optional[Set[str]] = None) -> bool:
@@ -361,11 +361,11 @@ def filter_two_file(
         Tuples of (lexeme, matching_senses) for each lexeme that passes filters
 
     Examples:
-        # Get all nouns with frequency tier A-F (top ~3000 words)
+        # Get all nouns with frequency tier A-I (top ~3000 words)
         for lexeme, senses in filter_two_file(
             lexeme_path, senses_path,
-            lexeme_predicate=lambda l: l.get('frequency_tier', 'Z') <= 'F',
-            sense_predicate=lambda s: s.get('pos') == 'noun'
+            lexeme_predicate=lambda l: l.get('frequency_tier', 'Z') <= 'I',
+            sense_predicate=lambda s: s.get('pos') == 'NOU'
         ):
             print(lexeme['word'])
 
@@ -444,7 +444,7 @@ def filter_two_file_words_only(
         words = list(filter_two_file_words_only(
             lexeme_path, senses_path,
             lexeme_predicate=lambda l: l.get('concreteness') == 'concrete',
-            sense_predicate=lambda s: s.get('pos') == 'noun'
+            sense_predicate=lambda s: s.get('pos') == 'NOU'
         ))
     """
     for lexeme, _ in filter_two_file(
@@ -538,14 +538,13 @@ def make_pos_predicate(required_pos: Set[str]) -> Callable[[dict], bool]:
     Create a sense predicate for POS filtering.
 
     Args:
-        required_pos: Set of POS values (e.g., {'noun', 'verb'})
+        required_pos: Set of POS values (e.g., {'NOU', 'VRB'})
 
     Returns:
         Function that returns True for senses with matching POS
     """
-    required_lower = {p.lower() for p in required_pos}
     def predicate(sense: dict) -> bool:
-        return sense.get('pos', '').lower() in required_lower
+        return sense.get('pos', '') in required_pos
     return predicate
 
 
@@ -556,24 +555,30 @@ def make_frequency_predicate(
     """
     Create a lexeme predicate for frequency filtering.
 
-    Frequency tiers: A (most common) → L (rare) → Y (very rare) → Z (unknown)
+    Frequency tiers (26 levels):
+      A-F: top 500 (A=20, B=100, C=200, D=300, E=400, F=500)
+      G-K: top 5,000 (G=1k, H=2k, I=3k, J=4k, K=5k)
+      L-P: top 50,000 (L=10k, M=20k, N=30k, O=40k, P=50k)
+      Q-X: top 400,000 (extended range)
+      Y: 400,001+ (known but very rare)
+      Z: unknown/unranked
 
     Args:
-        rarest_allowed: Include words up to this tier (e.g., 'F' includes A-F, ~top 3000)
+        rarest_allowed: Include words up to this tier (e.g., 'I' includes A-I, ~top 3000)
         most_common_allowed: Exclude words more common than this (e.g., 'C' excludes A-B)
 
     Returns:
         Function that returns True for lexemes in frequency range
 
     Examples:
-        # Top 3000 words only (tiers A-F)
-        make_frequency_predicate(rarest_allowed='F')
+        # Top 3000 words only (tiers A-I)
+        make_frequency_predicate(rarest_allowed='I')
 
         # Exclude very common words, keep C-Z
         make_frequency_predicate(most_common_allowed='C')
 
-        # Middle frequency range (D-H)
-        make_frequency_predicate(rarest_allowed='H', most_common_allowed='D')
+        # Middle frequency range (D-L)
+        make_frequency_predicate(rarest_allowed='L', most_common_allowed='D')
     """
     def predicate(lexeme: dict) -> bool:
         tier = lexeme.get('frequency_tier', 'Z')

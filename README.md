@@ -37,7 +37,7 @@ After `make build-en`, you'll find:
 | `data/build/en.trie` | Full lexicon (MARISA trie) | ~4 MB |
 | `data/build/en-game.trie` | Game profile (a-z only) | ~2.5 MB |
 | `data/build/en-wordlist.txt` | Plain text word list | ~16 MB |
-| `data/build/en-frequency.json.gz` | Frequency tiers (A-L/Y/Z) | ~5 MB |
+| `data/build/en-frequency.json.gz` | Frequency tiers (A-Z) | ~5 MB |
 | `data/build/en-concreteness.json.gz` | Concreteness ratings | ~150 KB |
 | `data/build/en-syllables.json.gz` | Syllable counts | ~200 KB |
 | `data/build/en-sources.json.gz` | Source attributions | ~5 MB |

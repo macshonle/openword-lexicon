@@ -13,62 +13,62 @@ class TestLemmaExtractionPredicates:
 
     def test_sense_is_base_form_true_for_base_word(self):
         """Base words should be identified as base forms."""
-        sense = {"word": "cat", "pos": "noun", "is_inflected": False}
+        sense = {"word": "cat", "pos": "NOU", "is_inflected": False}
         assert sense_is_base_form(sense) is True
 
     def test_sense_is_base_form_false_for_inflected(self):
         """Words marked as inflected should not be base forms."""
-        sense = {"word": "cats", "pos": "noun", "is_inflected": True, "lemma": "cat"}
+        sense = {"word": "cats", "pos": "NOU", "is_inflected": True, "lemma": "cat"}
         assert sense_is_base_form(sense) is False
 
     def test_sense_is_base_form_false_when_lemma_present(self):
         """Words with lemma field should not be base forms."""
-        sense = {"word": "running", "pos": "verb", "lemma": "run"}
+        sense = {"word": "running", "pos": "VRB", "lemma": "run"}
         assert sense_is_base_form(sense) is False
 
     def test_sense_is_base_form_true_when_no_flags(self):
         """Words without inflection flags should be base forms."""
-        sense = {"word": "run", "pos": "verb"}
+        sense = {"word": "run", "pos": "VRB"}
         assert sense_is_base_form(sense) is True
 
     def test_sense_is_inflected_true(self):
         """Words marked as inflected should return True."""
-        sense = {"word": "cats", "pos": "noun", "is_inflected": True}
+        sense = {"word": "cats", "pos": "NOU", "is_inflected": True}
         assert sense_is_inflected(sense) is True
 
     def test_sense_is_inflected_false(self):
         """Words not marked as inflected should return False."""
-        sense = {"word": "cat", "pos": "noun", "is_inflected": False}
+        sense = {"word": "cat", "pos": "NOU", "is_inflected": False}
         assert sense_is_inflected(sense) is False
 
     def test_sense_is_inflected_default_false(self):
         """Missing is_inflected should default to False."""
-        sense = {"word": "cat", "pos": "noun"}
+        sense = {"word": "cat", "pos": "NOU"}
         assert sense_is_inflected(sense) is False
 
     def test_sense_has_lemma_match(self):
         """Should return True when lemma matches target."""
-        sense = {"word": "cats", "pos": "noun", "lemma": "cat"}
+        sense = {"word": "cats", "pos": "NOU", "lemma": "cat"}
         assert sense_has_lemma(sense, "cat") is True
 
     def test_sense_has_lemma_no_match(self):
         """Should return False when lemma doesn't match."""
-        sense = {"word": "cats", "pos": "noun", "lemma": "cat"}
+        sense = {"word": "cats", "pos": "NOU", "lemma": "cat"}
         assert sense_has_lemma(sense, "dog") is False
 
     def test_sense_has_lemma_no_lemma(self):
         """Should return False when no lemma field exists."""
-        sense = {"word": "cat", "pos": "noun"}
+        sense = {"word": "cat", "pos": "NOU"}
         assert sense_has_lemma(sense, "cat") is False
 
     def test_sense_get_lemma_returns_lemma(self):
         """Should return lemma when present."""
-        sense = {"word": "cats", "pos": "noun", "lemma": "cat"}
+        sense = {"word": "cats", "pos": "NOU", "lemma": "cat"}
         assert sense_get_lemma(sense) == "cat"
 
     def test_sense_get_lemma_returns_none(self):
         """Should return None when no lemma."""
-        sense = {"word": "cat", "pos": "noun"}
+        sense = {"word": "cat", "pos": "NOU"}
         assert sense_get_lemma(sense) is None
 
 
@@ -247,8 +247,8 @@ class TestNormalizationPipeline:
         from openword.wikt_normalize import sense_projection
 
         # Two senses with same POS but different lemmas should be different
-        sense1 = {"pos": "verb", "is_inflected": True, "lemma": "leave"}
-        sense2 = {"pos": "verb", "is_inflected": True, "lemma": "left"}
+        sense1 = {"pos": "VRB", "is_inflected": True, "lemma": "leave"}
+        sense2 = {"pos": "VRB", "is_inflected": True, "lemma": "left"}
 
         proj1 = sense_projection(sense1)
         proj2 = sense_projection(sense2)
@@ -259,8 +259,8 @@ class TestNormalizationPipeline:
         """Verify same lemma produces same projection."""
         from openword.wikt_normalize import sense_projection
 
-        sense1 = {"pos": "noun", "is_inflected": True, "lemma": "cat"}
-        sense2 = {"pos": "noun", "is_inflected": True, "lemma": "cat"}
+        sense1 = {"pos": "NOU", "is_inflected": True, "lemma": "cat"}
+        sense2 = {"pos": "NOU", "is_inflected": True, "lemma": "cat"}
 
         proj1 = sense_projection(sense1)
         proj2 = sense_projection(sense2)

@@ -2,11 +2,12 @@ use bzip2::read::BzDecoder;
 use clap::{Parser, ValueEnum};
 use indicatif::{ProgressBar, ProgressStyle};
 use lazy_static::lazy_static;
+use once_cell::sync::OnceCell;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
-use std::io::{BufRead, BufReader, BufWriter, Write};
+use std::io::{BufRead, BufReader, BufWriter, Read, Write};
 use std::path::PathBuf;
 use std::time::{Duration, Instant};
 use unicode_normalization::UnicodeNormalization;
@@ -72,6 +73,167 @@ struct Args {
     /// Syllable validation mode - outputs all syllable sources for cross-validation
     #[arg(long)]
     syllable_validation: bool,
+
+    /// Path to POS schema YAML file (default: schema/pos.yaml relative to project root)
+    #[arg(long)]
+    schema: Option<PathBuf>,
+}
+
+// === POS Schema YAML structures ===
+
+#[derive(Debug, Deserialize)]
+struct PosSchema {
+    pos_classes: Vec<PosClass>,
+}
+
+#[derive(Debug, Deserialize)]
+struct PosClass {
+    code: String,
+    #[allow(dead_code)]
+    name: String,
+    #[allow(dead_code)]
+    description: String,
+    #[allow(dead_code)]
+    short_description: Option<String>,
+    variants: Vec<String>,
+}
+
+// Labels schema for label classifications
+#[derive(Debug, Deserialize)]
+struct LabelsSchema {
+    register_labels: Vec<String>,
+    temporal_labels: Vec<String>,
+    domain_labels: Vec<String>,
+    region_labels: HashMap<String, String>,
+    spelling_labels: HashMap<String, String>,
+    special_page_prefixes: Vec<String>,
+}
+
+// Global POS map loaded from YAML at runtime
+static POS_MAP: OnceCell<HashMap<String, String>> = OnceCell::new();
+
+// Global label sets loaded from YAML at runtime
+static REGISTER_LABELS_SET: OnceCell<HashSet<String>> = OnceCell::new();
+static TEMPORAL_LABELS_SET: OnceCell<HashSet<String>> = OnceCell::new();
+static DOMAIN_LABELS_SET: OnceCell<HashSet<String>> = OnceCell::new();
+static REGION_LABELS_MAP: OnceCell<HashMap<String, String>> = OnceCell::new();
+static SPELLING_LABELS_MAP: OnceCell<HashMap<String, String>> = OnceCell::new();
+static SPECIAL_PREFIXES_VEC: OnceCell<Vec<String>> = OnceCell::new();
+
+fn load_pos_schema(schema_path: &PathBuf) -> Result<HashMap<String, String>, String> {
+    let mut file = File::open(schema_path)
+        .map_err(|e| format!("Failed to open schema file {:?}: {}", schema_path, e))?;
+
+    let mut contents = String::new();
+    file.read_to_string(&mut contents)
+        .map_err(|e| format!("Failed to read schema file: {}", e))?;
+
+    let schema: PosSchema = serde_yaml::from_str(&contents)
+        .map_err(|e| format!("Failed to parse schema YAML: {}", e))?;
+
+    let mut map = HashMap::new();
+    for pos_class in schema.pos_classes {
+        for variant in pos_class.variants {
+            map.insert(variant, pos_class.code.clone());
+        }
+    }
+
+    Ok(map)
+}
+
+fn init_pos_map(schema_path: Option<&PathBuf>) -> Result<(), String> {
+    // Try to find schema file
+    let path = if let Some(p) = schema_path {
+        p.clone()
+    } else {
+        // Default: look for schema/pos.yaml relative to current dir or parent dirs
+        let candidates = [
+            PathBuf::from("schema/pos.yaml"),
+            PathBuf::from("../../schema/pos.yaml"),  // When running from tools/wiktionary-scanner-rust
+        ];
+        candidates.into_iter()
+            .find(|p| p.exists())
+            .ok_or_else(|| "Could not find schema/pos.yaml. Use --schema to specify path.".to_string())?
+    };
+
+    let map = load_pos_schema(&path)?;
+    POS_MAP.set(map).map_err(|_| "POS_MAP already initialized".to_string())?;
+    Ok(())
+}
+
+fn get_pos_map() -> &'static HashMap<String, String> {
+    POS_MAP.get().expect("POS_MAP not initialized - call init_pos_map() first")
+}
+
+fn find_schema_file(filename: &str) -> Result<PathBuf, String> {
+    let candidates = [
+        PathBuf::from(format!("schema/{}", filename)),
+        PathBuf::from(format!("../../schema/{}", filename)),  // When running from tools/wiktionary-scanner-rust
+    ];
+    candidates.into_iter()
+        .find(|p| p.exists())
+        .ok_or_else(|| format!("Could not find schema/{}. Use --schema to specify path.", filename))
+}
+
+fn load_labels_schema(schema_path: &PathBuf) -> Result<LabelsSchema, String> {
+    let mut file = File::open(schema_path)
+        .map_err(|e| format!("Failed to open labels schema file {:?}: {}", schema_path, e))?;
+
+    let mut contents = String::new();
+    file.read_to_string(&mut contents)
+        .map_err(|e| format!("Failed to read labels schema file: {}", e))?;
+
+    serde_yaml::from_str(&contents)
+        .map_err(|e| format!("Failed to parse labels schema YAML: {}", e))
+}
+
+fn init_labels(schema_path: Option<&PathBuf>) -> Result<(), String> {
+    let path = if let Some(p) = schema_path {
+        p.clone()
+    } else {
+        find_schema_file("labels.yaml")?
+    };
+
+    let schema = load_labels_schema(&path)?;
+
+    REGISTER_LABELS_SET.set(schema.register_labels.into_iter().collect())
+        .map_err(|_| "REGISTER_LABELS_SET already initialized".to_string())?;
+    TEMPORAL_LABELS_SET.set(schema.temporal_labels.into_iter().collect())
+        .map_err(|_| "TEMPORAL_LABELS_SET already initialized".to_string())?;
+    DOMAIN_LABELS_SET.set(schema.domain_labels.into_iter().collect())
+        .map_err(|_| "DOMAIN_LABELS_SET already initialized".to_string())?;
+    REGION_LABELS_MAP.set(schema.region_labels)
+        .map_err(|_| "REGION_LABELS_MAP already initialized".to_string())?;
+    SPELLING_LABELS_MAP.set(schema.spelling_labels)
+        .map_err(|_| "SPELLING_LABELS_MAP already initialized".to_string())?;
+    SPECIAL_PREFIXES_VEC.set(schema.special_page_prefixes)
+        .map_err(|_| "SPECIAL_PREFIXES_VEC already initialized".to_string())?;
+
+    Ok(())
+}
+
+fn get_register_labels() -> &'static HashSet<String> {
+    REGISTER_LABELS_SET.get().expect("Labels not initialized - call init_labels() first")
+}
+
+fn get_temporal_labels() -> &'static HashSet<String> {
+    TEMPORAL_LABELS_SET.get().expect("Labels not initialized - call init_labels() first")
+}
+
+fn get_domain_labels() -> &'static HashSet<String> {
+    DOMAIN_LABELS_SET.get().expect("Labels not initialized - call init_labels() first")
+}
+
+fn get_region_labels() -> &'static HashMap<String, String> {
+    REGION_LABELS_MAP.get().expect("Labels not initialized - call init_labels() first")
+}
+
+fn get_spelling_labels() -> &'static HashMap<String, String> {
+    SPELLING_LABELS_MAP.get().expect("Labels not initialized - call init_labels() first")
+}
+
+pub fn get_special_prefixes() -> &'static Vec<String> {
+    SPECIAL_PREFIXES_VEC.get().expect("Labels not initialized - call init_labels() first")
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -89,6 +251,11 @@ struct Morphology {
     etymology_template: String,
 }
 
+// Helper function for serde skip_serializing_if
+fn is_false(b: &bool) -> bool {
+    !*b
+}
+
 /// Flat entry structure - one per sense (definition line)
 /// Field order is normalized for consistent JSON output across Python/Rust scanners
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -98,9 +265,12 @@ pub struct Entry {
     pos: String,  // Single POS, not Vec
     word_count: usize,
 
-    // Boolean predicates (alphabetical order)
+    // Boolean predicates (alphabetical order) - omit when false
+    #[serde(default, skip_serializing_if = "is_false")]
     is_abbreviation: bool,
+    #[serde(default, skip_serializing_if = "is_false")]
     is_inflected: bool,
+    #[serde(default, skip_serializing_if = "is_false")]
     is_phrase: bool,
 
     // Syllables and phrase type (before lemma)
@@ -228,143 +398,8 @@ lazy_static! {
     // Used to strip wikilink markup from morphology components
     static ref WIKILINK_PATTERN: Regex = Regex::new(r"\[\[([^\]|]+)(?:\|[^\]]+)?\]\]").unwrap();
 
-    // POS mapping
-    static ref POS_MAP: HashMap<&'static str, &'static str> = {
-        let mut m = HashMap::new();
-        m.insert("noun", "noun");
-        m.insert("proper noun", "proper");
-        m.insert("proper name", "proper");
-        m.insert("propernoun", "proper");
-        m.insert("verb", "verb");
-        m.insert("verb form", "verb");
-        m.insert("participle", "verb");
-        m.insert("adjective", "adjective");
-        m.insert("adverb", "adverb");
-        m.insert("pronoun", "pronoun");
-        m.insert("preposition", "preposition");
-        m.insert("conjunction", "conjunction");
-        m.insert("interjection", "interjection");
-        m.insert("determiner", "determiner");
-        m.insert("article", "article");
-        m.insert("particle", "particle");
-        m.insert("auxiliary", "auxiliary");
-        m.insert("contraction", "verb");
-        m.insert("prefix", "affix");
-        m.insert("suffix", "affix");
-        m.insert("infix", "affix");
-        m.insert("circumfix", "affix");
-        m.insert("interfix", "affix");
-        m.insert("phrase", "phrase");
-        m.insert("prepositional phrase", "phrase");
-        m.insert("adverbial phrase", "phrase");
-        m.insert("verb phrase", "phrase");
-        m.insert("verb phrase form", "phrase");
-        m.insert("idiom", "phrase");
-        m.insert("proverb", "phrase");
-        m.insert("numeral", "numeral");
-        m.insert("symbol", "symbol");
-        m.insert("symbols", "symbol");
-        m.insert("letter", "letter");
-        m.insert("multiple parts of speech", "multiple");
-        m
-    };
-
-    // Label sets
-    static ref REGISTER_LABELS: HashSet<&'static str> = {
-        let mut s = HashSet::new();
-        s.insert("informal");
-        s.insert("colloquial");
-        s.insert("slang");
-        s.insert("vulgar");
-        s.insert("offensive");
-        s.insert("derogatory");
-        s.insert("formal");
-        s.insert("euphemistic");
-        s.insert("humorous");
-        s.insert("literary");
-        s.insert("childish");
-        s.insert("baby talk");
-        s.insert("infantile");
-        s.insert("puerile");
-        s
-    };
-
-    static ref TEMPORAL_LABELS: HashSet<&'static str> = {
-        let mut s = HashSet::new();
-        s.insert("archaic");
-        s.insert("obsolete");
-        s.insert("dated");
-        s.insert("historical");
-        s.insert("rare");
-        s
-    };
-
-    static ref DOMAIN_LABELS: HashSet<&'static str> = {
-        let mut s = HashSet::new();
-        s.insert("computing");
-        s.insert("mathematics");
-        s.insert("medicine");
-        s.insert("biology");
-        s.insert("chemistry");
-        s.insert("physics");
-        s.insert("law");
-        s.insert("military");
-        s.insert("nautical");
-        s.insert("aviation");
-        s.insert("sports");
-        s
-    };
-
-    // Special page prefixes
-    pub static ref SPECIAL_PREFIXES: Vec<&'static str> = vec![
-        "Wiktionary:",
-        "MediaWiki:",
-        "Module:",
-        "Thread:",
-        "Appendix:",
-        "Help:",
-        "Template:",
-        "Reconstruction:",
-        "Unsupported titles/",
-        "Category:",
-    ];
-
-    // Regional label patterns
-    static ref REGION_LABELS: HashMap<&'static str, &'static str> = {
-        let mut m = HashMap::new();
-        m.insert("british", "en-GB");
-        m.insert("uk", "en-GB");
-        m.insert("us", "en-US");
-        m.insert("american", "en-US");
-        m.insert("canadian", "en-CA");
-        m.insert("australia", "en-AU");
-        m.insert("australian", "en-AU");
-        m.insert("new zealand", "en-NZ");
-        m.insert("ireland", "en-IE");
-        m.insert("irish", "en-IE");
-        m.insert("south africa", "en-ZA");
-        m.insert("india", "en-IN");
-        m.insert("indian", "en-IN");
-        m
-    };
-
-    // Spelling variant labels - maps label text to region code
-    // These appear in {{tlb|en|American spelling}} templates on head lines
-    static ref SPELLING_LABELS: HashMap<&'static str, &'static str> = {
-        let mut m = HashMap::new();
-        m.insert("american spelling", "en-US");
-        m.insert("us spelling", "en-US");
-        m.insert("british spelling", "en-GB");
-        m.insert("uk spelling", "en-GB");
-        m.insert("commonwealth spelling", "en-GB");
-        m.insert("canadian spelling", "en-CA");
-        m.insert("australian spelling", "en-AU");
-        m.insert("irish spelling", "en-IE");
-        m.insert("new zealand spelling", "en-NZ");
-        m.insert("south african spelling", "en-ZA");
-        m.insert("indian spelling", "en-IN");
-        m
-    };
+    // POS_MAP and label sets are now loaded from schema/*.yaml at runtime
+    // via init_pos_map() and init_labels()
 
     // Pattern to extract {{tlb|en|...}} or {{lb|en|...}} from text
     // Used for head line labels (spelling variants)
@@ -426,15 +461,26 @@ pub fn is_englishlike(token: &str) -> bool {
             }
         } else {
             // Non-ASCII character - check if it's Latin-based
+            let cp = ch as u32;
             if ch.is_alphabetic() {
                 // Accept common Latin diacritics (À-ɏ range)
-                if ch as u32 >= 0x00C0 && ch as u32 <= 0x024F {
+                if cp >= 0x00C0 && cp <= 0x024F {
                     saw_latin_letter = true;
                 } else {
                     return false;
                 }
             } else if allowed_punct.contains(&ch) {
                 // Allow punctuation
+            } else {
+                // Reject combining diacritical marks (U+0300-U+036F) and emojis
+                // to match Python scanner behavior
+                if (0x0300..=0x036F).contains(&cp) {
+                    return false;
+                }
+                if cp > 0xFFFF || (0x1F000..=0x1FFFF).contains(&cp) {
+                    return false;
+                }
+                // Other non-alphabetic non-punctuation chars pass through
             }
         }
     }
@@ -472,18 +518,23 @@ fn extract_labels_from_line(line: &str) -> (Vec<String>, Vec<String>, Vec<String
     let mut temporal_tags = HashSet::new();
 
     // Extract from context labels in this line
+    let register_labels = get_register_labels();
+    let temporal_labels = get_temporal_labels();
+    let domain_labels = get_domain_labels();
+    let region_labels = get_region_labels();
+
     for cap in CONTEXT_LABEL.captures_iter(line) {
         for label in cap[1].split('|') {
             let label = label.trim().to_lowercase();
 
-            if REGISTER_LABELS.contains(label.as_str()) {
+            if register_labels.contains(&label) {
                 register_tags.insert(label);
-            } else if TEMPORAL_LABELS.contains(label.as_str()) {
+            } else if temporal_labels.contains(&label) {
                 temporal_tags.insert(label);
-            } else if DOMAIN_LABELS.contains(label.as_str()) {
+            } else if domain_labels.contains(&label) {
                 domain_tags.insert(label);
-            } else if let Some(&region_code) = REGION_LABELS.get(label.as_str()) {
-                region_tags.insert(region_code.to_string());
+            } else if let Some(region_code) = region_labels.get(&label) {
+                region_tags.insert(region_code.clone());
             }
         }
     }
@@ -515,8 +566,8 @@ fn parse_pos_sections(english_text: &str) -> Vec<PosSection> {
             let header_normalized = header_text.split_whitespace().collect::<Vec<_>>().join(" ");
 
             // Map to normalized POS (proper noun -> proper, etc.)
-            if let Some(&mapped_pos) = POS_MAP.get(header_normalized.as_str()) {
-                Some((full_match.start(), mapped_pos))
+            if let Some(mapped_pos) = get_pos_map().get(header_normalized.as_str()) {
+                Some((full_match.start(), mapped_pos.as_str()))
             } else {
                 None
             }
@@ -733,13 +784,14 @@ fn extract_syllable_validation(title: &str, text: &str) -> Option<SyllableValida
 /// Extract regional spelling variant from head lines
 /// Looks for {{tlb|en|American spelling}} or similar patterns
 fn extract_spelling_region(text: &str) -> Option<String> {
+    let spelling_labels = get_spelling_labels();
     for cap in TLB_TEMPLATE.captures_iter(text) {
         // Get all labels in this template
         for label in cap[1].split('|') {
             let label = label.trim().to_lowercase();
             // Check if this is a spelling variant label
-            if let Some(&region) = SPELLING_LABELS.get(label.as_str()) {
-                return Some(region.to_string());
+            if let Some(region) = spelling_labels.get(&label) {
+                return Some(region.clone());
             }
         }
     }
@@ -1542,7 +1594,7 @@ fn run_sequential(
         }
 
         // Check for special prefixes
-        if SPECIAL_PREFIXES.iter().any(|prefix| title.starts_with(prefix)) {
+        if get_special_prefixes().iter().any(|prefix| title.starts_with(prefix)) {
             stats.special += 1;
             return true;
         }
@@ -1689,7 +1741,7 @@ fn run_syllable_validation(
         }
 
         // Check for special prefixes
-        if SPECIAL_PREFIXES.iter().any(|prefix| title.starts_with(prefix)) {
+        if get_special_prefixes().iter().any(|prefix| title.starts_with(prefix)) {
             return true;
         }
 
@@ -1815,6 +1867,18 @@ fn print_stats(stats: &Stats, strategy_name: &str) {
 
 fn main() -> std::io::Result<()> {
     let args = Args::parse();
+
+    // Initialize POS map from schema YAML
+    if let Err(e) = init_pos_map(args.schema.as_ref()) {
+        eprintln!("Error loading POS schema: {}", e);
+        std::process::exit(1);
+    }
+
+    // Initialize labels from schema YAML
+    if let Err(e) = init_labels(None) {
+        eprintln!("Error loading labels schema: {}", e);
+        std::process::exit(1);
+    }
 
     // Handle syllable validation mode
     if args.syllable_validation {

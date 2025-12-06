@@ -28,8 +28,10 @@ import sys
 import time
 import unicodedata as ud
 from pathlib import Path
+
+import yaml
 from dataclasses import dataclass
-from typing import Dict, List, Set, Optional, Tuple
+from typing import Any, Dict, List, Set, Optional, Tuple
 from rich.live import Live
 from rich.table import Table
 from rich.panel import Panel
@@ -544,91 +546,55 @@ NS_PATTERN = re.compile(r'<ns>(\d+)</ns>')
 TEXT_PATTERN = re.compile(r'<text[^>]*>(.+?)</text>', re.DOTALL)
 REDIRECT_PATTERN = re.compile(r'<redirect\s+title="[^"]+"')
 
-# Known special page prefixes (build this list as we discover them)
-SPECIAL_PAGE_PREFIXES = (
-    'Wiktionary:',
-    'MediaWiki:',       # MediaWiki system messages
-    'Module:',          # Lua modules
-    'Thread:',          # Discussion threads (e.g., Thread:User talk:)
-    'Appendix:',
-    'Help:',
-    'Template:',
-    'Reconstruction:',  # Proto-language reconstructions
-    'Unsupported titles/',  # Special namespace for unsupported page titles
-    'Category:',        # Category pages (metadata, not words)
-)
+# Schema loading - all configuration is externalized to schema/ directory
+# Both Python and Rust scanners share these YAML files as single source of truth
 
-# Regional label patterns
-REGION_LABELS = {
-    'british': 'en-GB',
-    'uk': 'en-GB',
-    'us': 'en-US',
-    'american': 'en-US',
-    'canadian': 'en-CA',
-    'australia': 'en-AU',
-    'australian': 'en-AU',
-    'new zealand': 'en-NZ',
-    'ireland': 'en-IE',
-    'irish': 'en-IE',
-    'south africa': 'en-ZA',
-    'india': 'en-IN',
-    'indian': 'en-IN',
-}
+def _find_schema_file(filename: str) -> Path:
+    """Find a schema file in the schema/ directory."""
+    candidates = [
+        Path(__file__).parent.parent.parent / "schema" / filename,  # From tools/wiktionary_scanner_python/
+        Path("schema") / filename,  # From project root
+    ]
+    for path in candidates:
+        if path.exists():
+            return path
+    raise FileNotFoundError(
+        f"Could not find schema/{filename}. Searched: {[str(p) for p in candidates]}"
+    )
 
-# POS mapping
-POS_MAP = {
-    'noun': 'noun',
-    'proper noun': 'proper',           # Proper nouns get their own POS
-    'proper name': 'proper',           # Alternative form of proper noun
-    'propernoun': 'proper',            # Proper noun without space (typo in some entries)
-    'verb': 'verb',
-    'verb form': 'verb',               # Verb inflections
-    'participle': 'verb',              # Participles treated as verb forms
-    'adjective': 'adjective',
-    'adverb': 'adverb',
-    'pronoun': 'pronoun',
-    'preposition': 'preposition',
-    'conjunction': 'conjunction',
-    'interjection': 'interjection',
-    'determiner': 'determiner',
-    'article': 'article',              # Articles (a, an, the, yͤ, t3h)
-    'particle': 'particle',
-    'auxiliary': 'auxiliary',
-    'contraction': 'verb',
-    'prefix': 'affix',
-    'suffix': 'affix',
-    'infix': 'affix',                  # Infixes like -bloody- (inserted inside words)
-    'circumfix': 'affix',              # Circumfixes like en- -en (surround the root)
-    'interfix': 'affix',               # Interfixes like -s- (connect morphemes)
-    'phrase': 'phrase',                # Multi-word expressions
-    'prepositional phrase': 'phrase',  # Prepositional phrases (e.g., "at least", "on hold")
-    'adverbial phrase': 'phrase',      # Adverbial phrases (e.g., "on all fours")
-    'verb phrase': 'phrase',           # Verb phrases (multi-word verb expressions)
-    'verb phrase form': 'phrase',      # Inflected verb phrases
-    'idiom': 'phrase',                 # Idiomatic expressions (e.g., "maximum attack")
-    'proverb': 'phrase',               # Proverbs treated as phrases
-    'numeral': 'numeral',              # Numbers (thirteen, centillion, etc.)
-    'symbol': 'symbol',                # Symbols (chemical elements, abbreviations, etc.)
-    'symbols': 'symbol',               # Plural form (from {{head-lite|en|symbols}})
-    'letter': 'letter',                # Letters (ſ, þ, Þ, etc. - archaic/special Latin letters)
-    'multiple parts of speech': 'multiple',  # Entries with multiple POS (stenoscript)
-}
 
-# Label classifications
-REGISTER_LABELS = {
-    'informal', 'colloquial', 'slang', 'vulgar', 'offensive',
-    'derogatory', 'formal', 'euphemistic', 'humorous', 'literary',
-    'childish', 'baby talk', 'infantile', 'puerile'  # Added: childish terms
-}
+def _load_pos_map() -> Dict[str, str]:
+    """Load POS mapping from schema/pos.yaml."""
+    schema_path = _find_schema_file("pos.yaml")
+    with open(schema_path) as f:
+        schema = yaml.safe_load(f)
 
-TEMPORAL_LABELS = {
-    'archaic', 'obsolete', 'dated', 'historical', 'rare'
-}
+    pos_map = {}
+    for pos_class in schema["pos_classes"]:
+        code = pos_class["code"]
+        for variant in pos_class["variants"]:
+            pos_map[variant] = code
+    return pos_map
 
-DOMAIN_LABELS = {
-    'computing', 'mathematics', 'medicine', 'biology', 'chemistry',
-    'physics', 'law', 'military', 'nautical', 'aviation', 'sports'
-}
+
+def _load_labels() -> Dict[str, Any]:
+    """Load label classifications from schema/labels.yaml."""
+    labels_path = _find_schema_file("labels.yaml")
+    with open(labels_path) as f:
+        return yaml.safe_load(f)
+
+
+# Load configuration at module import time
+POS_MAP = _load_pos_map()
+_LABELS = _load_labels()
+
+# Extract label sets from loaded configuration
+REGISTER_LABELS: Set[str] = set(_LABELS["register_labels"])
+TEMPORAL_LABELS: Set[str] = set(_LABELS["temporal_labels"])
+DOMAIN_LABELS: Set[str] = set(_LABELS["domain_labels"])
+REGION_LABELS: Dict[str, str] = _LABELS["region_labels"]
+SPELLING_LABELS: Dict[str, str] = _LABELS["spelling_labels"]
+SPECIAL_PAGE_PREFIXES: Tuple[str, ...] = tuple(_LABELS["special_page_prefixes"])
 
 
 def extract_english_section(text: str) -> Optional[str]:
@@ -1444,8 +1410,19 @@ def is_englishlike(token: str) -> bool:
                     return False
             elif ch in ALLOWED_PUNCT:
                 pass  # Allow punctuation
-            # Reject other non-ASCII non-alphabetic characters
-            # (except allowed punctuation handled above)
+            else:
+                # Reject combining diacritical marks (U+0300-U+036F) and emojis
+                # to match Rust scanner behavior
+                cp = ord(ch)
+                if 0x0300 <= cp <= 0x036F:
+                    # Combining Diacritical Marks - reject (Rust treats these
+                    # as alphabetic via Unicode Alphabetic property, then rejects
+                    # them for being outside Latin range)
+                    return False
+                if cp > 0xFFFF or (0x1F000 <= cp <= 0x1FFFF):
+                    # Emojis and supplementary characters - reject
+                    return False
+                # Other non-alphabetic non-punctuation chars pass through
 
     return saw_latin_letter
 
@@ -1852,21 +1829,7 @@ def has_english_categories(text: str) -> bool:
 # Pattern to extract {{tlb|en|...}} or {{lb|en|...}} from text
 TLB_TEMPLATE = re.compile(r'\{\{(?:tlb|lb)\|en\|([^}]+)\}\}', re.IGNORECASE)
 
-# Spelling variant labels - maps label text to region code
-# These appear in {{tlb|en|American spelling}} templates on head lines
-SPELLING_LABELS = {
-    "american spelling": "en-US",
-    "us spelling": "en-US",
-    "british spelling": "en-GB",
-    "uk spelling": "en-GB",
-    "commonwealth spelling": "en-GB",
-    "canadian spelling": "en-CA",
-    "australian spelling": "en-AU",
-    "irish spelling": "en-IE",
-    "new zealand spelling": "en-NZ",
-    "south african spelling": "en-ZA",
-    "indian spelling": "en-IN",
-}
+# SPELLING_LABELS is loaded from schema/labels.yaml at module initialization
 
 
 def extract_spelling_region(text: str) -> Optional[str]:
@@ -1909,7 +1872,7 @@ def build_ordered_entry(
 
     Field order:
     1. word, pos, word_count (core identifiers)
-    2. is_abbreviation, is_inflected, is_phrase (boolean predicates)
+    2. is_abbreviation, is_inflected, is_phrase (if true - false is default, omitted)
     3. syllables (if present)
     4. phrase_type (if present)
     5. lemma (if present)
@@ -1924,10 +1887,13 @@ def build_ordered_entry(
     entry['pos'] = pos
     entry['word_count'] = word_count
 
-    # Boolean predicates (always present)
-    entry['is_abbreviation'] = is_abbreviation
-    entry['is_inflected'] = is_inflected
-    entry['is_phrase'] = is_phrase
+    # Boolean predicates (omit when false - false is the default)
+    if is_abbreviation:
+        entry['is_abbreviation'] = True
+    if is_inflected:
+        entry['is_inflected'] = True
+    if is_phrase:
+        entry['is_phrase'] = True
 
     # Optional fields in specified order
     if syllables is not None:

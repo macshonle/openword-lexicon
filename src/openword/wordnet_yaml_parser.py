@@ -37,13 +37,13 @@ logger = logging.getLogger(__name__)
 class OEWNParser:
     """Parser for Open English WordNet YAML files."""
 
-    # POS mappings
+    # POS mappings (WordNet single-letter → 3-letter codes)
     POS_MAP = {
-        'n': 'noun',
-        'v': 'verb',
-        'a': 'adjective',
-        's': 'adjective',  # Adjective satellite
-        'r': 'adverb',
+        'n': 'NOU',
+        'v': 'VRB',
+        'a': 'ADJ',
+        's': 'ADJ',  # Adjective satellite
+        'r': 'ADV',
     }
 
     # All synset files organized by POS with their lexnames
@@ -112,19 +112,6 @@ class OEWNParser:
         'noun.communication', 'noun.event', 'noun.feeling', 'noun.group',
         'noun.motive', 'noun.phenomenon', 'noun.possession', 'noun.process',
         'noun.quantity', 'noun.relation', 'noun.state', 'noun.time',
-    }
-
-    # Legacy domain sets (for backwards compatibility)
-    CONCRETE_DOMAINS = {
-        'artifact', 'object', 'substance', 'food', 'plant', 'animal',
-        'body', 'person', 'location', 'shape', 'container', 'vehicle',
-        'building', 'furniture', 'clothing', 'tool', 'weapon', 'device'
-    }
-
-    ABSTRACT_DOMAINS = {
-        'attribute', 'state', 'feeling', 'cognition', 'communication',
-        'act', 'phenomenon', 'process', 'time', 'relation', 'quantity',
-        'motivation', 'possession'
     }
 
     def __init__(self, archive_path: str):
@@ -372,7 +359,7 @@ class OEWNParser:
 
         Args:
             word: The word to look up
-            pos: Optional POS filter ('noun', 'verb', etc.)
+            pos: Optional POS filter ('NOU', 'VRB', etc.)
 
         Returns:
             List of synset dictionaries

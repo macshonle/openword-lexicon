@@ -4,7 +4,7 @@ This document captures key statistics and findings about the English Wiktionary 
 It is a "living document" - regenerate by running `make corpus-stats`.
 
 <!-- AUTO:last_updated -->
-**Last updated:** 2025-12-05
+**Last updated:** 2025-12-06
 <!-- /AUTO:last_updated -->
 **Source dump:** `enwiktionary-latest-pages-articles.xml.bz2`
 
@@ -274,7 +274,7 @@ Potential groupings for normalization:
 | Determiner/Numeral | determiner, article, numeral | 809 |
 <!-- /AUTO:aggregate_groups -->
 
-### Unknown POS Entries
+### Unknown POS Headers
 
 Pages that have section headers but none match our known POS types:
 
@@ -283,6 +283,21 @@ Pages with section headers but no recognized POS: **30**
 
 Sample entries: supposed to, sixty-eight, sixty-five, thirty-nine, forty-one, forty-three, forty-nine, fifty-one, fifty-two, fifty-three
 <!-- /AUTO:unknown_pos -->
+
+### Entries with Unknown POS in Output
+
+Entries where no POS could be determined (no recognizable headers, templates, or categories).
+These get `pos: "unknown"` in the scanner output and may indicate:
+- Missing fallback handling in scanners
+- Unusual Wiktionary page structure
+- Pages that should be filtered out
+
+<!-- AUTO:unknown_output_pos -->
+**Total:** 95 entries
+
+**First 20 entries:**
+B.LL., Blu-ray player, Easter break, GCH, GCVO, JUD, Law of the Instrument, Nashvillean, Reg. Prof., Thanksgiving break, abstract plane, acrospore, acrotomous, adhamant, autumn break, battery backup, bgm, bimisogyny, bishop bird, bishopbird
+<!-- /AUTO:unknown_output_pos -->
 
 ## Key Findings
 
