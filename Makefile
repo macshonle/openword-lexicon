@@ -66,7 +66,7 @@ RUN_BENCHMARK := $(RUN_PYTHON) tools/wiktionary-scanner-rust/scripts/run_full_be
 BENCHMARK_DIR := data/benchmark
 
 .PHONY: bootstrap venv deps fmt lint test test-python test-rust test-js test-full \
-		clean scrub fetch-en \
+		clean scrub clean-fetched fetch-en \
         build-en build-rust-scanner build-trie build-metadata \
 		package report-en diagnose-scanner corpus-stats \
 		validate-all validate-enable validate-profanity validate-childish \
@@ -263,7 +263,14 @@ clean:
 		(cd tools/wiktionary-scanner-rust; cargo clean); \
 	fi
 
-scrub: clean
+# Clean fetched source data (for testing fetch_sources.py)
+clean-fetched:
+	@echo "Removing fetched source files..."
+	rm -rf $(RAW_DIR)
+	rm -rf data/raw/validation
+	@echo "Done. Run 'make fetch-en' to re-download."
+
+scrub: clean clean-fetched
 	rm -rf .venv
 	rm -rf $(BENCHMARK_DIR)
 

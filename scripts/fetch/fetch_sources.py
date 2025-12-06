@@ -20,11 +20,13 @@ import argparse
 import hashlib
 import json
 import os
+import select
 import shutil
 import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 from datetime import datetime, timezone
 from glob import glob
 from pathlib import Path
@@ -209,9 +211,14 @@ def clone_repo(
     *,
     tag: str | None = None,
     shallow: bool = True,
+    activity_timeout: int = 120,  # Timeout if no progress for this many seconds
 ) -> tuple[bool, str | None]:
     """
-    Clone a git repository.
+    Clone a git repository with activity-based timeout.
+
+    Instead of a fixed timeout, we monitor git's progress output and only
+    timeout if no progress is made for `activity_timeout` seconds. This
+    allows slow but steady downloads to complete.
 
     Returns (success, commit_hash).
     """
@@ -233,19 +240,56 @@ def clone_repo(
     env = os.environ.copy()
     env["GIT_TERMINAL_PROMPT"] = "0"
 
+    process: subprocess.Popen[bytes] | None = None
     try:
-        result = subprocess.run(
+        # Use Popen to stream stderr and monitor for activity
+        process = subprocess.Popen(
             cmd,
             env=env,
-            capture_output=not sys.stdout.isatty(),
-            text=True,
-            timeout=300,  # 5 minute timeout
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
 
-        if result.returncode != 0:
+        last_activity = time.time()
+        stderr_output: list[bytes] = []
+        stderr = process.stderr
+        assert stderr is not None  # We set stderr=PIPE above
+
+        while True:
+            # Check if process has finished
+            retcode = process.poll()
+            if retcode is not None:
+                break
+
+            # Wait for output with timeout
+            ready, _, _ = select.select([stderr], [], [], 1.0)
+
+            if ready:
+                # Read available data (non-blocking since select said it's ready)
+                chunk = stderr.read(1024)
+                if chunk:
+                    last_activity = time.time()
+                    stderr_output.append(chunk)
+                    # Show progress to terminal if interactive
+                    if sys.stdout.isatty():
+                        sys.stderr.buffer.write(chunk)
+                        sys.stderr.buffer.flush()
+
+            # Check for activity timeout
+            if time.time() - last_activity > activity_timeout:
+                process.kill()
+                process.wait()
+                print(f"\n      {RED('Error')}: git clone stalled (no progress for {activity_timeout}s)")
+                if dest.exists():
+                    shutil.rmtree(dest)
+                return False, None
+
+        # Process finished - check return code
+        if retcode != 0:
             print(f"      {RED('Error')}: git clone failed")
-            if result.stderr:
-                for line in result.stderr.strip().split("\n")[:3]:
+            stderr_text = b"".join(stderr_output).decode("utf-8", errors="replace")
+            if stderr_text:
+                for line in stderr_text.strip().split("\n")[:3]:
                     print(f"      {DIM(line)}")
             return False, None
 
@@ -265,13 +309,14 @@ def clone_repo(
 
         return True, None
 
-    except subprocess.TimeoutExpired:
-        print(f"      {RED('Error')}: git clone timed out after 5 minutes")
-        if dest.exists():
-            shutil.rmtree(dest)
-        return False, None
     except Exception as e:
         print(f"      {RED('Error')}: {e}")
+        # Clean up process if still running
+        if process is not None and process.poll() is None:
+            process.kill()
+            process.wait()
+        if dest.exists():
+            shutil.rmtree(dest)
         return False, None
 
 
@@ -740,36 +785,42 @@ def main() -> int:
 
     print(f"\n{BOLD(f'Fetching sources ({total})...')}\n")
 
-    for i, (source_id, source_config) in enumerate(sources_to_fetch, 1):
-        name = source_config.get("name", source_id)
-        title = source_config.get("title", "")
+    try:
+        for i, (source_id, source_config) in enumerate(sources_to_fetch, 1):
+            name = source_config.get("name", source_id)
+            title = source_config.get("title", "")
 
-        print(f"[{i}/{total}] {BOLD(source_id)}")
-        print(f"      {DIM(title[:60] + '...' if len(title) > 60 else title)}")
+            print(f"[{i}/{total}] {BOLD(source_id)}")
+            print(f"      {DIM(title[:60] + '...' if len(title) > 60 else title)}")
 
-        status, message = fetch_source(
-            source_id,
-            source_config,
-            variables,
-            force=args.force,
-            dry_run=args.dry_run,
-        )
+            status, message = fetch_source(
+                source_id,
+                source_config,
+                variables,
+                force=args.force,
+                dry_run=args.dry_run,
+            )
 
-        if status == "fetched":
-            print(f"      {GREEN('✓')} {message}")
-            fetched += 1
-        elif status == "skipped":
-            print(f"      {BLUE('ℹ')} {message}")
-            skipped += 1
-        else:  # failed
-            print(f"      {RED('✗')} {message}")
-            failed += 1
-            if not args.continue_on_error:
-                print(f"\n{RED('Aborting due to error.')}")
-                print("Use --continue-on-error to fetch remaining sources.")
-                return 1
+            if status == "fetched":
+                print(f"      {GREEN('✓')} {message}")
+                fetched += 1
+            elif status == "skipped":
+                print(f"      {BLUE('ℹ')} {message}")
+                skipped += 1
+            else:  # failed
+                print(f"      {RED('✗')} {message}")
+                failed += 1
+                if not args.continue_on_error:
+                    print(f"\n{RED('Aborting due to error.')}")
+                    print("Use --continue-on-error to fetch remaining sources.")
+                    return 1
 
-        print()
+            print()
+
+    except KeyboardInterrupt:
+        print(f"\n\n{YELLOW('Interrupted.')} Partial downloads may remain.")
+        print("Re-run to resume (resumable sources will continue where they left off).")
+        return 130  # Standard exit code for SIGINT
 
     # Summary
     summary_parts = []

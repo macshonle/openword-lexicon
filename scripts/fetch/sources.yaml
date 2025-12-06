@@ -85,7 +85,7 @@ sources:
     title: Open English WordNet 2024 Edition
     method: git
     repo: https://github.com/globalwordnet/english-wordnet.git
-    tag: "2024"
+    tag: "2024-edition"
     output: english-wordnet-2024.tar.gz
     license: CC BY 4.0
     license_url: https://creativecommons.org/licenses/by/4.0/
