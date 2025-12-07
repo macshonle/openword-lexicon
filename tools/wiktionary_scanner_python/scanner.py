@@ -1948,21 +1948,23 @@ def parse_entry(title: str, text: str) -> List[Dict]:
     phrase_type = extract_phrase_type(english_text) if word_count > 1 else None
 
     # Extract syllable count from multiple sources
-    # Priority order: rhymes (explicit) > IPA (parsed) > categories > hyphenation (least reliable)
-    rhymes_count = extract_syllable_count_from_rhymes(english_text)
+    # Priority order: IPA (most reliable) > hyphenation > categories > rhymes (has data quality issues)
+    # Note: rhymes s= parameter was previously prioritized but has known errors in Wiktionary
+    # (e.g., "assassin" has s=2 but IPA shows 3 syllables)
     ipa_count = extract_syllable_count_from_ipa(english_text)
-    cat_count = extract_syllable_count_from_categories(english_text)
     hyph_count = extract_syllable_count_from_hyphenation(english_text, word)
+    cat_count = extract_syllable_count_from_categories(english_text)
+    rhymes_count = extract_syllable_count_from_rhymes(english_text)
 
     syllable_count = None
-    if rhymes_count is not None:
-        syllable_count = rhymes_count
-    elif ipa_count is not None:
+    if ipa_count is not None:
         syllable_count = ipa_count
-    elif cat_count is not None:
-        syllable_count = cat_count
     elif hyph_count is not None:
         syllable_count = hyph_count
+    elif cat_count is not None:
+        syllable_count = cat_count
+    elif rhymes_count is not None:
+        syllable_count = rhymes_count
 
     # Extract morphology from etymology section
     morphology = extract_morphology(english_text)

@@ -754,11 +754,11 @@ fn extract_syllable_validation(title: &str, text: &str) -> Option<SyllableValida
         return None;
     }
 
-    // Calculate final value using priority order
-    let final_value = rhymes
-        .or(ipa)
+    // Calculate final value using priority order (IPA > hyphenation > category > rhymes)
+    let final_value = ipa
+        .or(hyphenation)
         .or(category)
-        .or(hyphenation);
+        .or(rhymes);
 
     // Check for disagreement - collect all non-None values and compare
     let values: Vec<usize> = [rhymes, ipa, category, hyphenation]
@@ -1393,11 +1393,13 @@ pub fn parse_page(title: &str, text: &str) -> Vec<Entry> {
         None
     };
 
-    // Priority order: rhymes (explicit) > IPA (parsed) > categories > hyphenation (least reliable)
-    let syllables = extract_syllable_count_from_rhymes(&english_text)
-        .or_else(|| extract_syllable_count_from_ipa(&english_text))
+    // Priority order: IPA (most reliable) > hyphenation > categories > rhymes (has data quality issues)
+    // Note: rhymes s= parameter was previously prioritized but has known errors in Wiktionary
+    // (e.g., "assassin" has s=2 but IPA shows 3 syllables)
+    let syllables = extract_syllable_count_from_ipa(&english_text)
+        .or_else(|| extract_syllable_count_from_hyphenation(&english_text))
         .or_else(|| extract_syllable_count_from_categories(&english_text))
-        .or_else(|| extract_syllable_count_from_hyphenation(&english_text));
+        .or_else(|| extract_syllable_count_from_rhymes(&english_text));
 
     let morphology = extract_morphology(&english_text);
     // Detect abbreviations via templates only

@@ -530,6 +530,28 @@ Hyphenation data in `{{hyphenation|en|...}}` templates (200k page sample):
 which doesn't follow standard syllabification rules (e.g., `ice cream` → `ice cream` not `ice\|cream`).
 This is intentional for pronunciation guidance but affects syllable counting.
 
+## Cross-Validation Issues
+
+Data inconsistencies detected by comparing multiple sources within Wiktionary entries.
+These can be reported to Wiktionary editors for correction.
+
+### Syllable Count Discrepancies
+
+When the `{{rhymes|en|...|s=N}}` template's `s=` parameter disagrees with IPA-derived syllable count.
+The `s=` parameter is meant to indicate total syllables in the word (per Wiktionary Lua module docs),
+but some entries have incorrect values.
+
+**Priority order (as of 2024-12):** IPA > hyphenation > category > rhymes
+We now prefer IPA-derived counts since they're based on actual pronunciation data.
+
+<!-- AUTO:syllable_discrepancies -->
+| IPA Count | Rhymes s= | Word | IPA | Page |
+|----------:|----------:|------|-----|------|
+| 3 | 2 | assassin | /əˈsæsɪn/ | [[assassin]] |
+<!-- /AUTO:syllable_discrepancies -->
+
+*Note: Full list limited to 20 examples. Run `--syllable-validation` mode on either scanner to get complete data.*
+
 ---
 
 *Regenerate this document: `make corpus-stats`*
