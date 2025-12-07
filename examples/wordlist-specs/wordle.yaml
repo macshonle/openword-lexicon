@@ -1,17 +1,15 @@
 # Wordle-style 5-letter words
-# Simplified format - filters only
 
 character:
   exact_length: 5
   pattern: "^[a-z]+$"
 
 phrase:
-  max_words: 1  # single words only
+  max_words: 1
 
 frequency:
   min_tier: A
   max_tier: N   # top ~30k words
 
-labels:
-  register:
-    exclude: [vulgar, offensive, derogatory]
+exclude:
+  register: [vulgar, offensive, derogatory]

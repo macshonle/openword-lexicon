@@ -43,9 +43,11 @@ owlex wordle.yaml --enriched data.jsonl --jq '{id, nsyll}'
 owlex wordle.yaml --output words.txt --verbose
 ```
 
-## YAML Specifications
+## YAML Specification Format
 
-Create a YAML file with your filters. The spec body IS the filters - no wrapper needed:
+### Operation-First Syntax
+
+The specification format uses operation-first syntax for sense-level filters:
 
 ```yaml
 # wordle.yaml - 5-letter common words
@@ -60,45 +62,68 @@ phrase:
 frequency:
   min_tier: A
   max_tier: I
+
+exclude:
+  register: [vulgar, offensive, derogatory]
 ```
 
-This simplified format:
-- No `version`, `distribution`, or `output` sections needed
-- Output format controlled via CLI flags (`--output`, `--enriched`, `--jq`)
-- Filters are the entire spec body
+This format groups operations (`include`, `exclude`, etc.) at the top level, with properties underneath:
 
-## Spec Editor (Web UI)
+```yaml
+include:
+  pos: [noun, verb]
+  region: [en-US]
 
-```bash
-make spec-editor-web
-# Opens http://localhost:8000
+exclude:
+  register: [vulgar, offensive]
+  temporal: [archaic, obsolete]
+  domain: [medical, legal]
+
+exclude-if-primary:
+  pos: [proper noun]
 ```
 
-The spec editor lets you:
-- Select filter criteria visually
-- See live word count estimates
-- Export YAML specifications
-- Download filtered word lists
+### Filter Categories
 
-## Makefile Targets
+**Word-level filters** (properties of the word itself):
+- `character` — length, pattern, prefixes, suffixes
+- `phrase` — word count constraints
+- `frequency` — frequency tier ranges
+- `syllables` — syllable count constraints
+- `concreteness` — abstract/concrete classification
+- `sources` — data source constraints (for licensing)
 
-Generate word lists using make:
+**Sense-level filters** (properties checked against word senses):
+- `pos` — part of speech
+- `register` — vulgar, offensive, slang, formal, etc.
+- `temporal` — archaic, obsolete, dated
+- `domain` — medical, legal, technical, etc.
+- `region` — en-US, en-GB, etc.
 
-```bash
-# Generate all word lists from specs in examples/wordlist-specs/
-make wordlists
+## Conceptual Model: Lexemes vs Senses
 
-# Add custom specs to examples/wordlist-specs/ and they'll be auto-discovered
-```
+Understanding how filtering works requires knowing the data model:
 
-Word lists are output to `data/wordlists/` with the same name as the spec file.
+- **Lexemes** are headwords (the words themselves, like "bank" or "taffy")
+- **Senses** are individual meanings of a word ("bank" as riverbank vs financial institution)
+- **Word lists output lexemes** (the words), not individual senses
 
-For enriched output (JSONL sidecar with metadata), use `owlex` directly:
+When you filter, you're deciding which *lexemes* to include based on properties of their *senses*. The key question is: which senses should a filter check?
 
-```bash
-# Generate word list with enriched metadata
-uv run owlex my-spec.yaml --output words.txt --enriched enriched.jsonl
-```
+### Operation Variants
+
+- **`include`/`exclude`**: Check against *any* sense. A word passes `exclude: register: [vulgar]` only if *none* of its senses are vulgar.
+- **`include-if-primary`/`exclude-if-primary`**: Check only the *primary* (first) sense. The primary sense typically represents the most common or prominent meaning.
+
+**Example:** The word "taffy" has three senses:
+1. (primary) US candy — safe
+2. flattery — safe
+3. British slang for Welsh person — potentially derogatory
+
+With `exclude: register: [derogatory]`, "taffy" would be excluded entirely.
+With `exclude-if-primary: register: [derogatory]`, "taffy" passes because its primary sense is safe.
+
+This distinction matters for games targeting specific audiences: a US word game might accept "taffy" (primary meaning is candy), while a global audience might prefer stricter filtering.
 
 ## Filter Reference
 
@@ -176,17 +201,56 @@ Example ranges:
 - **Register labels** (`rare`, `literary`, `technical`) — exclude specialized vocabulary
 - **Concreteness** — prefer concrete nouns for visual games
 
-A word can be high-frequency but still inappropriate (e.g., archaic words in historical texts), or low-frequency but perfectly suitable (e.g., concrete nouns like "giraffe").
-
 ### POS Filters
 
 ```yaml
-pos:
-  include: [NOU, VRB]        # Must have one of these
-  exclude: [ITJ]             # Must not have any of these
+include:
+  pos: [noun, verb]
+
+exclude:
+  pos: [phrase, idiom]
+
+exclude-if-primary:
+  pos: [proper noun]
 ```
 
-POS tags use 3-letter codes: `NOU`, `VRB`, `ADJ`, `ADV`, `PRN`, `ADP`, `CNJ`, `ITJ`, `DET`, `PRT`, `NAM` (proper noun), `PHR`, `PRV`, `PPP`, `IDM`, `AFX`, `NUM`, `SYM`, `MLT`, `CTN`. See `schema/pos.yaml` for full details.
+POS tags use 3-letter codes: `NOU`, `VRB`, `ADJ`, `ADV`, `PRN`, `ADP`, `CNJ`, `ITJ`, `DET`, `PRT`, `NAM` (proper noun), `PHR`, `PRV`, `PPP`, `IDM`, `AFX`, `NUM`, `SYM`, `MLT`, `CTN`.
+
+User-friendly names are also accepted: `noun`, `verb`, `adjective`, `adverb`, `pronoun`, `preposition`, `conjunction`, `interjection`, `determiner`, `particle`, `proper noun`, `phrase`, `proverb`, `prepositional phrase`, `idiom`, `affix`, `number`, `symbol`.
+
+See `schema/pos.yaml` for full details.
+
+### Register Filters
+
+```yaml
+exclude:
+  register: [vulgar, offensive, derogatory, slang]
+```
+
+**Register labels:** vulgar, offensive, slang, informal, formal, colloquial, dialectal, technical, literary, humorous, derogatory, euphemistic
+
+### Temporal Filters
+
+```yaml
+exclude:
+  temporal: [archaic, obsolete, dated]
+```
+
+**Temporal labels:** archaic, obsolete, dated, rare
+
+### Domain Filters
+
+```yaml
+exclude:
+  domain: [medical, legal, technical, scientific]
+```
+
+### Region Filters
+
+```yaml
+include:
+  region: [en-US]
+```
 
 ### Concreteness Filters
 
@@ -196,30 +260,6 @@ concreteness:
 ```
 
 Values: `concrete` (4.0+), `abstract` (<2.5), `mixed` (2.5-4.0)
-
-### Label Filters
-
-```yaml
-labels:
-  register:
-    include: [slang]
-    exclude: [vulgar, offensive, derogatory]
-  domain:
-    exclude: [medical, legal, technical]
-  region:
-    include: [en-US]
-```
-
-**Register labels:** vulgar, offensive, slang, informal, formal, colloquial, dialectal, technical, literary, humorous, derogatory, euphemistic
-
-### Temporal Filters
-
-```yaml
-temporal:
-  exclude: [archaic, obsolete, dated]
-```
-
-**Temporal labels:** archaic, obsolete, dated, rare
 
 ### Syllable Filters
 
@@ -264,15 +304,21 @@ Proper nouns use the `NAM` POS code, distinct from common nouns (`NOU`). To filt
 
 ```yaml
 # Exclude proper nouns
-pos:
-  exclude: [NAM]
+exclude:
+  pos: [proper noun]
 
 # Include only proper nouns
-pos:
-  include: [NAM]
+include:
+  pos: [proper noun]
 ```
 
-For words that have both common and proper usages (e.g., "bill" as a common noun and "Bill" as a name), the sense-level data in `en-senses.jsonl` distinguishes these.
+For words that have both common and proper usages (e.g., "bill" as a common noun and "Bill" as a name), use primary sense filtering:
+
+```yaml
+# Exclude words whose PRIMARY sense is a proper noun
+exclude-if-primary:
+  pos: [proper noun]
+```
 
 ## Example Specifications
 
@@ -280,6 +326,7 @@ For words that have both common and proper usages (e.g., "bill" as a common noun
 
 ```yaml
 # wordle.yaml
+
 character:
   exact_length: 5
   pattern: "^[a-z]+$"
@@ -290,6 +337,9 @@ phrase:
 frequency:
   min_tier: A
   max_tier: I
+
+exclude:
+  register: [vulgar, offensive, derogatory]
 ```
 
 **Expected:** ~3,000 words
@@ -298,6 +348,7 @@ frequency:
 
 ```yaml
 # kids-nouns.yaml
+
 character:
   min_length: 3
   max_length: 10
@@ -305,46 +356,93 @@ character:
 phrase:
   max_words: 1
 
-pos:
-  include: [NOU]
-
 concreteness:
   values: [concrete]
 
 frequency:
   min_tier: A
-  max_tier: G
+  max_tier: L
 
-labels:
-  register:
-    exclude: [vulgar, offensive, derogatory, slang]
+include:
+  pos: [noun]
 
-temporal:
-  exclude: [archaic, obsolete, dated]
+exclude:
+  register: [vulgar, offensive, derogatory, slang]
+  temporal: [archaic, obsolete, dated]
 ```
 
 ### Poetry (5-syllable words)
 
 ```yaml
 # poetry-5syllable.yaml
+
 syllables:
   exact: 5
+  require_syllables: true
 
-temporal:
-  exclude: [archaic, obsolete]
+phrase:
+  max_words: 1
 
-labels:
-  register:
-    exclude: [vulgar, offensive]
+exclude:
+  register: [vulgar, offensive, derogatory]
+  temporal: [archaic, obsolete]
 ```
 
 ### Profanity Blocklist
 
 ```yaml
 # profanity-blocklist.yaml
-labels:
-  register:
-    include: [vulgar, offensive, derogatory]
+
+include:
+  register: [vulgar, offensive, derogatory]
+```
+
+### Scrabble Words
+
+```yaml
+# scrabble.yaml
+
+phrase:
+  max_words: 1
+
+character:
+  char_preset: standard  # a-z only
+
+exclude:
+  pos: [proper noun]
+```
+
+## Spec Editor (Web UI)
+
+```bash
+make spec-editor-web
+# Opens http://localhost:8000
+```
+
+The spec editor lets you:
+- Select filter criteria visually
+- See live word count estimates
+- Export YAML specifications
+- Download filtered word lists
+
+## Makefile Targets
+
+Generate word lists using make:
+
+```bash
+# Generate all word lists from specs in examples/wordlist-specs/
+make wordlists
+
+# Add custom specs to examples/wordlist-specs/ and they'll be auto-discovered
+```
+
+Word lists are output to `data/wordlists/` with the same name as the spec file.
+
+For enriched output (JSONL sidecar with metadata), use `owlex` directly:
+
+```bash
+# Generate word list with enriched metadata
+uv run owlex my-spec.yaml --output words.txt --enriched enriched.jsonl
 ```
 
 ## Enriched Output

@@ -24,97 +24,98 @@ def mini_lexemes():
     """
     return [
         # Common 5-letter nouns (Wordle candidates)
-        {"id": "apple", "pos": ["noun"], "frequency_tier": "B", "sources": ["wikt", "eowl"],
+        # Note: POS uses 3-letter codes to match production data format
+        {"id": "apple", "pos": ["NOU"], "frequency_tier": "B", "sources": ["wikt", "eowl"],
          "labels": {}, "concreteness": "concrete", "nsyll": 2},
-        {"id": "bread", "pos": ["noun"], "frequency_tier": "C", "sources": ["wikt", "eowl"],
+        {"id": "bread", "pos": ["NOU"], "frequency_tier": "C", "sources": ["wikt", "eowl"],
          "labels": {}, "concreteness": "concrete", "nsyll": 1},
-        {"id": "chair", "pos": ["noun"], "frequency_tier": "D", "sources": ["wikt"],
+        {"id": "chair", "pos": ["NOU"], "frequency_tier": "D", "sources": ["wikt"],
          "labels": {}, "concreteness": "concrete", "nsyll": 1},
-        {"id": "dream", "pos": ["noun", "verb"], "frequency_tier": "C", "sources": ["wikt", "wordnet"],
+        {"id": "dream", "pos": ["NOU", "VRB"], "frequency_tier": "C", "sources": ["wikt", "wordnet"],
          "labels": {}, "concreteness": "abstract", "nsyll": 1},
-        {"id": "earth", "pos": ["noun"], "frequency_tier": "B", "sources": ["wikt", "wordnet"],
+        {"id": "earth", "pos": ["NOU"], "frequency_tier": "B", "sources": ["wikt", "wordnet"],
          "labels": {}, "concreteness": "concrete", "nsyll": 1},
 
         # Short common words
-        {"id": "cat", "pos": ["noun"], "frequency_tier": "A", "sources": ["wikt", "eowl"],
+        {"id": "cat", "pos": ["NOU"], "frequency_tier": "A", "sources": ["wikt", "eowl"],
          "labels": {}, "concreteness": "concrete", "nsyll": 1},
-        {"id": "dog", "pos": ["noun"], "frequency_tier": "A", "sources": ["wikt", "eowl"],
+        {"id": "dog", "pos": ["NOU"], "frequency_tier": "A", "sources": ["wikt", "eowl"],
          "labels": {}, "concreteness": "concrete", "nsyll": 1},
-        {"id": "the", "pos": ["determiner"], "frequency_tier": "A", "sources": ["wikt"],
+        {"id": "the", "pos": ["DET"], "frequency_tier": "A", "sources": ["wikt"],
          "labels": {}, "nsyll": 1},
-        {"id": "run", "pos": ["verb", "noun"], "frequency_tier": "A", "sources": ["wikt"],
+        {"id": "run", "pos": ["VRB", "NOU"], "frequency_tier": "A", "sources": ["wikt"],
          "labels": {}, "nsyll": 1},
 
         # Words with special characters
-        {"id": "don't", "pos": ["verb"], "frequency_tier": "A", "sources": ["wikt"],
+        {"id": "don't", "pos": ["VRB"], "frequency_tier": "A", "sources": ["wikt"],
          "labels": {}, "nsyll": 1},
-        {"id": "self-help", "pos": ["noun"], "frequency_tier": "H", "sources": ["wikt"],
+        {"id": "self-help", "pos": ["NOU"], "frequency_tier": "H", "sources": ["wikt"],
          "labels": {}, "nsyll": 2},
-        {"id": "re-enter", "pos": ["verb"], "frequency_tier": "G", "sources": ["wikt"],
+        {"id": "re-enter", "pos": ["VRB"], "frequency_tier": "G", "sources": ["wikt"],
          "labels": {}, "nsyll": 3},
 
         # Multi-word phrases
-        {"id": "hot dog", "pos": ["noun"], "frequency_tier": "E", "sources": ["wikt"],
+        {"id": "hot dog", "pos": ["NOU"], "frequency_tier": "E", "sources": ["wikt"],
          "labels": {}, "concreteness": "concrete", "nsyll": 2, "wc": 2},
-        {"id": "ice cream", "pos": ["noun"], "frequency_tier": "D", "sources": ["wikt"],
+        {"id": "ice cream", "pos": ["NOU"], "frequency_tier": "D", "sources": ["wikt"],
          "labels": {}, "concreteness": "concrete", "nsyll": 2, "wc": 2},
 
         # Words with labels
-        {"id": "damn", "pos": ["interjection", "verb"], "frequency_tier": "D", "sources": ["wikt"],
+        {"id": "damn", "pos": ["ITJ", "VRB"], "frequency_tier": "D", "sources": ["wikt"],
          "labels": {"register": ["vulgar"]}, "nsyll": 1},
-        {"id": "bloody", "pos": ["adjective"], "frequency_tier": "E", "sources": ["wikt"],
+        {"id": "bloody", "pos": ["ADJ"], "frequency_tier": "E", "sources": ["wikt"],
          "labels": {"register": ["offensive"], "region": ["en-GB"]}, "nsyll": 2},
-        {"id": "thee", "pos": ["pronoun"], "frequency_tier": "G", "sources": ["wikt"],
+        {"id": "thee", "pos": ["PRN"], "frequency_tier": "G", "sources": ["wikt"],
          "labels": {"temporal": ["archaic"]}, "nsyll": 1},
-        {"id": "hither", "pos": ["adverb"], "frequency_tier": "H", "sources": ["wikt"],
+        {"id": "hither", "pos": ["ADV"], "frequency_tier": "H", "sources": ["wikt"],
          "labels": {"temporal": ["archaic", "obsolete"]}, "nsyll": 2},
-        {"id": "whilst", "pos": ["conjunction"], "frequency_tier": "F", "sources": ["wikt"],
+        {"id": "whilst", "pos": ["CNJ"], "frequency_tier": "F", "sources": ["wikt"],
          "labels": {"temporal": ["dated"], "region": ["en-GB"]}, "nsyll": 1},
 
         # Rare/uncommon words
-        {"id": "pulchritudinous", "pos": ["adjective"], "frequency_tier": "Z", "sources": ["wikt"],
+        {"id": "pulchritudinous", "pos": ["ADJ"], "frequency_tier": "Z", "sources": ["wikt"],
          "labels": {}, "nsyll": 6},
-        {"id": "defenestration", "pos": ["noun"], "frequency_tier": "Y", "sources": ["wikt", "wordnet"],
+        {"id": "defenestration", "pos": ["NOU"], "frequency_tier": "Y", "sources": ["wikt", "wordnet"],
          "labels": {}, "nsyll": 5},
 
         # Words from different sources
-        {"id": "syzygy", "pos": ["noun"], "frequency_tier": "Y", "sources": ["wordnet"],
+        {"id": "syzygy", "pos": ["NOU"], "frequency_tier": "Y", "sources": ["wordnet"],
          "labels": {}, "nsyll": 3},
-        {"id": "aardvark", "pos": ["noun"], "frequency_tier": "I", "sources": ["eowl", "wordnet"],
+        {"id": "aardvark", "pos": ["NOU"], "frequency_tier": "I", "sources": ["eowl", "wordnet"],
          "labels": {}, "concreteness": "concrete", "nsyll": 2},
 
         # Regional variants
-        {"id": "color", "pos": ["noun", "verb"], "frequency_tier": "B", "sources": ["wikt"],
+        {"id": "color", "pos": ["NOU", "VRB"], "frequency_tier": "B", "sources": ["wikt"],
          "labels": {}, "spelling_region": "en-US", "nsyll": 2},
-        {"id": "colour", "pos": ["noun", "verb"], "frequency_tier": "B", "sources": ["wikt"],
+        {"id": "colour", "pos": ["NOU", "VRB"], "frequency_tier": "B", "sources": ["wikt"],
          "labels": {}, "spelling_region": "en-GB", "nsyll": 2},
 
         # Words with specific prefixes/suffixes
-        {"id": "unhappy", "pos": ["adjective"], "frequency_tier": "E", "sources": ["wikt"],
+        {"id": "unhappy", "pos": ["ADJ"], "frequency_tier": "E", "sources": ["wikt"],
          "labels": {}, "nsyll": 3},
-        {"id": "running", "pos": ["verb", "noun"], "frequency_tier": "B", "sources": ["wikt"],
+        {"id": "running", "pos": ["VRB", "NOU"], "frequency_tier": "B", "sources": ["wikt"],
          "labels": {}, "nsyll": 2},
-        {"id": "preview", "pos": ["noun", "verb"], "frequency_tier": "F", "sources": ["wikt"],
+        {"id": "preview", "pos": ["NOU", "VRB"], "frequency_tier": "F", "sources": ["wikt"],
          "labels": {}, "nsyll": 2},
-        {"id": "rethink", "pos": ["verb", "noun"], "frequency_tier": "G", "sources": ["wikt"],
+        {"id": "rethink", "pos": ["VRB", "NOU"], "frequency_tier": "G", "sources": ["wikt"],
          "labels": {}, "nsyll": 2},
 
         # Proper noun edge cases
-        {"id": "bill", "pos": ["noun", "verb"], "frequency_tier": "C", "sources": ["wikt"],
+        {"id": "bill", "pos": ["NOU", "VRB"], "frequency_tier": "C", "sources": ["wikt"],
          "labels": {}, "has_common_usage": True, "has_proper_usage": True, "nsyll": 1},
-        {"id": "aaron", "pos": ["noun"], "frequency_tier": "H", "sources": ["wikt"],
+        {"id": "aaron", "pos": ["NOU"], "frequency_tier": "H", "sources": ["wikt"],
          "labels": {}, "has_common_usage": False, "has_proper_usage": True, "nsyll": 2},
 
         # Technical/domain-specific words
-        {"id": "plaintiff", "pos": ["noun"], "frequency_tier": "G", "sources": ["wikt"],
+        {"id": "plaintiff", "pos": ["NOU"], "frequency_tier": "G", "sources": ["wikt"],
          "labels": {"domain": ["legal"]}, "nsyll": 2},
-        {"id": "diagnosis", "pos": ["noun"], "frequency_tier": "F", "sources": ["wikt"],
+        {"id": "diagnosis", "pos": ["NOU"], "frequency_tier": "F", "sources": ["wikt"],
          "labels": {"domain": ["medical"]}, "nsyll": 4},
 
         # Slang
-        {"id": "cool", "pos": ["adjective", "verb"], "frequency_tier": "B", "sources": ["wikt"],
+        {"id": "cool", "pos": ["ADJ", "VRB"], "frequency_tier": "B", "sources": ["wikt"],
          "labels": {"register": ["slang"]}, "concreteness": "abstract", "nsyll": 1},
-        {"id": "dude", "pos": ["noun"], "frequency_tier": "E", "sources": ["wikt"],
+        {"id": "dude", "pos": ["NOU"], "frequency_tier": "E", "sources": ["wikt"],
          "labels": {"register": ["informal", "slang"]}, "nsyll": 1},
     ]
 
@@ -322,27 +323,36 @@ class TestPOSFilters:
     """Unit tests for part-of-speech filters."""
 
     def test_include_nouns(self, mini_lexemes):
-        """Test include=[noun] filter."""
+        """Test include=[noun] filter.
+
+        Filter uses user-friendly name 'noun', but data has 3-letter code 'NOU'.
+        """
         spec = {"filters": {"pos": {"include": ["noun"]}}}
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
 
         for entry in results:
-            assert "noun" in entry.get('pos', [])
+            assert "NOU" in entry.get('pos', [])
 
     def test_exclude_verbs(self, mini_lexemes):
-        """Test exclude=[verb] filter."""
+        """Test exclude=[verb] filter.
+
+        Filter uses user-friendly name 'verb', but data has 3-letter code 'VRB'.
+        """
         spec = {"filters": {"pos": {"exclude": ["verb"]}}}
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
 
         for entry in results:
-            assert "verb" not in entry.get('pos', [])
+            assert "VRB" not in entry.get('pos', [])
 
     def test_include_multiple_pos(self, mini_lexemes):
-        """Test include with multiple POS (OR logic)."""
+        """Test include with multiple POS (OR logic).
+
+        Filter uses user-friendly names, but data has 3-letter codes.
+        """
         spec = {"filters": {"pos": {"include": ["noun", "adjective"]}}}
         filter_obj = MockOwlexFilter(spec)
 
@@ -350,7 +360,7 @@ class TestPOSFilters:
 
         for entry in results:
             pos = entry.get('pos', [])
-            assert "noun" in pos or "adjective" in pos
+            assert "NOU" in pos or "ADJ" in pos
 
 
 # =============================================================================
@@ -676,6 +686,232 @@ character:
 
 
 # =============================================================================
+# Unit Tests: Operation-First Format Parsing
+# =============================================================================
+
+class TestOperationFirstFormat:
+    """Test the operation-first YAML format parsing."""
+
+    def test_exclude_register(self, tmp_path):
+        """Test exclude with register labels."""
+        spec_content = """
+exclude:
+  register: [vulgar, offensive]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        assert 'labels' in filters
+        assert 'register' in filters['labels']
+        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive']
+
+    def test_include_pos(self, tmp_path):
+        """Test include with POS tags."""
+        spec_content = """
+include:
+  pos: [noun, verb]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        assert 'pos' in filters
+        assert filters['pos']['include'] == ['noun', 'verb']
+
+    def test_exclude_pos(self, tmp_path):
+        """Test exclude with POS tags."""
+        spec_content = """
+exclude:
+  pos: [phrase, idiom, proper noun]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        assert 'pos' in filters
+        assert filters['pos']['exclude'] == ['phrase', 'idiom', 'proper noun']
+
+    def test_exclude_if_primary(self, tmp_path):
+        """Test exclude-if-primary with POS tags."""
+        spec_content = """
+exclude-if-primary:
+  pos: [proper noun]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        assert 'pos' in filters
+        assert filters['pos']['exclude-if-primary'] == ['proper noun']
+
+    def test_combined_include_exclude(self, tmp_path):
+        """Test combining include and exclude in same spec."""
+        spec_content = """
+include:
+  pos: [noun]
+
+exclude:
+  register: [vulgar, offensive]
+  temporal: [archaic, obsolete]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        # POS include
+        assert filters['pos']['include'] == ['noun']
+
+        # Labels exclude
+        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive']
+        assert filters['labels']['temporal']['exclude'] == ['archaic', 'obsolete']
+
+    def test_mixed_word_and_sense_filters(self, tmp_path):
+        """Test mixing word-level and sense-level filters."""
+        spec_content = """
+character:
+  exact_length: 5
+  pattern: "^[a-z]+$"
+
+phrase:
+  max_words: 1
+
+frequency:
+  min_tier: A
+  max_tier: I
+
+include:
+  pos: [noun]
+
+exclude:
+  register: [vulgar, offensive]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        # Word-level filters
+        assert filters['character']['exact_length'] == 5
+        assert filters['phrase']['max_words'] == 1
+        assert filters['frequency']['min_tier'] == 'A'
+
+        # Sense-level filters
+        assert filters['pos']['include'] == ['noun']
+        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive']
+
+    def test_domain_filter(self, tmp_path):
+        """Test domain filter in operation-first format."""
+        spec_content = """
+exclude:
+  domain: [medical, legal, technical]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        assert filters['labels']['domain']['exclude'] == ['medical', 'legal', 'technical']
+
+    def test_region_filter(self, tmp_path):
+        """Test region filter in operation-first format."""
+        spec_content = """
+include:
+  region: [en-US]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        assert filters['labels']['region']['include'] == ['en-US']
+
+    def test_full_wordle_spec(self, tmp_path):
+        """Test a complete Wordle-style spec in operation-first format."""
+        spec_content = """
+# Wordle-style 5-letter words
+
+character:
+  exact_length: 5
+  pattern: "^[a-z]+$"
+
+phrase:
+  max_words: 1
+
+frequency:
+  min_tier: A
+  max_tier: N
+
+exclude:
+  register: [vulgar, offensive, derogatory]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        assert filters['character']['exact_length'] == 5
+        assert filters['character']['pattern'] == "^[a-z]+$"
+        assert filters['phrase']['max_words'] == 1
+        assert filters['frequency']['min_tier'] == 'A'
+        assert filters['frequency']['max_tier'] == 'N'
+        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive', 'derogatory']
+
+    def test_full_kids_nouns_spec(self, tmp_path):
+        """Test a complete kids-nouns spec in operation-first format."""
+        spec_content = """
+character:
+  min_length: 3
+  max_length: 10
+
+phrase:
+  max_words: 1
+
+concreteness:
+  values: [concrete]
+
+frequency:
+  min_tier: A
+  max_tier: L
+
+include:
+  pos: [noun]
+
+exclude:
+  register: [vulgar, offensive, derogatory, slang]
+  temporal: [archaic, obsolete, dated]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        # Word-level
+        assert filters['character']['min_length'] == 3
+        assert filters['concreteness']['values'] == ['concrete']
+
+        # Sense-level
+        assert filters['pos']['include'] == ['noun']
+        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive', 'derogatory', 'slang']
+        assert filters['labels']['temporal']['exclude'] == ['archaic', 'obsolete', 'dated']
+
+
+# =============================================================================
 # Integration Tests: End-to-End Word List Generation
 # =============================================================================
 
@@ -744,7 +980,7 @@ class TestEdgeCases:
 
     def test_missing_labels_field(self, mini_lexemes):
         """Test handling of entries with missing labels field."""
-        entry = {"id": "test", "pos": ["noun"], "frequency_tier": "C", "sources": ["wikt"]}
+        entry = {"id": "test", "pos": ["NOU"], "frequency_tier": "C", "sources": ["wikt"]}
         spec = {"filters": {"labels": {"register": {"exclude": ["vulgar"]}}}}
         filter_obj = MockOwlexFilter(spec)
 

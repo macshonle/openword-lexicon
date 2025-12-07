@@ -1,0 +1,8 @@
+# Multi-word entries that are NOT phrases
+# Useful for finding compound terms, technical vocabulary, etc.
+
+phrase:
+  min_words: 2  # must be multi-word
+
+exclude:
+  pos: [phrase, proverb, prepositional phrase, idiom, proper noun]

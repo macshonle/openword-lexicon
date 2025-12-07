@@ -17,11 +17,7 @@ character:
 phrase:
   max_words: 1
 
-labels:
-  register:
-    exclude: [slang, vulgar, offensive, derogatory]
-  domain:
-    exclude: [technical, medical, legal, scientific]
-
-temporal:
-  exclude: [archaic, obsolete]
+exclude:
+  register: [slang, vulgar, offensive, derogatory]
+  domain: [technical, medical, legal, scientific]
+  temporal: [archaic, obsolete]

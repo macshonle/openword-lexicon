@@ -1,9 +1,11 @@
 # Single words suitable for Scrabble
 # Allows archaic/obsolete (valid in Scrabble dictionaries)
-# TODO: Add lexnames filter to exclude pure proper nouns (noun.person, noun.location only)
 
 phrase:
-  max_words: 1  # single words only
+  max_words: 1
 
 character:
   char_preset: standard  # a-z only (no hyphens, apostrophes, etc.)
+
+exclude:
+  pos: [proper noun]  # Scrabble doesn't allow proper nouns

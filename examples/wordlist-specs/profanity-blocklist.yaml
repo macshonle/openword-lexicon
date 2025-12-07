@@ -1,6 +1,5 @@
 # Words flagged as vulgar, offensive, or derogatory
 # Useful for content filtering and blocklists
 
-labels:
-  register:
-    include: [vulgar, offensive, derogatory]
+include:
+  register: [vulgar, offensive, derogatory]

@@ -28,6 +28,72 @@ try:
 except ImportError:
     HAS_YAML = False
 
+
+def _load_pos_code_map() -> Dict[str, str]:
+    """Load POS variant-to-code mapping from schema/pos.yaml.
+
+    Returns a dict mapping user-friendly names (noun, verb, etc.) to
+    their canonical 3-letter codes (NOU, VRB, etc.).
+
+    Also maps codes to themselves for pass-through support.
+    """
+    # Find schema file relative to this module
+    schema_paths = [
+        Path(__file__).parent.parent.parent / "schema" / "pos.yaml",  # From src/openword/
+        Path("schema/pos.yaml"),  # From project root
+    ]
+
+    schema_path = None
+    for p in schema_paths:
+        if p.exists():
+            schema_path = p
+            break
+
+    if schema_path is None:
+        raise FileNotFoundError(
+            "POS schema not found. Expected at schema/pos.yaml relative to project root."
+        )
+
+    with open(schema_path) as f:
+        schema = yaml.safe_load(f)
+
+    pos_map = {}
+    for pos_class in schema["pos_classes"]:
+        code = pos_class["code"]
+        # Map code to itself (pass-through)
+        pos_map[code] = code
+        pos_map[code.lower()] = code
+        # Map all variants to code
+        for variant in pos_class["variants"]:
+            pos_map[variant.lower()] = code
+    return pos_map
+
+
+# Lazy-loaded POS code mapping
+_POS_CODE_MAP: Optional[Dict[str, str]] = None
+
+
+def _get_pos_code_map() -> Dict[str, str]:
+    """Get the POS code mapping, loading it lazily."""
+    global _POS_CODE_MAP
+    if _POS_CODE_MAP is None:
+        _POS_CODE_MAP = _load_pos_code_map()
+    return _POS_CODE_MAP
+
+
+def normalize_pos_to_code(pos: str) -> Optional[str]:
+    """Convert a POS variant name to its canonical 3-letter code.
+
+    Args:
+        pos: User-friendly name (noun, verb) or code (NOU, VRB)
+
+    Returns:
+        The 3-letter code, or None if not recognized
+    """
+    pos_map = _get_pos_code_map()
+    return pos_map.get(pos.lower())
+
+
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
@@ -260,22 +326,52 @@ class OwlexFilter:
         Supports:
         1. Legacy format: {"version": "1.0", "distribution": "en", "filters": {...}}
         2. Web builder format: {"version": "1.0", "sources": [...], "filters": [...]}
-        3. Simplified format: filters-only body (what the plan recommends)
+        3. Simplified format: filters-only body
+        4. Operation-first format: include/exclude at top level (recommended)
+
+        Operation-first format example:
+            include:
+              pos: [noun]
+            exclude:
+              pos: [phrase]
+              register: [vulgar]
+            exclude-if-primary:
+              pos: [proper noun]
         """
-        # Check if this is a simplified "filters-only" format
-        # Simplified format has no 'version', 'distribution', or 'filters' key at the root
-        # Instead, the root keys are filter types like 'character', 'frequency', 'pos', etc.
-        filter_type_keys = {
-            'character', 'phrase', 'frequency', 'pos', 'concreteness',
-            'labels', 'temporal', 'sources', 'syllables', 'region',
-            'proper_noun', 'lemma', 'policy'  # policy kept for backward compat
+        # Word-level filter keys (properties of the word itself)
+        word_filter_keys = {
+            'character', 'phrase', 'frequency', 'syllables',
+            'concreteness', 'proper_noun', 'lemma'
         }
+
+        # Sense-level operation keys (operation-first format)
+        operation_keys = {'include', 'exclude', 'include-if-primary', 'exclude-if-primary'}
+
+        # Sense property keys (what operations apply to)
+        sense_property_keys = {'pos', 'register', 'temporal', 'domain', 'region'}
+
+        # Legacy category-first keys
+        legacy_sense_keys = {'pos', 'labels', 'temporal', 'policy'}
+
+        # Check for operation-first format
+        is_operation_first = (
+            'version' not in spec and
+            'distribution' not in spec and
+            'filters' not in spec and
+            any(key in operation_keys for key in spec.keys())
+        )
+
+        if is_operation_first:
+            return self._normalize_operation_first_format(spec, word_filter_keys, operation_keys, sense_property_keys)
+
+        # Check if this is a simplified "filters-only" format (legacy category-first)
+        all_filter_keys = word_filter_keys | legacy_sense_keys | {'sources', 'region'}
 
         is_simplified = (
             'version' not in spec and
             'distribution' not in spec and
             'filters' not in spec and
-            any(key in filter_type_keys for key in spec.keys())
+            any(key in all_filter_keys for key in spec.keys())
         )
 
         if is_simplified:
@@ -316,6 +412,103 @@ class OwlexFilter:
             'distribution': 'en',
             'filters': spec.get('filters', {})
         }
+
+    def _normalize_operation_first_format(
+        self,
+        spec: Dict,
+        word_filter_keys: set,
+        operation_keys: set,
+        sense_property_keys: set
+    ) -> Dict:
+        """Transform operation-first format to internal format.
+
+        Operation-first format (input):
+            include:
+              pos: [noun]
+            exclude:
+              pos: [phrase]
+              register: [vulgar]
+            exclude-if-primary:
+              pos: [proper noun]
+            character:
+              exact_length: 5
+            phrase:
+              max_words: 1
+
+        Internal format (output):
+            filters:
+              pos:
+                include: [noun]
+                exclude: [phrase]
+                exclude-if-primary: [proper noun]
+              labels:
+                register:
+                  exclude: [vulgar]
+              character:
+                exact_length: 5
+              phrase:
+                max_words: 1
+        """
+        normalized = {
+            'version': '2.0',
+            'distribution': 'en',
+            'filters': {}
+        }
+
+        filters = normalized['filters']
+
+        # Process operation keys (include, exclude, etc.)
+        for op_key in operation_keys:
+            if op_key not in spec:
+                continue
+
+            op_content = spec[op_key]
+            if not isinstance(op_content, dict):
+                continue
+
+            for prop_key, prop_values in op_content.items():
+                # Handle sense-level properties
+                if prop_key in sense_property_keys:
+                    if prop_key == 'pos':
+                        # POS goes directly under filters.pos
+                        if 'pos' not in filters:
+                            filters['pos'] = {}
+                        filters['pos'][op_key] = prop_values
+                    elif prop_key in {'register', 'temporal', 'domain', 'region'}:
+                        # These go under filters.labels.{category}
+                        if 'labels' not in filters:
+                            filters['labels'] = {}
+                        if prop_key not in filters['labels']:
+                            filters['labels'][prop_key] = {}
+                        filters['labels'][prop_key][op_key] = prop_values
+
+        # Process word-level filter keys (character, phrase, frequency, etc.)
+        for key in word_filter_keys:
+            if key in spec:
+                filters[key] = spec[key]
+
+        # Handle sources filter specially (for licensing)
+        if 'sources' in spec:
+            if isinstance(spec['sources'], dict):
+                normalized['_sources_filter'] = spec['sources']
+            else:
+                filters['sources'] = spec['sources']
+
+        # Handle temporal at top level (shorthand for labels.temporal)
+        if 'temporal' in spec and 'temporal' not in filters.get('labels', {}):
+            # Check if it's an operation-style or direct style
+            temporal_spec = spec['temporal']
+            if isinstance(temporal_spec, dict):
+                # Check if it has operation keys directly
+                if any(k in operation_keys for k in temporal_spec.keys()):
+                    if 'labels' not in filters:
+                        filters['labels'] = {}
+                    filters['labels']['temporal'] = temporal_spec
+                else:
+                    # It's a word-level filter config
+                    filters['temporal'] = temporal_spec
+
+        return normalized
 
     def _normalize_new_format(self, spec: Dict) -> Dict:
         """
@@ -661,25 +854,65 @@ class OwlexFilter:
 
         return True
 
+    def _normalize_pos_list(self, pos_list: List[str]) -> set:
+        """Normalize a list of POS values to 3-letter codes."""
+        codes = set()
+        for pos in pos_list:
+            code = normalize_pos_to_code(pos)
+            if code:
+                codes.add(code)
+            else:
+                # If not recognized, try exact match (might be a code already)
+                codes.add(pos.upper())
+        return codes
+
     def _check_pos_filters(self, entry: Dict, filters: Dict) -> bool:
-        """Apply POS filters."""
+        """Apply POS filters.
+
+        Supports both user-friendly names (noun, verb, adjective) and
+        3-letter codes (NOU, VRB, ADJ). Filter values are normalized
+        to codes before comparison.
+
+        Filter variants:
+        - include/exclude: check against ANY sense (current behavior)
+        - include-if-primary/exclude-if-primary: check against PRIMARY sense only
+        """
         pos_tags = set(entry.get('pos', []))
+        primary_sense = entry.get('primary_sense', {})
+        primary_pos = primary_sense.get('pos')
 
         if 'require_pos' in filters and filters['require_pos']:
             if not pos_tags:
                 return False
 
+        # include: Entry must have at least one matching POS (any sense)
         if 'include' in filters:
-            # Entry must have at least one of the included POS tags
             if not pos_tags:
                 return False
-            if not any(pos in pos_tags for pos in filters['include']):
+            include_codes = self._normalize_pos_list(filters['include'])
+            if not any(pos in include_codes for pos in pos_tags):
                 return False
 
+        # exclude: Entry must not have any matching POS (any sense)
         if 'exclude' in filters:
-            # Entry must not have any of the excluded POS tags
-            if any(pos in pos_tags for pos in filters['exclude']):
+            exclude_codes = self._normalize_pos_list(filters['exclude'])
+            if any(pos in exclude_codes for pos in pos_tags):
                 return False
+
+        # include-if-primary: Primary sense must have one of these POS
+        if 'include-if-primary' in filters:
+            if not primary_pos:
+                return False
+            include_codes = self._normalize_pos_list(filters['include-if-primary'])
+            if primary_pos not in include_codes:
+                return False
+
+        # exclude-if-primary: Primary sense must NOT have any of these POS
+        if 'exclude-if-primary' in filters:
+            if primary_pos:
+                exclude_codes = self._normalize_pos_list(filters['exclude-if-primary'])
+                if primary_pos in exclude_codes:
+                    return False
 
         return True
 
@@ -700,23 +933,43 @@ class OwlexFilter:
         return True
 
     def _check_label_filters(self, entry: Dict, filters: Dict) -> bool:
-        """Apply label filters."""
+        """Apply label filters.
+
+        Filter variants:
+        - include/exclude: check against ANY sense (current behavior)
+        - include-if-primary/exclude-if-primary: check against PRIMARY sense only
+        """
         labels = entry.get('labels', {})
+        primary_sense = entry.get('primary_sense', {})
+        primary_labels = primary_sense.get('labels', {})
 
         for label_category in ['register', 'temporal', 'domain', 'region']:
             category_filters = filters.get(label_category, {})
             entry_labels = set(labels.get(label_category, []))
+            primary_category_labels = set(primary_labels.get(label_category, []))
 
+            # include: Entry must have at least one of the included labels (any sense)
             if 'include' in category_filters:
-                # Entry must have at least one of the included labels
                 include_set = set(category_filters['include'])
                 if not (entry_labels & include_set):
                     return False
 
+            # exclude: Entry must not have any of the excluded labels (any sense)
             if 'exclude' in category_filters:
-                # Entry must not have any of the excluded labels
                 exclude_set = set(category_filters['exclude'])
                 if entry_labels & exclude_set:
+                    return False
+
+            # include-if-primary: Primary sense must have one of these labels
+            if 'include-if-primary' in category_filters:
+                include_set = set(category_filters['include-if-primary'])
+                if not (primary_category_labels & include_set):
+                    return False
+
+            # exclude-if-primary: Primary sense must NOT have any of these labels
+            if 'exclude-if-primary' in category_filters:
+                exclude_set = set(category_filters['exclude-if-primary'])
+                if primary_category_labels & exclude_set:
                     return False
 
         return True
@@ -750,29 +1003,52 @@ class OwlexFilter:
 
         This is the explicit version - separate from policy.modern_only.
 
+        Filter variants:
+        - include/exclude: check against ANY sense (current behavior)
+        - include-if-primary/exclude-if-primary: check against PRIMARY sense only
+
         Examples:
           temporal:
             exclude: [archaic, obsolete]
           temporal:
             include: [historical]  # Only historical words
+          temporal:
+            exclude-if-primary: [archaic]  # Only exclude if primary sense is archaic
         """
         if not filters:
             return True
 
-        # Get temporal labels from entry
+        # Get temporal labels from entry (all senses)
         labels = entry.get('labels', {})
         temporal_labels = set(labels.get('temporal', []))
 
-        # Include filter - must have at least one of these labels
+        # Get temporal labels from primary sense
+        primary_sense = entry.get('primary_sense', {})
+        primary_labels = primary_sense.get('labels', {})
+        primary_temporal = set(primary_labels.get('temporal', []))
+
+        # Include filter - must have at least one of these labels (any sense)
         if 'include' in filters:
             include_set = set(filters['include'])
             if not (temporal_labels & include_set):
                 return False
 
-        # Exclude filter - must NOT have any of these labels
+        # Exclude filter - must NOT have any of these labels (any sense)
         if 'exclude' in filters:
             exclude_set = set(filters['exclude'])
             if temporal_labels & exclude_set:
+                return False
+
+        # include-if-primary: Primary sense must have one of these labels
+        if 'include-if-primary' in filters:
+            include_set = set(filters['include-if-primary'])
+            if not (primary_temporal & include_set):
+                return False
+
+        # exclude-if-primary: Primary sense must NOT have any of these labels
+        if 'exclude-if-primary' in filters:
+            exclude_set = set(filters['exclude-if-primary'])
+            if primary_temporal & exclude_set:
                 return False
 
         return True
@@ -1016,8 +1292,12 @@ class OwlexFilter:
         """Augment a lexeme entry with aggregated senses data for filtering.
 
         This adds fields that exist in senses but not in lexemes:
-        - pos: aggregated POS tags
-        - labels: aggregated register/temporal/domain/region labels
+        - pos: aggregated POS tags (from all senses)
+        - labels: aggregated register/temporal/domain/region labels (from all senses)
+        - primary_sense: data from first/primary sense only (for -if-primary filters)
+
+        The primary sense is the first sense in document order from Wiktionary,
+        which typically represents the most common/prominent meaning.
         """
         # Start with a copy of the entry
         augmented = entry.copy()
@@ -1025,7 +1305,7 @@ class OwlexFilter:
         if not senses:
             return augmented
 
-        # Aggregate POS from senses
+        # Aggregate POS from all senses
         pos_set = set()
         register_tags = set()
         temporal_tags = set()
@@ -1046,11 +1326,11 @@ class OwlexFilter:
             if sense.get('region_tags'):
                 region_tags.update(sense['region_tags'])
 
-        # Add aggregated POS
+        # Add aggregated POS (from all senses)
         if pos_set:
             augmented['pos'] = sorted(pos_set)
 
-        # Build labels structure matching filter expectations
+        # Build labels structure matching filter expectations (from all senses)
         labels = {}
         if register_tags:
             labels['register'] = sorted(register_tags)
@@ -1063,6 +1343,30 @@ class OwlexFilter:
 
         if labels:
             augmented['labels'] = labels
+
+        # Extract primary sense data (first sense in document order)
+        primary = senses[0]
+        primary_sense = {}
+
+        if primary.get('pos'):
+            primary_sense['pos'] = primary['pos']
+
+        # Build primary sense labels
+        primary_labels = {}
+        if primary.get('register_tags'):
+            primary_labels['register'] = primary['register_tags']
+        if primary.get('temporal_tags'):
+            primary_labels['temporal'] = primary['temporal_tags']
+        if primary.get('domain_tags'):
+            primary_labels['domain'] = primary['domain_tags']
+        if primary.get('region_tags'):
+            primary_labels['region'] = primary['region_tags']
+
+        if primary_labels:
+            primary_sense['labels'] = primary_labels
+
+        if primary_sense:
+            augmented['primary_sense'] = primary_sense
 
         return augmented
 

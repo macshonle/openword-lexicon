@@ -5,9 +5,6 @@ syllables:
   exact: 2
   require_syllables: true
 
-pos:
-  include: [noun]
-
 concreteness:
   values: [concrete]
 
@@ -18,9 +15,9 @@ frequency:
 phrase:
   max_words: 1
 
-labels:
-  register:
-    exclude: [slang, vulgar, offensive, derogatory]
+include:
+  pos: [noun]
 
-temporal:
-  exclude: [archaic, obsolete]
+exclude:
+  register: [slang, vulgar, offensive, derogatory]
+  temporal: [archaic, obsolete]

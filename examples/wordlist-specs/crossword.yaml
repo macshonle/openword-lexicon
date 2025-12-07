@@ -9,13 +9,11 @@ character:
 phrase:
   max_words: 3  # multi-word answers allowed
 
-pos:
-  include: [noun, verb, adjective, adverb]
-
 # No frequency filter - obscure words are fair game in crosswords
-
-labels:
-  register:
-    exclude: [vulgar, derogatory]  # offensive may appear if clued appropriately
-
 # Archaic/obsolete words are valid crossword answers (no temporal exclusion)
+
+include:
+  pos: [noun, verb, adjective, adverb]
+
+exclude:
+  register: [vulgar, derogatory]  # offensive may appear if clued appropriately

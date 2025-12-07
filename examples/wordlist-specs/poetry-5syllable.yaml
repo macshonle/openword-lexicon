@@ -8,9 +8,6 @@ syllables:
 phrase:
   max_words: 1
 
-labels:
-  register:
-    exclude: [vulgar, offensive, derogatory]
-
-temporal:
-  exclude: [archaic, obsolete]
+exclude:
+  register: [vulgar, offensive, derogatory]
+  temporal: [archaic, obsolete]
