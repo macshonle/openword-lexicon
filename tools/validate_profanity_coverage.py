@@ -55,7 +55,7 @@ def load_lexicon(lexicon_path: Path) -> Dict[str, dict]:
     with open(lexicon_path, 'rb') as f:
         for line in f:
             entry = orjson.loads(line)
-            word = entry['word']
+            word = entry['id']
             lexicon[word] = entry
 
     logger.info(f"  Loaded {len(lexicon):,} entries")

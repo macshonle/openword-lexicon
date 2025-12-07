@@ -48,7 +48,7 @@ def extract_concreteness(entry: Dict[str, Any]) -> Optional[float]:
 
 def extract_syllables(entry: Dict[str, Any]) -> Optional[int]:
     """Extract syllable count."""
-    return entry.get('syllables')
+    return entry.get('nsyll')
 
 
 def extract_sources(entry: Dict[str, Any]) -> Optional[List[str]]:
@@ -100,7 +100,7 @@ def export_module(
 
                 try:
                     entry = json.loads(line)
-                    word = entry['word']
+                    word = entry['id']
                     value = extractor(entry)
 
                     if value is not None:

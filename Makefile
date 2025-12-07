@@ -205,6 +205,9 @@ build-en: fetch-en $(LEXEMES_JSON) $(SENSES_JSON)
 $(WIKT_JSON_PARENT):
 	@mkdir -p "$(WIKT_JSON_PARENT)"
 
+.PHONY: build-wikt-json
+build-wikt-json: $(WIKT_JSON_SORTED)
+
 # Build and sort Wiktionary JSONL using Rust scanner
 # 1. Extract from XML dump to unsorted JSONL (kept for traceability)
 # 2. Sort lexicographically by word (ensures duplicate entries are consecutive,

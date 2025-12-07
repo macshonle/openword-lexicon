@@ -58,7 +58,7 @@ def load_lexicon(lexicon_path: Path) -> Dict[str, dict]:
     with open(lexicon_path, 'rb') as f:
         for line in f:
             entry = orjson.loads(line)
-            word = entry['word']
+            word = entry['id']
             lexicon[word] = entry
 
     logger.info(f"  Loaded {len(lexicon):,} entries")
@@ -79,7 +79,7 @@ def analyze_childish_terms(lexicon: Dict[str, dict]) -> dict:
                 'labels': register_labels,
                 'sources': entry.get('sources', []),
                 'frequency_tier': entry.get('frequency_tier'),
-                'syllables': entry.get('syllables'),
+                'nsyll': entry.get('nsyll'),
             }
 
     # Statistics

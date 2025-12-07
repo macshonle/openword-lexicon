@@ -77,11 +77,11 @@ def load_lexicon_words(build_path: Path) -> Set[str]:
 
             try:
                 entry = json.loads(line)
-                word = entry.get('word', '').strip()
+                word = entry.get('id', '').strip()
 
                 # Skip multi-word phrases for ENABLE comparison
                 # (ENABLE only contains single words)
-                if entry.get('word_count', 1) > 1:
+                if entry.get('wc', 1) > 1:
                     continue
 
                 if word:

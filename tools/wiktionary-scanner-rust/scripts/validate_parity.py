@@ -149,7 +149,7 @@ def compare_files(python_path: Path, rust_path: Path) -> dict:
                     diffs = diff_entries(py_entry, rust_entry)
                     results["mismatches"].append({
                         "line": line_num,
-                        "word": py_entry.get("word") or rust_entry.get("word"),
+                        "id": py_entry.get("id") or rust_entry.get("id"),
                         "pos": py_entry.get("pos") or rust_entry.get("pos"),
                         "differences": diffs,
                     })
@@ -211,7 +211,7 @@ def main():
                 if "error" in m:
                     print(f"  Line {m['line']}: {m['error']}")
                 else:
-                    print(f"  Line {m['line']}: {m['word']} ({m['pos']})")
+                    print(f"  Line {m['line']}: {m['id']} ({m['pos']})")
                     for key, diff in m.get('differences', {}).items():
                         if 'python_only' in diff:
                             print(f"    {key}: Python has {diff['python_only']!r}, Rust missing")

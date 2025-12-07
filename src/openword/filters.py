@@ -367,7 +367,7 @@ def filter_two_file(
             lexeme_predicate=lambda l: l.get('frequency_tier', 'Z') <= 'I',
             sense_predicate=lambda s: s.get('pos') == 'NOU'
         ):
-            print(lexeme['word'])
+            print(lexeme['id'])
 
         # Get words where ALL senses are non-profane (strict)
         for lexeme, senses in filter_two_file(
@@ -375,7 +375,7 @@ def filter_two_file(
             sense_predicate=lambda s: not sense_is_profane(s),
             require_all_senses=True
         ):
-            print(lexeme['word'])
+            print(lexeme['id'])
     """
     # Build senses index for efficient random access
     senses_index = SensesIndex.from_file(senses_path)
@@ -451,7 +451,7 @@ def filter_two_file_words_only(
         lexeme_path, senses_path,
         lexeme_predicate, sense_predicate, require_all_senses
     ):
-        yield lexeme['word']
+        yield lexeme['id']
 
 
 def apply_two_file_filters(
@@ -605,7 +605,7 @@ def make_word_form_predicate(
         Function that returns True for lexemes with valid word forms
     """
     def predicate(lexeme: dict) -> bool:
-        word = lexeme.get('word', '')
+        word = lexeme.get('id', '')
 
         if exclude_fragments and is_contraction_fragment(word):
             return False
@@ -696,7 +696,7 @@ def matches_syllables(entry: dict, min_syllables: Optional[int] = None,
         # Words with syllable data (any count)
         matches_syllables(entry, require_syllables=True)
     """
-    syllable_count = entry.get('syllables')
+    syllable_count = entry.get('nsyll')
 
     # If requiring syllable data and it's missing, exclude
     if require_syllables and syllable_count is None:

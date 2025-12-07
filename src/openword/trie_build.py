@@ -86,7 +86,7 @@ def build_trie_simple(
 
                 try:
                     entry = json.loads(line)
-                    word = entry['word']
+                    word = entry['id']
 
                     # Apply filter if provided
                     if word_filter is None or word_filter(word):

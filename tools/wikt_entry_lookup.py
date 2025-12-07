@@ -166,7 +166,7 @@ class EntryMapper:
 
                     try:
                         entry = json.loads(line)
-                        w = entry.get('word')
+                        w = entry.get('id')
 
                         if w and w not in seen_words:
                             self._word_to_ordinal[w] = ordinal
@@ -188,7 +188,7 @@ def format_entry(entry: Dict[str, Any], index: int = 0) -> str:
     if index > 0:
         lines.append(f"\n--- Entry {index + 1} ---")
 
-    word = entry.get('word', '?')
+    word = entry.get('id', '?')
     pos = entry.get('pos', [])
     labels = entry.get('labels', {})
 
@@ -213,7 +213,7 @@ def format_entry(entry: Dict[str, Any], index: int = 0) -> str:
         lines.append(f"Flags: {', '.join(flags)}")
 
     # Syllables
-    syllables = entry.get('syllables')
+    syllables = entry.get('nsyll')
     if syllables:
         lines.append(f"Syllables: {syllables}")
 

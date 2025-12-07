@@ -12,7 +12,7 @@ owlex examples/wordlist-specs/wordle.yaml --output words.txt
 owlex wordle.yaml --output words.txt --enriched enriched.jsonl
 
 # Extract specific fields with jq
-owlex wordle.yaml --enriched data.jsonl --jq '{word, syllables, pos}'
+owlex wordle.yaml --enriched data.jsonl --jq '{id, nsyll, pos}'
 ```
 
 ## Methods
@@ -37,7 +37,7 @@ owlex wordle.yaml --output words.txt
 owlex wordle.yaml --output words.txt --enriched enriched.jsonl
 
 # Extract specific fields with jq projection
-owlex wordle.yaml --enriched data.jsonl --jq '{word, syllables}'
+owlex wordle.yaml --enriched data.jsonl --jq '{id, nsyll}'
 
 # Verbose mode (shows filter statistics)
 owlex wordle.yaml --output words.txt --verbose
@@ -182,11 +182,11 @@ A word can be high-frequency but still inappropriate (e.g., archaic words in his
 
 ```yaml
 pos:
-  include: [noun, verb]        # Must have one of these
-  exclude: [interjection]      # Must not have any of these
+  include: [NOU, VRB]        # Must have one of these
+  exclude: [ITJ]             # Must not have any of these
 ```
 
-POS tags: `noun`, `verb`, `adjective`, `adverb`, `pronoun`, `preposition`, `conjunction`, `interjection`, `determiner`, `particle`, `proper noun`
+POS tags use 3-letter codes: `NOU`, `VRB`, `ADJ`, `ADV`, `PRN`, `ADP`, `CNJ`, `ITJ`, `DET`, `PRT`, `NAM` (proper noun), `PHR`, `PRV`, `PPP`, `IDM`, `AFX`, `NUM`, `SYM`, `MLT`, `CTN`. See `schema/pos.yaml` for full details.
 
 ### Concreteness Filters
 
@@ -260,13 +260,19 @@ frequency:
 
 ### Proper Noun Filters
 
-> **Note:** Proper noun filtering is not yet fully implemented. The `has_common_usage` field is not currently populated in the data pipeline. For now, use WordNet `lexnames` to identify proper nouns (words with only `noun.person` or `noun.location` categories).
+Proper nouns use the `NAM` POS code, distinct from common nouns (`NOU`). To filter:
 
 ```yaml
-# NOT YET IMPLEMENTED - will error
-# proper_noun:
-#   require_common_usage: true  # "bill" OK, "Aaron" excluded
+# Exclude proper nouns
+pos:
+  exclude: [NAM]
+
+# Include only proper nouns
+pos:
+  include: [NAM]
 ```
+
+For words that have both common and proper usages (e.g., "bill" as a common noun and "Bill" as a name), the sense-level data in `en-senses.jsonl` distinguishes these.
 
 ## Example Specifications
 
@@ -300,7 +306,7 @@ phrase:
   max_words: 1
 
 pos:
-  include: [noun]
+  include: [NOU]
 
 concreteness:
   values: [concrete]
@@ -350,9 +356,9 @@ owlex wordle.yaml --output words.txt --enriched enriched.jsonl
 ```
 
 Each line in `enriched.jsonl` contains:
-- `word` - The word
-- `pos` - Part of speech tags (aggregated from senses)
-- `syllables` - Syllable data
+- `id` - The word
+- `pos` - Part of speech tags (3-letter codes, aggregated from senses)
+- `nsyll` - Syllable count
 - `frequency_tier` - Frequency tier
 - `concreteness` - Concreteness rating
 - `sources` - Contributing sources
@@ -361,10 +367,10 @@ Use `--jq` to project specific fields:
 
 ```bash
 # Extract word + syllables only
-owlex wordle.yaml --enriched data.jsonl --jq '{word, syllables}'
+owlex wordle.yaml --enriched data.jsonl --jq '{id, nsyll}'
 
 # Morphology lookup
-owlex wordle.yaml --enriched data.jsonl --jq '{word, pos, lemmas}'
+owlex wordle.yaml --enriched data.jsonl --jq '{id, pos, lemmas}'
 ```
 
 ## Python Filtering
@@ -381,7 +387,7 @@ def load_lexemes(path='data/intermediate/en-lexemes-enriched.jsonl'):
 
 # Custom filter function
 def is_wordle_word(entry):
-    word = entry['word']
+    word = entry['id']
     return (
         len(word) == 5 and
         word.isalpha() and
@@ -389,7 +395,7 @@ def is_wordle_word(entry):
         entry.get('frequency_tier', 'Z') <= 'I'
     )
 
-wordle_words = [e['word'] for e in load_lexemes() if is_wordle_word(e)]
+wordle_words = [e['id'] for e in load_lexemes() if is_wordle_word(e)]
 ```
 
 ## jq Filtering
@@ -398,17 +404,17 @@ For quick ad-hoc filtering:
 
 ```bash
 # 5-letter words
-jq -r 'select(.word | length == 5) | .word' \
+jq -r 'select(.id | length == 5) | .id' \
     data/intermediate/en-lexemes-enriched.jsonl
 
 # Common nouns
 jq -r 'select(
-    (.pos // [] | contains(["noun"])) and
+    (.pos // [] | contains(["NOU"])) and
     (.frequency_tier // "Z") <= "F"
-) | .word' data/intermediate/en-lexemes-enriched.jsonl
+) | .id' data/intermediate/en-lexemes-enriched.jsonl
 
 # Words with concreteness data
-jq -r 'select(.concreteness != null) | "\(.word)\t\(.concreteness)"' \
+jq -r 'select(.concreteness != null) | "\(.id)\t\(.concreteness)"' \
     data/intermediate/en-lexemes-enriched.jsonl
 ```
 
@@ -438,7 +444,7 @@ Not all words have all metadata:
 | `pos` | ~98% |
 | `labels` | ~11% |
 | `concreteness` | ~3% (~39K words) |
-| `syllables` | ~2% (~30K words) |
+| `nsyll` | ~2% (~30K words) |
 
 When filtering by optional fields, consider using `require_*` options to exclude words without data, or accept that some words may pass filters by default.
 
@@ -449,7 +455,7 @@ For advanced filtering that requires sense-level data (POS per sense, per-sense 
 ```bash
 python -m openword.filters INPUT OUTPUT \
     --senses data/intermediate/en-senses.jsonl \
-    --pos noun --no-profanity
+    --pos NOU --no-profanity
 ```
 
 This uses the senses file which contains per-sense data, correctly handling words like "left" that have multiple parts of speech.

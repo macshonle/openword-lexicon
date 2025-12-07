@@ -1871,9 +1871,9 @@ def build_ordered_entry(
     Build an entry dict with normalized field order for consistent JSON output.
 
     Field order:
-    1. word, pos, word_count (core identifiers)
+    1. id, pos, wc (core identifiers)
     2. is_abbreviation, is_inflected, is_phrase (if true - false is default, omitted)
-    3. syllables (if present)
+    3. nsyll (if present)
     4. phrase_type (if present)
     5. lemma (if present)
     6. domain_tags, region_tags, register_tags, temporal_tags (if present)
@@ -1883,9 +1883,9 @@ def build_ordered_entry(
     entry = {}
 
     # Core fields (always present)
-    entry['word'] = word
+    entry['id'] = word
     entry['pos'] = pos
-    entry['word_count'] = word_count
+    entry['wc'] = word_count
 
     # Boolean predicates (omit when false - false is the default)
     if is_abbreviation:
@@ -1897,7 +1897,7 @@ def build_ordered_entry(
 
     # Optional fields in specified order
     if syllables is not None:
-        entry['syllables'] = syllables
+        entry['nsyll'] = syllables
     if phrase_type is not None:
         entry['phrase_type'] = phrase_type
     if lemma is not None:
@@ -1981,8 +1981,8 @@ def parse_entry(title: str, text: str) -> List[Dict]:
 
     # Word-level data shared across all senses
     word_data = {
-        'word': word,
-        'word_count': word_count,
+        'id': word,
+        'wc': word_count,
         'is_phrase': word_count > 1,
         'is_abbreviation': is_abbreviation,
         'is_inflected': is_inflected,
@@ -1994,7 +1994,7 @@ def parse_entry(title: str, text: str) -> List[Dict]:
     if phrase_type:
         word_data['phrase_type'] = phrase_type
     if syllable_count is not None:
-        word_data['syllables'] = syllable_count
+        word_data['nsyll'] = syllable_count
     if morphology:
         word_data['morphology'] = morphology
     if spelling_region:
@@ -2015,11 +2015,11 @@ def parse_entry(title: str, text: str) -> List[Dict]:
             entry = build_ordered_entry(
                 word=word,
                 pos='unknown',
-                word_count=word_data['word_count'],
+                word_count=word_data['wc'],
                 is_abbreviation=word_data['is_abbreviation'],
                 is_inflected=word_data['is_inflected'],
                 is_phrase=word_data['is_phrase'],
-                syllables=word_data.get('syllables'),
+                syllables=word_data.get('nsyll'),
                 phrase_type=word_data.get('phrase_type'),
                 lemma=word_data.get('lemma'),
                 spelling_region=word_data.get('spelling_region'),
@@ -2039,11 +2039,11 @@ def parse_entry(title: str, text: str) -> List[Dict]:
             entry = build_ordered_entry(
                 word=word,
                 pos=section.pos,
-                word_count=word_data['word_count'],
+                word_count=word_data['wc'],
                 is_abbreviation=word_data['is_abbreviation'],
                 is_inflected=word_data['is_inflected'],
                 is_phrase=word_data['is_phrase'],
-                syllables=word_data.get('syllables'),
+                syllables=word_data.get('nsyll'),
                 phrase_type=word_data.get('phrase_type'),
                 lemma=word_data.get('lemma'),
                 domain_tags=domain_tags if domain_tags else None,

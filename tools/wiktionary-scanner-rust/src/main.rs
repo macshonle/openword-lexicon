@@ -261,8 +261,10 @@ fn is_false(b: &bool) -> bool {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Entry {
     // Core identifiers
+    #[serde(rename = "id")]
     word: String,
     pos: String,  // Single POS, not Vec
+    #[serde(rename = "wc")]
     word_count: usize,
 
     // Boolean predicates (alphabetical order) - omit when false
@@ -274,7 +276,7 @@ pub struct Entry {
     is_phrase: bool,
 
     // Syllables and phrase type (before lemma)
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "nsyll", skip_serializing_if = "Option::is_none")]
     syllables: Option<usize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     phrase_type: Option<String>,
@@ -312,6 +314,7 @@ struct PosSection {
 /// Syllable validation record - shows all sources for cross-validation
 #[derive(Debug, Serialize, Deserialize)]
 struct SyllableValidation {
+    #[serde(rename = "id")]
     word: String,
     rhymes: Option<usize>,
     ipa: Option<usize>,

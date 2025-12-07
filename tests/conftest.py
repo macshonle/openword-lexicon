@@ -129,7 +129,7 @@ def sample_metadata(sample_words):
 
     for i, word in enumerate(sample_words):
         entry = {
-            "word": word,
+            "id": word,
             "pos": pos_options[i % len(pos_options)],
             "labels": {},
             "is_phrase": False,

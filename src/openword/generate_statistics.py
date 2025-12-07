@@ -43,7 +43,7 @@ def load_entries_from_jsonl(input_path: Path) -> Dict[str, dict]:
 
             try:
                 entry = json.loads(line)
-                word = entry.get('word')
+                word = entry.get('id')
                 if word:
                     entries[word] = entry
             except json.JSONDecodeError as e:

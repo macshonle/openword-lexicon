@@ -59,12 +59,12 @@ def load_metadata(meta_path: Path) -> Dict[str, Any]:
                 line = line.strip()
                 if line:
                     entry = json.loads(line)
-                    metadata[entry['word']] = entry
+                    metadata[entry['id']] = entry
     else:
         # Legacy JSON array format
         with open(meta_path, 'r', encoding='utf-8') as f:
             metadata_list = json.load(f)
-        metadata = {entry['word']: entry for entry in metadata_list}
+        metadata = {entry['id']: entry for entry in metadata_list}
 
     return metadata
 
@@ -79,7 +79,7 @@ def load_senses(senses_path: Path) -> Dict[str, Dict[str, Any]]:
 
     Returns a dict with aggregated data per word:
     {
-        'word': {
+        'id': {
             'pos': ['noun', 'verb'],  # List of unique POS
             'labels': {
                 'register': ['informal', 'slang'],
@@ -102,7 +102,7 @@ def load_senses(senses_path: Path) -> Dict[str, Dict[str, Any]]:
                 continue
 
             entry = json.loads(line)
-            word = entry.get('word', '')
+            word = entry.get('id', '')
 
             if word not in word_senses:
                 word_senses[word] = {
@@ -396,7 +396,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     has_frequency = sum(1 for e in metadata.values() if e.get('frequency_tier'))
     has_labels = sum(1 for e in metadata.values() if e.get('labels'))
     has_gloss = sum(1 for e in metadata.values() if e.get('gloss'))
-    has_syllables = sum(1 for e in metadata.values() if e.get('syllables'))
+    has_syllables = sum(1 for e in metadata.values() if e.get('nsyll'))
 
     # Count nouns (using 3-letter POS code)
     nouns = [e for e in metadata.values() if 'NOU' in e.get('pos', [])]
@@ -453,7 +453,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     if has_syllables > 0:
         syllable_dist = Counter()
         for entry in metadata.values():
-            syll_count = entry.get('syllables')
+            syll_count = entry.get('nsyll')
             if syll_count is not None:
                 syllable_dist[syll_count] += 1
 
@@ -486,9 +486,9 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
                     # Filter out proverbs and long phrases from samples
                     words_with_syll = [
                         w for w, e in metadata.items()
-                        if e.get('syllables') == syll_count
+                        if e.get('nsyll') == syll_count
                         and e.get('phrase_type') != 'proverb'
-                        and e.get('word_count', 1) <= 5
+                        and e.get('wc', 1) <= 5
                     ]
                     count = len(words_with_syll)
 
@@ -499,7 +499,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
                         formatted = []
                         for w, meta in words_with_meta:
                             phrase_type = meta.get('phrase_type')
-                            word_count = meta.get('word_count', 1)
+                            word_count = meta.get('wc', 1)
                             if phrase_type or word_count > 1:
                                 annotations = []
                                 if phrase_type:
@@ -517,7 +517,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
                         for w in sample:
                             meta = metadata[w]
                             phrase_type = meta.get('phrase_type')
-                            word_count = meta.get('word_count', 1)
+                            word_count = meta.get('wc', 1)
                             if phrase_type or word_count > 1:
                                 annotations = []
                                 if phrase_type:
@@ -535,7 +535,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
                 report += "\n#### Complete Enumeration for Rare Syllable Counts\n\n"
                 for syll_count in sorted(rare_syllable_counts):
                     words_with_syll_data = [(w, metadata[w]) for w in metadata.keys()
-                                           if metadata[w].get('syllables') == syll_count]
+                                           if metadata[w].get('nsyll') == syll_count]
                     words_with_syll_data.sort(key=lambda x: x[0])  # Sort by word
 
                     count = len(words_with_syll_data)
@@ -544,7 +544,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
                     formatted_words = []
                     for word, meta in words_with_syll_data:
                         phrase_type = meta.get('phrase_type')
-                        word_count = meta.get('word_count')
+                        word_count = meta.get('wc')
 
                         if phrase_type or (word_count and word_count > 3):
                             # Annotate special cases

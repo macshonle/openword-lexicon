@@ -51,20 +51,20 @@ def load_entries(input_file: Path) -> List[Dict]:
 
 def sort_entries(entries: List[Dict]) -> List[Dict]:
     """
-    Sort entries lexicographically by word.
+    Sort entries lexicographically by id.
 
     Uses the same sorting logic as trie_build.py to ensure consistency:
-        sorted(entries, key=lambda e: e['word'])
+        sorted(entries, key=lambda e: e['id'])
 
     This is Python's default lexicographic sort based on Unicode code points.
     """
-    print("Sorting entries by word...")
+    print("Sorting entries by id...")
 
     # Same sorting as trie_build.py line 84
-    sorted_entries = sorted(entries, key=lambda e: e['word'])
+    sorted_entries = sorted(entries, key=lambda e: e['id'])
 
     # Report statistics about duplicates
-    unique_words = len(set(e['word'] for e in entries))
+    unique_words = len(set(e['id'] for e in entries))
     total_entries = len(entries)
     duplicate_entries = total_entries - unique_words
 

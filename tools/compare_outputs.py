@@ -16,7 +16,7 @@ def load_entries(jsonl_path):
     with open(jsonl_path) as f:
         for line in f:
             entry = json.loads(line)
-            entries[entry['word']] = entry
+            entries[entry['id']] = entry
     return entries
 
 
@@ -30,7 +30,7 @@ def compare_field(word, field, py_val, rust_val):
         return None
 
     return {
-        'word': word,
+        'id': word,
         'field': field,
         'python': py_val,
         'rust': rust_val
@@ -57,10 +57,10 @@ def compare_entries(py_entries, rust_entries, sample_size=100):
         rust_entry = rust_entries[word]
 
         # Compare each field
-        for field in ['pos', 'labels', 'word_count', 'is_phrase', 'is_abbreviation',
+        for field in ['pos', 'labels', 'wc', 'is_phrase', 'is_abbreviation',
                       'is_vulgar', 'is_archaic', 'is_rare',
                       'is_informal', 'is_technical', 'is_regional', 'is_inflected',
-                      'is_dated', 'sources', 'phrase_type', 'syllables', 'morphology']:
+                      'is_dated', 'sources', 'phrase_type', 'nsyll', 'morphology']:
 
             py_val = py_entry.get(field)
             rust_val = rust_entry.get(field)
@@ -128,7 +128,7 @@ def print_report(sample_words, differences, field_stats):
             print(f"\n{field.upper()} ({len(diffs)} differences):")
             print("-" * 80)
             for diff in diffs[:5]:  # Show first 5 examples
-                print(f"  Word: {diff['word']}")
+                print(f"  Word: {diff['id']}")
                 print(f"  Python: {diff['python']}")
                 print(f"  Rust:   {diff['rust']}")
                 print()

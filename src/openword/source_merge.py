@@ -17,7 +17,7 @@ Usage:
 
 Output format (lexeme entries):
   {
-    "word": "castle",
+    "id": "castle",
     "sources": ["eowl", "wikt", "wordnet"],
     "license_sources": {"CC-BY-SA-4.0": ["wikt"], "UKACD": ["eowl"], "CC-BY-4.0": ["wordnet"]},
     "sense_offset": 0,
@@ -155,7 +155,7 @@ def load_wikt_lexemes(lexeme_path: Path) -> Tuple[Dict[str, dict], Dict[str, Lis
 
                 try:
                     entry = json.loads(line)
-                    word = entry['word']  # Preserve original case
+                    word = entry['id']  # Preserve original case
                     norm = normalize_word(word)
 
                     # Initialize sources if not present
@@ -225,13 +225,13 @@ def create_secondary_entry(word: str, sources: list, lexnames: Optional[List[str
         license_sources[license_key] = sorted(license_sources[license_key])
 
     entry = {
-        'word': word,
+        'id': word,
         'sources': sorted(sources),
         'license_sources': license_sources,
         'sense_offset': 0,
         'sense_length': 0,
         'sense_count': 0,
-        'word_count': len(word.split()),
+        'wc': len(word.split()),
     }
 
     # Add lexnames if available

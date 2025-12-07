@@ -22,7 +22,7 @@ def extract_wikitext_samples(jsonl_path, words, output_dir):
     with open(jsonl_path) as f:
         for line in f:
             entry = json.loads(line)
-            word = entry['word']
+            word = entry['id']
 
             if word in target_words:
                 found[word] = entry
@@ -54,8 +54,8 @@ def extract_wikitext_samples(jsonl_path, words, output_dir):
             else:
                 print("✗ Regional: None")
 
-            if entry.get('syllables'):
-                print(f"✓ Syllables: {entry['syllables']}")
+            if entry.get('nsyll'):
+                print(f"✓ Syllables: {entry['nsyll']}")
             else:
                 print("✗ Syllables: None")
 

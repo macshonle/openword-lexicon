@@ -19,7 +19,7 @@ Each line in `en-lexemes-enriched.jsonl` is a JSON object:
 
 ```json
 {
-  "word": "castle",
+  "id": "castle",
   "sources": ["eowl", "wikt", "wordnet"],
   "license_sources": {
     "UKACD": ["eowl"],
@@ -28,10 +28,10 @@ Each line in `en-lexemes-enriched.jsonl` is a JSON object:
   },
   "frequency_tier": "H",
   "concreteness": 4.97,
-  "syllables": 2,
+  "nsyll": 2,
   "sense_offset": 12345,
   "sense_length": 3,
-  "pos": ["noun", "verb"],
+  "pos": ["NOU", "VRB"],
   "labels": {
     "register": [],
     "region": [],
@@ -45,7 +45,7 @@ Each line in `en-lexemes-enriched.jsonl` is a JSON object:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `word` | string | The word (NFKC normalized, lowercase) |
+| `id` | string | The word (NFKC normalized, lowercase) |
 | `sources` | string[] | Origin sources: `"wikt"`, `"eowl"`, `"wordnet"` |
 
 ### Optional Fields
@@ -54,8 +54,9 @@ Each line in `en-lexemes-enriched.jsonl` is a JSON object:
 |-------|------|-------------|
 | `frequency_tier` | string | A-Z frequency code (see below) |
 | `concreteness` | float | Brysbaert rating 1.0-5.0 |
-| `syllables` | int | Syllable count |
-| `pos` | string[] | Parts of speech |
+| `nsyll` | int | Syllable count |
+| `wc` | int | Word count (tokens in phrase) |
+| `pos` | string[] | Parts of speech (3-letter codes) |
 | `labels` | object | Register, region, domain, temporal labels |
 | `sense_offset` | int | Byte offset into senses file |
 | `sense_length` | int | Number of senses |
@@ -102,19 +103,30 @@ Each line in `en-lexemes-enriched.jsonl` is a JSON object:
 
 ## Part of Speech Tags
 
-| Tag | Description | Example |
-|-----|-------------|---------|
-| `noun` | Noun | castle, freedom |
-| `verb` | Verb | run, think |
-| `adjective` | Adjective | red, happy |
-| `adverb` | Adverb | quickly, very |
-| `pronoun` | Pronoun | she, they |
-| `preposition` | Preposition | in, under |
-| `conjunction` | Conjunction | and, but |
-| `interjection` | Interjection | wow, ouch |
-| `determiner` | Determiner | the, a |
-| `particle` | Particle | up (in "give up") |
-| `proper` | Proper noun | London, John |
+POS tags use 3-letter codes. See `schema/pos.yaml` for the full specification.
+
+| Code | Name | Description |
+|------|------|-------------|
+| `NOU` | Noun | Common nouns (castle, freedom) |
+| `NAM` | Proper Noun | Names (London, John) |
+| `VRB` | Verb | Verbs (run, think) |
+| `ADJ` | Adjective | Adjectives (red, happy) |
+| `ADV` | Adverb | Adverbs (quickly, very) |
+| `PRN` | Pronoun | Pronouns (she, they) |
+| `DET` | Determiner | Determiners/articles (the, a) |
+| `ADP` | Adposition | Prepositions (in, under) |
+| `CNJ` | Conjunction | Conjunctions (and, but) |
+| `PRT` | Particle | Particles (up in "give up") |
+| `ITJ` | Interjection | Exclamations (wow, ouch) |
+| `PHR` | Phrase | Multi-word expressions |
+| `PRV` | Proverb | Traditional sayings |
+| `PPP` | Prepositional Phrase | Phrases with preposition |
+| `IDM` | Idiom | Non-literal expressions |
+| `AFX` | Affix | Prefixes, suffixes |
+| `NUM` | Numeral | Number words |
+| `SYM` | Symbol | Symbols and letters |
+| `MLT` | Multiple | Multiple POS |
+| `CTN` | Contraction | Shortened forms |
 
 ## Labels
 
@@ -251,11 +263,11 @@ Use lexnames to extract words by semantic category:
 
 ```bash
 # Get all animal words
-jq -r 'select(.lexnames // [] | any(. == "noun.animal")) | .word' \
+jq -r 'select(.lexnames // [] | any(. == "noun.animal")) | .id' \
     data/intermediate/en-lexemes-enriched.jsonl
 
 # Get all food words
-jq -r 'select(.lexnames // [] | any(. == "noun.food")) | .word' \
+jq -r 'select(.lexnames // [] | any(. == "noun.food")) | .id' \
     data/intermediate/en-lexemes-enriched.jsonl
 ```
 
@@ -265,8 +277,8 @@ Each line in `en-senses.jsonl` is a JSON object:
 
 ```json
 {
-  "word": "cats",
-  "pos": "noun",
+  "id": "cats",
+  "pos": "NOU",
   "is_inflected": true,
   "lemma": "cat"
 }
@@ -274,8 +286,8 @@ Each line in `en-senses.jsonl` is a JSON object:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `word` | string | The word this sense belongs to |
-| `pos` | string | Part of speech for this sense (`proper` for proper nouns) |
+| `id` | string | The word this sense belongs to |
+| `pos` | string | Part of speech (3-letter code; `NAM` for proper nouns) |
 | `is_inflected` | bool | True if this is an inflected form |
 | `is_abbreviation` | bool | True if this is an abbreviation |
 | `lemma` | string? | Base form for inflected words (null for base forms) |
@@ -289,10 +301,10 @@ Each line in `en-senses.jsonl` is a JSON object:
 The `lemma` field indicates the base/dictionary form of an inflected word:
 
 ```json
-{"word": "cats", "pos": "noun", "is_inflected": true, "lemma": "cat"}
-{"word": "running", "pos": "verb", "is_inflected": true, "lemma": "run"}
-{"word": "went", "pos": "verb", "is_inflected": true, "lemma": "go"}
-{"word": "mice", "pos": "noun", "is_inflected": true, "lemma": "mouse"}
+{"id": "cats", "pos": "NOU", "is_inflected": true, "lemma": "cat"}
+{"id": "running", "pos": "VRB", "is_inflected": true, "lemma": "run"}
+{"id": "went", "pos": "VRB", "is_inflected": true, "lemma": "go"}
+{"id": "mice", "pos": "NOU", "is_inflected": true, "lemma": "mouse"}
 ```
 
 **Key points:**
@@ -374,7 +386,7 @@ Base form is always first in the array. Words can appear under multiple lemmas i
 
 ## Unicode Normalization
 
-All `word` fields are **NFKC normalized** (Unicode Normalization Form KC):
+All `id` fields are **NFKC normalized** (Unicode Normalization Form KC):
 
 ```python
 import unicodedata

@@ -153,7 +153,7 @@ def load_senses_by_word(senses_path: Path) -> Dict[str, List[dict]]:
                 continue
             try:
                 sense = json.loads(line)
-                word = sense.get('word')
+                word = sense.get('id')
                 if word:
                     senses_by_word[word].append(sense)
             except json.JSONDecodeError:
@@ -268,7 +268,7 @@ def compute_statistics_lexeme(entries: Dict[str, dict], senses_by_word: Optional
 
     entries_list = entries.values() if isinstance(entries, dict) else entries
     for entry in entries_list:
-        word = entry.get('word', '')
+        word = entry.get('id', '')
         # Source tracking
         sources = entry.get('sources', ['wikt'])  # Default to wikt for backwards compat
         sources_key = ','.join(sorted(sources))
@@ -286,7 +286,7 @@ def compute_statistics_lexeme(entries: Dict[str, dict], senses_by_word: Optional
             combo['licenses'].add(lic)
 
         # Syllables
-        if entry.get('syllables') is not None:
+        if entry.get('nsyll') is not None:
             with_syllables += 1
             for src in sources:
                 source_metadata[src]['with_syllables'] += 1
@@ -307,7 +307,7 @@ def compute_statistics_lexeme(entries: Dict[str, dict], senses_by_word: Optional
                 source_metadata[src]['with_frequency'] += 1
 
         # Multi-word
-        if entry.get('word_count', 1) > 1:
+        if entry.get('wc', 1) > 1:
             multi_word += 1
 
         # Sense count
@@ -621,7 +621,7 @@ def compute_statistics(entries: Dict[str, dict], senses_by_word: Optional[Dict[s
             freq_counts[tier] += 1
 
         # Multi-word phrases
-        word_count = entry.get('word_count', 1)
+        word_count = entry.get('wc', 1)
         is_multi_word = word_count > 1
         if is_multi_word:
             multi_word += 1

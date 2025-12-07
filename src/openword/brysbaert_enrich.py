@@ -128,7 +128,7 @@ def enrich_entry(
     Returns:
         Enriched entry dictionary
     """
-    word = entry.get('word', '').lower()
+    word = entry.get('id', '').lower()
 
     if word not in ratings:
         return entry
@@ -189,7 +189,7 @@ def process_file(
                     entry = json.loads(line)
 
                     # Check if entry will be enriched
-                    word = entry.get('word', '').lower()
+                    word = entry.get('id', '').lower()
                     had_concreteness = entry.get('concreteness') is not None
 
                     # Enrich entry

@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 LEXEME_SCHEMA = {
     # Required fields
-    'word': {'type': str, 'required': True},
+    'id': {'type': str, 'required': True},
 
     # Core metadata (always present after enrichment)
     'frequency_tier': {'type': str, 'default': 'Z'},
@@ -50,10 +50,10 @@ LEXEME_SCHEMA = {
     'sense_count': {'type': int, 'default': 0},
     'sense_offset': {'type': int, 'default': 0},
     'sense_length': {'type': int, 'default': 0},
-    'word_count': {'type': int, 'default': 1},
+    'wc': {'type': int, 'default': 1},
 
     # Optional enrichment fields
-    'syllables': {'type': int, 'default': None},
+    'nsyll': {'type': int, 'default': None},
     'concreteness': {'type': str, 'default': None},  # 'concrete', 'mixed', 'abstract'
     'concreteness_rating': {'type': float, 'default': None},
     'concreteness_sd': {'type': float, 'default': None},
@@ -92,10 +92,10 @@ FILTER_FIELD_REQUIREMENTS = {
         'max_score': ['frequency_tier'],
     },
     'syllables': {
-        'min': ['syllables'],
-        'max': ['syllables'],
-        'exact': ['syllables'],
-        'require_syllables': ['syllables'],
+        'min': ['nsyll'],
+        'max': ['nsyll'],
+        'exact': ['nsyll'],
+        'require_syllables': ['nsyll'],
     },
     'concreteness': {
         'categories': ['concreteness'],
@@ -103,19 +103,19 @@ FILTER_FIELD_REQUIREMENTS = {
         'max_rating': ['concreteness_rating'],
     },
     'character': {
-        'min_length': ['word'],
-        'max_length': ['word'],
-        'exact_length': ['word'],
-        'char_preset': ['word'],
-        'allowed_chars': ['word'],
-        'must_contain': ['word'],
-        'must_not_contain': ['word'],
-        'pattern': ['word'],
+        'min_length': ['id'],
+        'max_length': ['id'],
+        'exact_length': ['id'],
+        'char_preset': ['id'],
+        'allowed_chars': ['id'],
+        'must_contain': ['id'],
+        'must_not_contain': ['id'],
+        'pattern': ['id'],
     },
     'phrase': {
-        'min_words': ['word_count'],
-        'max_words': ['word_count'],
-        'is_phrase': ['word_count'],
+        'min_words': ['wc'],
+        'max_words': ['wc'],
+        'is_phrase': ['wc'],
         'phrase_type': ['phrase_type'],
     },
     'sources': {
@@ -506,7 +506,7 @@ class OwlexFilter:
 
     def _check_character_filters(self, entry: Dict, filters: Dict) -> bool:
         """Apply character-level filters."""
-        word = entry['word']
+        word = entry['id']
         length = len(word)
 
         # Length constraints
@@ -596,7 +596,7 @@ class OwlexFilter:
 
     def _check_phrase_filters(self, entry: Dict, filters: Dict) -> bool:
         """Apply phrase/word count filters."""
-        word_count = entry.get('word_count', len(entry['word'].split()))
+        word_count = entry.get('wc', len(entry['id'].split()))
         phrase_type = entry.get('phrase_type')
 
         if 'min_words' in filters:
@@ -1076,7 +1076,7 @@ class OwlexFilter:
                     continue
                 try:
                     sense = json.loads(line)
-                    word = sense.get('word')
+                    word = sense.get('id')
                     if word:
                         senses_by_word[word].append(sense)
                 except json.JSONDecodeError:
@@ -1095,14 +1095,14 @@ class OwlexFilter:
         """
         # Start with word-level data
         result = {
-            'word': entry['word'],
+            'id': entry['id'],
             'frequency_tier': entry.get('frequency_tier', 'Z'),
             'sources': entry.get('sources', []),
         }
 
         # Add optional word-level fields if present
-        if 'syllables' in entry:
-            result['syllables'] = entry['syllables']
+        if 'nsyll' in entry:
+            result['nsyll'] = entry['nsyll']
         if 'concreteness' in entry:
             result['concreteness'] = entry['concreteness']
 
@@ -1115,12 +1115,12 @@ class OwlexFilter:
             if sense.get('pos'):
                 pos_set.add(sense['pos'])
 
-            lemma = sense.get('lemma', entry['word'])
+            lemma = sense.get('lemma', entry['id'])
             lemmas_set.add(lemma)
 
             # Build sense detail object
             sense_detail = {'pos': sense.get('pos')}
-            if sense.get('lemma') and sense['lemma'] != entry['word']:
+            if sense.get('lemma') and sense['lemma'] != entry['id']:
                 sense_detail['lemma'] = sense['lemma']
             if sense.get('is_inflected'):
                 sense_detail['is_inflected'] = True
@@ -1132,7 +1132,7 @@ class OwlexFilter:
         # Add aggregated arrays
         if pos_set:
             result['pos'] = sorted(pos_set)
-        if lemmas_set and lemmas_set != {entry['word']}:
+        if lemmas_set and lemmas_set != {entry['id']}:
             result['lemmas'] = sorted(lemmas_set)
 
         # Include senses array if there's meaningful data
@@ -1154,7 +1154,7 @@ class OwlexFilter:
             score += 20
 
         # Length penalty
-        word_len = len(entry['word'])
+        word_len = len(entry['id'])
         if word_len > 12:
             score -= 10
         if word_len > 15:
@@ -1182,7 +1182,7 @@ class OwlexFilter:
 
         # Sort entries
         if sort_by == 'alphabetical':
-            entries = sorted(entries, key=lambda e: e['word'])
+            entries = sorted(entries, key=lambda e: e['id'])
         elif sort_by == 'score':
             entries = sorted(entries, key=lambda e: self.calculate_score(e), reverse=True)
         elif sort_by == 'frequency':
@@ -1194,9 +1194,9 @@ class OwlexFilter:
                 for entry in entries[:5]:
                     tier = entry.get('frequency_tier', 'rare')
                     score = self.tier_scores.get(tier, 0)
-                    logger.info(f"  {entry['word']:15} tier={tier:10} score={score}")
+                    logger.info(f"  {entry['id']:15} tier={tier:10} score={score}")
         elif sort_by == 'length':
-            entries = sorted(entries, key=lambda e: len(e['word']))
+            entries = sorted(entries, key=lambda e: len(e['id']))
 
         # Apply limit
         if limit:
@@ -1211,13 +1211,13 @@ class OwlexFilter:
                     lines.append('\t'.join(fields))
                 return '\n'.join(lines)
             else:
-                return '\n'.join(entry['word'] for entry in entries)
+                return '\n'.join(entry['id'] for entry in entries)
 
         elif output_format == 'json':
             if include_metadata:
                 return json.dumps(entries, indent=2, sort_keys=True)
             else:
-                return json.dumps([entry['word'] for entry in entries], indent=2, sort_keys=True)
+                return json.dumps([entry['id'] for entry in entries], indent=2, sort_keys=True)
 
         elif output_format == 'jsonl':
             lines = []
@@ -1225,7 +1225,7 @@ class OwlexFilter:
                 if include_metadata:
                     lines.append(json.dumps(entry, sort_keys=True))
                 else:
-                    lines.append(json.dumps({'word': entry['word']}, sort_keys=True))
+                    lines.append(json.dumps({'id': entry['id']}, sort_keys=True))
             return '\n'.join(lines)
 
         elif output_format == 'csv':
@@ -1236,7 +1236,7 @@ class OwlexFilter:
                     lines.append(','.join(f'"{f}"' for f in fields))
                 return '\n'.join(lines)
             else:
-                return '\n'.join(entry['word'] for entry in entries)
+                return '\n'.join(entry['id'] for entry in entries)
 
         elif output_format == 'tsv':
             if include_metadata and metadata_fields:
@@ -1246,9 +1246,9 @@ class OwlexFilter:
                     lines.append('\t'.join(fields))
                 return '\n'.join(lines)
             else:
-                return '\n'.join(entry['word'] for entry in entries)
+                return '\n'.join(entry['id'] for entry in entries)
 
-        return '\n'.join(entry['word'] for entry in entries)
+        return '\n'.join(entry['id'] for entry in entries)
 
     def run(
         self,
@@ -1305,7 +1305,7 @@ class OwlexFilter:
 
                     # Augment entry with senses data if needed for filtering
                     if needs_senses_for_filtering:
-                        word = entry.get('word', '')
+                        word = entry.get('id', '')
                         senses = senses_by_word.get(word, [])
                         entry_for_filter = self._augment_entry_for_filtering(entry, senses)
                     else:
@@ -1371,7 +1371,7 @@ class OwlexFilter:
         # Aggregate entries with senses
         enriched_entries = []
         for entry in filtered:
-            word = entry['word']
+            word = entry['id']
             senses = senses_by_word.get(word, [])
             enriched = self.aggregate_entry_with_senses(entry, senses)
             enriched_entries.append(enriched)

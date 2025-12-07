@@ -474,6 +474,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "caminite",
   "labels": {
     "domain": [],
     "region": [],
@@ -494,8 +495,7 @@ Representative samples from different source combinations:
   "sources": [
     "wikt"
   ],
-  "word": "caminite",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -503,6 +503,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "future bass",
   "is_phrase": true,
   "labels": {
     "domain": [],
@@ -524,8 +525,7 @@ Representative samples from different source combinations:
   "sources": [
     "wikt"
   ],
-  "word": "future bass",
-  "word_count": 2
+  "wc": 2
 }
 ```
 
@@ -533,6 +533,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "pull quote",
   "is_phrase": true,
   "labels": {
     "domain": [],
@@ -554,8 +555,7 @@ Representative samples from different source combinations:
   "sources": [
     "wikt"
   ],
-  "word": "pull quote",
-  "word_count": 2
+  "wc": 2
 }
 ```
 
@@ -566,6 +566,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "grandpas",
   "labels": {
     "domain": [],
     "region": [],
@@ -590,8 +591,7 @@ Representative samples from different source combinations:
     "eowl",
     "wikt"
   ],
-  "word": "grandpas",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -599,6 +599,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "honkers",
   "labels": {
     "domain": [],
     "region": [
@@ -628,8 +629,7 @@ Representative samples from different source combinations:
     "eowl",
     "wikt"
   ],
-  "word": "honkers",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -637,6 +637,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "O",
+  "id": "chins",
   "labels": {
     "domain": [],
     "region": [],
@@ -651,6 +652,7 @@ Representative samples from different source combinations:
       "eowl"
     ]
   },
+  "nsyll": 1,
   "pos": [
     "NOU",
     "VRB"
@@ -662,9 +664,7 @@ Representative samples from different source combinations:
     "eowl",
     "wikt"
   ],
-  "syllables": 1,
-  "word": "chins",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -675,6 +675,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "genus procyon",
   "labels": {},
   "lexnames": [
     "noun.animal"
@@ -691,8 +692,7 @@ Representative samples from different source combinations:
   "sources": [
     "wordnet"
   ],
-  "word": "genus procyon",
-  "word_count": 2
+  "wc": 2
 }
 ```
 
@@ -700,6 +700,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "genus erignathus",
   "labels": {},
   "lexnames": [
     "noun.animal"
@@ -716,8 +717,7 @@ Representative samples from different source combinations:
   "sources": [
     "wordnet"
   ],
-  "word": "genus erignathus",
-  "word_count": 2
+  "wc": 2
 }
 ```
 
@@ -725,6 +725,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "pseudoscorpionida",
   "labels": {},
   "lexnames": [
     "noun.animal"
@@ -741,8 +742,7 @@ Representative samples from different source combinations:
   "sources": [
     "wordnet"
   ],
-  "word": "pseudoscorpionida",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -753,6 +753,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "Rastas",
   "labels": {
     "domain": [],
     "region": [],
@@ -780,8 +781,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "word": "Rastas",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -789,6 +789,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "miner's cat",
   "is_phrase": true,
   "labels": {
     "domain": [],
@@ -817,8 +818,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "word": "miner's cat",
-  "word_count": 2
+  "wc": 2
 }
 ```
 
@@ -826,6 +826,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "Colorado Desert",
   "is_phrase": true,
   "labels": {
     "domain": [],
@@ -854,8 +855,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "word": "Colorado Desert",
-  "word_count": 2
+  "wc": 2
 }
 ```
 
@@ -869,6 +869,7 @@ Representative samples from different source combinations:
   "concreteness_rating": 3.5,
   "concreteness_sd": 1.46,
   "frequency_tier": "P",
+  "id": "dweller",
   "labels": {
     "domain": [],
     "region": [],
@@ -906,6 +907,7 @@ Representative samples from different source combinations:
     ],
     "type": "suffixed"
   },
+  "nsyll": 2,
   "pos": [
     "NOU"
   ],
@@ -918,9 +920,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "syllables": 2,
-  "word": "dweller",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -931,6 +931,7 @@ Representative samples from different source combinations:
   "concreteness_rating": 3.26,
   "concreteness_sd": 1.51,
   "frequency_tier": "M",
+  "id": "cholera",
   "labels": {
     "domain": [],
     "region": [],
@@ -954,6 +955,7 @@ Representative samples from different source combinations:
       "eowl"
     ]
   },
+  "nsyll": 3,
   "pos": [
     "NOU"
   ],
@@ -966,9 +968,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "syllables": 3,
-  "word": "cholera",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -979,6 +979,7 @@ Representative samples from different source combinations:
   "concreteness_rating": 4.3,
   "concreteness_sd": 1.23,
   "frequency_tier": "J",
+  "id": "frame",
   "labels": {
     "domain": [
       "computing",
@@ -1023,6 +1024,7 @@ Representative samples from different source combinations:
       "eowl"
     ]
   },
+  "nsyll": 1,
   "pos": [
     "NOU",
     "VRB"
@@ -1036,9 +1038,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "syllables": 1,
-  "word": "frame",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1049,6 +1049,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "Airbus",
   "labels": {
     "domain": [
       "aviation"
@@ -1082,6 +1083,7 @@ Representative samples from different source combinations:
     "suffixes": [],
     "type": "compound"
   },
+  "nsyll": 2,
   "pos": [
     "NAM",
     "NOU"
@@ -1094,9 +1096,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "syllables": 2,
-  "word": "Airbus",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1104,6 +1104,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "Dais",
   "labels": {
     "domain": [],
     "region": [],
@@ -1135,8 +1136,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "word": "Dais",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1144,6 +1144,7 @@ Representative samples from different source combinations:
 ```json
 {
   "frequency_tier": "Z",
+  "id": "bombax",
   "labels": {
     "domain": [],
     "region": [],
@@ -1175,8 +1176,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "word": "bombax",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1190,6 +1190,7 @@ Representative samples from different source combinations:
   "concreteness_rating": 2.04,
   "concreteness_sd": 1.37,
   "frequency_tier": "Z",
+  "id": "Nazism",
   "labels": {
     "domain": [],
     "region": [],
@@ -1224,6 +1225,7 @@ Representative samples from different source combinations:
     ],
     "type": "suffixed"
   },
+  "nsyll": 4,
   "pos": [
     "NOU"
   ],
@@ -1235,9 +1237,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "syllables": 4,
-  "word": "Nazism",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1248,6 +1248,7 @@ Representative samples from different source combinations:
   "concreteness_rating": 4.79,
   "concreteness_sd": 0.42,
   "frequency_tier": "Z",
+  "id": "meat grinder",
   "is_phrase": true,
   "labels": {
     "domain": [],
@@ -1281,8 +1282,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "word": "meat grinder",
-  "word_count": 2
+  "wc": 2
 }
 ```
 
@@ -1293,6 +1293,7 @@ Representative samples from different source combinations:
   "concreteness_rating": 2.22,
   "concreteness_sd": 1.12,
   "frequency_tier": "Z",
+  "id": "hierarchical",
   "labels": {
     "domain": [],
     "region": [],
@@ -1313,6 +1314,7 @@ Representative samples from different source combinations:
       "wikt"
     ]
   },
+  "nsyll": 5,
   "pos": [
     "ADJ"
   ],
@@ -1324,9 +1326,7 @@ Representative samples from different source combinations:
     "wikt",
     "wordnet"
   ],
-  "syllables": 5,
-  "word": "hierarchical",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1340,6 +1340,7 @@ Representative samples from different source combinations:
   "concreteness_rating": 1.62,
   "concreteness_sd": 0.94,
   "frequency_tier": "Z",
+  "id": "guilelessly",
   "labels": {
     "domain": [],
     "region": [],
@@ -1378,8 +1379,7 @@ Representative samples from different source combinations:
     "brysbaert",
     "wikt"
   ],
-  "word": "guilelessly",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1390,6 +1390,7 @@ Representative samples from different source combinations:
   "concreteness_rating": 1.59,
   "concreteness_sd": 1.02,
   "frequency_tier": "Z",
+  "id": "ultraconservatism",
   "labels": {
     "domain": [],
     "region": [],
@@ -1428,8 +1429,7 @@ Representative samples from different source combinations:
     "brysbaert",
     "wikt"
   ],
-  "word": "ultraconservatism",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1440,6 +1440,7 @@ Representative samples from different source combinations:
   "concreteness_rating": 1.41,
   "concreteness_sd": 0.95,
   "frequency_tier": "Z",
+  "id": "transcending",
   "labels": {
     "domain": [],
     "region": [],
@@ -1454,6 +1455,7 @@ Representative samples from different source combinations:
       "wikt"
     ]
   },
+  "nsyll": 3,
   "pos": [
     "VRB"
   ],
@@ -1464,9 +1466,7 @@ Representative samples from different source combinations:
     "brysbaert",
     "wikt"
   ],
-  "syllables": 3,
-  "word": "transcending",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1485,6 +1485,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 2.97,
   "concreteness_sd": 1.35,
   "frequency_tier": "L",
+  "id": "activate",
   "labels": {
     "domain": [
       "biology",
@@ -1530,6 +1531,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     ],
     "type": "suffixed"
   },
+  "nsyll": 3,
   "pos": [
     "VRB"
   ],
@@ -1542,9 +1544,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "syllables": 3,
-  "word": "activate",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1556,6 +1556,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 3.21,
   "concreteness_sd": 1.69,
   "frequency_tier": "L",
+  "id": "delta",
   "labels": {
     "domain": [
       "chemistry",
@@ -1592,6 +1593,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "eowl"
     ]
   },
+  "nsyll": 2,
   "pos": [
     "NOU",
     "VRB"
@@ -1605,9 +1607,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "syllables": 2,
-  "word": "delta",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1619,6 +1619,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 4.79,
   "concreteness_sd": 0.62,
   "frequency_tier": "I",
+  "id": "flag",
   "labels": {
     "domain": [
       "aviation",
@@ -1663,6 +1664,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "eowl"
     ]
   },
+  "nsyll": 1,
   "pos": [
     "NOU",
     "VRB"
@@ -1676,9 +1678,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "syllables": 1,
-  "word": "flag",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1690,6 +1690,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 4.41,
   "concreteness_sd": 1.18,
   "frequency_tier": "J",
+  "id": "port",
   "labels": {
     "domain": [
       "aviation",
@@ -1734,6 +1735,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "eowl"
     ]
   },
+  "nsyll": 1,
   "pos": [
     "ADJ",
     "NOU",
@@ -1748,9 +1750,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "syllables": 1,
-  "word": "port",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1759,6 +1759,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 ```json
 {
   "frequency_tier": "Z",
+  "id": "AA",
   "labels": {
     "domain": [
       "aviation",
@@ -1808,8 +1809,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "word": "AA",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1818,6 +1818,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
 ```json
 {
   "frequency_tier": "Z",
+  "id": "ER",
   "labels": {
     "domain": [
       "biology",
@@ -1861,8 +1862,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "word": "ER",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1874,6 +1874,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 4.67,
   "concreteness_sd": 0.62,
   "frequency_tier": "G",
+  "id": "bar",
   "labels": {
     "domain": [
       "law",
@@ -1919,6 +1920,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "eowl"
     ]
   },
+  "nsyll": 1,
   "pos": [
     "ADP",
     "NOU",
@@ -1933,9 +1935,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "syllables": 1,
-  "word": "bar",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -1947,6 +1947,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 3.86,
   "concreteness_sd": 1.48,
   "frequency_tier": "H",
+  "id": "base",
   "labels": {
     "domain": [
       "aviation",
@@ -1998,6 +1999,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "eowl"
     ]
   },
+  "nsyll": 1,
   "pos": [
     "ADJ",
     "NOU",
@@ -2012,9 +2014,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "syllables": 1,
-  "word": "base",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -2026,6 +2026,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 4.81,
   "concreteness_sd": 0.48,
   "frequency_tier": "I",
+  "id": "crown",
   "labels": {
     "domain": [
       "chemistry",
@@ -2070,6 +2071,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "eowl"
     ]
   },
+  "nsyll": 1,
   "pos": [
     "ADJ",
     "NOU",
@@ -2084,9 +2086,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "syllables": 1,
-  "word": "crown",
-  "word_count": 1
+  "wc": 1
 }
 ```
 
@@ -2098,6 +2098,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
   "concreteness_rating": 1.79,
   "concreteness_sd": 1.17,
   "frequency_tier": "I",
+  "id": "negative",
   "labels": {
     "domain": [
       "chemistry",
@@ -2132,6 +2133,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
       "eowl"
     ]
   },
+  "nsyll": 3,
   "pos": [
     "ADJ",
     "ITJ",
@@ -2147,9 +2149,7 @@ These entries have extensive metadata (multiple sources, labels, glosses, etc.)
     "wikt",
     "wordnet"
   ],
-  "syllables": 3,
-  "word": "negative",
-  "word_count": 1
+  "wc": 1
 }
 ```
 

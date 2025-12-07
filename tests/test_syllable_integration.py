@@ -36,12 +36,12 @@ def test_syllable_filtering_exact():
 
         # Test entries
         test_entries = [
-            {"word": "table", "syllables": 2},      # Should pass
-            {"word": "cat", "syllables": 1},        # Should fail (not 2)
-            {"word": "elephant", "syllables": 3},   # Should fail (not 2)
-            {"word": "button", "syllables": 2},     # Should pass
-            {"word": "unknown", "syllables": None}, # Should fail (require_syllables)
-            {"word": "window", "syllables": 2},     # Should pass
+            {"id": "table", "nsyll": 2},      # Should pass
+            {"id": "cat", "nsyll": 1},        # Should fail (not 2)
+            {"id": "elephant", "nsyll": 3},   # Should fail (not 2)
+            {"id": "button", "nsyll": 2},     # Should pass
+            {"id": "unknown", "nsyll": None}, # Should fail (require_syllables)
+            {"id": "window", "nsyll": 2},     # Should pass
         ]
 
         results = [owlex.filter_entry(e) for e in test_entries]
@@ -74,13 +74,13 @@ def test_syllable_filtering_range():
         owlex = OwlexFilter(spec_path)
 
         test_entries = [
-            {"word": "I", "syllables": 1},              # Should fail (< 2)
-            {"word": "table", "syllables": 2},          # Should pass
-            {"word": "elephant", "syllables": 3},       # Should pass
-            {"word": "dictionary", "syllables": 4},     # Should pass
-            {"word": "encyclopedia", "syllables": 6},   # Should fail (> 4)
-            {"word": "cat", "syllables": 1},            # Should fail (< 2)
-            {"word": "unknown"},                        # Should fail (no data + filter active)
+            {"id": "I", "nsyll": 1},              # Should fail (< 2)
+            {"id": "table", "nsyll": 2},          # Should pass
+            {"id": "elephant", "nsyll": 3},       # Should pass
+            {"id": "dictionary", "nsyll": 4},     # Should pass
+            {"id": "encyclopedia", "nsyll": 6},   # Should fail (> 4)
+            {"id": "cat", "nsyll": 1},            # Should fail (< 2)
+            {"id": "unknown"},                        # Should fail (no data + filter active)
         ]
 
         results = [owlex.filter_entry(e) for e in test_entries]
@@ -112,12 +112,12 @@ def test_syllable_filtering_min_only():
         owlex = OwlexFilter(spec_path)
 
         test_entries = [
-            {"word": "cat", "syllables": 1},                # Should fail
-            {"word": "table", "syllables": 2},              # Should fail
-            {"word": "elephant", "syllables": 3},           # Should fail
-            {"word": "dictionary", "syllables": 4},         # Should pass
-            {"word": "encyclopedia", "syllables": 6},       # Should pass
-            {"word": "philosophical", "syllables": 5},      # Should pass
+            {"id": "cat", "nsyll": 1},                # Should fail
+            {"id": "table", "nsyll": 2},              # Should fail
+            {"id": "elephant", "nsyll": 3},           # Should fail
+            {"id": "dictionary", "nsyll": 4},         # Should pass
+            {"id": "encyclopedia", "nsyll": 6},       # Should pass
+            {"id": "philosophical", "nsyll": 5},      # Should pass
         ]
 
         results = [owlex.filter_entry(e) for e in test_entries]
@@ -153,11 +153,11 @@ def test_syllable_filtering_with_other_filters():
         owlex = OwlexFilter(spec_path)
 
         test_entries = [
-            {"word": "table", "syllables": 2},      # Should pass (2 syl, 5 chars)
-            {"word": "cat", "syllables": 2},        # Should fail (3 chars < 5)
-            {"word": "button", "syllables": 2},     # Should pass (2 syl, 6 chars)
-            {"word": "elephant", "syllables": 3},   # Should fail (3 syllables)
-            {"word": "veryverylongword", "syllables": 2},  # Should fail (>10 chars)
+            {"id": "table", "nsyll": 2},      # Should pass (2 syl, 5 chars)
+            {"id": "cat", "nsyll": 2},        # Should fail (3 chars < 5)
+            {"id": "button", "nsyll": 2},     # Should pass (2 syl, 6 chars)
+            {"id": "elephant", "nsyll": 3},   # Should fail (3 syllables)
+            {"id": "veryverylongword", "nsyll": 2},  # Should fail (>10 chars)
         ]
 
         results = [owlex.filter_entry(e) for e in test_entries]
@@ -190,10 +190,10 @@ def test_syllable_safe_defaults():
         owlex = OwlexFilter(spec_path)
 
         test_entries = [
-            {"word": "table", "syllables": 2},          # Should pass
-            {"word": "unknown1"},                       # Should fail (no syllable data)
-            {"word": "unknown2", "syllables": None},    # Should fail (no syllable data)
-            {"word": "elephant", "syllables": 3},       # Should pass
+            {"id": "table", "nsyll": 2},          # Should pass
+            {"id": "unknown1"},                       # Should fail (no syllable data)
+            {"id": "unknown2", "nsyll": None},    # Should fail (no syllable data)
+            {"id": "elephant", "nsyll": 3},       # Should pass
         ]
 
         results = [owlex.filter_entry(e) for e in test_entries]
@@ -225,9 +225,9 @@ def test_no_syllable_filters():
         owlex = OwlexFilter(spec_path)
 
         test_entries = [
-            {"word": "table", "syllables": 2},      # Should pass
-            {"word": "unknown"},                    # Should pass (no syllable filter)
-            {"word": "cat", "syllables": None},     # Should pass
+            {"id": "table", "nsyll": 2},      # Should pass
+            {"id": "unknown"},                    # Should pass (no syllable filter)
+            {"id": "cat", "nsyll": None},     # Should pass
         ]
 
         results = [owlex.filter_entry(e) for e in test_entries]

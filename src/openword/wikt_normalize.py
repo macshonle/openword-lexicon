@@ -76,9 +76,9 @@ def aggregate_word_senses(
     Returns (lexeme_entry, sense_entries)
     """
     # Extract word-level properties (take first non-null)
-    syllables = next((s.get('syllables') for s in senses if s.get('syllables') is not None), None)
+    syllables = next((s.get('nsyll') for s in senses if s.get('nsyll') is not None), None)
     morphology = next((s.get('morphology') for s in senses if s.get('morphology')), None)
-    word_count = senses[0].get('word_count', 1)
+    word_count = senses[0].get('wc', 1)
     phrase_type = next((s.get('phrase_type') for s in senses if s.get('phrase_type')), None)
     is_phrase = senses[0].get('is_phrase', False)
     spelling_region = next((s.get('spelling_region') for s in senses if s.get('spelling_region')), None)
@@ -95,7 +95,7 @@ def aggregate_word_senses(
 
             # Create sense entry with only sense-level fields
             sense_entry = {
-                'word': word,
+                'id': word,
                 'pos': sense.get('pos', 'unknown'),
             }
 
@@ -120,8 +120,8 @@ def aggregate_word_senses(
 
     # Create lexeme entry
     lexeme = {
-        'word': word,
-        'word_count': word_count,
+        'id': word,
+        'wc': word_count,
         'sense_count': len(senses),  # Original sense count before deduplication
         'sense_offset': current_sense_offset,
         'sense_length': len(unique_senses),
@@ -129,7 +129,7 @@ def aggregate_word_senses(
 
     # Add optional fields only if present
     if syllables is not None:
-        lexeme['syllables'] = syllables
+        lexeme['nsyll'] = syllables
     if is_phrase:
         lexeme['is_phrase'] = True
     if phrase_type:
@@ -168,7 +168,7 @@ def normalize_wiktionary(
     original_sense_count = 0
 
     for entry in read_jsonl(input_path):
-        word = entry.get('word', '')
+        word = entry.get('id', '')
         original_sense_count += 1
 
         if word != current_word:

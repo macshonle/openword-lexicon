@@ -24,98 +24,98 @@ def mini_lexemes():
     """
     return [
         # Common 5-letter nouns (Wordle candidates)
-        {"word": "apple", "pos": ["noun"], "frequency_tier": "B", "sources": ["wikt", "eowl"],
-         "labels": {}, "concreteness": "concrete", "syllables": 2},
-        {"word": "bread", "pos": ["noun"], "frequency_tier": "C", "sources": ["wikt", "eowl"],
-         "labels": {}, "concreteness": "concrete", "syllables": 1},
-        {"word": "chair", "pos": ["noun"], "frequency_tier": "D", "sources": ["wikt"],
-         "labels": {}, "concreteness": "concrete", "syllables": 1},
-        {"word": "dream", "pos": ["noun", "verb"], "frequency_tier": "C", "sources": ["wikt", "wordnet"],
-         "labels": {}, "concreteness": "abstract", "syllables": 1},
-        {"word": "earth", "pos": ["noun"], "frequency_tier": "B", "sources": ["wikt", "wordnet"],
-         "labels": {}, "concreteness": "concrete", "syllables": 1},
+        {"id": "apple", "pos": ["noun"], "frequency_tier": "B", "sources": ["wikt", "eowl"],
+         "labels": {}, "concreteness": "concrete", "nsyll": 2},
+        {"id": "bread", "pos": ["noun"], "frequency_tier": "C", "sources": ["wikt", "eowl"],
+         "labels": {}, "concreteness": "concrete", "nsyll": 1},
+        {"id": "chair", "pos": ["noun"], "frequency_tier": "D", "sources": ["wikt"],
+         "labels": {}, "concreteness": "concrete", "nsyll": 1},
+        {"id": "dream", "pos": ["noun", "verb"], "frequency_tier": "C", "sources": ["wikt", "wordnet"],
+         "labels": {}, "concreteness": "abstract", "nsyll": 1},
+        {"id": "earth", "pos": ["noun"], "frequency_tier": "B", "sources": ["wikt", "wordnet"],
+         "labels": {}, "concreteness": "concrete", "nsyll": 1},
 
         # Short common words
-        {"word": "cat", "pos": ["noun"], "frequency_tier": "A", "sources": ["wikt", "eowl"],
-         "labels": {}, "concreteness": "concrete", "syllables": 1},
-        {"word": "dog", "pos": ["noun"], "frequency_tier": "A", "sources": ["wikt", "eowl"],
-         "labels": {}, "concreteness": "concrete", "syllables": 1},
-        {"word": "the", "pos": ["determiner"], "frequency_tier": "A", "sources": ["wikt"],
-         "labels": {}, "syllables": 1},
-        {"word": "run", "pos": ["verb", "noun"], "frequency_tier": "A", "sources": ["wikt"],
-         "labels": {}, "syllables": 1},
+        {"id": "cat", "pos": ["noun"], "frequency_tier": "A", "sources": ["wikt", "eowl"],
+         "labels": {}, "concreteness": "concrete", "nsyll": 1},
+        {"id": "dog", "pos": ["noun"], "frequency_tier": "A", "sources": ["wikt", "eowl"],
+         "labels": {}, "concreteness": "concrete", "nsyll": 1},
+        {"id": "the", "pos": ["determiner"], "frequency_tier": "A", "sources": ["wikt"],
+         "labels": {}, "nsyll": 1},
+        {"id": "run", "pos": ["verb", "noun"], "frequency_tier": "A", "sources": ["wikt"],
+         "labels": {}, "nsyll": 1},
 
         # Words with special characters
-        {"word": "don't", "pos": ["verb"], "frequency_tier": "A", "sources": ["wikt"],
-         "labels": {}, "syllables": 1},
-        {"word": "self-help", "pos": ["noun"], "frequency_tier": "H", "sources": ["wikt"],
-         "labels": {}, "syllables": 2},
-        {"word": "re-enter", "pos": ["verb"], "frequency_tier": "G", "sources": ["wikt"],
-         "labels": {}, "syllables": 3},
+        {"id": "don't", "pos": ["verb"], "frequency_tier": "A", "sources": ["wikt"],
+         "labels": {}, "nsyll": 1},
+        {"id": "self-help", "pos": ["noun"], "frequency_tier": "H", "sources": ["wikt"],
+         "labels": {}, "nsyll": 2},
+        {"id": "re-enter", "pos": ["verb"], "frequency_tier": "G", "sources": ["wikt"],
+         "labels": {}, "nsyll": 3},
 
         # Multi-word phrases
-        {"word": "hot dog", "pos": ["noun"], "frequency_tier": "E", "sources": ["wikt"],
-         "labels": {}, "concreteness": "concrete", "syllables": 2, "word_count": 2},
-        {"word": "ice cream", "pos": ["noun"], "frequency_tier": "D", "sources": ["wikt"],
-         "labels": {}, "concreteness": "concrete", "syllables": 2, "word_count": 2},
+        {"id": "hot dog", "pos": ["noun"], "frequency_tier": "E", "sources": ["wikt"],
+         "labels": {}, "concreteness": "concrete", "nsyll": 2, "wc": 2},
+        {"id": "ice cream", "pos": ["noun"], "frequency_tier": "D", "sources": ["wikt"],
+         "labels": {}, "concreteness": "concrete", "nsyll": 2, "wc": 2},
 
         # Words with labels
-        {"word": "damn", "pos": ["interjection", "verb"], "frequency_tier": "D", "sources": ["wikt"],
-         "labels": {"register": ["vulgar"]}, "syllables": 1},
-        {"word": "bloody", "pos": ["adjective"], "frequency_tier": "E", "sources": ["wikt"],
-         "labels": {"register": ["offensive"], "region": ["en-GB"]}, "syllables": 2},
-        {"word": "thee", "pos": ["pronoun"], "frequency_tier": "G", "sources": ["wikt"],
-         "labels": {"temporal": ["archaic"]}, "syllables": 1},
-        {"word": "hither", "pos": ["adverb"], "frequency_tier": "H", "sources": ["wikt"],
-         "labels": {"temporal": ["archaic", "obsolete"]}, "syllables": 2},
-        {"word": "whilst", "pos": ["conjunction"], "frequency_tier": "F", "sources": ["wikt"],
-         "labels": {"temporal": ["dated"], "region": ["en-GB"]}, "syllables": 1},
+        {"id": "damn", "pos": ["interjection", "verb"], "frequency_tier": "D", "sources": ["wikt"],
+         "labels": {"register": ["vulgar"]}, "nsyll": 1},
+        {"id": "bloody", "pos": ["adjective"], "frequency_tier": "E", "sources": ["wikt"],
+         "labels": {"register": ["offensive"], "region": ["en-GB"]}, "nsyll": 2},
+        {"id": "thee", "pos": ["pronoun"], "frequency_tier": "G", "sources": ["wikt"],
+         "labels": {"temporal": ["archaic"]}, "nsyll": 1},
+        {"id": "hither", "pos": ["adverb"], "frequency_tier": "H", "sources": ["wikt"],
+         "labels": {"temporal": ["archaic", "obsolete"]}, "nsyll": 2},
+        {"id": "whilst", "pos": ["conjunction"], "frequency_tier": "F", "sources": ["wikt"],
+         "labels": {"temporal": ["dated"], "region": ["en-GB"]}, "nsyll": 1},
 
         # Rare/uncommon words
-        {"word": "pulchritudinous", "pos": ["adjective"], "frequency_tier": "Z", "sources": ["wikt"],
-         "labels": {}, "syllables": 6},
-        {"word": "defenestration", "pos": ["noun"], "frequency_tier": "Y", "sources": ["wikt", "wordnet"],
-         "labels": {}, "syllables": 5},
+        {"id": "pulchritudinous", "pos": ["adjective"], "frequency_tier": "Z", "sources": ["wikt"],
+         "labels": {}, "nsyll": 6},
+        {"id": "defenestration", "pos": ["noun"], "frequency_tier": "Y", "sources": ["wikt", "wordnet"],
+         "labels": {}, "nsyll": 5},
 
         # Words from different sources
-        {"word": "syzygy", "pos": ["noun"], "frequency_tier": "Y", "sources": ["wordnet"],
-         "labels": {}, "syllables": 3},
-        {"word": "aardvark", "pos": ["noun"], "frequency_tier": "I", "sources": ["eowl", "wordnet"],
-         "labels": {}, "concreteness": "concrete", "syllables": 2},
+        {"id": "syzygy", "pos": ["noun"], "frequency_tier": "Y", "sources": ["wordnet"],
+         "labels": {}, "nsyll": 3},
+        {"id": "aardvark", "pos": ["noun"], "frequency_tier": "I", "sources": ["eowl", "wordnet"],
+         "labels": {}, "concreteness": "concrete", "nsyll": 2},
 
         # Regional variants
-        {"word": "color", "pos": ["noun", "verb"], "frequency_tier": "B", "sources": ["wikt"],
-         "labels": {}, "spelling_region": "en-US", "syllables": 2},
-        {"word": "colour", "pos": ["noun", "verb"], "frequency_tier": "B", "sources": ["wikt"],
-         "labels": {}, "spelling_region": "en-GB", "syllables": 2},
+        {"id": "color", "pos": ["noun", "verb"], "frequency_tier": "B", "sources": ["wikt"],
+         "labels": {}, "spelling_region": "en-US", "nsyll": 2},
+        {"id": "colour", "pos": ["noun", "verb"], "frequency_tier": "B", "sources": ["wikt"],
+         "labels": {}, "spelling_region": "en-GB", "nsyll": 2},
 
         # Words with specific prefixes/suffixes
-        {"word": "unhappy", "pos": ["adjective"], "frequency_tier": "E", "sources": ["wikt"],
-         "labels": {}, "syllables": 3},
-        {"word": "running", "pos": ["verb", "noun"], "frequency_tier": "B", "sources": ["wikt"],
-         "labels": {}, "syllables": 2},
-        {"word": "preview", "pos": ["noun", "verb"], "frequency_tier": "F", "sources": ["wikt"],
-         "labels": {}, "syllables": 2},
-        {"word": "rethink", "pos": ["verb", "noun"], "frequency_tier": "G", "sources": ["wikt"],
-         "labels": {}, "syllables": 2},
+        {"id": "unhappy", "pos": ["adjective"], "frequency_tier": "E", "sources": ["wikt"],
+         "labels": {}, "nsyll": 3},
+        {"id": "running", "pos": ["verb", "noun"], "frequency_tier": "B", "sources": ["wikt"],
+         "labels": {}, "nsyll": 2},
+        {"id": "preview", "pos": ["noun", "verb"], "frequency_tier": "F", "sources": ["wikt"],
+         "labels": {}, "nsyll": 2},
+        {"id": "rethink", "pos": ["verb", "noun"], "frequency_tier": "G", "sources": ["wikt"],
+         "labels": {}, "nsyll": 2},
 
         # Proper noun edge cases
-        {"word": "bill", "pos": ["noun", "verb"], "frequency_tier": "C", "sources": ["wikt"],
-         "labels": {}, "has_common_usage": True, "has_proper_usage": True, "syllables": 1},
-        {"word": "aaron", "pos": ["noun"], "frequency_tier": "H", "sources": ["wikt"],
-         "labels": {}, "has_common_usage": False, "has_proper_usage": True, "syllables": 2},
+        {"id": "bill", "pos": ["noun", "verb"], "frequency_tier": "C", "sources": ["wikt"],
+         "labels": {}, "has_common_usage": True, "has_proper_usage": True, "nsyll": 1},
+        {"id": "aaron", "pos": ["noun"], "frequency_tier": "H", "sources": ["wikt"],
+         "labels": {}, "has_common_usage": False, "has_proper_usage": True, "nsyll": 2},
 
         # Technical/domain-specific words
-        {"word": "plaintiff", "pos": ["noun"], "frequency_tier": "G", "sources": ["wikt"],
-         "labels": {"domain": ["legal"]}, "syllables": 2},
-        {"word": "diagnosis", "pos": ["noun"], "frequency_tier": "F", "sources": ["wikt"],
-         "labels": {"domain": ["medical"]}, "syllables": 4},
+        {"id": "plaintiff", "pos": ["noun"], "frequency_tier": "G", "sources": ["wikt"],
+         "labels": {"domain": ["legal"]}, "nsyll": 2},
+        {"id": "diagnosis", "pos": ["noun"], "frequency_tier": "F", "sources": ["wikt"],
+         "labels": {"domain": ["medical"]}, "nsyll": 4},
 
         # Slang
-        {"word": "cool", "pos": ["adjective", "verb"], "frequency_tier": "B", "sources": ["wikt"],
-         "labels": {"register": ["slang"]}, "concreteness": "abstract", "syllables": 1},
-        {"word": "dude", "pos": ["noun"], "frequency_tier": "E", "sources": ["wikt"],
-         "labels": {"register": ["informal", "slang"]}, "syllables": 1},
+        {"id": "cool", "pos": ["adjective", "verb"], "frequency_tier": "B", "sources": ["wikt"],
+         "labels": {"register": ["slang"]}, "concreteness": "abstract", "nsyll": 1},
+        {"id": "dude", "pos": ["noun"], "frequency_tier": "E", "sources": ["wikt"],
+         "labels": {"register": ["informal", "slang"]}, "nsyll": 1},
     ]
 
 
@@ -148,7 +148,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "apple" in words
         assert "bread" in words
@@ -164,7 +164,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "cat" in words  # 3 letters
         assert "apple" in words  # 5 letters
@@ -176,7 +176,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "apple" in words
         assert "don't" not in words  # has apostrophe
@@ -189,7 +189,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "unhappy" in words
         assert "re-enter" in words
@@ -203,7 +203,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "running" in words
         assert "run" not in words
@@ -214,7 +214,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "bread" in words
         assert "dream" in words
@@ -228,7 +228,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "apple" in words
         assert "don't" not in words  # has apostrophe
@@ -248,7 +248,7 @@ class TestPhraseFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "apple" in words
         assert "hot dog" not in words
@@ -260,7 +260,7 @@ class TestPhraseFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "hot dog" in words
         assert "ice cream" in words
@@ -280,8 +280,8 @@ class TestFrequencyFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
-        tiers = {e['word']: e['frequency_tier'] for e in results}
+        words = [e['id'] for e in results]
+        tiers = {e['id']: e['frequency_tier'] for e in results}
 
         assert "cat" in words  # A
         assert "dog" in words  # A
@@ -297,7 +297,7 @@ class TestFrequencyFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "aardvark" in words  # I
         assert "syzygy" not in words  # Y
@@ -366,7 +366,7 @@ class TestConcretenessFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "apple" in words
         assert "cat" in words
@@ -387,7 +387,7 @@ class TestLabelFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "damn" not in words
         assert "apple" in words
@@ -398,7 +398,7 @@ class TestLabelFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "damn" not in words
         assert "bloody" not in words
@@ -410,7 +410,7 @@ class TestLabelFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "cool" in words
         assert "dude" in words
@@ -430,7 +430,7 @@ class TestTemporalFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "thee" not in words
         assert "hither" not in words
@@ -442,7 +442,7 @@ class TestTemporalFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "thee" not in words
         assert "hither" not in words
@@ -491,7 +491,7 @@ class TestSpellingRegionFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "color" in words
         assert "colour" not in words
@@ -504,7 +504,7 @@ class TestSpellingRegionFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "colour" in words
         assert "color" not in words
@@ -526,7 +526,7 @@ class TestSyllableFilters:
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
 
         for entry in results:
-            assert entry.get('syllables') == 2
+            assert entry.get('nsyll') == 2
 
     def test_syllable_range(self, mini_lexemes):
         """Test syllable range filter."""
@@ -536,7 +536,7 @@ class TestSyllableFilters:
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
 
         for entry in results:
-            syllables = entry.get('syllables')
+            syllables = entry.get('nsyll')
             if syllables:
                 assert 1 <= syllables <= 2
 
@@ -554,7 +554,7 @@ class TestProperNounFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         assert "bill" in words  # has common usage
         assert "aaron" not in words  # only proper usage
@@ -579,7 +579,7 @@ class TestCombinedFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         # Should include common 5-letter single words
         assert "apple" in words
@@ -608,7 +608,7 @@ class TestCombinedFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['word'] for e in results]
+        words = [e['id'] for e in results]
 
         # Should include concrete nouns
         assert "apple" in words
@@ -707,7 +707,7 @@ frequency:
             for line in f:
                 entry = json.loads(line)
                 if filter_obj.filter_entry(entry):
-                    results.append(entry['word'])
+                    results.append(entry['id'])
 
         # Verify results
         assert len(results) >= 5
@@ -726,7 +726,7 @@ class TestEdgeCases:
 
     def test_empty_pos_array(self, mini_lexemes):
         """Test handling of entries with empty POS array."""
-        entry = {"word": "test", "pos": [], "frequency_tier": "C", "sources": ["wikt"]}
+        entry = {"id": "test", "pos": [], "frequency_tier": "C", "sources": ["wikt"]}
         spec = {"filters": {"pos": {"include": ["noun"]}}}
         filter_obj = MockOwlexFilter(spec)
 
@@ -735,7 +735,7 @@ class TestEdgeCases:
 
     def test_missing_pos_field(self, mini_lexemes):
         """Test handling of entries with missing POS field."""
-        entry = {"word": "test", "frequency_tier": "C", "sources": ["wikt"]}
+        entry = {"id": "test", "frequency_tier": "C", "sources": ["wikt"]}
         spec = {"filters": {"pos": {"include": ["noun"]}}}
         filter_obj = MockOwlexFilter(spec)
 
@@ -744,7 +744,7 @@ class TestEdgeCases:
 
     def test_missing_labels_field(self, mini_lexemes):
         """Test handling of entries with missing labels field."""
-        entry = {"word": "test", "pos": ["noun"], "frequency_tier": "C", "sources": ["wikt"]}
+        entry = {"id": "test", "pos": ["noun"], "frequency_tier": "C", "sources": ["wikt"]}
         spec = {"filters": {"labels": {"register": {"exclude": ["vulgar"]}}}}
         filter_obj = MockOwlexFilter(spec)
 
@@ -754,9 +754,9 @@ class TestEdgeCases:
     def test_frequency_tier_boundary(self, mini_lexemes):
         """Test frequency tier boundary conditions."""
         # Test boundary: exactly at min_tier
-        entry_a = {"word": "test", "frequency_tier": "A", "sources": ["wikt"]}
-        entry_i = {"word": "test", "frequency_tier": "I", "sources": ["wikt"]}
-        entry_j = {"word": "test", "frequency_tier": "J", "sources": ["wikt"]}
+        entry_a = {"id": "test", "frequency_tier": "A", "sources": ["wikt"]}
+        entry_i = {"id": "test", "frequency_tier": "I", "sources": ["wikt"]}
+        entry_j = {"id": "test", "frequency_tier": "J", "sources": ["wikt"]}
 
         spec = {"filters": {"frequency": {"min_tier": "A", "max_tier": "I"}}}
         filter_obj = MockOwlexFilter(spec)
@@ -767,7 +767,7 @@ class TestEdgeCases:
 
     def test_unknown_frequency_tier(self, mini_lexemes):
         """Test handling of unknown frequency tier."""
-        entry = {"word": "test", "frequency_tier": "X", "sources": ["wikt"]}  # Unknown tier
+        entry = {"id": "test", "frequency_tier": "X", "sources": ["wikt"]}  # Unknown tier
         spec = {"filters": {"frequency": {"min_tier": "A", "max_tier": "Z"}}}
         filter_obj = MockOwlexFilter(spec)
 
@@ -778,7 +778,7 @@ class TestEdgeCases:
 
     def test_syllable_filter_without_syllable_data(self, mini_lexemes):
         """Test syllable filter on entry without syllable data."""
-        entry = {"word": "test", "frequency_tier": "C", "sources": ["wikt"]}  # No syllables
+        entry = {"id": "test", "frequency_tier": "C", "sources": ["wikt"]}  # No syllables
 
         spec = {"filters": {"syllables": {"exact": 2}}}
         filter_obj = MockOwlexFilter(spec)
@@ -789,8 +789,8 @@ class TestEdgeCases:
 
     def test_spelling_region_none_vs_missing(self, mini_lexemes):
         """Test spelling region handling for None vs missing field."""
-        entry_none = {"word": "test", "spelling_region": None, "sources": ["wikt"]}
-        entry_missing = {"word": "test", "sources": ["wikt"]}
+        entry_none = {"id": "test", "spelling_region": None, "sources": ["wikt"]}
+        entry_missing = {"id": "test", "sources": ["wikt"]}
 
         spec = {"filters": {"region": {"region": "en-US"}}}
         filter_obj = MockOwlexFilter(spec)
@@ -804,7 +804,7 @@ class TestEdgeCases:
 
     def test_starts_with_empty_string(self, mini_lexemes):
         """Test starts_with with empty string."""
-        entry = {"word": "test", "sources": ["wikt"]}
+        entry = {"id": "test", "sources": ["wikt"]}
         spec = {"filters": {"character": {"starts_with": [""]}}}
         filter_obj = MockOwlexFilter(spec)
 
@@ -814,7 +814,7 @@ class TestEdgeCases:
 
     def test_pattern_special_characters(self, mini_lexemes):
         """Test pattern filter with special regex characters."""
-        entry = {"word": "test", "sources": ["wikt"]}
+        entry = {"id": "test", "sources": ["wikt"]}
         spec = {"filters": {"character": {"pattern": r"^[a-z\.]+$"}}}
         filter_obj = MockOwlexFilter(spec)
 
@@ -871,7 +871,7 @@ class TestKnownBugs:
         """
         # This entry has vulgar label in expected format (how test fixtures work)
         entry_with_label = {
-            "word": "damn",
+            "id": "damn",
             "pos": ["interjection"],
             "labels": {"register": ["vulgar"]},
             "sources": ["wikt"]
@@ -879,7 +879,7 @@ class TestKnownBugs:
 
         # This entry is how the REAL data looks (no labels field)
         entry_real_format = {
-            "word": "damn",
+            "id": "damn",
             "frequency_tier": "D",
             "sources": ["wikt"],
             "sense_count": 1
@@ -904,7 +904,7 @@ class TestKnownBugs:
         """
         # Real data format - no POS field
         entry_real_format = {
-            "word": "cat",
+            "id": "cat",
             "frequency_tier": "A",
             "sources": ["wikt"],
             "sense_count": 1
@@ -922,7 +922,7 @@ class TestKnownBugs:
         Only ~3% of words have concreteness data.
         """
         entry_without_concreteness = {
-            "word": "cat",
+            "id": "cat",
             "frequency_tier": "A",
             "sources": ["wikt"]
         }
@@ -973,7 +973,7 @@ class TestRealDataIntegration:
                 field_counts[key] = field_counts.get(key, 0) + 1
 
         # Expected fields that SHOULD be in lexemes
-        expected_always = ["word", "sources", "frequency_tier"]
+        expected_always = ["id", "sources", "frequency_tier"]
         for field in expected_always:
             assert field in field_counts, f"Missing expected field: {field}"
 
@@ -1008,7 +1008,7 @@ class TestRealDataIntegration:
                 field_counts[key] = field_counts.get(key, 0) + 1
 
         # Expected fields in senses
-        expected = ["word", "pos"]
+        expected = ["id", "pos"]
         for field in expected:
             assert field in field_counts, f"Missing expected field: {field}"
 

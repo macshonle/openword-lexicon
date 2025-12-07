@@ -11,21 +11,21 @@ def test_source_combinations_structure():
     # Sample entries with different source combinations
     entries = {
         'word1': {
-            'word': 'word1',
+            'id': 'word1',
             'sources': ['wikt'],
             'license_sources': {'CC-BY-SA-4.0': 'wikt'},
             'pos': ['NOU'],
             'labels': {},
         },
         'word2': {
-            'word': 'word2',
+            'id': 'word2',
             'sources': ['wikt', 'wordnet'],
             'license_sources': {'CC-BY-SA-4.0': 'wikt', 'WordNet': 'wordnet'},
             'pos': ['VRB'],
             'labels': {},
         },
         'word3': {
-            'word': 'word3',
+            'id': 'word3',
             'sources': ['eowl', 'wikt'],
             'license_sources': {'UKACD': 'eowl', 'CC-BY-SA-4.0': 'wikt'},
             'pos': ['NOU'],
@@ -61,7 +61,7 @@ def test_no_duplicate_license_combinations():
     """Test that license_combinations is NOT in output (removed redundancy)."""
     entries = {
         'word1': {
-            'word': 'word1',
+            'id': 'word1',
             'sources': ['wikt'],
             'license_sources': {'CC-BY-SA-4.0': 'wikt'},
             'pos': ['NOU'],
@@ -79,20 +79,20 @@ def test_basic_statistics():
     """Test basic statistics are computed correctly."""
     entries = {
         'word1': {
-            'word': 'word1',
+            'id': 'word1',
             'sources': ['wikt'],
             'license_sources': {'CC-BY-SA-4.0': 'wikt'},
             'pos': ['NOU'],
             'labels': {'register': ['formal']},
-            'word_count': 1,
+            'wc': 1,
         },
         'word2': {
-            'word': 'word2',
+            'id': 'word2',
             'sources': ['wikt'],
             'license_sources': {'CC-BY-SA-4.0': 'wikt'},
             'pos': ['VRB', 'NOU'],
             'labels': {},
-            'word_count': 1,
+            'wc': 1,
         },
     }
 
@@ -127,7 +127,7 @@ def test_sorted_by_count():
     """Test that source combinations are sorted by count descending."""
     entries = {
         f'word{i}': {
-            'word': f'word{i}',
+            'id': f'word{i}',
             'sources': ['wikt'] if i < 10 else ['eowl'],
             'license_sources': {'CC-BY-SA-4.0': 'wikt'} if i < 10 else {'UKACD': 'eowl'},
             'pos': ['NOU'],

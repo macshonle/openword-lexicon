@@ -63,7 +63,7 @@ def extract_lemmas_from_senses(senses_path: Path) -> Dict[str, Set[str]]:
 
                 try:
                     entry = json.loads(line)
-                    word = entry.get('word')
+                    word = entry.get('id')
                     lemma = entry.get('lemma')
 
                     # Only record if lemma exists and differs from word

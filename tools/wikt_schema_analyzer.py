@@ -42,7 +42,7 @@ def flatten_entry(entry: dict, prefix: str = "") -> Dict[str, Set[Any]]:
 
     for key, value in entry.items():
         # Skip the 'word' field
-        if prefix == "" and key == "word":
+        if prefix == "" and key == "id":
             continue
 
         path = f"{prefix}_{key}" if prefix else key
@@ -109,7 +109,7 @@ def extract_array_combinations(entry: dict, prefix: str = "") -> Dict[str, Tuple
 
     for key, value in entry.items():
         # Skip the 'word' field
-        if prefix == "" and key == "word":
+        if prefix == "" and key == "id":
             continue
 
         path = f"{prefix}_{key}" if prefix else key

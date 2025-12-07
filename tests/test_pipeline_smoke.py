@@ -10,19 +10,19 @@ def test_sample_metadata_format(sample_metadata):
 
     for entry in sample_metadata:
         # Check required fields
-        assert "word" in entry
+        assert "id" in entry
         assert "pos" in entry
         assert "labels" in entry
         assert "sources" in entry
 
         # Check types
-        assert isinstance(entry["word"], str)
+        assert isinstance(entry["id"], str)
         assert isinstance(entry["pos"], list)
         assert isinstance(entry["labels"], dict)
         assert isinstance(entry["sources"], list)
 
-        # Check word is non-empty
-        assert len(entry["word"]) > 0
+        # Check id is non-empty
+        assert len(entry["id"]) > 0
 
 
 def test_metadata_to_jsonl(sample_metadata, temp_dir):

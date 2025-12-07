@@ -51,7 +51,7 @@ def analyze_duplicates(input_file: Path) -> Tuple[Dict[str, List[int]], List[str
 
             try:
                 entry = json.loads(line)
-                word = entry.get('word')
+                word = entry.get('id')
 
                 if word:
                     word_to_lines[word].append(line_num)

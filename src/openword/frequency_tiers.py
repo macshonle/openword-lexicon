@@ -278,14 +278,14 @@ def assign_tier(entry: dict, ranks: Dict[str, int], lowercase_words: Set[str]) -
     that only exist in capitalized forms.
 
     Args:
-        entry: Lexeme entry dict with 'word' key
+        entry: Lexeme entry dict with 'id' key
         ranks: Word to frequency rank mapping (1-indexed)
         lowercase_words: Set of all lowercase words in the lexicon
 
     Returns:
         Entry dict with 'frequency_tier' assigned
     """
-    word = entry['word']
+    word = entry['id']
 
     # Check if this entry should receive a frequency tier
     if not _should_assign_frequency(word, lowercase_words):
@@ -331,7 +331,7 @@ def process_file(input_path: Path, output_path: Path, ranks: Dict[str, int]):
                 try:
                     entry = json.loads(line)
                     entries.append(entry)
-                    word = entry['word']
+                    word = entry['id']
                     if word.islower():
                         lowercase_words.add(word)
                     progress.update(Lines=line_num, Entries=len(entries))

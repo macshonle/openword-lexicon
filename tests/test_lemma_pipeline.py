@@ -18,11 +18,11 @@ class TestLemmaNormalizationIntegration:
         senses_path = tmp_path / "senses.jsonl"
 
         test_entries = [
-            {"word": "cat", "pos": "noun", "is_inflected": False},
-            {"word": "cats", "pos": "noun", "is_inflected": True, "lemma": "cat"},
-            {"word": "run", "pos": "verb", "is_inflected": False},
-            {"word": "running", "pos": "verb", "is_inflected": True, "lemma": "run"},
-            {"word": "ran", "pos": "verb", "is_inflected": True, "lemma": "run"},
+            {"id": "cat", "pos": "noun", "is_inflected": False},
+            {"id": "cats", "pos": "noun", "is_inflected": True, "lemma": "cat"},
+            {"id": "run", "pos": "verb", "is_inflected": False},
+            {"id": "running", "pos": "verb", "is_inflected": True, "lemma": "run"},
+            {"id": "ran", "pos": "verb", "is_inflected": True, "lemma": "run"},
         ]
 
         with open(input_path, 'w') as f:
@@ -43,10 +43,10 @@ class TestLemmaNormalizationIntegration:
         assert len(inflected_senses) == 3  # cats, running, ran
 
         # Verify specific lemmas
-        cats_sense = next(s for s in senses if s.get('word') == 'cats')
+        cats_sense = next(s for s in senses if s.get('id') == 'cats')
         assert cats_sense.get('lemma') == 'cat'
 
-        running_sense = next(s for s in senses if s.get('word') == 'running')
+        running_sense = next(s for s in senses if s.get('id') == 'running')
         assert running_sense.get('lemma') == 'run'
 
     def test_multiple_senses_same_word_different_lemmas(self, tmp_path):
@@ -59,8 +59,8 @@ class TestLemmaNormalizationIntegration:
 
         # "left" has two senses: past tense of "leave" and standalone adjective
         test_entries = [
-            {"word": "left", "pos": "verb", "is_inflected": True, "lemma": "leave"},
-            {"word": "left", "pos": "adjective", "is_inflected": False},
+            {"id": "left", "pos": "verb", "is_inflected": True, "lemma": "leave"},
+            {"id": "left", "pos": "adjective", "is_inflected": False},
         ]
 
         with open(input_path, 'w') as f:
@@ -97,15 +97,15 @@ class TestLemmaExportIntegration:
         output_dir.mkdir()
 
         test_senses = [
-            {"word": "cat", "pos": "noun"},
-            {"word": "cats", "pos": "noun", "is_inflected": True, "lemma": "cat"},
-            {"word": "run", "pos": "verb"},
-            {"word": "runs", "pos": "verb", "is_inflected": True, "lemma": "run"},
-            {"word": "ran", "pos": "verb", "is_inflected": True, "lemma": "run"},
-            {"word": "running", "pos": "verb", "is_inflected": True, "lemma": "run"},
-            {"word": "go", "pos": "verb"},
-            {"word": "went", "pos": "verb", "is_inflected": True, "lemma": "go"},
-            {"word": "gone", "pos": "verb", "is_inflected": True, "lemma": "go"},
+            {"id": "cat", "pos": "noun"},
+            {"id": "cats", "pos": "noun", "is_inflected": True, "lemma": "cat"},
+            {"id": "run", "pos": "verb"},
+            {"id": "runs", "pos": "verb", "is_inflected": True, "lemma": "run"},
+            {"id": "ran", "pos": "verb", "is_inflected": True, "lemma": "run"},
+            {"id": "running", "pos": "verb", "is_inflected": True, "lemma": "run"},
+            {"id": "go", "pos": "verb"},
+            {"id": "went", "pos": "verb", "is_inflected": True, "lemma": "go"},
+            {"id": "gone", "pos": "verb", "is_inflected": True, "lemma": "go"},
         ]
 
         with open(senses_path, 'w') as f:
@@ -166,17 +166,17 @@ class TestLemmaFilteringIntegration:
         senses_path = tmp_path / "senses.jsonl"
 
         lexemes = [
-            {"word": "cat", "sense_offset": 0, "sense_length": 1},
-            {"word": "cats", "sense_offset": 1, "sense_length": 1},
-            {"word": "run", "sense_offset": 2, "sense_length": 1},
-            {"word": "running", "sense_offset": 3, "sense_length": 1},
+            {"id": "cat", "sense_offset": 0, "sense_length": 1},
+            {"id": "cats", "sense_offset": 1, "sense_length": 1},
+            {"id": "run", "sense_offset": 2, "sense_length": 1},
+            {"id": "running", "sense_offset": 3, "sense_length": 1},
         ]
 
         senses = [
-            {"word": "cat", "pos": "noun"},
-            {"word": "cats", "pos": "noun", "is_inflected": True, "lemma": "cat"},
-            {"word": "run", "pos": "verb"},
-            {"word": "running", "pos": "verb", "is_inflected": True, "lemma": "run"},
+            {"id": "cat", "pos": "noun"},
+            {"id": "cats", "pos": "noun", "is_inflected": True, "lemma": "cat"},
+            {"id": "run", "pos": "verb"},
+            {"id": "running", "pos": "verb", "is_inflected": True, "lemma": "run"},
         ]
 
         with open(lexemes_path, 'w') as f:
@@ -196,7 +196,7 @@ class TestLemmaFilteringIntegration:
         ))
 
         # Should only return base forms
-        words = [r[0]['word'] for r in results]
+        words = [r[0]['id'] for r in results]
         assert set(words) == {"cat", "run"}
         assert "cats" not in words
         assert "running" not in words
@@ -286,14 +286,14 @@ class TestLemmaValidation:
         """Verify no word is its own lemma (except base forms which have no lemma)."""
         # This is a structural test - lemma should always point to a different word
         test_senses = [
-            {"word": "cats", "lemma": "cat"},  # OK: different
-            {"word": "running", "lemma": "run"},  # OK: different
+            {"id": "cats", "lemma": "cat"},  # OK: different
+            {"id": "running", "lemma": "run"},  # OK: different
         ]
 
         for sense in test_senses:
             if sense.get('lemma'):
-                assert sense['word'] != sense['lemma'], \
-                    f"Circular lemma: {sense['word']} -> {sense['lemma']}"
+                assert sense['id'] != sense['lemma'], \
+                    f"Circular lemma: {sense['id']} -> {sense['lemma']}"
 
     def test_lemma_lowercase_normalized(self):
         """Verify lemmas are lowercase (NFKC normalized)."""
@@ -301,8 +301,8 @@ class TestLemmaValidation:
 
         # Lemmas extracted from Wiktionary should be lowercase
         test_senses = [
-            {"word": "cats", "lemma": "cat"},
-            {"word": "Running", "lemma": "run"},  # Word may be capitalized, lemma should not
+            {"id": "cats", "lemma": "cat"},
+            {"id": "Running", "lemma": "run"},  # Word may be capitalized, lemma should not
         ]
 
         for sense in test_senses:

@@ -783,15 +783,15 @@ def main() -> int:
     skipped = 0
     failed = 0
 
-    print(f"\n{BOLD(f'Fetching sources ({total})...')}\n")
+    print(f"\n{BOLD(f'Fetching sources ({total})...')}")
 
     try:
         for i, (source_id, source_config) in enumerate(sources_to_fetch, 1):
             name = source_config.get("name", source_id)
             title = source_config.get("title", "")
+            title_display = title[:50] + '...' if len(title) > 50 else title
 
-            print(f"[{i}/{total}] {BOLD(source_id)}")
-            print(f"      {DIM(title[:60] + '...' if len(title) > 60 else title)}")
+            print(f"[{i}/{total}] {BOLD(source_id)} {DIM(title_display)}")
 
             status, message = fetch_source(
                 source_id,
@@ -802,20 +802,18 @@ def main() -> int:
             )
 
             if status == "fetched":
-                print(f"      {GREEN('✓')} {message}")
+                print(f"      -> {GREEN('OK')} {message}")
                 fetched += 1
             elif status == "skipped":
-                print(f"      {BLUE('ℹ')} {message}")
+                print(f"      -> {message}")
                 skipped += 1
             else:  # failed
-                print(f"      {RED('✗')} {message}")
+                print(f"      -> {RED('ERROR')} {message}")
                 failed += 1
                 if not args.continue_on_error:
-                    print(f"\n{RED('Aborting due to error.')}")
+                    print(f"{RED('Aborting due to error.')}")
                     print("Use --continue-on-error to fetch remaining sources.")
                     return 1
-
-            print()
 
     except KeyboardInterrupt:
         print(f"\n\n{YELLOW('Interrupted.')} Partial downloads may remain.")
@@ -831,8 +829,8 @@ def main() -> int:
     if failed:
         summary_parts.append(f"{RED(f'{failed} failed')}")
 
-    status_icon = GREEN("✓") if failed == 0 else RED("✗")
-    print(f"{status_icon} Complete: {', '.join(summary_parts)}")
+    status_icon = GREEN("OK") if failed == 0 else RED("ERROR")
+    print(f"\n{status_icon} Complete: {', '.join(summary_parts)}")
 
     return 1 if failed > 0 else 0
 
