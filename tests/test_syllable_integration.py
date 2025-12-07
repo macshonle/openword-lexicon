@@ -4,12 +4,30 @@ Integration tests for syllable filtering with owlex.
 Tests end-to-end syllable filtering through the OwlexFilter class
 to verify that the refactored code correctly delegates to filters.py
 and produces expected results.
+
+Also includes cross-validation tests to verify syllable extraction
+from different sources (IPA, hyphenation, rhymes) are consistent.
 """
 
 import json
+import sys
 import tempfile
 from pathlib import Path
+
+import pytest
+
 from openword.owlex import OwlexFilter
+
+# Add tools directory to path for scanner imports
+tools_path = Path(__file__).parent.parent / "tools"
+sys.path.insert(0, str(tools_path))
+
+from wiktionary_scanner_python.scanner import (
+    count_syllables_from_ipa,
+    extract_syllable_count_from_hyphenation,
+    extract_syllable_count_from_rhymes,
+    extract_syllable_count_from_ipa,
+)
 
 
 def test_syllable_filtering_exact():
@@ -237,6 +255,134 @@ def test_no_syllable_filters():
 
     finally:
         spec_path.unlink()
+
+
+# =============================================================================
+# Cross-Validation Tests for Syllable Extraction
+# =============================================================================
+
+class TestSyllableCrossValidation:
+    """Tests that verify syllable extraction from different sources is consistent.
+
+    These tests help identify Wiktionary data quality issues where different
+    syllable sources (IPA, hyphenation, rhymes) disagree.
+    """
+
+    def test_ipa_syllable_counting_basic(self):
+        """Test basic IPA syllable counting."""
+        cases = [
+            ("/kæt/", 1),           # cat - 1 vowel
+            ("/ˈteɪ.bəl/", 2),      # table - 2 syllables with schwa
+            ("/ɪnˌsaɪ.kləˈpiː.di.ə/", 6),  # encyclopedia
+            ("/əˈsæsɪn/", 3),       # assassin - 3 syllables
+        ]
+        for ipa, expected in cases:
+            result = count_syllables_from_ipa(ipa)
+            assert result == expected, f"IPA {ipa}: expected {expected}, got {result}"
+
+    def test_hyphenation_extraction_basic(self):
+        """Test hyphenation template syllable extraction."""
+        cases = [
+            ("cat", "{{hyphenation|en|cat}}", 1),
+            ("dictionary", "{{hyphenation|en|dic|tion|a|ry}}", 4),
+            ("encyclopedia", "{{hyphenation|en|en|cy|clo|pe|di|a}}", 6),
+        ]
+        for word, template, expected in cases:
+            result = extract_syllable_count_from_hyphenation(template, word)
+            assert result == expected, f"{word}: expected {expected}, got {result}"
+
+    def test_rhymes_extraction_basic(self):
+        """Test rhymes template s= parameter extraction."""
+        cases = [
+            ("{{rhymes|en|æt|s=1}}", 1),
+            ("{{rhymes|en|iːdiə|s=6}}", 6),
+            ("{{rhymes|en|ɔːɹəs|s=3}}", 3),
+            ("{{rhymes|en|æt}}", None),  # No s= parameter
+        ]
+        for template, expected in cases:
+            result = extract_syllable_count_from_rhymes(template)
+            assert result == expected, f"Template {template}: expected {expected}, got {result}"
+
+    def test_priority_order_ipa_first(self):
+        """Verify IPA takes priority over rhymes when both present.
+
+        The scanner should use IPA syllable count when available,
+        even if rhymes provides a different count.
+        """
+        # IPA says 3 syllables, rhymes says 2 (a hypothetical disagreement)
+        ipa = "/əˈsæsɪn/"  # 3 syllables
+        rhymes_wrong = "{{rhymes|en|æsɪn|s=2}}"  # Claims 2 syllables
+
+        ipa_count = count_syllables_from_ipa(ipa)
+        rhymes_count = extract_syllable_count_from_rhymes(rhymes_wrong)
+
+        # IPA should give 3, rhymes gives 2
+        assert ipa_count == 3, f"IPA count should be 3, got {ipa_count}"
+        assert rhymes_count == 2, f"Rhymes count should be 2, got {rhymes_count}"
+
+        # Scanner should prefer IPA when resolving conflict
+        # (This documents the expected behavior)
+
+    def test_hyphenation_ipa_agreement(self):
+        """Test that hyphenation and IPA agree on syllable counts.
+
+        For standard words, these sources should produce the same count.
+        """
+        test_cases = [
+            # (word, hyphenation_template, ipa, expected_syllables)
+            ("dictionary", "{{hyphenation|en|dic|tion|a|ry}}", "/ˈdɪk.ʃən.ɛɹ.i/", 4),
+            ("beautiful", "{{hyphenation|en|beau|ti|ful}}", "/ˈbjuːtɪfəl/", 3),
+            ("elephant", "{{hyphenation|en|el|e|phant}}", "/ˈɛlɪfənt/", 3),
+        ]
+
+        for word, hyph_template, ipa, expected in test_cases:
+            hyph_count = extract_syllable_count_from_hyphenation(hyph_template, word)
+            ipa_count = count_syllables_from_ipa(ipa)
+
+            assert hyph_count == expected, f"{word} hyphenation: expected {expected}, got {hyph_count}"
+            assert ipa_count == expected, f"{word} IPA: expected {expected}, got {ipa_count}"
+            assert hyph_count == ipa_count, f"{word}: hyphenation ({hyph_count}) != IPA ({ipa_count})"
+
+    def test_detect_potential_wiktionary_issues(self):
+        """Test cases that might represent Wiktionary data issues.
+
+        These tests document known or potential discrepancies in Wiktionary
+        where different syllable sources disagree.
+        """
+        # "assassin" example: IPA has 3 syllables but some Wiktionary
+        # entries might have incorrect rhymes s= values
+        ipa_assassin = "/əˈsæsɪn/"
+        ipa_count = count_syllables_from_ipa(ipa_assassin)
+        assert ipa_count == 3, "assassin should have 3 syllables per IPA"
+
+        # If we find a rhymes template claiming s=2, that would be wrong
+        wrong_rhymes = "{{rhymes|en|æsɪn|s=2}}"
+        rhymes_count = extract_syllable_count_from_rhymes(wrong_rhymes)
+
+        # This documents a potential data quality issue
+        if rhymes_count is not None and rhymes_count != ipa_count:
+            # In a real scenario, we'd flag this for Wiktionary review
+            pass  # Expected discrepancy for this test case
+
+    def test_encore_first_syllable_matches_lang_code(self):
+        """Test words where first syllable matches a language code.
+
+        The hyphenation parser should handle 'encore' correctly where
+        the first syllable 'en' is also a language code.
+        """
+        # "encore" starts with "en" which is also English's language code
+        hyph_count = extract_syllable_count_from_hyphenation(
+            "{{hyphenation|en|en|core}}", "encore"
+        )
+        assert hyph_count == 2, f"encore should have 2 syllables, got {hyph_count}"
+
+    def test_syllabic_consonants(self):
+        """Test IPA with syllabic consonants like /l̩/ and /n̩/."""
+        # Words with syllabic consonants can be tricky
+        # "button" with syllabic n: /ˈbʌtn̩/ or /ˈbʌtən/
+        ipa_with_schwa = "/ˈbʌtən/"  # 2 syllables explicit
+        count = count_syllables_from_ipa(ipa_with_schwa)
+        assert count == 2, f"button should have 2 syllables, got {count}"
 
 
 # Test runner

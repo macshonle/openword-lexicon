@@ -253,20 +253,20 @@ This section analyzes metadata coverage for word game filtering needs.
 
 | Syllables | Count | Percentage |
 |-----------|------:|-----------:|
-| 1 | 12,469 | 11.8% |
-| 2 | 37,418 | 35.3% |
-| 3 | 26,695 | 25.2% |
-| 4 | 17,049 | 16.1% |
-| 5 | 7,776 | 7.3% |
-| 6 | 3,028 | 2.9% |
-| 7 | 1,043 | 1.0% |
-| 8 | 335 | 0.3% |
-| 9 | 131 | 0.1% |
-| 10 | 55 | 0.1% |
-| 11 | 38 | 0.0% |
+| 1 | 12,385 | 11.7% |
+| 2 | 37,345 | 35.2% |
+| 3 | 26,837 | 25.3% |
+| 4 | 17,066 | 16.1% |
+| 5 | 7,754 | 7.3% |
+| 6 | 3,031 | 2.9% |
+| 7 | 1,055 | 1.0% |
+| 8 | 339 | 0.3% |
+| 9 | 133 | 0.1% |
+| 10 | 54 | 0.1% |
+| 11 | 40 | 0.0% |
 | 12 | 16 | 0.0% |
 | 13 | 9 | 0.0% |
-| 14 | 4 | 0.0% |
+| 14 | 3 | 0.0% |
 | 15 | 7 | 0.0% |
 
 **Average syllables:** 2.88  
@@ -276,18 +276,17 @@ This section analyzes metadata coverage for word game filtering needs.
 
 *(Excludes proverbs and long phrases with >5 words)*
 
-**1 syllable:** `tracks`, `slut`, `n-`, `fam`, `sag`  
-**2 syllables:** `Siston`, `Shimer`, `Hogwarts`, `pornhwa`, `toper`  
-**3 syllables:** `tolerate`, `Jeshua`, `horchata`, `paries`, `convergent`  
-**4 syllables:** `nonendemic`, `educated`, `extravagant`, `cyclostrophic`, `audiophile`  
-**5 syllables:** `signification`, `disinterested`, `ideophone`, `pronounciation`, `superoseptum`  
+**1 syllable:** `trib`, `smur`, `ne`, `fat`, `sawn`  
+**2 syllables:** `Sir John` (2 words), `Shiloh`, `Hodgkins`, `postlude`, `tourney`  
+**3 syllables:** `thoroughly`, `Jenkinson`, `hirundine`, `pancreatin`, `contentful`  
+**4 syllables:** `noncommittal`, `ectosteal`, `extramental`, `cybernetics`, `audiation`  
+**5 syllables:** `sinus venosi` (2 words), `disorientation`, `idioglossia`, `prosopopoeial`, `suprailium`  
 
 #### Complete Enumeration for Rare Syllable Counts
 
 **13 syllables:** (9 words) `a spoonful of sugar helps the medicine go down` (proverb, 9 words), `behind every successful man there stands a woman` (proverb, 8 words), `cyclohexyloxycarbonyloxyethyl`, `fibrodysplasia ossificans progressiva`, `hexahectaenneacontakaiheptagon`, `honorificabilitudinitatibus`, `levatores palpebrarum superiorum`, `methylenetetrahydrofolatereductase`, `sufficient unto the day is the evil thereof` (proverb, 8 words)  
-**14 syllables:** (4 words) `Dadra and Nagar Haveli and Daman and Diu` (8 words), `a woman needs a man like a fish needs a bicycle` (11 words), `hexakosioihexekontahexaphobia`, `supercalifragilisticexpialidocious`  
+**14 syllables:** (3 words) `Dadra and Nagar Haveli and Daman and Diu` (8 words), `a woman needs a man like a fish needs a bicycle` (11 words), `hexakosioihexekontahexaphobia`  
 **15 syllables:** (7 words) `Lake Chargoggagoggmanchauggagoggchaubunagungamaugg`, `Russian Soviet Federative Socialist Republic` (5 words), `United Kingdom of Great Britain and Northern Ireland` (8 words), `dimethylamidophenyldimethylpyrazolon`, `encephalomyeloradiculoneuropathy`, `enneahectaenneacontakaienneagon`, `hippopotomonstrosesquipedaliophobia`  
-**16 syllables:** (1 word) `Stanley Bridge, Hope River, Bayview, Cavendish and North Rustico` (9 words)  
 **19 syllables:** (1 word) `pneumonoultramicroscopicsilicovolcanoconiosis`  
 
 ### Concreteness Distribution

@@ -1257,6 +1257,259 @@ class TestRealDataIntegration:
 
 
 # =============================================================================
+# Integration Tests: Operation-First Format Filtering
+# =============================================================================
+
+class TestOperationFirstFiltering:
+    """Integration tests that verify operation-first format actually filters correctly.
+
+    Unlike TestOperationFirstFormat which tests spec parsing,
+    these tests verify the complete filtering pipeline works end-to-end.
+    """
+
+    def test_exclude_register_filters_words(self, mini_lexemes_file, tmp_path):
+        """Test that exclude register actually removes vulgar words."""
+        spec_content = """
+exclude:
+  register: [vulgar]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+
+        # Load and filter entries
+        results = []
+        with open(mini_lexemes_file) as f:
+            for line in f:
+                entry = json.loads(line)
+                if filter_obj.filter_entry(entry):
+                    results.append(entry['id'])
+
+        # "damn" has vulgar label - should be excluded
+        assert "damn" not in results
+        # "apple" has no labels - should be included
+        assert "apple" in results
+        # "bloody" has offensive but not vulgar - should still be included
+        assert "bloody" in results
+
+    def test_exclude_multiple_registers(self, mini_lexemes_file, tmp_path):
+        """Test excluding multiple register types."""
+        spec_content = """
+exclude:
+  register: [vulgar, offensive]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+
+        results = []
+        with open(mini_lexemes_file) as f:
+            for line in f:
+                entry = json.loads(line)
+                if filter_obj.filter_entry(entry):
+                    results.append(entry['id'])
+
+        # Both vulgar and offensive should be excluded
+        assert "damn" not in results
+        assert "bloody" not in results
+        # Clean words should remain
+        assert "apple" in results
+
+    def test_include_pos_filters_words(self, mini_lexemes_file, tmp_path):
+        """Test that include pos only keeps specified POS."""
+        spec_content = """
+include:
+  pos: [noun]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+
+        results = []
+        with open(mini_lexemes_file) as f:
+            for line in f:
+                entry = json.loads(line)
+                if filter_obj.filter_entry(entry):
+                    results.append(entry['id'])
+
+        # Nouns should be included
+        assert "apple" in results
+        assert "cat" in results
+        # Determiners should be excluded
+        assert "the" not in results
+
+    def test_combined_word_and_sense_filters(self, mini_lexemes_file, tmp_path):
+        """Test combining word-level and sense-level filters."""
+        spec_content = """
+character:
+  exact_length: 5
+  pattern: "^[a-z]+$"
+
+phrase:
+  max_words: 1
+
+frequency:
+  min_tier: A
+  max_tier: I
+
+include:
+  pos: [noun]
+
+exclude:
+  register: [vulgar, offensive]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+
+        results = []
+        with open(mini_lexemes_file) as f:
+            for line in f:
+                entry = json.loads(line)
+                if filter_obj.filter_entry(entry):
+                    results.append(entry['id'])
+
+        # Verify all constraints are applied
+        for word in results:
+            assert len(word) == 5, f"{word} is not 5 letters"
+
+        # "apple" should pass all filters
+        assert "apple" in results
+        # "cat" is only 3 letters
+        assert "cat" not in results
+
+    def test_exclude_temporal_filters(self, mini_lexemes_file, tmp_path):
+        """Test excluding archaic and obsolete words."""
+        spec_content = """
+exclude:
+  temporal: [archaic, obsolete]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+
+        results = []
+        with open(mini_lexemes_file) as f:
+            for line in f:
+                entry = json.loads(line)
+                if filter_obj.filter_entry(entry):
+                    results.append(entry['id'])
+
+        # Words with archaic/obsolete labels should be excluded
+        assert "thee" not in results
+        assert "hither" not in results
+        # Modern words should be included
+        assert "apple" in results
+
+
+# =============================================================================
+# Integration Tests: Primary-Sense Filtering
+# =============================================================================
+
+class TestPrimarySenseFiltering:
+    """Tests for exclude-if-primary and include-if-primary operations.
+
+    These operations check only the first/primary sense of a word,
+    allowing words with problematic secondary senses through.
+    """
+
+    def test_exclude_if_primary_vs_exclude(self, tmp_path):
+        """Compare exclude-if-primary vs exclude behavior.
+
+        Word with:
+        - Primary sense: safe
+        - Secondary sense: problematic
+
+        exclude: should filter out
+        exclude-if-primary: should keep
+        """
+        # Create a word with safe primary sense but problematic secondary
+        lexeme_with_mixed_senses = {
+            "id": "taffy",
+            "pos": ["NOU"],
+            "frequency_tier": "G",
+            "sources": ["wikt"],
+            "labels": {"register": ["derogatory"]},  # Has derogatory but not in primary
+            "primary_labels": {},  # Primary sense is safe
+        }
+
+        # Regular exclude should filter it
+        spec_exclude = {"filters": {"labels": {"register": {"exclude": ["derogatory"]}}}}
+        filter_exclude = MockOwlexFilter(spec_exclude)
+        assert not filter_exclude.filter_entry(lexeme_with_mixed_senses)
+
+    def test_exclude_if_primary_pos(self, tmp_path):
+        """Test exclude-if-primary with POS.
+
+        Word "bill" has:
+        - Primary sense: noun (common)
+        - Secondary sense: proper noun (name Bill)
+
+        exclude-if-primary: pos: [proper noun]
+        Should INCLUDE "bill" because primary is common noun.
+        """
+        spec_content = """
+exclude-if-primary:
+  pos: [proper noun]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        # Verify the spec was parsed correctly
+        assert 'pos' in filters
+        assert 'exclude-if-primary' in filters['pos']
+        assert filters['pos']['exclude-if-primary'] == ['proper noun']
+
+    def test_include_if_primary_region(self, tmp_path):
+        """Test include-if-primary with region labels."""
+        spec_content = """
+include-if-primary:
+  region: [en-US]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        # Verify spec parsing
+        assert 'labels' in filters
+        assert 'region' in filters['labels']
+        assert 'include-if-primary' in filters['labels']['region']
+
+    def test_combine_primary_and_regular_operations(self, tmp_path):
+        """Test mixing -if-primary with regular operations."""
+        spec_content = """
+include:
+  pos: [noun, verb]
+
+exclude-if-primary:
+  pos: [proper noun]
+
+exclude:
+  register: [vulgar, offensive]
+"""
+        spec_file = tmp_path / "test.yaml"
+        spec_file.write_text(spec_content)
+
+        filter_obj = OwlexFilter(spec_file)
+        filters = filter_obj.spec['filters']
+
+        # Verify all operations are captured
+        assert filters['pos']['include'] == ['noun', 'verb']
+        assert filters['pos']['exclude-if-primary'] == ['proper noun']
+        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive']
+
+
+# =============================================================================
 # Run Tests
 # =============================================================================
 

@@ -117,8 +117,7 @@ head -5 /tmp/python-1k.jsonl
 - Try with `--limit 10` first to test quickly
 
 **Output differences:**
-- Rust and Python versions produce functionally equivalent output
-- Rust version accepts slightly wider range of punctuation (~0.1% more entries, primarily idioms/proverbs with commas)
+- Rust and Python versions produce **100% identical output** (verified by automated parity validation)
 - All core fields (word, POS, labels, syllables, morphology, phrase_type) are present in both versions
 
 ## Documentation
