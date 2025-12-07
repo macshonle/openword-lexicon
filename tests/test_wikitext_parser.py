@@ -14,11 +14,14 @@ from pathlib import Path
 tools_path = Path(__file__).parent.parent / "tools"
 sys.path.insert(0, str(tools_path))
 
-from wiktionary_scanner_python.scanner import (
+from wiktionary_scanner_python.wikitext_parser import (
     WikitextParser,
     Wikilink,
     Template,
     parse_template_params,
+    strip_namespace_prefix,
+    find_closing_braces,
+    strip_wikitext_markup,
     extract_head_template_content,
     extract_pos_from_head_template,
     find_head_template_pos_values,
@@ -510,3 +513,274 @@ class TestRealWorldPOSBugs:
         text = "{{head|en|nf}}"
         result = find_head_template_pos_values(text)
         assert result == ["nf"]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Utility Function Tests
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestStripNamespacePrefix:
+    """Test strip_namespace_prefix utility function (docstring examples)."""
+
+    def test_leading_colon_with_namespace(self):
+        """:en:word → word"""
+        assert strip_namespace_prefix(":en:word") == "word"
+
+    def test_category_namespace(self):
+        """Category:English nouns → English nouns"""
+        assert strip_namespace_prefix("Category:English nouns") == "English nouns"
+
+    def test_no_namespace(self):
+        """word → word (unchanged)"""
+        assert strip_namespace_prefix("word") == "word"
+
+    def test_multiple_colons(self):
+        """Multiple colons - only strip last prefix."""
+        assert strip_namespace_prefix(":en:Category:words") == "words"
+
+    def test_empty_string(self):
+        """Empty string returns empty string."""
+        assert strip_namespace_prefix("") == ""
+
+    def test_only_colons(self):
+        """Only colons returns empty string."""
+        assert strip_namespace_prefix(":::") == ""
+
+    def test_colon_at_end(self):
+        """Colon at end - returns empty after the colon."""
+        assert strip_namespace_prefix("prefix:") == ""
+
+
+class TestFindClosingBraces:
+    """Test find_closing_braces utility function."""
+
+    def test_simple_template(self):
+        """Simple template with immediate closing."""
+        text = "content}}"
+        pos, found = find_closing_braces(text, 0)
+        assert found is True
+        assert pos == 9  # After '}}'
+
+    def test_nested_template(self):
+        """Template with one level of nesting."""
+        text = "a|{{inner}}|b}}"
+        pos, found = find_closing_braces(text, 0)
+        assert found is True
+        assert text[:pos-2] == "a|{{inner}}|b"  # Content before }}
+
+    def test_deeply_nested(self):
+        """Multiple levels of nested templates."""
+        text = "{{a|{{b}}}}}}"
+        pos, found = find_closing_braces(text, 0)
+        assert found is True
+        # First closing at depth 0 is at position 12
+
+    def test_unclosed_template(self):
+        """Unclosed template returns False."""
+        text = "content without closing"
+        pos, found = find_closing_braces(text, 0)
+        assert found is False
+        assert pos == len(text)
+
+    def test_empty_content(self):
+        """Empty content with immediate closing."""
+        text = "}}"
+        pos, found = find_closing_braces(text, 0)
+        assert found is True
+        assert pos == 2
+
+    def test_partial_close(self):
+        """Only one closing brace - not a match."""
+        text = "content}"
+        pos, found = find_closing_braces(text, 0)
+        assert found is False
+
+
+class TestWikilinkCleanTarget:
+    """Test Wikilink.clean_target method (docstring examples)."""
+
+    def test_interwiki_prefix(self):
+        """[[:en:word]] → word"""
+        wl = Wikilink(target=":en:word")
+        assert wl.clean_target() == "word"
+
+    def test_category_prefix(self):
+        """[[:Category:English nouns]] → English nouns"""
+        wl = Wikilink(target=":Category:English nouns")
+        assert wl.clean_target() == "English nouns"
+
+    def test_simple_word(self):
+        """[[word]] → word"""
+        wl = Wikilink(target="word")
+        assert wl.clean_target() == "word"
+
+    def test_no_leading_colon_with_namespace(self):
+        """Category:X without leading colon."""
+        wl = Wikilink(target="Category:test")
+        assert wl.clean_target() == "test"
+
+
+class TestStripWikitextMarkup:
+    """Test strip_wikitext_markup function (docstring examples)."""
+
+    def test_simple_wikilink(self):
+        """[[rhodologist]] → rhodologist"""
+        assert strip_wikitext_markup("[[rhodologist]]") == "rhodologist"
+
+    def test_interwiki_link(self):
+        """[[:en:word]] → word"""
+        assert strip_wikitext_markup("[[:en:word]]") == "word"
+
+    def test_template_removal(self):
+        """germanic {{italic}} → germanic"""
+        assert strip_wikitext_markup("germanic {{italic}}") == "germanic"
+
+    def test_section_anchor_truncation(self):
+        """after#noun → after"""
+        assert strip_wikitext_markup("after#noun") == "after"
+
+    def test_incomplete_wikilink_with_anchor(self):
+        """read -> [[#etymology 1 → read ->"""
+        result = strip_wikitext_markup("read -> [[#etymology 1")
+        assert result == "read ->"
+
+    def test_stray_closing_brackets(self):
+        """Stray ]] are removed."""
+        assert strip_wikitext_markup("word]]") == "word"
+
+    def test_stray_closing_braces(self):
+        """Stray }} are removed."""
+        assert strip_wikitext_markup("word}}") == "word"
+
+    def test_stray_double_slash(self):
+        """Stray // are removed."""
+        assert strip_wikitext_markup("word//") == "word"
+
+    def test_nested_template(self):
+        """Nested templates are fully removed."""
+        assert strip_wikitext_markup("word {{a|{{b}}}}") == "word"
+
+    def test_multiple_wikilinks(self):
+        """Multiple wikilinks are all processed."""
+        assert strip_wikitext_markup("[[a]] and [[b]]") == "a and b"
+
+    def test_empty_input(self):
+        """Empty input returns empty string."""
+        assert strip_wikitext_markup("") == ""
+
+    def test_only_template(self):
+        """Only a template returns empty string."""
+        assert strip_wikitext_markup("{{template}}") == ""
+
+
+class TestConsumeUntil:
+    """Test WikitextParser.consume_until method."""
+
+    def test_single_terminator(self):
+        """Consume until single character."""
+        parser = WikitextParser("hello|world")
+        result = parser.consume_until("|")
+        assert result == "hello"
+        assert parser.pos == 5
+
+    def test_multiple_terminators(self):
+        """Consume until any of multiple characters."""
+        parser = WikitextParser("hello#world")
+        result = parser.consume_until("#|]")
+        assert result == "hello"
+
+    def test_no_terminator_found(self):
+        """Consume to end if no terminator found."""
+        parser = WikitextParser("hello")
+        result = parser.consume_until("|")
+        assert result == "hello"
+        assert parser.at_end()
+
+    def test_empty_result(self):
+        """Immediate terminator returns empty string."""
+        parser = WikitextParser("|hello")
+        result = parser.consume_until("|")
+        assert result == ""
+        assert parser.pos == 0
+
+    def test_empty_input(self):
+        """Empty input returns empty string."""
+        parser = WikitextParser("")
+        result = parser.consume_until("|")
+        assert result == ""
+
+
+class TestIncompleteInputHandling:
+    """Test graceful handling of incomplete/malformed input."""
+
+    def test_unclosed_wikilink_parse_params(self):
+        """Unclosed wikilink in parse_params extracts target."""
+        result = parse_template_params("[[word")
+        assert result == ["word"]
+
+    def test_unclosed_template_parse_params(self):
+        """Unclosed template in parse_params is handled."""
+        result = parse_template_params("text{{template")
+        assert "text" in result[0] or result == ["text"]
+
+    def test_unclosed_nested_wikilink(self):
+        """Nested unclosed wikilink."""
+        result = parse_template_params("[[outer|[[inner")
+        # Should handle gracefully without crashing
+        assert isinstance(result, list)
+
+    def test_mismatched_brackets(self):
+        """Mismatched brackets handled gracefully."""
+        result = parse_template_params("]][[word]]")
+        # Should not crash
+        assert isinstance(result, list)
+
+    def test_only_open_brackets(self):
+        """Only opening brackets."""
+        result = parse_template_params("[[[[")
+        assert isinstance(result, list)
+
+    def test_only_close_brackets(self):
+        """Only closing brackets handled via strip_wikitext_markup."""
+        result = strip_wikitext_markup("]]]]")
+        assert result == ""
+
+    def test_unclosed_template_strip_markup(self):
+        """Unclosed template in strip_wikitext_markup."""
+        result = strip_wikitext_markup("text {{unclosed")
+        assert "text" in result
+
+    def test_partial_wikilink_strip_markup(self):
+        """Partial wikilink like [[word without close."""
+        result = strip_wikitext_markup("prefix [[word")
+        # Should extract what it can
+        assert "prefix" in result
+
+    def test_extract_head_template_content_unclosed(self):
+        """extract_head_template_content handles unclosed template."""
+        text = "{{head|en|noun|head=word"
+        content = extract_head_template_content(text, 10)
+        assert content == "noun|head=word"
+
+    def test_extract_head_template_content_empty(self):
+        """extract_head_template_content with empty after start."""
+        text = "{{head|en|"
+        content = extract_head_template_content(text, 10)
+        assert content is None
+
+    def test_find_closing_braces_at_end_of_text(self):
+        """find_closing_braces when starting at end of text."""
+        text = "short"
+        pos, found = find_closing_braces(text, len(text))
+        assert found is False
+        assert pos == len(text)
+
+    def test_wikilink_only_anchor(self):
+        """Wikilink with only anchor [[#section]]."""
+        result = strip_wikitext_markup("[[#section]]")
+        assert result == ""  # Empty target, truncated at #
+
+    def test_deeply_nested_unclosed(self):
+        """Deeply nested unclosed templates."""
+        result = strip_wikitext_markup("text {{a|{{b|{{c")
+        assert "text" in result

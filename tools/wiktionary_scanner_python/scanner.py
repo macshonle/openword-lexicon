@@ -30,7 +30,6 @@ import unicodedata as ud
 from pathlib import Path
 
 import yaml
-from dataclasses import dataclass
 from typing import Any, Dict, List, Set, Optional, Tuple
 from rich.live import Live
 from rich.table import Table
@@ -38,343 +37,15 @@ from rich.panel import Panel
 from rich.text import Text
 from rich import box
 
+from .wikitext_parser import (
+    parse_template_params,
+    find_head_template_pos_values,
+    strip_wikitext_markup,
+)
+
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Wikitext Parser Data Structures
-# ─────────────────────────────────────────────────────────────────────────────
-
-@dataclass
-class Wikilink:
-    """Represents a parsed wikilink: [[target#anchor|display]]"""
-    target: str
-    anchor: Optional[str] = None
-    display: Optional[str] = None
-
-    def text(self) -> str:
-        """Return display text if present, otherwise target."""
-        return self.display if self.display is not None else self.target
-
-
-@dataclass
-class Template:
-    """Represents a parsed template: {{name|param1|param2|...}}"""
-    name: str
-    params: List[str]
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Wikitext Recursive Descent Parser
-# ─────────────────────────────────────────────────────────────────────────────
-
-class WikitextParser:
-    """
-    Recursive descent parser for Wiktionary template parameters.
-
-    Uses the call stack for nesting - no explicit depth counters.
-    Each parse method returns structured data; callers decide what to do with it.
-
-    Grammar:
-        params          ::= param ("|" param)*
-        param           ::= element*
-        element         ::= template | wikilink | char
-        template        ::= "{{" template_body "}}"
-        template_body   ::= (template | wikilink | template_char)*
-        wikilink        ::= "[[" target ("#" anchor)? ("|" display)? "]]"
-        target          ::= target_char+
-        anchor          ::= anchor_char+
-        display         ::= display_char+
-    """
-
-    def __init__(self, text: str):
-        self.text = text
-        self.pos = 0
-
-    def peek(self, n: int = 1) -> str:
-        """Look ahead n characters without consuming."""
-        return self.text[self.pos:self.pos + n]
-
-    def consume(self, n: int = 1) -> str:
-        """Consume and return n characters."""
-        result = self.text[self.pos:self.pos + n]
-        self.pos += n
-        return result
-
-    def at_end(self) -> bool:
-        """Check if we've reached end of input."""
-        return self.pos >= len(self.text)
-
-    # ─────────────────────────────────────────────────────────────
-    # Top-level entry point: params ::= param ("|" param)*
-    # ─────────────────────────────────────────────────────────────
-    def parse_params(self) -> List[str]:
-        """Parse template parameters separated by |."""
-        params = []
-        while not self.at_end():
-            param = self.parse_param()
-            params.append(param)
-            if self.peek() == "|":
-                self.consume()
-            else:
-                break
-        return params
-
-    # ─────────────────────────────────────────────────────────────
-    # param ::= element*  (terminated by | or end)
-    # ─────────────────────────────────────────────────────────────
-    def parse_param(self) -> str:
-        """Parse elements until | or end of input."""
-        result = ""
-        while not self.at_end() and self.peek() != "|":
-            if self.peek(2) == "[[":
-                wikilink = self.parse_wikilink()
-                result += wikilink.text()  # Extract display or target
-            elif self.peek(2) == "{{":
-                template = self.parse_template()
-                # For morphology params, nested templates are metadata - discard
-                _ = template
-            else:
-                result += self.consume()
-        return result.strip()
-
-    # ─────────────────────────────────────────────────────────────
-    # wikilink ::= "[[" target ("#" anchor)? ("|" display)? "]]"
-    # ─────────────────────────────────────────────────────────────
-    def parse_wikilink(self) -> Wikilink:
-        """Parse [[target#anchor|display]] -> Wikilink object."""
-        self.consume(2)  # consume "[["
-
-        target = self.parse_target()
-        anchor = None
-        display = None
-
-        # Optional: "#" anchor
-        if self.peek() == "#":
-            self.consume()
-            anchor = self.parse_anchor()
-
-        # Optional: "|" display
-        if self.peek() == "|":
-            self.consume()
-            display = self.parse_display()
-
-        # Consume "]]"
-        if self.peek(2) == "]]":
-            self.consume(2)
-
-        return Wikilink(target=target, anchor=anchor, display=display)
-
-    def parse_target(self) -> str:
-        """target ::= target_char+  where target_char = [^#|\\]]"""
-        result = ""
-        while not self.at_end() and self.peek() not in "#|]":
-            result += self.consume()
-        return result
-
-    def parse_anchor(self) -> str:
-        """anchor ::= anchor_char+  where anchor_char = [^|\\]]"""
-        result = ""
-        while not self.at_end() and self.peek() not in "|]":
-            result += self.consume()
-        return result
-
-    def parse_display(self) -> str:
-        """display ::= display_char+  where display_char = [^\\]]"""
-        result = ""
-        while not self.at_end() and self.peek() != "]":
-            result += self.consume()
-        return result
-
-    # ─────────────────────────────────────────────────────────────
-    # template ::= "{{" params "}}"
-    # (reuses param parsing - templates have same structure!)
-    # ─────────────────────────────────────────────────────────────
-    def parse_template(self) -> Template:
-        """
-        Parse {{name|param1|param2|...}} -> Template object.
-        RECURSIVELY handles nested templates via parse_template_param_inner().
-        """
-        self.consume(2)  # consume "{{"
-
-        # Parse template contents as params (recursive!)
-        params = self.parse_template_params_inner()
-
-        if self.peek(2) == "}}":
-            self.consume(2)
-
-        # First param is template name, rest are params
-        name = params[0] if params else ""
-        return Template(name=name, params=params[1:])
-
-    def parse_template_params_inner(self) -> List[str]:
-        """Parse params inside a template (terminated by }})."""
-        params = []
-        while not self.at_end() and self.peek(2) != "}}":
-            param = self.parse_template_param_inner()
-            params.append(param)
-            if self.peek() == "|":
-                self.consume()
-            else:
-                break
-        return params
-
-    def parse_template_param_inner(self) -> str:
-        """Parse a single param inside a template (terminated by | or }})."""
-        result = ""
-        while not self.at_end() and self.peek() != "|" and self.peek(2) != "}}":
-            if self.peek(2) == "[[":
-                wikilink = self.parse_wikilink()
-                result += wikilink.text()
-            elif self.peek(2) == "{{":
-                template = self.parse_template()  # RECURSIVE!
-                # Nested templates produce no text for our purposes
-                _ = template
-            else:
-                result += self.consume()
-        return result.strip()
-
-
-def parse_template_params(content: str) -> List[str]:
-    """
-    Parse template parameters with proper bracket handling.
-
-    This is the main entry point for parsing template content.
-    Handles nested [[wikilinks]] and {{templates}} correctly.
-
-    Args:
-        content: The inner content of a template (without outer {{ }})
-
-    Returns:
-        List of parsed parameter strings with wikilink display text extracted
-    """
-    parser = WikitextParser(content)
-    return parser.parse_params()
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Head Template POS Extraction - Proper parsing for {{head|en|POS|...}}
-# ─────────────────────────────────────────────────────────────────────────────
-
-# Regex to find head templates and capture their FULL content (greedy but balanced)
-# This matches {{head|en|...}}, {{en-head|en|...}}, {{head-lite|en|...}}
-# We capture everything after the template name up to the closing }}
-# Note: This is a two-phase approach:
-#   1. Find potential head templates with a simple regex
-#   2. Use WikitextParser to properly extract parameters
-HEAD_TEMPLATE_FINDER = re.compile(
-    r'\{\{(head|en-head|head-lite)\|en\|',
-    re.IGNORECASE
-)
-
-
-def extract_head_template_content(text: str, start_pos: int) -> Optional[str]:
-    """
-    Extract the full content of a template starting at start_pos.
-
-    Uses bracket counting to handle nested templates correctly.
-
-    Args:
-        text: Full text to search in
-        start_pos: Position right after '{{head|en|' (where content begins)
-
-    Returns:
-        Template content (without {{ and }}) or None if malformed
-    """
-    depth = 1  # We're inside one {{ already
-    pos = start_pos
-    content_start = start_pos
-
-    while pos < len(text) and depth > 0:
-        if text[pos:pos + 2] == '{{':
-            depth += 1
-            pos += 2
-        elif text[pos:pos + 2] == '}}':
-            depth -= 1
-            if depth == 0:
-                return text[content_start:pos]
-            pos += 2
-        else:
-            pos += 1
-
-    # Unclosed template - return what we have
-    return text[content_start:pos] if pos > content_start else None
-
-
-def extract_pos_from_head_template(template_content: str) -> Optional[str]:
-    """
-    Extract the POS from head template content using proper parsing.
-
-    The POS is the first positional parameter (no '=' in it).
-    Named parameters like 'head=...', 'sort=...' are skipped.
-
-    Args:
-        template_content: Content after '{{head|en|' and before '}}'
-
-    Returns:
-        The POS string (lowercase) or None if not found
-
-    Examples:
-        >>> extract_pos_from_head_template("noun form|head=kris kringles")
-        'noun form'
-        >>> extract_pos_from_head_template("head=[[word]]|noun")
-        'noun'
-        >>> extract_pos_from_head_template("proper noun|head=[[United States]]")
-        'proper noun'
-    """
-    # Parse using WikitextParser for proper bracket handling
-    params = parse_template_params(template_content)
-
-    # Find first positional parameter (no '=' in it)
-    for param in params:
-        if '=' not in param and param.strip():
-            return param.strip().lower()
-
-    return None
-
-
-def find_head_template_pos_values(text: str) -> List[str]:
-    """
-    Find all POS values from {{head|en|...}} templates in text.
-
-    Uses proper parsing to correctly handle:
-    - Named parameters like head=...
-    - Nested templates
-    - Wikilinks in parameters
-
-    Args:
-        text: Wikitext to search
-
-    Returns:
-        List of POS values found (lowercase, deduplicated by order)
-
-    Examples:
-        >>> find_head_template_pos_values("{{head|en|noun form|head=cats}}")
-        ['noun form']
-        >>> find_head_template_pos_values("{{head|en|head=[[word]]|verb}}")
-        ['verb']
-    """
-    pos_values = []
-    seen = set()
-
-    for match in HEAD_TEMPLATE_FINDER.finditer(text):
-        # Position right after '{{head|en|'
-        content_start = match.end()
-
-        # Extract full template content with bracket balancing
-        content = extract_head_template_content(text, content_start)
-        if not content:
-            continue
-
-        # Parse to get POS
-        pos = extract_pos_from_head_template(content)
-        if pos and pos not in seen:
-            seen.add(pos)
-            pos_values.append(pos)
-
-    return pos_values
 
 
 class BZ2StreamReader:
@@ -584,9 +255,41 @@ def _load_labels() -> Dict[str, Any]:
         return yaml.safe_load(f)
 
 
+def _load_categories() -> Dict[str, Any]:
+    """Load category classifications from schema/categories.yaml."""
+    categories_path = _find_schema_file("categories.yaml")
+    with open(categories_path) as f:
+        return yaml.safe_load(f)
+
+
 # Load configuration at module import time
 POS_MAP = _load_pos_map()
 _LABELS = _load_labels()
+_CATEGORIES = _load_categories()
+
+# Build phrase type category patterns from YAML config
+# Maps full category string (e.g., "Category:English idioms") to phrase_type (e.g., "idiom")
+PHRASE_TYPE_CATEGORIES: Dict[str, str] = {
+    f"Category:English {suffix}": phrase_type
+    for suffix, phrase_type in _CATEGORIES.get("phrase_type_categories", {}).items()
+}
+
+# Build English POS category patterns for validation
+# Combines all category suffixes from pos_categories and abbreviation_categories
+# Used by has_english_categories() to validate that a page has English content
+def _build_english_pos_categories() -> List[str]:
+    """Build list of English POS category patterns from YAML config."""
+    categories = []
+    # Add all suffixes from pos_categories (flattened from all POS codes)
+    for suffixes in _CATEGORIES.get("pos_categories", {}).values():
+        for suffix in suffixes:
+            categories.append(f"Category:English {suffix}")
+    # Add abbreviation categories
+    for suffix in _CATEGORIES.get("abbreviation_categories", []):
+        categories.append(f"Category:English {suffix}")
+    return categories
+
+ENGLISH_POS_CATEGORIES: List[str] = _build_english_pos_categories()
 
 # Extract label sets from loaded configuration
 REGISTER_LABELS: Set[str] = set(_LABELS["register_labels"])
@@ -1440,13 +1143,13 @@ def extract_phrase_type(text: str) -> Optional[str]:
     - **Proverb**: Complete sentence with advice/wisdom ("a stitch in time saves nine")
     - **Phrase**: Generic multi-word without specific type
     - **Prepositional phrase**: Starts with preposition ("at least", "on hold")
-    - **Adverbial phrase**: Functions as adverb ("all of a sudden")
     - **Verb phrase**: Multi-word verb expression ("give up", "take over")
+    - **Noun phrase**: Multi-word noun expression
 
     Detection methods:
     1. Section headers: ===Idiom===, ===Proverb===, etc.
     2. Templates: {{head|en|idiom}}, {{en-prepphr}}
-    3. Categories: [[Category:English idioms]], etc.
+    3. Categories: loaded from schema/categories.yaml (phrase_type_categories)
     """
     # Check section headers for specific phrase types
     for match in POS_HEADER.finditer(text):
@@ -1472,19 +1175,9 @@ def extract_phrase_type(text: str) -> Optional[str]:
     if PREP_PHRASE_TEMPLATE.search(text):
         return 'prepositional phrase'
 
-    # Check categories (more comprehensive)
-    category_patterns = {
-        'Category:English idioms': 'idiom',
-        'Category:English proverbs': 'proverb',
-        'Category:English prepositional phrases': 'prepositional phrase',
-        'Category:English adverbial phrases': 'adverbial phrase',
-        'Category:English verb phrases': 'verb phrase',
-        'Category:English noun phrases': 'noun phrase',
-        'Category:English sayings': 'proverb',
-    }
-
-    for pattern, phrase_type in category_patterns.items():
-        if pattern in text:
+    # Check categories (loaded from schema/categories.yaml)
+    for category, phrase_type in PHRASE_TYPE_CATEGORIES.items():
+        if category in text:
             return phrase_type
 
     return None
@@ -1675,6 +1368,8 @@ def clean_lemma(raw: str) -> str:
     Removes section anchors (#...), wiki links ([[...]]), and templates ({{...}}).
     This handles malformed Wiktionary template content that leaks into lemma values.
 
+    Uses the recursive descent parser for proper bracket-aware handling.
+
     Args:
         raw: Raw lemma string potentially containing wiki markup
 
@@ -1688,46 +1383,7 @@ def clean_lemma(raw: str) -> str:
         "germanic {{italic" → "germanic"
         "read -> [[#etymology 1" → "read"
     """
-    result = raw
-
-    # Remove section anchors (e.g., "after#noun" -> "after")
-    if '#' in result:
-        result = result.split('#')[0]
-
-    # Remove wiki link syntax: [[target]] or [[target|display]] or [[:en:target]]
-    while '[[' in result:
-        start = result.find('[[')
-        end = result.find(']]', start)
-        if end != -1:
-            link_content = result[start + 2:end]
-            # Handle [[target|display]] - extract target
-            if '|' in link_content:
-                cleaned = link_content.split('|')[0]
-            else:
-                cleaned = link_content
-            # Handle [[:en:word]] - strip leading colon and namespace
-            cleaned = cleaned.lstrip(':')
-            if ':' in cleaned:
-                cleaned = cleaned.rsplit(':', 1)[-1]
-            result = result[:start] + cleaned + result[end + 2:]
-        else:
-            # Malformed (no closing ]]) - remove from [[ to end
-            result = result[:start]
-    result = result.replace(']]', '')
-
-    # Remove template syntax {{...}}
-    while '{{' in result:
-        start = result.find('{{')
-        end = result.find('}}', start)
-        if end != -1:
-            result = result[:start] + result[end + 2:]
-        else:
-            # Malformed (no closing }}) - remove from {{ to end
-            result = result[:start]
-    result = result.replace('}}', '')
-    result = result.replace('//', '')
-
-    return result.strip()
+    return strip_wikitext_markup(raw)
 
 
 def extract_lemma(text: str) -> Optional[str]:
@@ -1795,35 +1451,13 @@ def has_english_categories(text: str) -> bool:
     with an English section. Filters out foreign words like 'łódź' that may
     have an English section but no English POS categories.
 
+    Uses ENGLISH_POS_CATEGORIES loaded from schema/categories.yaml which
+    combines pos_categories and abbreviation_categories suffixes.
+
     Returns True if any English POS categories are found.
     """
-    # Common English POS categories
-    english_pos_patterns = [
-        'Category:English nouns',
-        'Category:English verbs',
-        'Category:English adjectives',
-        'Category:English adverbs',
-        'Category:English pronouns',
-        'Category:English prepositions',
-        'Category:English conjunctions',
-        'Category:English interjections',
-        'Category:English determiners',
-        'Category:English articles',
-        'Category:English proper nouns',
-        'Category:English idioms',
-        'Category:English phrases',
-        'Category:English proverbs',
-        'Category:English prepositional phrases',
-        'Category:English verb forms',
-        'Category:English noun forms',
-        'Category:English adjective forms',
-        'Category:English adverb forms',
-        'Category:English contractions',
-        'Category:English abbreviations',
-    ]
-
     text_lower = text.lower()
-    return any(pattern.lower() in text_lower for pattern in english_pos_patterns)
+    return any(pattern.lower() in text_lower for pattern in ENGLISH_POS_CATEGORIES)
 
 
 # Pattern to extract {{tlb|en|...}} or {{lb|en|...}} from text

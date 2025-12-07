@@ -52,7 +52,8 @@ WIKT_NORMALIZE := $(RUN_PYTHON) src/openword/wikt_normalize.py
 PACKAGE_RELEASE := $(RUN_PYTHON) src/openword/package_release.py
 
 # Python scripts (tools/)
-PYTHON_SCANNER := $(RUN_PYTHON) tools/wiktionary_scanner_python/scanner.py
+# Use -m to run as module so relative imports work properly
+PYTHON_SCANNER := PYTHONPATH=tools $(RUN_PYTHON) -m wiktionary_scanner_python.scanner
 COLLECT_POS := $(RUN_PYTHON) tools/collect_pos.py
 UPDATE_CORPUS_DOC := $(RUN_PYTHON) tools/update_corpus_doc.py
 GENERATE_REPORTS := $(RUN_PYTHON) tools/generate_reports.py

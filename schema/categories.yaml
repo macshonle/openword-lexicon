@@ -71,6 +71,17 @@ inflected_form_categories:
   - adverb forms
   - plurals
 
+# Phrase type detection from categories
+# Maps category suffix (without "Category:English " prefix) to phrase_type string
+# Used by extract_phrase_type() for granular phrase classification
+# Only includes categories with actual occurrences in Wiktionary data
+phrase_type_categories:
+  idioms: idiom
+  proverbs: proverb
+  prepositional phrases: prepositional phrase
+  verb phrases: verb phrase
+  noun phrases: noun phrase
+
 # {{en-X}} template abbreviations
 # Maps POS code to template abbreviation used in {{en-X}} patterns
 # e.g., {{en-adj}} → ADJ, {{en-prop}} → NAM

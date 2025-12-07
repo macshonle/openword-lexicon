@@ -12,9 +12,11 @@ import pytest
 tools_path = Path(__file__).parent.parent / "tools"
 sys.path.insert(0, str(tools_path))
 
-from wiktionary_scanner_python.scanner import (
+from wiktionary_scanner_python.wikitext_parser import (
     WikitextParser,
     parse_template_params,
+)
+from wiktionary_scanner_python.scanner import (
     extract_syllable_count_from_hyphenation,
     extract_syllable_count_from_rhymes,
     extract_syllable_count_from_ipa,
