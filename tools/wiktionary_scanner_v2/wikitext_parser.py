@@ -393,6 +393,9 @@ class WikitextParser:
         """
         Extract labels from {{lb|en|...}} templates.
 
+        Handles both standard pipe-separated params and non-standard
+        comma-separated text within params (e.g., "UK, derogatory").
+
         Returns:
             List of label strings (lowercase)
         """
@@ -406,9 +409,17 @@ class WikitextParser:
                 if template.params and template.params[0].lower() == "en":
                     # Rest are labels
                     for param in template.params[1:]:
-                        label = param.strip().lower()
-                        if label and "=" not in label:
-                            labels.append(label)
+                        if "=" in param:
+                            continue
+
+                        # Split on commas to handle non-standard markup
+                        # e.g., "UK, derogatory" -> ["UK", "derogatory"]
+                        parts = param.split(",")
+
+                        for part in parts:
+                            label = part.strip().lower()
+                            if label:
+                                labels.append(label)
 
         return labels
 

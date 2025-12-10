@@ -73,7 +73,10 @@ class BindingConfig:
     # === Section roles (en-wikt.section_roles.yaml) ===
     ignore_headers: set[str] = field(default_factory=set)  # Literal headers (no patterns)
     ignore_header_patterns: list[Pattern[str]] = field(default_factory=list)  # Compiled %d patterns
+    label_qualifiers: set[str] = field(default_factory=set)  # Noise words to strip from labels
     label_normalizations: dict[str, str] = field(default_factory=dict)
+    definition_markers: dict[str, str] = field(default_factory=dict)  # type → prefix (e.g., "primary" → "#")
+    definition_marker_pattern: Pattern[str] | None = None  # Compiled regex for matching definition lines
 
     # === Derived allowlists (computed from bindings) ===
     # pos_headers = headers that map to a POS or phrase type (the "allowlist")
@@ -97,6 +100,28 @@ class BindingConfig:
             if pattern.fullmatch(header):
                 return True
         return False
+
+    def parse_definition_marker(self, prefix: str) -> tuple[str, int]:
+        """
+        Parse a definition marker prefix into (type, level).
+
+        Args:
+            prefix: The matched prefix (e.g., "#", "##", "#*")
+
+        Returns:
+            (definition_type, definition_level) tuple
+        """
+        # Find matching type from definition_markers
+        for def_type, marker_prefix in self.definition_markers.items():
+            if prefix == marker_prefix:
+                # Determine level from hash count
+                level = prefix.count("#")
+                if level == 0:
+                    level = 1  # Fallback for non-hash markers
+                return (def_type, level)
+
+        # Fallback: primary level 1
+        return ("primary", 1)
 
     def summary(self) -> str:
         """Return a human-readable summary of the loaded configuration."""
@@ -342,9 +367,26 @@ def load_binding_config(core_path: Path, bindings_path: Path) -> BindingConfig:
         else:
             config.ignore_headers.add(h_lower)
 
+    config.label_qualifiers = {q.lower() for q in bindings.section_roles.label_qualifiers}
+
     config.label_normalizations = {
         k.lower(): v.lower() for k, v in bindings.section_roles.label_normalizations.items()
     }
+
+    # Load definition markers and build compiled regex pattern
+    # The YAML maps type → prefix (e.g., "primary" → "#", "secondary" → "##")
+    config.definition_markers = bindings.section_roles.definition_markers.copy()
+    if config.definition_markers:
+        # Build regex pattern that matches all marker types
+        # Sort prefixes by length (longest first) so ## matches before #
+        prefixes_by_type = [(t, p) for t, p in config.definition_markers.items()]
+        prefixes_by_type.sort(key=lambda x: -len(x[1]))  # Longest prefix first
+
+        # Build pattern: ^(###|##|#\*|#:|#)\s*(.*)$
+        # Each prefix is escaped and captured, followed by optional space and content
+        escaped_prefixes = [re.escape(p) for _, p in prefixes_by_type]
+        pattern_str = f"^({'|'.join(escaped_prefixes)})\\s*(.*)$"
+        config.definition_marker_pattern = re.compile(pattern_str, re.MULTILINE)
 
     # === Build derived allowlists ===
 

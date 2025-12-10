@@ -112,6 +112,10 @@ tag_sets:
         name: physics
         description: Physics and related physical sciences.
 
+      - code: DMTH
+        name: mathematics
+        description: Mathematics, set theory, logic, and related fields.
+
       - code: DLAW
         name: law
         description: Legal / law domain.
@@ -143,6 +147,10 @@ tag_sets:
       - code: ENGB
         name: English (United Kingdom)
         description: Usage typical of British English.
+
+      - code: ENSC
+        name: English (Scotland)
+        description: Usage typical of Scottish English.
 
       - code: ENUS
         name: English (United States)

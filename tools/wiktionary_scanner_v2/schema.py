@@ -182,6 +182,7 @@ class SectionRoles:
     """Section role definitions from en-wikt.section_roles.yaml."""
 
     ignore_headers: list[str] = field(default_factory=list)
+    label_qualifiers: list[str] = field(default_factory=list)
     label_normalizations: dict[str, str] = field(default_factory=dict)
     definition_markers: dict[str, str] = field(default_factory=dict)
 
@@ -443,6 +444,7 @@ def load_bindings(path: Path) -> Bindings:
             roles_data = yaml.safe_load(f)
         bindings.section_roles = SectionRoles(
             ignore_headers=roles_data.get("ignore_headers", []),
+            label_qualifiers=roles_data.get("label_qualifiers", []),
             label_normalizations=roles_data.get("label_normalizations", {}),
             definition_markers=roles_data.get("definition_markers", {}),
         )

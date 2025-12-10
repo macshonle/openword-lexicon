@@ -48,6 +48,8 @@ class Entry:
     lemma: Optional[str] = None  # Base form (if inflected)
     nsyll: Optional[int] = None  # Syllable count
     morphology: Optional[Morphology] = None
+    definition_level: int = 1  # 1 for #, 2 for ##, 3 for ###
+    definition_type: str = "primary"  # primary, secondary, tertiary, quote, synonym, usage
 
 
 # =============================================================================
@@ -269,15 +271,27 @@ def compute_tags(evidence: Evidence, config: BindingConfig) -> set[str]:
     """
     Compute tag codes from evidence labels, spelling labels, and categories.
 
+    Uses config.label_qualifiers to strip noise words before lookup.
     Uses config.label_normalizations to canonicalize labels before lookup.
     """
     tags = set()
 
+    def strip_qualifiers(label: str) -> str:
+        """Strip leading qualifier words from a label."""
+        words = label.split()
+        while words and words[0] in config.label_qualifiers:
+            words.pop(0)
+        return " ".join(words)
+
     def normalize_and_lookup(label: str) -> str | None:
-        """Normalize a label and look it up in the tag table."""
+        """Strip qualifiers, normalize a label and look it up in the tag table."""
         label_lower = label.lower()
+        # Strip leading qualifiers (e.g., "usu. derogatory" -> "derogatory")
+        stripped = strip_qualifiers(label_lower)
+        if not stripped:
+            return None
         # Apply normalizations (e.g., "u.s." -> "us", "british" -> "uk")
-        normalized = config.label_normalizations.get(label_lower, label_lower)
+        normalized = config.label_normalizations.get(stripped, stripped)
         return config.label_to_tag.get(normalized)
 
     # Map labels from {{lb|en|...}} to tags
@@ -602,6 +616,8 @@ def apply_rules(evidence: Evidence, config: BindingConfig) -> Optional[Entry]:
         lemma=lemma,
         nsyll=nsyll,
         morphology=morphology,
+        definition_level=evidence.definition_level,
+        definition_type=evidence.definition_type,
     )
 
 
@@ -615,6 +631,7 @@ def entry_to_dict(entry: Entry) -> dict:
     3. lemma (if present)
     4. nsyll (if present)
     5. morphology (if present)
+    6. def_level, def_type (if not primary level 1)
     """
     result = {
         "id": entry.id,
@@ -643,5 +660,10 @@ def entry_to_dict(entry: Entry) -> dict:
         if entry.morphology.suffixes:
             morph_dict["suffixes"] = entry.morphology.suffixes
         result["morphology"] = morph_dict
+
+    # Include definition level/type only for non-primary entries
+    if entry.definition_level != 1 or entry.definition_type != "primary":
+        result["def_level"] = entry.definition_level
+        result["def_type"] = entry.definition_type
 
     return result

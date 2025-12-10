@@ -174,6 +174,21 @@ tag_set_bindings:
         from_category_substrings:
           - physics
 
+      - code: DMTH   # mathematics
+        description: Mathematics, set theory, logic.
+        from_labels:
+          - mathematics
+          - math
+          - maths
+          - set theory
+          - logic
+          - algebra
+          - geometry
+          - calculus
+          - number theory
+        from_category_substrings:
+          - mathematics
+
       - code: DLAW   # law
         description: Legal / law domain.
         from_labels:
@@ -225,6 +240,13 @@ tag_set_bindings:
         from_category_substrings:
           - british english
           - uk english
+
+      - code: ENSC   # Scottish English usage
+        description: Used primarily in Scottish English.
+        from_labels:
+          - scottish
+        from_category_substrings:
+          - scottish english
 
       - code: ENUS   # American English usage
         description: Used primarily in American English.

@@ -14,6 +14,7 @@ Architecture:
 """
 
 import bz2
+import codecs
 import re
 import time
 from dataclasses import dataclass, field
@@ -60,6 +61,8 @@ class Evidence:
 
     # Definition
     definition_text: str = ""  # The definition line text
+    definition_level: int = 1  # 1 for #, 2 for ##, 3 for ###
+    definition_type: str = "primary"  # primary, secondary, tertiary, quote, synonym, usage
 
     # Syllable signals (multiple sources for priority resolution)
     hyphenation_parts: list[str] = field(default_factory=list)  # From {{hyphenation|en|...}}
@@ -156,20 +159,25 @@ def scan_pages(file_obj, chunk_size: int = 1024 * 1024) -> Iterator[str]:
     - No namespace handling
     - No validation
     - Simple string scanning
+
+    Uses an incremental UTF-8 decoder to properly handle multi-byte sequences
+    that may be split across chunk boundaries.
     """
     buffer = ""
     page_start_marker = "<page>"
     page_end_marker = "</page>"
 
+    # Incremental decoder handles split multi-byte UTF-8 sequences correctly
+    decoder = codecs.getincrementaldecoder("utf-8")(errors="replace")
+
     while True:
         chunk = file_obj.read(chunk_size)
         if not chunk:
+            # Flush any remaining bytes in the decoder
+            buffer += decoder.decode(b"", final=True)
             break
 
-        try:
-            buffer += chunk.decode("utf-8")
-        except UnicodeDecodeError:
-            buffer += chunk.decode("utf-8", errors="ignore")
+        buffer += decoder.decode(chunk)
 
         while True:
             start = buffer.find(page_start_marker)
@@ -244,8 +252,8 @@ ABBREVIATION_TEMPLATE = re.compile(
     r"\{\{(?:abbreviation of|abbrev of|abbr of|initialism of|acronym of)\|en\|", re.IGNORECASE
 )
 
-# Spelling region labels from {{tlb|en|...}}
-TLB_TEMPLATE = re.compile(r"\{\{(?:tlb|lb)\|en\|([^}]+)\}\}", re.IGNORECASE)
+# Spelling region labels from {{tlb|en|...}} (NOT {{lb|...}} which is per-definition)
+TLB_TEMPLATE = re.compile(r"\{\{tlb\|en\|([^}]+)\}\}", re.IGNORECASE)
 
 # Special page handling
 SPECIAL_PAGE_PREFIXES = (
@@ -611,6 +619,8 @@ def extract_evidence_from_section(
     section_text: str,
     page_cache: PageLevelCache,
     etym_cache: EtymologyBlockCache,
+    definition_marker_pattern: Optional[re.Pattern] = None,
+    parse_definition_marker: Optional[callable] = None,
 ) -> Iterator[Evidence]:
     """
     Extract Evidence objects for each definition in a POS section.
@@ -621,6 +631,8 @@ def extract_evidence_from_section(
         section_text: Text of this POS section
         page_cache: Pre-computed page-level data (categories, wc)
         etym_cache: Pre-computed etymology-scoped data (IPA, hyphenation, etymology, etc.)
+        definition_marker_pattern: Compiled regex for matching definition lines (from config)
+        parse_definition_marker: Function to parse prefix into (type, level) tuple
 
     Yields:
         Evidence objects, one per definition line
@@ -631,13 +643,25 @@ def extract_evidence_from_section(
     # Section-level inflection template (in definition area, not etymology)
     inflection_template = extract_inflection_template(section_text)
 
-    # Extract definition lines
-    definition_lines = [m.group(1) for m in DEFINITION_LINE.finditer(section_text)]
+    # Extract definition lines using config pattern or fallback to primary-only
+    definition_entries: list[tuple[str, int, str]] = []  # (text, level, type)
 
-    if not definition_lines:
-        definition_lines = [""]  # Create at least one entry
+    if definition_marker_pattern and parse_definition_marker:
+        # Use config-driven definition extraction (captures #, ##, #*, #:, etc.)
+        for match in definition_marker_pattern.finditer(section_text):
+            prefix = match.group(1)
+            text = match.group(2).strip()
+            def_type, level = parse_definition_marker(prefix)
+            definition_entries.append((text, level, def_type))
+    else:
+        # Fallback: primary definitions only (backwards compatibility)
+        for match in DEFINITION_LINE.finditer(section_text):
+            definition_entries.append((match.group(1), 1, "primary"))
 
-    for def_text in definition_lines:
+    if not definition_entries:
+        definition_entries = [("", 1, "primary")]  # Create at least one entry
+
+    for def_text, def_level, def_type in definition_entries:
         # Definition-level labels
         labels = extract_labels(def_text)
 
@@ -652,6 +676,8 @@ def extract_evidence_from_section(
             etymology_text=etym_cache.etymology_text,
             etymology_templates=etym_cache.etymology_templates,
             definition_text=def_text,
+            definition_level=def_level,
+            definition_type=def_type,
             hyphenation_parts=etym_cache.hyphenation_parts,
             rhymes_syllable_count=etym_cache.rhymes_syllable_count,
             syllable_category_count=etym_cache.syllable_category_count,
@@ -675,6 +701,8 @@ def extract_evidence(
     text: str,
     is_ignored_header: callable,
     pos_headers: set[str] | None = None,
+    definition_marker_pattern: Optional[re.Pattern] = None,
+    parse_definition_marker: Optional[callable] = None,
 ) -> Iterator[Evidence]:
     """
     Extract Evidence objects from a Wiktionary page.
@@ -685,11 +713,16 @@ def extract_evidence(
         is_ignored_header: Function(header: str) -> bool that checks if a header should be skipped.
             The header passed is already lowercased and whitespace-normalized.
         pos_headers: Allowlist of valid POS headers (lowercase). If None, accepts all non-ignored.
+        definition_marker_pattern: Compiled regex for matching definition lines (from config)
+        parse_definition_marker: Function to parse prefix into (type, level) tuple
 
     Yields:
         Evidence objects for each (POS, definition) pair
     """
-    result = extract_evidence_with_unknowns(title, text, is_ignored_header, pos_headers)
+    result = extract_evidence_with_unknowns(
+        title, text, is_ignored_header, pos_headers,
+        definition_marker_pattern, parse_definition_marker
+    )
     yield from result.evidence
 
 
@@ -698,6 +731,8 @@ def extract_evidence_with_unknowns(
     text: str,
     is_ignored_header: callable,
     pos_headers: set[str] | None = None,
+    definition_marker_pattern: Optional[re.Pattern] = None,
+    parse_definition_marker: Optional[callable] = None,
 ) -> ExtractionResult:
     """
     Extract Evidence objects from a Wiktionary page, tracking unknown headers.
@@ -712,6 +747,8 @@ def extract_evidence_with_unknowns(
         is_ignored_header: Function(header: str) -> bool that checks if a header should be skipped.
             The header passed is already lowercased and whitespace-normalized.
         pos_headers: Allowlist of valid POS headers (lowercase). If None, accepts all non-ignored.
+        definition_marker_pattern: Compiled regex for matching definition lines (from config)
+        parse_definition_marker: Function to parse prefix into (type, level) tuple
 
     Returns:
         ExtractionResult with evidence list and unknown headers
@@ -772,6 +809,8 @@ def extract_evidence_with_unknowns(
             section_text=section_text,
             page_cache=page_cache,
             etym_cache=etym_cache,
+            definition_marker_pattern=definition_marker_pattern,
+            parse_definition_marker=parse_definition_marker,
         ):
             evidence_list.append(ev)
 

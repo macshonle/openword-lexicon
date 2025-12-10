@@ -66,6 +66,19 @@ ignore_headers:
   - paronyms
   - abbreviations
 
+# Label qualifiers to strip before tag lookup
+# These are "noise words" that appear before the actual label in NON-STANDARD markup
+# where someone wrote prose instead of pipe-separated params.
+# e.g., "{{lb|en|Mainly [[UK]], usu. [[derogatory]]}}" -> "uk", "derogatory"
+#
+# NOTE: In standard Wiktionary markup, qualifiers like "chiefly" are separate
+# pipe-separated params ({{lb|en|chiefly|US}}) and don't need stripping.
+# This list is intentionally minimal, based on observed non-standard patterns.
+label_qualifiers:
+  - mainly      # Observed in taffy.xml: "Mainly [[UK]]"
+  - usu.        # Observed in taffy.xml: "usu. [[derogatory]]"
+  - usu         # Variant of above
+
 # Label normalizations for tag mapping
 # Maps common label variants to canonical forms before tag lookup
 label_normalizations:

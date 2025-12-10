@@ -164,11 +164,18 @@ def main() -> int:
                     result.text,
                     is_ignored_header=config.is_ignored_header,
                     pos_headers=config.pos_headers,
+                    definition_marker_pattern=config.definition_marker_pattern,
+                    parse_definition_marker=config.parse_definition_marker,
                 )
 
                 # Track unknown headers
                 for header in extraction_result.unknown_headers:
                     unknown_headers[header.lower()] += 1
+
+                # Collect entries for this page into an append-only ordered set
+                # (deduplicate by JSON string, first appearance wins)
+                seen_json: set[str] = set()
+                page_entries: list[str] = []
 
                 for evidence in extraction_result.evidence:
                     entry = apply_rules(evidence, config)
@@ -177,9 +184,18 @@ def main() -> int:
                         stats["entries_filtered"] += 1
                         continue
 
-                    # Write entry
+                    # Convert to JSON string for deduplication (compact, no whitespace)
                     entry_dict = entry_to_dict(entry)
-                    out.write(json.dumps(entry_dict, ensure_ascii=False) + "\n")
+                    entry_json = json.dumps(entry_dict, ensure_ascii=False, separators=(",", ":"))
+
+                    # Only keep first occurrence of each unique entry
+                    if entry_json not in seen_json:
+                        seen_json.add(entry_json)
+                        page_entries.append(entry_json)
+
+                # Write deduplicated entries for this page
+                for entry_json in page_entries:
+                    out.write(entry_json + "\n")
                     stats["entries_written"] += 1
 
                     # Check limit
