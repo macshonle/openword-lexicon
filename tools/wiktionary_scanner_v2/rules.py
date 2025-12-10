@@ -215,9 +215,8 @@ def determine_pos(evidence: Evidence, config: BindingConfig) -> str:
             if suffix in config.en_template_to_pos:
                 return config.en_template_to_pos[suffix]
 
-    # 4. Try category suffix
-    for category in evidence.categories:
-        cat_lower = category.lower()
+    # 4. Try category suffix (use pre-lowercased categories)
+    for cat_lower in evidence.categories_lower:
         if cat_lower in config.category_suffix_to_pos:
             return config.category_suffix_to_pos[cat_lower]
 
@@ -240,18 +239,14 @@ def compute_flags(evidence: Evidence, config: BindingConfig) -> set[str]:
         if template_lower in config.template_to_flag:
             flags.add(config.template_to_flag[template_lower])
 
-    # 2. Check inflection template against binding table
+    # 2. Check inflection template against binding table (no fallback - use config)
     if evidence.inflection_template:
         template_lower = evidence.inflection_template.name.lower()
         if template_lower in config.template_to_flag:
             flags.add(config.template_to_flag[template_lower])
-        # Fallback: if inflection template exists but not in binding, assume INFL
-        elif "INFL" in config.flag_schema:
-            flags.add("INFL")
 
-    # 3. Check categories against binding table
-    for category in evidence.categories:
-        cat_lower = category.lower()
+    # 3. Check categories against binding table (use pre-lowercased)
+    for cat_lower in evidence.categories_lower:
         if cat_lower in config.category_suffix_to_flag:
             flags.add(config.category_suffix_to_flag[cat_lower])
 
@@ -297,9 +292,8 @@ def compute_tags(evidence: Evidence, config: BindingConfig) -> set[str]:
         if tag:
             tags.add(tag)
 
-    # Map category substrings to tags
-    for category in evidence.categories:
-        cat_lower = category.lower()
+    # Map category substrings to tags (use pre-lowercased)
+    for cat_lower in evidence.categories_lower:
         for substring, code in config.category_substring_to_tag.items():
             if substring in cat_lower:
                 tags.add(code)
@@ -349,9 +343,8 @@ def compute_phrase_type(evidence: Evidence, config: BindingConfig) -> Optional[s
         if template_lower in config.template_to_phrase_type:
             return config.template_to_phrase_type[template_lower]
 
-    # 5. Check category suffix
-    for category in evidence.categories:
-        cat_lower = category.lower()
+    # 5. Check category suffix (use pre-lowercased)
+    for cat_lower in evidence.categories_lower:
         if cat_lower in config.category_suffix_to_phrase_type:
             return config.category_suffix_to_phrase_type[cat_lower]
 
@@ -359,20 +352,45 @@ def compute_phrase_type(evidence: Evidence, config: BindingConfig) -> Optional[s
 
 
 def _find_morphology_template_binding(
-    template_name: str, config: BindingConfig
-) -> Optional[tuple[str, list[str]]]:
+    template_name: str,
+    template_params: list[str],
+    config: BindingConfig,
+) -> Optional[tuple[str, list[str], str]]:
     """
-    Find matching morphology template binding by name or alias.
+    Find matching morphology template binding by name/alias and language.
 
-    Returns (template_name, roles) if found, None otherwise.
+    Checks that the template's first param matches the expected language_param
+    from the binding config. This prevents matching non-English etymology
+    templates on mixed-language pages.
+
+    Args:
+        template_name: Name of the template (e.g., "suffix")
+        template_params: List of template parameters
+        config: BindingConfig with morphology templates
+
+    Returns:
+        (canonical_name, roles, language_param) if found, None otherwise
     """
     template_lower = template_name.lower()
+
+    # Extract first positional param (likely the language code)
+    first_param = None
+    for p in template_params:
+        p = p.strip()
+        if p and "=" not in p:
+            first_param = p.lower()
+            break
+
     for mt in config.morphology_templates:
-        if template_lower == mt.name.lower():
-            return (mt.name, mt.roles)
-        for alias in mt.aliases:
-            if template_lower == alias.lower():
-                return (mt.name, mt.roles)
+        # Check name or alias match
+        name_match = template_lower == mt.name.lower()
+        alias_match = any(template_lower == alias.lower() for alias in mt.aliases)
+
+        if name_match or alias_match:
+            # Check language param matches expected value
+            if first_param == mt.language_param.lower():
+                return (mt.name, mt.roles, mt.language_param)
+
     return None
 
 
@@ -380,18 +398,31 @@ def compute_morphology(evidence: Evidence, config: BindingConfig) -> Optional[Mo
     """
     Compute morphology structure from etymology templates using binding config.
 
-    Uses config.morphology_templates to match templates and derive roles,
-    then maps type through config.morphology_type_to_code.
+    Iterates over all etymology templates until finding one that matches a
+    binding with the correct language. Uses config.morphology_templates to
+    match templates and derive roles, then maps type through
+    config.morphology_type_to_code.
     """
     if not evidence.etymology_templates:
         return None
 
-    template = evidence.etymology_templates[0]  # Use first template
+    # Try each etymology template until we find a matching binding
+    template = None
+    binding = None
+
+    for t in evidence.etymology_templates:
+        binding = _find_morphology_template_binding(t.name, t.params, config)
+        if binding:
+            template = t
+            break
+
+    if template is None or binding is None:
+        # No matching binding found - config must define the template
+        return None
+
     template_name = template.name.lower()
     params = template.params
-
-    # Try to find a matching binding for this template
-    binding = _find_morphology_template_binding(template_name, config)
+    canonical_name, roles, _ = binding
 
     # Extract components (skip language codes and named params)
     cleaned = []
@@ -419,83 +450,49 @@ def compute_morphology(evidence: Evidence, config: BindingConfig) -> Optional[Mo
     bases = []
     components = []
 
-    if binding:
-        # Use roles from binding to classify components
-        canonical_name, roles = binding
+    # Use roles from binding to classify components
+    for i, component in enumerate(cleaned):
+        role = roles[i] if i < len(roles) else "component"
 
-        for i, component in enumerate(cleaned):
-            role = roles[i] if i < len(roles) else "component"
-
-            if role == "prefix":
-                # Normalize: ensure trailing hyphen
-                if not component.endswith("-"):
-                    component = component + "-"
+        if role == "prefix":
+            # Normalize: ensure trailing hyphen
+            if not component.endswith("-"):
+                component = component + "-"
+            prefixes.append(component)
+        elif role == "suffix":
+            # Normalize: ensure leading hyphen
+            if not component.startswith("-"):
+                component = "-" + component
+            suffixes.append(component)
+        elif role == "base":
+            bases.append(component)
+        else:
+            # Generic component - classify by hyphen pattern
+            if component.endswith("-") and not component.startswith("-"):
                 prefixes.append(component)
-            elif role == "suffix":
-                # Normalize: ensure leading hyphen
-                if not component.startswith("-"):
-                    component = "-" + component
+            elif component.startswith("-") and not component.endswith("-"):
                 suffixes.append(component)
-            elif role == "base":
+            elif not component.startswith("-") and not component.endswith("-"):
                 bases.append(component)
-            else:
-                # Generic component - classify by hyphen pattern
-                if component.endswith("-") and not component.startswith("-"):
-                    prefixes.append(component)
-                elif component.startswith("-") and not component.endswith("-"):
-                    suffixes.append(component)
-                elif not component.startswith("-") and not component.endswith("-"):
-                    bases.append(component)
 
-            components.append(component)
+        components.append(component)
 
-        # Determine type based on canonical template name and derived structure
-        if canonical_name == "compound":
-            morph_type_str = "compound"
-        elif canonical_name == "confix":
-            morph_type_str = "circumfixed"
-        elif prefixes and suffixes:
-            morph_type_str = "affixed"
-        elif prefixes:
-            morph_type_str = "prefixed"
-        elif suffixes:
-            morph_type_str = "suffixed"
-        else:
-            morph_type_str = "simple"
+    # Determine type based on canonical template name and derived structure
+    if canonical_name == "compound":
+        morph_type_str = "compound"
+    elif canonical_name == "confix":
+        morph_type_str = "circumfixed"
+    elif prefixes and suffixes:
+        morph_type_str = "affixed"
+    elif prefixes:
+        morph_type_str = "prefixed"
+    elif suffixes:
+        morph_type_str = "suffixed"
     else:
-        # Fallback: classify purely by hyphen patterns (no binding match)
-        components = cleaned
-        prefixes = [c for c in cleaned if c.endswith("-") and not c.startswith("-")]
-        suffixes = [c for c in cleaned if c.startswith("-") and not c.endswith("-")]
-        bases = [c for c in cleaned if not c.startswith("-") and not c.endswith("-")]
+        morph_type_str = "simple"
 
-        if template_name == "compound":
-            morph_type_str = "compound"
-        elif template_name == "confix":
-            morph_type_str = "circumfixed"
-        elif prefixes and suffixes:
-            morph_type_str = "affixed"
-        elif prefixes:
-            morph_type_str = "prefixed"
-        elif suffixes:
-            morph_type_str = "suffixed"
-        else:
-            morph_type_str = "simple"
-
-    # Map type string to 4-letter code via config
+    # Map type string to 4-letter code via config (no hardcoded fallback)
     morph_type = config.morphology_type_to_code.get(morph_type_str)
-    if not morph_type:
-        # Fallback to hardcoded mapping if config doesn't have it
-        fallback_map = {
-            "simple": "SIMP",
-            "compound": "COMP",
-            "prefixed": "PREF",
-            "suffixed": "SUFF",
-            "affixed": "AFFX",
-            "circumfixed": "CIRC",
-        }
-        morph_type = fallback_map.get(morph_type_str)
-
     if not morph_type or morph_type not in config.morphology_type_schema:
         return None
 

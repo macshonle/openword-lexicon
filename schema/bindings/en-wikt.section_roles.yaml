@@ -8,24 +8,15 @@ description: >
 
 # Headers that should be skipped (metadata sections, not parts of speech)
 # These are normalized to lowercase for matching.
+# Pattern format: %d matches one or more digits (e.g., "etymology %d" matches "etymology 1", "etymology 23")
 ignore_headers:
-  # Etymology sections (numbered variants)
+  # Etymology sections (base and numbered variants)
   - etymology
-  - etymology 1
-  - etymology 2
-  - etymology 3
-  - etymology 4
-  - etymology 5
-  - etymology 6
-  - etymology 7
-  - etymology 8
-  - etymology 9
-  - etymology 10
+  - etymology %d
 
   # Pronunciation and phonology
   - pronunciation
-  - pronunciation 1
-  - pronunciation 2
+  - pronunciation %d
 
   # Usage and notes
   - usage notes
@@ -66,6 +57,14 @@ ignore_headers:
   # Statistics sections (rare but exist)
   - statistics
   - trivia
+
+  # Other metadata sections
+  - collocations
+  - gallery
+  - pronunciation notes
+  - sense overview
+  - paronyms
+  - abbreviations
 
 # Label normalizations for tag mapping
 # Maps common label variants to canonical forms before tag lookup

@@ -175,10 +175,12 @@ pos_bindings:
     header_variants:
       - numeral
       - numerals
+      - number
       - cardinal number
       - ordinal number
     head_pos_values:
       - numeral
+      - number
       - cardinal number
       - ordinal number
     category_suffixes:
@@ -274,6 +276,15 @@ pos_bindings:
       - idiom
     category_suffixes:
       - idioms
+
+  CTN:
+    header_variants:
+      - contraction
+      - contractions
+    head_pos_values:
+      - contraction
+    category_suffixes:
+      - contractions
 
 # NOTE: Additional minor POS classes (e.g. letters-only, symbols-only)
 # that are rare in English can be added here if we decide they merit

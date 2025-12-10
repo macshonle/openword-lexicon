@@ -12,8 +12,10 @@ The BindingConfig object provides:
 - Validation of code shapes and global uniqueness
 """
 
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Pattern
 
 from .schema import (
     CoreSchema,
@@ -69,11 +71,37 @@ class BindingConfig:
     morphology_type_to_code: dict[str, str] = field(default_factory=dict)
 
     # === Section roles (en-wikt.section_roles.yaml) ===
-    ignore_headers: set[str] = field(default_factory=set)
+    ignore_headers: set[str] = field(default_factory=set)  # Literal headers (no patterns)
+    ignore_header_patterns: list[Pattern[str]] = field(default_factory=list)  # Compiled %d patterns
     label_normalizations: dict[str, str] = field(default_factory=dict)
+
+    # === Derived allowlists (computed from bindings) ===
+    # pos_headers = headers that map to a POS or phrase type (the "allowlist")
+    pos_headers: set[str] = field(default_factory=set)
+
+    def is_ignored_header(self, header: str) -> bool:
+        """
+        Check if a header should be ignored (is a metadata section).
+
+        Args:
+            header: Header text, already lowercased and whitespace-normalized
+
+        Returns:
+            True if the header should be skipped
+        """
+        # Fast path: check literal headers first
+        if header in self.ignore_headers:
+            return True
+        # Slow path: check patterns
+        for pattern in self.ignore_header_patterns:
+            if pattern.fullmatch(header):
+                return True
+        return False
 
     def summary(self) -> str:
         """Return a human-readable summary of the loaded configuration."""
+        ignore_count = len(self.ignore_headers) + len(self.ignore_header_patterns)
+        pattern_note = f" ({len(self.ignore_header_patterns)} patterns)" if self.ignore_header_patterns else ""
         return (
             f"Core schema:\n"
             f"  - {len(self.pos_schema)} POS codes\n"
@@ -87,7 +115,9 @@ class BindingConfig:
             f"  - {len(self.header_to_pos)} POS header mappings\n"
             f"  - {len(self.template_to_flag)} flag template mappings\n"
             f"  - {len(self.label_to_tag)} label → tag mappings\n"
-            f"  - {len(self.morphology_templates)} morphology templates"
+            f"  - {len(self.morphology_templates)} morphology templates\n"
+            f"  - {len(self.pos_headers)} POS/phrase header allowlist entries\n"
+            f"  - {ignore_count} ignored section headers{pattern_note}"
         )
 
 
@@ -299,10 +329,28 @@ def load_binding_config(core_path: Path, bindings_path: Path) -> BindingConfig:
 
     # === Index section roles ===
 
-    config.ignore_headers = {h.lower() for h in bindings.section_roles.ignore_headers}
+    # Separate literal headers from patterns (%d)
+    # Pattern format: %d matches one or more digits
+    for h in bindings.section_roles.ignore_headers:
+        h_lower = h.lower()
+        if "%d" in h_lower:
+            # Convert %d to regex pattern (matches one or more digits)
+            # First escape any regex special chars, then replace %d with \d+
+            # Note: % is not a regex special char, so we replace the literal "%d"
+            pattern_str = re.escape(h_lower).replace("%d", r"\d+")
+            config.ignore_header_patterns.append(re.compile(f"^{pattern_str}$"))
+        else:
+            config.ignore_headers.add(h_lower)
+
     config.label_normalizations = {
         k.lower(): v.lower() for k, v in bindings.section_roles.label_normalizations.items()
     }
+
+    # === Build derived allowlists ===
+
+    # pos_headers = union of all POS header variants and phrase type headers
+    # This is the "allowlist" - headers that should be treated as POS sections
+    config.pos_headers = set(config.header_to_pos.keys()) | set(config.header_to_phrase_type.keys())
 
     # === Validate global uniqueness ===
 

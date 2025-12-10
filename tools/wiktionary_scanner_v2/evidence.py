@@ -49,6 +49,7 @@ class Evidence:
 
     # Categories (full category strings without "Category:" prefix)
     categories: list[str] = field(default_factory=list)
+    categories_lower: list[str] = field(default_factory=list)  # Pre-lowercased
 
     # Labels from {{lb|en|...}} templates
     labels: list[str] = field(default_factory=list)
@@ -245,42 +246,6 @@ ABBREVIATION_TEMPLATE = re.compile(
 
 # Spelling region labels from {{tlb|en|...}}
 TLB_TEMPLATE = re.compile(r"\{\{(?:tlb|lb)\|en\|([^}]+)\}\}", re.IGNORECASE)
-
-# Non-POS section headers to skip
-# These headers are metadata sections, not parts of speech
-NON_POS_HEADERS = {
-    "etymology",
-    "etymology 1",
-    "etymology 2",
-    "etymology 3",
-    "etymology 4",
-    "etymology 5",
-    "pronunciation",
-    "usage notes",
-    "synonyms",
-    "antonyms",
-    "derived terms",
-    "related terms",
-    "translations",
-    "see also",
-    "references",
-    "further reading",
-    "anagrams",
-    "alternative forms",
-    "descendants",
-    "hypernyms",
-    "hyponyms",
-    "meronyms",
-    "holonyms",
-    "troponyms",
-    "coordinate terms",
-    "conjugation",
-    "declension",
-    "inflection",
-    "quotations",
-    "external links",
-    "notes",
-}
 
 # Special page handling
 SPECIAL_PAGE_PREFIXES = (
@@ -541,44 +506,111 @@ def extract_page(page_xml: str) -> PageResult:
 
 @dataclass
 class PageLevelCache:
-    """Cached page-level data to avoid re-parsing for each POS section."""
+    """Cached page-level data that is truly page-wide (not per etymology)."""
 
     wc: int
-    categories: list[str]
+    categories: list[str]  # Page-wide categories
+    categories_lower: list[str]  # Pre-lowercased for efficient matching
+
+
+@dataclass
+class EtymologyBlockCache:
+    """Cached data for a single etymology block (or the whole page if no etymologies)."""
+
     etymology_text: str
     etymology_templates: list[Template]
     hyphenation_parts: list[str]
     rhymes_syllable_count: Optional[int]
     syllable_category_count: Optional[int]
     ipa_transcription: Optional[str]
-    inflection_template: Optional[Template]
     phrase_type_header: Optional[str]
     spelling_labels: list[str]
 
 
+@dataclass
+class EtymologyBlock:
+    """An etymology block with its boundaries and cache."""
+
+    start: int  # Start position in English section
+    end: int  # End position in English section
+    cache: EtymologyBlockCache
+
+
+# Pattern to match etymology headers
+ETYMOLOGY_HEADER = re.compile(r"^===+\s*Etymology\s*(\d*)\s*===+\s*$", re.MULTILINE | re.IGNORECASE)
+
+
 def build_page_cache(title: str, english_text: str) -> PageLevelCache:
     """Build page-level cache from English section text."""
-    etymology_text = extract_etymology_text(english_text)
+    categories = extract_categories(english_text)
     return PageLevelCache(
         wc=len(title.split()),
-        categories=extract_categories(english_text),
+        categories=categories,
+        categories_lower=[c.lower() for c in categories],
+    )
+
+
+def build_etymology_cache(block_text: str) -> EtymologyBlockCache:
+    """Build etymology-scoped cache from a block of text."""
+    etymology_text = extract_etymology_text(block_text)
+    return EtymologyBlockCache(
         etymology_text=etymology_text,
         etymology_templates=extract_etymology_templates(etymology_text),
-        hyphenation_parts=extract_hyphenation(english_text),
-        rhymes_syllable_count=extract_rhymes_syllable_count(english_text),
-        syllable_category_count=extract_syllable_category_count(english_text),
-        ipa_transcription=extract_ipa_transcription(english_text),
-        inflection_template=extract_inflection_template(english_text),
-        phrase_type_header=extract_phrase_type_header(english_text),
-        spelling_labels=extract_spelling_labels(english_text),
+        hyphenation_parts=extract_hyphenation(block_text),
+        rhymes_syllable_count=extract_rhymes_syllable_count(block_text),
+        syllable_category_count=extract_syllable_category_count(block_text),
+        ipa_transcription=extract_ipa_transcription(block_text),
+        phrase_type_header=extract_phrase_type_header(block_text),
+        spelling_labels=extract_spelling_labels(block_text),
     )
+
+
+def find_etymology_blocks(english_text: str) -> list[EtymologyBlock]:
+    """
+    Find etymology blocks in the English section.
+
+    Returns a list of EtymologyBlock objects, each with start/end positions.
+    If no etymology headers found, returns a single block covering the whole section.
+    """
+    etymology_matches = list(ETYMOLOGY_HEADER.finditer(english_text))
+
+    if not etymology_matches:
+        # No etymology headers - whole section is one block
+        cache = build_etymology_cache(english_text)
+        return [EtymologyBlock(start=0, end=len(english_text), cache=cache)]
+
+    blocks = []
+    for i, match in enumerate(etymology_matches):
+        start = match.end()
+        # Block extends to next etymology header or end of text
+        if i + 1 < len(etymology_matches):
+            end = etymology_matches[i + 1].start()
+        else:
+            end = len(english_text)
+
+        block_text = english_text[start:end]
+        cache = build_etymology_cache(block_text)
+        blocks.append(EtymologyBlock(start=start, end=end, cache=cache))
+
+    return blocks
+
+
+def find_etymology_for_pos(pos_start: int, etymology_blocks: list[EtymologyBlock]) -> EtymologyBlockCache:
+    """Find which etymology block a POS header belongs to."""
+    for block in etymology_blocks:
+        if block.start <= pos_start < block.end:
+            return block.cache
+
+    # Fallback to first block if not found (shouldn't happen)
+    return etymology_blocks[0].cache if etymology_blocks else build_etymology_cache("")
 
 
 def extract_evidence_from_section(
     title: str,
     pos_header: str,
     section_text: str,
-    cache: PageLevelCache,
+    page_cache: PageLevelCache,
+    etym_cache: EtymologyBlockCache,
 ) -> Iterator[Evidence]:
     """
     Extract Evidence objects for each definition in a POS section.
@@ -587,13 +619,17 @@ def extract_evidence_from_section(
         title: Page title (the word)
         pos_header: The POS header text
         section_text: Text of this POS section
-        cache: Pre-computed page-level data
+        page_cache: Pre-computed page-level data (categories, wc)
+        etym_cache: Pre-computed etymology-scoped data (IPA, hyphenation, etymology, etc.)
 
     Yields:
         Evidence objects, one per definition line
     """
     # Section-level data (parse once per section)
     head_templates = extract_head_templates(section_text)
+
+    # Section-level inflection template (in definition area, not etymology)
+    inflection_template = extract_inflection_template(section_text)
 
     # Extract definition lines
     definition_lines = [m.group(1) for m in DEFINITION_LINE.finditer(section_text)]
@@ -607,28 +643,38 @@ def extract_evidence_from_section(
 
         yield Evidence(
             title=title,
-            wc=cache.wc,
+            wc=page_cache.wc,
             pos_header=pos_header,
             head_templates=head_templates,
-            categories=cache.categories,
+            categories=page_cache.categories,
+            categories_lower=page_cache.categories_lower,
             labels=labels,
-            etymology_text=cache.etymology_text,
-            etymology_templates=cache.etymology_templates,
+            etymology_text=etym_cache.etymology_text,
+            etymology_templates=etym_cache.etymology_templates,
             definition_text=def_text,
-            hyphenation_parts=cache.hyphenation_parts,
-            rhymes_syllable_count=cache.rhymes_syllable_count,
-            syllable_category_count=cache.syllable_category_count,
-            ipa_transcription=cache.ipa_transcription,
-            inflection_template=cache.inflection_template,
-            phrase_type_header=cache.phrase_type_header,
-            spelling_labels=cache.spelling_labels,
+            hyphenation_parts=etym_cache.hyphenation_parts,
+            rhymes_syllable_count=etym_cache.rhymes_syllable_count,
+            syllable_category_count=etym_cache.syllable_category_count,
+            ipa_transcription=etym_cache.ipa_transcription,
+            inflection_template=inflection_template,
+            phrase_type_header=etym_cache.phrase_type_header,
+            spelling_labels=etym_cache.spelling_labels,
         )
+
+
+@dataclass
+class ExtractionResult:
+    """Result of extracting evidence from a page, including metadata."""
+
+    evidence: list[Evidence]
+    unknown_headers: list[str]  # Headers not in allowlist or ignore list
 
 
 def extract_evidence(
     title: str,
     text: str,
-    ignore_headers: set[str] | None = None,
+    is_ignored_header: callable,
+    pos_headers: set[str] | None = None,
 ) -> Iterator[Evidence]:
     """
     Extract Evidence objects from a Wiktionary page.
@@ -636,62 +682,97 @@ def extract_evidence(
     Args:
         title: Page title
         text: Page wikitext
-        ignore_headers: Set of headers to skip (lowercase). If None, uses NON_POS_HEADERS.
+        is_ignored_header: Function(header: str) -> bool that checks if a header should be skipped.
+            The header passed is already lowercased and whitespace-normalized.
+        pos_headers: Allowlist of valid POS headers (lowercase). If None, accepts all non-ignored.
 
     Yields:
         Evidence objects for each (POS, definition) pair
     """
-    # Use config-provided ignore_headers or fall back to default
-    skip_headers = ignore_headers if ignore_headers is not None else NON_POS_HEADERS
+    result = extract_evidence_with_unknowns(title, text, is_ignored_header, pos_headers)
+    yield from result.evidence
+
+
+def extract_evidence_with_unknowns(
+    title: str,
+    text: str,
+    is_ignored_header: callable,
+    pos_headers: set[str] | None = None,
+) -> ExtractionResult:
+    """
+    Extract Evidence objects from a Wiktionary page, tracking unknown headers.
+
+    Etymology scoping: Each POS section inherits etymology data from its
+    containing etymology block. This prevents inflection/IPA/etymology from
+    bleeding across different etymologies on multi-etymology pages.
+
+    Args:
+        title: Page title
+        text: Page wikitext
+        is_ignored_header: Function(header: str) -> bool that checks if a header should be skipped.
+            The header passed is already lowercased and whitespace-normalized.
+        pos_headers: Allowlist of valid POS headers (lowercase). If None, accepts all non-ignored.
+
+    Returns:
+        ExtractionResult with evidence list and unknown headers
+    """
+
+    evidence_list = []
+    unknown_headers = []
 
     # Extract English section only
     english_text = extract_english_section(text)
     if not english_text:
-        return
+        return ExtractionResult(evidence=[], unknown_headers=[])
 
-    # Build page-level cache ONCE (avoid re-parsing for each POS section)
-    cache = build_page_cache(title, english_text)
+    # Build page-level cache ONCE (truly page-wide: categories, word count)
+    page_cache = build_page_cache(title, english_text)
 
-    # Find POS headers and their sections (filter out non-POS headers)
+    # Build etymology blocks (each with its own IPA, hyphenation, etymology, etc.)
+    etymology_blocks = find_etymology_blocks(english_text)
+
+    # Find POS headers and their sections
     headers = []
     for match in POS_HEADER.finditer(english_text):
         header_text = match.group(1).strip()
+        header_lower = header_text.lower()
+        header_normalized = " ".join(header_lower.split())
+
         # Skip configured non-POS headers (etymology, pronunciation, etc.)
-        if header_text.lower() in skip_headers:
+        if is_ignored_header(header_normalized):
             continue
+
+        # Check if header is in allowlist (if provided)
+        if pos_headers is not None:
+            if header_normalized not in pos_headers:
+                # Unknown header - track it but don't emit evidence
+                unknown_headers.append(header_text)
+                continue
+
         headers.append((match.start(), match.end(), header_text))
 
     if not headers:
-        # No POS headers - create single Evidence with unknown POS
-        yield Evidence(
-            title=title,
-            wc=cache.wc,
-            pos_header="unknown",
-            head_templates=extract_head_templates(english_text),
-            categories=cache.categories,
-            labels=extract_labels(english_text),
-            etymology_text=cache.etymology_text,
-            etymology_templates=cache.etymology_templates,
-            hyphenation_parts=cache.hyphenation_parts,
-            rhymes_syllable_count=cache.rhymes_syllable_count,
-            syllable_category_count=cache.syllable_category_count,
-            ipa_transcription=cache.ipa_transcription,
-            inflection_template=cache.inflection_template,
-            phrase_type_header=cache.phrase_type_header,
-            spelling_labels=cache.spelling_labels,
-        )
-        return
+        # No valid POS headers - don't create "unknown" evidence
+        # (this is the new behavior per review: drop unknown headers)
+        return ExtractionResult(evidence=[], unknown_headers=unknown_headers)
 
-    # Process each POS section (reuse cached page-level data)
+    # Process each POS section
     for i, (start, end, header_text) in enumerate(headers):
         # Section extends from end of header to start of next header (or end)
         section_start = end
         section_end = headers[i + 1][0] if i + 1 < len(headers) else len(english_text)
         section_text = english_text[section_start:section_end]
 
-        yield from extract_evidence_from_section(
+        # Find which etymology block this POS section belongs to
+        etym_cache = find_etymology_for_pos(start, etymology_blocks)
+
+        for ev in extract_evidence_from_section(
             title=title,
             pos_header=header_text,
             section_text=section_text,
-            cache=cache,
-        )
+            page_cache=page_cache,
+            etym_cache=etym_cache,
+        ):
+            evidence_list.append(ev)
+
+    return ExtractionResult(evidence=evidence_list, unknown_headers=unknown_headers)

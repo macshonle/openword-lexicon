@@ -27,8 +27,10 @@ import sys
 import time
 from pathlib import Path
 
+from collections import Counter
+
 from .cdaload import load_binding_config, CodeValidationError
-from .evidence import BZ2StreamReader, scan_pages, extract_page, extract_evidence
+from .evidence import BZ2StreamReader, scan_pages, extract_page, extract_evidence_with_unknowns
 from .rules import apply_rules, entry_to_dict
 
 
@@ -119,6 +121,7 @@ def main() -> int:
         "entries_written": 0,
         "entries_filtered": 0,
     }
+    unknown_headers: Counter[str] = Counter()
 
     start_time = time.time()
 
@@ -156,9 +159,18 @@ def main() -> int:
                 stats["pages_ok"] += 1
 
                 # Extract evidence and apply rules
-                for evidence in extract_evidence(
-                    result.title, result.text, ignore_headers=config.ignore_headers
-                ):
+                extraction_result = extract_evidence_with_unknowns(
+                    result.title,
+                    result.text,
+                    is_ignored_header=config.is_ignored_header,
+                    pos_headers=config.pos_headers,
+                )
+
+                # Track unknown headers
+                for header in extraction_result.unknown_headers:
+                    unknown_headers[header.lower()] += 1
+
+                for evidence in extraction_result.evidence:
                     entry = apply_rules(evidence, config)
 
                     if entry is None:
@@ -211,6 +223,17 @@ def main() -> int:
     if elapsed > 0:
         print(f"  Rate:             {stats['pages_processed'] / elapsed:.0f} pages/sec")
     print("=" * 60)
+
+    # Report unknown headers
+    if unknown_headers:
+        total_unknown = sum(unknown_headers.values())
+        print(f"\nUnknown headers ({total_unknown:,} occurrences, {len(unknown_headers)} unique):")
+        # Show top 20 by count
+        for header, count in unknown_headers.most_common(20):
+            print(f"  {count:6,}  {header}")
+        if len(unknown_headers) > 20:
+            remaining = len(unknown_headers) - 20
+            print(f"  ... and {remaining} more unique headers")
 
     return 0
 
