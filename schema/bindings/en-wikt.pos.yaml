@@ -1,0 +1,280 @@
+# English Wiktionary POS bindings
+language: en
+source: wiktionary
+description: >
+  Maps English Wiktionary section headers, head templates, categories,
+  and {{en-...}} templates to core POS codes defined in schema/core/pos.yaml.
+
+# Design notes:
+# - header_variants and head_pos_values are normalized to lowercase.
+# - category_suffixes are relative to the 'Category:English ' prefix.
+# - en_templates correspond to the suffix in {{en-XXX}} templates (e.g., 'noun' in {{en-noun}}).
+# - This file intentionally mirrors (but does not duplicate verbatim) the
+#   information that used to live in pos.yaml and categories.yaml.
+
+pos_bindings:
+
+  NOU:
+    header_variants:
+      - noun
+      - nouns
+      - noun form
+      - plural noun
+    head_pos_values:
+      - noun
+      - countable noun
+      - uncountable noun
+    en_templates:
+      - noun      # {{en-noun}}
+    category_suffixes:
+      - nouns
+      - countable nouns
+      - uncountable nouns
+
+  NAM:
+    header_variants:
+      - proper noun
+      - proper nouns
+    head_pos_values:
+      - proper noun
+    en_templates:
+      - prop      # {{en-prop}}
+    category_suffixes:
+      - proper nouns
+
+  VRB:
+    header_variants:
+      - verb
+      - verbs
+      - verb form
+      - transitive verb
+      - intransitive verb
+      - ambitransitive verb
+      - linking verb
+      - phrasal verb
+    head_pos_values:
+      - verb
+      - transitive verb
+      - intransitive verb
+      - ambitransitive verb
+      - auxiliary verb
+      - phrasal verb
+    en_templates:
+      - verb      # {{en-verb}}
+    category_suffixes:
+      - verbs
+      - verb forms
+
+  ADJ:
+    header_variants:
+      - adjective
+      - adjectives
+      - adjective form
+      - determiner and adjective
+      - predicative adjective
+      - attributive adjective
+    head_pos_values:
+      - adjective
+      - predicative adjective
+      - attributive adjective
+    en_templates:
+      - adj      # {{en-adj}}
+    category_suffixes:
+      - adjectives
+      - adjective forms
+
+  ADV:
+    header_variants:
+      - adverb
+      - adverbs
+      - adverb form
+      - comparative adverb
+      - superlative adverb
+    head_pos_values:
+      - adverb
+    en_templates:
+      - adv      # {{en-adv}}
+    category_suffixes:
+      - adverbs
+      - adverb forms
+
+  PRN:
+    header_variants:
+      - pronoun
+      - pronouns
+      - pronoun form
+    head_pos_values:
+      - pronoun
+    category_suffixes:
+      - pronouns
+
+  DET:
+    header_variants:
+      - determiner
+      - determiners
+      - article
+      - articles
+    head_pos_values:
+      - determiner
+      - article
+    category_suffixes:
+      - determiners
+      - articles
+
+  ADP:
+    header_variants:
+      - preposition
+      - prepositions
+      - postposition
+      - postpositions
+      - adposition
+      - adpositions
+    head_pos_values:
+      - preposition
+      - postposition
+      - adposition
+    category_suffixes:
+      - prepositions
+      - postpositions
+      - adpositions
+
+  CNJ:
+    header_variants:
+      - conjunction
+      - conjunctions
+      - coordinating conjunction
+      - subordinating conjunction
+    head_pos_values:
+      - conjunction
+    category_suffixes:
+      - conjunctions
+
+  PRT:
+    header_variants:
+      - particle
+      - particles
+    head_pos_values:
+      - particle
+    category_suffixes:
+      - particles
+
+  ITJ:
+    header_variants:
+      - interjection
+      - interjections
+      - exclamation
+      - exclamations
+    head_pos_values:
+      - interjection
+      - exclamation
+    category_suffixes:
+      - interjections
+      - exclamations
+
+  NUM:
+    header_variants:
+      - numeral
+      - numerals
+      - cardinal number
+      - ordinal number
+    head_pos_values:
+      - numeral
+      - cardinal number
+      - ordinal number
+    category_suffixes:
+      - numerals
+      - cardinal numbers
+      - ordinal numbers
+
+  AFX:
+    header_variants:
+      - prefix
+      - suffix
+      - infix
+      - affix
+      - circumfix
+    head_pos_values:
+      - prefix
+      - suffix
+      - infix
+      - affix
+      - circumfix
+    category_suffixes:
+      - prefixes
+      - suffixes
+      - infixes
+      - affixes
+      - circumfixes
+
+  SYM:
+    header_variants:
+      - symbol
+      - symbols
+      - letter
+      - letters
+      - punctuation mark
+      - character
+    head_pos_values:
+      - symbol
+      - letter
+      - character
+    category_suffixes:
+      - symbols
+      - letters
+
+  PHR:
+    header_variants:
+      - phrase
+      - phrases
+      - verb phrase
+      - verb phrases
+      - verb phrase form
+      - adverbial phrase
+      - noun phrase
+      - noun phrases
+    head_pos_values:
+      - phrase
+      - verb phrase
+      - verb phrase form
+      - adverbial phrase
+      - noun phrase
+    category_suffixes:
+      - phrases
+      - verb phrases
+      - noun phrases
+
+  PRV:
+    header_variants:
+      - proverb
+      - proverbs
+      - saying
+      - adage
+    head_pos_values:
+      - proverb
+      - saying
+      - adage
+    category_suffixes:
+      - proverbs
+      - sayings
+
+  PPP:
+    header_variants:
+      - prepositional phrase
+      - prepositional phrases
+    head_pos_values:
+      - prepositional phrase
+    category_suffixes:
+      - prepositional phrases
+
+  IDM:
+    header_variants:
+      - idiom
+      - idioms
+    head_pos_values:
+      - idiom
+    category_suffixes:
+      - idioms
+
+# NOTE: Additional minor POS classes (e.g. letters-only, symbols-only)
+# that are rare in English can be added here if we decide they merit
+# dedicated codes in core/pos.yaml.

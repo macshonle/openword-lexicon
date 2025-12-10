@@ -1,0 +1,111 @@
+# English Wiktionary → core morphology bindings
+#
+# Encodes how to interpret Wiktionary etymology templates for English
+# and how to map the low-level 'type' strings used by the extraction
+# logic to the stable morphology codes defined in schema/core/morphology.yaml.
+
+language: en
+source: wiktionary
+
+# Map the internal morphology type strings produced by the extraction
+# logic to the 4-letter morphology codes.
+type_mappings:
+  simple: SIMP
+  compound: COMP
+  prefixed: PREF
+  suffixed: SUFF
+  affixed: AFFX
+  circumfixed: CIRC
+
+# Template bindings tell the scanner which templates to treat as
+# morphology-bearing and how to interpret their positional arguments.
+#
+# For all templates below:
+#   - language_param: which language code must appear in the template
+#     for the binding to apply (here always 'en').
+#   - roles: the semantic roles of the subsequent parameters in order.
+#     Valid roles are:
+#       - base: lexical base form
+#       - prefix: a bound prefix (will be normalized with trailing '-')
+#       - suffix: a bound suffix (will be normalized with leading '-')
+#       - component: generic component (compound member, etc.)
+
+templates:
+
+  - name: suffix
+    aliases: [suf]
+    language_param: en
+    roles:
+      - base
+      - suffix
+    notes: >
+      {{suffix|en|happy|ness}} → components ['happy', '-ness'].
+
+  - name: prefix
+    aliases: [pre]
+    language_param: en
+    roles:
+      - prefix
+      - base
+    notes: >
+      {{prefix|en|un|happy}} → components ['un-', 'happy'].
+
+  - name: confix
+    aliases: []
+    language_param: en
+    roles:
+      - prefix
+      - base
+      - suffix
+    notes: >
+      {{confix|en|en|light|ment}} → components ['en-', 'light', '-ment'].
+      The implementation SHOULD always classify such templates as
+      'circumfixed' before applying type_mappings.
+
+  - name: compound
+    aliases: []
+    language_param: en
+    roles:
+      - component    # first compound part
+      - component    # second compound part
+      # any further positional arguments are additional components
+    notes: >
+      {{compound|en|bar|tender}} → components ['bar', 'tender'].
+      {{compound|en|ASCII|art}} → ['ASCII', 'art'].
+
+  - name: affix
+    aliases: [af]
+    language_param: en
+    roles:
+      - component
+      - component
+      # additional arguments are components
+    notes: >
+      {{affix|en|un-|break|-able}} → ['un-', 'break', '-able'].
+
+  - name: surf
+    aliases: []
+    language_param: en
+    roles:
+      - component
+      - component
+      # additional arguments are components
+    notes: >
+      {{surf|en|dict|ion|ary}} → components
+      corresponding to the surface segmentation of the word.
+      Classification into COMP/PREF/SUFF/AFFX/SIMP is determined
+      purely by hyphen patterns on normalized components, not by
+      the template name itself.
+
+# Implementation notes:
+# - The existing Python scanner already contains normalization logic
+#   (adding/removing hyphens, extracting components, etc.). That logic
+#   should be kept but parameterized via this configuration.
+# - The scanner should:
+#     1. Identify the first matching template in the etymology section
+#        that matches one of 'name' or 'aliases' with the given language.
+#     2. Extract positional arguments according to 'roles'.
+#     3. Normalize them (add hyphens for bound morphemes).
+#     4. Derive prefixes/suffixes/bases/interfixes and classify to one
+#        of the lower-case types above.
+#     5. Map that type to a 4-letter morphology code via type_mappings.

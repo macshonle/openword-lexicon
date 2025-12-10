@@ -1,0 +1,115 @@
+# Core Part of Speech (POS) codes
+#
+# This file defines the POS inventory in a language-neutral way.
+# Each code is a short, stable identifier. Mappings from Wiktionary
+# headers/templates to these codes live in bindings (e.g., en-wikt.pos.yaml).
+
+language: neutral
+
+pos_classes:
+
+  # === Core parts of speech ===
+
+  - code: NOU
+    name: Noun
+    description: Common nouns (not proper nouns)
+    short_description: Person, place, or thing
+
+  - code: NAM
+    name: Proper Noun
+    description: Names of specific people, places, organizations, etc.
+    short_description: Name of specific entity
+
+  - code: VRB
+    name: Verb
+    description: Verbs including inflected forms, participles, and auxiliaries
+    short_description: Action or state
+
+  - code: ADJ
+    name: Adjective
+    description: Words that modify nouns
+    short_description: Describes a noun
+
+  - code: ADV
+    name: Adverb
+    description: Words that modify verbs, adjectives, or other adverbs
+    short_description: Modifies verbs or adjectives
+
+  - code: PRN
+    name: Pronoun
+    description: Words that substitute for nouns
+    short_description: Substitutes for a noun
+
+  - code: DET
+    name: Determiner
+    description: Words that introduce nouns (the, a, this, some) including articles
+    short_description: Introduces a noun
+
+  - code: ADP
+    name: Adposition
+    description: Words expressing spatial/temporal relations (prepositions, postpositions)
+    short_description: Spatial or temporal relation
+
+  - code: CNJ
+    name: Conjunction
+    description: Words that connect clauses or phrases
+    short_description: Connects words or clauses
+
+  - code: PRT
+    name: Particle
+    description: Function words that do not fit other categories cleanly
+    short_description: Function word
+
+  - code: ITJ
+    name: Interjection
+    description: Exclamations and discourse markers
+    short_description: Exclamation
+
+  # === Extended POS classes ===
+  # These are “POS-like” classes used for some Wiktionary entries and
+  # remain part of the core inventory for compatibility.
+
+  - code: PHR
+    name: Phrase
+    description: Multi-word expressions treated as lexical units
+    short_description: Multi-word expression
+
+  - code: PRV
+    name: Proverb
+    description: Traditional sayings expressing common truths
+    short_description: Traditional saying
+
+  - code: PPP
+    name: Prepositional Phrase
+    description: Phrases beginning with an adposition (preposition/postposition)
+    short_description: Phrase with preposition
+
+  - code: IDM
+    name: Idiom
+    description: Expressions whose meanings are not compositionally predictable
+    short_description: Non-literal expression
+
+  - code: AFX
+    name: Affix
+    description: Bound morphemes (prefixes, suffixes, infixes, etc.)
+    short_description: Word-forming element
+
+  - code: NUM
+    name: Numeral
+    description: Words representing numbers
+    short_description: Number word
+
+  - code: SYM
+    name: Symbol
+    description: Non-alphabetic symbols, letters, or punctuation used lexically
+    short_description: Symbol or letter
+
+  - code: MLT
+    name: Multiple
+    description: Entries with multiple parts of speech not yet disambiguated
+    short_description: Multiple parts of speech
+
+  - code: CTN
+    name: Contraction
+    description: Shortened forms combining multiple words
+    short_description: Shortened word form

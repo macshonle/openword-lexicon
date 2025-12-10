@@ -1,0 +1,61 @@
+# English Wiktionary → core flag bindings
+#
+# Maps Wiktionary templates and categories to core boolean flag codes
+# defined in schema/core/flags.yaml (e.g. ABRV, INFL).
+#
+# The scanner should:
+#   1. Inspect the raw English-section wikitext for these templates.
+#   2. Inspect the actual category memberships for these suffixes.
+#   3. Set the corresponding flag code in Entry.codes when any rule matches.
+
+language: en
+source: wiktionary
+
+flags:
+
+  ABRV:
+    name: abbreviation_or_initialism
+    description: Entry is an abbreviation, initialism, or acronym.
+    templates:
+      # These are the English-specific sense templates used to define abbreviations.
+      # Match template names case-insensitively, ignoring the "en" language argument.
+      - abbr of
+      - abbrev of
+      - abbreviation of
+      - initialism of
+      - acronym of
+    category_suffixes:
+      # These are relative to 'Category:English '.
+      - abbreviations
+      - initialisms
+      - acronyms
+      - Stenoscript abbreviations
+    pos_hints:
+      # Optional: these hints can be used by the implementation if we
+      # want to treat some POS (e.g. SYM) as more likely abbreviations.
+      # For parity with the current Python scanner, symbol-based heuristics
+      # can remain in code, not via this file.
+      - SYM   # symbol
+    # TODO: If you later decide that purely-formal heuristics (e.g. all-caps
+    # 3–5 letter strings) should set ABRV, keep those in a separate
+    # heuristic layer so that this file stays purely Wiktionary-driven.
+
+  INFL:
+    name: inflected_form
+    description: Entry is an inflected form (plural, tense, degree, etc.) rather than a lemma.
+    templates:
+      # These patterns mirror detect_inflected_form() in scanner.py.
+      - plural of
+      - past tense of
+      - past participle of
+      - present participle of
+      - comparative of
+      - superlative of
+      - inflection of
+    category_suffixes:
+      # These suffixes are relative to 'Category:English '.
+      - verb forms
+      - noun forms
+      - adjective forms
+      - adverb forms
+      - plurals

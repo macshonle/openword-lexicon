@@ -1,0 +1,101 @@
+# English Wiktionary → core phrase-type bindings
+#
+# Maps headers, head templates, dedicated phrase templates, and
+# phrase-related categories to core phrase_type codes defined in
+# schema/core/phrase_types.yaml.
+#
+# Phrase type is orthogonal to POS; for example, most idioms and
+# proverbs will have POS code PHR or PRV, but phrase_type distinguishes
+# idiom vs proverb vs generic phrase vs prepositional phrase.
+
+language: en
+source: wiktionary
+
+phrase_type_bindings:
+
+  IDIM:
+    name: idiom
+    description: Non-literal multi-word expression.
+    headers:
+      - idiom
+      - idioms
+    head_pos_values:
+      - idiom
+    templates: []          # idioms use generic {{head|en|idiom}}
+    category_suffixes:
+      - idioms             # 'Category:English idioms'
+
+  PRVB:
+    name: proverb
+    description: Traditional saying expressing a general truth.
+    headers:
+      - proverb
+      - proverbs
+      - saying
+      - sayings
+      - adage
+      - adages
+    head_pos_values:
+      - proverb
+      - saying
+      - adage
+    templates: []          # {{head|en|proverb}} / {{head|en|saying}} etc.
+    category_suffixes:
+      - proverbs           # 'Category:English proverbs'
+
+  PPHR:
+    name: prepositional_phrase
+    description: Phrase beginning with a preposition (e.g. 'at least').
+    headers:
+      - prepositional phrase
+      - prepositional phrases
+    head_pos_values:
+      - prepositional phrase
+    templates:
+      - en-prepphr         # {{en-prepphr|...}}
+    category_suffixes:
+      - prepositional phrases
+
+  APHR:
+    name: adverbial_phrase
+    description: Multi-word adverbial expression.
+    headers:
+      - adverbial phrase
+      - adverbial phrases
+    head_pos_values:
+      - adverbial phrase
+    templates: []
+    category_suffixes: []   # currently no dedicated category; present for symmetry
+
+  NPHR:
+    name: noun_phrase
+    description: Multi-word noun phrase functioning as a noun.
+    headers:
+      - noun phrase
+      - noun phrases
+    head_pos_values:
+      - noun phrase
+    templates: []
+    category_suffixes:
+      - noun phrases
+
+  VPHR:
+    name: verb_phrase
+    description: Multi-word verb phrase, including phrasal verbs.
+    headers:
+      - verb phrase
+      - verb phrases
+      - verb phrase form
+    head_pos_values:
+      - verb phrase
+      - verb phrase form
+    templates: []
+    category_suffixes:
+      - verb phrases
+
+# Implementation notes:
+# - The scanner should call its phrase-type detector early, before POS
+#   normalization, and map the resulting raw string (e.g. 'idiom',
+#   'proverb', 'prepositional phrase') to these codes using this file.
+# - When multiple signals are present (header + template + category),
+#   header takes precedence, then template, then category.

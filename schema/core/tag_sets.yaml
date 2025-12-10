@@ -1,0 +1,228 @@
+# Core tag sets
+#
+# Each tag set groups related multi-valued labels (register, temporal status,
+# domain, usage region, spelling region, etc.). Individual tags are referenced
+# in Entry.codes via their 4-letter codes.
+#
+# The tag_set codes themselves (REGS, TEMP, etc.) are for organization and
+# tooling; they do not need to appear in Entry JSON.
+
+language: neutral
+
+tag_sets:
+
+  # === Register / style ===
+
+  - code: REGS
+    name: Register
+    description: Stylistic or formality properties of usage.
+
+    tags:
+      - code: RINF
+        name: informal
+        description: Informal or colloquial usage (neutral/vague informality).
+
+      - code: RSLG
+        name: slang
+        description: Clearly marked slang usage.
+
+      - code: RVLG
+        name: vulgar
+        description: Vulgar or coarse usage.
+
+      - code: ROFF
+        name: offensive
+        description: Offensive or derogatory usage.
+
+      - code: RFRM
+        name: formal
+        description: Formal or elevated register.
+
+      - code: REUP
+        name: euphemistic
+        description: Euphemistic expression, often avoiding a taboo term.
+
+      - code: RHUM
+        name: humorous
+        description: Deliberately humorous or jocular usage.
+
+      - code: RLIT
+        name: literary
+        description: Literary or elevated style, often in written texts.
+
+      - code: RCHD
+        name: childish
+        description: Childish / baby-talk register (infantile style).
+
+  # === Temporal status ===
+
+  - code: TEMP
+    name: Temporal status
+    description: Diachronic status of usage (current vs historical).
+
+    tags:
+      - code: TARC
+        name: archaic
+        description: Largely outdated; occasionally encountered in older texts.
+
+      - code: TOBS
+        name: obsolete
+        description: No longer in normal use; only historical or highly marked uses.
+
+      - code: TDAT
+        name: dated
+        description: Once normal, now perceived as somewhat old-fashioned.
+
+      - code: THIS
+        name: historical
+        description: Used in historical contexts, often for institutions or concepts that no longer exist.
+
+      - code: TRAR
+        name: rare
+        description: Rare or infrequently used in contemporary language.
+
+  # === Domain / subject field ===
+
+  - code: DOMN
+    name: Domain
+    description: Subject field or technical domain of usage.
+
+    tags:
+      - code: DCOM
+        name: computing
+        description: Computing / information technology.
+
+      - code: DMAT
+        name: mathematics
+        description: Mathematics and related fields.
+
+      - code: DMED
+        name: medicine
+        description: Medicine, healthcare, clinical usage.
+
+      - code: DBIO
+        name: biology
+        description: Biology and life sciences.
+
+      - code: DCHM
+        name: chemistry
+        description: Chemistry and related disciplines.
+
+      - code: DPHY
+        name: physics
+        description: Physics and related physical sciences.
+
+      - code: DLAW
+        name: law
+        description: Legal / law domain.
+
+      - code: DMIL
+        name: military
+        description: Military jargon or technical usage.
+
+      - code: DNAU
+        name: nautical
+        description: Nautical / seafaring domain.
+
+      - code: DAVI
+        name: aviation
+        description: Aviation and aeronautics.
+
+      - code: DSPT
+        name: sports
+        description: Sports and athletics.
+
+  # === Usage region ===
+  # Where the term is used, regardless of spelling standard.
+
+  - code: REGN
+    name: Usage region
+    description: Geographic regions where the term is in use.
+
+    tags:
+      - code: ENGB
+        name: English (United Kingdom)
+        description: Usage typical of British English.
+
+      - code: ENUS
+        name: English (United States)
+        description: Usage typical of American English.
+
+      - code: ENCA
+        name: English (Canada)
+        description: Usage typical of Canadian English.
+
+      - code: ENAU
+        name: English (Australia)
+        description: Usage typical of Australian English.
+
+      - code: ENNZ
+        name: English (New Zealand)
+        description: Usage typical of New Zealand English.
+
+      - code: ENIE
+        name: English (Ireland)
+        description: Usage typical of Irish English.
+
+      - code: ENZA
+        name: English (South Africa)
+        description: Usage typical of South African English.
+
+      - code: ENIN
+        name: English (India)
+        description: Usage typical of Indian English.
+
+  # === Spelling region ===
+  # Orthographic standard (which spelling norm this surface form follows).
+
+  - code: SPRG
+    name: Spelling region
+    description: Regional orthographic norm for this written form.
+
+    tags:
+      - code: SPGB
+        name: UK spelling
+        description: Follows British/UK spelling conventions.
+
+      - code: SPUS
+        name: US spelling
+        description: Follows American/US spelling conventions.
+
+      - code: SPCA
+        name: Canadian spelling
+        description: Follows Canadian spelling conventions.
+
+      - code: SPAU
+        name: Australian spelling
+        description: Follows Australian spelling conventions.
+
+      - code: SPNZ
+        name: New Zealand spelling
+        description: Follows New Zealand spelling conventions.
+
+      - code: SPIE
+        name: Irish spelling
+        description: Follows Irish spelling conventions.
+
+      - code: SPZA
+        name: South African spelling
+        description: Follows South African spelling conventions.
+
+      - code: SPIN
+        name: Indian spelling
+        description: Follows Indian / South-Asian English spelling conventions.
+
+  # === Nonstandard / quality tags (future-facing) ===
+
+  - code: NSND
+    name: Nonstandard type
+    description: Nonstandard forms such as leetspeak or common misspellings.
+
+    tags:
+      - code: NLET
+        name: leet / leetspeak
+        description: Leetspeak or similar nonstandard orthography.
+
+      - code: NMIS
+        name: misspelling
+        description: Common or recognized misspelling of another word.

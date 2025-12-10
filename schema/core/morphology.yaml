@@ -1,0 +1,93 @@
+# Core morphology type codes
+#
+# These describe the morphological structure of a form as inferred from
+# etymology templates. Bindings specify how concrete templates (suffix,
+# prefix, compound, etc.) map to these codes and how components are parsed.
+
+language: neutral
+
+morphology_types:
+
+  - code: SIMP
+    name: simple
+    description: >
+      No clear internal morphological structure is identified beyond the base.
+      Either no etymology template was recognized, or components did not
+      produce derivational structure.
+
+    example:
+      # No affixes or compounding recognized; single base form
+      components: ["cat"]
+
+  - code: COMP
+    name: compound
+    description: >
+      Form is analyzed as a compound of two or more bases, none of which
+      is uniquely designated as “the” base word. All components are peers.
+
+    example:
+      # bartender = bar + tender
+      components: ["bar", "tender"]
+
+  - code: PREF
+    name: prefixed
+    description: >
+      One or more prefixes attach to a base. Prefixes typically have trailing
+      hyphens in normalized components (e.g., "un-").
+
+    example:
+      # unhappy = un- + happy
+      components: ["un-", "happy"]
+      prefixes:  ["un-"]
+      base: "happy"
+
+  - code: SUFF
+    name: suffixed
+    description: >
+      One or more suffixes attach to a base. Suffixes typically have leading
+      hyphens in normalized components (e.g., "-ness").
+
+    example:
+      # happiness = happy + -ness
+      components: ["happy", "-ness"]
+      suffixes:  ["-ness"]
+      base: "happy"
+
+  - code: AFFX
+    name: affixed
+    description: >
+      Both prefix(es) and suffix(es) occur around a base, or otherwise the
+      structure is best treated as a combined affixal derivation.
+
+    example:
+      # unbreakable = un- + break + -able
+      components: ["un-", "break", "-able"]
+      prefixes:  ["un-"]
+      suffixes:  ["-able"]
+      base: "break"
+
+  - code: CIRC
+    name: circumfixed
+    description: >
+      A special case of affixed morphology where a logically single affix
+      is split into a prefix-like and suffix-like part (circumfix). Not all
+      scanners will distinguish this from AFFX; the core type exists for
+      languages where circumfixes are explicit.
+
+    example:
+      # schematic example: ge- + sag + -t (German-style)
+      components: ["ge-", "sag", "-t"]
+      prefixes:  ["ge-"]
+      suffixes:  ["-t"]
+      base: "sag"
+
+# Notes:
+# - The scanner's internal representation will typically include:
+#     type: SIMP|COMP|PREF|SUFF|AFFX|CIRC
+#     components: [str]
+#     prefixes: [str]
+#     suffixes: [str]
+#     interfixes: [str]   # when applicable
+#     base: str           # when a single base exists
+# - The classification heuristics (hyphen patterns, template names, etc.)
+#   live in bindings (e.g., en-wikt.morphology.yaml), not here.

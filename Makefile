@@ -17,6 +17,7 @@ WIKT_DUMP := $(RAW_DIR)/$(LEXICON_LANG)wiktionary-latest-pages-articles.xml.bz2
 WIKT_JSON_PARENT :=$(INTERMEDIATE_DIR)
 WIKT_JSON := $(WIKT_JSON_PARENT)/$(LEXICON_LANG)-wikt.jsonl
 WIKT_JSON_SORTED := $(WIKT_JSON_PARENT)/$(LEXICON_LANG)-wikt-sorted.jsonl
+WIKT_JSON_V2 := $(WIKT_JSON_PARENT)/$(LEXICON_LANG)-wikt-v2.jsonl
 FREQUENCY_DATA := $(RAW_DIR)/$(LEXICON_LANG)_50k.txt
 WORDNET_ARCHIVE := $(RAW_DIR)/english-wordnet-2024.tar.gz
 UNIFIED_TRIE := $(BUILD_DIR)/$(LEXICON_LANG).trie
@@ -54,6 +55,7 @@ PACKAGE_RELEASE := $(RUN_PYTHON) src/openword/package_release.py
 # Python scripts (tools/)
 # Use -m to run as module so relative imports work properly
 PYTHON_SCANNER := PYTHONPATH=tools $(RUN_PYTHON) -m wiktionary_scanner_python.scanner
+PYTHON_SCANNER_V2 := PYTHONPATH=tools $(RUN_PYTHON) -m wiktionary_scanner_v2.scanner
 COLLECT_POS := $(RUN_PYTHON) tools/collect_pos.py
 UPDATE_CORPUS_DOC := $(RUN_PYTHON) tools/update_corpus_doc.py
 GENERATE_REPORTS := $(RUN_PYTHON) tools/generate_reports.py
@@ -68,7 +70,7 @@ BENCHMARK_DIR := data/benchmark
 
 .PHONY: bootstrap venv deps fmt lint test test-python test-rust test-js test-full \
 		clean scrub clean-fetched fetch-en \
-        build-en build-rust-scanner build-trie build-metadata \
+        build-en build-rust-scanner build-trie build-metadata build-wikt-json-v2 \
 		package report-en diagnose-scanner corpus-stats \
 		validate-all validate-enable validate-profanity validate-childish \
 		validate-scanner-parity validate-scanner-parity-full \
@@ -208,6 +210,14 @@ $(WIKT_JSON_PARENT):
 
 .PHONY: build-wikt-json
 build-wikt-json: $(WIKT_JSON_SORTED)
+
+# Build Wiktionary JSONL using Python scanner v2 (schema-driven)
+# This is the new scanner that reads from schema/core/ and schema/bindings/
+build-wikt-json-v2: $(WIKT_DUMP) deps | $(WIKT_JSON_PARENT)
+	@echo "Extracting Wiktionary (using Python scanner v2)..."
+	$(PYTHON_SCANNER_V2) "$(WIKT_DUMP)" "$(WIKT_JSON_V2)" \
+		--schema-core schema/core \
+		--schema-bindings schema/bindings
 
 # Build and sort Wiktionary JSONL using Rust scanner
 # 1. Extract from XML dump to unsorted JSONL (kept for traceability)

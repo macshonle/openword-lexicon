@@ -1,0 +1,347 @@
+# English Wiktionary → core tag-set bindings
+#
+# Maps Wiktionary context labels (from {{lb|en|...}}, {{label|en|...}})
+# and category substrings to core tag codes defined in schema/core/tag_sets.yaml.
+#
+# IMPORTANT:
+# - All label strings below are lowercase and should be matched after
+#   stripping whitespace.
+# - category_substrings are matched against the suffix of the category
+#   name lowercased and with the 'Category:English ' prefix removed.
+#   For example, 'Category:English slang terms' → 'slang terms'.
+
+language: en
+source: wiktionary
+
+tag_set_bindings:
+
+  # ------------------------------------------------------------------
+  # Register / style tags (REGS tag_set)
+  # ------------------------------------------------------------------
+  REGS:
+    tags:
+
+      - code: RINF   # informal / colloquial
+        description: Informal, colloquial or non-standard in style.
+        from_labels:
+          - informal
+          - colloquial
+        from_category_substrings:
+          - informal
+          - colloquial
+
+      - code: RSLG   # slang
+        description: Slang usage.
+        from_labels:
+          - slang
+        from_category_substrings:
+          - slang
+
+      - code: RVLG   # vulgar
+        description: Vulgar or coarse language.
+        from_labels:
+          - vulgar
+        from_category_substrings:
+          - vulgar
+
+      - code: ROFF   # offensive / derogatory
+        description: Offensive or derogatory usage.
+        from_labels:
+          - offensive
+          - derogatory
+        from_category_substrings:
+          - offensive
+          - derogatory
+
+      - code: REUP   # euphemistic
+        description: Euphemistic usage.
+        from_labels:
+          - euphemistic
+        from_category_substrings:
+          - euphemistic
+
+      - code: RHUM   # humorous
+        description: Humorous or joking usage.
+        from_labels:
+          - humorous
+        from_category_substrings:
+          - humorous
+
+      - code: RLIT   # literary / elevated style
+        description: Literary or elevated usage.
+        from_labels:
+          - literary
+        from_category_substrings:
+          - literary
+
+      - code: RCHD   # childish / baby-talk
+        description: Childish, baby-talk or infantile usage.
+        from_labels:
+          - childish
+          - baby talk
+          - infantile
+          - puerile
+        from_category_substrings:
+          - childish
+          - baby talk
+          - infantile
+          - puerile
+
+  # ------------------------------------------------------------------
+  # Temporal / historical tags (TEMP tag_set)
+  # ------------------------------------------------------------------
+  TEMP:
+    tags:
+
+      - code: TARC   # archaic
+        description: Archaic usage.
+        from_labels:
+          - archaic
+        from_category_substrings:
+          - archaic
+
+      - code: TOBS   # obsolete
+        description: Obsolete usage.
+        from_labels:
+          - obsolete
+        from_category_substrings:
+          - obsolete
+
+      - code: TDAT   # dated
+        description: Dated, but not fully obsolete.
+        from_labels:
+          - dated
+        from_category_substrings:
+          - dated
+
+      - code: THIS   # historical
+        description: Historical usage (used in a specific historical period).
+        from_labels:
+          - historical
+        from_category_substrings:
+          - historical
+
+      # If you decide to treat "rare" as a temporal-ish signal, add TRAR here
+      # and wire it in core/tag_sets.yaml:
+      # - code: TRAR
+      #   description: Rare usage.
+      #   from_labels:
+      #     - rare
+      #   from_category_substrings:
+      #     - rare
+
+  # ------------------------------------------------------------------
+  # Domain / subject-matter tags (DOMN tag_set)
+  # ------------------------------------------------------------------
+  DOMN:
+    tags:
+
+      - code: DCOM   # computing / technology
+        description: Computing, information technology, or Internet domain.
+        from_labels:
+          - computing
+          - internet
+          - programming
+        from_category_substrings:
+          - computing
+
+      - code: DMED   # medicine
+        description: Medical or clinical domain.
+        from_labels:
+          - medicine
+          - medical
+        from_category_substrings:
+          - medicine
+
+      - code: DBIO   # biology
+        description: Biological sciences.
+        from_labels:
+          - biology
+        from_category_substrings:
+          - biology
+
+      - code: DCHM   # chemistry
+        description: Chemical sciences.
+        from_labels:
+          - chemistry
+        from_category_substrings:
+          - chemistry
+
+      - code: DPHY   # physics
+        description: Physical sciences / physics.
+        from_labels:
+          - physics
+        from_category_substrings:
+          - physics
+
+      - code: DLAW   # law
+        description: Legal / law domain.
+        from_labels:
+          - law
+          - legal
+        from_category_substrings:
+          - law
+
+      - code: DMIL   # military
+        description: Military terminology.
+        from_labels:
+          - military
+        from_category_substrings:
+          - military
+
+      - code: DNAU   # nautical
+        description: Nautical / maritime terminology.
+        from_labels:
+          - nautical
+        from_category_substrings:
+          - nautical
+
+      - code: DAVI   # aviation
+        description: Aviation, aeronautics, aerospace.
+        from_labels:
+          - aviation
+        from_category_substrings:
+          - aviation
+
+      - code: DSPT   # sports
+        description: Sports and games.
+        from_labels:
+          - sports
+          - sport
+        from_category_substrings:
+          - sports
+
+  # ------------------------------------------------------------------
+  # Region-of-use tags (REGN tag_set)
+  # ------------------------------------------------------------------
+  REGN:
+    tags:
+
+      - code: ENGB   # British English usage
+        description: Used primarily in British English.
+        from_labels:
+          - british
+          - uk
+        from_category_substrings:
+          - british english
+          - uk english
+
+      - code: ENUS   # American English usage
+        description: Used primarily in American English.
+        from_labels:
+          - us
+          - american
+        from_category_substrings:
+          - american english
+          - us english
+
+      - code: ENCA   # Canadian English usage
+        description: Used primarily in Canadian English.
+        from_labels:
+          - canadian
+        from_category_substrings:
+          - canadian english
+
+      - code: ENAU   # Australian English usage
+        description: Used primarily in Australian English.
+        from_labels:
+          - australia
+          - australian
+        from_category_substrings:
+          - australian english
+
+      - code: ENIE   # Irish English usage
+        description: Used primarily in Irish English.
+        from_labels:
+          - ireland
+          - irish
+        from_category_substrings:
+          - irish english
+
+      - code: ENNZ   # New Zealand English usage
+        description: Used primarily in New Zealand English.
+        from_labels:
+          - new zealand
+        from_category_substrings:
+          - new zealand english
+
+      - code: ENZA   # South African English usage
+        description: Used primarily in South African English.
+        from_labels:
+          - south africa
+          - south african
+        from_category_substrings:
+          - south african english
+
+      - code: ENIN   # Indian English usage
+        description: Used primarily in Indian English.
+        from_labels:
+          - india
+          - indian
+        from_category_substrings:
+          - indian english
+
+  # ------------------------------------------------------------------
+  # Spelling-region tags (SPRG tag_set)
+  #
+  # These correspond to spelling-region labels like "US spelling",
+  # "British spelling", etc., which the current scanner maps to a
+  # dedicated spelling_region field. In the new schema, we fold these
+  # into codes.
+  # ------------------------------------------------------------------
+  SPRG:
+    tags:
+
+      - code: SPUS   # American / US spelling
+        description: American English spelling.
+        from_labels:
+          - american spelling
+          - us spelling
+
+      - code: SPGB   # British spelling
+        description: British / UK spelling.
+        from_labels:
+          - british spelling
+          - uk spelling
+          - commonwealth spelling
+
+      - code: SPCA   # Canadian spelling
+        description: Canadian spelling.
+        from_labels:
+          - canadian spelling
+
+      - code: SPAU   # Australian spelling
+        description: Australian spelling.
+        from_labels:
+          - australian spelling
+
+      - code: SPIE   # Irish spelling
+        description: Irish spelling.
+        from_labels:
+          - irish spelling
+
+      - code: SPNZ   # New Zealand spelling
+        description: New Zealand spelling.
+        from_labels:
+          - new zealand spelling
+
+      - code: SPZA   # South African spelling
+        description: South African spelling.
+        from_labels:
+          - south african spelling
+
+      - code: SPIN   # Indian spelling
+        description: Indian spelling.
+        from_labels:
+          - indian spelling
+
+  # ------------------------------------------------------------------
+  # Nonstandard / orthography / playful tags (NSND tag_set)
+  #
+  # The current scanner does not yet emit dedicated nonstandard tags
+  # beyond the register markers above (e.g. "eye dialect", "leet").
+  # This block is reserved for future use if we decide to model those
+  # explicitly.
+  # ------------------------------------------------------------------
+  NSND:
+    tags: []   # intentionally empty for now; see design notes above.

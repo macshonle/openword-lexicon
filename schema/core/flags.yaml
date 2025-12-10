@@ -1,0 +1,47 @@
+# Core boolean feature codes (“flags”)
+#
+# These represent true/false properties about a sense or lexeme.
+# Bindings map specific templates/categories to these codes.
+#
+# All codes are 4-letter uppercase strings and must be globally unique
+# across all feature/tag/phrase codes that appear in Entry.codes.
+
+language: neutral
+
+flags:
+
+  - code: ABRV
+    name: Abbreviation
+    description: >
+      Sense is an abbreviation, initialism, or acronym of a longer form.
+      Useful for “base-form only” dictionaries or when filtering short‐form entries.
+    examples:
+      - USA
+      - Dr.
+      - HTML
+
+  - code: INFL
+    name: Inflected Form
+    description: >
+      Sense is an inflected form of a lemma (plural, tense, degree, etc.),
+      as opposed to a base lemma form.
+    examples:
+      - cats  (plural of “cat”)
+      - ran   (past tense of “run”)
+      - better (comparative of “good”)
+
+# Future examples (not yet wired in bindings; included for conceptual completeness):
+
+# - code: NSTD
+#   name: Nonstandard form
+#   description: >
+#     Sense is marked as nonstandard (e.g., dialectal spelling, eye dialect),
+#     based on nonstandard labels. Specific subtypes may be captured as tags
+#     under a tag_set (see NSND in tag_sets.yaml).
+#
+# - code: DEPR
+#   name: Deprecated code example
+#   description: >
+#     Placeholder to illustrate how deprecated codes can be kept for
+#     backwards compatibility but not reused for new semantics.
+#   status: deprecated

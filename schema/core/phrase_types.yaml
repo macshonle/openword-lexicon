@@ -1,0 +1,68 @@
+# Core phrase type codes
+#
+# These describe the structural type of a multi-word expression,
+# independent of its POS code. For example, a POS of VRB might still
+# have a phrase_type of VPHR when the entry is a verb phrase.
+
+language: neutral
+
+phrase_types:
+
+  - code: IDIM
+    name: idiom
+    description: >
+      Fixed or semi-fixed expression whose meaning is not predictable
+      from the meanings of its individual components.
+
+    examples:
+      - "kick the bucket"
+      - "spill the beans"
+
+  - code: PRVB
+    name: proverb
+    description: >
+      Short, commonly known saying that expresses a general truth or
+      piece of advice.
+
+    examples:
+      - "a stitch in time saves nine"
+      - "better late than never"
+
+  - code: PPHR
+    name: prepositional phrase
+    description: >
+      Phrase centered on an adposition (preposition/postposition),
+      plus its complement.
+
+    examples:
+      - "on the table"
+      - "after the storm"
+
+  - code: NPHR
+    name: noun phrase
+    description: >
+      Phrase built around a noun or pronoun, possibly with determiners
+      and modifiers.
+
+    examples:
+      - "the red car"
+      - "a very old book"
+
+  - code: VPHR
+    name: verb phrase
+    description: >
+      Phrase built around a verb, including auxiliaries and complements.
+
+    examples:
+      - "has been working"
+      - "should have gone"
+
+  - code: APHR
+    name: adverbial phrase
+    description: >
+      Phrase functioning as an adverbial (modifying a verb, clause, or
+      sentence), whether or not it is headed by an adverb.
+
+    examples:
+      - "in a hurry"
+      - "at the last minute"
