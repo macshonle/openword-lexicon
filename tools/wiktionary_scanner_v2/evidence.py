@@ -1,0 +1,664 @@
+"""
+Evidence extraction for v2 scanner.
+
+This module extracts neutral "Evidence" objects from Wiktionary pages.
+Evidence represents raw signals before code mapping - it has no knowledge
+of POS codes, flags, or tags. The rule engine (rules.py) will convert
+Evidence objects to Entry objects using BindingConfig lookups.
+
+Architecture:
+    XML dump -> stream_pages() -> extract_evidence() -> Evidence objects
+                                                            |
+                                                            v
+                                                      rules.py (Entry)
+"""
+
+import bz2
+import re
+import time
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Iterator, Optional
+
+from .wikitext_parser import (
+    Template,
+    WikitextParser,
+    extract_labels as parser_extract_labels,
+    extract_head_pos,
+    find_templates,
+)
+
+
+@dataclass
+class Evidence:
+    """
+    Raw signals extracted from a single sense, before code mapping.
+
+    This is a neutral representation that captures all Wiktionary signals
+    without mapping them to codes. The rule engine will use BindingConfig
+    to convert these signals to codes.
+    """
+
+    # Page identity
+    title: str  # Page title (the word)
+    wc: int  # Word count (spaces + 1)
+
+    # POS signals
+    pos_header: str  # Raw POS header text (e.g., "Noun", "Proper noun")
+    head_templates: list[Template] = field(default_factory=list)  # {{head}}, {{en-noun}}, etc.
+
+    # Categories (full category strings without "Category:" prefix)
+    categories: list[str] = field(default_factory=list)
+
+    # Labels from {{lb|en|...}} templates
+    labels: list[str] = field(default_factory=list)
+
+    # Etymology section signals
+    etymology_text: str = ""  # Raw etymology section text
+    etymology_templates: list[Template] = field(default_factory=list)
+
+    # Definition
+    definition_text: str = ""  # The definition line text
+
+    # Syllable signals (multiple sources for priority resolution)
+    hyphenation_parts: list[str] = field(default_factory=list)  # From {{hyphenation|en|...}}
+    rhymes_syllable_count: Optional[int] = None  # From {{rhymes|en|...|s=N}}
+    syllable_category_count: Optional[int] = None  # From Category:English N-syllable words
+    ipa_transcription: Optional[str] = None  # From {{IPA|en|...}}
+
+    # Inflection signals
+    inflection_template: Optional[Template] = None  # {{plural of}}, {{past tense of}}, etc.
+
+    # Phrase type signals (from headers before POS normalization)
+    phrase_type_header: Optional[str] = None  # "idiom", "proverb", "prepositional phrase"
+
+    # Spelling region signals
+    spelling_labels: list[str] = field(default_factory=list)  # From {{tlb|en|...}}
+
+
+# =============================================================================
+# BZ2 streaming
+# =============================================================================
+
+
+class BZ2StreamReader:
+    """Streaming BZ2 decompressor with progress feedback."""
+
+    def __init__(self, filepath: Path, chunk_size: int = 256 * 1024):
+        self.filepath = filepath
+        self.chunk_size = chunk_size
+        self.file = open(filepath, "rb")
+        self.decompressor = bz2.BZ2Decompressor()
+        self.buffer = b""
+        self.total_compressed = 0
+        self.total_decompressed = 0
+        self.start_time = time.time()
+
+    def read(self, size: int = -1) -> bytes:
+        """Read decompressed data."""
+        if size == -1:
+            while not self.decompressor.eof:
+                self._decompress_chunk()
+            result = self.buffer
+            self.buffer = b""
+            return result
+
+        while len(self.buffer) < size and not self.decompressor.eof:
+            self._decompress_chunk()
+
+        result = self.buffer[:size]
+        self.buffer = self.buffer[size:]
+        return result
+
+    def _decompress_chunk(self):
+        """Decompress one chunk."""
+        if self.decompressor.eof:
+            return
+
+        compressed = self.file.read(self.chunk_size)
+        if not compressed:
+            return
+
+        self.total_compressed += len(compressed)
+        decompressed = self.decompressor.decompress(compressed)
+        self.buffer += decompressed
+        self.total_decompressed += len(decompressed)
+
+    def close(self):
+        self.file.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return False
+
+
+# =============================================================================
+# XML streaming
+# =============================================================================
+
+# Simple extraction patterns (no full XML parsing)
+TITLE_PATTERN = re.compile(r"<title>([^<]+)</title>")
+NS_PATTERN = re.compile(r"<ns>(\d+)</ns>")
+TEXT_PATTERN = re.compile(r"<text[^>]*>(.+?)</text>", re.DOTALL)
+REDIRECT_PATTERN = re.compile(r'<redirect\s+title="[^"]+"')
+
+
+def scan_pages(file_obj, chunk_size: int = 1024 * 1024) -> Iterator[str]:
+    """
+    Scan for <page> boundaries and yield complete page XML.
+
+    This is much faster than ET.iterparse() because:
+    - No XML DOM building
+    - No namespace handling
+    - No validation
+    - Simple string scanning
+    """
+    buffer = ""
+    page_start_marker = "<page>"
+    page_end_marker = "</page>"
+
+    while True:
+        chunk = file_obj.read(chunk_size)
+        if not chunk:
+            break
+
+        try:
+            buffer += chunk.decode("utf-8")
+        except UnicodeDecodeError:
+            buffer += chunk.decode("utf-8", errors="ignore")
+
+        while True:
+            start = buffer.find(page_start_marker)
+            if start == -1:
+                buffer = buffer[-len(page_start_marker) :]
+                break
+
+            end = buffer.find(page_end_marker, start)
+            if end == -1:
+                buffer = buffer[start:]
+                break
+
+            end += len(page_end_marker)
+            page_xml = buffer[start:end]
+            buffer = buffer[end:]
+
+            yield page_xml
+
+
+# =============================================================================
+# Wikitext extraction patterns
+# =============================================================================
+
+ENGLISH_SECTION = re.compile(r"==\s*English\s*==", re.IGNORECASE)
+LANGUAGE_SECTION = re.compile(r"^==\s*([^=]+?)\s*==$", re.MULTILINE)
+POS_HEADER = re.compile(r"^===+\s*(.+?)\s*===+\s*$", re.MULTILINE)
+DEFINITION_LINE = re.compile(r"^#\s+(.+)$", re.MULTILINE)
+
+# Category extraction
+CATEGORY = re.compile(r"\[\[Category:English\s+([^\]]+)\]\]", re.IGNORECASE)
+
+# Label extraction from {{lb|en|...}} or {{label|en|...}}
+CONTEXT_LABEL = re.compile(r"\{\{(?:lb|label|context)\|en\|([^}]+)\}\}", re.IGNORECASE)
+
+# Head templates (for POS detection)
+HEAD_TEMPLATE = re.compile(r"\{\{(head|en-head|head-lite)\|en\|([^}]+)\}\}", re.IGNORECASE)
+EN_POS_TEMPLATE = re.compile(r"\{\{en-(noun|verb|adj|adv|prop|pron|phrase|prepphr)\b", re.IGNORECASE)
+
+# Syllable extraction
+HYPHENATION_TEMPLATE = re.compile(r"\{\{(?:hyphenation|hyph)\|en\|([^}]+)\}\}", re.IGNORECASE)
+RHYMES_SYLLABLE = re.compile(r"\{\{rhymes\|en\|[^}]*\|s=(\d+)", re.IGNORECASE)
+SYLLABLE_CATEGORY = re.compile(r"\[\[Category:English\s+(\d+)-syllable\s+words?\]\]", re.IGNORECASE)
+IPA_TEMPLATE = re.compile(r"\{\{IPA\|en\|([^}]+)\}\}", re.IGNORECASE)
+
+# Etymology extraction
+ETYMOLOGY_SECTION = re.compile(
+    r"===+\s*Etymology\s*\d*\s*===+\s*\n(.+?)(?=\n===|\Z)", re.DOTALL | re.IGNORECASE
+)
+
+# Morphology templates
+SUFFIX_TEMPLATE = re.compile(r"\{\{suffix\|en\|([^}]+)\}\}", re.IGNORECASE)
+PREFIX_TEMPLATE = re.compile(r"\{\{prefix\|en\|([^}]+)\}\}", re.IGNORECASE)
+AFFIX_TEMPLATE = re.compile(r"\{\{af(?:fix)?\|en\|([^}]+)\}\}", re.IGNORECASE)
+COMPOUND_TEMPLATE = re.compile(r"\{\{compound\|en\|([^}]+)\}\}", re.IGNORECASE)
+CONFIX_TEMPLATE = re.compile(r"\{\{confix\|en\|([^}]+)\}\}", re.IGNORECASE)
+SURF_TEMPLATE = re.compile(r"\{\{surf\|en\|([^}]+)\}\}", re.IGNORECASE)
+
+# Inflection templates
+INFLECTION_PATTERNS = [
+    ("plural of", re.compile(r"\{\{plural of\|en\|([^|}]+)", re.IGNORECASE)),
+    ("past tense of", re.compile(r"\{\{past tense of\|en\|([^|}]+)", re.IGNORECASE)),
+    ("past participle of", re.compile(r"\{\{past participle of\|en\|([^|}]+)", re.IGNORECASE)),
+    ("present participle of", re.compile(r"\{\{present participle of\|en\|([^|}]+)", re.IGNORECASE)),
+    ("third-person singular of", re.compile(r"\{\{(?:en-)?third-person singular of\|en\|([^|}]+)", re.IGNORECASE)),
+    ("comparative of", re.compile(r"\{\{comparative of\|en\|([^|}]+)", re.IGNORECASE)),
+    ("superlative of", re.compile(r"\{\{superlative of\|en\|([^|}]+)", re.IGNORECASE)),
+    ("inflection of", re.compile(r"\{\{inflection of\|en\|([^|}]+)", re.IGNORECASE)),
+]
+
+# Abbreviation templates
+ABBREVIATION_TEMPLATE = re.compile(
+    r"\{\{(?:abbreviation of|abbrev of|abbr of|initialism of|acronym of)\|en\|", re.IGNORECASE
+)
+
+# Spelling region labels from {{tlb|en|...}}
+TLB_TEMPLATE = re.compile(r"\{\{(?:tlb|lb)\|en\|([^}]+)\}\}", re.IGNORECASE)
+
+# Non-POS section headers to skip
+# These headers are metadata sections, not parts of speech
+NON_POS_HEADERS = {
+    "etymology",
+    "etymology 1",
+    "etymology 2",
+    "etymology 3",
+    "etymology 4",
+    "etymology 5",
+    "pronunciation",
+    "usage notes",
+    "synonyms",
+    "antonyms",
+    "derived terms",
+    "related terms",
+    "translations",
+    "see also",
+    "references",
+    "further reading",
+    "anagrams",
+    "alternative forms",
+    "descendants",
+    "hypernyms",
+    "hyponyms",
+    "meronyms",
+    "holonyms",
+    "troponyms",
+    "coordinate terms",
+    "conjugation",
+    "declension",
+    "inflection",
+    "quotations",
+    "external links",
+    "notes",
+}
+
+# Special page handling
+SPECIAL_PAGE_PREFIXES = (
+    "Wiktionary:",
+    "Template:",
+    "Module:",
+    "Category:",
+    "Appendix:",
+    "Help:",
+    "MediaWiki:",
+    "User:",
+    "Reconstruction:",
+    "Thesaurus:",
+    "Rhymes:",
+    "Citations:",
+    "Index:",
+    "Concordance:",
+    "Talk:",
+    "File:",
+)
+
+# Dictionary-only marker
+DICT_ONLY = re.compile(r"\{\{no entry\|en", re.IGNORECASE)
+
+
+# =============================================================================
+# Extraction functions
+# =============================================================================
+
+
+def extract_english_section(text: str) -> Optional[str]:
+    """
+    Extract ONLY the ==English== section from a Wiktionary page.
+
+    Returns the English section text, or None if no English section found.
+    """
+    english_match = ENGLISH_SECTION.search(text)
+    if not english_match:
+        return None
+
+    english_start = english_match.end()
+
+    next_section = None
+    for match in LANGUAGE_SECTION.finditer(text, english_start):
+        lang = match.group(1).strip()
+        if lang.lower() != "english":
+            next_section = match.start()
+            break
+
+    if next_section:
+        return text[english_start:next_section]
+    else:
+        return text[english_start:]
+
+
+def extract_categories(text: str) -> list[str]:
+    """Extract English category suffixes from text."""
+    categories = []
+    for match in CATEGORY.finditer(text):
+        categories.append(match.group(1))
+    return categories
+
+
+def extract_labels(text: str) -> list[str]:
+    """Extract label tokens from {{lb|en|...}} templates using parser."""
+    return parser_extract_labels(text)
+
+
+def extract_spelling_labels(text: str) -> list[str]:
+    """Extract spelling-related labels from {{tlb|en|...}} templates."""
+    labels = []
+    for match in TLB_TEMPLATE.finditer(text):
+        for label in match.group(1).split("|"):
+            label = label.strip().lower()
+            if label:
+                labels.append(label)
+    return labels
+
+
+def extract_hyphenation(text: str) -> list[str]:
+    """Extract hyphenation parts from {{hyphenation|en|...}}."""
+    match = HYPHENATION_TEMPLATE.search(text)
+    if not match:
+        return []
+
+    content = match.group(1)
+    # Handle alternatives (||) - use first alternative
+    alternatives = content.split("||")
+    first_alt = alternatives[0] if alternatives else content
+
+    parts = []
+    for part in first_alt.split("|"):
+        part = part.strip()
+        if part and "=" not in part:  # Skip parameters like lang=
+            parts.append(part)
+
+    return parts
+
+
+def extract_rhymes_syllable_count(text: str) -> Optional[int]:
+    """Extract syllable count from {{rhymes|en|...|s=N}}."""
+    match = RHYMES_SYLLABLE.search(text)
+    if match:
+        return int(match.group(1))
+    return None
+
+
+def extract_syllable_category_count(text: str) -> Optional[int]:
+    """Extract syllable count from Category:English N-syllable words."""
+    match = SYLLABLE_CATEGORY.search(text)
+    if match:
+        return int(match.group(1))
+    return None
+
+
+def extract_ipa_transcription(text: str) -> Optional[str]:
+    """Extract first IPA transcription from {{IPA|en|...}}."""
+    match = IPA_TEMPLATE.search(text)
+    if match:
+        return match.group(1)
+    return None
+
+
+def extract_etymology_text(text: str) -> str:
+    """Extract etymology section text."""
+    match = ETYMOLOGY_SECTION.search(text)
+    if match:
+        return match.group(1)
+    return ""
+
+
+def extract_etymology_templates(etymology_text: str) -> list[Template]:
+    """Extract morphology-related templates from etymology section using parser."""
+    morphology_template_names = [
+        "suffix", "prefix", "affix", "af",
+        "compound", "confix", "surf"
+    ]
+    return find_templates(etymology_text, *morphology_template_names)
+
+
+def extract_inflection_template(text: str) -> Optional[Template]:
+    """Extract inflection template if present using parser."""
+    inflection_template_names = [
+        "plural of", "past tense of", "past participle of",
+        "present participle of", "third-person singular of",
+        "en-third-person singular of",
+        "comparative of", "superlative of", "inflection of"
+    ]
+    templates = find_templates(text, *inflection_template_names)
+    if templates:
+        # Return first matching template
+        # Normalize name (remove "en-" prefix if present)
+        t = templates[0]
+        name = t.name.lower()
+        if name.startswith("en-"):
+            name = name[3:]
+        # Filter to get first positional param (the lemma)
+        positional = [p for p in t.params if "=" not in p and p.strip()]
+        # Skip language code if present
+        if positional and positional[0].lower() == "en":
+            positional = positional[1:]
+        if positional:
+            return Template(name=name, params=[positional[0]])
+    return None
+
+
+def extract_head_templates(text: str) -> list[Template]:
+    """Extract head templates from text using parser."""
+    # Find head templates and en-* templates
+    head_names = ["head", "en-head", "head-lite"]
+    en_pos_names = ["en-noun", "en-verb", "en-adj", "en-adv", "en-prop", "en-pron", "en-phrase", "en-prepphr"]
+
+    all_names = head_names + en_pos_names
+    return find_templates(text, *all_names)
+
+
+def extract_phrase_type_header(text: str) -> Optional[str]:
+    """Extract phrase type from section headers before POS normalization."""
+    phrase_types = {
+        "idiom",
+        "proverb",
+        "saying",
+        "adage",
+        "prepositional phrase",
+        "adverbial phrase",
+        "verb phrase",
+        "verb phrase form",
+        "noun phrase",
+    }
+
+    for match in POS_HEADER.finditer(text):
+        header = match.group(1).lower().strip()
+        header = " ".join(header.split())  # Normalize whitespace
+        if header in phrase_types:
+            return header
+
+    return None
+
+
+@dataclass
+class PageResult:
+    """Result of extracting a page."""
+
+    title: str
+    status: str  # 'ok', 'redirect', 'special', 'dict_only', 'non_english', 'no_content'
+    text: Optional[str] = None
+
+
+def extract_page(page_xml: str) -> PageResult:
+    """
+    Extract title and text from page XML.
+
+    Returns PageResult with status indicating why page was skipped (if applicable).
+    """
+    # Extract title
+    title_match = TITLE_PATTERN.search(page_xml)
+    if not title_match:
+        return PageResult(title="", status="no_content")
+
+    title = title_match.group(1)
+
+    # Check namespace - only process main namespace (ns=0)
+    ns_match = NS_PATTERN.search(page_xml)
+    if ns_match:
+        namespace = int(ns_match.group(1))
+        if namespace != 0:
+            return PageResult(title=title, status="special")
+
+    # Check for special pages by prefix
+    if title.startswith(SPECIAL_PAGE_PREFIXES):
+        return PageResult(title=title, status="special")
+
+    # Filter translation subpages
+    if "/translations" in title.lower():
+        return PageResult(title=title, status="special")
+
+    # Check for redirects
+    if REDIRECT_PATTERN.search(page_xml):
+        return PageResult(title=title, status="redirect")
+
+    # Extract text
+    text_match = TEXT_PATTERN.search(page_xml)
+    if not text_match:
+        return PageResult(title=title, status="no_content")
+
+    text = text_match.group(1)
+
+    # Check for English section
+    if not ENGLISH_SECTION.search(text):
+        return PageResult(title=title, status="non_english")
+
+    # Check for dictionary-only terms
+    if DICT_ONLY.search(text):
+        return PageResult(title=title, status="dict_only")
+
+    return PageResult(title=title, status="ok", text=text)
+
+
+def extract_evidence_from_section(
+    title: str,
+    pos_header: str,
+    section_text: str,
+    english_text: str,
+) -> Iterator[Evidence]:
+    """
+    Extract Evidence objects for each definition in a POS section.
+
+    Args:
+        title: Page title (the word)
+        pos_header: The POS header text
+        section_text: Text of this POS section
+        english_text: Full English section text (for word-level data)
+
+    Yields:
+        Evidence objects, one per definition line
+    """
+    # Word-level data (shared across definitions)
+    wc = len(title.split())
+    categories = extract_categories(english_text)
+    etymology_text = extract_etymology_text(english_text)
+    etymology_templates = extract_etymology_templates(etymology_text)
+    hyphenation_parts = extract_hyphenation(english_text)
+    rhymes_syllable_count = extract_rhymes_syllable_count(english_text)
+    syllable_category_count = extract_syllable_category_count(english_text)
+    ipa_transcription = extract_ipa_transcription(english_text)
+    inflection_template = extract_inflection_template(english_text)
+    phrase_type_header = extract_phrase_type_header(english_text)
+    spelling_labels = extract_spelling_labels(english_text)
+
+    # Section-level data
+    head_templates = extract_head_templates(section_text)
+
+    # Extract definition lines
+    definition_lines = [m.group(1) for m in DEFINITION_LINE.finditer(section_text)]
+
+    if not definition_lines:
+        definition_lines = [""]  # Create at least one entry
+
+    for def_text in definition_lines:
+        # Definition-level labels
+        labels = extract_labels(def_text)
+
+        yield Evidence(
+            title=title,
+            wc=wc,
+            pos_header=pos_header,
+            head_templates=head_templates,
+            categories=categories,
+            labels=labels,
+            etymology_text=etymology_text,
+            etymology_templates=etymology_templates,
+            definition_text=def_text,
+            hyphenation_parts=hyphenation_parts,
+            rhymes_syllable_count=rhymes_syllable_count,
+            syllable_category_count=syllable_category_count,
+            ipa_transcription=ipa_transcription,
+            inflection_template=inflection_template,
+            phrase_type_header=phrase_type_header,
+            spelling_labels=spelling_labels,
+        )
+
+
+def extract_evidence(title: str, text: str) -> Iterator[Evidence]:
+    """
+    Extract Evidence objects from a Wiktionary page.
+
+    Args:
+        title: Page title
+        text: Page wikitext
+
+    Yields:
+        Evidence objects for each (POS, definition) pair
+    """
+    # Extract English section only
+    english_text = extract_english_section(text)
+    if not english_text:
+        return
+
+    # Find POS headers and their sections (filter out non-POS headers)
+    headers = []
+    for match in POS_HEADER.finditer(english_text):
+        header_text = match.group(1).strip()
+        # Skip known non-POS headers (etymology, pronunciation, etc.)
+        if header_text.lower() in NON_POS_HEADERS:
+            continue
+        headers.append((match.start(), match.end(), header_text))
+
+    if not headers:
+        # No POS headers - create single Evidence with unknown POS
+        yield Evidence(
+            title=title,
+            wc=len(title.split()),
+            pos_header="unknown",
+            head_templates=extract_head_templates(english_text),
+            categories=extract_categories(english_text),
+            labels=extract_labels(english_text),
+            etymology_text=extract_etymology_text(english_text),
+            etymology_templates=extract_etymology_templates(extract_etymology_text(english_text)),
+            hyphenation_parts=extract_hyphenation(english_text),
+            rhymes_syllable_count=extract_rhymes_syllable_count(english_text),
+            syllable_category_count=extract_syllable_category_count(english_text),
+            ipa_transcription=extract_ipa_transcription(english_text),
+            inflection_template=extract_inflection_template(english_text),
+            phrase_type_header=extract_phrase_type_header(english_text),
+            spelling_labels=extract_spelling_labels(english_text),
+        )
+        return
+
+    # Process each POS section
+    for i, (start, end, header_text) in enumerate(headers):
+        # Section extends from end of header to start of next header (or end)
+        section_start = end
+        section_end = headers[i + 1][0] if i + 1 < len(headers) else len(english_text)
+        section_text = english_text[section_start:section_end]
+
+        yield from extract_evidence_from_section(
+            title=title,
+            pos_header=header_text,
+            section_text=section_text,
+            english_text=english_text,
+        )

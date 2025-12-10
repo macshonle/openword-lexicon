@@ -22,10 +22,14 @@ Example:
 """
 
 import argparse
+import json
 import sys
+import time
 from pathlib import Path
 
 from .cdaload import load_binding_config, CodeValidationError
+from .evidence import BZ2StreamReader, scan_pages, extract_page, extract_evidence
+from .rules import apply_rules, entry_to_dict
 
 
 def parse_args() -> argparse.Namespace:
@@ -101,9 +105,110 @@ def main() -> int:
     if args.limit:
         print(f"  Limit:  {args.limit} entries")
 
-    # Placeholder: actual processing will be implemented in Phase 2-4
-    print(f"\n[Placeholder] Would process {args.input} -> {args.output}")
-    print("Phase 1 complete. Evidence extraction (Phase 2) not yet implemented.")
+    # Ensure output directory exists
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+
+    # Statistics
+    stats = {
+        "pages_processed": 0,
+        "pages_ok": 0,
+        "pages_redirect": 0,
+        "pages_special": 0,
+        "pages_non_english": 0,
+        "pages_dict_only": 0,
+        "entries_written": 0,
+        "entries_filtered": 0,
+    }
+
+    start_time = time.time()
+
+    # Open input and output files
+    if str(args.input).endswith(".bz2"):
+        file_obj = BZ2StreamReader(args.input)
+    else:
+        file_obj = open(args.input, "rb")
+
+    try:
+        with file_obj as f, open(args.output, "w", encoding="utf-8") as out:
+            # Process pages
+            for page_xml in scan_pages(f):
+                stats["pages_processed"] += 1
+
+                # Extract page content
+                result = extract_page(page_xml)
+
+                # Track page status
+                if result.status == "redirect":
+                    stats["pages_redirect"] += 1
+                    continue
+                elif result.status == "special":
+                    stats["pages_special"] += 1
+                    continue
+                elif result.status == "non_english":
+                    stats["pages_non_english"] += 1
+                    continue
+                elif result.status == "dict_only":
+                    stats["pages_dict_only"] += 1
+                    continue
+                elif result.status != "ok" or not result.text:
+                    continue
+
+                stats["pages_ok"] += 1
+
+                # Extract evidence and apply rules
+                for evidence in extract_evidence(result.title, result.text):
+                    entry = apply_rules(evidence, config)
+
+                    if entry is None:
+                        stats["entries_filtered"] += 1
+                        continue
+
+                    # Write entry
+                    entry_dict = entry_to_dict(entry)
+                    out.write(json.dumps(entry_dict, ensure_ascii=False) + "\n")
+                    stats["entries_written"] += 1
+
+                    # Check limit
+                    if args.limit and stats["entries_written"] >= args.limit:
+                        print(f"\nReached limit of {args.limit} entries")
+                        break
+
+                # Check limit (outer loop)
+                if args.limit and stats["entries_written"] >= args.limit:
+                    break
+
+                # Progress update every 10000 pages
+                if stats["pages_processed"] % 10000 == 0:
+                    elapsed = time.time() - start_time
+                    rate = stats["pages_processed"] / elapsed if elapsed > 0 else 0
+                    print(
+                        f"  Progress: {stats['pages_processed']:,} pages, "
+                        f"{stats['entries_written']:,} entries, "
+                        f"{rate:.0f} pages/sec"
+                    )
+
+    except KeyboardInterrupt:
+        print("\nInterrupted by user")
+
+    # Print summary
+    elapsed = time.time() - start_time
+    elapsed_min = int(elapsed / 60)
+    elapsed_sec = int(elapsed % 60)
+
+    print("\n" + "=" * 60)
+    print("Summary:")
+    print(f"  Pages processed:  {stats['pages_processed']:,}")
+    print(f"  Pages OK:         {stats['pages_ok']:,}")
+    print(f"  Redirects:        {stats['pages_redirect']:,}")
+    print(f"  Special pages:    {stats['pages_special']:,}")
+    print(f"  Non-English:      {stats['pages_non_english']:,}")
+    print(f"  Dict-only:        {stats['pages_dict_only']:,}")
+    print(f"  Entries written:  {stats['entries_written']:,}")
+    print(f"  Entries filtered: {stats['entries_filtered']:,}")
+    print(f"  Time:             {elapsed_min}m {elapsed_sec}s")
+    if elapsed > 0:
+        print(f"  Rate:             {stats['pages_processed'] / elapsed:.0f} pages/sec")
+    print("=" * 60)
 
     return 0
 
