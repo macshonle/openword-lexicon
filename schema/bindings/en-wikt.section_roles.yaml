@@ -1,0 +1,137 @@
+# English Wiktionary section role bindings
+language: en
+source: wiktionary
+description: >
+  Defines which section headers are POS sections vs metadata sections.
+  POS headers can be derived from pos_bindings, but ignore_headers must
+  be explicitly listed to prevent treating metadata sections as unknown POS.
+
+# Headers that should be skipped (metadata sections, not parts of speech)
+# These are normalized to lowercase for matching.
+ignore_headers:
+  # Etymology sections (numbered variants)
+  - etymology
+  - etymology 1
+  - etymology 2
+  - etymology 3
+  - etymology 4
+  - etymology 5
+  - etymology 6
+  - etymology 7
+  - etymology 8
+  - etymology 9
+  - etymology 10
+
+  # Pronunciation and phonology
+  - pronunciation
+  - pronunciation 1
+  - pronunciation 2
+
+  # Usage and notes
+  - usage notes
+  - notes
+  - usage
+
+  # Semantic relations
+  - synonyms
+  - antonyms
+  - hypernyms
+  - hyponyms
+  - meronyms
+  - holonyms
+  - troponyms
+  - coordinate terms
+  - related terms
+  - derived terms
+  - descendants
+
+  # References and external
+  - translations
+  - references
+  - further reading
+  - external links
+  - see also
+  - quotations
+
+  # Morphological tables
+  - conjugation
+  - declension
+  - inflection
+
+  # Alternative forms and anagrams
+  - alternative forms
+  - alternative spellings
+  - anagrams
+
+  # Statistics sections (rare but exist)
+  - statistics
+  - trivia
+
+# Label normalizations for tag mapping
+# Maps common label variants to canonical forms before tag lookup
+label_normalizations:
+  # Regional variants
+  "u.s.": "us"
+  "u.s": "us"
+  "usa": "us"
+  "american": "us"
+  "america": "us"
+  "u.k.": "uk"
+  "u.k": "uk"
+  "britain": "uk"
+  "british": "uk"
+  "great britain": "uk"
+  "australia": "australian"
+  "aus": "australian"
+  "aus.": "australian"
+  "canada": "canadian"
+  "can": "canadian"
+  "can.": "canadian"
+  "ireland": "irish"
+  "ire": "irish"
+  "ire.": "irish"
+  "scotland": "scottish"
+  "scot": "scottish"
+  "scot.": "scottish"
+  "new zealand": "new zealand"
+  "nz": "new zealand"
+  "n.z.": "new zealand"
+  "south africa": "south african"
+  "sa": "south african"
+  "s.a.": "south african"
+  "india": "indian english"
+  "ind": "indian english"
+  "ind.": "indian english"
+
+  # Register variants
+  "coll.": "colloquial"
+  "coll": "colloquial"
+  "inf.": "informal"
+  "inf": "informal"
+  "form.": "formal"
+  "form": "formal"
+  "lit.": "literary"
+  "lit": "literary"
+  "poet.": "poetic"
+  "poet": "poetic"
+  "vulg.": "vulgar"
+  "vulg": "vulgar"
+
+  # Temporal variants
+  "obs.": "obsolete"
+  "obs": "obsolete"
+  "arch.": "archaic"
+  "arch": "archaic"
+  "hist.": "historical"
+  "hist": "historical"
+  "dat.": "dated"
+  "dat": "dated"
+
+# Definition line markers (for future multi-level definition support)
+definition_markers:
+  primary: "#"
+  secondary: "##"
+  tertiary: "###"
+  quote: "#*"
+  synonym: "#:"
+  usage: "#:"

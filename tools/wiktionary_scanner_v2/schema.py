@@ -178,6 +178,15 @@ class MorphologyBindings:
 
 
 @dataclass
+class SectionRoles:
+    """Section role definitions from en-wikt.section_roles.yaml."""
+
+    ignore_headers: list[str] = field(default_factory=list)
+    label_normalizations: dict[str, str] = field(default_factory=dict)
+    definition_markers: dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
 class Bindings:
     """Language-specific bindings loaded from schema/bindings/."""
 
@@ -186,6 +195,7 @@ class Bindings:
     tag_set_bindings: list[TagSetBinding] = field(default_factory=list)
     phrase_type_bindings: list[PhraseTypeBinding] = field(default_factory=list)
     morphology: MorphologyBindings = field(default_factory=MorphologyBindings)
+    section_roles: SectionRoles = field(default_factory=SectionRoles)
 
     def summary(self) -> str:
         """Return a human-readable summary of the loaded bindings."""
@@ -424,6 +434,17 @@ def load_bindings(path: Path) -> Bindings:
                 )
                 for t in morph_data.get("templates", [])
             ],
+        )
+
+    # Load section roles (en-wikt.section_roles.yaml)
+    roles_file = path / "en-wikt.section_roles.yaml"
+    if roles_file.exists():
+        with open(roles_file) as f:
+            roles_data = yaml.safe_load(f)
+        bindings.section_roles = SectionRoles(
+            ignore_headers=roles_data.get("ignore_headers", []),
+            label_normalizations=roles_data.get("label_normalizations", {}),
+            definition_markers=roles_data.get("definition_markers", {}),
         )
 
     return bindings

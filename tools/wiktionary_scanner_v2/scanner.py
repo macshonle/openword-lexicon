@@ -156,7 +156,9 @@ def main() -> int:
                 stats["pages_ok"] += 1
 
                 # Extract evidence and apply rules
-                for evidence in extract_evidence(result.title, result.text):
+                for evidence in extract_evidence(
+                    result.title, result.text, ignore_headers=config.ignore_headers
+                ):
                     entry = apply_rules(evidence, config)
 
                     if entry is None:

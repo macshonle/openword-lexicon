@@ -539,11 +539,46 @@ def extract_page(page_xml: str) -> PageResult:
     return PageResult(title=title, status="ok", text=text)
 
 
+@dataclass
+class PageLevelCache:
+    """Cached page-level data to avoid re-parsing for each POS section."""
+
+    wc: int
+    categories: list[str]
+    etymology_text: str
+    etymology_templates: list[Template]
+    hyphenation_parts: list[str]
+    rhymes_syllable_count: Optional[int]
+    syllable_category_count: Optional[int]
+    ipa_transcription: Optional[str]
+    inflection_template: Optional[Template]
+    phrase_type_header: Optional[str]
+    spelling_labels: list[str]
+
+
+def build_page_cache(title: str, english_text: str) -> PageLevelCache:
+    """Build page-level cache from English section text."""
+    etymology_text = extract_etymology_text(english_text)
+    return PageLevelCache(
+        wc=len(title.split()),
+        categories=extract_categories(english_text),
+        etymology_text=etymology_text,
+        etymology_templates=extract_etymology_templates(etymology_text),
+        hyphenation_parts=extract_hyphenation(english_text),
+        rhymes_syllable_count=extract_rhymes_syllable_count(english_text),
+        syllable_category_count=extract_syllable_category_count(english_text),
+        ipa_transcription=extract_ipa_transcription(english_text),
+        inflection_template=extract_inflection_template(english_text),
+        phrase_type_header=extract_phrase_type_header(english_text),
+        spelling_labels=extract_spelling_labels(english_text),
+    )
+
+
 def extract_evidence_from_section(
     title: str,
     pos_header: str,
     section_text: str,
-    english_text: str,
+    cache: PageLevelCache,
 ) -> Iterator[Evidence]:
     """
     Extract Evidence objects for each definition in a POS section.
@@ -552,25 +587,12 @@ def extract_evidence_from_section(
         title: Page title (the word)
         pos_header: The POS header text
         section_text: Text of this POS section
-        english_text: Full English section text (for word-level data)
+        cache: Pre-computed page-level data
 
     Yields:
         Evidence objects, one per definition line
     """
-    # Word-level data (shared across definitions)
-    wc = len(title.split())
-    categories = extract_categories(english_text)
-    etymology_text = extract_etymology_text(english_text)
-    etymology_templates = extract_etymology_templates(etymology_text)
-    hyphenation_parts = extract_hyphenation(english_text)
-    rhymes_syllable_count = extract_rhymes_syllable_count(english_text)
-    syllable_category_count = extract_syllable_category_count(english_text)
-    ipa_transcription = extract_ipa_transcription(english_text)
-    inflection_template = extract_inflection_template(english_text)
-    phrase_type_header = extract_phrase_type_header(english_text)
-    spelling_labels = extract_spelling_labels(english_text)
-
-    # Section-level data
+    # Section-level data (parse once per section)
     head_templates = extract_head_templates(section_text)
 
     # Extract definition lines
@@ -585,46 +607,57 @@ def extract_evidence_from_section(
 
         yield Evidence(
             title=title,
-            wc=wc,
+            wc=cache.wc,
             pos_header=pos_header,
             head_templates=head_templates,
-            categories=categories,
+            categories=cache.categories,
             labels=labels,
-            etymology_text=etymology_text,
-            etymology_templates=etymology_templates,
+            etymology_text=cache.etymology_text,
+            etymology_templates=cache.etymology_templates,
             definition_text=def_text,
-            hyphenation_parts=hyphenation_parts,
-            rhymes_syllable_count=rhymes_syllable_count,
-            syllable_category_count=syllable_category_count,
-            ipa_transcription=ipa_transcription,
-            inflection_template=inflection_template,
-            phrase_type_header=phrase_type_header,
-            spelling_labels=spelling_labels,
+            hyphenation_parts=cache.hyphenation_parts,
+            rhymes_syllable_count=cache.rhymes_syllable_count,
+            syllable_category_count=cache.syllable_category_count,
+            ipa_transcription=cache.ipa_transcription,
+            inflection_template=cache.inflection_template,
+            phrase_type_header=cache.phrase_type_header,
+            spelling_labels=cache.spelling_labels,
         )
 
 
-def extract_evidence(title: str, text: str) -> Iterator[Evidence]:
+def extract_evidence(
+    title: str,
+    text: str,
+    ignore_headers: set[str] | None = None,
+) -> Iterator[Evidence]:
     """
     Extract Evidence objects from a Wiktionary page.
 
     Args:
         title: Page title
         text: Page wikitext
+        ignore_headers: Set of headers to skip (lowercase). If None, uses NON_POS_HEADERS.
 
     Yields:
         Evidence objects for each (POS, definition) pair
     """
+    # Use config-provided ignore_headers or fall back to default
+    skip_headers = ignore_headers if ignore_headers is not None else NON_POS_HEADERS
+
     # Extract English section only
     english_text = extract_english_section(text)
     if not english_text:
         return
 
+    # Build page-level cache ONCE (avoid re-parsing for each POS section)
+    cache = build_page_cache(title, english_text)
+
     # Find POS headers and their sections (filter out non-POS headers)
     headers = []
     for match in POS_HEADER.finditer(english_text):
         header_text = match.group(1).strip()
-        # Skip known non-POS headers (etymology, pronunciation, etc.)
-        if header_text.lower() in NON_POS_HEADERS:
+        # Skip configured non-POS headers (etymology, pronunciation, etc.)
+        if header_text.lower() in skip_headers:
             continue
         headers.append((match.start(), match.end(), header_text))
 
@@ -632,24 +665,24 @@ def extract_evidence(title: str, text: str) -> Iterator[Evidence]:
         # No POS headers - create single Evidence with unknown POS
         yield Evidence(
             title=title,
-            wc=len(title.split()),
+            wc=cache.wc,
             pos_header="unknown",
             head_templates=extract_head_templates(english_text),
-            categories=extract_categories(english_text),
+            categories=cache.categories,
             labels=extract_labels(english_text),
-            etymology_text=extract_etymology_text(english_text),
-            etymology_templates=extract_etymology_templates(extract_etymology_text(english_text)),
-            hyphenation_parts=extract_hyphenation(english_text),
-            rhymes_syllable_count=extract_rhymes_syllable_count(english_text),
-            syllable_category_count=extract_syllable_category_count(english_text),
-            ipa_transcription=extract_ipa_transcription(english_text),
-            inflection_template=extract_inflection_template(english_text),
-            phrase_type_header=extract_phrase_type_header(english_text),
-            spelling_labels=extract_spelling_labels(english_text),
+            etymology_text=cache.etymology_text,
+            etymology_templates=cache.etymology_templates,
+            hyphenation_parts=cache.hyphenation_parts,
+            rhymes_syllable_count=cache.rhymes_syllable_count,
+            syllable_category_count=cache.syllable_category_count,
+            ipa_transcription=cache.ipa_transcription,
+            inflection_template=cache.inflection_template,
+            phrase_type_header=cache.phrase_type_header,
+            spelling_labels=cache.spelling_labels,
         )
         return
 
-    # Process each POS section
+    # Process each POS section (reuse cached page-level data)
     for i, (start, end, header_text) in enumerate(headers):
         # Section extends from end of header to start of next header (or end)
         section_start = end
@@ -660,5 +693,5 @@ def extract_evidence(title: str, text: str) -> Iterator[Evidence]:
             title=title,
             pos_header=header_text,
             section_text=section_text,
-            english_text=english_text,
+            cache=cache,
         )

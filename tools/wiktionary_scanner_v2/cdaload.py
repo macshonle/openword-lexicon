@@ -68,6 +68,10 @@ class BindingConfig:
     morphology_templates: list[MorphologyTemplate] = field(default_factory=list)
     morphology_type_to_code: dict[str, str] = field(default_factory=dict)
 
+    # === Section roles (en-wikt.section_roles.yaml) ===
+    ignore_headers: set[str] = field(default_factory=set)
+    label_normalizations: dict[str, str] = field(default_factory=dict)
+
     def summary(self) -> str:
         """Return a human-readable summary of the loaded configuration."""
         return (
@@ -292,6 +296,13 @@ def load_binding_config(core_path: Path, bindings_path: Path) -> BindingConfig:
                 f"Morphology type mapping references unknown code '{code}'"
             )
         config.morphology_type_to_code[type_str.lower()] = code
+
+    # === Index section roles ===
+
+    config.ignore_headers = {h.lower() for h in bindings.section_roles.ignore_headers}
+    config.label_normalizations = {
+        k.lower(): v.lower() for k, v in bindings.section_roles.label_normalizations.items()
+    }
 
     # === Validate global uniqueness ===
 
