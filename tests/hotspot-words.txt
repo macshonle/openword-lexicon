@@ -20,6 +20,8 @@ BOAT
 B.O.A.T.
 B. O. A. T.
 cat
+color
+colour
 dialect
 dictionary
 dimorphemic

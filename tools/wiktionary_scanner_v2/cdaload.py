@@ -59,6 +59,8 @@ class BindingConfig:
     # === Flag bindings (en-wikt.flags.yaml) ===
     template_to_flag: dict[str, str] = field(default_factory=dict)
     category_suffix_to_flag: dict[str, str] = field(default_factory=dict)
+    # For ALTH flag: maps from= param values to spelling labels (lowercased keys)
+    from_param_to_spelling: dict[str, str] = field(default_factory=dict)
 
     # === Tag bindings (en-wikt.tag_sets.yaml) ===
     label_to_tag: dict[str, str] = field(default_factory=dict)
@@ -327,6 +329,9 @@ def load_binding_config(core_path: Path, bindings_path: Path) -> BindingConfig:
             config.template_to_flag[template.lower()] = code
         for suffix in flag_binding.category_suffixes:
             config.category_suffix_to_flag[suffix.lower()] = code
+        # Load from_param_to_spelling (for ALTH flag)
+        for from_value, spelling_label in flag_binding.from_param_to_spelling.items():
+            config.from_param_to_spelling[from_value.lower()] = spelling_label.lower()
 
     # === Index tag bindings ===
 

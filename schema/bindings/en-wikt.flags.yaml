@@ -78,7 +78,28 @@ flags:
       - alternative spelling of
       - altform
       - altspelling
+      # Standard spelling templates (used for Commonwealth/British spellings)
+      # Structure: {{standard spelling of|en|from=Commonwealth|target}}
+      - standard spelling of
     category_suffixes:
       # Rare in practice - most categories are dynamically generated
       - alternative forms
       - alternative spellings
+    from_param_to_spelling:
+      # Maps from= parameter values (e.g., {{standard spelling of|en|from=Commonwealth|color}})
+      # to spelling labels that can be looked up in tag_sets.yaml for SPEL codes.
+      # Keys are lowercased for case-insensitive matching.
+      commonwealth: commonwealth spelling
+      british form: british spelling
+      british: british spelling
+      ireland: irish spelling
+      irish: irish spelling
+      american: american spelling
+      us: us spelling
+      canadian: canadian spelling
+      australia: australian spelling
+      australian: australian spelling
+      new zealand: new zealand spelling
+      south africa: south african spelling
+      india: indian spelling
+      indian: indian spelling

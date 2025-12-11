@@ -143,6 +143,52 @@ def build_abbreviation_pattern() -> re.Pattern:
 
 
 # =============================================================================
+# Inflection template names (from en-wikt.flags.yaml)
+# =============================================================================
+
+def _load_inflection_template_names() -> list[str]:
+    """Load inflection template names from en-wikt.flags.yaml.
+
+    Returns list of template names that indicate inflected forms.
+    Used by evidence.py for template extraction.
+    """
+    config = _load_flags_config()
+    infl_config = config.get("flags", {}).get("INFL", {})
+    templates = infl_config.get("templates", [])
+
+    if not templates:
+        raise SchemaError(
+            "No INFL templates found in en-wikt.flags.yaml.\n"
+            "Expected flags.INFL.templates to contain template names."
+        )
+
+    return templates
+
+
+# =============================================================================
+# Alternative form template names (from en-wikt.flags.yaml)
+# =============================================================================
+
+def _load_altform_template_names() -> list[str]:
+    """Load alternative form template names from en-wikt.flags.yaml.
+
+    Returns list of template names that indicate alternative forms/spellings.
+    Used by evidence.py for template extraction.
+    """
+    config = _load_flags_config()
+    alth_config = config.get("flags", {}).get("ALTH", {})
+    templates = alth_config.get("templates", [])
+
+    if not templates:
+        raise SchemaError(
+            "No ALTH templates found in en-wikt.flags.yaml.\n"
+            "Expected flags.ALTH.templates to contain template names."
+        )
+
+    return templates
+
+
+# =============================================================================
 # Morphology patterns (from en-wikt.patterns.yaml)
 # =============================================================================
 
@@ -392,6 +438,7 @@ def _initialize_all_patterns():
     Raises SchemaError with clear message if required files are missing.
     """
     global INFLECTION_PATTERNS, ABBREVIATION_PATTERN
+    global INFLECTION_TEMPLATE_NAMES, ALTFORM_TEMPLATE_NAMES
     global MORPHOLOGY_TEMPLATE_NAMES, MORPHOLOGY_PATTERNS
     global SUFFIX_TEMPLATE, PREFIX_TEMPLATE, AFFIX_TEMPLATE
     global COMPOUND_TEMPLATE, CONFIX_TEMPLATE, SURF_TEMPLATE
@@ -404,6 +451,10 @@ def _initialize_all_patterns():
         # Inflection and abbreviation from en-wikt.flags.yaml
         INFLECTION_PATTERNS = build_inflection_patterns()
         ABBREVIATION_PATTERN = build_abbreviation_pattern()
+
+        # Template name lists for evidence.py (from en-wikt.flags.yaml)
+        INFLECTION_TEMPLATE_NAMES = _load_inflection_template_names()
+        ALTFORM_TEMPLATE_NAMES = _load_altform_template_names()
 
         # Morphology from en-wikt.patterns.yaml
         MORPHOLOGY_TEMPLATE_NAMES = _load_morphology_templates()
@@ -438,6 +489,8 @@ def _initialize_all_patterns():
 # Declare module-level variables (will be populated by _initialize_all_patterns)
 INFLECTION_PATTERNS: list[tuple[str, re.Pattern]] = []
 ABBREVIATION_PATTERN: re.Pattern = re.compile(r"$^")  # placeholder
+INFLECTION_TEMPLATE_NAMES: list[str] = []  # Template names for inflected forms
+ALTFORM_TEMPLATE_NAMES: list[str] = []  # Template names for alternative forms/spellings
 MORPHOLOGY_TEMPLATE_NAMES: list[str] = []
 MORPHOLOGY_PATTERNS: dict[str, re.Pattern] = {}
 SUFFIX_TEMPLATE: re.Pattern = re.compile(r"$^")

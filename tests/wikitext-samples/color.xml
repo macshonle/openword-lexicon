@@ -1,0 +1,1390 @@
+<page>
+    <title>color</title>
+    <ns>0</ns>
+    <id>1520</id>
+    <revision>
+      <id>88267057</id>
+      <parentid>88146228</parentid>
+      <timestamp>2025-11-23T21:34:01Z</timestamp>
+      <contributor>
+        <username>Gegarsya</username>
+        <id>4310429</id>
+      </contributor>
+      <comment>/* Translations */</comment>
+      <origin>88267057</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="50069" sha1="5m4xgj81pf3du0g9ptyxfb5udq2pbvf" xml:space="preserve">{{also|colôr}}
+==English==
+{{wp}}
+{{Wiktionary:Picture dictionary/en:color}}
+{{wikidata lexeme|L1347}}
+
+===Alternative forms===
+* {{alt|en|colour||Commonwealth|Ireland}} (see the [[#Usage notes|usage notes]] below)
+
+===Etymology===
+From {{inh|en|enm|colour}}, {{m|enm|color}}, borrowed from {{der|en|xno|colur}}, from {{der|en|fro|colour}}, {{m|fro|color}}, from {{der|en|la|color}}. {{doublet|en|couleur}}.
+
+Displaced {{noncog|en|blee}}, {{noncog|enm|blee|t=color}}, from {{noncog|ang|blēo}}. Also partially replaced {{noncog|ang|hīew||color}} and its descendants ({{noncog|en|hue}}), which is less often used in this sense.
+
+The spelling ''color'' was popularized in modern American English by {{w|Noah Webster}}, to match the spelling of the word's Latin etymon{{,}} and make all American spellings of the derivatives consistent (''colorimeter'',  ''coloration'', ''colorize'', ''colorless'', etc).
+
+===Pronunciation===
+* {{enPR|kŭlʹə|a=UK,etc}}, {{IPA|en|/ˈkʌl.ə/}} {{rhymes|en|ʌlə(ɹ)|s=2}}
+** {{IPA|en|/ˈkʌl.ə(ɹ)/|a=RP}}
+** {{IPA|en|[ˈkʰʌl.ə(ɹ)]|a=Southern England}}
+** {{IPA|en|[ˈkʌləɹ]|a=Scotland,Northern Ireland}}
+** {{IPA|en|[ˈkʰɐɫ.ɐ]|a=AU,NZ}}
+** {{IPA|en|[ˈkɐl.ɐ(ɾ)]|a=Indic}}
+* {{enPR|kŭlʹər|a=GA}}, {{IPA|en|/ˈkʌl.ɚ/}} {{rhymes|en|ʌlə(ɹ)|s=2}}
+** {{audio|en|en-us-color.ogg|a=GA|IPA=[ˈkʰʌl.ɚ]}}
+* {{enPR|ko͝olʹər|a=Northern England,Ireland}}, {{IPA|en|/ˈkʊl.ə(ɹ)/}}
+** {{IPA|en|/ˈkʊl.ɚ/|/ˈkʊlɐ/|a=Dublin}}
+* {{homophones|en|culler|qq1=most accents}}
+* {{hyph|en|col|or}}
+
+===Noun===
+{{en-noun|~|s}} {{tlb|en|American spelling|Philippines|;|occasionally also|_|Canadian spelling}}
+
+# {{lb|en|uncountable}} The spectral composition of visible light.
+#: {{syn|en|blee|q1=archaic}}
+#: {{ux|en|Humans and birds can perceive '''color'''.}}
+# A subset thereof:
+## {{lb|en|countable}} A particular set of visible spectral compositions, perceived or named as a class.
+##: {{syn|en|hue|blee|q2=archaic}}
+##: {{ux|en|Most languages have names for the '''colors''' black, white, red, and green.}}
+##: {{ux|en|What '''color''' are your [[bf]]'s eyes?}}
+##* {{RQ:Maxwell Mirror and the Lamp|chapter=5|passage=Here, in the transept and choir, where the service was being held, one was conscious every moment of an increasing brightness; '''colours''' glowing vividly beneath the circular chandeliers, and the rows of small lights on the choristers' desks flashed and sparkled in front of the boys' faces, deep linen collars, and red neckbands.}}
+## {{lb|en|uncountable}} [[hue|Hue]] as opposed to [[achromatic]] colors (black, white and grays).
+##: {{syn|en|hue|shade|blee|q3=archaic}}
+##: {{ux|en|The accident victim's face was white, drained of all '''color'''.}}
+## These hues as used in [[color television]] or films, color photographs, etc (as opposed to the shades of grey used in black-and-white television).
+##: {{syn|en|color television}}
+##: {{ux|en|This film is broadcast in '''color'''. &amp;nbsp;Most people dream in '''color''', but some dream in black and white.}}
+## {{senseid|en|heraldry}} {{lb|en|heraldry}} Any of the standard dark [[tincture#English:_heraldry|tincture]]s used in a [[coat of arms]], including [[azure]], [[gules]], [[sable]], and [[vert]].
+##: {{cot|en|metal&lt;id:heraldry&gt;|stain&lt;id:heraldry&gt;|fur&lt;id:heraldry&gt;}}
+# A [[paint]].
+#: {{ux|en|The artist took out her '''colors''' and began work on a landscape.}}
+# {{lb|en|uncountable}} Human skin tone, especially as an indicator of [[race]] or [[ethnicity]].
+#: {{syn|en|complexion|ethnicity|race}}
+#: {{ux|en|'''Color''' has been a sensitive issue in many societies.}}
+# {{lb|en|medicine}} Skin color, noted as normal, [[jaundiced]], [[cyanotic]], [[flush]], [[mottled]], [[pale]], or [[ashen]] as part of the [[skin signs]] assessment.
+# A [[flushed]] appearance of blood in the face; redness of complexion.
+#* {{quote-book|en|year=1864|author=Sir Henry Stewart Cunningham|title=Late Laurels|volume=1-2|page=117
+|passage={{...}} her very embarrassment wore a graceful air; her high '''colour''' had softened down to a warm, delicate tint; and her dress, which looked beautifully new and fresh, was in good taste, and showed her off to advantage.}}
+# {{senseid|en|detail}} {{lb|en|figuratively}} Richness of expression; detail or flavour that is likely to generate interest or enjoyment.
+#: {{coi|en|[[color commentator|'''color''' commentator]]}}, {{coi|en|'''color''' commentary}}
+#: {{ux|en|There is a great deal of '''colour''' in his writing.}}
+#: {{ux|en|a bit of local '''color'''}}
+#* {{RQ:Vance Outsider|page=377|column=2|passage=Three chairs of the steamer type, all maimed, comprised the furniture of this roof-garden, with (by way of local '''color''') on one of the copings a row of four red clay flower-pots filled with sun-baked dust {{...}}}}
+#: {{ux|en|Could you give me some '''color''' with regards to which products made up the mix of revenue for this quarter?}}
+# {{senseid|en|standard}} A [[standard]], [[flag]], or [[insignia]]:
+## {{lb|en|in the plural}} A [[standard]] or [[banner]].
+##: {{syn|en|banner|standard}}
+##: {{ux|en|The loss of their '''colors''' destroyed the regiment's morale.}}
+## {{lb|en|in the plural}} The flag of a nation or team.
+##: {{ux|en|The '''colors''' were raised over the new territory.}}
+##* {{quote-book|en|page=7|chapter=[[:s:Treaty of friendship and commerce between Great Britain and Siam/Treaty|Treaty signed April 18, 1855; ratified April 5, 1856]]|title=Treaty of friendship and commerce between Great Britain and Siam|year=1856|publisher=J. H. Chandler|location=Bangkok|text=The arrival of the British Consul at Bangkok shall not take place before the ratification of this Treaty, nor until ten vessels owned by British subjects, sailing under British '''colours''' and with British papers, shall have entered the port of Bangkok for purposes of trade, subsequent to the signing of this Treaty.}}
+## {{lb|en|in the plural}} Gang insignia.
+##: {{ux|en|Both of the perpetrators were wearing '''colors'''.}}
+# {{lb|en|in the plural}} An award for sporting achievement, particularly within a school or university.
+#: {{ux|en|He was awarded '''colors''' for his football.}}
+# {{lb|en|military|in the plural}} The morning ceremony of raising the flag.
+# {{lb|en|physics}} A property of [[quark]]s, with three values called red, green, and blue, which they can [[exchange]] by passing [[gluon]]s; [[color charge]].
+# {{lb|en|finance|uncountable}} A [[third-order]] measure of [[derivative]] price sensitivity, expressed as the rate of change of [[gamma]] with respect to time, or equivalently the rate of change of [[charm]] with respect to changes in the [[underlying]] [[asset]] [[price]].
+# {{lb|en|typography}} The relative [[lightness]] or [[darkness]] of a mass of written or printed [[text]] on a page. (See {{pedia|type color}})
+# {{lb|en|snooker}} Any of the colored balls excluding the [[red]]s.
+# A [[front]] or [[facade]]; an [[ostensible]] truth actually false; [[pretext]].
+#* {{quote-text|en|year=2011|author=David Baldacci|title=The Collectors
+|passage=At the far end of the continuum, Roger Seagraves collected personal items from people he'd murdered, or assassinated rather, since he'd done it under the '''color''' of serving his country.}}
+# An appearance of right or authority; [[color of law]].
+#: {{ux|en|Under '''color''' of law, he managed to bilk taxpayers of millions of dollars.}}
+#* {{quote-text|en|year=1882|title=The Ohio Law Journal|volume=2|page=396
+|passage=The only thing which this defendant is accused of doing is that he excluded this boy from the school, and he did it under the '''color''' of the statute relating to the subject, and did it because he was a colored boy.}}
+#* {{quote-web|en|url=https://www.legislation.gov.uk/apgb/Geo3/10/50|title=Parliamentary Privilege Act 1770|work=legislation.gov.uk|year=1770|text=no such action, suit, or any other process or proceeding thereupon shall at any time be impeached, stayed, or delayed by or under '''colour''' or pretence of any privilege of Parliament.}}
+# {{lb|en|mining}} Gold, particles of gold found when [[prospect]]ing.
+#* {{quote-book|en|title=The Luminaries|passage=He smelted Wells’s '''colour''' before it was valued, and by the time anybody saw it, it had been poured into bars and stamped with the Reserve seal.|year=2013|author=Eleanor Catton|page=184|isbn=978 1 84708 432 3|year_published=2014|authorlink=Eleanor Catton|publisher=Granta|location=London}}
+# {{lb|en|professional wrestling|_|slang}} To bleed, either through injury or [[blade#Verb|blading]]. Usally prefaced with &quot;[[get]]&quot;.
+#: {{ux|en|The local hero is getting '''color''' in tonight's spectacle.}}
+# {{senseid|en|music}}{{lb|en|music}} [[timbre|Timbre]], often in relation to [[orchestration]].
+#* {{quote-book|en|title=The Study of Orchestration|passage=In other words, Brahms saves the higher violin '''color''' for the more important foreground statement and assigns the soft swirling background to middle-register violins and violas, while the cellos dominate in their best voice.|year=1982|author= Samuel Adler|page=115|isbn=0 393 95188 X|year_published=1982|authorlink=Samuel Adler (composer)|publisher=W. W. Norton &amp; Company|location=New York}}
+# {{senseid|en|vowel}}{{lb|en|linguistics}} The quality of a particular [[vowel]] sound.
+
+====Usage notes====
+* The late {{cog|xno|colour}}, which is the standard UK spelling, has been the usual spelling in Britain since the 14th century and was chosen by {{w|Samuel Johnson|Dr. Johnson's}} ''{{w|A Dictionary of the English Language|Dictionary of the English Language}}'' (1755) along with other Anglo-Norman spellings such as [[favour]], [[honour]], etc. The Latin spelling ''color'' was occasionally used from the 15th century onward, mainly due to Latin influence; it was lemmatized by {{w|Noah Webster|Webster's}} ''{{w|Webster's Dictionary|American Dictionary of the English Language}}'' (1828), along with [[favor]], [[honor]], etc., and is currently the standard US spelling.
+
+* In Canada, ''colour'' is preferred, but ''color'' is not unknown; in Australia, ''-our'' endings are the standard, although ''-or'' endings had some currency in the past and are still sporadically found in some regions. In New Zealand and South Africa, ''-our'' endings are the standard.
+
+====Synonyms====
+* {{s|measure of derivative price sensitivity}} {{l|en|colour}}, {{l|en|DgammaDtime}}, {{l|en|gamma decay}}
+
+====Hypernyms====
+* {{s|measure of derivative price sensitivity}} {{l|en|Greeks}} {{q|includes list of coordinate terms}}
+
+====Hyponyms====
+{{col5|en
+|accidental color
+|bodycolor
+|color of law
+|deep color
+|eye color
+|forecolor
+|high color
+|hypercolor
+|local color
+|noncolor
+|primary color
+|prismatic colors
+|process color
+|pseudocolor
+|secondary color
+|skin color
+|tertiary color
+|topcolor
+|true color
+|true colors
+|undercolor
+|watercolor
+|web color
+}}
+
+====Derived terms====
+The majority of these terms are either considered alternative forms of, or have alternative forms corresponding to, {{m|en|colour}} (the Commonwealth and Irish spelling).
+
+{{col|en
+|anticolor|four color problem
+|bicolor
+|bodycolor
+|colorability
+|color analyst
+|color announcer|coat color dilution lethal|color-guard
+|color banding
+|color bar
+|colorbearer|color barrier
+|colorblind
+|color-blind
+|color blind
+|color blindness
+|colorbreed
+|colorburst
+|colorcast
+|color charge|color-struck
+|color-code
+|color code
+|color-coded
+|color coded
+|color commentator
+|color compass
+|color confinement
+|color-coordinate
+|color coordinate 
+|color coordinate system
+|color coordination
+|color depth
+|colored
+|color fade
+|colorfast|lip color
+|colorfastness
+|color field
+|color-flavor
+|color-flavor locking
+|color font
+|color force|what color is your Bugatti
+|colorful
+|color grading
+|color guard
+|coloriferous
+|colorification
+|Colorify
+|colorimeter
+|colorimetry
+|colorine
+|colorisation
+|colorise
+|coloriser
+|colorism
+|colorist
+|coloristic
+|colorization
+|colorize
+|colorizer
+|color killer
+|colorless
+|color line
+|colormaker
+|colormaking
+|colorman
+|color man
+|colormap
+|color me
+|color-octet
+|color of authority
+|color of law
+|color of office
+|color of someone's money
+|color of title
+|colorogenic
+|colorologist
+|colorology
+|coloron
+|colorous
+|color pencil
+|colorphobia
+|colorphobic
+|color photography
+|color pigeon
+|color pop
+|color-proud 
+|color proud
+|colorpuncture
+|color revolution
+|color-screw 
+|color screw
+|color separation
+|colorsome
+|color space
+|color story
+|color television
+|color temperature
+|color timing
+|color triangle
+|color TV
+|colortype
+|color war
+|colorway
+|color wheel
+|colorwise
+|colorwork
+|complementary color
+|discolor
+|discoloration
+|duocolor
+|false-color
+|Finlaycolor
+|flame-color
+|flesh-colored
+|flying colors
+|forecolor
+|four color
+|four color theorem
+|full color
+|give color to
+|grapheme-color
+|haircolor
+|horse of a different color
+|hyperbolic color
+|hypercolor
+|in color
+|in flying colors
+|in living color
+|impossible color
+|intercolor
+|lend color to
+|monocolor
+|multicolor
+|multicolored
+|multicolors
+|noncolor
+|of color
+|off-color
+|pair of colors
+|pentacolor
+|person of color
+|play of color
+|prismatic colors
+|poster color
+|pseudocolor
+|quadricolor
+|quincolor
+|rainbow color
+|rainbow-colored
+|real-color
+|show one's true colors
+|spot color
+|sulfur-color
+|Technicolor
+|technicolored
+|w:The Color Purple
+|tone color
+|topcolor
+|Tricolor
+|tricolor
+|troop the color
+|true-color
+|true colors
+|turn one's color
+|type color
+|uncolor
+|undercolor
+|unicolor
+|unicolored
+|watercolor
+|wax-color
+|what color is the sun in your world
+|with flying colors
+}}
+
+====Translations====
+{{trans-top|spectral composition of visible light}}
+{{multitrans|data=
+* Abkhaz: {{tt|ab|аԥштәы}}
+* Afrikaans: {{tt+|af|kleur}}
+* Albanian: {{tt+|sq|ngjyrë|f}}, {{tt+|sq|larë|f}}
+* Amharic: {{tt|am|ቀለም}}
+* Arabic: {{tt+|ar|لَوْن|m}}
+*: Chadian Arabic: {{t|shu|لون|m|tr=lōn}}
+*: Egyptian Arabic: {{t|arz|لون|m|tr=lōn}}, {{t|arz|ألوان|f-p|tr=ʔalwān}}, {{t|arz|ألوانات|f-p|tr=ʔalwanāt}} {{q|low-class}}
+*: Gulf Arabic: {{tt|afb|لون|tr=lon}}, {{tt|afb|رنق|tr=rəng}}
+*: Hijazi Arabic: {{tt|acw|لون|m|tr=lōn}}
+*: Moroccan Arabic: {{tt|ary|لون|m|tr=lūn}}
+* Aragonese: {{tt|an|color|f}}
+* Aramaic:
+*: Classical Syriac: {{t|syc|ܓܘܢܐ|tr=gawnā}}
+* Archi: {{t|aqc|ранг}}
+* Armenian: {{tt+|hy|գույն}}
+* Aromanian: {{t|rup|boie|f}}, {{t|rup|rengã|f}}
+* Assamese: {{tt|as|ৰং}}, {{tt|as|বৰণ}}
+* Assyrian Neo-Aramaic: {{t|aii|ܓܲܘܢܵܐ|tr=gawnā}}
+* Asturian: {{tt+|ast|color|f}}
+* Aymara: {{tt+|ay|sami}}
+* Azerbaijani: {{tt+|az|rəng}}
+* Bashkir: {{tt|ba|төҫ}}
+* Basque: {{tt|eu|kolore}}
+* Belarusian: {{tt+|be|ко́лер|m}}, {{tt|be|фа́рба|f}}, {{tt|be|хва́рба|f}}, {{tt|be|ба́рва|f}}
+* Bengali: {{tt+|bn|রঙ}}, {{tt+|bn|রং}}, {{t+|bn|বর্ণ}}
+* Bhojpuri: {{t|bho|रंग}}
+* Binukid: {{tt|bkd|babelek}}
+* Bislama: {{t|bi|kala}}
+* Breton: {{tt+|br|liv|m}}
+* Bulgarian: {{tt+|bg|цвят|m}}
+* Burmese: {{tt+|my|အရောင်}}
+* Buryat: {{tt|bua|үнгэ}}
+* Carpathian Rusyn: {{t|rue|фа́рба|f}}
+* Catalan: {{tt+|ca|color|m|f}}
+* Cebuano: {{tt|ceb|kolor}}
+* Central Dusun: {{tt|dtp|warana}}
+* Chechen: {{tt|ce|бос}}
+* Cherokee: {{tt|chr|ᏗᎧᏃᏗ}}
+* Chickasaw: {{tt|cic|kala'}}
+* Chinese:
+*: Cantonese: {{tt|yue|色|tr=sik1}}, {{tt|yue|顏色|tr=ngaan4 sik1}}
+*: Dungan: {{tt|dng|янсый}}
+*: Eastern Min: {{tt|cdo|色|tr=sáik}}, {{tt|cdo|顏色|tr=ngàng-sáik}}
+*: Hakka: {{tt|hak|色|tr=set}}, {{tt|hak|顏色|tr=ngân-set}}
+*: Hokkien: {{tt|nan-hbl|色|tr=siak / sek}}, {{tt|nan-hbl|顏色|tr=gân-siak / gân-sek}}
+*: Jin: {{t|cjy|顏色}}
+*: Mandarin: {{tt+|cmn|色|tr=sè}}, {{tt+|cmn|顏色|tr=yánsè}}
+*: Northern Min: {{t|mnp|色}}, {{t|mnp|顏色}}
+*: Wu: {{tt|wuu|色}}, {{tt|wuu|顏色}}
+* Chukchi: {{tt|ckt|пэран|tr=pėran}}
+* Chuvash: {{tt|cv|тӗс}}
+* Coptic: {{tt|cop|ⲁⲟⲩⲁⲛ|m}} {{q|Bohairic}}, {{t|cop|ⲁⲃⲁⲛ|tr=ɑwɑn}} {{q|Bohairic}}, {{tt|cop|ⲁⲩⲁⲛ|m}} {{q|Sahidic}}
+* Cornish: {{tt|kw|liw}}
+* Crimean Tatar: {{tt|crh|renk}}, {{tt|crh|tüs}}
+* Czech: {{tt+|cs|barva|f}}
+* Dalmatian: {{tt|dlm|colaur|m}}
+* Danish: {{tt+|da|farve|c}}
+* Daur: {{t|dta|jusu}}
+* Dutch: {{tt+|nl|kleur|f}}
+* Egyptian: {{t-egy|jwn|h=i-wn:n-D3}}
+* Erzya: {{t|myv|тюс}}, {{t|myv|чачо}}
+* Esperanto: {{tt|eo|koloro}}
+* Estonian: {{tt+|et|värvus}}, {{tt+|et|värv}}
+* Extremaduran: {{t|ext|colol}}
+* Faroese: {{tt|fo|litur|m}}
+* Finnish: {{tt+|fi|väri}}
+* French: {{tt+|fr|couleur|f}}
+* Friulian: {{tt|fur|colôr|m}}
+* Galician: {{tt+|gl|cor|f}}, {{tt+|gl|color|f}}
+* Georgian: {{tt+|ka|ფერი}}
+* German: {{tt+|de|Farbe|f}}
+* Greek: {{tt+|el|χρώμα|n}}
+*: Ancient: {{tt|grc|χρῶμα|n}}, {{tt|grc|χρώς|m}}
+* Greenlandic: {{tt+|kl|qalipaat}}
+* Guaraní: {{tt|gn|sa'y}}
+* Haitian Creole: {{tt|ht|koulè}}
+* Hausa: {{t|ha|launi}}
+* Hawaiian: {{tt|haw|waihoʻoluʻu}}
+* Hebrew: {{tt+|he|צֶבַע|m|tr=tséva}}
+* Hindi: {{tt+|hi|रंग|m}}
+* Hungarian: {{tt+|hu|szín}}
+* Hunsrik: {{tt|hrx|Forreb|f}}
+* Icelandic: {{tt+|is|litur|m}}
+* Ido: {{tt+|io|koloro}}
+* Indonesian: {{tt+|id|warna}}
+* Ingrian: {{t|izh|karva}}, {{t|izh|kuva}}
+* Ingush: {{t|inh|бос}}
+* Irish: {{tt+|ga|dath|m}}
+* Italian: {{tt+|it|colore|m}}
+* Japanese: {{tt+|ja|色|tr=いろ, iro}}, {{tt+|ja|色彩|tr=しきさい, shikisai}}
+* Jarai: {{tt|jra|mâo}}
+* Javanese: {{t+|jv|werna}}, {{tt|jv|warni}}, {{tt+|jv|rupa}}
+* Kalmyk: {{tt|xal|өңг}}
+* Kannada: {{tt+|kn|ಬಣ್ಣ}}
+* Kapampangan: {{tt|pam|kule}}, {{tt|pam|diua}}
+* Karachay-Balkar: {{tt|krc|бет}}, {{tt|krc|бояу}}
+* Kashubian: {{t|csb|farwa|f}}
+* Kazakh: {{tt+|kk|түс}}, {{tt|kk|реңк}}, {{tt|kk|рең}}
+* Khakas: {{tt|kjh|ӧң}}
+* Khmer: {{tt+|km|ពណ៌}}
+* Kongo: {{tt|kg|langi}}
+* Konkani: {{t|kok|बण्ण|tr=baṇṇa}}
+* Korean: {{tt+|ko|색깔}}, {{tt+|ko|색(色)}}
+* Kumyk: {{tt|kum|тюс}}, {{tt|kum|ренк}}, {{tt|kum|бояв}}
+* Kurdish:
+*: Central Kurdish: {{tt+|ckb|ڕەنگ}}
+*: Northern Kurdish: {{tt+|kmr|reng|m}}
+* Kyrgyz: {{tt+|ky|түс}}, {{tt+|ky|өң}}
+* Ladin: {{tt|lld|corú|m}}, {{tt|lld|curú|m}}, {{tt|lld|culour|m}}, {{tt|lld|culëur|m}}, {{tt|lld|color|m}}, {{tt|lld|culòur|m}}
+* Lao: {{tt+|lo|ສີ}}
+* Latgalian: {{tt|ltg|nūdora|f}}, {{tt|ltg|kruosa|f}}, {{tt|ltg|spolva|f}}
+* Latin: {{tt+|la|color|m}}
+* Latvian: {{tt+|lv|krāsa|f}}
+* Lezgi: {{t|lez|ранг}}
+* Ligurian: {{tt|lij|cô}}
+* Lingala: {{tt|ln|lángi|f}}
+* Lithuanian: {{tt+|lt|spalva|f}}
+* Low German:
+*: German Low German: {{tt+|nds-de|Farv}}; {{t-check|nds-de|farv}}, {{t+check|nds-de|klöör}}
+* Luxembourgish: {{tt+|lb|Faarf|f}}, {{tt|lb|Fuarf|f}}
+* Macedonian: {{tt|mk|бо́ја|f}}
+* Maguindanao: {{t|mdh|warna}}
+* Malagasy: {{tt+|mg|volo}}, {{tt+|mg|loko}}
+* Malay: {{tt+|ms|warna}}, {{tt+|ms|rona}}
+* Malayalam: {{tt|ml|വര്‍ണ്ണരാജി}}
+* Maltese: {{tt|mt|kulur|m}}, {{tt|mt|lewn|m}}
+* Manchu: {{tt|mnc|ᠪᠣᠴᠣ}}
+* Manx: {{tt|gv|daah|m}}
+* Maori: {{tt|mi|tae}}, {{t|mi|mura}}, {{tt|mi|kara}}
+* Maranao: {{t|mrw|warna}}
+* Marathi: {{t|mr|रंग|m}}
+* Mari:
+*: Eastern Mari: {{t|mhr|тӱс}}
+* Mauritian Creole: {{t|mfe|kouler}}
+* Middle Persian: {{tt|pal|𐭫𐭭𐭢|tr=rang}}
+* Moksha: {{t|mdf|тюс}}
+* Mongolian:
+*: Cyrillic: {{tt+|mn|өнгө}}, {{tt+|mn|будаг}}
+*: Mongolian: {{tt|mn|ᠥᠩᠭᠡ}}, {{tt|mn|ᠪᠤᠳᠤᠭ}}
+* Nanai: {{t|gld|бойко}}
+* Navajo: {{tt|nv|nidaashchʼąąʼígíí}}
+* Neapolitan: {{tt|nap|culore|m}}
+* Nepali: {{tt|ne|रङ्ग}}
+* Nivkh: {{t|niv|вал}}
+* Nogai: {{tt|nog|туьс}}
+* Norman: {{tt|nrf|couleu|m}} {{q|Jersey}}, {{tt|nrf|couleur|m}} {{q|Guernsey}}, {{tt|nrf|couoleu|m}} {{q|continental Normandy}}
+* Norwegian:
+*: Bokmål: {{tt+|nb|farge|m}}
+*: Nynorsk: {{tt|nn|farge|m|f}}
+* Occitan: {{tt+|oc|color|f}}
+* Odia: {{t+|or|ରଙ୍ଗ}}
+* Old Church Slavonic:
+*: Cyrillic: {{t|cu|шаръ|m}}
+* Old English: {{tt|ang|blēo|n}}, {{tt|ang|hīew|n}}
+* Old Javanese: {{t|kaw|warṇṇa}}
+* Old Norse: {{tt|non|litr|m}}
+* Old Occitan: {{tt|pro|color|m}}
+* Oromo: {{t|om|halluu}}
+* Ossetian: {{t|os|хуыз}}
+* Ottoman Turkish: {{tt|ota|رنگ|tr=reng}}, {{t|ota|بویا|tr=boya}}, {{tt|ota|لون|tr=levn}}, {{tt|ota|فام|tr=fâm}}, {{tt|ota|الوان|p|tr=elvân}}
+* Paiwan: {{tt|pwn|quljaw}}
+* Pannonian Rusyn: {{t|rsk|фарба|f}}
+* Pashto: {{tt|ps|رنګ|m|tr=rang}}
+* Persian:
+*: Dari: {{tt|prs|رَنْگ}}, {{tt|prs|گُون}}
+*: Iranian Persian: {{tt|fa-ira|رَنْگ}}, {{tt+|fa-ira|گون}}
+* Polabian: {{t|pox|farb’ă|f}}
+* Polish: {{tt+|pl|kolor|m-in}}, {{tt+|pl|barwa|f}}, {{t|pl|krasa}}
+* Portuguese: {{tt+|pt|cor|f}}
+* Punjabi:
+*: Gurmukhi: {{tt|pa|ਰੰਗ|m}}
+*: Shahmukhi: {{tt|pa|رَنْگ|m}}
+* Quechua: {{tt|qu|llimphi}}
+* Romanian: {{tt+|ro|culoare|f}}
+* Romansch: {{tt|rm|colur|m}}, {{tt|rm|calur|m}}, {{tt|rm|calour|m}}, {{tt|rm|culur|m}}
+* Russian: {{tt+|ru|цвет|m}}, {{tt+|ru|ко́лер|m}} {{q|colloquial or special}}
+* Sanskrit: {{tt+|sa|रङ्ग|m}}
+* Santali: {{tt|sat|ᱵᱳᱨᱳᱱ}}
+* Sardinian: {{tt|sc|cabori|m}}, {{tt|sc|caori|m}}, {{tt|sc|colore|m}}, {{tt|sc|colori|m}}
+* Saterland Frisian: {{tt|stq|Faawe}}
+* Scottish Gaelic: {{tt|gd|dath|m}}
+* Serbo-Croatian:
+*: Cyrillic: {{tt|sh|бо̀ја|f}}, {{tt|sh|фа̑рба|f}}
+*: Roman: {{tt+|sh|bòja|f}}, {{tt+|sh|fȃrba|f}}
+* Shor: {{tt|cjs|ӧң|tr=öň}}
+* Sicilian: {{tt+|scn|culuri|m}}
+* Silesian: {{t|szl|farba|f}}
+* Sinhalese: {{tt+|si|වර්ණ}}
+* Skolt Sami: {{tt|sms|eu´nn}}
+* Slovak: {{tt+|sk|farba|f}}
+* Slovene: {{tt+|sl|barva|f}}
+* Somali: {{tt+|so|midab}}
+* Sorbian:
+*: Lower Sorbian: {{tt|dsb|barwa|f}}
+*: Upper Sorbian: {{tt|hsb|barba|f}}
+* Southern Altai: {{tt|alt|ӧҥ}}
+* Spanish: {{tt+|es|color|m}}
+* Swahili: {{tt+|sw|michezo}}, {{tt+|sw|rangi}}, {{t|sw|launi|cn}}
+* Swazi: {{tt|ss|bâla}}
+* Swedish: {{tt+|sv|färg|c}}
+* Sylheti: {{tt|syl|ꠞꠋ}}
+* Tabasaran: {{t|tab|ранг}}
+* Tagalog: {{tt+|tl|kulay}}
+* Tahitian: {{t|ty|pēni}}
+* Tajik: {{tt+|tg|ранг}}
+* Talysh: {{t|tly|ranq}}
+* Tamil: {{tt+|ta|நிறம்}}, {{t+|ta|வண்ணம்}}
+* Tat: {{t|ttt|rang}}
+* Tatar: {{tt+|tt|төс}}
+* Telugu: {{tt+|te|రంగు}}, {{tt+|te|వర్ణము}}
+* Thai: {{tt+|th|สี}}
+* Tibetan: {{tt|bo|ཚོས་གཞི}}, {{tt|bo|ཚོན་མདོག}}, {{t|bo|ཁ་དོག}}
+* Tok Pisin: {{tt|tpi|kala}}
+* Turkish: {{tt+|tr|renk}}, {{tt|tr|ıl}}, {{tt|tr|tüs}}
+* Turkmen: {{tt|tk|reňk}}
+* Tuvan: {{tt|tyv|өң}}
+* Udmurt: {{t|udm|буёл}}
+* Ukrainian: {{tt+|uk|ко́лір|m}}, {{tt|uk|фа́рба|f}}, {{tt+|uk|ба́рва|f}}
+* Urdu: {{tt|ur|رَن٘گ|m}}
+* Uyghur: {{tt|ug|رەڭ}}
+* Uzbek: {{tt+|uz|rang}}, {{tt+|uz|tus}}
+* Venetan: {{tt|vec|cołor|m}}, {{tt|vec|color|m}}
+* Vietnamese: {{tt+|vi|màu}}, {{tt+|vi|màu sắc}}
+* Vilamovian: {{tt|wym|förf|f}}
+* Volapük: {{tt+|vo|köl}}
+* Welsh: {{tt+|cy|lliw|f}}
+* West Frisian: {{tt+|fy|kleur}}
+* White Hmong: {{t-needed|mww}}
+* Yaghnobi: {{tt|yai|ранг}}
+* Yakan: {{t|yka|ulanna'}}
+* Yakut: {{tt|sah|өҥ}}
+* Yiddish: {{tt|yi|קאָליר}}, {{tt+|yi|פֿאַרב}}
+* Zazaki: {{tt+|zza|reng}}
+* Zhuang: {{tt|za|saek}}
+{{trans-bottom}}
+
+{{trans-top|particular set of the visible spectrum}}
+* Afrikaans: {{t+|af|kleur}}
+* American Sign Language: {{tt|ase|5@Chin-PalmBack Wiggle}}
+* Arabic: {{t+|ar|لَوْن|m}}
+* Armenian: {{tt+|hy|գույն}}
+* Azerbaijani: {{tt+|az|rəng}}
+* Bashkir: {{tt|ba|төҫ}}
+* Belarusian: {{tt+|be|ко́лер|m}}
+* Bulgarian: {{tt+|bg|цвят|m}}
+* Catalan: {{tt+|ca|color|m|f}}
+* Chinese:
+*: Cantonese: {{tt|yue|顏色|tr=ngaan4 sik1}}
+*: Mandarin: {{tt+|cmn|色|tr=sè}}, {{tt+|cmn|顏色|tr=yánsè}}
+* Czech: {{tt+|cs|barva|f}}
+* Danish: {{tt+|da|farve|c}}
+* Dutch: {{tt+|nl|kleur|f}}
+* Egyptian: {{t-egy|jwn|m|h=i-wn:n-D3}}
+* Estonian: {{tt+|et|värv}}
+* Finnish: {{tt+|fi|väri}}
+* French: {{tt+|fr|couleur|f}}
+* Georgian: {{tt+|ka|ფერი}}
+* German: {{tt+|de|Farbe|f}}
+* Greek: {{tt+|el|χρώμα|n}}
+* Greenlandic: {{tt+|kl|qalipaat}}
+* Haitian Creole: {{tt|ht|koulè}}
+* Hebrew: {{tt+|he|צֶבַע|m|tr=tséva}}
+* Hindi: {{tt+|hi|रंग|m}}
+* Hungarian: {{tt+|hu|szín}}
+* Icelandic: {{tt+|is|litur|m}}
+* Irish: {{tt+|ga|dath|m}}
+* Japanese: {{tt+|ja|色|tr=いろ, iro}}, {{tt+|ja|色彩|tr=しきさい, shikisai}}
+* Kurdish:
+*: Central Kurdish: {{tt+|ckb|ڕەنگ}}
+* Louisiana Creole French: {{t|lou|koulær}}, {{t|lou|koulè}}, {{t|lou|koulèr}}
+* Low German:
+*: German Low German: {{tt|nds-de|farv}}, {{tt+|nds-de|klöör}}
+* Luxembourgish: {{tt+|lb|Faarf|f}}, {{tt|lb|Fuarf|f}}
+* Malay: {{tt+|ms|warna}}, {{tt+|ms|rona}}
+* Malayalam: {{tt+|ml|നിറം}}, {{tt|ml|വര്‍ണ്ണം}}
+* Norwegian:
+*: Bokmål: {{tt+|nb|farge|m}}
+*: Nynorsk: {{tt|nn|farge|m|f}}
+* Old English: {{tt|ang|blēo|n}}, {{tt|ang|hīew|n}}
+* Ottoman Turkish: {{tt|ota|رنگ|tr=reng}}, {{t|ota|بویا|tr=boya}}, {{tt|ota|لون|tr=levn}}, {{tt|ota|فام|tr=fâm}}, {{tt|ota|الوان|p|tr=elvân}}
+* Persian:
+*: Dari: {{tt|prs|رَنْگ}}
+*: Iranian Persian: {{tt|fa-ira|رَنْگ}}
+* Polish: {{tt+|pl|barwa|f}}, {{tt+|pl|kolor|m-in}}
+* Portuguese: {{tt+|pt|cor|f}}
+* Romanian: {{tt+|ro|culoare|f}}
+* Russian: {{tt+|ru|цвет|m}}
+* Sorbian:
+*: Lower Sorbian: {{tt|dsb|barwa|f}}
+*: Upper Sorbian: {{tt|hsb|barba|f}}
+* Spanish: {{tt+|es|color|m}}
+* Swedish: {{tt+|sv|färg|c}}
+* Ukrainian: {{tt+|uk|ко́лір|m}}
+* Vietnamese: {{tt+|vi|màu}}, * Vietnamese: {{tt+|vi|sắc}}
+* Volapük: {{tt+|vo|köl}}
+* White Hmong: {{tt|mww|xim}}
+{{trans-bottom}}
+
+{{trans-top|hue as opposed to achromatic colors}}
+* Afrikaans: {{t+|af|kleur}}
+* American Sign Language: {{tt|ase|5@Chin-PalmBack Wiggle}}
+* Bashkir: {{tt|ba|төҫ}}
+* Bengali: {{t+|bn|রঙিন}}
+* Bulgarian: {{tt+|bg|цвят|m}}
+* Catalan: {{tt+|ca|color|m|f}}
+* Czech: {{tt+|cs|odstín|m}}
+* Danish: {{tt+|da|farve|c}}, {{tt|da|farvetone|c}}, {{tt|da|kulør|c}}
+* Dutch: {{tt+|nl|kleur|f}}
+* Estonian: {{tt+|et|toon}}
+* Finnish: {{tt+|fi|väri}}
+* German: {{tt+|de|Farbton|m}}
+* Greek: {{tt+|el|χρώμα|n}}, {{tt+|el|απόχρωση|f}}
+* Hungarian: {{tt+|hu|színárnyalat}}
+* Icelandic: {{tt+|is|litur|m}}
+* Japanese: {{tt+|ja|色|tr=いろ, iro}}
+* Malay: {{tt+|ms|warna}}, {{tt+|ms|rona}}
+* Norwegian:
+*: Bokmål: {{tt+|nb|farge|m}}, {{tt|nb|fargetone|m}}, {{tt|nb|kulør|m}}
+*: Nynorsk: {{tt|nn|farge|m|f}}, {{tt|nn|fargetone|m}}, {{tt|nn|kulør|m}}
+* Polish: {{tt+|pl|barwa|f}}, {{tt+|pl|odcień|m-in}}
+* Portuguese: {{tt+|pt|cor|f}}
+* Russian: {{tt+|ru|насы́щенность}}
+* Spanish: {{tt+|es|color|m}}
+* Swedish: {{tt+|sv|färg}}
+* Ukrainian: {{t+|uk|ко́лір|m}}
+{{trans-bottom}}
+
+{{trans-top|human skin tone, especially as an indicator of race or ethnicity}}
+* Afrikaans: {{t|af|velkleur}}
+* Armenian: {{tt+|hy|գույն}}
+* Bengali: {{t+|bn|বর্ণ}}
+* Bulgarian: {{tt+|bg|цвят|m}}
+* Catalan: {{tt+|ca|color|m|f}}
+* Czech: {{tt+|cs|barva|f}}
+* Danish: {{tt+|da|hudfarve|c}}
+* Dutch: {{tt+|nl|kleur|f}}
+* Estonian: {{tt|et|nahavärv}}
+* Finnish: {{tt+|fi|ihonväri}}
+* German: {{tt+|de|Hautfarbe|f}}
+* Greek: {{tt+|el|χρώμα|n}}
+* Hungarian: {{tt+|hu|bőrszín}}
+* Japanese: {{t|ja|[[肌]][[の]][[色]]|tr=はだのいろ, hada no iro}}
+* Korean: {{tt+|ko|피부색(皮膚色)}}
+* Malay: {{t-check|ms|[[warna]] [[kulit]]}} &lt;!-- was &quot;[[warna]] [[kulit]]&quot; - assumed sum-of-parts; if an idiom, remove the wikilinks to the individual words. see [[User:Kephir/gadgets/xte#Translation_fixing]] --&gt;
+* Norwegian:
+*: Bokmål: {{tt|nb|hudfarge|m}}
+*: Nynorsk: {{tt|nn|hudfarge|m|f}}
+* Polish: {{tt|pl|[[kolor]] [[skóra|skóry]]|m-in}}
+* Portuguese: {{tt+|pt|cor|f}}
+* Romanian: {{tt|ro|culoare de piele|f}}
+* Russian: {{tt|ru|[[цвет]] [[кожа|ко́жи]]|m}}
+* Spanish: {{tt+|es|color|m}}
+* Ukrainian: {{t|uk|[[ко́лір]] [[шкіра|шкі́ри]]|m}}
+* Vietnamese: {{tt+|vi|màu da}}
+* Volapük: {{tt|vo|täin}}, {{tt|vo|logodakölül}} {{q|face}}
+{{trans-bottom}}
+
+{{trans-top|interest, especially in a selective area}}
+* Bulgarian: {{tt+|bg|колори́т|m}}
+* Dutch: {{tt+|nl|kleur|f}}
+* Finnish: {{tt|fi|paikallisväri}}
+* Greek: {{tt+|el|χρώμα|n}}
+* Japanese: {{tt+|ja|色|tr=いろ, iro}}
+* Norwegian:
+*: Bokmål: {{tt+|nb|farge|m}}, {{tt|nb|koloritt|m}}
+*: Nynorsk: {{tt|nn|farge|m|f}}, {{tt|nn|koloritt|m}}
+* Polish: {{tt+|pl|koloryt|m-in}}
+* Russian: {{tt+|ru|колори́т|m}}
+{{trans-bottom}}
+
+{{trans-top|any of the standard dark tinctures used in a coat of arms}}
+* Afrikaans: {{t+|af|kleur}}
+* Catalan: {{tt+|ca|color|m|f}}
+* Czech: {{tt+|cs|barva|f}}
+* Danish: {{tt+|da|farve|c}}
+* Dutch: {{tt+|nl|kleur|f}}
+* Finnish: {{tt+|fi|väri}}, {{tt|fi|[[heraldinen]] [[väri]]}}
+* German: {{tt+|de|Tinktur|f}}
+* Japanese: {{tt+|ja|業績|tr=ぎょうせき, gyōseki}}
+* Norwegian:
+*: Bokmål: {{tt+|nb|farge|m}}
+*: Nynorsk: {{tt|nn|farge|m|f}}
+* Polish: {{tt+|pl|kolor|m-in}}
+* Portuguese: {{tt+|pt|cor|f}}
+* Russian: {{tt+|ru|фини́фть|f}}, {{tt+|ru|цвет|m}}
+* Swedish: {{t+|sv|färg|c}}
+* Ukrainian: {{t+|uk|ко́лір|m}}, {{t+|uk|ба́рва|f}}
+{{trans-bottom}}
+
+{{trans-top|standard or banner (colors)}}
+* Afrikaans: {{t+|af|kleur}}
+* Bulgarian: {{tt+|bg|зна́ме|n}}
+* Catalan: {{tt+|ca|color|m|f}}
+* Czech: {{tt+|cs|vlajka|f}}
+* Dutch: {{tt+|nl|kleur}}
+* Estonian: {{tt+|et|lipp}}
+* Finnish: {{tt+|fi|lippu}}, {{tt+|fi|värit}}
+* German: {{tt+|de|Fahne|f}}, {{tt+|de|Flagge|f}}
+* Greek: {{tt+|el|χρώματα|n-p}}
+* Hungarian: {{tt+|hu|lobogó}}
+* Indonesian: {{tt+|id|pataka}}
+* Italian: {{tt+|it|stendardo|m}}, {{tt+|it|bandiera|f}}
+* Japanese: {{tt+|ja|幟|tr=のぼり, nobori}}
+* Malay: {{tt|ms|panji-panji}}
+* Norwegian:
+*: Bokmål: {{tt+|nb|fane|m|f}}
+*: Nynorsk: {{tt|nn|fane|m}}
+* Polish: {{t|pl|[[barwa|barwy]]|f-p}}
+* Portuguese: {{tt+|pt|cores|m-p}}
+* Russian: {{tt+|ru|зна́мя|n}}, {{tt+|ru|флаг|m}}, {{tt+|ru|штанда́рт|m}}
+* Tagalog: {{tt+|tl|kulay}}
+* Ukrainian: {{t|uk|кольори́|m-p}}, {{t|uk|ба́рви|f-p}}
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Hebrew: {{t+check|he|צֶבַע|tr=tséva}}
+* Indonesian: {{t+check|id|rona}}
+* Interlingua: {{t+check|ia|color}}
+* Kurdish:
+*: Northern Kurdish: {{t+check|kmr|gon|m}}
+* Romanian: {{t+check|ro|culoare|f}}
+* Serbo-Croatian:
+*: Cyrillic: {{tt|sh|боја|f}}, {{tt|sh|фарба|f}}
+*: Roman: {{tt+|sh|boja|f}}, {{tt+|sh|farba|f}}
+* Slovene: {{t+check|sl|barva|f}}
+* Turkish: {{t+check|tr|renk}}
+* Volapük: {{t+check|vo|köl}}
+}}&lt;!-- close {{multitrans}} --&gt;
+{{trans-bottom}}
+
+===Adjective===
+{{en-adj|-}} {{tlb|en|American spelling}}
+
+# Conveying color, as opposed to shades of gray.
+#: {{ux|en|'''Color''' television and movies were considered a great improvement over black and white.}}
+#* {{quote-book|en|year=1977|author=w:John Cheever|title=w:Falconer|series=A Borzoi Book|location=New York, N.Y.|publisher=[[w:Alfred A. Knopf|Alfred A[braham] Knopf]]|page=209|pageurl=https://archive.org/details/falconer00chee/page/209/mode/1up|isbn=978-0-394-48347-4|passage=I took my TV over on the first trip. I got a beauty. It's four years old, '''color''', but when I had a little snow and asked the repairman to come in, he told me never, never turn this set in for a new one.}}
+
+====Translations====
+{{trans-top|conveying color}}
+{{multitrans|data=
+* Bulgarian: {{tt+|bg|цветен}}
+* Chinese:
+*: Mandarin: {{tt+|cmn|彩色|tr=cǎisè}}
+* Danish: {{tt|da|farve-}}
+* French: {{tt|fr|en couleur}}
+* Greek: {{tt+|el|έγχρωμος}}, {{tt+|el|χρωματικός}}
+* Hebrew: {{tt+|he|צבעוני|tr=tziv'ony|m}}, {{tt|he|צבעונית|f|tr=tziv'onyt|sc=Hebr}}
+* Hungarian: {{tt+|hu|színes}}
+* Japanese: {{tt|ja|[[カラー]][[の]]|tr=karā-no|sc=Jpan}}
+* Korean: {{tt|ko|띤}}
+* Polish: {{t+|pl|kolorowy}}
+* Portuguese: {{tt+|pt|de cor}}
+* Russian: {{tt+|ru|цветно́й|m}}
+* Spanish: {{tt|es|en color}}
+* Swedish: {{tt+|sv|färg|alt=färg-}}
+}}&lt;!-- close {{multitrans}} --&gt;
+{{trans-bottom}}
+
+===Verb===
+{{en-verb}} {{tlb|en|American spelling}}
+
+# {{lb|en|transitive}} To give something color.
+#: {{syn|en|dye|paint|stain|shade|tinge|tint}}
+#: {{ux|en|We could '''color''' the walls red.}}
+## {{lb|en|transitive}} To cause (a pipe, especially a [[meerschaum]]) to take on a brown or black color, by smoking.
+# {{lb|en|intransitive}} To apply colors to the areas within the boundaries of a line drawing using colored markers or crayons.
+#: {{syn|en|color in}}
+#: {{ux|en|My kindergartener loves to '''color'''.}}
+# {{lb|en|of a person or their face}} To become red through increased blood flow.
+#: {{syn|en|blush}}
+#: {{ux|en|Her face '''colored''' as she realized her mistake.}}
+# To affect without completely changing.
+#: {{syn|en|affect|influence}}
+#: {{ux|en|That interpretation certainly '''colors''' my perception of the book.}}
+# {{senseid|en|portray as}} {{lb|en|informal}} To attribute a quality to; to portray (as).
+#: {{syn|en|call}}
+#: {{ux|en|'''Color''' me confused.}}
+#: {{ux|en|They tried to '''colour''' the industrial unrest as a merely local matter.}}
+# {{lb|en|mathematics|graph theory}} To [[assign]] colors to the [[vertex|vertices]] of a [[graph]] (''or'' the [[region]]s of a [[map]]) so that no two vertices connected by an [[edge]] (regions sharing a border) have the [[same]] color.
+#: {{ux|en|Can this graph be 2-'''colored'''?}}
+#: {{ux|en|You can '''color''' any map with four colors.}}
+# {{senseid|en|change vowel}}{{lb|en|linguistics|usually of a {{glossary|phoneme}}}} To affect the quality of a [[speech]] [[sound#Noun|sound]], especially a [[vowel]].
+#: {{ux|en|Many languages have a &quot;neutral&quot;, roughly [[central]] vowel like {{IPAchar|/a/}} or {{IPAchar|/ə/}} which can be '''colored''' to a [[back]], [[rounded]] vowel like {{IPAchar|[o]}} by an adjacent [[labialized]] consonant, or to a [[front]], [[unrounded]] vowel like {{IPAchar|[e]}} by an adjacent [[palatalised|palatalized]] consonant.}}
+#: {{ux|en|The [[Proto-Indo-European]] [[laryngeal]] ''*[[h₂]]'' often '''colors''' the neutral vowel ''*e'' with an ''[[a]]''-like quality, while ''*[[h₃]]'' results in a more ''[[o]]''-like quality; ''*[[h₁]]'' has no '''coloring''' effect.}}
+
+====Antonyms====
+* {{l|en|decolor}}
+
+====Hyponyms====
+{{col4|en
+|color in
+|discolor
+|[[miscolour|miscolor]]
+|[[overcolour|overcolor]]
+|precolor
+|recolor
+}}
+
+====Derived terms====
+{{col4|en
+|color in
+|color by number
+|color by numbers
+|color inside the lines
+|color outside the lines
+|color up
+|colorable
+|colorate
+|colored
+|colorer
+|decolor
+|discolor
+|miscolor
+|overcolor
+|precolor
+|[[R-coloured vowel|R-colored vowel]]
+|recolor
+}}
+
+====Related terms====
+{{col4|en
+|colorably
+|coloration
+}}
+
+====Translations====
+{{trans-top|give something color}}
+{{multitrans|data=
+* Albanian: {{tt+|sq|ly}}
+* Arabic: {{tt+|ar|لَوَّنَ}}
+* Armenian: {{tt+|hy|ներկել}}
+* Belarusian: {{tt|be|фарбава́ць|impf|sc=Cyrl}}, {{tt|be|пафарбава́ць|pf|sc=Cyrl}}
+* Breton: {{tt+|br|livañ}}
+* Bulgarian: {{tt+|bg|оцветявам}}
+* Catalan: {{tt+|ca|acolorir}}
+* Chinese:
+*: Mandarin: {{tt|cmn|填色|tr=tián sè}}, {{tt+|cmn|上色|tr=shàng sè}}, {{tt+|cmn|著色|tr=zhuó sè}}
+* Czech: {{tt|cs|obarvit}}
+* Danish: {{tt+|da|farve}}, {{tt+|da|male}}
+* Dutch: {{tt+|nl|kleuren}}, {{tt+|nl|inkleuren}}
+* Esperanto: {{tt|eo|kolorigi}}, {{tt|eo|kolori}}
+* Finnish: {{tt+|fi|värjätä}}
+* French: {{tt+|fr|colorer}}, {{tt+|fr|teinter}}
+* Galician: {{tt+|gl|colorar}}
+* German: {{tt+|de|färben}}
+* Greek: {{tt+|el|χρωματίζω}}, {{tt+|el|βάφω}}
+* Hebrew: {{tt+|he|צבע|tr=tsavá}}
+* Hungarian: {{tt+|hu|színez}}, {{tt+|hu|fest}}
+* Icelandic: {{tt|is|lita}}
+* Interlingua: {{tt|ia|colorar}}
+* Irish: {{tt|ga|dathaigh}}
+* Italian: {{tt+|it|colorare}}, {{tt+|it|colorire}}
+* Japanese: {{tt+|ja|塗る|tr=nuru}}
+* Korean: {{tt+|ko|칠하다}}
+* Kurdish:
+*: Central Kurdish: {{tt|ckb|رەنگ کردن}}
+* Latin: {{tt|la|colōrō}}
+* Malay: {{tt|ms|mewarna}}
+* Manx: {{tt|gv|daah}}
+* Norwegian: 
+*: Bokmål: {{tt+|nb|farge}}
+* Old English: {{tt|ang|blēo|n}}
+* Ottoman Turkish: {{t|ota|بویالامق|tr=boyalamak}}
+* Pashto: {{t|ps|رنګول}}
+* Persian: {{tt+|fa|رنگ کردن|tr=rang kardan}}
+* Polish: {{tt+|pl|kolorować}}, {{tt+|pl|barwić}}, {{tt+|pl|zabarwiać}}
+* Portuguese: {{tt+|pt|colorir}}
+* Romanian: {{tt+|ro|colora}}
+* Russian: {{tt+|ru|кра́сить|impf}}, {{tt+|ru|покра́сить|pf}}
+* Shor: {{tt|cjs|сырларға|tr=sırlarğa}}
+* Slovene: {{tt|sl|pobarvati}}
+* Spanish: {{tt+|es|colorar}}, {{tt+|es|colorear}}, {{tt+|es|teñir}}, {{t+|es|colorir}}
+* Swedish: {{tt|sv|färgsätta}}, {{tt+|sv|färga}}, {{tt+|sv|färglägga}}
+* Turkish: {{tt+|tr|boyamak}}
+* Ukrainian: {{t+|uk|фарбува́ти|impf}}, {{t|uk|розфарбо́вувати|impf}}, {{t|uk|розфарбува́ти|pf}}
+* Vietnamese: {{tt+|vi|nhuộm}}
+* Volapük: {{tt+|vo|kölön}}
+{{trans-bottom}}
+
+{{trans-top|draw using crayons}}
+* Albanian: {{t+|sq|ngjyros}}
+* Armenian: {{tt+|hy|ներկել}}
+* Bulgarian: {{tt+|bg|оцветявам}}
+* Danish: {{tt+|da|male}}
+* Dutch: {{tt+|nl|kleuren}}
+* Finnish: {{tt+|fi|värittää}}
+* French: {{tt+|fr|colorier}}
+* German: {{tt+|de|ausmalen}}
+* Greek: {{tt+|el|χρωματίζω}}
+* Hungarian: {{tt+|hu|színez}}
+* Icelandic: {{tt|is|lita}}
+* Italian: {{tt+|it|colorare}}
+* Japanese: {{tt+|ja|塗る|tr=nuru}}
+* Norwegian: 
+*: Bokmål: {{tt|nb|fargelegge}}, {{tt+|nb|male}}
+*: Nynorsk: {{tt|nn|fargelegga}}, {{tt|nn|fargelegge}}, {{tt|nn|fargeleggja}}, {{tt|nn|fargeleggje}}, {{tt+|nn|måle}}
+* Portuguese: {{tt+|pt|colorir}}
+* Russian: {{tt+|ru|раскра́шивать|impf}}, {{tt+|ru|раскра́сить|pf}}
+* Slovene: {{tt|sl|narisati}}
+* Spanish: {{tt+|es|colorear}}
+* Swedish: {{tt+|sv|färglägga}}, {{tt+|sv|måla}}
+* Ukrainian: {{t|uk|зафарбо́вувати|impf}}, {{t|uk|зафарбува́ти|pf}}
+{{trans-bottom}}
+
+{{trans-top|become red through increased blood flow}}
+* Albanian: {{t+|sq|skuq}}
+* Armenian: {{tt+|hy|կարմրել}}
+* Bulgarian: {{tt|bg|изчервявам се}}
+* Czech: {{tt+|cs|zardít se}}, {{tt|cs|začervenat se}}
+* Danish: {{tt|da|få kulør}}, {{tt|da|få farve}}, {{tt+|da|rødme}}
+* Dutch: {{tt+|nl|blozen}}, een {{tt+|nl|kleur}} krijgen, {{tt+|nl|kleuren}}
+* French: {{tt+|fr|rougir}}
+* German: {{tt+|de|erröten}}, {{tt|de|rot werden}}
+* Greek: {{tt+|el|κοκκινίζω}}
+* Hebrew: {{tt+|he|הסמיק|tr=hismík}}
+* Hungarian: {{tt+|hu|elpirul}}
+* Icelandic: {{tt|is|roðna}}
+* Italian: {{tt+|it|arrossire}}, {{tt+|it|colorire}}
+* Japanese: {{tt+|ja|染める|tr=someru}}
+* Korean: {{tt|ko|붉히다}}
+* Norwegian: {{tt+|no|rødme}}
+* Portuguese: {{tt+|pt|enrubescer}}, {{tt+|pt|corar}}, {{tt+|pt|ruborizar}}
+* Russian: {{tt+|ru|красне́ть}}, {{tt+|ru|рде́ться}}
+* Slovene: {{tt+|sl|zardeti}}
+* Spanish: {{tt|es|[[ponerse]] [[colorado]]}}
+* Swedish: {{tt+|sv|rodna}}
+* Ukrainian: {{t|uk|червоні́ти|impf}}, {{t|uk|почервоні́ти|pf}}
+{{trans-bottom}}
+
+{{trans-top|affect without completely changing}}
+* Danish: {{tt+|da|farve}}
+* Dutch: {{tt+|nl|kleuren}}
+* Hungarian: {{tt+|hu|módosít}}, {{tt+|hu|kihat}}
+* Icelandic: {{tt|is|lita}}
+* Norwegian: {{tt+|no|farge}}
+* Swedish: {{tt+|sv|färga}}
+{{trans-bottom}}
+
+{{trans-top|mathematics: assign distinct colors to the vertices or regions of}}
+* Swedish: {{tt+|sv|färglägga}}
+}}&lt;!-- close {{multitrans}} --&gt;
+{{trans-bottom}}
+
+{{checktrans-top}}
+* Guerrero Amuzgo: {{t-check|amu|kolô}}
+* Persian: {{t+check|fa|رنگ کردن|tr=rang kardan}}, {{t+check|fa|رزیدن|tr=razidan}}
+{{trans-bottom}}
+
+===See also===
+* {{l|en|tincture}}
+* [[Appendix:Colors]]
+{{table:colors/en}}
+
+===Further reading===
+* {{R:OneLook}}
+* {{pedia|Color (disambiguation)}}
+* {{R:commons|Colors}}
+
+===Anagrams===
+* {{anagrams|en|a=cloor|corol|crool}}
+
+{{cln|en|autohyponyms}}
+{{C|en|Light|Flags|Sound|Phonology|Vision}}
+
+==Aragonese==
+
+===Etymology===
+{{inh+|an|la|color|colōrem}}.
+
+===Pronunciation===
+{{an-pr}}
+
+===Noun===
+{{an-noun|f}}
+
+# {{l|en|color}} / [[colour]]
+
+===References===
+* {{R:DBLA}}
+* {{R:an:Aragonario}}
+
+==Asturian==
+
+===Alternative forms===
+* {{alt|ast|collor}}
+
+===Etymology===
+{{inh+|ast|la|color|color, colōrem}}.
+
+===Pronunciation===
+{{ast-pr}}
+
+===Noun===
+{{ast-noun|mf|colores}}
+
+# [[color]], [[colour]]
+
+====Related terms====
+* {{l|ast|coloráu}}, {{l|ast|colloráu}}
+
+==Catalan==
+
+===Etymology===
+{{inh+|ca|la|color|colōrem}}. Compare {{cog|oc|color}}, {{cog|fr|couleur}}.
+
+===Pronunciation===
+* {{ca-IPA|[ó(r)]}}&lt;!-- per GDLC and DCVB --&gt;
+* {{audio|ca|LL-Q7026 (cat)-Unjoanqualsevol-color.wav|a=Catalonia}}
+* {{rhymes|ca|o(ɾ)|s=2}}
+
+===Noun===
+{{ca-noun|m,f&lt;l:archaic,regional,or,poetic&gt;}}
+
+# {{l|en|color}}, [[colour]]
+# {{lb|ca|poker}} [[flush]]
+
+====Derived terms====
+{{col3|ca
+|acolorir
+|colorar
+|color cru
+|color d'ala de mosca
+|color de catxumbo
+|color de gos com fuig
+|color de merda d'oca
+|color primari
+|escala de color
+}}
+
+===See also===
+{{table:colors/ca}}
+
+===Further reading===
+* {{R:ca:IEC2}}
+* {{R:ca:GDLC}}
+* {{R:ca:DNV}}
+* {{R:ca:DCVB}}
+
+{{C|ca|Materials|Medicine|People}}
+
+==Galician==
+
+===Alternative forms===
+* {{alt|gl|cor}}
+
+===Etymology===
+{{inh+|gl|roa-opt|color}}, alternative form of {{m|roa-opt|coor}}, perhaps from an older forms {{m|roa-opt||collor}} (compare {{cog|ast|collor}} and {{m|ast|color}}), from {{inh|gl|la|color|color, colōrem}}.
+
+===Pronunciation===
+* {{IPA|gl|[ˈkoloɾ]}}
+
+===Noun===
+{{gl-noun|f}}
+
+# {{l|en|color}} / [[colour]], [[hue]]
+#* {{quote-text|gl|year=1295|author=R. Lorenzo|title=La traducción gallega de la Crónica General y de la Crónica de Castilla|page=745|location=Ourense|publisher=I.E.O.P.F.
+|passage=''diz que apareçeu ẽno çeo hũa cruz, que era de muytas '''colores''' et muy fremosa; et teuerõna os cristãos por muy boo sinal''
+|translation=he says that a cross appeared in the sky, which was of many '''colors''' and very beauty; and the Christians considered it a very good sign}}
+# [[flush]] {{gloss|suffusion of the face with blood}}
+
+====Derived terms====
+* {{l|gl|colorado}}
+* {{l|gl|de color}}
+
+===References===
+* {{R:gl:DDGM}}
+* {{R:gl:CX}}
+* {{R:gl:CX|collor}}
+* {{R:gl:DDLG}}
+* {{R:gl:TILG}}
+* {{R:TLPGP|cor}}
+
+{{C|gl|Colors}}
+
+==Italian==
+
+===Pronunciation===
+{{it-pr|[ló]&lt;r:DOP:lid#1014945,lemma#cerambice&gt;&lt;r:DOP:lid#1016850,lemma#coloro&lt;&lt;name:dop&gt;&gt;&gt;}}
+
+===Noun===
+{{it-noun|m|apoc=1}}
+
+# {{apocopic form of|it|colore}}
+
+===Pronoun===
+{{it-pron-adj|apoc=1}} {{tlb|it|archaic form|or|poetic form}}&lt;ref name=dop/&gt;
+
+# {{apocopic form of|it|coloro}}
+
+===References===
+{{reflist}}
+
+===Anagrams===
+* {{anagrams|it|a=cloor|cloro|cloro-}}
+
+==Latin==
+
+===Alternative forms===
+* {{alt|la|colōs||archaic}}
+
+===Etymology===
+{{root|la|ine-pro|*ḱel- (cover)}}
+From earlier {{m|la|colōs}} (genitive {{m|la||colōris}}), from {{inh|la|itc-pro|*kelōs}}, from {{der|la|ine-pro|*ḱel-|t=to hide, conceal}}.&lt;ref&gt;{{R:itc:EDL|page=126|head=color}}&lt;/ref&gt; The nominative singular changed to {{m|la|color}} in Classical times by analogy with the oblique forms, where /r/ had regularly developed from an original intervocalic /s/.
+
+===Pronunciation===
+* {{la-IPA|color}}
+
+===Noun===
+{{la-noun|color&lt;3&gt;}}
+
+# {{l|en|color}} {{q|US}}, [[colour]] {{q|UK}}; [[shade]], [[hue]], [[tint]]
+#* {{Q|la|Ovid|Fasti|4|429|thru=430|quote=tot fuerant illīc, quot habet nātūra, '''colōrēs''',&lt;br/&gt;pictaque dissimilī flōre nitēbat humus.|trans=''In that place there had been so many '''colors''' – as many as nature possesses –&lt;br/&gt;and the ground was radiant, having been decorated with every different flower.''&lt;br/&gt;(Ovid describes the field where {{w|Persephone}} and her attendants picked flowers.)}}
+# [[pigment]]
+# [[complexion]]
+# [[outward]] [[appearance]]
+
+====Declension====
+{{la-ndecl|color&lt;3&gt;}}
+
+====Derived terms====
+{{col3|la
+|bicolor
+|colōrō
+|incolor
+|homō nūllīus colōris
+|lignicolor
+}}
+
+====Descendants====
+{{col-top|2|desc}}
+* {{desc|an|color}}
+* {{desc|ast|color|collor}}
+* {{desc|ca|color|g=m}}
+* {{desc|dlm|colaur}}
+* {{desc|egl|culåur}}
+* {{desc|fur|colôr}}
+* {{desc|it|colore|g=m}}
+* {{desc|lld|corú|curú|culour|culëur|color|culòur}}
+* {{desc|mcm|klor}}
+* {{desc|mwl|quelor}}
+* {{desc|fro|color|colour|g=f}}
+** {{desc|bor=1|en|color|colour}}
+*** {{desc|ceb|kolor|bor=1}}
+** {{desc|fr|couleur|g=f}}
+*** {{desc|kmv|kuló}}
+*** {{desc|ht|koulè}}
+*** {{desc|da|kulør|bor=1}}
+** {{desc|nrf|couleu}} {{q|Jersey}}, {{l|nrf|couleur}} {{q|Guernsey}}, {{l|nrf|couoleu}} {{q|continental Normandy}}
+** {{desc|dum|coleur|bor=1}}
+*** {{desc|nl|kleur}}
+**** {{desc|af|kleur}}
+*** {{desc|fy|kleur|bor=1}}
+* {{desctree|roa-opt|coor|g=f}}
+* {{desctree|pro|color|g=f}}
+* {{desctree|osp|color|g=m}}
+* {{desc|rgn|culòr}}
+* {{desc|ro|culoare}}
+* {{desc|rm|colur|calur|calour|culur}}
+* {{desc|sc|cabori|caori|colore|colori}}
+* {{desc|scn|culuri}}
+* {{desc|vec|cołor}}
+* {{desc|cy|colur|bor=1}}
+{{col-bottom}}
+
+===References===
+&lt;references /&gt;
+
+===Further reading===
+* {{R:L&amp;S lite}}
+* {{R:Elementary Lewis lite}}
+* {{R:du Cange}}
+* {{R:Gaffiot}}&lt;!--
+* {{R:M&amp;A}}--&gt;
+
+==Occitan==
+
+===Alternative forms===
+* {{alt|oc|coulour||Provence}}
+
+===Etymology===
+{{inh+|oc|pro|color}}, from {{inh|oc|la|color|color, colōrem}}.
+
+===Pronunciation===
+* {{audio|oc|LL-Q14185 (oci)-Davidgrosclaude-color.wav|a=Béarn}}
+
+===Noun===
+{{oc-noun|f}}
+
+# {{l|en|color}} / [[colour]]
+
+==Old French==
+
+===Alternative forms===
+* {{alt|fro|colour|colur|culur}}
+
+===Etymology===
+{{inh+|fro|la|color|color, colōrem|colo[u]r}}.
+
+===Noun===
+{{fro-noun|f}}
+
+# {{l|en|color}} / [[colour]]
+
+====Descendants====
+* {{desc|da|kulør|bor=1}}
+* {{desc|nl|kleur|bor=1}}
+** {{desc|af|kleur}}
+* {{desc|bor=1|en|color|colour}}
+* {{desc|fr|couleur}}
+* {{desc|nrf|couleu}} {{q|Jersey}}, {{l|nrf|couleur}} {{q|Guernsey}}, {{l|nrf|couoleu}} {{q|continental Normandy}}
+* {{desc|sv|kulör|bor=1}}
+
+==Old Galician-Portuguese==
+
+===Noun===
+{{roa-opt-noun|f}}
+
+# {{alt form of|roa-opt|coor}}
+
+====Descendants====
+* {{desc|gl|color}}
+
+==Old Occitan==
+
+===Etymology===
+{{inh+|pro|la|color|colōrem}}.
+
+===Noun===
+{{pro-noun|f}}
+
+# {{l|en|color}} / [[colour]]
+
+====Descendants====
+* {{desc|oc|color|g=f}}
+
+==Old Spanish==
+
+===Etymology===
+{{inh+|osp|la|color}}. Cognate with {{cog|roa-opt|coor}}.
+
+===Pronunciation===
+* {{IPA|osp|/koˈloɾ/}}
+
+===Noun===
+{{osp-noun|m|colores}}
+
+# {{l|en|color}} / [[colour]]
+#* {{quote-text|osp|year=c. 1200|author=Almerich|title=[[w:Fazienda de Ultramar|Fazienda de Ultramar]]|section=f. 19r
+|passage=[…] &amp;́ vieron la gĺa de iſŕl dedios. Como huebra de blãcor. &amp;́ de cristal. ⁊ como '''color''' de los cielo&lt;sup&gt;s&lt;/sup&gt; mõdos […]
+|norm=[…] e vieron la gloria de Israel de Dios, como huebra de blancor e de cristal, e como '''color''' de los cielos mondos […]
+|translation=[…] and they saw the glory of the God of Israel, like a work of white and crystal, and like the '''color''' of realm of the heavens. […]}}
+
+====Descendants====
+* {{desc|es|color|g=mf}}
+
+{{c|osp|Colors}}
+
+==Romanian==
+
+===Etymology===
+{{bor+|ro|en|color}}. {{doublet|ro|culoare}}.
+
+===Adjective===
+{{ro-adj|inv}}
+
+# {{l|en|color}} / [[colour]] {{gl|about film or photography}}
+
+====Declension====
+{{ro-decl-adj|inv}}
+
+==Spanish==
+{{picdic|image=Color circle (hue-sat).png|width=310|labels=
+{{picdiclabel|es|align=left|color=red|fontsize=18|x=100|y=70|rojo}}
+{{picdiclabel|es|align=left|color=orange|fontsize=18|x=100|y=90|naranja}}
+{{picdiclabel|es|align=left|color=yellow|fontsize=18|x=100|y=110|amarillo}}
+{{picdiclabel|es|align=left|color=green|fontsize=18|x=100|y=130|verde}}
+{{picdiclabel|es|align=left|color=blue|fontsize=18|x=100|y=150|azul}}
+{{picdiclabel|es|align=left|color=violet|fontsize=18|x=100|y=170|violeta}}
+{{picdiclabel|es|align=left|color=black|fontsize=18|x=100|y=190|negro}}
+{{picdiclabel|es|align=left|color=grey|fontsize=18|x=100|y=210|gris}}
+{{picdiclabel|es|align=left|color=white|fontsize=18|x=100|y=230|blanco}}|detail1=Click on labels in the image}}
+{{wp|es:}}
+
+===Etymology===
+{{inh+|es|osp|color}}, from {{inh|es|la|colōrem}}, singular [[Appendix:Glossary#accusative case|accusative]] of {{m|la|color}}.
+
+===Pronunciation===
+{{es-pr|+&lt;audio:LL-Q1321 (spa)-AdrianAbdulBaha-color.wav&lt;a:Colombia&gt;&gt;}}
+
+===Noun===
+{{es-noun|mfequiv}}
+
+# {{l|en|color}} / [[colour]], [[hue]]
+#* {{RQ:Acevedo Díaz Ismael|passage=Las mujeres atendían los pasteles y los peones los asados, a los que daban las últimas vueltas en las brasas, ya bien en punto y goteando grasa '''color''' de oro.}}
+# {{lb|es|usually|feminine|archaic|or|dialectal}} [[complexion]]
+
+===Noun===
+{{es-noun|m}}
+
+# [[rouge]] {{gl|cosmetics}}
+# [[pretext]], [[motive]], [[reason]]
+# [[character]]; [[special]] quality
+#* {{quote-song|es|year=1992|artist=Los del Río|title=Sevilla tiene un '''color''' especial|lyricist=César Cadaval; Miguel Ángel Magüesín|text=Sevilla tiene un '''color''' especial / Sevilla sigue teniendo su duende / Me sigue oliendo a azahar / Me gusta estar con su gente|t=Seville has a special '''character''' / Seville still has its charm / It still smells like orange blossom to me / I like to be with its people}}
+# [[side]], [[party]], [[faction]]
+# [[race]], [[ethnicity]]
+# {{lb|es|poker}} [[flush]]
+
+====Usage notes====
+* The word is generally used in the masculine, while its use in the feminine is normal in medieval or classical Spanish. However, in countries like Chile or Ecuador, its use in the feminine is normal to refer to certain food colorings.&lt;ref&gt;{{R:DPD}}&lt;/ref&gt;
+
+====Derived terms====
+{{col|es
+|a todo color
+|coloración
+|colorado
+|colorante
+|colorar
+|colorear
+|colorete
+|colorido|pez de colores
+|colorín
+|colorir
+|color primario
+|color secundario
+|color terciario
+|darse color
+|dato de color
+|de color
+|descolorar
+|escalera de color
+|incoloro
+|lápiz de color
+|no haber color
+|para gustos colores
+|so color de
+}}
+
+====Related terms====
+{{col|es
+|corladura
+|corlar
+}}
+
+===See also===
+{{table:colors/es}}
+{{table:suits/es}}
+
+===References===
+&lt;references/&gt;
+
+===Further reading===
+* {{R:es:DRAE}}
+
+===Anagrams===
+* {{anagrams|es|a=cloor|cloro|corló|corlo|locro}}
+
+{{C|es|Light|Sound|Phonology|Vision}}</text>
+      <sha1>5m4xgj81pf3du0g9ptyxfb5udq2pbvf</sha1>
+    </revision>
+  </page>

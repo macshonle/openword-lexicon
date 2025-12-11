@@ -229,6 +229,10 @@ from .enwikt_patterns import (
     # Special page handling
     SPECIAL_PAGE_PREFIXES,
     DICT_ONLY,
+    # Template name lists (loaded from YAML config)
+    MORPHOLOGY_TEMPLATE_NAMES,
+    INFLECTION_TEMPLATE_NAMES,
+    ALTFORM_TEMPLATE_NAMES,
 )
 
 # Note: Additional patterns available in enwikt_patterns for other modules:
@@ -236,7 +240,6 @@ from .enwikt_patterns import (
 # - SUFFIX_TEMPLATE, PREFIX_TEMPLATE, etc. (morphology fast detection)
 # - INFLECTION_PATTERNS (generated from en-wikt.flags.yaml)
 # - ABBREVIATION_PATTERN (generated from en-wikt.flags.yaml)
-# - MORPHOLOGY_TEMPLATE_NAMES (for wikitext_parser)
 
 
 # =============================================================================
@@ -362,25 +365,20 @@ def extract_etymology_text(text: str) -> str:
 
 
 def extract_etymology_templates(etymology_text: str) -> list[Template]:
-    """Extract morphology-related templates from etymology section using parser."""
-    morphology_template_names = [
-        "suffix", "prefix", "affix", "af",
-        "compound", "confix", "surf"
-    ]
-    return find_templates(etymology_text, *morphology_template_names)
+    """Extract morphology-related templates from etymology section using parser.
+
+    Template names are loaded from schema/bindings/en-wikt.patterns.yaml.
+    """
+    return find_templates(etymology_text, *MORPHOLOGY_TEMPLATE_NAMES)
 
 
 def extract_inflection_template(text: str) -> Optional[Template]:
-    """Extract inflection template if present using parser."""
-    inflection_template_names = [
-        "plural of", "past tense of", "past participle of",
-        "present participle of", "third-person singular of",
-        "en-third-person singular of",
-        "comparative of", "superlative of",
-        "inflection of", "infl of",
-        "form of",  # Special handling below - param structure is {{form of|lang|description|lemma}}
-    ]
-    templates = find_templates(text, *inflection_template_names)
+    """Extract inflection template if present using parser.
+
+    Template names are loaded from schema/bindings/en-wikt.flags.yaml (INFL.templates).
+    Note: "form of" has special handling - param structure is {{form of|lang|description|lemma}}.
+    """
+    templates = find_templates(text, *INFLECTION_TEMPLATE_NAMES)
     if templates:
         # Return first matching template
         # Normalize name (remove "en-" prefix if present)
@@ -437,20 +435,25 @@ def extract_altform_template(text: str) -> Optional[Template]:
     - {{alt sp|en|target}}
     - {{alternative form of|en|target}}
     - {{alternative spelling of|en|target}}
+    - {{standard spelling of|en|from=Commonwealth|target}}
 
-    Returns Template with target word in params[0], or None if not found.
+    Template names are loaded from schema/bindings/en-wikt.flags.yaml (ALTH.templates).
+
+    Returns Template with target word in params[0], and any from= values
+    in params[1:] for spelling region detection. Returns None if not found.
     """
-    altform_template_names = [
-        "alt form", "alt sp", "alt form of", "alt sp of",
-        "alternative form of", "alternative spelling of",
-        "altform", "altspelling",
-    ]
-    templates = find_templates(text, *altform_template_names)
+    templates = find_templates(text, *ALTFORM_TEMPLATE_NAMES)
     if templates:
         t = templates[0]
         name = t.name.lower()
-        # Filter to get positional params
+        # Filter to get positional params (excluding named params with =)
         positional = [p for p in t.params if "=" not in p and p.strip()]
+        # Extract from= params for spelling region (e.g., from=Commonwealth)
+        from_values = []
+        for p in t.params:
+            if p.startswith("from=") or p.startswith("from2="):
+                value = p.split("=", 1)[1].strip()
+                from_values.append(value)
         # Skip language code if present
         if positional and positional[0].lower() == "en":
             positional = positional[1:]
@@ -459,7 +462,8 @@ def extract_altform_template(text: str) -> Optional[Template]:
             # Strip anchor if present
             if "#" in target:
                 target = target.split("#")[0]
-            return Template(name=name, params=[target])
+            # Return target in params[0], from= values in rest
+            return Template(name=name, params=[target] + from_values)
     return None
 
 

@@ -177,6 +177,8 @@ class FlagBinding:
     templates: list[str] = field(default_factory=list)
     category_suffixes: list[str] = field(default_factory=list)
     pos_hints: list[str] = field(default_factory=list)
+    # For ALTH: maps from= param values to spelling labels
+    from_param_to_spelling: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -457,6 +459,7 @@ def load_bindings(path: Path) -> Bindings:
                     templates=flatten_list(binding.get("templates", [])),
                     category_suffixes=flatten_list(binding.get("category_suffixes", [])),
                     pos_hints=flatten_list(binding.get("pos_hints", [])),
+                    from_param_to_spelling=binding.get("from_param_to_spelling", {}),
                 )
             )
 

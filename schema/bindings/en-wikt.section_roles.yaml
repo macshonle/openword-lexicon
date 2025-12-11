@@ -66,18 +66,140 @@ ignore_headers:
   - paronyms
   - abbreviations
 
-# Label qualifiers to strip before tag lookup
-# These are "noise words" that appear before the actual label in NON-STANDARD markup
-# where someone wrote prose instead of pipe-separated params.
-# e.g., "{{lb|en|Mainly [[UK]], usu. [[derogatory]]}}" -> "uk", "derogatory"
+# =============================================================================
+# Label qualifiers to strip before tag/domain lookup
+# =============================================================================
 #
-# NOTE: In standard Wiktionary markup, qualifiers like "chiefly" are separate
-# pipe-separated params ({{lb|en|chiefly|US}}) and don't need stripping.
-# This list is intentionally minimal, based on observed non-standard patterns.
+# Wiktionary {{lb|en|...}} templates contain pipe-separated labels. Some labels
+# are categorical (map to tags/domains) while others are qualifiers that modify
+# meaning without affecting category placement.
+#
+# These qualifiers are stripped during label processing so that:
+#   {{lb|en|chiefly|US|slang}} → tags: [ENUS, RSLG]  (chiefly stripped)
+#   {{lb|en|by extension|medicine}} → domain: DMEDI  (by extension stripped)
+#
+# Statistics from full Wiktionary dump (Dec 2024):
+#   - "chiefly": 6,583 entries
+#   - "by extension": 4,173 entries
+#   - "figurative/figuratively": 7,029 entries
+#   - Total qualifier usage: ~48,000 entries
+#
+# NOTE: Someone reviewing this list might identify qualifiers worth tracking
+# as separate metadata (e.g., "simile" could become a rhetorical device tag).
+# These are explicitly listed to make such decisions visible.
+# =============================================================================
+
+# Shared qualifier groups (for YAML anchor reuse)
+_qualifier_groups:
+
+  # Structural labels: placeholders and connectors that are artifacts of
+  # template syntax rather than meaningful labels
+  structural_labels: &structural_labels
+    - _           # Placeholder (8,417 entries) - often empty param or separator
+    - or          # Connector between alternatives (2,784 entries)
+    - and         # Connector (970 entries)
+    - also        # Additional context connector (554 entries)
+
+  # Frequency qualifiers: indicate how commonly a usage applies without
+  # changing what the usage IS
+  frequency_qualifiers: &frequency_qualifiers
+    - chiefly     # (6,583 entries) "chiefly US" = primarily US, but not exclusively
+    - often       # (1,663 entries)
+    - sometimes   # (1,432 entries)
+    - usually     # (1,397 entries)
+    - especially  # (967 entries)
+    - mostly      # (965 entries)
+    - mainly      # Observed in non-standard markup
+    - primarily
+    - particularly
+    - generally
+    - typically
+    - commonly
+    - frequently
+    - occasionally
+    - rarely
+    - seldom
+
+  # Temporal qualifiers: when a usage applies, distinct from temporal TAGS
+  # (obsolete, archaic) which indicate the word itself is dated
+  temporal_qualifiers: &temporal_qualifiers
+    - now         # (2,934 entries) "now chiefly UK" = currently UK usage
+    - originally  # (681 entries) "originally US" = started in US
+    - formerly
+    - currently
+    - once
+    - later
+    - recently
+    - still
+
+  # Semantic shift markers: indicate HOW a meaning relates to the primary sense
+  # These describe the relationship, not the domain or register
+  semantic_shift_markers: &semantic_shift_markers
+    - by extension    # (4,173 entries) Extended from primary meaning
+    - figurative      # (3,779 entries) Non-literal usage
+    - figuratively    # (3,250 entries) Variant
+    - literally       # (533 entries) Emphasizes literal meaning
+    - simile          # (738 entries) Comparative usage
+    - by analogy
+    - metaphorically
+    - metonymically
+
+  # Grammatical context markers: describe syntactic usage patterns
+  # rather than semantic categories
+  grammatical_context: &grammatical_context
+    - attributive     # (1,022 entries) Used before noun
+    - attributively
+    - predicative     # Used after linking verb
+    - predicatively
+    - relational      # (580 entries) Describes relationships
+    - not comparable  # (438 entries) No comparative/superlative
+    - postpositive
+    - prenominal
+
+  # Usage scope markers: describe contexts or patterns of use
+  usage_scope_markers: &usage_scope_markers
+    - in the plural           # (1,524 entries) Typically pluralized
+    - in the singular
+    - in combination          # (1,074 entries) Used with other words
+    - especially in combination  # (924 entries)
+    - of a person             # (500 entries) When referring to people
+    - of a thing
+    - of people
+    - of things
+    - with a
+    - with the
+
+  # Specificity markers: narrow the scope without changing category
+  specificity_markers: &specificity_markers
+    - specifically    # (462 entries)
+    - notably
+    - principally
+    - predominantly
+    - exclusively
+    - solely
+
+  # Abbreviation patterns from non-standard markup
+  abbreviated_qualifiers: &abbreviated_qualifiers
+    - usu.        # Observed in taffy.xml: "usu. [[derogatory]]"
+    - usu
+    - esp.
+    - esp
+    - orig.
+    - orig
+    - freq.
+    - freq
+    - occas.
+    - occas
+
 label_qualifiers:
-  - mainly      # Observed in taffy.xml: "Mainly [[UK]]"
-  - usu.        # Observed in taffy.xml: "usu. [[derogatory]]"
-  - usu         # Variant of above
+  - *structural_labels
+  - *frequency_qualifiers
+  - *temporal_qualifiers
+  - *semantic_shift_markers
+  - *grammatical_context
+  - *usage_scope_markers
+  - *specificity_markers
+  - *abbreviated_qualifiers
 
 # Label normalizations for tag mapping
 # Maps common label variants to canonical forms before tag lookup

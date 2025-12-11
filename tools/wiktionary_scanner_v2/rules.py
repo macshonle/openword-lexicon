@@ -280,6 +280,7 @@ def compute_tags(evidence: Evidence, config: BindingConfig) -> set[str]:
 
     Uses config.label_qualifiers to strip noise words before lookup.
     Uses config.label_normalizations to canonicalize labels before lookup.
+    Also extracts spelling region from {{standard spelling of|en|from=...|target}}
     """
     tags = set()
 
@@ -312,6 +313,19 @@ def compute_tags(evidence: Evidence, config: BindingConfig) -> set[str]:
         tag = normalize_and_lookup(label)
         if tag:
             tags.add(tag)
+
+    # Extract spelling region from altform template from= params
+    # e.g., {{standard spelling of|en|from=Commonwealth|from2=Ireland|color}}
+    # params[0] = "color", params[1:] = ["Commonwealth", "Ireland"]
+    # Mapping is loaded from schema/bindings/en-wikt.flags.yaml (ALTH.from_param_to_spelling)
+    if evidence.altform_template and len(evidence.altform_template.params) > 1:
+        for from_value in evidence.altform_template.params[1:]:
+            from_lower = from_value.lower().strip()
+            spelling_label = config.from_param_to_spelling.get(from_lower)
+            if spelling_label:
+                tag = config.label_to_tag.get(spelling_label)
+                if tag:
+                    tags.add(tag)
 
     # Map category substrings to tags (use pre-lowercased)
     for cat_lower in evidence.categories_lower:

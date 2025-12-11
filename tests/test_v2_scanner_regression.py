@@ -235,6 +235,52 @@ class TestLabelToTagMapping:
 
 
 # =============================================================================
+# Test: Spelling Code Detection
+# =============================================================================
+
+
+class TestSpellingCodeDetection:
+    """Test that spelling variants are correctly detected via {{standard spelling of}}.
+
+    The scanner extracts spelling region codes from templates like:
+        {{standard spelling of|en|from=Commonwealth|from2=Ireland|color}}
+
+    The from= and from2= parameters map to spelling tags:
+        - Commonwealth → SPGB (British/Commonwealth spelling)
+        - Ireland → SPIE (Irish spelling)
+
+    The word also gets ALTH flag and the target as lemma.
+    """
+
+    def test_colour_has_spelling_codes(self, hotspot_entries):
+        """Verify 'colour' has SPGB and SPIE from {{standard spelling of}} template."""
+        if "colour" not in hotspot_entries:
+            pytest.skip("'colour' not in hotspot samples")
+
+        entries = hotspot_entries["colour"]
+        all_codes = set()
+        for e in entries:
+            all_codes.update(e.get("codes", []))
+
+        # Should have spelling region codes
+        assert "SPGB" in all_codes, f"Expected SPGB for 'colour', got {all_codes}"
+        assert "SPIE" in all_codes, f"Expected SPIE for 'colour', got {all_codes}"
+
+        # Should have alternative form flag
+        assert "ALTH" in all_codes, f"Expected ALTH for 'colour', got {all_codes}"
+
+    def test_colour_has_color_lemma(self, hotspot_entries):
+        """Verify 'colour' has 'color' as lemma from {{standard spelling of}} target."""
+        if "colour" not in hotspot_entries:
+            pytest.skip("'colour' not in hotspot samples")
+
+        entries = hotspot_entries["colour"]
+        lemmas = {e.get("lemma") for e in entries if e.get("lemma")}
+
+        assert "color" in lemmas, f"Expected lemma 'color' for 'colour', got {lemmas}"
+
+
+# =============================================================================
 # Test: POS Detection
 # =============================================================================
 
