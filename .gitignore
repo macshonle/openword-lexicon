@@ -242,3 +242,11 @@ tools/wordlist-viewer/data/
 tools/wordlist-viewer/dist/
 .claude/settings.local.json
 /data/benchmark
+
+# Hotspot testing (quick v2 scanner regression tests)
+# Generated from tests/wikitext-samples/*.xml (which ARE tracked)
+/tests/hotspotwords.xml.bz2
+/tests/hotspotwords.jsonl
+
+# Ad-hoc test outputs (from manual scanner runs)
+*-v2.jsonl

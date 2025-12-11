@@ -558,16 +558,44 @@ def build_page_cache(title: str, english_text: str) -> PageLevelCache:
     )
 
 
-def build_etymology_cache(block_text: str) -> EtymologyBlockCache:
-    """Build etymology-scoped cache from a block of text."""
+def build_etymology_cache(
+    block_text: str,
+    preamble_cache: Optional["EtymologyBlockCache"] = None,
+) -> EtymologyBlockCache:
+    """Build etymology-scoped cache from a block of text.
+
+    Args:
+        block_text: The text of this etymology block
+        preamble_cache: Optional cache from the preamble (content before first etymology).
+            If provided, pronunciation data (hyphenation, rhymes, syllable count, IPA)
+            from the preamble is used as fallback when not found in the block.
+    """
     etymology_text = extract_etymology_text(block_text)
+
+    # Extract pronunciation data from this block
+    hyphenation = extract_hyphenation(block_text)
+    rhymes_syllable = extract_rhymes_syllable_count(block_text)
+    syllable_category = extract_syllable_category_count(block_text)
+    ipa = extract_ipa_transcription(block_text)
+
+    # Fall back to preamble pronunciation data if block has none
+    if preamble_cache:
+        if not hyphenation:
+            hyphenation = preamble_cache.hyphenation_parts
+        if rhymes_syllable is None:
+            rhymes_syllable = preamble_cache.rhymes_syllable_count
+        if syllable_category is None:
+            syllable_category = preamble_cache.syllable_category_count
+        if ipa is None:
+            ipa = preamble_cache.ipa_transcription
+
     return EtymologyBlockCache(
         etymology_text=etymology_text,
         etymology_templates=extract_etymology_templates(etymology_text),
-        hyphenation_parts=extract_hyphenation(block_text),
-        rhymes_syllable_count=extract_rhymes_syllable_count(block_text),
-        syllable_category_count=extract_syllable_category_count(block_text),
-        ipa_transcription=extract_ipa_transcription(block_text),
+        hyphenation_parts=hyphenation,
+        rhymes_syllable_count=rhymes_syllable,
+        syllable_category_count=syllable_category,
+        ipa_transcription=ipa,
         phrase_type_header=extract_phrase_type_header(block_text),
         spelling_labels=extract_spelling_labels(block_text),
     )
@@ -579,6 +607,12 @@ def find_etymology_blocks(english_text: str) -> list[EtymologyBlock]:
 
     Returns a list of EtymologyBlock objects, each with start/end positions.
     If no etymology headers found, returns a single block covering the whole section.
+
+    Pronunciation inheritance: When pages have a Pronunciation section before the
+    first Etymology header (a common pattern in Wiktionary), that pronunciation data
+    is inherited by all etymology blocks as a fallback. This ensures words like
+    "set", "cat", "hell" don't lose their syllable counts just because they have
+    multiple etymologies.
     """
     etymology_matches = list(ETYMOLOGY_HEADER.finditer(english_text))
 
@@ -586,6 +620,11 @@ def find_etymology_blocks(english_text: str) -> list[EtymologyBlock]:
         # No etymology headers - whole section is one block
         cache = build_etymology_cache(english_text)
         return [EtymologyBlock(start=0, end=len(english_text), cache=cache)]
+
+    # Extract preamble (content before first etymology header)
+    # This typically contains shared Pronunciation data
+    preamble_text = english_text[: etymology_matches[0].start()]
+    preamble_cache = build_etymology_cache(preamble_text) if preamble_text.strip() else None
 
     blocks = []
     for i, match in enumerate(etymology_matches):
@@ -597,7 +636,7 @@ def find_etymology_blocks(english_text: str) -> list[EtymologyBlock]:
             end = len(english_text)
 
         block_text = english_text[start:end]
-        cache = build_etymology_cache(block_text)
+        cache = build_etymology_cache(block_text, preamble_cache=preamble_cache)
         blocks.append(EtymologyBlock(start=start, end=end, cache=cache))
 
     return blocks

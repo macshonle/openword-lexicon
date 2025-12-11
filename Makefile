@@ -68,9 +68,17 @@ RUN_BENCHMARK := $(RUN_PYTHON) tools/wiktionary-scanner-rust/scripts/run_full_be
 # Benchmark outputs
 BENCHMARK_DIR := data/benchmark
 
+# Hotspot testing (quick v2 scanner regression tests)
+HOTSPOT_WORDS := tests/hotspot-words.txt
+WIKITEXT_SAMPLES_DIR := tests/wikitext-samples
+HOTSPOT_XML := tests/hotspotwords.xml.bz2
+HOTSPOT_JSONL := tests/hotspotwords.jsonl
+EXTRACT_WIKITEXT := $(RUN_PYTHON) tools/extract_wikitext.py
+
 .PHONY: bootstrap venv deps fmt lint test test-python test-rust test-js test-full \
 		clean scrub clean-fetched fetch-en \
         build-en build-rust-scanner build-trie build-metadata build-wikt-json-v2 \
+		quick-build-wikt-json-v2 update-hotspot-samples \
 		package report-en diagnose-scanner corpus-stats \
 		validate-all validate-enable validate-profanity validate-childish \
 		validate-scanner-parity validate-scanner-parity-full \
@@ -219,6 +227,45 @@ build-wikt-json-v2: $(WIKT_DUMP) deps | $(WIKT_JSON_PARENT)
 		--schema-core schema/core \
 		--schema-bindings schema/bindings
 
+# Quick v2 scanner build using hotspot words (for regression testing)
+# Combines all .xml files from tests/wikitext-samples into a single .bz2 dump
+# and runs the v2 scanner on it. Much faster than full corpus processing.
+#
+# Prerequisites:
+#   - tests/wikitext-samples/*.xml files must exist (checked into git)
+#   - To update samples from fresh dump: make update-hotspot-samples
+#
+# Output files (not checked into git):
+#   - tests/hotspotwords.xml.bz2 - combined XML dump
+#   - tests/hotspotwords.jsonl - v2 scanner output
+quick-build-wikt-json-v2: $(HOTSPOT_XML) deps
+	@echo "Running v2 scanner on hotspot words..."
+	$(PYTHON_SCANNER_V2) "$(HOTSPOT_XML)" "$(HOTSPOT_JSONL)" \
+		--schema-core schema/core \
+		--schema-bindings schema/bindings
+	@echo "Output: $(HOTSPOT_JSONL)"
+	@wc -l $(HOTSPOT_JSONL)
+
+# Build the combined hotspot XML from individual sample files
+# This combines all .xml files in wikitext-samples into a valid MediaWiki dump
+# Note: Uses shell find to handle filenames with spaces correctly
+$(HOTSPOT_XML): $(WIKITEXT_SAMPLES_DIR)
+	@echo "Combining XML files from $(WIKITEXT_SAMPLES_DIR) into $(HOTSPOT_XML)..."
+	@{ \
+		echo '<mediawiki>'; \
+		find "$(WIKITEXT_SAMPLES_DIR)" -name '*.xml' -print0 | sort -z | xargs -0 cat; \
+		echo '</mediawiki>'; \
+	} | bzip2 > $(HOTSPOT_XML)
+	@echo "Created $(HOTSPOT_XML) with $$(find "$(WIKITEXT_SAMPLES_DIR)" -name '*.xml' | wc -l | tr -d ' ') pages"
+
+# Update hotspot sample files from the Wiktionary dump
+# Use this after adding new words to tests/hotspot-words.txt
+# Requires the Wiktionary dump to be present (run fetch-en first)
+update-hotspot-samples: $(WIKT_DUMP) deps
+	@echo "Updating hotspot samples from Wiktionary dump..."
+	$(EXTRACT_WIKITEXT) "$(WIKT_DUMP)" "$(WIKITEXT_SAMPLES_DIR)" \
+		--words-file "$(HOTSPOT_WORDS)" --update
+
 # Build and sort Wiktionary JSONL using Rust scanner
 # 1. Extract from XML dump to unsorted JSONL (kept for traceability)
 # 2. Sort lexicographically by word (ensures duplicate entries are consecutive,
@@ -272,6 +319,7 @@ clean:
 	find . -name '*.egg-info' -type d -prune -exec rm -rf '{}' +
 	rm -rf data/intermediate data/filtered data/build data/artifacts
 	rm -rf tools/wordlist-viewer/node_modules tools/wordlist-viewer/pnpm-lock.yaml tools/wordlist-viewer/data tools/wordlist-viewer/dist
+	rm -f $(HOTSPOT_XML) $(HOTSPOT_JSONL)
 	@if [ -d tools/wiktionary-scanner-rust/target ]; then \
 		echo "Cleaning Rust build artifacts..."; \
 		(cd tools/wiktionary-scanner-rust; cargo clean); \

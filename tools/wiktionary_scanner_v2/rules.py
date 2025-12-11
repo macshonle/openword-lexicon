@@ -627,9 +627,9 @@ def entry_to_dict(entry: Entry) -> dict:
 
     Field order:
     1. id, pos, wc (core identifiers)
-    2. codes (if not empty)
-    3. lemma (if present)
-    4. nsyll (if present)
+    2. nsyll (if present)
+    3. codes (if not empty)
+    4. lemma (if present)
     5. morphology (if present)
     6. def_level, def_type (if not primary level 1)
     """
@@ -639,14 +639,14 @@ def entry_to_dict(entry: Entry) -> dict:
         "wc": entry.wc,
     }
 
+    if entry.nsyll is not None:
+        result["nsyll"] = entry.nsyll
+
     if entry.codes:
         result["codes"] = sorted(entry.codes)
 
     if entry.lemma:
         result["lemma"] = entry.lemma
-
-    if entry.nsyll is not None:
-        result["nsyll"] = entry.nsyll
 
     if entry.morphology:
         morph_dict = {
