@@ -729,15 +729,29 @@ def extract_evidence_from_section(
     altform_template = extract_altform_template(section_text)
 
     # Extract definition lines using config pattern or fallback to primary-only
+    #
+    # DESIGN NOTE: We only create entries for PRIMARY definitions (single #).
+    # Sub-definitions (##, ###), quotes (#*), and usage examples (#:) are skipped
+    # because they are elaborations of the parent definition, not distinct senses.
+    # For example, "the" as a determiner has deeply nested definitions:
+    #   # Used before a noun phrase...
+    #   ## The definite grammatical article...
+    #   ### ...because it has already been mentioned...
+    #   #* {{quote-journal|...}}
+    # Creating separate entries for each would incorrectly inflate sense counts
+    # and create entries with identical metadata (word, POS, pronunciation, etc.)
+    # that differ only in definition text—which we don't currently store.
     definition_entries: list[tuple[str, int, str]] = []  # (text, level, type)
 
     if definition_marker_pattern and parse_definition_marker:
-        # Use config-driven definition extraction (captures #, ##, #*, #:, etc.)
+        # Use config-driven definition extraction
         for match in definition_marker_pattern.finditer(section_text):
             prefix = match.group(1)
             text = match.group(2).strip()
             def_type, level = parse_definition_marker(prefix)
-            definition_entries.append((text, level, def_type))
+            # Only include primary definitions (# lines), skip sub-definitions and quotes
+            if def_type == "primary":
+                definition_entries.append((text, level, def_type))
     else:
         # Fallback: primary definitions only (backwards compatibility)
         for match in DEFINITION_LINE.finditer(section_text):
