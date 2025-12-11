@@ -73,11 +73,17 @@ class Evidence:
     # Inflection signals
     inflection_template: Optional[Template] = None  # {{plural of}}, {{past tense of}}, etc.
 
+    # Alternative form signals
+    altform_template: Optional[Template] = None  # {{alt form}}, {{alternative spelling of}}, etc.
+
     # Phrase type signals (from headers before POS normalization)
     phrase_type_header: Optional[str] = None  # "idiom", "proverb", "prepositional phrase"
 
     # Spelling region signals
     spelling_labels: list[str] = field(default_factory=list)  # From {{tlb|en|...}}
+
+    # Senseid signals
+    senseid: Optional[str] = None  # From {{senseid|en|...}} - Wikidata QID or semantic identifier
 
 
 # =============================================================================
@@ -198,85 +204,39 @@ def scan_pages(file_obj, chunk_size: int = 1024 * 1024) -> Iterator[str]:
 
 
 # =============================================================================
-# Wikitext extraction patterns
+# Wikitext extraction patterns (imported from enwikt_patterns)
+#
+# English Wiktionary-specific patterns are isolated in enwikt_patterns.py.
+# Some patterns are generated from schema/bindings/en-wikt.*.yaml config files.
 # =============================================================================
 
-ENGLISH_SECTION = re.compile(r"==\s*English\s*==", re.IGNORECASE)
-LANGUAGE_SECTION = re.compile(r"^==\s*([^=]+?)\s*==$", re.MULTILINE)
-POS_HEADER = re.compile(r"^===+\s*(.+?)\s*===+\s*$", re.MULTILINE)
-DEFINITION_LINE = re.compile(r"^#\s+(.+)$", re.MULTILINE)
-
-# Category extraction
-CATEGORY = re.compile(r"\[\[Category:English\s+([^\]]+)\]\]", re.IGNORECASE)
-
-# Label extraction from {{lb|en|...}} or {{label|en|...}}
-CONTEXT_LABEL = re.compile(r"\{\{(?:lb|label|context)\|en\|([^}]+)\}\}", re.IGNORECASE)
-
-# Head templates (for POS detection)
-HEAD_TEMPLATE = re.compile(r"\{\{(head|en-head|head-lite)\|en\|([^}]+)\}\}", re.IGNORECASE)
-EN_POS_TEMPLATE = re.compile(r"\{\{en-(noun|verb|adj|adv|prop|pron|phrase|prepphr)\b", re.IGNORECASE)
-
-# Syllable extraction
-HYPHENATION_TEMPLATE = re.compile(r"\{\{(?:hyphenation|hyph)\|en\|([^}]+)\}\}", re.IGNORECASE)
-RHYMES_SYLLABLE = re.compile(r"\{\{rhymes\|en\|[^}]*\|s=(\d+)", re.IGNORECASE)
-SYLLABLE_CATEGORY = re.compile(r"\[\[Category:English\s+(\d+)-syllable\s+words?\]\]", re.IGNORECASE)
-IPA_TEMPLATE = re.compile(r"\{\{IPA\|en\|([^}]+)\}\}", re.IGNORECASE)
-
-# Etymology extraction
-ETYMOLOGY_SECTION = re.compile(
-    r"===+\s*Etymology\s*\d*\s*===+\s*\n(.+?)(?=\n===|\Z)", re.DOTALL | re.IGNORECASE
+from .enwikt_patterns import (
+    # Section structure
+    ENGLISH_SECTION,
+    LANGUAGE_SECTION,
+    POS_HEADER,
+    DEFINITION_LINE,
+    ETYMOLOGY_SECTION,
+    ETYMOLOGY_HEADER,
+    # Categories and labels
+    CATEGORY,
+    TLB_TEMPLATE,
+    # Syllable extraction
+    HYPHENATION_TEMPLATE,
+    RHYMES_SYLLABLE,
+    SYLLABLE_CATEGORY,
+    IPA_TEMPLATE,
+    # Special page handling
+    SPECIAL_PAGE_PREFIXES,
+    DICT_ONLY,
 )
 
-# Morphology templates
-SUFFIX_TEMPLATE = re.compile(r"\{\{suffix\|en\|([^}]+)\}\}", re.IGNORECASE)
-PREFIX_TEMPLATE = re.compile(r"\{\{prefix\|en\|([^}]+)\}\}", re.IGNORECASE)
-AFFIX_TEMPLATE = re.compile(r"\{\{af(?:fix)?\|en\|([^}]+)\}\}", re.IGNORECASE)
-COMPOUND_TEMPLATE = re.compile(r"\{\{compound\|en\|([^}]+)\}\}", re.IGNORECASE)
-CONFIX_TEMPLATE = re.compile(r"\{\{confix\|en\|([^}]+)\}\}", re.IGNORECASE)
-SURF_TEMPLATE = re.compile(r"\{\{surf\|en\|([^}]+)\}\}", re.IGNORECASE)
-
-# Inflection templates
-INFLECTION_PATTERNS = [
-    ("plural of", re.compile(r"\{\{plural of\|en\|([^|}]+)", re.IGNORECASE)),
-    ("past tense of", re.compile(r"\{\{past tense of\|en\|([^|}]+)", re.IGNORECASE)),
-    ("past participle of", re.compile(r"\{\{past participle of\|en\|([^|}]+)", re.IGNORECASE)),
-    ("present participle of", re.compile(r"\{\{present participle of\|en\|([^|}]+)", re.IGNORECASE)),
-    ("third-person singular of", re.compile(r"\{\{(?:en-)?third-person singular of\|en\|([^|}]+)", re.IGNORECASE)),
-    ("comparative of", re.compile(r"\{\{comparative of\|en\|([^|}]+)", re.IGNORECASE)),
-    ("superlative of", re.compile(r"\{\{superlative of\|en\|([^|}]+)", re.IGNORECASE)),
-    ("inflection of", re.compile(r"\{\{inflection of\|en\|([^|}]+)", re.IGNORECASE)),
-]
-
-# Abbreviation templates
-ABBREVIATION_TEMPLATE = re.compile(
-    r"\{\{(?:abbreviation of|abbrev of|abbr of|initialism of|acronym of)\|en\|", re.IGNORECASE
-)
-
-# Spelling region labels from {{tlb|en|...}} (NOT {{lb|...}} which is per-definition)
-TLB_TEMPLATE = re.compile(r"\{\{tlb\|en\|([^}]+)\}\}", re.IGNORECASE)
-
-# Special page handling
-SPECIAL_PAGE_PREFIXES = (
-    "Wiktionary:",
-    "Template:",
-    "Module:",
-    "Category:",
-    "Appendix:",
-    "Help:",
-    "MediaWiki:",
-    "User:",
-    "Reconstruction:",
-    "Thesaurus:",
-    "Rhymes:",
-    "Citations:",
-    "Index:",
-    "Concordance:",
-    "Talk:",
-    "File:",
-)
-
-# Dictionary-only marker
-DICT_ONLY = re.compile(r"\{\{no entry\|en", re.IGNORECASE)
+# Note: Additional patterns available in enwikt_patterns for other modules:
+# - CONTEXT_LABEL, HEAD_TEMPLATE, EN_POS_TEMPLATE (head/label parsing)
+# - SUFFIX_TEMPLATE, PREFIX_TEMPLATE, etc. (morphology fast detection)
+# - INFLECTION_PATTERNS (generated from en-wikt.flags.yaml)
+# - ABBREVIATION_PATTERN (generated from en-wikt.flags.yaml)
+# - MORPHOLOGY_TEMPLATE_NAMES (for wikitext_parser)
 
 
 # =============================================================================
@@ -378,11 +338,27 @@ def extract_ipa_transcription(text: str) -> Optional[str]:
 
 
 def extract_etymology_text(text: str) -> str:
-    """Extract etymology section text."""
+    """Extract etymology section text.
+
+    Handles two cases:
+    1. Text contains ===Etymology=== header: extracts content after header up to next ===
+    2. Text is already etymology block content (header consumed by find_etymology_blocks):
+       extracts content up to first === header
+    """
+    # First, try to find etymology section with header
     match = ETYMOLOGY_SECTION.search(text)
     if match:
-        return match.group(1)
-    return ""
+        return match.group(1).strip()
+
+    # If no header found, this might be a block where we're already inside
+    # the etymology content (header was consumed by find_etymology_blocks).
+    # Extract up to first === header.
+    next_header_match = re.search(r"\n===", text)
+    if next_header_match:
+        return text[: next_header_match.start()].strip()
+
+    # No headers found, return all text (might be etymology-only content)
+    return text.strip()
 
 
 def extract_etymology_templates(etymology_text: str) -> list[Template]:
@@ -400,7 +376,9 @@ def extract_inflection_template(text: str) -> Optional[Template]:
         "plural of", "past tense of", "past participle of",
         "present participle of", "third-person singular of",
         "en-third-person singular of",
-        "comparative of", "superlative of", "inflection of"
+        "comparative of", "superlative of",
+        "inflection of", "infl of",
+        "form of",  # Special handling below - param structure is {{form of|lang|description|lemma}}
     ]
     templates = find_templates(text, *inflection_template_names)
     if templates:
@@ -410,13 +388,78 @@ def extract_inflection_template(text: str) -> Optional[Template]:
         name = t.name.lower()
         if name.startswith("en-"):
             name = name[3:]
-        # Filter to get first positional param (the lemma)
+        # Filter to get positional params
+        positional = [p for p in t.params if "=" not in p and p.strip()]
+        # Skip language code if present
+        if positional and positional[0].lower() == "en":
+            positional = positional[1:]
+
+        # Special handling for "form of" - lemma is param 3, not param 2
+        # {{form of|en|Form|a#Article|a}} -> lemma is "a#Article" (index 1 after lang)
+        if name == "form of" and len(positional) >= 2:
+            lemma = positional[1]  # Skip description, get actual lemma
+            # Strip anchor (e.g., "a#Article" -> "a")
+            if "#" in lemma:
+                lemma = lemma.split("#")[0]
+            return Template(name=name, params=[lemma])
+        elif positional:
+            return Template(name=name, params=[positional[0]])
+    return None
+
+
+# Senseid pattern: {{senseid|en|value}}
+SENSEID_PATTERN = re.compile(r"\{\{senseid\|en\|([^}|]+)", re.IGNORECASE)
+
+
+def extract_senseid(text: str) -> Optional[str]:
+    """Extract senseid value from {{senseid|en|...}} template in definition text.
+
+    The senseid value can be:
+    - A Wikidata QID (e.g., "Q617085")
+    - A semantic identifier (e.g., "grammar", "music", "transitive")
+
+    Returns the first senseid found, or None if no senseid template present.
+    """
+    match = SENSEID_PATTERN.search(text)
+    if match:
+        value = match.group(1).strip()
+        # Clean up any trailing whitespace or wiki markup
+        if value:
+            return value
+    return None
+
+
+def extract_altform_template(text: str) -> Optional[Template]:
+    """Extract alternative form template if present using parser.
+
+    Detects templates like:
+    - {{alt form|en|target}}
+    - {{alt sp|en|target}}
+    - {{alternative form of|en|target}}
+    - {{alternative spelling of|en|target}}
+
+    Returns Template with target word in params[0], or None if not found.
+    """
+    altform_template_names = [
+        "alt form", "alt sp", "alt form of", "alt sp of",
+        "alternative form of", "alternative spelling of",
+        "altform", "altspelling",
+    ]
+    templates = find_templates(text, *altform_template_names)
+    if templates:
+        t = templates[0]
+        name = t.name.lower()
+        # Filter to get positional params
         positional = [p for p in t.params if "=" not in p and p.strip()]
         # Skip language code if present
         if positional and positional[0].lower() == "en":
             positional = positional[1:]
         if positional:
-            return Template(name=name, params=[positional[0]])
+            target = positional[0]
+            # Strip anchor if present
+            if "#" in target:
+                target = target.split("#")[0]
+            return Template(name=name, params=[target])
     return None
 
 
@@ -542,10 +585,6 @@ class EtymologyBlock:
     start: int  # Start position in English section
     end: int  # End position in English section
     cache: EtymologyBlockCache
-
-
-# Pattern to match etymology headers
-ETYMOLOGY_HEADER = re.compile(r"^===+\s*Etymology\s*(\d*)\s*===+\s*$", re.MULTILINE | re.IGNORECASE)
 
 
 def build_page_cache(title: str, english_text: str) -> PageLevelCache:
@@ -682,6 +721,9 @@ def extract_evidence_from_section(
     # Section-level inflection template (in definition area, not etymology)
     inflection_template = extract_inflection_template(section_text)
 
+    # Section-level alternative form template
+    altform_template = extract_altform_template(section_text)
+
     # Extract definition lines using config pattern or fallback to primary-only
     definition_entries: list[tuple[str, int, str]] = []  # (text, level, type)
 
@@ -704,6 +746,9 @@ def extract_evidence_from_section(
         # Definition-level labels
         labels = extract_labels(def_text)
 
+        # Definition-level senseid
+        senseid = extract_senseid(def_text)
+
         yield Evidence(
             title=title,
             wc=page_cache.wc,
@@ -722,8 +767,10 @@ def extract_evidence_from_section(
             syllable_category_count=etym_cache.syllable_category_count,
             ipa_transcription=etym_cache.ipa_transcription,
             inflection_template=inflection_template,
+            altform_template=altform_template,
             phrase_type_header=etym_cache.phrase_type_header,
             spelling_labels=etym_cache.spelling_labels,
+            senseid=senseid,
         )
 
 

@@ -1,0 +1,134 @@
+# Core domain types
+#
+# Domain codes are 5-letter identifiers starting with 'D' (DXXXX format).
+# These categorize terms by subject field or technical domain.
+#
+# Note: Domains are non-exclusive - an entry can have multiple domain codes.
+
+language: neutral
+
+domain_types:
+
+  # === Sciences ===
+
+  - code: DMATH
+    name: mathematics
+    description: Mathematics, set theory, logic, algebra, geometry, calculus.
+
+  - code: DPHYS
+    name: physics
+    description: Physics and physical sciences.
+
+  - code: DASTL
+    name: astronomy
+    description: Astronomy, astrophysics, and celestial phenomena.
+
+  - code: DGEOL
+    name: geology
+    description: Geology, mineralogy, and earth sciences.
+
+  - code: DCHEM
+    name: chemistry
+    description: Chemistry and related disciplines.
+
+  - code: DBIOL
+    name: biology
+    description: Biology and life sciences.
+
+  - code: DANAT
+    name: anatomy
+    description: Anatomy, body parts, and physiological structures.
+
+  - code: DZOOL
+    name: zoology
+    description: Zoology, animals, and animal classification.
+
+  - code: DBOTN
+    name: botany
+    description: Botany, plants, and plant classification.
+
+  - code: DORGC
+    name: organic chemistry
+    description: Organic chemistry and carbon-based compounds.
+
+  - code: DBCHM
+    name: biochemistry
+    description: Biochemistry, enzymes, and biological molecules.
+
+  - code: DMEDI
+    name: medicine
+    description: Medicine, healthcare, clinical usage.
+
+  - code: DCOMP
+    name: computing
+    description: Computing, information technology, programming.
+
+  # === Professional domains ===
+
+  - code: DLAWW
+    name: law
+    description: Legal terminology and jurisprudence.
+
+  - code: DMILL
+    name: military
+    description: Military jargon and terminology.
+
+  - code: DNAUT
+    name: nautical
+    description: Nautical and maritime terminology.
+
+  - code: DAVIA
+    name: aviation
+    description: Aviation and aeronautics.
+
+  - code: DFINN
+    name: finance
+    description: Finance, banking, economics, and commerce.
+
+  - code: DTRAN
+    name: transport
+    description: Transportation, railways, automotive, and shipping.
+
+  - code: DWEAP
+    name: weaponry
+    description: Weapons, firearms, and armaments.
+
+  # === Humanities ===
+
+  - code: DLING
+    name: linguistics
+    description: Linguistics, grammar, phonetics, and language study.
+
+  - code: DPHIL
+    name: philosophy
+    description: Philosophy, logic, ethics, and metaphysics.
+
+  - code: DRELI
+    name: religion
+    description: Religion, theology, and religious practice.
+
+  # === Culture and leisure ===
+
+  - code: DSPRT
+    name: sports
+    description: Sports, athletics, and physical games.
+
+  - code: DGAMB
+    name: gaming
+    description: Gambling, card games, board games, and recreational gaming.
+
+  - code: DMUSC
+    name: music
+    description: Music terminology and theory.
+
+  - code: DGAST
+    name: gastronomy
+    description: Cooking, food, beverages, and culinary arts.
+
+  - code: DFASH
+    name: fashion
+    description: Clothing, textiles, and fashion design.
+
+  - code: DARCR
+    name: architecture
+    description: Architecture, construction, and building design.

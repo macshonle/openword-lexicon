@@ -50,6 +50,7 @@ class Entry:
     morphology: Optional[Morphology] = None
     definition_level: int = 1  # 1 for #, 2 for ##, 3 for ###
     definition_type: str = "primary"  # primary, secondary, tertiary, quote, synonym, usage
+    senseid: Optional[str] = None  # Wikidata QID or semantic identifier from {{senseid|en|...}}
 
 
 # =============================================================================
@@ -244,6 +245,12 @@ def compute_flags(evidence: Evidence, config: BindingConfig) -> set[str]:
     # 2. Check inflection template against binding table (no fallback - use config)
     if evidence.inflection_template:
         template_lower = evidence.inflection_template.name.lower()
+        if template_lower in config.template_to_flag:
+            flags.add(config.template_to_flag[template_lower])
+
+    # 2b. Check alternative form template against binding table
+    if evidence.altform_template:
+        template_lower = evidence.altform_template.name.lower()
         if template_lower in config.template_to_flag:
             flags.add(config.template_to_flag[template_lower])
 
@@ -553,19 +560,24 @@ def compute_syllable_count(evidence: Evidence) -> Optional[int]:
 
 def extract_lemma(evidence: Evidence) -> Optional[str]:
     """
-    Extract lemma from inflection template.
+    Extract lemma from inflection template or alternative form template.
+
+    For inflected forms (e.g., "cats" -> "cat"), returns the base form.
+    For alternative forms (e.g., "colour" -> "color"), returns the canonical form.
     """
-    if evidence.inflection_template is None:
-        return None
+    # Try inflection template first
+    if evidence.inflection_template and evidence.inflection_template.params:
+        raw_lemma = evidence.inflection_template.params[0]
+        lemma = clean_lemma(raw_lemma)
+        if lemma and is_englishlike(lemma):
+            return lemma
 
-    if not evidence.inflection_template.params:
-        return None
-
-    raw_lemma = evidence.inflection_template.params[0]
-    lemma = clean_lemma(raw_lemma)
-
-    if lemma and is_englishlike(lemma):
-        return lemma
+    # Try alternative form template
+    if evidence.altform_template and evidence.altform_template.params:
+        raw_lemma = evidence.altform_template.params[0]
+        lemma = clean_lemma(raw_lemma)
+        if lemma and is_englishlike(lemma):
+            return lemma
 
     return None
 
@@ -618,6 +630,7 @@ def apply_rules(evidence: Evidence, config: BindingConfig) -> Optional[Entry]:
         morphology=morphology,
         definition_level=evidence.definition_level,
         definition_type=evidence.definition_type,
+        senseid=evidence.senseid,
     )
 
 
@@ -650,7 +663,6 @@ def entry_to_dict(entry: Entry) -> dict:
 
     if entry.morphology:
         morph_dict = {
-            "type": entry.morphology.type,
             "components": entry.morphology.components,
         }
         if entry.morphology.base:
@@ -665,5 +677,9 @@ def entry_to_dict(entry: Entry) -> dict:
     if entry.definition_level != 1 or entry.definition_type != "primary":
         result["def_level"] = entry.definition_level
         result["def_type"] = entry.definition_type
+
+    # Include senseid if present
+    if entry.senseid:
+        result["senseid"] = entry.senseid
 
     return result

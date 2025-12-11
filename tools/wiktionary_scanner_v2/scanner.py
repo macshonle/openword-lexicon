@@ -32,6 +32,12 @@ from collections import Counter
 from .cdaload import load_binding_config, CodeValidationError
 from .evidence import BZ2StreamReader, scan_pages, extract_page, extract_evidence_with_unknowns
 from .rules import apply_rules, entry_to_dict
+from .stats import (
+    ScannerStats,
+    extract_senseids,
+    extract_etymology_sources,
+    is_domain_label,
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -74,6 +80,13 @@ def parse_args() -> argparse.Namespace:
         help="Limit processing to first N entries (for testing)",
     )
 
+    parser.add_argument(
+        "--stats",
+        type=Path,
+        default=None,
+        help="Output path for statistics JSON file (optional)",
+    )
+
     return parser.parse_args()
 
 
@@ -104,13 +117,15 @@ def main() -> int:
     print(f"\nProcessing:")
     print(f"  Input:  {args.input}")
     print(f"  Output: {args.output}")
+    if args.stats:
+        print(f"  Stats:  {args.stats}")
     if args.limit:
         print(f"  Limit:  {args.limit} entries")
 
     # Ensure output directory exists
     args.output.parent.mkdir(parents=True, exist_ok=True)
 
-    # Statistics
+    # Basic statistics (for summary output)
     stats = {
         "pages_processed": 0,
         "pages_ok": 0,
@@ -122,6 +137,9 @@ def main() -> int:
         "entries_filtered": 0,
     }
     unknown_headers: Counter[str] = Counter()
+
+    # Detailed statistics collector (for JSON output)
+    detailed_stats = ScannerStats() if args.stats else None
 
     start_time = time.time()
 
@@ -158,6 +176,18 @@ def main() -> int:
 
                 stats["pages_ok"] += 1
 
+                # Record page for detailed stats
+                if detailed_stats:
+                    detailed_stats.record_page()
+
+                    # Extract senseids from raw page text
+                    for senseid_value in extract_senseids(result.text):
+                        detailed_stats.record_senseid(senseid_value)
+
+                    # Extract etymology sources from raw page text
+                    for source_lang in extract_etymology_sources(result.text):
+                        detailed_stats.record_etymology_source(source_lang)
+
                 # Extract evidence and apply rules
                 extraction_result = extract_evidence_with_unknowns(
                     result.title,
@@ -171,6 +201,8 @@ def main() -> int:
                 # Track unknown headers
                 for header in extraction_result.unknown_headers:
                     unknown_headers[header.lower()] += 1
+                    if detailed_stats:
+                        detailed_stats.record_unknown_header(header)
 
                 # Collect entries for this page into an append-only ordered set
                 # (deduplicate by JSON string, first appearance wins)
@@ -182,7 +214,59 @@ def main() -> int:
 
                     if entry is None:
                         stats["entries_filtered"] += 1
+                        if detailed_stats:
+                            detailed_stats.record_filtered_entry()
                         continue
+
+                    # Record detailed stats for this entry
+                    if detailed_stats:
+                        # Record template usage
+                        for template in evidence.head_templates:
+                            detailed_stats.record_template(template.name)
+                        for template in evidence.etymology_templates:
+                            detailed_stats.record_template(template.name)
+                            detailed_stats.record_morphology_template(template.name)
+                        if evidence.inflection_template:
+                            detailed_stats.record_template(evidence.inflection_template.name)
+                            detailed_stats.record_inflection_template(evidence.inflection_template.name)
+                        if evidence.altform_template:
+                            detailed_stats.record_template(evidence.altform_template.name)
+                            detailed_stats.record_altform_template(evidence.altform_template.name)
+
+                        # Record labels and check for domain labels
+                        for label in evidence.labels:
+                            if is_domain_label(label):
+                                detailed_stats.record_domain_label(label)
+                            # Check if label mapped to a tag or domain
+                            label_lower = label.lower()
+                            if (label_lower not in config.label_to_tag and
+                                label_lower not in config.label_to_domain):
+                                detailed_stats.record_unmapped_label(label)
+
+                        # Compute spelling region from spelling labels
+                        spelling_region = None
+                        for label in evidence.spelling_labels:
+                            if label in config.label_to_tag:
+                                # Check if it maps to a region tag like ENUS, ENGB
+                                tag = config.label_to_tag[label]
+                                if tag.startswith("EN"):
+                                    spelling_region = tag
+                                    break
+
+                        # Record entry-level stats
+                        detailed_stats.record_entry(
+                            pos=entry.pos,
+                            flags=entry.codes,
+                            tags=entry.codes,  # codes contains both flags and tags
+                            labels=evidence.labels,
+                            categories=evidence.categories,
+                            has_nsyll=entry.nsyll is not None,
+                            has_lemma=entry.lemma is not None,
+                            has_morphology=entry.morphology is not None,
+                            def_level=evidence.definition_level,
+                            def_type=evidence.definition_type,
+                            spelling_region=spelling_region,
+                        )
 
                     # Convert to JSON string for deduplication (compact, no whitespace)
                     entry_dict = entry_to_dict(entry)
@@ -250,6 +334,22 @@ def main() -> int:
         if len(unknown_headers) > 20:
             remaining = len(unknown_headers) - 20
             print(f"  ... and {remaining} more unique headers")
+
+    # Write detailed statistics if requested
+    if detailed_stats and args.stats:
+        args.stats.parent.mkdir(parents=True, exist_ok=True)
+        detailed_stats.write_to_file(str(args.stats))
+        print(f"\nStatistics written to: {args.stats}")
+
+        # Print some highlights from the stats
+        stats_dict = detailed_stats.to_dict()
+        print(f"\nStatistics highlights:")
+        print(f"  Unique labels:     {stats_dict['label_frequencies']['total_unique']:,}")
+        print(f"  Unmapped labels:   {stats_dict['unmapped_labels']['total_unique']:,}")
+        print(f"  Domain labels:     {stats_dict['domain_labels']['total_unique']:,}")
+        print(f"  Unique senseids:   {stats_dict['senseid']['total_unique']:,}")
+        print(f"  Wikidata QIDs:     {stats_dict['senseid']['total_qids']:,}")
+        print(f"  Unique categories: {stats_dict['categories']['total_unique']:,}")
 
     return 0
 

@@ -1,0 +1,539 @@
+{
+  "pos": {
+    "NOU": {
+      "name": "Noun",
+      "short": "Person, place, or thing",
+      "description": "Common nouns (not proper nouns)"
+    },
+    "NAM": {
+      "name": "Proper Noun",
+      "short": "Name of specific entity",
+      "description": "Names of specific people, places, organizations, etc."
+    },
+    "VRB": {
+      "name": "Verb",
+      "short": "Action or state",
+      "description": "Verbs including inflected forms, participles, and auxiliaries"
+    },
+    "ADJ": {
+      "name": "Adjective",
+      "short": "Describes a noun",
+      "description": "Words that modify nouns"
+    },
+    "ADV": {
+      "name": "Adverb",
+      "short": "Modifies verbs or adjectives",
+      "description": "Words that modify verbs, adjectives, or other adverbs"
+    },
+    "PRN": {
+      "name": "Pronoun",
+      "short": "Substitutes for a noun",
+      "description": "Words that substitute for nouns"
+    },
+    "DET": {
+      "name": "Determiner",
+      "short": "Introduces a noun",
+      "description": "Words that introduce nouns (the, a, this, some) including articles"
+    },
+    "ADP": {
+      "name": "Adposition",
+      "short": "Spatial or temporal relation",
+      "description": "Words expressing spatial/temporal relations (prepositions, postpositions)"
+    },
+    "CNJ": {
+      "name": "Conjunction",
+      "short": "Connects words or clauses",
+      "description": "Words that connect clauses or phrases"
+    },
+    "PRT": {
+      "name": "Particle",
+      "short": "Function word",
+      "description": "Function words that do not fit other categories cleanly"
+    },
+    "ITJ": {
+      "name": "Interjection",
+      "short": "Exclamation",
+      "description": "Exclamations and discourse markers"
+    },
+    "PHR": {
+      "name": "Phrase",
+      "short": "Multi-word expression",
+      "description": "Multi-word expressions treated as lexical units"
+    },
+    "PRV": {
+      "name": "Proverb",
+      "short": "Traditional saying",
+      "description": "Traditional sayings expressing common truths"
+    },
+    "PPP": {
+      "name": "Prepositional Phrase",
+      "short": "Phrase with preposition",
+      "description": "Phrases beginning with an adposition (preposition/postposition)"
+    },
+    "IDM": {
+      "name": "Idiom",
+      "short": "Non-literal expression",
+      "description": "Expressions whose meanings are not compositionally predictable"
+    },
+    "AFX": {
+      "name": "Affix",
+      "short": "Word-forming element",
+      "description": "Bound morphemes (prefixes, suffixes, infixes, etc.)"
+    },
+    "NUM": {
+      "name": "Numeral",
+      "short": "Number word",
+      "description": "Words representing numbers"
+    },
+    "SYM": {
+      "name": "Symbol",
+      "short": "Symbol or letter",
+      "description": "Non-alphabetic symbols, letters, or punctuation used lexically"
+    },
+    "MLT": {
+      "name": "Multiple",
+      "short": "Multiple parts of speech",
+      "description": "Entries with multiple parts of speech not yet disambiguated"
+    },
+    "CTN": {
+      "name": "Contraction",
+      "short": "Shortened word form",
+      "description": "Shortened forms combining multiple words"
+    }
+  },
+  "flags": {
+    "ABRV": {
+      "name": "Abbreviation",
+      "short": "abbreviation",
+      "description": "Sense is an abbreviation, initialism, or acronym of a longer form. Useful for “base-form only” dictionaries or when filtering short‐form entries."
+    },
+    "INFL": {
+      "name": "Inflected Form",
+      "short": "inflected form",
+      "description": "Sense is an inflected form of a lemma (plural, tense, degree, etc.), as opposed to a base lemma form."
+    },
+    "ALTH": {
+      "name": "Alternative Form",
+      "short": "alternative form",
+      "description": "Sense is an alternative form, spelling, or variant of another word. Similar to INFL but for spelling variants rather than grammatical forms."
+    }
+  },
+  "tags": {
+    "REGS": {
+      "name": "Register",
+      "description": "Stylistic or formality properties of usage.",
+      "tags": {
+        "RINF": {
+          "name": "informal",
+          "short": "informal",
+          "description": "Informal or colloquial usage (neutral/vague informality)."
+        },
+        "RSLG": {
+          "name": "slang",
+          "short": "slang",
+          "description": "Clearly marked slang usage."
+        },
+        "RVLG": {
+          "name": "vulgar",
+          "short": "vulgar",
+          "description": "Vulgar or coarse usage."
+        },
+        "ROFF": {
+          "name": "offensive",
+          "short": "offensive",
+          "description": "Offensive or derogatory usage."
+        },
+        "RFRM": {
+          "name": "formal",
+          "short": "formal",
+          "description": "Formal or elevated register."
+        },
+        "REUP": {
+          "name": "euphemistic",
+          "short": "euphemistic",
+          "description": "Euphemistic expression, often avoiding a taboo term."
+        },
+        "RHUM": {
+          "name": "humorous",
+          "short": "humorous",
+          "description": "Deliberately humorous or jocular usage."
+        },
+        "RLIT": {
+          "name": "literary",
+          "short": "literary",
+          "description": "Literary or elevated style, often in written texts."
+        },
+        "RCHD": {
+          "name": "childish",
+          "short": "childish",
+          "description": "Childish / baby-talk register (infantile style)."
+        },
+        "RNST": {
+          "name": "nonstandard",
+          "short": "nonstandard",
+          "description": "Nonstandard usage that deviates from prescriptive norms."
+        },
+        "RAAV": {
+          "name": "AAVE",
+          "short": "aave",
+          "description": "African American Vernacular English."
+        }
+      }
+    },
+    "TEMP": {
+      "name": "Temporal status",
+      "description": "Diachronic status of usage (current vs historical).",
+      "tags": {
+        "TARC": {
+          "name": "archaic",
+          "short": "archaic",
+          "description": "Largely outdated; occasionally encountered in older texts."
+        },
+        "TOBS": {
+          "name": "obsolete",
+          "short": "obsolete",
+          "description": "No longer in normal use; only historical or highly marked uses."
+        },
+        "TDAT": {
+          "name": "dated",
+          "short": "dated",
+          "description": "Once normal, now perceived as somewhat old-fashioned."
+        },
+        "THIS": {
+          "name": "historical",
+          "short": "historical",
+          "description": "Used in historical contexts, often for institutions or concepts that no longer exist."
+        },
+        "TRAR": {
+          "name": "rare",
+          "short": "rare",
+          "description": "Rare or infrequently used in contemporary language."
+        }
+      }
+    },
+    "REGN": {
+      "name": "Usage region",
+      "description": "Geographic regions where the term is in use.",
+      "tags": {
+        "ENGB": {
+          "name": "English (United Kingdom)",
+          "short": "english (united kingdom)",
+          "description": "Usage typical of British English."
+        },
+        "ENSC": {
+          "name": "English (Scotland)",
+          "short": "english (scotland)",
+          "description": "Usage typical of Scottish English."
+        },
+        "ENUS": {
+          "name": "English (United States)",
+          "short": "english (united states)",
+          "description": "Usage typical of American English."
+        },
+        "ENCA": {
+          "name": "English (Canada)",
+          "short": "english (canada)",
+          "description": "Usage typical of Canadian English."
+        },
+        "ENAU": {
+          "name": "English (Australia)",
+          "short": "english (australia)",
+          "description": "Usage typical of Australian English."
+        },
+        "ENNZ": {
+          "name": "English (New Zealand)",
+          "short": "english (new zealand)",
+          "description": "Usage typical of New Zealand English."
+        },
+        "ENIE": {
+          "name": "English (Ireland)",
+          "short": "english (ireland)",
+          "description": "Usage typical of Irish English."
+        },
+        "ENZA": {
+          "name": "English (South Africa)",
+          "short": "english (south africa)",
+          "description": "Usage typical of South African English."
+        },
+        "ENIN": {
+          "name": "English (India)",
+          "short": "english (india)",
+          "description": "Usage typical of Indian English."
+        }
+      }
+    },
+    "SPRG": {
+      "name": "Spelling region",
+      "description": "Regional orthographic norm for this written form.",
+      "tags": {
+        "SPGB": {
+          "name": "UK spelling",
+          "short": "uk spelling",
+          "description": "Follows British/UK spelling conventions."
+        },
+        "SPUS": {
+          "name": "US spelling",
+          "short": "us spelling",
+          "description": "Follows American/US spelling conventions."
+        },
+        "SPCA": {
+          "name": "Canadian spelling",
+          "short": "canadian spelling",
+          "description": "Follows Canadian spelling conventions."
+        },
+        "SPAU": {
+          "name": "Australian spelling",
+          "short": "australian spelling",
+          "description": "Follows Australian spelling conventions."
+        },
+        "SPNZ": {
+          "name": "New Zealand spelling",
+          "short": "new zealand spelling",
+          "description": "Follows New Zealand spelling conventions."
+        },
+        "SPIE": {
+          "name": "Irish spelling",
+          "short": "irish spelling",
+          "description": "Follows Irish spelling conventions."
+        },
+        "SPZA": {
+          "name": "South African spelling",
+          "short": "south african spelling",
+          "description": "Follows South African spelling conventions."
+        },
+        "SPIN": {
+          "name": "Indian spelling",
+          "short": "indian spelling",
+          "description": "Follows Indian / South-Asian English spelling conventions."
+        }
+      }
+    },
+    "NSND": {
+      "name": "Nonstandard type",
+      "description": "Nonstandard forms such as leetspeak or common misspellings.",
+      "tags": {
+        "NLET": {
+          "name": "leet / leetspeak",
+          "short": "leet / leetspeak",
+          "description": "Leetspeak or similar nonstandard orthography."
+        },
+        "NMIS": {
+          "name": "misspelling",
+          "short": "misspelling",
+          "description": "Common or recognized misspelling of another word."
+        }
+      }
+    }
+  },
+  "phrase_types": {
+    "IDIM": {
+      "name": "idiom",
+      "short": "idiom",
+      "description": "Fixed or semi-fixed expression whose meaning is not predictable from the meanings of its individual components."
+    },
+    "PRVB": {
+      "name": "proverb",
+      "short": "proverb",
+      "description": "Short, commonly known saying that expresses a general truth or piece of advice."
+    },
+    "PPHR": {
+      "name": "prepositional phrase",
+      "short": "prepositional phrase",
+      "description": "Phrase centered on an adposition (preposition/postposition), plus its complement."
+    },
+    "NPHR": {
+      "name": "noun phrase",
+      "short": "noun phrase",
+      "description": "Phrase built around a noun or pronoun, possibly with determiners and modifiers."
+    },
+    "VPHR": {
+      "name": "verb phrase",
+      "short": "verb phrase",
+      "description": "Phrase built around a verb, including auxiliaries and complements."
+    },
+    "APHR": {
+      "name": "adverbial phrase",
+      "short": "adverbial phrase",
+      "description": "Phrase functioning as an adverbial (modifying a verb, clause, or sentence), whether or not it is headed by an adverb."
+    }
+  },
+  "morphology_types": {
+    "SIMP": {
+      "name": "simple",
+      "short": "simple",
+      "description": "No clear internal morphological structure is identified beyond the base. Either no etymology template was recognized, or components did not produce derivational structure."
+    },
+    "COMP": {
+      "name": "compound",
+      "short": "compound",
+      "description": "Form is analyzed as a compound of two or more bases, none of which is uniquely designated as “the” base word. All components are peers."
+    },
+    "PREF": {
+      "name": "prefixed",
+      "short": "prefixed",
+      "description": "One or more prefixes attach to a base. Prefixes typically have trailing hyphens in normalized components (e.g., \"un-\")."
+    },
+    "SUFF": {
+      "name": "suffixed",
+      "short": "suffixed",
+      "description": "One or more suffixes attach to a base. Suffixes typically have leading hyphens in normalized components (e.g., \"-ness\")."
+    },
+    "AFFX": {
+      "name": "affixed",
+      "short": "affixed",
+      "description": "Both prefix(es) and suffix(es) occur around a base, or otherwise the structure is best treated as a combined affixal derivation."
+    },
+    "CIRC": {
+      "name": "circumfixed",
+      "short": "circumfixed",
+      "description": "A special case of affixed morphology where a logically single affix is split into a prefix-like and suffix-like part (circumfix). Not all scanners will distinguish this from AFFX; the core type exists for languages where circumfixes are explicit."
+    }
+  },
+  "domain_types": {
+    "DMATH": {
+      "name": "mathematics",
+      "short": "mathematics",
+      "description": "Mathematics, set theory, logic, algebra, geometry, calculus."
+    },
+    "DPHYS": {
+      "name": "physics",
+      "short": "physics",
+      "description": "Physics and physical sciences."
+    },
+    "DASTL": {
+      "name": "astronomy",
+      "short": "astronomy",
+      "description": "Astronomy, astrophysics, and celestial phenomena."
+    },
+    "DGEOL": {
+      "name": "geology",
+      "short": "geology",
+      "description": "Geology, mineralogy, and earth sciences."
+    },
+    "DCHEM": {
+      "name": "chemistry",
+      "short": "chemistry",
+      "description": "Chemistry and related disciplines."
+    },
+    "DBIOL": {
+      "name": "biology",
+      "short": "biology",
+      "description": "Biology and life sciences."
+    },
+    "DANAT": {
+      "name": "anatomy",
+      "short": "anatomy",
+      "description": "Anatomy, body parts, and physiological structures."
+    },
+    "DZOOL": {
+      "name": "zoology",
+      "short": "zoology",
+      "description": "Zoology, animals, and animal classification."
+    },
+    "DBOTN": {
+      "name": "botany",
+      "short": "botany",
+      "description": "Botany, plants, and plant classification."
+    },
+    "DORGC": {
+      "name": "organic chemistry",
+      "short": "organic chemistry",
+      "description": "Organic chemistry and carbon-based compounds."
+    },
+    "DBCHM": {
+      "name": "biochemistry",
+      "short": "biochemistry",
+      "description": "Biochemistry, enzymes, and biological molecules."
+    },
+    "DMEDI": {
+      "name": "medicine",
+      "short": "medicine",
+      "description": "Medicine, healthcare, clinical usage."
+    },
+    "DCOMP": {
+      "name": "computing",
+      "short": "computing",
+      "description": "Computing, information technology, programming."
+    },
+    "DLAWW": {
+      "name": "law",
+      "short": "law",
+      "description": "Legal terminology and jurisprudence."
+    },
+    "DMILL": {
+      "name": "military",
+      "short": "military",
+      "description": "Military jargon and terminology."
+    },
+    "DNAUT": {
+      "name": "nautical",
+      "short": "nautical",
+      "description": "Nautical and maritime terminology."
+    },
+    "DAVIA": {
+      "name": "aviation",
+      "short": "aviation",
+      "description": "Aviation and aeronautics."
+    },
+    "DFINN": {
+      "name": "finance",
+      "short": "finance",
+      "description": "Finance, banking, economics, and commerce."
+    },
+    "DTRAN": {
+      "name": "transport",
+      "short": "transport",
+      "description": "Transportation, railways, automotive, and shipping."
+    },
+    "DWEAP": {
+      "name": "weaponry",
+      "short": "weaponry",
+      "description": "Weapons, firearms, and armaments."
+    },
+    "DLING": {
+      "name": "linguistics",
+      "short": "linguistics",
+      "description": "Linguistics, grammar, phonetics, and language study."
+    },
+    "DPHIL": {
+      "name": "philosophy",
+      "short": "philosophy",
+      "description": "Philosophy, logic, ethics, and metaphysics."
+    },
+    "DRELI": {
+      "name": "religion",
+      "short": "religion",
+      "description": "Religion, theology, and religious practice."
+    },
+    "DSPRT": {
+      "name": "sports",
+      "short": "sports",
+      "description": "Sports, athletics, and physical games."
+    },
+    "DGAMB": {
+      "name": "gaming",
+      "short": "gaming",
+      "description": "Gambling, card games, board games, and recreational gaming."
+    },
+    "DMUSC": {
+      "name": "music",
+      "short": "music",
+      "description": "Music terminology and theory."
+    },
+    "DGAST": {
+      "name": "gastronomy",
+      "short": "gastronomy",
+      "description": "Cooking, food, beverages, and culinary arts."
+    },
+    "DFASH": {
+      "name": "fashion",
+      "short": "fashion",
+      "description": "Clothing, textiles, and fashion design."
+    },
+    "DARCR": {
+      "name": "architecture",
+      "short": "architecture",
+      "description": "Architecture, construction, and building design."
+    }
+  }
+}

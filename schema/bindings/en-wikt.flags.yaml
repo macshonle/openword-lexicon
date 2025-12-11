@@ -49,9 +49,13 @@ flags:
       - past tense of
       - past participle of
       - present participle of
+      - third-person singular of
+      - en-third-person singular of
       - comparative of
       - superlative of
       - inflection of
+      - infl of
+      - form of  # Special handling in evidence.py - param structure is {{form of|lang|description|lemma}}
     category_suffixes:
       # These suffixes are relative to 'Category:English '.
       - verb forms
@@ -59,3 +63,22 @@ flags:
       - adjective forms
       - adverb forms
       - plurals
+
+  ALTH:
+    name: alternative_form
+    description: Entry is an alternative form or spelling of another word.
+    templates:
+      # These templates indicate spelling variants and alternative forms.
+      # Structure: {{alt form|en|target}} or {{alternative form of|en|target}}
+      - alt form
+      - alt sp
+      - alt form of
+      - alt sp of
+      - alternative form of
+      - alternative spelling of
+      - altform
+      - altspelling
+    category_suffixes:
+      # Rare in practice - most categories are dynamically generated
+      - alternative forms
+      - alternative spellings

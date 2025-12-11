@@ -54,6 +54,14 @@ tag_sets:
         name: childish
         description: Childish / baby-talk register (infantile style).
 
+      - code: RNST
+        name: nonstandard
+        description: Nonstandard usage that deviates from prescriptive norms.
+
+      - code: RAAV
+        name: AAVE
+        description: African American Vernacular English.
+
   # === Temporal status ===
 
   - code: TEMP
@@ -80,61 +88,6 @@ tag_sets:
       - code: TRAR
         name: rare
         description: Rare or infrequently used in contemporary language.
-
-  # === Domain / subject field ===
-
-  - code: DOMN
-    name: Domain
-    description: Subject field or technical domain of usage.
-
-    tags:
-      - code: DCOM
-        name: computing
-        description: Computing / information technology.
-
-      - code: DMAT
-        name: mathematics
-        description: Mathematics and related fields.
-
-      - code: DMED
-        name: medicine
-        description: Medicine, healthcare, clinical usage.
-
-      - code: DBIO
-        name: biology
-        description: Biology and life sciences.
-
-      - code: DCHM
-        name: chemistry
-        description: Chemistry and related disciplines.
-
-      - code: DPHY
-        name: physics
-        description: Physics and related physical sciences.
-
-      - code: DMTH
-        name: mathematics
-        description: Mathematics, set theory, logic, and related fields.
-
-      - code: DLAW
-        name: law
-        description: Legal / law domain.
-
-      - code: DMIL
-        name: military
-        description: Military jargon or technical usage.
-
-      - code: DNAU
-        name: nautical
-        description: Nautical / seafaring domain.
-
-      - code: DAVI
-        name: aviation
-        description: Aviation and aeronautics.
-
-      - code: DSPT
-        name: sports
-        description: Sports and athletics.
 
   # === Usage region ===
   # Where the term is used, regardless of spelling standard.

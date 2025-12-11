@@ -26,6 +26,8 @@ from .schema import (
     PhraseType,
     MorphologyType,
     MorphologyTemplate,
+    DomainType,
+    DomainTypeBinding,
     load_core_schema,
     load_bindings,
 )
@@ -46,6 +48,7 @@ class BindingConfig:
     tag_schema: dict[str, dict[str, Tag]] = field(default_factory=dict)
     phrase_type_schema: dict[str, PhraseType] = field(default_factory=dict)
     morphology_type_schema: dict[str, MorphologyType] = field(default_factory=dict)
+    domain_type_schema: dict[str, DomainType] = field(default_factory=dict)
 
     # === POS bindings (en-wikt.pos.yaml) ===
     header_to_pos: dict[str, str] = field(default_factory=dict)
@@ -60,6 +63,10 @@ class BindingConfig:
     # === Tag bindings (en-wikt.tag_sets.yaml) ===
     label_to_tag: dict[str, str] = field(default_factory=dict)
     category_substring_to_tag: dict[str, str] = field(default_factory=dict)
+
+    # === Domain type bindings (en-wikt.domain_types.yaml) ===
+    label_to_domain: dict[str, str] = field(default_factory=dict)
+    category_substring_to_domain: dict[str, str] = field(default_factory=dict)
 
     # === Phrase type bindings (en-wikt.phrase_types.yaml) ===
     header_to_phrase_type: dict[str, str] = field(default_factory=dict)
@@ -135,11 +142,13 @@ class BindingConfig:
             f"in {len(self.tag_schema)} sets\n"
             f"  - {len(self.phrase_type_schema)} phrase type codes\n"
             f"  - {len(self.morphology_type_schema)} morphology type codes\n"
+            f"  - {len(self.domain_type_schema)} domain type codes\n"
             f"\n"
             f"Bindings:\n"
             f"  - {len(self.header_to_pos)} POS header mappings\n"
             f"  - {len(self.template_to_flag)} flag template mappings\n"
             f"  - {len(self.label_to_tag)} label → tag mappings\n"
+            f"  - {len(self.label_to_domain)} label → domain mappings\n"
             f"  - {len(self.morphology_templates)} morphology templates\n"
             f"  - {len(self.pos_headers)} POS/phrase header allowlist entries\n"
             f"  - {ignore_count} ignored section headers{pattern_note}"
@@ -181,10 +190,10 @@ def validate_code_shape(code: str, expected_length: int, context: str) -> None:
 
 def validate_code_uniqueness(config: BindingConfig) -> None:
     """
-    Validate that all 4-letter codes are globally unique.
+    Validate that all codes are globally unique.
 
-    All flags, tags, phrase types, and morphology types share a single
-    namespace and must not collide.
+    All flags, tags, phrase types, morphology types, and domain types share
+    a single namespace and must not collide.
 
     Args:
         config: The BindingConfig to validate
@@ -224,6 +233,14 @@ def validate_code_uniqueness(config: BindingConfig) -> None:
                 f"Duplicate code '{code}': defined in both {seen[code]} and morphology_types"
             )
         seen[code] = "morphology_types"
+
+    # Collect all 5-letter domain codes
+    for code in config.domain_type_schema:
+        if code in seen:
+            raise CodeValidationError(
+                f"Duplicate code '{code}': defined in both {seen[code]} and domain_types"
+            )
+        seen[code] = "domain_types"
 
 
 def load_binding_config(core_path: Path, bindings_path: Path) -> BindingConfig:
@@ -277,6 +294,10 @@ def load_binding_config(core_path: Path, bindings_path: Path) -> BindingConfig:
         validate_code_shape(mt.code, 4, f"Morphology type '{mt.name}'")
         config.morphology_type_schema[mt.code] = mt
 
+    for dt in core.domain_types:
+        validate_code_shape(dt.code, 5, f"Domain type '{dt.name}'")
+        config.domain_type_schema[dt.code] = dt
+
     # === Index POS bindings ===
 
     for pos_binding in bindings.pos_bindings:
@@ -326,6 +347,19 @@ def load_binding_config(core_path: Path, bindings_path: Path) -> BindingConfig:
                 config.label_to_tag[label.lower()] = code
             for substring in tag_binding.from_category_substrings:
                 config.category_substring_to_tag[substring.lower()] = code
+
+    # === Index domain type bindings ===
+
+    for domain_binding in bindings.domain_type_bindings:
+        code = domain_binding.code
+        if code not in config.domain_type_schema:
+            raise CodeValidationError(
+                f"Domain type binding references unknown code '{code}'"
+            )
+        for label in domain_binding.from_labels:
+            config.label_to_domain[label.lower()] = code
+        for substring in domain_binding.from_category_substrings:
+            config.category_substring_to_domain[substring.lower()] = code
 
     # === Index phrase type bindings ===
 

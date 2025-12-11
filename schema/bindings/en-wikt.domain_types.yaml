@@ -1,0 +1,408 @@
+# English Wiktionary → core domain type bindings
+#
+# Maps Wiktionary context labels (from {{lb|en|...}}, {{label|en|...}})
+# and category substrings to core domain codes defined in schema/core/domain_types.yaml.
+#
+# IMPORTANT:
+# - All label strings below are lowercase and should be matched after
+#   stripping whitespace.
+# - category_substrings are matched against the suffix of the category
+#   name lowercased and with the 'Category:English ' prefix removed.
+#   For example, 'Category:English computing terms' → 'computing terms'.
+#
+# YAML ANCHORS:
+# - Use &name to define a reusable list, *name to reference it
+# - Lists containing anchor references are automatically flattened
+# - Use underscore-prefixed keys (e.g., _shared) for anchor-only definitions
+#   that shouldn't be processed as bindings
+
+language: en
+source: wiktionary
+
+# =============================================================================
+# Shared label groups (for reuse via YAML anchors)
+# =============================================================================
+
+_shared:
+  # Math-related labels
+  math_labels: &math_labels
+    - mathematics
+    - math
+    - maths
+
+  math_subfields: &math_subfields
+    - set theory
+    - logic
+    - algebra
+    - geometry
+    - calculus
+    - number theory
+
+  # Sports with significant frequency (>150 entries in full dump)
+  major_sports: &major_sports
+    - baseball
+    - cricket
+    - soccer
+    - football
+    - basketball
+    - tennis
+    - golf
+
+  # Zoology sub-domains
+  zoology_labels: &zoology_labels
+    - zoology
+    - mammalogy
+    - ornithology
+    - herpetology
+    - ichthyology
+    - entomology
+
+  # Botany sub-domains
+  botany_labels: &botany_labels
+    - botany
+    - mycology
+    - phycology
+
+  # Linguistics sub-domains
+  linguistics_labels: &linguistics_labels
+    - linguistics
+    - grammar
+    - phonetics
+    - phonology
+    - morphology
+    - syntax
+    - semantics
+    - pragmatics
+    - lexicography
+
+  # Gaming/gambling labels
+  gaming_labels: &gaming_labels
+    - poker
+    - card games
+    - board games
+    - dice
+    - gambling
+    - chess
+    - backgammon
+
+  # Gastronomy labels
+  gastronomy_labels: &gastronomy_labels
+    - cooking
+    - cuisine
+    - culinary
+    - beverages
+    - brewing
+    - winemaking
+    - distilling
+
+  # Fashion labels
+  fashion_labels: &fashion_labels
+    - clothing
+    - fashion
+    - textiles
+    - sewing
+    - tailoring
+
+  # Architecture labels
+  architecture_labels: &architecture_labels
+    - architecture
+    - construction
+    - building
+
+  # Astronomy labels
+  astronomy_labels: &astronomy_labels
+    - astronomy
+    - astrophysics
+    - celestial mechanics
+    - cosmology
+
+  # Geology labels
+  geology_labels: &geology_labels
+    - geology
+    - mineralogy
+    - petrology
+    - paleontology
+    - geomorphology
+
+  # Philosophy labels
+  philosophy_labels: &philosophy_labels
+    - philosophy
+    - ethics
+    - metaphysics
+    - epistemology
+    - logic
+
+  # Religion labels
+  religion_labels: &religion_labels
+    - religion
+    - theology
+    - Christianity
+    - Islam
+    - Judaism
+    - Buddhism
+    - Hinduism
+    - biblical
+
+  # Finance labels
+  finance_labels: &finance_labels
+    - finance
+    - banking
+    - economics
+    - stock market
+    - accounting
+    - business
+
+  # Transport labels
+  transport_labels: &transport_labels
+    - rail
+    - railways
+    - automotive
+    - shipping
+    - transport
+    - transportation
+
+  # Weaponry labels
+  weaponry_labels: &weaponry_labels
+    - weapons
+    - firearms
+    - artillery
+    - ballistics
+    - archery
+
+# =============================================================================
+# Domain type bindings
+# =============================================================================
+
+domain_type_bindings:
+
+  # === Sciences ===
+
+  - code: DMATH
+    description: Mathematics, set theory, logic, and related fields.
+    from_labels:
+      - *math_labels
+      - *math_subfields
+    from_category_substrings:
+      - mathematics
+
+  - code: DPHYS
+    description: Physical sciences / physics.
+    from_labels:
+      - physics
+    from_category_substrings:
+      - physics
+
+  - code: DASTL
+    description: Astronomy and celestial phenomena.
+    from_labels:
+      - *astronomy_labels
+    from_category_substrings:
+      - astronomy
+
+  - code: DGEOL
+    description: Geology and earth sciences.
+    from_labels:
+      - *geology_labels
+    from_category_substrings:
+      - geology
+
+  - code: DCHEM
+    description: Chemical sciences.
+    from_labels:
+      - chemistry
+    from_category_substrings:
+      - chemistry
+
+  - code: DBIOL
+    description: Biological sciences.
+    from_labels:
+      - biology
+    from_category_substrings:
+      - biology
+
+  - code: DANAT
+    description: Anatomy and body parts.
+    from_labels:
+      - anatomy
+      - anatomical
+    from_category_substrings:
+      - anatomy
+
+  - code: DZOOL
+    description: Zoology and animal sciences.
+    from_labels:
+      - *zoology_labels
+    from_category_substrings:
+      - zoology
+
+  - code: DBOTN
+    description: Botany and plant sciences.
+    from_labels:
+      - *botany_labels
+    from_category_substrings:
+      - botany
+
+  - code: DORGC
+    description: Organic chemistry.
+    from_labels:
+      - organic chemistry
+      - organic compound
+    from_category_substrings:
+      - organic chemistry
+
+  - code: DBCHM
+    description: Biochemistry and biological molecules.
+    from_labels:
+      - biochemistry
+      - enzyme
+      - protein
+    from_category_substrings:
+      - biochemistry
+
+  - code: DMEDI
+    description: Medical or clinical domain.
+    from_labels:
+      - medicine
+      - medical
+    from_category_substrings:
+      - medicine
+
+  - code: DCOMP
+    description: Computing, information technology, or Internet domain.
+    from_labels:
+      - computing
+      - internet
+      - programming
+    from_category_substrings:
+      - computing
+
+  # === Professional domains ===
+
+  - code: DLAWW
+    description: Legal / law domain.
+    from_labels:
+      - law
+      - legal
+    from_category_substrings:
+      - law
+
+  - code: DMILL
+    description: Military terminology.
+    from_labels:
+      - military
+    from_category_substrings:
+      - military
+
+  - code: DNAUT
+    description: Nautical / maritime terminology.
+    from_labels:
+      - nautical
+    from_category_substrings:
+      - nautical
+
+  - code: DAVIA
+    description: Aviation, aeronautics, aerospace.
+    from_labels:
+      - aviation
+    from_category_substrings:
+      - aviation
+
+  - code: DFINN
+    description: Finance, banking, and economics.
+    from_labels:
+      - *finance_labels
+    from_category_substrings:
+      - finance
+      - economics
+
+  - code: DTRAN
+    description: Transportation and vehicles.
+    from_labels:
+      - *transport_labels
+    from_category_substrings:
+      - rail
+      - automotive
+
+  - code: DWEAP
+    description: Weapons and armaments.
+    from_labels:
+      - *weaponry_labels
+    from_category_substrings:
+      - weapons
+      - firearms
+
+  # === Humanities ===
+
+  - code: DLING
+    description: Linguistics and language study.
+    from_labels:
+      - *linguistics_labels
+    from_category_substrings:
+      - linguistics
+
+  - code: DPHIL
+    description: Philosophy and ethics.
+    from_labels:
+      - *philosophy_labels
+    from_category_substrings:
+      - philosophy
+
+  - code: DRELI
+    description: Religion and theology.
+    from_labels:
+      - *religion_labels
+    from_category_substrings:
+      - religion
+      - theology
+
+  # === Culture and leisure ===
+
+  - code: DSPRT
+    description: Sports and athletics.
+    # Labels based on actual domain_labels frequencies from full dump:
+    # baseball: 1036, cricket: 1011, soccer: 641, basketball: 319,
+    # golf: 307, tennis: 182, football: 167
+    from_labels:
+      - sports
+      - sport
+      - *major_sports
+    from_category_substrings:
+      - sports
+
+  - code: DGAMB
+    description: Gaming, gambling, and recreational games.
+    from_labels:
+      - *gaming_labels
+    from_category_substrings:
+      - games
+
+  - code: DMUSC
+    description: Music terminology and theory.
+    from_labels:
+      - music
+      - musical
+    from_category_substrings:
+      - music
+
+  - code: DGAST
+    description: Gastronomy, cooking, and culinary arts.
+    from_labels:
+      - *gastronomy_labels
+    from_category_substrings:
+      - cooking
+      - food
+
+  - code: DFASH
+    description: Fashion, clothing, and textiles.
+    from_labels:
+      - *fashion_labels
+    from_category_substrings:
+      - clothing
+      - fashion
+
+  - code: DARCR
+    description: Architecture and construction.
+    from_labels:
+      - *architecture_labels
+    from_category_substrings:
+      - architecture

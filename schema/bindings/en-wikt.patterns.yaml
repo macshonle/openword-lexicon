@@ -1,0 +1,103 @@
+# English Wiktionary → pattern configuration
+#
+# Externalizes pattern-related values used by tools/wiktionary_scanner_v2/enwikt_patterns.py
+#
+# This file contains:
+# - Template names for pattern matching (morphology, etc.)
+# - References to shared schema files where appropriate
+#
+# Note: Inflection and abbreviation templates are in en-wikt.flags.yaml
+# Note: Label-to-tag mappings are in en-wikt.tag_sets.yaml
+
+language: en
+source: wiktionary
+
+# Morphology template names
+# Used by: tools/wiktionary_scanner_v2/enwikt_patterns.py
+#          tools/wiktionary_scanner_v2/wikitext_parser.py
+#
+# These templates indicate word formation patterns in etymology sections.
+# The actual parsing logic is complex and template-specific, but the
+# template names themselves can be externalized here.
+morphology_templates:
+  - suffix      # {{suffix|en|happy|ness}} → "happiness" from "happy" + "-ness"
+  - prefix      # {{prefix|en|un|happy}} → "unhappy" from "un-" + "happy"
+  - affix       # {{affix|en|un|believe|able}} → complex affixation
+  - af          # Short form of affix
+  - compound    # {{compound|en|black|bird}} → "blackbird"
+  - confix      # {{confix|en|tele|vision}} → prefix + suffix combination
+  - surf        # {{surf|en|run|ing}} → surface analysis (spelling-based)
+
+# Special page prefixes
+# Used by: tools/wiktionary_scanner_v2/enwikt_patterns.py
+#
+# Pages with these prefixes are skipped during scanning (not dictionary entries).
+# These are shared across language editions - see also schema/labels.yaml
+special_page_prefixes:
+  - "Wiktionary:"
+  - "Template:"
+  - "Module:"
+  - "Category:"
+  - "Appendix:"
+  - "Help:"
+  - "MediaWiki:"
+  - "User:"
+  - "Reconstruction:"
+  - "Thesaurus:"
+  - "Rhymes:"
+  - "Citations:"
+  - "Index:"
+  - "Concordance:"
+  - "Talk:"
+  - "File:"
+
+# Dictionary-only marker templates
+# Used by: tools/wiktionary_scanner_v2/enwikt_patterns.py
+#
+# Pages containing these templates have no lexical content for English
+dict_only_templates:
+  - "no entry"  # {{no entry|en}} - placeholder for words that exist but have no entry
+
+# Head templates for POS detection
+# Used by: tools/wiktionary_scanner_v2/enwikt_patterns.py
+#
+# These templates appear at the start of POS sections
+head_templates:
+  generic:
+    - head        # {{head|en|noun}}
+    - en-head     # {{en-head|noun}}
+    - head-lite   # {{head-lite|en|noun}}
+  pos_specific:
+    - en-noun
+    - en-verb
+    - en-adj
+    - en-adv
+    - en-prop     # proper noun
+    - en-pron     # pronoun
+    - en-phrase
+    - en-prepphr  # prepositional phrase
+
+# Context label templates
+# Used by: tools/wiktionary_scanner_v2/enwikt_patterns.py
+#
+# These templates mark usage context on definitions
+context_label_templates:
+  - lb          # {{lb|en|informal|vulgar}}
+  - label       # {{label|en|...}}
+  - context    # {{context|en|...}} (deprecated but still used)
+  - tlb         # {{tlb|en|UK}} - top-level label (whole sense, e.g., spelling region)
+
+# Syllable extraction templates
+# Used by: tools/wiktionary_scanner_v2/enwikt_patterns.py
+#
+# These templates provide syllable count information
+syllable_templates:
+  hyphenation:
+    - hyphenation  # {{hyphenation|en|hap|pi|ness}}
+    - hyph         # Short form
+  rhymes: rhymes   # {{rhymes|en|æt|s=1}} - s= param gives count
+  ipa: IPA         # {{IPA|en|/ˈhæpinəs/}} - for vowel counting fallback
+
+# Syllable category pattern
+# Category format: "Category:English N-syllable words"
+syllable_category_pattern: "English {n}-syllable words"

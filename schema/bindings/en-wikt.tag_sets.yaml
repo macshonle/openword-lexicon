@@ -49,9 +49,12 @@ tag_set_bindings:
         from_labels:
           - offensive
           - derogatory
+          - ethnic slur
+          - pejorative
         from_category_substrings:
           - offensive
           - derogatory
+          - ethnic slur
 
       - code: REUP   # euphemistic
         description: Euphemistic usage.
@@ -71,8 +74,10 @@ tag_set_bindings:
         description: Literary or elevated usage.
         from_labels:
           - literary
+          - poetic
         from_category_substrings:
           - literary
+          - poetic
 
       - code: RCHD   # childish / baby-talk
         description: Childish, baby-talk or infantile usage.
@@ -86,6 +91,23 @@ tag_set_bindings:
           - baby talk
           - infantile
           - puerile
+
+      - code: RNST   # nonstandard
+        description: Nonstandard usage that deviates from prescriptive norms.
+        from_labels:
+          - nonstandard
+          - proscribed
+        from_category_substrings:
+          - nonstandard
+
+      - code: RAAV   # AAVE
+        description: African American Vernacular English.
+        from_labels:
+          - aave
+          - african american vernacular english
+          - african-american vernacular english
+        from_category_substrings:
+          - african american vernacular
 
   # ------------------------------------------------------------------
   # Temporal / historical tags (TEMP tag_set)
@@ -121,110 +143,12 @@ tag_set_bindings:
         from_category_substrings:
           - historical
 
-      # If you decide to treat "rare" as a temporal-ish signal, add TRAR here
-      # and wire it in core/tag_sets.yaml:
-      # - code: TRAR
-      #   description: Rare usage.
-      #   from_labels:
-      #     - rare
-      #   from_category_substrings:
-      #     - rare
-
-  # ------------------------------------------------------------------
-  # Domain / subject-matter tags (DOMN tag_set)
-  # ------------------------------------------------------------------
-  DOMN:
-    tags:
-
-      - code: DCOM   # computing / technology
-        description: Computing, information technology, or Internet domain.
+      - code: TRAR   # rare
+        description: Rare usage.
         from_labels:
-          - computing
-          - internet
-          - programming
+          - rare
         from_category_substrings:
-          - computing
-
-      - code: DMED   # medicine
-        description: Medical or clinical domain.
-        from_labels:
-          - medicine
-          - medical
-        from_category_substrings:
-          - medicine
-
-      - code: DBIO   # biology
-        description: Biological sciences.
-        from_labels:
-          - biology
-        from_category_substrings:
-          - biology
-
-      - code: DCHM   # chemistry
-        description: Chemical sciences.
-        from_labels:
-          - chemistry
-        from_category_substrings:
-          - chemistry
-
-      - code: DPHY   # physics
-        description: Physical sciences / physics.
-        from_labels:
-          - physics
-        from_category_substrings:
-          - physics
-
-      - code: DMTH   # mathematics
-        description: Mathematics, set theory, logic.
-        from_labels:
-          - mathematics
-          - math
-          - maths
-          - set theory
-          - logic
-          - algebra
-          - geometry
-          - calculus
-          - number theory
-        from_category_substrings:
-          - mathematics
-
-      - code: DLAW   # law
-        description: Legal / law domain.
-        from_labels:
-          - law
-          - legal
-        from_category_substrings:
-          - law
-
-      - code: DMIL   # military
-        description: Military terminology.
-        from_labels:
-          - military
-        from_category_substrings:
-          - military
-
-      - code: DNAU   # nautical
-        description: Nautical / maritime terminology.
-        from_labels:
-          - nautical
-        from_category_substrings:
-          - nautical
-
-      - code: DAVI   # aviation
-        description: Aviation, aeronautics, aerospace.
-        from_labels:
-          - aviation
-        from_category_substrings:
-          - aviation
-
-      - code: DSPT   # sports
-        description: Sports and games.
-        from_labels:
-          - sports
-          - sport
-        from_category_substrings:
-          - sports
+          - rare
 
   # ------------------------------------------------------------------
   # Region-of-use tags (REGN tag_set)
@@ -245,6 +169,7 @@ tag_set_bindings:
         description: Used primarily in Scottish English.
         from_labels:
           - scottish
+          - scotland
         from_category_substrings:
           - scottish english
 

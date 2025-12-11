@@ -78,7 +78,7 @@ EXTRACT_WIKITEXT := $(RUN_PYTHON) tools/extract_wikitext.py
 .PHONY: bootstrap venv deps fmt lint test test-python test-rust test-js test-full \
 		clean scrub clean-fetched fetch-en \
         build-en build-rust-scanner build-trie build-metadata build-wikt-json-v2 \
-		quick-build-wikt-json-v2 update-hotspot-samples \
+		quick-build-wikt-json-v2 update-hotspot-samples export-codes-schema \
 		package report-en diagnose-scanner corpus-stats \
 		validate-all validate-enable validate-profanity validate-childish \
 		validate-scanner-parity validate-scanner-parity-full \
@@ -221,11 +221,14 @@ build-wikt-json: $(WIKT_JSON_SORTED)
 
 # Build Wiktionary JSONL using Python scanner v2 (schema-driven)
 # This is the new scanner that reads from schema/core/ and schema/bindings/
-build-wikt-json-v2: $(WIKT_DUMP) deps | $(WIKT_JSON_PARENT)
+# Also generates schema/codes.json for downstream UI consumption
+# Stats output goes to data/intermediate/en-wikt-v2-stats.json
+build-wikt-json-v2: $(WIKT_DUMP) deps export-codes-schema | $(WIKT_JSON_PARENT)
 	@echo "Extracting Wiktionary (using Python scanner v2)..."
 	$(PYTHON_SCANNER_V2) "$(WIKT_DUMP)" "$(WIKT_JSON_V2)" \
 		--schema-core schema/core \
-		--schema-bindings schema/bindings
+		--schema-bindings schema/bindings \
+		--stats "$(WIKT_JSON_PARENT)/en-wikt-v2-stats.json"
 
 # Quick v2 scanner build using hotspot words (for regression testing)
 # Combines all .xml files from tests/wikitext-samples into a single .bz2 dump
@@ -238,11 +241,14 @@ build-wikt-json-v2: $(WIKT_DUMP) deps | $(WIKT_JSON_PARENT)
 # Output files (not checked into git):
 #   - tests/hotspotwords.xml.bz2 - combined XML dump
 #   - tests/hotspotwords.jsonl - v2 scanner output
-quick-build-wikt-json-v2: $(HOTSPOT_XML) deps
+#   - tests/hotspotwords-stats.json - scanner statistics
+#   - schema/codes.json - codes schema for UI consumption
+quick-build-wikt-json-v2: $(HOTSPOT_XML) deps export-codes-schema
 	@echo "Running v2 scanner on hotspot words..."
 	$(PYTHON_SCANNER_V2) "$(HOTSPOT_XML)" "$(HOTSPOT_JSONL)" \
 		--schema-core schema/core \
-		--schema-bindings schema/bindings
+		--schema-bindings schema/bindings \
+		--stats "tests/hotspotwords-stats.json"
 	@echo "Output: $(HOTSPOT_JSONL)"
 	@wc -l $(HOTSPOT_JSONL)
 
@@ -300,6 +306,12 @@ build-trie: $(WORDLIST_TXT) tools/wordlist-viewer/node_modules | check-pnpm
 build-metadata: $(LEXEMES_ENRICHED)
 	@echo "Exporting metadata modules (gzipped)..."
 	$(EXPORT_METADATA) --input $(LEXEMES_ENRICHED) --modules all --gzip
+
+# Export codes schema to JSON for downstream UI tools
+# Generates schema/codes.json from schema/core/ files
+export-codes-schema:
+	@echo "Exporting codes schema..."
+	$(RUN_PYTHON) tools/export_codes_schema.py schema/codes.json
 
 # Export trie to plain text wordlist
 $(WORDLIST_TXT): $(UNIFIED_TRIE)

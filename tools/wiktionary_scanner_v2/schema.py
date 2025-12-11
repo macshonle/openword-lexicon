@@ -6,12 +6,53 @@ Loads and validates YAML schema files from schema/core/ and schema/bindings/.
 This module defines dataclasses for both:
 - Core schema (language-neutral definitions)
 - Bindings (language-specific mappings from Wiktionary to core codes)
+
+YAML files support anchors (&name) and aliases (*name) to reduce repetition.
+When aliases are used in lists, they create nested structures which are
+automatically flattened during loading.
 """
 
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import yaml
+
+
+# =============================================================================
+# YAML utilities
+# =============================================================================
+
+
+def flatten_list(items: list[Any]) -> list[str]:
+    """
+    Flatten a list that may contain nested lists from YAML anchor references.
+
+    YAML anchors create nested lists when referenced in a list context:
+        common: &common
+          - a
+          - b
+        all:
+          - *common
+          - c
+
+    Produces: {'common': ['a', 'b'], 'all': [['a', 'b'], 'c']}
+
+    This function flattens to: ['a', 'b', 'c']
+
+    Args:
+        items: A list that may contain strings or nested lists
+
+    Returns:
+        A flat list of strings
+    """
+    result: list[str] = []
+    for item in items:
+        if isinstance(item, list):
+            result.extend(flatten_list(item))
+        else:
+            result.append(str(item))
+    return result
 
 
 # =============================================================================
@@ -78,6 +119,15 @@ class MorphologyType:
 
 
 @dataclass
+class DomainType:
+    """A domain type definition from core/domain_types.yaml."""
+
+    code: str  # 5-letter code (e.g., "DMATH", "DMEDI")
+    name: str
+    description: str
+
+
+@dataclass
 class CoreSchema:
     """Complete core schema loaded from schema/core/."""
 
@@ -86,6 +136,7 @@ class CoreSchema:
     tag_sets: list[TagSet]
     phrase_types: list[PhraseType]
     morphology_types: list[MorphologyType]
+    domain_types: list[DomainType] = field(default_factory=list)
 
     def summary(self) -> str:
         """Return a human-readable summary of the loaded schema."""
@@ -95,7 +146,8 @@ class CoreSchema:
             f"  - {len(self.flags)} flags\n"
             f"  - {len(self.tag_sets)} tag sets ({total_tags} tags total)\n"
             f"  - {len(self.phrase_types)} phrase types\n"
-            f"  - {len(self.morphology_types)} morphology types"
+            f"  - {len(self.morphology_types)} morphology types\n"
+            f"  - {len(self.domain_types)} domain types"
         )
 
 
@@ -188,6 +240,16 @@ class SectionRoles:
 
 
 @dataclass
+class DomainTypeBinding:
+    """Domain type binding from en-wikt.domain_types.yaml."""
+
+    code: str  # 5-letter domain code (e.g., "DMATH", "DMEDI")
+    description: str = ""
+    from_labels: list[str] = field(default_factory=list)
+    from_category_substrings: list[str] = field(default_factory=list)
+
+
+@dataclass
 class Bindings:
     """Language-specific bindings loaded from schema/bindings/."""
 
@@ -197,6 +259,7 @@ class Bindings:
     phrase_type_bindings: list[PhraseTypeBinding] = field(default_factory=list)
     morphology: MorphologyBindings = field(default_factory=MorphologyBindings)
     section_roles: SectionRoles = field(default_factory=SectionRoles)
+    domain_type_bindings: list[DomainTypeBinding] = field(default_factory=list)
 
     def summary(self) -> str:
         """Return a human-readable summary of the loaded bindings."""
@@ -206,7 +269,8 @@ class Bindings:
             f"  - {len(self.flag_bindings)} flag bindings\n"
             f"  - {len(self.tag_set_bindings)} tag set bindings ({total_tags} tags)\n"
             f"  - {len(self.phrase_type_bindings)} phrase type bindings\n"
-            f"  - {len(self.morphology.templates)} morphology templates"
+            f"  - {len(self.morphology.templates)} morphology templates\n"
+            f"  - {len(self.domain_type_bindings)} domain type bindings"
         )
 
 
@@ -320,12 +384,28 @@ def load_core_schema(path: Path) -> CoreSchema:
         for mt in morph_data.get("morphology_types", [])
     ]
 
+    # Load domain_types.yaml (optional - new file)
+    domain_types: list[DomainType] = []
+    domain_file = path / "domain_types.yaml"
+    if domain_file.exists():
+        with open(domain_file) as f:
+            domain_data = yaml.safe_load(f)
+        domain_types = [
+            DomainType(
+                code=dt["code"],
+                name=dt["name"],
+                description=dt["description"].strip(),
+            )
+            for dt in domain_data.get("domain_types", [])
+        ]
+
     return CoreSchema(
         pos_classes=pos_classes,
         flags=flags,
         tag_sets=tag_sets,
         phrase_types=phrase_types,
         morphology_types=morphology_types,
+        domain_types=domain_types,
     )
 
 
@@ -356,10 +436,10 @@ def load_bindings(path: Path) -> Bindings:
             bindings.pos_bindings.append(
                 PosBinding(
                     code=code,
-                    header_variants=binding.get("header_variants", []),
-                    head_pos_values=binding.get("head_pos_values", []),
-                    en_templates=binding.get("en_templates", []),
-                    category_suffixes=binding.get("category_suffixes", []),
+                    header_variants=flatten_list(binding.get("header_variants", [])),
+                    head_pos_values=flatten_list(binding.get("head_pos_values", [])),
+                    en_templates=flatten_list(binding.get("en_templates", [])),
+                    category_suffixes=flatten_list(binding.get("category_suffixes", [])),
                 )
             )
 
@@ -374,9 +454,9 @@ def load_bindings(path: Path) -> Bindings:
                     code=code,
                     name=binding.get("name", ""),
                     description=binding.get("description", ""),
-                    templates=binding.get("templates", []),
-                    category_suffixes=binding.get("category_suffixes", []),
-                    pos_hints=binding.get("pos_hints", []),
+                    templates=flatten_list(binding.get("templates", [])),
+                    category_suffixes=flatten_list(binding.get("category_suffixes", [])),
+                    pos_hints=flatten_list(binding.get("pos_hints", [])),
                 )
             )
 
@@ -392,8 +472,8 @@ def load_bindings(path: Path) -> Bindings:
                     TagBinding(
                         code=tag["code"],
                         description=tag.get("description", ""),
-                        from_labels=tag.get("from_labels", []),
-                        from_category_substrings=tag.get("from_category_substrings", []),
+                        from_labels=flatten_list(tag.get("from_labels", [])),
+                        from_category_substrings=flatten_list(tag.get("from_category_substrings", [])),
                     )
                 )
             bindings.tag_set_bindings.append(
@@ -411,10 +491,10 @@ def load_bindings(path: Path) -> Bindings:
                     code=code,
                     name=binding.get("name", ""),
                     description=binding.get("description", ""),
-                    headers=binding.get("headers", []),
-                    head_pos_values=binding.get("head_pos_values", []),
-                    templates=binding.get("templates", []),
-                    category_suffixes=binding.get("category_suffixes", []),
+                    headers=flatten_list(binding.get("headers", [])),
+                    head_pos_values=flatten_list(binding.get("head_pos_values", [])),
+                    templates=flatten_list(binding.get("templates", [])),
+                    category_suffixes=flatten_list(binding.get("category_suffixes", [])),
                 )
             )
 
@@ -428,9 +508,9 @@ def load_bindings(path: Path) -> Bindings:
             templates=[
                 MorphologyTemplate(
                     name=t["name"],
-                    aliases=t.get("aliases", []),
+                    aliases=flatten_list(t.get("aliases", [])),
                     language_param=t.get("language_param", "en"),
-                    roles=t.get("roles", []),
+                    roles=flatten_list(t.get("roles", [])),
                     notes=t.get("notes", ""),
                 )
                 for t in morph_data.get("templates", [])
@@ -443,10 +523,25 @@ def load_bindings(path: Path) -> Bindings:
         with open(roles_file) as f:
             roles_data = yaml.safe_load(f)
         bindings.section_roles = SectionRoles(
-            ignore_headers=roles_data.get("ignore_headers", []),
-            label_qualifiers=roles_data.get("label_qualifiers", []),
+            ignore_headers=flatten_list(roles_data.get("ignore_headers", [])),
+            label_qualifiers=flatten_list(roles_data.get("label_qualifiers", [])),
             label_normalizations=roles_data.get("label_normalizations", {}),
             definition_markers=roles_data.get("definition_markers", {}),
         )
+
+    # Load domain type bindings (en-wikt.domain_types.yaml)
+    domain_file = path / "en-wikt.domain_types.yaml"
+    if domain_file.exists():
+        with open(domain_file) as f:
+            domain_data = yaml.safe_load(f)
+        for binding in domain_data.get("domain_type_bindings", []):
+            bindings.domain_type_bindings.append(
+                DomainTypeBinding(
+                    code=binding["code"],
+                    description=binding.get("description", ""),
+                    from_labels=flatten_list(binding.get("from_labels", [])),
+                    from_category_substrings=flatten_list(binding.get("from_category_substrings", [])),
+                )
+            )
 
     return bindings

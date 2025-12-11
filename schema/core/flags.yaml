@@ -26,9 +26,19 @@ flags:
       Sense is an inflected form of a lemma (plural, tense, degree, etc.),
       as opposed to a base lemma form.
     examples:
-      - cats  (plural of “cat”)
-      - ran   (past tense of “run”)
-      - better (comparative of “good”)
+      - cats  (plural of "cat")
+      - ran   (past tense of "run")
+      - better (comparative of "good")
+
+  - code: ALTH
+    name: Alternative Form
+    description: >
+      Sense is an alternative form, spelling, or variant of another word.
+      Similar to INFL but for spelling variants rather than grammatical forms.
+    examples:
+      - colour (alternative spelling of "color")
+      - grey (alternative spelling of "gray")
+      - donut (alternative form of "doughnut")
 
 # Future examples (not yet wired in bindings; included for conceptual completeness):
 
