@@ -125,8 +125,8 @@ help:
 # =============================================================================
 
 deps:
-	$(UV) sync
-	@echo "Dependencies installed"
+	$(UV) sync --dev
+	@echo "Dependencies installed (including dev)"
 
 # =============================================================================
 # Testing
