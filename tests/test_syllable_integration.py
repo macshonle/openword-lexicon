@@ -19,10 +19,10 @@ import pytest
 from openword.cli.owlex import OwlexFilter
 
 # Add legacy directory to path for v1 scanner imports
-legacy_path = Path(__file__).parent.parent / "legacy"
+legacy_path = Path(__file__).parent.parent / "legacy" / "scanner_v1"
 sys.path.insert(0, str(legacy_path))
 
-from scanner_v1.scanner import (
+from wiktionary_scanner_python.scanner import (
     count_syllables_from_ipa,
     extract_syllable_count_from_hyphenation,
     extract_syllable_count_from_rhymes,

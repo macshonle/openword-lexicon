@@ -9,8 +9,8 @@ matching language codes were incorrectly filtered out.
 import sys
 from pathlib import Path
 
-# Add tools directory to path for importing wiktionary_scanner_python
-sys.path.insert(0, str(Path(__file__).parent.parent / "tools"))
+# Add legacy scanner_v1 directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent / "legacy" / "scanner_v1"))
 
 from wiktionary_scanner_python.scanner import (
     extract_syllable_count_from_hyphenation,

@@ -8,9 +8,9 @@ import sys
 from pathlib import Path
 import pytest
 
-# Add tools directory to path
-tools_path = Path(__file__).parent.parent / "tools"
-sys.path.insert(0, str(tools_path))
+# Add legacy scanner_v1 directory to path
+legacy_path = Path(__file__).parent.parent / "legacy" / "scanner_v1"
+sys.path.insert(0, str(legacy_path))
 
 from wiktionary_scanner_python.wikitext_parser import (
     WikitextParser,
