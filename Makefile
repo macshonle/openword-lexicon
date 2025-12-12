@@ -19,8 +19,9 @@
 SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 
-# Language configuration (can be overridden: make LANG=de)
-LANG ?= en
+# Language configuration (can be overridden: make OW_LANG=de)
+# Note: We use OW_LANG instead of LANG to avoid conflict with shell locale
+OW_LANG ?= en
 
 # Package manager
 UV := uv
@@ -42,7 +43,7 @@ RUST_SCANNER := crates/wiktionary-scanner/target/release/wiktionary-scanner
 # =============================================================================
 
 DATA_DIR := data
-RAW_DIR := $(DATA_DIR)/raw/$(LANG)
+RAW_DIR := $(DATA_DIR)/raw/$(OW_LANG)
 INTERMEDIATE_DIR := $(DATA_DIR)/intermediate
 BUILD_DIR := $(DATA_DIR)/build
 REPORTS_DIR := reports
@@ -64,25 +65,25 @@ STAMPS_DIR := .stamps
 $(STAMPS_DIR):
 	mkdir -p $@
 
-FETCH_STAMP := $(STAMPS_DIR)/fetch-$(LANG).done
-SCAN_STAMP := $(STAMPS_DIR)/scan-$(LANG).done
-ENRICH_STAMP := $(STAMPS_DIR)/enrich-$(LANG).done
+FETCH_STAMP := $(STAMPS_DIR)/fetch-$(OW_LANG).done
+SCAN_STAMP := $(STAMPS_DIR)/scan-$(OW_LANG).done
+ENRICH_STAMP := $(STAMPS_DIR)/enrich-$(OW_LANG).done
 
 # =============================================================================
 # Intermediate Files (generated)
 # =============================================================================
 
-SCANNER_OUTPUT := $(INTERMEDIATE_DIR)/$(LANG)-wikt-v2.jsonl
-SCANNER_STATS := $(INTERMEDIATE_DIR)/$(LANG)-wikt-v2-stats.json
-ENRICHED_OUTPUT := $(INTERMEDIATE_DIR)/$(LANG)-wikt-v2-enriched.jsonl
+SCANNER_OUTPUT := $(INTERMEDIATE_DIR)/$(OW_LANG)-wikt-v2.jsonl
+SCANNER_STATS := $(INTERMEDIATE_DIR)/$(OW_LANG)-wikt-v2-stats.json
+ENRICHED_OUTPUT := $(INTERMEDIATE_DIR)/$(OW_LANG)-wikt-v2-enriched.jsonl
 
 # =============================================================================
 # Build Outputs
 # =============================================================================
 
-UNIFIED_TRIE := $(BUILD_DIR)/$(LANG).trie
-GAME_TRIE := $(BUILD_DIR)/$(LANG)-game.trie
-METADATA := $(BUILD_DIR)/$(LANG).meta.json
+UNIFIED_TRIE := $(BUILD_DIR)/$(OW_LANG).trie
+GAME_TRIE := $(BUILD_DIR)/$(OW_LANG)-game.trie
+METADATA := $(BUILD_DIR)/$(OW_LANG).meta.json
 
 # =============================================================================
 # Phony Targets
@@ -144,14 +145,14 @@ test-quick: deps
 # The stamp file tracks completion - touch it to skip re-fetching.
 
 $(FETCH_STAMP): schema/sources/index.yaml | $(RAW_DIR) $(STAMPS_DIR)
-	$(OWFETCH) --language $(LANG)
+	$(OWFETCH)
 	touch $@
 
 fetch: $(FETCH_STAMP)
 
 # Force re-fetch (ignores stamp)
 fetch-force: deps | $(RAW_DIR)
-	$(OWFETCH) --language $(LANG) --force
+	$(OWFETCH) --force
 	touch $(FETCH_STAMP)
 
 # =============================================================================
@@ -162,7 +163,7 @@ fetch-force: deps | $(RAW_DIR)
 
 $(SCANNER_OUTPUT): $(FETCH_STAMP) schema/core schema/bindings | $(INTERMEDIATE_DIR)
 	@echo "Running Wiktionary scanner..."
-	$(OWSCAN) "$(RAW_DIR)/$(LANG)wiktionary-latest-pages-articles.xml.bz2" \
+	$(OWSCAN) "$(RAW_DIR)/$(OW_LANG)wiktionary-latest-pages-articles.xml.bz2" \
 		"$(SCANNER_OUTPUT)" \
 		--schema-core schema/core \
 		--schema-bindings schema/bindings \
@@ -182,7 +183,7 @@ $(ENRICHED_OUTPUT): $(SCANNER_OUTPUT) $(FETCH_STAMP) schema/enrichment/pipeline.
 	$(PYTHON) -m openword.enrich.pipeline \
 		--input "$(SCANNER_OUTPUT)" \
 		--output "$(ENRICHED_OUTPUT)" \
-		--language $(LANG)
+		--language $(OW_LANG)
 
 enrich: $(ENRICHED_OUTPUT)
 
