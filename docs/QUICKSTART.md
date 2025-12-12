@@ -25,10 +25,10 @@ print(list(trie.keys('cast'))[:5])  # ['cast', 'caste', 'casted', 'caster', ...]
 
 ### Check if a Word Exists (JavaScript)
 
-For browser use, see the [tools/wordlist-viewer/](../tools/wordlist-viewer/) directory which includes a binary trie loader.
+For browser use, see the [web/viewer/](../web/viewer/) directory which includes a binary trie loader.
 
 ```javascript
-// Using the binary trie loader (see tools/wordlist-viewer/app.js for full implementation)
+// Using the binary trie loader (see web/viewer/app.js for full implementation)
 import { BinaryTrie } from './app.js';
 
 const trie = await BinaryTrie.load('en.trie.bin');
@@ -112,7 +112,7 @@ Create a JSON specification and run the filter:
 Save as `my-filter.json` and run:
 
 ```bash
-uv run python -m openword.owlex my-filter.json > words.txt
+uv run owlex my-filter.json > words.txt
 ```
 
 ## Option 4: Interactive Spec Editor
@@ -179,6 +179,6 @@ permissive_words = [
 
 ## Next Steps
 
-- [SCHEMA.md](SCHEMA.md) — Full field reference
 - [FILTERING.md](FILTERING.md) — All filter options
-- [SOURCES.md](SOURCES.md) — Licensing details
+- [schema/core/](../schema/core/) — Schema definitions (POS, flags, tags)
+- [schema/sources/](../schema/sources/) — Data source definitions

@@ -367,7 +367,7 @@ Phrasal verbs are detected by checking if the headword matches the pattern:
 | Aspect | Complexity | Portability |
 |--------|------------|-------------|
 | Basic POS categories | Low | ✅ **Ported** - string concatenation |
-| Phrasal verb detection | Medium | ✅ **Ported** - see `tools/wiktionary_scanner_python/categories.py` |
+| Phrasal verb detection | Medium | ✅ **Ported** - see `legacy/scanner_v1/wiktionary_scanner_python/categories.py` |
 | Multiword term detection | Low | ✅ **Ported** - check for spaces |
 | Label → category mapping | Low | ✅ **Ported** - 30 labels with pos_categories |
 | Adj/Adv comparability | Low | ✅ **Ported** - uncomparable/componly/suponly |
