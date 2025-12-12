@@ -1,0 +1,28 @@
+# Profanity List - censor-text
+# Used for validation to ensure lexicon properly labels offensive terms
+
+id: profanity_censor_text
+name: censor-text profanity list
+title: Profanity word list for content filtering
+
+# Attribution
+attribution:
+  license: Open Source
+
+# Fetching configuration
+fetch:
+  method: http
+  url: https://raw.githubusercontent.com/censor-text/profanity-list/main/list/en.txt
+  output: censor-text-profanity-list.txt
+  format: text/plain
+
+# Data characteristics
+data:
+  format: One word per line
+  description: |
+    Profanity word list for content filtering.
+    Repository was archived November 2024.
+  warning: |
+    Contains explicit/offensive content.
+    Used ONLY for validation to ensure lexicon properly labels vulgar/offensive terms.
+    These lists are NOT part of the main lexicon build.

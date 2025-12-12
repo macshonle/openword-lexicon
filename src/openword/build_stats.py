@@ -99,9 +99,9 @@ def load_code_lookups() -> Dict[str, Any]:
         lookups["domain"] = {}
         lookups["region"] = {}
 
-    # Frequency tier definitions from frequency_tiers.py
+    # Frequency tier definitions from enrich/frequency.py
     # Import here to avoid circular imports
-    from openword.frequency_tiers import TIER_DEFINITIONS
+    from openword.enrich.frequency import TIER_DEFINITIONS
 
     lookups["frequency"] = {}
     for i, (min_rank, code, description) in enumerate(TIER_DEFINITIONS):

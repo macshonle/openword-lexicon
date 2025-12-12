@@ -29,6 +29,28 @@ sources:
     notes: Concreteness ratings from crowdsourcing (5-point scale 1=abstract, 5=concrete). Covers ~40k English lemmas.
     count_header_lines: 1
 
+  kuperman_aoa:
+    name: Kuperman Age of Acquisition
+    title: Age-of-acquisition ratings for 30,000 English words
+    method: http
+    url: https://osf.io/download/vb9je/
+    output: kuperman_aoa.xlsx
+    license: CC BY 4.0
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    metadata:
+      authors: Victor Kuperman, Hans Stadthagen-Gonzalez, Marc Brysbaert
+      year: 2012
+      journal: Behavior Research Methods
+      volume: 44
+      pages: 978-990
+      doi: "10.3758/s13428-012-0210-4"
+    format: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+    notes: Age of acquisition ratings collected via Amazon Mechanical Turk. Rating.Mean is estimated acquisition age in years (2-25 scale). Covers ~31k English lemmas with POS tags.
+    post_process:
+      type: xlsx_to_tsv
+      columns: [Word, Rating.Mean, Rating.SD, Dunno, PoS]
+      output: kuperman_aoa.txt
+
   enable:
     name: ENABLE
     title: Enhanced North American Benchmark LExicon

@@ -1,0 +1,27 @@
+# Profanity List - dsojevic
+# Used for validation to ensure lexicon properly labels offensive terms
+
+id: profanity_dsojevic
+name: dsojevic profanity list
+title: Profanity list with severity ratings
+
+# Attribution
+attribution:
+  license: Open Source
+
+# Fetching configuration
+fetch:
+  method: http
+  url: https://raw.githubusercontent.com/dsojevic/profanity-list/main/en.json
+  output: dsojevic-profanity-list.json
+  format: application/json
+
+# Data characteristics
+data:
+  format: JSON with severity metadata
+  description: |
+    Profanity word list with severity ratings.
+    JSON format allows for categorization and filtering by severity level.
+  warning: |
+    Contains explicit/offensive content.
+    JSON format with severity metadata.

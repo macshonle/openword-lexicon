@@ -46,14 +46,20 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# Register labels that mark profanity/offensive content
+# Register labels that mark profanity/offensive content (v1 format)
 PROFANITY_REGISTERS = {'vulgar', 'offensive', 'derogatory'}
+
+# Register codes that mark profanity/offensive content (v2 format)
+PROFANITY_CODES = {'RVLG', 'ROFF', 'RDEG'}
 
 # Core sources that are curated for word games (pre-vetted)
 GAME_CURATED_SOURCES = {'enable', 'eowl'}
 
-# Temporal labels marking outdated words
+# Temporal labels marking outdated words (v1 format)
 OUTDATED_TEMPORAL = {'archaic', 'obsolete', 'dated', 'historical'}
+
+# Temporal codes marking outdated words (v2 format)
+OUTDATED_CODES = {'TARC', 'TOBS', 'TDAT', 'THIS'}
 
 
 # =============================================================================
@@ -153,12 +159,20 @@ def sense_is_profane(sense: dict) -> bool:
     """
     Check if a sense is marked as profane/offensive.
 
+    Supports both v1 format (register_tags array) and v2 format (codes set).
+
     Args:
-        sense: Sense dict from senses file (flat tag arrays)
+        sense: Sense dict from senses file
 
     Returns:
-        True if sense has vulgar/offensive/derogatory register tags
+        True if sense has vulgar/offensive/derogatory tags
     """
+    # V2 format: check codes set for RVLG, ROFF, RDEG
+    codes = set(sense.get('codes', []))
+    if codes:
+        return bool(codes & PROFANITY_CODES)
+
+    # V1 format fallback: check register_tags array
     register_tags = set(sense.get('register_tags', []))
     return bool(register_tags & PROFANITY_REGISTERS)
 
@@ -167,12 +181,20 @@ def sense_is_modern(sense: dict) -> bool:
     """
     Check if a sense is modern (not archaic/obsolete).
 
+    Supports both v1 format (temporal_tags array) and v2 format (codes set).
+
     Args:
         sense: Sense dict from senses file
 
     Returns:
         True if sense is not marked as archaic/obsolete/dated/historical
     """
+    # V2 format: check codes set for TARC, TOBS, TDAT, THIS
+    codes = set(sense.get('codes', []))
+    if codes:
+        return not bool(codes & OUTDATED_CODES)
+
+    # V1 format fallback: check temporal_tags array
     temporal_tags = set(sense.get('temporal_tags', []))
     return not bool(temporal_tags & OUTDATED_TEMPORAL)
 
@@ -197,9 +219,13 @@ def sense_matches_region(sense: dict, preferred_regions: Optional[Set[str]] = No
 
     SAFE DEFAULT: Missing region tags = universal (include).
 
+    Supports both v1 format (region_tags array) and v2 format (ENXX codes).
+
     Args:
         sense: Sense dict from senses file
-        preferred_regions: Set of region codes (e.g., {'US', 'UK'})
+        preferred_regions: Set of region codes. Accepts both formats:
+            - V1 style: {'US', 'UK', 'AU'}
+            - V2 style: {'ENUS', 'ENGB', 'ENAU'}
 
     Returns:
         True if sense matches region or has no region tags
@@ -207,6 +233,15 @@ def sense_matches_region(sense: dict, preferred_regions: Optional[Set[str]] = No
     if not preferred_regions:
         return True
 
+    # V2 format: extract region codes (ENXX pattern) from codes set
+    codes = set(sense.get('codes', []))
+    if codes:
+        region_codes = {c for c in codes if c.startswith('EN') and len(c) == 4}
+        if not region_codes:
+            return True  # No region codes = universal
+        return bool(region_codes & preferred_regions)
+
+    # V1 format fallback: check region_tags array
     region_tags = set(sense.get('region_tags', []))
 
     # No region tags = universal → include
@@ -217,7 +252,17 @@ def sense_matches_region(sense: dict, preferred_regions: Optional[Set[str]] = No
 
 
 def sense_is_inflected(sense: dict) -> bool:
-    """Check if sense is marked as inflected form."""
+    """
+    Check if sense is marked as inflected form.
+
+    Supports both v1 format (is_inflected bool) and v2 format (INFL in codes).
+    """
+    # V2 format: check codes set for INFL
+    codes = set(sense.get('codes', []))
+    if codes:
+        return 'INFL' in codes
+
+    # V1 format fallback
     return sense.get('is_inflected', False)
 
 
@@ -226,7 +271,7 @@ def sense_is_base_form(sense: dict) -> bool:
     Check if sense is a base form (not an inflection).
 
     Base forms are:
-    - Not marked as inflected
+    - Not marked as inflected (no INFL code in v2, is_inflected=False in v1)
     - Or don't have a lemma pointing to a different word
 
     Args:
@@ -235,8 +280,8 @@ def sense_is_base_form(sense: dict) -> bool:
     Returns:
         True if this sense represents a base/root form
     """
-    # If explicitly marked as inflected, it's not a base form
-    if sense.get('is_inflected', False):
+    # Check inflection status (handles both v1 and v2)
+    if sense_is_inflected(sense):
         return False
 
     # If it has a lemma pointing to another word, it's an inflection
@@ -276,13 +321,30 @@ def sense_get_lemma(sense: dict) -> str | None:
 
 
 def sense_is_abbreviation(sense: dict) -> bool:
-    """Check if sense is marked as abbreviation."""
+    """
+    Check if sense is marked as abbreviation.
+
+    Supports both v1 format (is_abbreviation bool) and v2 format (ABRV in codes).
+    """
+    # V2 format: check codes set for ABRV
+    codes = set(sense.get('codes', []))
+    if codes:
+        return 'ABRV' in codes
+
+    # V1 format fallback
     return sense.get('is_abbreviation', False)
 
 
 def sense_is_proper_noun(sense: dict) -> bool:
-    """Check if sense is a proper noun (names, places, etc.)."""
-    return sense.get('pos') == 'proper'
+    """
+    Check if sense is a proper noun (names, places, etc.).
+
+    Supports both v1 format (pos='proper') and v2 format (pos='NAM').
+    """
+    pos = sense.get('pos', '')
+    # V2 format uses NAM for proper nouns
+    # V1 format uses 'proper'
+    return pos in ('NAM', 'proper')
 
 
 # =============================================================================

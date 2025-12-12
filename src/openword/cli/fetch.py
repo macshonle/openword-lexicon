@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-fetch_sources.py — Unified source fetcher for OpenWord Lexicon
+owfetch — Unified source fetcher for OpenWord Lexicon
 
 Fetches data sources defined in sources.yaml with progress feedback,
 error handling, and SOURCE.json metadata generation.
 
 Usage:
-    uv run scripts/fetch/fetch_sources.py              # Fetch default sources
-    uv run scripts/fetch/fetch_sources.py wordnet      # Fetch specific source
-    uv run scripts/fetch/fetch_sources.py --list       # List available sources
-    uv run scripts/fetch/fetch_sources.py --force      # Re-download even if exists
-    uv run scripts/fetch/fetch_sources.py --group profanity  # Fetch a group
-    uv run scripts/fetch/fetch_sources.py --all        # Fetch all sources
+    owfetch                     # Fetch default sources
+    owfetch wordnet             # Fetch specific source
+    owfetch --list              # List available sources
+    owfetch --force             # Re-download even if exists
+    owfetch --group profanity   # Fetch a group
+    owfetch --all               # Fetch all sources
 """
 
 from __future__ import annotations
@@ -40,9 +40,12 @@ import yaml
 # Constants
 # ==============================================================================
 
-SCRIPT_DIR = Path(__file__).parent
-SOURCES_YAML = SCRIPT_DIR / "sources.yaml"
-PROJECT_ROOT = SCRIPT_DIR.parent.parent
+# Find project root (from src/openword/cli/)
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
+
+# Sources configuration (schema-driven)
+SOURCES_DIR = PROJECT_ROOT / "schema" / "sources"
+SOURCES_INDEX = SOURCES_DIR / "index.yaml"
 
 # CI mode detection
 CI_MODE = os.environ.get("CI") == "true" or os.environ.get("OPENWORD_CI") == "1"
@@ -647,10 +650,108 @@ def show_interactive_warning(sources: list[tuple[str, dict]]) -> bool:
 # ==============================================================================
 
 
+def load_source_schema(source_id: str, schema_file: str | None = None) -> dict[str, Any] | None:
+    """Load a single source schema file."""
+    if schema_file:
+        schema_path = SOURCES_DIR / schema_file
+    else:
+        schema_path = SOURCES_DIR / f"{source_id}.yaml"
+
+    if schema_path.exists():
+        with open(schema_path) as f:
+            return yaml.safe_load(f)
+    return None
+
+
 def load_sources() -> dict[str, Any]:
-    """Load sources.yaml configuration."""
-    with open(SOURCES_YAML) as f:
-        return yaml.safe_load(f)
+    """
+    Load sources configuration from schema/sources/.
+
+    Merges index.yaml with individual source schema files to produce
+    a unified configuration compatible with the fetch logic.
+    """
+    # Load the index
+    with open(SOURCES_INDEX) as f:
+        index = yaml.safe_load(f)
+
+    settings = index.get("settings", {})
+    groups = index.get("groups", {})
+    source_refs = index.get("sources", {})
+
+    # Build the merged sources dict
+    sources: dict[str, Any] = {}
+
+    for source_id, source_ref in source_refs.items():
+        # Load the full schema for this source
+        schema_file = source_ref.get("schema") if isinstance(source_ref, dict) else None
+        source_schema = load_source_schema(source_id, schema_file)
+
+        if source_schema is None:
+            print(f"{YELLOW('Warning')}: No schema found for source: {source_id}")
+            continue
+
+        # Merge: schema provides base, index entry provides overrides
+        merged = {}
+
+        # Copy base info from schema
+        merged["name"] = source_schema.get("name", source_id)
+        merged["title"] = source_schema.get("title", "")
+
+        # Copy fetch config
+        fetch = source_schema.get("fetch", {})
+        merged["method"] = fetch.get("method", "http")
+        merged["url"] = fetch.get("url")
+        merged["repo"] = fetch.get("repo")
+        merged["output"] = fetch.get("output")
+        merged["format"] = fetch.get("format")
+        merged["tag"] = fetch.get("tag")
+
+        # Post-processing
+        if "post_process" in fetch:
+            merged["post_process"] = fetch["post_process"]
+
+        # Attribution/license from schema
+        attribution = source_schema.get("attribution", {})
+        merged["license"] = attribution.get("license")
+        merged["license_url"] = attribution.get("license_url")
+        merged["license_text"] = attribution.get("license_text")
+        merged["attribution"] = attribution.get("attribution_text")
+
+        # Metadata
+        if "metadata" in source_schema:
+            merged["metadata"] = source_schema["metadata"]
+
+        # Data characteristics
+        data = source_schema.get("data", {})
+        if "notes" in source_schema.get("data", {}):
+            merged["notes"] = data.get("description", "")
+
+        # Apply overrides from index entry
+        if isinstance(source_ref, dict):
+            if source_ref.get("large_file"):
+                merged["large_file"] = True
+            if source_ref.get("max_age_days"):
+                merged["max_age_days"] = source_ref["max_age_days"]
+            if source_ref.get("resume"):
+                merged["resume"] = True
+            if source_ref.get("interactive"):
+                merged["interactive"] = True
+            if source_ref.get("skip_in_default"):
+                merged["skip_in_default"] = True
+            if source_ref.get("group"):
+                merged["group"] = source_ref["group"]
+            if source_ref.get("output_dir"):
+                merged["output_dir"] = source_ref["output_dir"]
+            if source_ref.get("warning"):
+                merged["warning"] = source_ref["warning"]
+
+        sources[source_id] = merged
+
+    return {
+        "settings": settings,
+        "groups": groups,
+        "sources": sources,
+    }
 
 
 def list_sources(config: dict[str, Any]) -> None:

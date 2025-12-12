@@ -1,5 +1,5 @@
 """
-v2 Wiktionary scanner - Configuration-Driven Architecture (CDA).
+Wiktionary scanner v2 - Configuration-Driven Architecture (CDA).
 
 This scanner uses declarative YAML schema files to drive extraction,
 making the mapping from Wiktionary signals to output codes explicit
@@ -11,14 +11,13 @@ Architecture:
     3. Rule Engine Layer (rules.py) - applies bindings to produce entries
 
 Usage:
-    python -m wiktionary_scanner_v2.scanner INPUT OUTPUT [options]
+    owscan INPUT OUTPUT [options]
 
 Example:
-    python -m wiktionary_scanner_v2.scanner \
-        data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
-        data/intermediate/en-wikt-v2.jsonl \
-        --schema-core schema/core \
-        --schema-bindings schema/bindings
+    owscan data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \\
+           data/intermediate/en-wikt-v2.jsonl \\
+           --schema-core schema/core \\
+           --schema-bindings schema/bindings
 """
 
 import argparse

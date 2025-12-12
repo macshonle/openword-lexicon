@@ -1,0 +1,47 @@
+# Frequency tier enrichment schema
+# Based on OpenSubtitles corpus word frequency rankings
+
+name: frequency
+description: |
+  Word frequency tier assignment based on OpenSubtitles corpus rankings.
+  Words are bucketed into tiers A-Z based on their frequency rank.
+
+  Tier boundaries:
+    A: top 100       (rank 1-100)
+    B: top 200       (rank 101-200)
+    C: top 500       (rank 201-500)
+    D: top 1000      (rank 501-1000)
+    E: top 2000      (rank 1001-2000)
+    F: top 3000      (rank 2001-3000)
+    G: top 4000      (rank 3001-4000)
+    H: top 5000      (rank 4001-5000)
+    I: top 6000      (rank 5001-6000)
+    J: top 7000      (rank 6001-7000)
+    K: top 8000      (rank 7001-8000)
+    L: top 10000     (rank 8001-10000)
+    M: top 12000     (rank 10001-12000)
+    N: top 15000     (rank 12001-15000)
+    O: top 18000     (rank 15001-18000)
+    P: top 20000     (rank 18001-20000)
+    Q: top 25000     (rank 20001-25000)
+    R: top 30000     (rank 25001-30000)
+    S: top 35000     (rank 30001-35000)
+    T: top 40000     (rank 35001-40000)
+    U: top 45000     (rank 40001-45000)
+    V: top 50000     (rank 45001-50000)
+    W-Y: reserved for future expansion
+    Z: unranked (not in frequency list)
+
+# Source reference - full definition in schema/sources/opensubtitles.yaml
+source_ref: opensubtitles
+
+fields:
+  frequency_tier:
+    type: enum
+    values: [A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z]
+    default: Z
+    omit_default: true
+    description: |
+      Frequency tier based on rank in OpenSubtitles corpus.
+      A = most frequent (top 100), Z = unranked or very rare.
+      Default Z indicates word was not found in the frequency list.

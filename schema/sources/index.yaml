@@ -1,0 +1,92 @@
+# Source Index
+# Master list of all data sources with their configurations
+#
+# This file serves as:
+# 1. Index of available source schemas
+# 2. Configuration for fetch_sources.py
+# 3. Default fetch settings
+
+version: "1.0"
+
+# Default settings for fetching
+settings:
+  output_dir: data/raw/{lang}
+  default_language: en
+
+# Source groups for selective fetching
+groups:
+  # Core sources needed for lexicon build
+  core:
+    - wiktionary
+    - frequency
+    - brysbaert
+    - kuperman_aoa
+    - enable
+    - eowl
+    - wordnet
+
+  # Enrichment-only sources
+  enrichment:
+    - frequency
+    - brysbaert
+    - kuperman_aoa
+
+  # Validation sources (not fetched by default)
+  validation:
+    - profanity_censor_text
+    - profanity_dsojevic
+
+# Source definitions
+# Each source has its own schema file in this directory
+# Listed here with fetch-specific overrides if needed
+sources:
+  # === Core Lexicon Sources ===
+
+  wiktionary:
+    schema: wiktionary.yaml
+    # Large file handling
+    large_file: true
+    max_age_days: 30
+    resume: true
+
+  frequency:
+    schema: opensubtitles.yaml
+
+  brysbaert:
+    schema: brysbaert.yaml
+
+  kuperman_aoa:
+    schema: kuperman_aoa.yaml
+
+  enable:
+    schema: enable.yaml
+
+  eowl:
+    schema: eowl.yaml
+
+  wordnet:
+    schema: wordnet.yaml
+
+  # === Validation Sources ===
+  # These require interactive confirmation and are not fetched by default
+
+  profanity_censor_text:
+    schema: validation/profanity_censor_text.yaml
+    output_dir: data/raw/validation/profanity
+    group: profanity
+    interactive: true
+    skip_in_default: true
+    warning: |
+      Contains explicit/offensive content.
+      Used ONLY for validation to ensure lexicon properly labels vulgar/offensive terms.
+      These lists are NOT part of the main lexicon build.
+
+  profanity_dsojevic:
+    schema: validation/profanity_dsojevic.yaml
+    output_dir: data/raw/validation/profanity
+    group: profanity
+    interactive: true
+    skip_in_default: true
+    warning: |
+      Contains explicit/offensive content.
+      JSON format with severity metadata.

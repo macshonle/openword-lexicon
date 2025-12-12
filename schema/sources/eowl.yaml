@@ -1,0 +1,35 @@
+# English Open Word List (EOWL)
+
+id: eowl
+name: EOWL
+title: English Open Word List
+
+# Attribution
+attribution:
+  license: UKACD License
+  license_text: |
+    The UK Advanced Cryptics Dictionary (UKACD) is J Ross Beresford 1993-1999.
+    Permission is granted to use this list for any purpose provided this notice
+    is retained. No warranty is given.
+  license_url: https://github.com/kloge/The-English-Open-Word-List/blob/master/README.md
+
+# Metadata
+metadata:
+  author: Ken Loge (derived from UK Advanced Cryptics Dictionary by J. Ross Beresford)
+
+# Fetching configuration
+fetch:
+  method: git
+  repo: https://github.com/kloge/The-English-Open-Word-List.git
+  output: eowl.txt
+  format: text/plain
+  post_process:
+    type: concatenate
+    pattern: "EOWL LF Delimited Format/* Words.txt"
+
+# Data characteristics
+data:
+  format: One word per line
+  description: |
+    Words up to 10 letters, no proper nouns, no hyphens, diacritics removed.
+    Derived from UK Advanced Cryptics Dictionary.

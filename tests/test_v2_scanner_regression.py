@@ -459,7 +459,7 @@ class TestCategoryBasedDetection:
 
     def test_category_extraction(self):
         """Test that categories are extracted from wikitext."""
-        from tools.wiktionary_scanner_v2.evidence import extract_categories
+        from openword.scanner.v2.evidence import extract_categories
 
         text = """
 ==English==
@@ -479,7 +479,7 @@ class TestCategoryBasedDetection:
     def test_category_suffix_to_flag_mapping(self):
         """Test that config has category_suffix_to_flag populated."""
         from pathlib import Path
-        from tools.wiktionary_scanner_v2.cdaload import load_binding_config
+        from openword.scanner.v2.cdaload import load_binding_config
 
         config = load_binding_config(
             Path("schema/core"),
@@ -505,9 +505,9 @@ class TestCategoryBasedDetection:
     def test_compute_flags_from_categories(self):
         """Test that compute_flags uses categories for flag detection."""
         from pathlib import Path
-        from tools.wiktionary_scanner_v2.cdaload import load_binding_config
-        from tools.wiktionary_scanner_v2.evidence import Evidence
-        from tools.wiktionary_scanner_v2.rules import compute_flags
+        from openword.scanner.v2.cdaload import load_binding_config
+        from openword.scanner.v2.evidence import Evidence
+        from openword.scanner.v2.rules import compute_flags
 
         config = load_binding_config(
             Path("schema/core"),
@@ -550,9 +550,9 @@ class TestCategoryBasedDetection:
     def test_multiple_category_flags(self):
         """Test that multiple category-based flags can be detected."""
         from pathlib import Path
-        from tools.wiktionary_scanner_v2.cdaload import load_binding_config
-        from tools.wiktionary_scanner_v2.evidence import Evidence
-        from tools.wiktionary_scanner_v2.rules import compute_flags
+        from openword.scanner.v2.cdaload import load_binding_config
+        from openword.scanner.v2.evidence import Evidence
+        from openword.scanner.v2.rules import compute_flags
 
         config = load_binding_config(
             Path("schema/core"),

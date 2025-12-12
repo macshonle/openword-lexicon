@@ -1,0 +1,105 @@
+# Enrichment Pipeline Configuration
+# Defines the order and settings for applying enrichments to lexicon entries
+
+version: "1.0"
+
+# Global settings for the enrichment pipeline
+settings:
+  # Default language for data sources
+  default_language: en
+
+  # Where enrichment data files are located (relative to project root)
+  data_dir: data/raw/{lang}
+
+  # Output field ordering: these fields appear first (in order), then
+  # remaining fields are sorted alphabetically
+  priority_fields:
+    - id
+    - pos
+    - wc
+    - nsyll
+
+  # Global policy for handling defaults
+  defaults_policy:
+    # Whether to omit fields that match their default value
+    # This reduces output size but requires consumers to know defaults
+    omit_defaults: true
+
+    # Whether to include a schema reference in output metadata
+    include_schema_ref: false
+
+# Enrichment stages in execution order
+# Each stage corresponds to a schema file in this directory
+stages:
+  - name: frequency
+    schema: frequency.yaml
+    enabled: true
+    description: Assign frequency tiers based on corpus rankings
+    data_file: "{lang}_50k.txt"
+
+  - name: concreteness
+    schema: concreteness.yaml
+    enabled: true
+    description: Add Brysbaert concreteness ratings
+    data_file: brysbaert_concreteness.txt
+    options:
+      # Override existing concreteness values from scanner
+      prefer_brysbaert: true
+
+  - name: aoa
+    schema: aoa.yaml
+    enabled: true
+    description: Add Kuperman Age of Acquisition ratings
+    data_file: kuperman_aoa.txt
+    options:
+      # Minimum proportion of raters who knew the word
+      min_known_proportion: 0.5
+
+# Source attribution tracking
+# License information is now loaded from schema/sources/*.yaml
+# This section maps enrichment stages to their source schemas
+source_schemas:
+  frequency: opensubtitles      # schema/sources/opensubtitles.yaml
+  concreteness: brysbaert       # schema/sources/brysbaert.yaml
+  aoa: kuperman_aoa             # schema/sources/kuperman_aoa.yaml
+
+# Field summary (for documentation and validation)
+# Lists all fields added by the enrichment pipeline
+output_fields:
+  # From frequency stage
+  - name: frequency_tier
+    source: frequency
+    type: enum
+    default: Z
+
+  # From concreteness stage
+  - name: concreteness
+    source: concreteness
+    type: enum
+    default: null
+
+  - name: concreteness_rating
+    source: concreteness
+    type: number
+    default: null
+
+  - name: concreteness_sd
+    source: concreteness
+    type: number
+    default: null
+
+  # From aoa stage
+  - name: aoa_rating
+    source: aoa
+    type: number
+    default: null
+
+  - name: aoa_sd
+    source: aoa
+    type: number
+    default: null
+
+  - name: aoa_grade
+    source: aoa
+    type: enum
+    default: null

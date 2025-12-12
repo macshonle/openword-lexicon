@@ -1,0 +1,71 @@
+# Concreteness enrichment schema
+# Based on Brysbaert et al. (2014) concreteness ratings
+
+name: concreteness
+description: |
+  Concreteness ratings from Brysbaert et al. (2014).
+
+  Concreteness indicates how tangible/perceptible a word's referent is:
+  - Concrete words refer to things you can experience through senses
+    (e.g., "apple", "chair", "thunder")
+  - Abstract words refer to concepts that cannot be directly perceived
+    (e.g., "freedom", "justice", "idea")
+
+  Use cases:
+  - Vocabulary difficulty estimation (concrete words are easier)
+  - Children's vocabulary filtering (prefer concrete words)
+  - Semantic categorization
+
+# Source reference - full definition in schema/sources/brysbaert.yaml
+source_ref: brysbaert
+
+fields:
+  concreteness:
+    type: enum
+    values: [concrete, mixed, abstract]
+    default: null
+    omit_default: true
+    description: |
+      Categorical concreteness label derived from rating.
+      - concrete: rating >= 4.0 (highly tangible)
+      - mixed: 2.5 <= rating < 4.0 (partially tangible)
+      - abstract: rating < 2.5 (intangible concepts)
+
+      Absent when no concreteness data is available.
+
+  concreteness_rating:
+    type: number
+    range: [1.0, 5.0]
+    precision: 2
+    default: null
+    omit_default: true
+    description: |
+      Mean concreteness rating on a 1-5 scale.
+      1 = most abstract, 5 = most concrete.
+
+      Absent when no concreteness data is available.
+
+  concreteness_sd:
+    type: number
+    range: [0.0, 3.0]
+    precision: 2
+    default: null
+    omit_default: true
+    description: |
+      Standard deviation of concreteness ratings.
+      Higher SD indicates less agreement among raters.
+      Useful for filtering to high-confidence ratings.
+
+      Absent when no concreteness data is available.
+
+# Derivation rules for categorical field
+derivation:
+  concreteness:
+    from: concreteness_rating
+    rules:
+      - condition: "rating >= 4.0"
+        value: concrete
+      - condition: "rating >= 2.5"
+        value: mixed
+      - condition: "rating < 2.5"
+        value: abstract

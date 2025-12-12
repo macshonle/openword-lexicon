@@ -238,8 +238,11 @@ __marimo__/
 node_modules/
 pnpm-lock.yaml
 .pnpm-store/
-tools/wordlist-viewer/data/
-tools/wordlist-viewer/dist/
+web/viewer/data/
+web/viewer/dist/
+
+# Build stamps (for Make dependency tracking)
+.stamps/
 .claude/settings.local.json
 /data/benchmark
 

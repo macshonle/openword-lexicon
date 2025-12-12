@@ -1,0 +1,42 @@
+# OpenSubtitles Frequency Data
+# Single source of truth for both fetching and enrichment attribution
+
+id: opensubtitles
+name: FrequencyWords
+title: OpenSubtitles 2018 English Word Frequency List
+
+# Attribution (used in enriched output)
+attribution:
+  license: CC-BY-SA-4.0
+  license_url: https://creativecommons.org/licenses/by-sa/4.0/
+  attribution_text: |
+    Word frequency data compiled from OpenSubtitles.org.
+    Licensed under CC BY-SA 4.0.
+
+# Metadata
+metadata:
+  author: Hermit Dave (compiled from OpenSubtitles.org data)
+  source_corpus: OpenSubtitles.org movie/TV subtitles
+
+# Fetching configuration (used by fetch_sources.py)
+fetch:
+  method: git
+  repo: https://github.com/hermitdave/FrequencyWords.git
+  output: "{lang}_50k.txt"
+  format: text/plain
+  post_process:
+    type: find_file
+    patterns:
+      - "content/2018/{lang}/{lang}_50k.txt"
+      - "content/2016/{lang}/{lang}_50k.txt"
+      - "{lang}_50k.txt"
+      - "{lang}/{lang}_50k.txt"
+
+# Data characteristics
+data:
+  word_count: ~50000
+  format: "word<space>frequency"
+  description: |
+    Each line contains word and raw frequency count.
+    Based on movie/TV subtitles corpus from OpenSubtitles.org.
+    Provides real-world usage frequency for common vocabulary.

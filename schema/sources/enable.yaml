@@ -1,0 +1,31 @@
+# ENABLE Word List
+# Enhanced North American Benchmark LExicon
+
+id: enable
+name: ENABLE
+title: Enhanced North American Benchmark LExicon
+
+# Attribution
+attribution:
+  license: Public Domain
+  license_url: https://creativecommons.org/publicdomain/zero/1.0/
+
+# Metadata
+metadata:
+  author: Alan Beale et al.
+  description: Public domain word list for word games and NLP applications
+
+# Fetching configuration
+fetch:
+  method: http
+  url: https://raw.githubusercontent.com/dolph/dictionary/master/enable1.txt
+  output: enable1.txt
+  format: text/plain
+
+# Data characteristics
+data:
+  word_count: ~173000
+  format: One word per line, lowercase
+  description: |
+    Public domain word list commonly used for Scrabble validation
+    and other word game applications.

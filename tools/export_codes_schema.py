@@ -23,11 +23,11 @@ import json
 import sys
 from pathlib import Path
 
-# Add project root to path for imports
-project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
+# Add src to path for imports
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
 
-from tools.wiktionary_scanner_v2.schema import load_core_schema
+from openword.scanner.v2.schema import load_core_schema
 
 
 def export_codes_schema(core_path: Path, output_path: Path) -> dict:

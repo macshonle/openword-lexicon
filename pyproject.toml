@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "openword-lexicon"
-version = "0.1.0"
-description = "Openword Lexicon tooling and pipelines"
+version = "0.2.0"
+description = "OpenWord Lexicon - word game and NLP vocabulary tools"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
@@ -17,7 +17,8 @@ dependencies = [
   "wn>=0.9.5",
   "pyyaml>=6.0",
   "marisa-trie>=1.0",
-  "rich>=13.0"
+  "rich>=13.0",
+  "openpyxl>=3.1.5",
 ]
 
 [project.optional-dependencies]
@@ -28,8 +29,14 @@ dev = [
 ]
 
 [project.scripts]
-owlex = "openword.owlex:main"
+# Primary CLI entry points
+owlex = "openword.cli.owlex:main"
+owfetch = "openword.cli.fetch:main"
+owscan = "openword.cli.scan:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
-packages = ["openword"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["openword*"]

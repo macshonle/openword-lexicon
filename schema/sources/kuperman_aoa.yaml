@@ -1,0 +1,48 @@
+# Kuperman Age of Acquisition Dataset
+# Single source of truth for both fetching and enrichment attribution
+
+id: kuperman_aoa
+name: Kuperman Age of Acquisition
+title: Age-of-acquisition ratings for 30,000 English words
+
+# Attribution (used in enriched output license_sources)
+attribution:
+  license: CC-BY-4.0
+  license_url: https://creativecommons.org/licenses/by/4.0/
+  citation: |
+    Kuperman, V., Stadthagen-Gonzalez, H., & Brysbaert, M. (2012).
+    Age-of-acquisition ratings for 30,000 English words.
+    Behavior Research Methods, 44, 978-990.
+  doi: "10.3758/s13428-012-0210-4"
+
+# Academic metadata
+metadata:
+  authors:
+    - Victor Kuperman
+    - Hans Stadthagen-Gonzalez
+    - Marc Brysbaert
+  year: 2012
+  journal: Behavior Research Methods
+  volume: 44
+  pages: 978-990
+
+# Fetching configuration (used by fetch_sources.py)
+fetch:
+  method: http
+  url: https://osf.io/download/vb9je/
+  output: kuperman_aoa.xlsx
+  format: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+  post_process:
+    type: xlsx_to_tsv
+    columns: [Word, Rating.Mean, Rating.SD, Dunno, PoS]
+    output: kuperman_aoa.txt
+
+# Data characteristics
+data:
+  word_count: ~31000
+  rating_scale: [2, 25]
+  rating_unit: years
+  description: |
+    Age of acquisition ratings collected via Amazon Mechanical Turk.
+    Rating.Mean is estimated acquisition age in years (2-25 scale).
+    Covers ~31k English lemmas with POS tags.

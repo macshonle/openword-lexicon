@@ -1,0 +1,39 @@
+# Open English WordNet
+
+id: wordnet
+name: Open English WordNet
+title: Open English WordNet 2024 Edition
+
+# Attribution
+attribution:
+  license: CC-BY-4.0
+  license_url: https://creativecommons.org/licenses/by/4.0/
+  citation: |
+    McCrae, J. P., Rademaker, A., Rudnicka, E., & Bond, F. (2020).
+    English WordNet 2020: Improving and Extending a WordNet for English
+    using an Open-Source Methodology. In Proceedings of the LREC 2020
+    Workshop on Multimodal Wordnets (MMW2020).
+
+# Metadata
+metadata:
+  author: Global WordNet Association
+  year: 2024
+  source: https://github.com/globalwordnet/english-wordnet
+
+# Fetching configuration
+fetch:
+  method: git
+  repo: https://github.com/globalwordnet/english-wordnet.git
+  tag: "2024-edition"
+  output: english-wordnet-2024.tar.gz
+  format: application/gzip
+  post_process:
+    type: archive
+
+# Data characteristics
+data:
+  format: WordNet XML/LMF format (archived)
+  description: |
+    Community-maintained WordNet with semantic relationships.
+    Provides synsets, definitions, and lexical relations.
+    Updated 2024 edition.

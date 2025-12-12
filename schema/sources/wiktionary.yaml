@@ -1,0 +1,35 @@
+# Wiktionary XML Dump
+# Single source of truth for both fetching and scanner input
+
+id: wiktionary
+name: Wiktionary
+title: English Wiktionary pages-articles dump
+
+# Attribution
+attribution:
+  license: CC-BY-SA-4.0
+  license_url: https://creativecommons.org/licenses/by-sa/4.0/
+  attribution_text: |
+    This dataset includes material from Wiktionary (https://www.wiktionary.org/),
+    available under the Creative Commons Attribution-ShareAlike License (CC BY-SA 4.0).
+    See individual page histories for authorship.
+
+# Metadata
+metadata:
+  author: Wiktionary contributors
+  source: https://dumps.wikimedia.org/
+
+# Fetching configuration
+fetch:
+  method: http
+  url: https://dumps.wikimedia.org/enwiktionary/latest/enwiktionary-latest-pages-articles.xml.bz2
+  output: "{lang}wiktionary-latest-pages-articles.xml.bz2"
+  format: application/xml+bzip2
+
+# Data characteristics
+data:
+  format: MediaWiki XML dump (bzip2 compressed)
+  description: |
+    Full English Wiktionary dump containing all page articles.
+    Requires XML parsing to extract lexical entries.
+    Updated regularly by Wikimedia Foundation.

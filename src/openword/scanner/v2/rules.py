@@ -336,6 +336,31 @@ def compute_tags(evidence: Evidence, config: BindingConfig) -> set[str]:
     return tags
 
 
+def compute_domain_codes(evidence: Evidence, config: BindingConfig) -> set[str]:
+    """
+    Compute domain codes (5-letter DXXXX codes) from evidence labels and categories.
+
+    Uses config.label_to_domain for label lookups.
+    Uses config.category_substring_to_domain for category-based lookups.
+    """
+    domains = set()
+
+    # Map labels from {{lb|en|...}} to domain codes
+    for label in evidence.labels:
+        label_lower = label.lower()
+        domain = config.label_to_domain.get(label_lower)
+        if domain:
+            domains.add(domain)
+
+    # Map category substrings to domain codes
+    for cat_lower in evidence.categories_lower:
+        for substring, code in config.category_substring_to_domain.items():
+            if substring in cat_lower:
+                domains.add(code)
+
+    return domains
+
+
 def compute_phrase_type(evidence: Evidence, config: BindingConfig) -> Optional[str]:
     """
     Compute phrase type code if applicable using binding tables.
@@ -523,6 +548,10 @@ def compute_morphology(evidence: Evidence, config: BindingConfig) -> Optional[Mo
         morph_type_str = "prefixed"
     elif suffixes:
         morph_type_str = "suffixed"
+    elif len(bases) > 1:
+        # Multiple free bases (no affixes) = compound
+        # e.g., {{af|en|Isle|of|Man}} with no hyphens
+        morph_type_str = "compound"
     else:
         morph_type_str = "simple"
 
@@ -617,6 +646,9 @@ def apply_rules(evidence: Evidence, config: BindingConfig) -> Optional[Entry]:
 
     # Add tags
     codes.update(compute_tags(evidence, config))
+
+    # Add domain codes
+    codes.update(compute_domain_codes(evidence, config))
 
     # Add phrase type
     phrase_type = compute_phrase_type(evidence, config)

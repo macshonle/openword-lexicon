@@ -28,8 +28,9 @@ import yaml
 # =============================================================================
 
 def _get_schema_path() -> Path:
-    """Get path to schema directory."""
-    return Path(__file__).parent.parent.parent / "schema"
+    """Get path to schema directory (at project root)."""
+    # From src/openword/scanner/v2/ -> project root
+    return Path(__file__).parent.parent.parent.parent.parent / "schema"
 
 
 def _get_bindings_path() -> Path:

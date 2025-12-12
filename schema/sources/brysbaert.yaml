@@ -1,0 +1,49 @@
+# Brysbaert Concreteness Ratings Dataset
+# Single source of truth for both fetching and enrichment attribution
+
+id: brysbaert
+name: Brysbaert Concreteness Ratings
+title: Concreteness ratings for 40 thousand generally known English word lemmas
+
+# Attribution (used in enriched output license_sources)
+attribution:
+  license: Brysbaert-Research
+  license_note: |
+    Data made available for research purposes.
+    For commercial use, verify terms with authors.
+  citation: |
+    Brysbaert, M., Warriner, A. B., & Kuperman, V. (2014).
+    Concreteness ratings for 40 thousand generally known English word lemmas.
+    Behavior Research Methods, 46, 904-911.
+  doi: "10.3758/s13428-013-0403-5"
+
+# Academic metadata
+metadata:
+  authors:
+    - Marc Brysbaert
+    - Amy Beth Warriner
+    - Victor Kuperman
+  year: 2014
+  journal: Behavior Research Methods
+  volume: 46
+  pages: 904-911
+
+# Fetching configuration (used by fetch_sources.py)
+fetch:
+  method: http
+  url: https://raw.githubusercontent.com/ArtsEngine/concreteness/master/Concreteness_ratings_Brysbaert_et_al_BRM.txt
+  output: brysbaert_concreteness.txt
+  format: tab-separated values
+  count_header_lines: 1
+
+# Data characteristics
+data:
+  word_count: ~40000
+  rating_scale: [1, 5]
+  rating_labels:
+    1: most abstract
+    5: most concrete
+  description: |
+    Concreteness ratings from crowdsourcing (5-point scale).
+    1 = abstract concepts, 5 = concrete/tangible things.
+    Covers ~40k English lemmas.

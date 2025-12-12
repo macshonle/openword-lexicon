@@ -1,0 +1,89 @@
+# Age of Acquisition (AoA) enrichment schema
+# Based on Kuperman et al. (2012) ratings
+
+name: aoa
+description: |
+  Age of Acquisition (AoA) ratings from Kuperman et al. (2012).
+
+  AoA indicates the estimated age (in years) at which a word is typically
+  learned/acquired by native speakers. Values range roughly from 2-25 years.
+
+  Use cases:
+  - Vocabulary filtering for children's apps by acquisition age
+  - Grade-level appropriate word selection
+  - Reading level estimation
+  - Vocabulary difficulty ordering
+
+# Source reference - full definition in schema/sources/kuperman_aoa.yaml
+source_ref: kuperman_aoa
+
+# Minimum quality threshold for inclusion
+quality_filter:
+  min_known_proportion: 0.5
+  description: |
+    Only include ratings where at least 50% of raters knew the word.
+    Words below this threshold have unreliable ratings due to
+    insufficient familiarity among raters.
+
+fields:
+  aoa_rating:
+    type: number
+    range: [2.0, 25.0]
+    precision: 2
+    default: null
+    omit_default: true
+    description: |
+      Mean age of acquisition in years.
+      Lower values = earlier acquisition (easier words).
+      Examples: "cat" ~4 years, "philosophy" ~13 years.
+
+      Absent when no AoA data is available for the word.
+
+  aoa_sd:
+    type: number
+    range: [0.0, 10.0]
+    precision: 2
+    default: null
+    omit_default: true
+    description: |
+      Standard deviation of AoA ratings.
+      Higher SD indicates less agreement among raters about
+      when the word is typically acquired.
+
+      Absent when no AoA data is available.
+
+  aoa_grade:
+    type: enum
+    values: [pre-k, k-2, 3-5, 6-8, 9-12, adult]
+    default: null
+    omit_default: true
+    description: |
+      Approximate US grade level category derived from AoA rating.
+
+      Mapping based on typical school ages:
+      - pre-k: acquired before age 5 (very common words)
+      - k-2: acquired ages 5-8 (early elementary)
+      - 3-5: acquired ages 8-11 (upper elementary)
+      - 6-8: acquired ages 11-14 (middle school)
+      - 9-12: acquired ages 14-18 (high school)
+      - adult: acquired 18+ (advanced vocabulary)
+
+      Absent when no AoA data is available.
+
+# Derivation rules for categorical field
+derivation:
+  aoa_grade:
+    from: aoa_rating
+    rules:
+      - condition: "aoa < 5"
+        value: pre-k
+      - condition: "aoa < 8"
+        value: k-2
+      - condition: "aoa < 11"
+        value: 3-5
+      - condition: "aoa < 14"
+        value: 6-8
+      - condition: "aoa < 18"
+        value: 9-12
+      - condition: "aoa >= 18"
+        value: adult

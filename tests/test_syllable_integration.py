@@ -16,13 +16,13 @@ from pathlib import Path
 
 import pytest
 
-from openword.owlex import OwlexFilter
+from openword.cli.owlex import OwlexFilter
 
-# Add tools directory to path for scanner imports
-tools_path = Path(__file__).parent.parent / "tools"
-sys.path.insert(0, str(tools_path))
+# Add legacy directory to path for v1 scanner imports
+legacy_path = Path(__file__).parent.parent / "legacy"
+sys.path.insert(0, str(legacy_path))
 
-from wiktionary_scanner_python.scanner import (
+from scanner_v1.scanner import (
     count_syllables_from_ipa,
     extract_syllable_count_from_hyphenation,
     extract_syllable_count_from_rhymes,

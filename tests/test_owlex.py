@@ -8,7 +8,7 @@ import pytest
 import tempfile
 from pathlib import Path
 
-from openword.owlex import OwlexFilter
+from openword.cli.owlex import OwlexFilter
 
 
 # =============================================================================

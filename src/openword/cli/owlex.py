@@ -975,7 +975,10 @@ class OwlexFilter:
         return True
 
     def _check_policy_filters(self, entry: Dict, filters: Dict) -> bool:
-        """Apply policy-level filters (expanded to label checks)."""
+        """Apply policy-level filters (expanded to label checks).
+
+        Supports both v1 format (label names) and v2 format (codes).
+        """
         labels = entry.get('labels', {})
         register_labels = set(labels.get('register', []))
         temporal_labels = set(labels.get('temporal', []))
@@ -983,17 +986,29 @@ class OwlexFilter:
 
         if filters.get('family_friendly', False):
             # Exclude vulgar, offensive, derogatory
-            if register_labels & {'vulgar', 'offensive', 'derogatory'}:
+            # V1 labels: vulgar, offensive, derogatory
+            # V2 codes: RVLG, ROFF, RDEG
+            v1_profane = {'vulgar', 'offensive', 'derogatory'}
+            v2_profane = {'RVLG', 'ROFF', 'RDEG'}
+            if register_labels & (v1_profane | v2_profane):
                 return False
 
         if filters.get('modern_only', False):
             # Exclude archaic, obsolete, dated
-            if temporal_labels & {'archaic', 'obsolete', 'dated'}:
+            # V1 labels: archaic, obsolete, dated
+            # V2 codes: TARC, TOBS, TDAT
+            v1_outdated = {'archaic', 'obsolete', 'dated'}
+            v2_outdated = {'TARC', 'TOBS', 'TDAT'}
+            if temporal_labels & (v1_outdated | v2_outdated):
                 return False
 
         if filters.get('no_jargon', False):
             # Exclude technical domains
-            if domain_labels & {'medical', 'legal', 'technical', 'scientific'}:
+            # V1 labels: medical, legal, technical, scientific
+            # V2 codes: DMEDI, DLEGA, DTECH, DSCIE (if they exist)
+            v1_jargon = {'medical', 'legal', 'technical', 'scientific'}
+            v2_jargon = {'DMEDI', 'DLEGA', 'DTECH', 'DSCIE'}
+            if domain_labels & (v1_jargon | v2_jargon):
                 return False
 
         return True
@@ -1288,6 +1303,37 @@ class OwlexFilter:
 
         return False
 
+    def _categorize_codes(self, codes: List[str]) -> Dict[str, List[str]]:
+        """Categorize v2 codes into label categories.
+
+        V2 codes use prefixes to indicate category:
+        - R??? (4-letter): register codes (RVLG, ROFF, RINF, etc.)
+        - T??? (4-letter): temporal codes (TARC, TOBS, TDAT, THIS)
+        - D???? (5-letter): domain codes (DMEDI, DCOMP, etc.)
+        - EN?? (4-letter): region codes (ENUS, ENGB, ENAU)
+
+        Returns dict with keys: register, temporal, domain, region
+        """
+        result: Dict[str, List[str]] = {
+            'register': [],
+            'temporal': [],
+            'domain': [],
+            'region': [],
+        }
+
+        for code in codes:
+            if len(code) == 4:
+                if code.startswith('R'):
+                    result['register'].append(code)
+                elif code.startswith('T'):
+                    result['temporal'].append(code)
+                elif code.startswith('EN'):
+                    result['region'].append(code)
+            elif len(code) == 5 and code.startswith('D'):
+                result['domain'].append(code)
+
+        return result
+
     def _augment_entry_for_filtering(self, entry: Dict, senses: List[Dict]) -> Dict:
         """Augment a lexeme entry with aggregated senses data for filtering.
 
@@ -1298,6 +1344,8 @@ class OwlexFilter:
 
         The primary sense is the first sense in document order from Wiktionary,
         which typically represents the most common/prominent meaning.
+
+        Supports both v1 format (separate tag arrays) and v2 format (unified codes set).
         """
         # Start with a copy of the entry
         augmented = entry.copy()
@@ -1316,15 +1364,25 @@ class OwlexFilter:
             if sense.get('pos'):
                 pos_set.add(sense['pos'])
 
-            # Aggregate label tags
-            if sense.get('register_tags'):
-                register_tags.update(sense['register_tags'])
-            if sense.get('temporal_tags'):
-                temporal_tags.update(sense['temporal_tags'])
-            if sense.get('domain_tags'):
-                domain_tags.update(sense['domain_tags'])
-            if sense.get('region_tags'):
-                region_tags.update(sense['region_tags'])
+            # Check for v2 format (codes set)
+            codes = sense.get('codes', [])
+            if codes:
+                # V2 format: categorize codes into label categories
+                categorized = self._categorize_codes(codes)
+                register_tags.update(categorized['register'])
+                temporal_tags.update(categorized['temporal'])
+                domain_tags.update(categorized['domain'])
+                region_tags.update(categorized['region'])
+            else:
+                # V1 format fallback: use separate tag arrays
+                if sense.get('register_tags'):
+                    register_tags.update(sense['register_tags'])
+                if sense.get('temporal_tags'):
+                    temporal_tags.update(sense['temporal_tags'])
+                if sense.get('domain_tags'):
+                    domain_tags.update(sense['domain_tags'])
+                if sense.get('region_tags'):
+                    region_tags.update(sense['region_tags'])
 
         # Add aggregated POS (from all senses)
         if pos_set:
@@ -1353,14 +1411,28 @@ class OwlexFilter:
 
         # Build primary sense labels
         primary_labels = {}
-        if primary.get('register_tags'):
-            primary_labels['register'] = primary['register_tags']
-        if primary.get('temporal_tags'):
-            primary_labels['temporal'] = primary['temporal_tags']
-        if primary.get('domain_tags'):
-            primary_labels['domain'] = primary['domain_tags']
-        if primary.get('region_tags'):
-            primary_labels['region'] = primary['region_tags']
+        primary_codes = primary.get('codes', [])
+        if primary_codes:
+            # V2 format
+            categorized = self._categorize_codes(primary_codes)
+            if categorized['register']:
+                primary_labels['register'] = categorized['register']
+            if categorized['temporal']:
+                primary_labels['temporal'] = categorized['temporal']
+            if categorized['domain']:
+                primary_labels['domain'] = categorized['domain']
+            if categorized['region']:
+                primary_labels['region'] = categorized['region']
+        else:
+            # V1 format fallback
+            if primary.get('register_tags'):
+                primary_labels['register'] = primary['register_tags']
+            if primary.get('temporal_tags'):
+                primary_labels['temporal'] = primary['temporal_tags']
+            if primary.get('domain_tags'):
+                primary_labels['domain'] = primary['domain_tags']
+            if primary.get('region_tags'):
+                primary_labels['region'] = primary['region_tags']
 
         if primary_labels:
             primary_sense['labels'] = primary_labels
