@@ -23,14 +23,14 @@ import yaml
 
 
 def load_pos_codes() -> Set[str]:
-    """Load POS codes from schema/pos.yaml.
+    """Load POS codes from schema/core/pos.yaml.
 
     Raises:
         SystemExit: If schema file is not found.
     """
     schema_paths = [
-        Path(__file__).parent.parent / "schema" / "pos.yaml",
-        Path("schema/pos.yaml"),
+        Path(__file__).parent.parent / "schema" / "core" / "pos.yaml",
+        Path("schema/core/pos.yaml"),
     ]
     for schema_path in schema_paths:
         if schema_path.exists():
@@ -40,7 +40,7 @@ def load_pos_codes() -> Set[str]:
 
     # Schema not found - exit with error
     import sys
-    print(f"Error: Could not find schema/pos.yaml", file=sys.stderr)
+    print(f"Error: Could not find schema/core/pos.yaml", file=sys.stderr)
     print(f"Searched paths: {[str(p) for p in schema_paths]}", file=sys.stderr)
     sys.exit(1)
 

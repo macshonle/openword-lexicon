@@ -218,7 +218,7 @@ POS tags use 3-letter codes: `NOU`, `VRB`, `ADJ`, `ADV`, `PRN`, `ADP`, `CNJ`, `I
 
 User-friendly names are also accepted: `noun`, `verb`, `adjective`, `adverb`, `pronoun`, `preposition`, `conjunction`, `interjection`, `determiner`, `particle`, `proper noun`, `phrase`, `proverb`, `prepositional phrase`, `idiom`, `affix`, `number`, `symbol`.
 
-See `schema/pos.yaml` for full details.
+See `schema/core/pos.yaml` for full details.
 
 ### Register Filters
 
