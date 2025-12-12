@@ -225,7 +225,8 @@ def load_all_data_sources(language: str = 'en') -> Tuple[
     Dict[str, Tuple[float, float, float]],  # aoa ratings
 ]:
     """Load all enrichment data sources."""
-    data_root = Path(__file__).parent.parent.parent / "data"
+    # From src/openword/enrich/ go up 4 levels to project root
+    data_root = Path(__file__).parent.parent.parent.parent / "data"
     raw_dir = data_root / "raw" / language
 
     # Frequency data
