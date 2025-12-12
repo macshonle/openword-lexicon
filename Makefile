@@ -195,13 +195,14 @@ $(UNIFIED_TRIE): $(ENRICHED_OUTPUT) | $(BUILD_DIR)
 	@echo "Building unified trie..."
 	$(PYTHON) -m openword.trie_build \
 		--input "$(ENRICHED_OUTPUT)" \
-		--output "$(UNIFIED_TRIE)"
+		--language "$(OW_LANG)"
 
 $(METADATA): $(ENRICHED_OUTPUT) | $(BUILD_DIR)
 	@echo "Building metadata..."
 	$(PYTHON) -m openword.export_metadata \
 		--input "$(ENRICHED_OUTPUT)" \
-		--output "$(METADATA)"
+		--language "$(OW_LANG)" \
+		--gzip
 
 build: $(UNIFIED_TRIE) $(METADATA)
 
