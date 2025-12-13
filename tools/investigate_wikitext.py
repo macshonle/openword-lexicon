@@ -6,8 +6,8 @@ This tool examines raw wikitext to understand patterns and identify
 where parsers might diverge from expected behavior.
 
 Usage:
-    python tools/investigate_wikitext.py tests/wikitext-samples/WORD.xml
-    python tools/investigate_wikitext.py tests/wikitext-samples/*.xml > investigation_report.txt
+    python tools/investigate_wikitext.py reference/wiktionary/samples/WORD.xml
+    python tools/investigate_wikitext.py reference/wiktionary/samples/*.xml > investigation_report.txt
 """
 
 import re

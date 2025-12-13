@@ -32,11 +32,11 @@ Options:
 Examples:
     # Update mode: only extract missing words
     uv run python tools/extract_wikitext.py data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
-        tests/wikitext-samples --words-file tests/hotspot-words.txt --update
+        reference/wiktionary/samples --words-file reference/wiktionary/hotspot-words.txt --update
 
     # Extract from hotspot list
     uv run python tools/extract_wikitext.py data/raw/en/enwiktionary-latest-pages-articles.xml.bz2 \
-        tests/wikitext-samples --words-file tests/hotspot-words.txt
+        reference/wiktionary/samples --words-file reference/wiktionary/hotspot-words.txt
 """
 
 import bz2

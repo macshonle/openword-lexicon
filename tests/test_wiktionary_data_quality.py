@@ -15,7 +15,9 @@ from pathlib import Path
 import pytest
 
 # Add legacy scanner_v1 directory to path
-legacy_path = Path(__file__).parent.parent / "legacy" / "scanner_v1"
+TESTS_DIR = Path(__file__).parent
+PROJECT_ROOT = TESTS_DIR.parent
+legacy_path = PROJECT_ROOT / "legacy" / "scanner_v1"
 sys.path.insert(0, str(legacy_path))
 
 from wiktionary_scanner_python.scanner import (
@@ -25,7 +27,7 @@ from wiktionary_scanner_python.scanner import (
     extract_syllable_count_from_ipa,
 )
 
-SAMPLES_DIR = Path(__file__).parent / "wikitext-samples"
+SAMPLES_DIR = PROJECT_ROOT / "reference" / "wiktionary" / "samples"
 
 
 class TestWiktionaryDataQuality:

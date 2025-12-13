@@ -25,7 +25,7 @@ TESTS_DIR = Path(__file__).parent
 PROJECT_ROOT = TESTS_DIR.parent
 HOTSPOT_JSONL = TESTS_DIR / "hotspotwords.jsonl"
 HOTSPOT_XML = TESTS_DIR / "hotspotwords.xml.bz2"
-SAMPLES_DIR = TESTS_DIR / "wikitext-samples"
+SAMPLES_DIR = PROJECT_ROOT / "reference" / "wiktionary" / "samples"
 
 
 def load_hotspot_entries() -> dict[str, list[dict]]:

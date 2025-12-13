@@ -9,7 +9,9 @@ from pathlib import Path
 import pytest
 
 # Add legacy scanner_v1 directory to path
-legacy_path = Path(__file__).parent.parent / "legacy" / "scanner_v1"
+TESTS_DIR = Path(__file__).parent
+PROJECT_ROOT = TESTS_DIR.parent
+legacy_path = PROJECT_ROOT / "legacy" / "scanner_v1"
 sys.path.insert(0, str(legacy_path))
 
 from wiktionary_scanner_python.wikitext_parser import (
@@ -250,10 +252,10 @@ class TestEdgeCasesParity:
 class TestWikitextSamples:
     """Tests using actual Wiktionary sample files."""
 
-    SAMPLES_DIR = Path(__file__).parent / "wikitext-samples"
+    SAMPLES_DIR = PROJECT_ROOT / "reference" / "wiktionary" / "samples"
 
     @pytest.mark.skipif(
-        not (Path(__file__).parent / "wikitext-samples").exists(),
+        not (PROJECT_ROOT / "reference" / "wiktionary" / "samples").exists(),
         reason="Wikitext samples directory not found"
     )
     def test_encyclopedia_syllables(self):
@@ -273,7 +275,7 @@ class TestWikitextSamples:
         assert rhymes_count == 6, "Rhymes s= should show 6 syllables"
 
     @pytest.mark.skipif(
-        not (Path(__file__).parent / "wikitext-samples").exists(),
+        not (PROJECT_ROOT / "reference" / "wiktionary" / "samples").exists(),
         reason="Wikitext samples directory not found"
     )
     def test_happy_morphology(self):
