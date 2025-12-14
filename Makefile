@@ -255,17 +255,14 @@ web-viewer:
 # =============================================================================
 
 clean:
-	rm -rf $(INTERMEDIATE_DIR)/*.jsonl
-	rm -rf $(INTERMEDIATE_DIR)/*.json
-	rm -rf $(BUILD_DIR)/*.trie
-	rm -rf $(BUILD_DIR)/*.json
-	rm -rf $(STAMPS_DIR)
+	rm -rf $(INTERMEDIATE_DIR) $(BUILD_DIR) $(STAMPS_DIR)
 	rm -rf .pytest_cache
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 
-# Deep clean - also removes fetched data
+# Deep clean - also removes fetched data and node_modules
 scrub: clean
 	rm -rf $(RAW_DIR)
+	rm -rf web/spec-editor/node_modules web/viewer/node_modules
 
 # =============================================================================
 # Rust Scanner (optional, for benchmarking)

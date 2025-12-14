@@ -15,16 +15,6 @@
 /data/intermediate/
 /data/artifacts/
 /data/build/
-/data/filtered/
-/data/filtered_words/
-/data/wordlists/
-/data/game_words/
-/data/core/
-/data/plus/
-
-# Exception: Track diagnostic slices for analysis
-!/data/diagnostic/
-!/data/diagnostic/wikt_slices/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
