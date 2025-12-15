@@ -1178,27 +1178,35 @@ class TestRealDataIntegration:
     """Integration tests that verify behavior against real data files.
 
     These tests help catch architecture mismatches between the filter code
-    and the actual data format.
+    and the actual data format produced by the CDA pipeline.
     """
 
     # Project root (tests are in tests/ subdirectory)
     PROJECT_ROOT = Path(__file__).parent.parent
-    LEXEMES_PATH = PROJECT_ROOT / "data/intermediate/en-lexemes-enriched.jsonl"
-    SENSES_PATH = PROJECT_ROOT / "data/intermediate/en-senses.jsonl"
+    ENRICHED_PATH = PROJECT_ROOT / "data/intermediate/en-wikt-v2-enriched.jsonl"
 
     @pytest.mark.skipif(
-        not (Path(__file__).parent.parent / "data/intermediate/en-lexemes-enriched.jsonl").exists(),
-        reason="Requires built lexicon data"
+        not (Path(__file__).parent.parent / "data/intermediate/en-wikt-v2-enriched.jsonl").exists(),
+        reason="Requires built lexicon data (run: make enrich)"
     )
-    def test_lexemes_file_structure(self):
-        """Verify the actual structure of the lexemes file.
+    def test_cda_output_structure(self):
+        """Verify the structure of the CDA pipeline output.
 
-        This test documents what fields are actually present in the data.
+        This test documents what fields are actually present in the enriched
+        JSONL produced by the CDA scanner and enrichment pipeline. Each line
+        is a sense entry (not a word-level aggregate).
+
+        Expected fields:
+        - id: the word/phrase
+        - pos: part of speech code (e.g., "NOU", "VRB")
+        - codes: list of flag codes from CDA (e.g., "INFL", "ABRV")
+        - lemma: base form of the word
+        - wc: word count (1 for single words, 2+ for phrases)
+        - nsyll: syllable count (optional, from enrichment)
         """
         import json
 
-        lexemes_path = self.LEXEMES_PATH
-        with open(lexemes_path) as f:
+        with open(self.ENRICHED_PATH) as f:
             # Read a sample of entries
             entries = [json.loads(next(f)) for _ in range(100)]
 
@@ -1208,52 +1216,23 @@ class TestRealDataIntegration:
             for key in entry.keys():
                 field_counts[key] = field_counts.get(key, 0) + 1
 
-        # Expected fields that SHOULD be in lexemes
-        expected_always = ["id", "sources", "frequency_tier"]
-        for field in expected_always:
-            assert field in field_counts, f"Missing expected field: {field}"
+        # Core fields that MUST be present in every entry
+        required_fields = ["id", "pos"]
+        for field in required_fields:
+            assert field_counts.get(field, 0) == 100, \
+                f"Required field '{field}' missing from some entries"
 
-        # Fields that are NOT in lexemes (they're in senses)
-        # If these appear, the architecture has changed
-        sense_only_fields = ["pos", "labels", "register_tags"]
-        for field in sense_only_fields:
+        # Fields that SHOULD be present in most entries
+        expected_common = ["codes", "lemma", "wc"]
+        for field in expected_common:
+            assert field in field_counts, \
+                f"Expected field '{field}' not found in any entries"
+
+        # Optional enrichment fields (may not be in every entry)
+        optional_fields = ["nsyll", "frequency_tier", "concreteness", "aoa"]
+        for field in optional_fields:
             if field in field_counts:
-                # This would be good! It means the bug is fixed
-                print(f"NOTICE: {field} is now in lexemes file!")
-
-    @pytest.mark.skipif(
-        not (Path(__file__).parent.parent / "data/intermediate/en-senses.jsonl").exists(),
-        reason="Requires built lexicon data"
-    )
-    def test_senses_file_structure(self):
-        """Verify the actual structure of the senses file.
-
-        This test documents what fields are actually present in senses data.
-        """
-        import json
-
-        senses_path = self.SENSES_PATH
-        with open(senses_path) as f:
-            # Read a sample of entries
-            entries = [json.loads(next(f)) for _ in range(100)]
-
-        # Check which fields are commonly present
-        field_counts = {}
-        for entry in entries:
-            for key in entry.keys():
-                field_counts[key] = field_counts.get(key, 0) + 1
-
-        # Expected fields in senses
-        expected = ["id", "pos"]
-        for field in expected:
-            assert field in field_counts, f"Missing expected field: {field}"
-
-        # Fields that SHOULD be in senses (register_tags, not labels)
-        # This verifies the actual data format
-        if "register_tags" in field_counts:
-            print(f"register_tags found in {field_counts['register_tags']}/100 entries")
-        if "labels" in field_counts:
-            print(f"labels found in {field_counts['labels']}/100 entries")
+                print(f"  {field}: {field_counts[field]}/100 entries")
 
 
 # =============================================================================
