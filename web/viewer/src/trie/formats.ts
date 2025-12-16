@@ -14,6 +14,9 @@ export const HEADER_SIZE = 12;
 /** Extended header size for v5 (includes node count) */
 export const HEADER_SIZE_V5 = 16;
 
+/** Extended header size for v6 MARISA format */
+export const HEADER_SIZE_V6 = 24;
+
 /**
  * Supported format versions.
  *
@@ -32,8 +35,23 @@ export const HEADER_SIZE_V5 = 16;
  *     - ~1.5-2 bytes per character
  *     - Full Unicode support
  *     - Word ID mapping via terminal ranking
+ *
+ * v6: MARISA trie with link flags and tail buffer
+ *     - LOUDS + terminal + link bitvectors
+ *     - Tail buffer for path compression
+ *     - Tail suffix sharing for deduplication
+ *     - Optional recursive trie over tails
+ *     - Full Unicode support
  */
-export type FormatVersion = 'v2' | 'v4' | 'v5' | 'auto';
+export type FormatVersion = 'v2' | 'v4' | 'v5' | 'v6' | 'auto';
+
+/**
+ * v6 format flags (bit positions in header).
+ */
+export const V6_FLAG_HAS_LINKS = 0x01;      // Link flags bitvector present
+export const V6_FLAG_HAS_TAILS = 0x02;      // Tail buffer present
+export const V6_FLAG_BINARY_TAILS = 0x04;   // Length-prefixed tails (vs null-terminated)
+export const V6_FLAG_RECURSIVE = 0x08;      // Tails stored in recursive trie
 
 /** Maximum code point supported by v2 format (single byte) */
 export const V2_MAX_CODE_POINT = 255;
@@ -150,6 +168,8 @@ export function readHeader(buffer: Uint8Array): {
   version: number;
   wordCount: number;
   nodeCount?: number;
+  flags?: number;
+  tailBufferSize?: number;
 } {
   const version = detectVersion(buffer);
   if (version === null) {
@@ -158,6 +178,13 @@ export function readHeader(buffer: Uint8Array): {
 
   const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
   const wordCount = view.getUint32(8, true);
+
+  if (version === 6) {
+    const nodeCount = view.getUint32(12, true);
+    const flags = view.getUint32(16, true);
+    const tailBufferSize = view.getUint32(20, true);
+    return { version, wordCount, nodeCount, flags, tailBufferSize };
+  }
 
   if (version === 5) {
     const nodeCount = view.getUint32(12, true);

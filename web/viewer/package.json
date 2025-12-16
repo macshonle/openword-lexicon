@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "build-trie": "tsx src/build-trie.ts",
+    "benchmark": "tsx src/benchmark-v6.ts",
     "dev": "http-server ../.. -p 8080 -o /web/viewer/index.html --cors",
     "start": "http-server ../.. -p 8080 -o /web/viewer/index.html --cors",
-    "test": "tsx --test src/*.test.ts"
+    "test": "tsx --test src/*.test.ts src/**/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

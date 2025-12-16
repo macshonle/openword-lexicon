@@ -39,6 +39,7 @@ import {
   checkV2Compatibility,
   buildDAWG,
   LOUDSTrie,
+  MarisaTrie,
 } from './trie/index.js';
 
 // Default paths relative to web/viewer/
@@ -86,21 +87,25 @@ function parseArgs(args: string[]): {
   inputPath: string;
   outputPath: string;
   format: FormatVersion;
+  enableLinks: boolean;
 } {
   let inputPath = DEFAULT_INPUT;
   let outputPath = DEFAULT_OUTPUT;
   let format: FormatVersion = 'auto';
   let inputSet = false;
+  let enableLinks = false;
 
   for (const arg of args) {
     if (arg.startsWith('--format=')) {
       const fmt = arg.slice(9);
-      if (fmt === 'v2' || fmt === 'v4' || fmt === 'v5' || fmt === 'auto') {
+      if (fmt === 'v2' || fmt === 'v4' || fmt === 'v5' || fmt === 'v6' || fmt === 'auto') {
         format = fmt;
       } else {
-        console.error(`Invalid format: ${fmt}. Use v2, v4, v5, or auto.`);
+        console.error(`Invalid format: ${fmt}. Use v2, v4, v5, v6, or auto.`);
         process.exit(1);
       }
+    } else if (arg === '--links') {
+      enableLinks = true;
     } else if (arg === '--help' || arg === '-h') {
       printHelp();
       process.exit(0);
@@ -114,7 +119,7 @@ function parseArgs(args: string[]): {
     }
   }
 
-  return { inputPath, outputPath, format };
+  return { inputPath, outputPath, format, enableLinks };
 }
 
 function printHelp(): void {
@@ -122,7 +127,7 @@ function printHelp(): void {
 build-trie - Build compact binary trie from wordlist or JSONL
 
 Usage:
-  pnpm build-trie [input] [output] [--format=v2|v4|v5|auto]
+  pnpm build-trie [input] [output] [--format=v2|v4|v5|v6|auto] [--links]
 
 Arguments:
   input     Input file (.txt wordlist or .jsonl pipeline output)
@@ -131,11 +136,13 @@ Arguments:
             Default: ${DEFAULT_OUTPUT}
 
 Options:
-  --format=<fmt>  Format version (v2, v4, v5, or auto)
+  --format=<fmt>  Format version (v2, v4, v5, v6, or auto)
                   v2: ASCII only, max 65K nodes, smallest for ASCII
-                  v4: Full Unicode, unlimited nodes, recommended
+                  v4: Full Unicode, unlimited nodes, recommended for DAWG
                   v5: LOUDS trie with word ID mapping
+                  v6: MARISA trie with path compression (most compact)
                   auto: Select based on content and size (default)
+  --links         Enable path compression for v6 (tail buffer)
 
 Examples:
   # Build from pipeline output (default)
@@ -146,6 +153,9 @@ Examples:
 
   # Force v4 format for Unicode support
   pnpm build-trie wordlist.txt output.trie.bin --format=v4
+
+  # Build v6 MARISA trie with path compression
+  pnpm build-trie input.jsonl output.trie.bin --format=v6 --links
 `);
 }
 
@@ -153,12 +163,15 @@ Examples:
  * Main entry point.
  */
 async function main() {
-  const { inputPath, outputPath, format } = parseArgs(process.argv.slice(2));
+  const { inputPath, outputPath, format, enableLinks } = parseArgs(process.argv.slice(2));
 
   console.log('Building compact binary trie...');
   console.log(`Input: ${inputPath}`);
   console.log(`Output: ${outputPath}`);
   console.log(`Format: ${format}`);
+  if (format === 'v6' && enableLinks) {
+    console.log(`Path compression: enabled`);
+  }
   console.log();
 
   // Check input file exists
@@ -203,7 +216,51 @@ async function main() {
     let version: number;
     let nodeCount: number;
 
-    if (format === 'v5') {
+    if (format === 'v6') {
+      // Build MARISA trie (v6 format)
+      console.log('Building MARISA trie...');
+      const { trie, stats } = MarisaTrie.build(words, { enableLinks });
+
+      console.log(`MARISA trie has ${trie.nodeCount.toLocaleString()} nodes`);
+
+      // Serialize to binary
+      console.log('Serializing...');
+      binary = trie.serialize();
+      version = 6;
+      nodeCount = trie.nodeCount;
+
+      // Write output
+      fs.writeFileSync(outputPath, binary);
+
+      // Statistics
+      const outputSize = binary.length;
+      const ratio = ((outputSize / inputSize) * 100).toFixed(1);
+      const bytesPerWord = (outputSize / words.length).toFixed(2);
+
+      const extra: [string, string][] = [
+        ['Edges', stats.edgeCount.toLocaleString()],
+        ['LOUDS bits', `${stats.bitsSize.toLocaleString()} bytes`],
+        ['Terminal bits', `${stats.terminalSize.toLocaleString()} bytes`],
+        ['Labels', `${stats.labelsSize.toLocaleString()} bytes`],
+      ];
+
+      if (stats.linkFlagsSize > 0) {
+        extra.push(['Link flags', `${stats.linkFlagsSize.toLocaleString()} bytes`]);
+      }
+      if (stats.tailBufferSize > 0) {
+        extra.push(['Tail buffer', `${stats.tailBufferSize.toLocaleString()} bytes`]);
+      }
+
+      printStats({
+        version,
+        inputSize,
+        outputSize,
+        ratio,
+        bytesPerWord,
+        nodeCount,
+        extra,
+      });
+    } else if (format === 'v5') {
       // Build LOUDS trie (v5 format)
       console.log('Building LOUDS trie...');
       const trie = LOUDSTrie.build(words);
@@ -276,7 +333,7 @@ async function main() {
       console.error();
       console.error(`Error: ${error.message}`);
       console.error();
-      console.error('Tip: Use --format=v4 or --format=v5 for full Unicode support.');
+      console.error('Tip: Use --format=v4, --format=v5, or --format=v6 for full Unicode support.');
       process.exit(1);
     }
     throw error;

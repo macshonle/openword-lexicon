@@ -8,14 +8,15 @@
  *   v2: DAWG with 16-bit node IDs (ASCII only, max 65K nodes)
  *   v4: DAWG with varint node IDs (full Unicode, unlimited nodes)
  *   v5: LOUDS trie with bitvectors (full Unicode, word ID mapping)
+ *   v6: MARISA trie with link flags and tail buffer (full Unicode, path compression)
  *
  * Usage (Node.js):
- *   import { buildDAWG, LOUDSTrie } from './trie/index.js';
+ *   import { buildDAWG, LOUDSTrie, MarisaTrie } from './trie/index.js';
  *   const result = buildDAWG(words, 'v4');
  *   fs.writeFileSync('output.trie.bin', result.buffer);
  *
  * Usage (Browser):
- *   import { buildDAWG } from './trie/index.js';
+ *   import { buildDAWG, MarisaTrie } from './trie/index.js';
  *   const result = buildDAWG(words, 'auto');
  *   // result.buffer is ready to use
  */
@@ -28,8 +29,13 @@ export {
   OWTRIE_MAGIC,
   HEADER_SIZE,
   HEADER_SIZE_V5,
+  HEADER_SIZE_V6,
   V2_MAX_CODE_POINT,
   V2_MAX_NODES,
+  V6_FLAG_HAS_LINKS,
+  V6_FLAG_HAS_TAILS,
+  V6_FLAG_BINARY_TAILS,
+  V6_FLAG_RECURSIVE,
   UnicodeCompatibilityError,
   validateV2Compatibility,
   checkV2Compatibility,
@@ -46,6 +52,10 @@ export {
   calculateDAWGStats,
 } from './dawg.js';
 export type { DAWGBuildResult } from './dawg.js';
+
+// MARISA trie (v6)
+export { MarisaTrie } from './marisa.js';
+export type { MarisaConfig, MarisaStats, MarisaBuildResult } from './marisa.js';
 
 // Re-export LOUDS trie from existing module
 export { LOUDSTrie } from '../louds-trie.js';
