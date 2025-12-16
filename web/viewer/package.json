@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build-trie": "tsx src/build-trie.ts",
-    "start": "http-server . -p 8080 -o /index.html --cors",
+    "dev": "http-server ../.. -p 8080 -o /web/viewer/index.html --cors",
+    "start": "http-server ../.. -p 8080 -o /web/viewer/index.html --cors",
     "test": "tsx --test src/*.test.ts"
   },
   "devDependencies": {

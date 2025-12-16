@@ -1,243 +1,96 @@
 #!/usr/bin/env node
 /**
- * build-trie.ts - Build compact binary trie from wordlist
+ * build-trie.ts - Build compact binary trie from wordlist or JSONL
  *
  * Creates a DAWG (Directed Acyclic Word Graph) or LOUDS trie and serializes
  * it to a compact binary format optimized for browser consumption.
  *
  * Format versions:
- *   v2: DAWG with 16-bit absolute node IDs (max 65K nodes, 3 bytes/child)
- *   v4: DAWG with varint delta node IDs (unlimited nodes, ~2 bytes/child avg)
- *   v5: LOUDS trie with bitvectors + labels (word ID support, ~1.5 bytes/char)
+ *   v2: DAWG with 16-bit absolute node IDs (ASCII only, max 65K nodes, 3 bytes/child)
+ *   v4: DAWG with varint delta node IDs (full Unicode, unlimited nodes, ~2 bytes/child avg)
+ *   v5: LOUDS trie with bitvectors + labels (full Unicode, word ID support, ~1.5 bytes/char)
  *
- * The builder auto-selects the best format based on node count,
+ * The builder auto-selects the best format based on node count and content,
  * or you can force a specific version with --format=v2|v4|v5
+ *
+ * Input formats:
+ *   .txt     - Plain text wordlist (one word per line)
+ *   .jsonl   - JSON Lines with "lemma" field (pipeline output format)
+ *
+ * Usage:
+ *   pnpm build-trie [input] [output] [--format=v2|v4|v5|auto]
+ *
+ * Examples:
+ *   # Build from pipeline JSONL output
+ *   pnpm build-trie ../../data/intermediate/en-wikt-v2-enriched.jsonl data/en.trie.bin
+ *
+ *   # Build from plain wordlist
+ *   pnpm build-trie wordlist.txt data/en.trie.bin --format=v4
+ *
+ *   # Force LOUDS format for word ID support
+ *   pnpm build-trie input.jsonl output.trie.bin --format=v5
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { LOUDSTrie } from './louds-trie.js';
+import {
+  FormatVersion,
+  UnicodeCompatibilityError,
+  checkV2Compatibility,
+  buildDAWG,
+  LOUDSTrie,
+} from './trie/index.js';
 
-// DAWG node for building
-class DAWGNode {
-  children: Map<string, DAWGNode> = new Map();
-  isTerminal: boolean = false;
-  id: number = -1;
+// Default paths relative to web/viewer/
+const DEFAULT_INPUT = '../../data/intermediate/en-wikt-v2-enriched.jsonl';
+const DEFAULT_OUTPUT = 'data/en.trie.bin';
 
-  // For DAWG construction - signature for deduplication
-  getSignature(): string {
-    const childSigs = Array.from(this.children.entries())
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([char, node]) => `${char}:${node.id}`)
-      .join(',');
-    return `${this.isTerminal ? '1' : '0'}:${childSigs}`;
-  }
-}
+/**
+ * Load words from a file, detecting format by extension.
+ */
+function loadWords(inputPath: string): string[] {
+  const ext = path.extname(inputPath).toLowerCase();
+  const content = fs.readFileSync(inputPath, 'utf-8');
 
-class DAWGBuilder {
-  root: DAWGNode = new DAWGNode();
-  private nodeRegistry: Map<string, DAWGNode> = new Map();
-  private nextId: number = 0;
+  if (ext === '.jsonl') {
+    // JSONL format: extract "lemma" field from each line
+    const words: string[] = [];
+    const lines = content.trim().split('\n');
 
-  // Add a word to the DAWG
-  addWord(word: string): void {
-    let node = this.root;
-    for (const char of word) {
-      if (!node.children.has(char)) {
-        node.children.set(char, new DAWGNode());
+    for (const line of lines) {
+      if (!line.trim()) continue;
+      try {
+        const obj = JSON.parse(line);
+        if (obj.lemma && typeof obj.lemma === 'string') {
+          const word = obj.lemma.trim();
+          if (word.length > 0) {
+            words.push(word);
+          }
+        }
+      } catch {
+        // Skip invalid JSON lines
       }
-      node = node.children.get(char)!;
     }
-    node.isTerminal = true;
-  }
 
-  // Minimize the DAWG by sharing common suffixes
-  minimize(): DAWGNode[] {
-    const nodes: DAWGNode[] = [];
-    const visited = new Set<DAWGNode>();
-
-    // Assign IDs in post-order (children before parents)
-    const assignIds = (node: DAWGNode): void => {
-      if (visited.has(node)) return;
-      visited.add(node);
-
-      for (const child of node.children.values()) {
-        assignIds(child);
-      }
-
-      // Check if we've seen this node structure before
-      const sig = node.getSignature();
-      const existing = this.nodeRegistry.get(sig);
-
-      if (existing) {
-        // Reuse existing node
-        node.id = existing.id;
-      } else {
-        // New unique node
-        node.id = this.nextId++;
-        nodes.push(node);
-        this.nodeRegistry.set(sig, node);
-      }
-    };
-
-    assignIds(this.root);
-
-    // Re-sort nodes by ID for compact storage
-    return nodes.sort((a, b) => a.id - b.id);
-  }
-}
-
-// Varint encoding helpers
-function varintSize(value: number): number {
-  if (value < 0x80) return 1;
-  if (value < 0x4000) return 2;
-  if (value < 0x200000) return 3;
-  if (value < 0x10000000) return 4;
-  return 5;
-}
-
-function writeVarint(buffer: Uint8Array, offset: number, value: number): number {
-  while (value >= 0x80) {
-    buffer[offset++] = (value & 0x7F) | 0x80;
-    value >>>= 7;
-  }
-  buffer[offset++] = value;
-  return offset;
-}
-
-// Calculate size for v4 format (varint deltas, varint chars)
-function calculateV4Size(nodes: DAWGNode[]): number {
-  let size = 12; // Header
-
-  for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i];
-    size += 2; // flags + child_count
-
-    const sortedChildren = Array.from(node.children.entries())
-      .sort(([a], [b]) => a.localeCompare(b));
-
-    for (const [char, childNode] of sortedChildren) {
-      // Use codePointAt to get full Unicode code point (handles emoji, extended Latin)
-      const codePoint = char.codePointAt(0)!;
-      size += varintSize(codePoint);
-      // Delta = currentNodeId - childNodeId (always positive in post-order)
-      const delta = node.id - childNode.id;
-      size += varintSize(delta);
-    }
-  }
-
-  return size;
-}
-
-// Serialize DAWG to v2 format (16-bit absolute IDs)
-function serializeV2(nodes: DAWGNode[], wordCount: number): Uint8Array {
-  let size = 12; // Header
-  for (const node of nodes) {
-    size += 2 + node.children.size * 3; // flags + count + (char + 2-byte ID) per child
-  }
-
-  const buffer = new Uint8Array(size);
-  const view = new DataView(buffer.buffer);
-  let offset = 0;
-
-  // Header
-  buffer.set(new TextEncoder().encode('OWTRIE'), offset);
-  offset += 6;
-  view.setUint16(offset, 2, true);
-  offset += 2;
-  view.setUint32(offset, wordCount, true);
-  offset += 4;
-
-  // Nodes
-  for (const node of nodes) {
-    const childCount = node.children.size;
-    if (childCount > 255) throw new Error(`Node has too many children: ${childCount}`);
-
-    buffer[offset++] = node.isTerminal ? 0x01 : 0x00;
-    buffer[offset++] = childCount;
-
-    const sortedChildren = Array.from(node.children.entries())
-      .sort(([a], [b]) => a.localeCompare(b));
-
-    for (const [char, childNode] of sortedChildren) {
-      buffer[offset++] = char.charCodeAt(0);
-      view.setUint16(offset, childNode.id, true);
-      offset += 2;
-    }
-  }
-
-  return buffer;
-}
-
-// Serialize DAWG to v4 format (varint delta IDs)
-function serializeV4(nodes: DAWGNode[], wordCount: number): Uint8Array {
-  const size = calculateV4Size(nodes);
-  const buffer = new Uint8Array(size);
-  const view = new DataView(buffer.buffer);
-  let offset = 0;
-
-  // Header
-  buffer.set(new TextEncoder().encode('OWTRIE'), offset);
-  offset += 6;
-  view.setUint16(offset, 4, true);
-  offset += 2;
-  view.setUint32(offset, wordCount, true);
-  offset += 4;
-
-  // Nodes
-  for (const node of nodes) {
-    const childCount = node.children.size;
-    if (childCount > 255) throw new Error(`Node has too many children: ${childCount}`);
-
-    buffer[offset++] = node.isTerminal ? 0x01 : 0x00;
-    buffer[offset++] = childCount;
-
-    const sortedChildren = Array.from(node.children.entries())
-      .sort(([a], [b]) => a.localeCompare(b));
-
-    for (const [char, childNode] of sortedChildren) {
-      // Use codePointAt to get full Unicode code point (handles emoji, extended Latin)
-      const codePoint = char.codePointAt(0)!;
-      offset = writeVarint(buffer, offset, codePoint);
-      // Delta encoding: parent ID - child ID (always positive in post-order)
-      const delta = node.id - childNode.id;
-      offset = writeVarint(buffer, offset, delta);
-    }
-  }
-
-  return buffer;
-}
-
-type FormatVersion = 'v2' | 'v4' | 'v5' | 'auto';
-
-// Select best format and serialize
-function serializeDAWG(nodes: DAWGNode[], wordCount: number, format: FormatVersion = 'auto'): { buffer: Uint8Array; version: number } {
-  const nodeCount = nodes.length;
-
-  // Auto-select format based on node count
-  let selectedFormat = format;
-  if (format === 'auto') {
-    selectedFormat = nodeCount <= 65535 ? 'v2' : 'v4';
-  }
-
-  // Validate format choice
-  if (selectedFormat === 'v2' && nodeCount > 65535) {
-    console.warn(`Warning: v2 format cannot support ${nodeCount} nodes (max 65535). Switching to v4.`);
-    selectedFormat = 'v4';
-  }
-
-  if (selectedFormat === 'v2') {
-    return { buffer: serializeV2(nodes, wordCount), version: 2 };
+    return words;
   } else {
-    return { buffer: serializeV4(nodes, wordCount), version: 4 };
+    // Plain text: one word per line
+    return content.trim().split('\n').filter(w => w.trim().length > 0).map(w => w.trim());
   }
 }
 
-// Parse command line arguments
-function parseArgs(args: string[]): { inputPath: string; outputPath: string; format: FormatVersion } {
-  let inputPath = '../data/build/core/wordlist.txt';
-  let outputPath = 'data/core.trie.bin';
+/**
+ * Parse command line arguments.
+ */
+function parseArgs(args: string[]): {
+  inputPath: string;
+  outputPath: string;
+  format: FormatVersion;
+} {
+  let inputPath = DEFAULT_INPUT;
+  let outputPath = DEFAULT_OUTPUT;
   let format: FormatVersion = 'auto';
+  let inputSet = false;
 
   for (const arg of args) {
     if (arg.startsWith('--format=')) {
@@ -248,9 +101,13 @@ function parseArgs(args: string[]): { inputPath: string; outputPath: string; for
         console.error(`Invalid format: ${fmt}. Use v2, v4, v5, or auto.`);
         process.exit(1);
       }
+    } else if (arg === '--help' || arg === '-h') {
+      printHelp();
+      process.exit(0);
     } else if (!arg.startsWith('--')) {
-      if (inputPath === '../data/build/core/wordlist.txt') {
+      if (!inputSet) {
         inputPath = arg;
+        inputSet = true;
       } else {
         outputPath = arg;
       }
@@ -260,7 +117,41 @@ function parseArgs(args: string[]): { inputPath: string; outputPath: string; for
   return { inputPath, outputPath, format };
 }
 
-// Main execution
+function printHelp(): void {
+  console.log(`
+build-trie - Build compact binary trie from wordlist or JSONL
+
+Usage:
+  pnpm build-trie [input] [output] [--format=v2|v4|v5|auto]
+
+Arguments:
+  input     Input file (.txt wordlist or .jsonl pipeline output)
+            Default: ${DEFAULT_INPUT}
+  output    Output binary trie file
+            Default: ${DEFAULT_OUTPUT}
+
+Options:
+  --format=<fmt>  Format version (v2, v4, v5, or auto)
+                  v2: ASCII only, max 65K nodes, smallest for ASCII
+                  v4: Full Unicode, unlimited nodes, recommended
+                  v5: LOUDS trie with word ID mapping
+                  auto: Select based on content and size (default)
+
+Examples:
+  # Build from pipeline output (default)
+  pnpm build-trie
+
+  # Build from custom JSONL
+  pnpm build-trie ../../data/intermediate/en-wikt-v2-enriched.jsonl data/en.trie.bin
+
+  # Force v4 format for Unicode support
+  pnpm build-trie wordlist.txt output.trie.bin --format=v4
+`);
+}
+
+/**
+ * Main entry point.
+ */
 async function main() {
   const { inputPath, outputPath, format } = parseArgs(process.argv.slice(2));
 
@@ -270,103 +161,154 @@ async function main() {
   console.log(`Format: ${format}`);
   console.log();
 
-  // Read wordlist
-  const wordlistText = fs.readFileSync(inputPath, 'utf-8');
-  const words = wordlistText.trim().split('\n').filter(w => w.length > 0);
+  // Check input file exists
+  if (!fs.existsSync(inputPath)) {
+    console.error(`Error: Input file not found: ${inputPath}`);
+    console.error();
+    console.error('Make sure you have run the pipeline to generate the input file.');
+    console.error('Run: make enrich');
+    process.exit(1);
+  }
 
+  // Load words
+  console.log('Loading words...');
+  const words = loadWords(inputPath);
   console.log(`Loaded ${words.length.toLocaleString()} words`);
+
+  if (words.length === 0) {
+    console.error('Error: No words found in input file');
+    process.exit(1);
+  }
+
+  // Check Unicode compatibility for informational purposes
+  const unicodeCheck = checkV2Compatibility(words);
+  if (!unicodeCheck.compatible) {
+    console.log(`Note: Input contains ${unicodeCheck.invalidChars.length} non-ASCII character(s)`);
+    if (format === 'v2') {
+      console.log('  Characters:', unicodeCheck.invalidChars.slice(0, 5).join(', '));
+      console.log('  Sample words:', unicodeCheck.sampleWords.slice(0, 3).join(', '));
+    }
+  }
 
   // Ensure output directory exists
   const outputDir = path.dirname(outputPath);
-  if (!fs.existsSync(outputDir)) {
+  if (outputDir && !fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  const inputSize = Buffer.byteLength(wordlistText, 'utf-8');
-  let binary: Uint8Array;
-  let version: number;
-  let nodeCount: number;
+  const inputSize = fs.statSync(inputPath).size;
 
-  if (format === 'v5') {
-    // Build LOUDS trie (v5 format)
-    console.log('Building LOUDS trie...');
-    const trie = LOUDSTrie.build(words.map(w => w.trim()));
+  try {
+    let binary: Uint8Array;
+    let version: number;
+    let nodeCount: number;
 
-    console.log(`LOUDS trie has ${trie.nodeCount.toLocaleString()} nodes`);
+    if (format === 'v5') {
+      // Build LOUDS trie (v5 format)
+      console.log('Building LOUDS trie...');
+      const trie = LOUDSTrie.build(words);
 
-    // Serialize to binary
-    console.log('Serializing...');
-    binary = trie.serialize();
-    version = 5;
-    nodeCount = trie.nodeCount;
+      console.log(`LOUDS trie has ${trie.nodeCount.toLocaleString()} nodes`);
 
-    // Write output
-    fs.writeFileSync(outputPath, binary);
+      // Serialize to binary
+      console.log('Serializing...');
+      binary = trie.serialize();
+      version = 5;
+      nodeCount = trie.nodeCount;
 
-    // Statistics
-    const outputSize = binary.length;
-    const ratio = ((outputSize / inputSize) * 100).toFixed(1);
-    const bytesPerWord = (outputSize / words.length).toFixed(2);
-    const stats = trie.stats();
+      // Write output
+      fs.writeFileSync(outputPath, binary);
 
-    console.log();
-    console.log('='.repeat(50));
-    console.log('Statistics:');
-    console.log('='.repeat(50));
-    console.log(`Format version:  v${version}`);
-    console.log(`Input size:      ${inputSize.toLocaleString()} bytes (${(inputSize / 1024).toFixed(1)} KB)`);
-    console.log(`Output size:     ${outputSize.toLocaleString()} bytes (${(outputSize / 1024).toFixed(1)} KB)`);
-    console.log(`Compression:     ${ratio}% of original`);
-    console.log(`Bytes/word:      ${bytesPerWord}`);
-    console.log(`Nodes:           ${nodeCount.toLocaleString()}`);
-    console.log(`Edges:           ${stats.edgeCount.toLocaleString()}`);
-    console.log(`LOUDS bits:      ${stats.bitsSize.toLocaleString()} bytes`);
-    console.log(`Terminal bits:   ${stats.terminalSize.toLocaleString()} bytes`);
-    console.log(`Labels:          ${stats.labelsSize.toLocaleString()} bytes`);
-    console.log('='.repeat(50));
-  } else {
-    // Build DAWG (v2/v4 format)
-    console.log('Building DAWG...');
-    const builder = new DAWGBuilder();
+      // Statistics
+      const outputSize = binary.length;
+      const ratio = ((outputSize / inputSize) * 100).toFixed(1);
+      const bytesPerWord = (outputSize / words.length).toFixed(2);
+      const stats = trie.stats();
 
-    for (const word of words) {
-      builder.addWord(word.trim());
+      printStats({
+        version,
+        inputSize,
+        outputSize,
+        ratio,
+        bytesPerWord,
+        nodeCount,
+        extra: [
+          ['Edges', stats.edgeCount.toLocaleString()],
+          ['LOUDS bits', `${stats.bitsSize.toLocaleString()} bytes`],
+          ['Terminal bits', `${stats.terminalSize.toLocaleString()} bytes`],
+          ['Labels', `${stats.labelsSize.toLocaleString()} bytes`],
+        ],
+      });
+    } else {
+      // Build DAWG (v2/v4 format)
+      console.log('Building DAWG...');
+      const result = buildDAWG(words, format);
+
+      console.log(`DAWG has ${result.nodeCount.toLocaleString()} unique nodes`);
+
+      // Write output
+      fs.writeFileSync(outputPath, result.buffer);
+
+      binary = result.buffer;
+      version = result.version;
+      nodeCount = result.nodeCount;
+
+      // Statistics
+      const outputSize = binary.length;
+      const ratio = ((outputSize / inputSize) * 100).toFixed(1);
+      const bytesPerWord = (outputSize / words.length).toFixed(2);
+
+      printStats({
+        version,
+        inputSize,
+        outputSize,
+        ratio,
+        bytesPerWord,
+        nodeCount,
+        extra: [],
+      });
     }
 
-    // Minimize (deduplicate nodes with same suffixes)
-    console.log('Minimizing...');
-    const nodes = builder.minimize();
+    console.log(`\nWrote: ${outputPath}`);
 
-    console.log(`DAWG has ${nodes.length.toLocaleString()} unique nodes`);
-
-    // Serialize to binary
-    console.log('Serializing...');
-    const result = serializeDAWG(nodes, words.length, format);
-    binary = result.buffer;
-    version = result.version;
-    nodeCount = nodes.length;
-
-    // Write output
-    fs.writeFileSync(outputPath, binary);
-
-    // Statistics
-    const outputSize = binary.length;
-    const ratio = ((outputSize / inputSize) * 100).toFixed(1);
-    const bytesPerWord = (outputSize / words.length).toFixed(2);
-
-    console.log();
-    console.log('='.repeat(50));
-    console.log('Statistics:');
-    console.log('='.repeat(50));
-    console.log(`Format version:  v${version}`);
-    console.log(`Input size:      ${inputSize.toLocaleString()} bytes (${(inputSize / 1024).toFixed(1)} KB)`);
-    console.log(`Output size:     ${outputSize.toLocaleString()} bytes (${(outputSize / 1024).toFixed(1)} KB)`);
-    console.log(`Compression:     ${ratio}% of original`);
-    console.log(`Bytes/word:      ${bytesPerWord}`);
-    console.log(`Unique nodes:    ${nodeCount.toLocaleString()}`);
-    console.log(`Avg children:    ${(nodes.reduce((sum, n) => sum + n.children.size, 0) / nodes.length).toFixed(2)}`);
-    console.log('='.repeat(50));
+  } catch (error) {
+    if (error instanceof UnicodeCompatibilityError) {
+      console.error();
+      console.error(`Error: ${error.message}`);
+      console.error();
+      console.error('Tip: Use --format=v4 or --format=v5 for full Unicode support.');
+      process.exit(1);
+    }
+    throw error;
   }
 }
 
-main().catch(console.error);
+function printStats(opts: {
+  version: number;
+  inputSize: number;
+  outputSize: number;
+  ratio: string;
+  bytesPerWord: string;
+  nodeCount: number;
+  extra: [string, string][];
+}): void {
+  console.log();
+  console.log('='.repeat(50));
+  console.log('Statistics:');
+  console.log('='.repeat(50));
+  console.log(`Format version:  v${opts.version}`);
+  console.log(`Input size:      ${opts.inputSize.toLocaleString()} bytes (${(opts.inputSize / 1024 / 1024).toFixed(1)} MB)`);
+  console.log(`Output size:     ${opts.outputSize.toLocaleString()} bytes (${(opts.outputSize / 1024).toFixed(1)} KB)`);
+  console.log(`Compression:     ${opts.ratio}% of original`);
+  console.log(`Bytes/word:      ${opts.bytesPerWord}`);
+  console.log(`Nodes:           ${opts.nodeCount.toLocaleString()}`);
+  for (const [label, value] of opts.extra) {
+    console.log(`${label}:`.padEnd(17) + value);
+  }
+  console.log('='.repeat(50));
+}
+
+main().catch(err => {
+  console.error('Error:', err.message);
+  process.exit(1);
+});

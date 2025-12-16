@@ -89,9 +89,9 @@ METADATA := $(BUILD_DIR)/$(OW_LANG).meta.json
 # Phony Targets
 # =============================================================================
 
-.PHONY: all test nightly weekly fetch scan enrich build clean scrub \
+.PHONY: all test test-python test-typescript nightly weekly fetch scan enrich build clean scrub \
         deps lint fmt validate help \
-        web-spec-editor web-viewer
+        web-spec-editor web-viewer web-viewer-trie
 
 .DEFAULT_GOAL := help
 
@@ -119,6 +119,7 @@ help:
 	@echo "Web tools:"
 	@echo "  make web-spec-editor   Start spec editor dev server"
 	@echo "  make web-viewer        Start viewer dev server"
+	@echo "  make web-viewer-trie   Build OWTRIE binary for viewer"
 
 # =============================================================================
 # Dependencies
@@ -132,8 +133,13 @@ deps:
 # Testing
 # =============================================================================
 
-test: deps
+test: deps test-python test-typescript
+
+test-python: deps
 	$(PYTEST) tests/ -v
+
+test-typescript:
+	cd web/viewer && pnpm install && pnpm test
 
 test-quick: deps
 	$(PYTEST) tests/ -v -x --ignore=tests/test_wiktionary_data_quality.py
@@ -250,6 +256,13 @@ web-spec-editor:
 web-viewer:
 	cd web/viewer && pnpm install && pnpm dev
 
+# Build OWTRIE binary for web viewer (requires enriched data)
+web-viewer-trie: $(ENRICHED_OUTPUT) | web/viewer/data
+	cd web/viewer && pnpm install && pnpm build-trie --format=v4
+
+web/viewer/data:
+	mkdir -p $@
+
 # =============================================================================
 # Cleaning
 # =============================================================================
@@ -259,10 +272,10 @@ clean:
 	rm -rf .pytest_cache
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 
-# Deep clean - also removes fetched data and node_modules
+# Deep clean - also removes fetched data, node_modules, and viewer data
 scrub: clean
 	rm -rf $(RAW_DIR)
-	rm -rf web/spec-editor/node_modules web/viewer/node_modules
+	rm -rf web/spec-editor/node_modules web/viewer/node_modules web/viewer/data
 
 # =============================================================================
 # Rust Scanner (optional, for benchmarking)

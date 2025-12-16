@@ -760,7 +760,7 @@ function setStatus(message, className = '') {
 async function loadBinaryTrie() {
     setStatus('Downloading binary trie...', 'loading');
 
-    const response = await fetch('/data/en.trie.bin');
+    const response = await fetch('/web/viewer/data/en.trie.bin');
     if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
@@ -786,17 +786,25 @@ async function loadBinaryTrie() {
     return trie;
 }
 
-// Load plain text wordlist and build trie dynamically
+// Load words from JSONL and build trie dynamically
 async function loadDynamicTrie() {
-    setStatus('Downloading wordlist...', 'loading');
+    setStatus('Downloading word data...', 'loading');
 
-    const response = await fetch('/data/build/en-wordlist.txt');
+    const response = await fetch('/data/intermediate/en-wikt-v2-enriched.jsonl');
     if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
     const text = await response.text();
-    const words = text.trim().split('\n');
+    const words = text.trim().split('\n')
+        .map(line => {
+            try {
+                return JSON.parse(line).lemma;
+            } catch {
+                return null;
+            }
+        })
+        .filter(w => w && w.length > 0);
 
     setStatus(`Building trie from ${words.length.toLocaleString()} words...`, 'loading');
 

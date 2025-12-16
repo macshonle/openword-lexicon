@@ -4,6 +4,7 @@
   "description": "Web UI for creating wordlist filter YAML/JSON specs for OpenWord Lexicon",
   "type": "module",
   "scripts": {
+    "dev": "http-server . -p 8000 -o /index.html --cors",
     "start": "http-server . -p 8000 -o /index.html --cors"
   },
   "devDependencies": {
