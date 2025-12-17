@@ -29,6 +29,32 @@ except ImportError:
     HAS_YAML = False
 
 
+def _find_schema_file(relative_path: str) -> Path:
+    """Find a schema file relative to either module location or project root.
+
+    Args:
+        relative_path: Path relative to schema/ directory (e.g., "pos.yaml" or "core/tag_sets.yaml")
+
+    Returns:
+        Path to the schema file
+
+    Raises:
+        FileNotFoundError: If the schema file is not found
+    """
+    schema_paths = [
+        Path(__file__).parent.parent.parent / "schema" / relative_path,  # From src/openword/
+        Path("schema") / relative_path,  # From project root
+    ]
+
+    for p in schema_paths:
+        if p.exists():
+            return p
+
+    raise FileNotFoundError(
+        f"Schema file not found: {relative_path}. Expected at schema/{relative_path} relative to project root."
+    )
+
+
 def _load_pos_code_map() -> Dict[str, str]:
     """Load POS variant-to-code mapping from schema/pos.yaml.
 
@@ -37,22 +63,7 @@ def _load_pos_code_map() -> Dict[str, str]:
 
     Also maps codes to themselves for pass-through support.
     """
-    # Find schema file relative to this module
-    schema_paths = [
-        Path(__file__).parent.parent.parent / "schema" / "pos.yaml",  # From src/openword/
-        Path("schema/pos.yaml"),  # From project root
-    ]
-
-    schema_path = None
-    for p in schema_paths:
-        if p.exists():
-            schema_path = p
-            break
-
-    if schema_path is None:
-        raise FileNotFoundError(
-            "POS schema not found. Expected at schema/pos.yaml relative to project root."
-        )
+    schema_path = _find_schema_file("pos.yaml")
 
     with open(schema_path) as f:
         schema = yaml.safe_load(f)
@@ -69,8 +80,37 @@ def _load_pos_code_map() -> Dict[str, str]:
     return pos_map
 
 
+def _load_label_code_map() -> Dict[str, str]:
+    """Load label name-to-code mapping from schema/core/tag_sets.yaml.
+
+    Returns a dict mapping human-readable label names (vulgar, archaic, etc.)
+    to their canonical 4-letter codes (RVLG, TARC, etc.).
+
+    Also maps codes to themselves for pass-through support.
+    """
+    schema_path = _find_schema_file("core/tag_sets.yaml")
+
+    with open(schema_path) as f:
+        schema = yaml.safe_load(f)
+
+    label_map = {}
+    for tag_set in schema.get("tag_sets", []):
+        for tag in tag_set.get("tags", []):
+            code = tag["code"]
+            name = tag["name"]
+            # Map code to itself (pass-through)
+            label_map[code] = code
+            label_map[code.lower()] = code
+            # Map name to code
+            label_map[name.lower()] = code
+    return label_map
+
+
 # Lazy-loaded POS code mapping
 _POS_CODE_MAP: Optional[Dict[str, str]] = None
+
+# Lazy-loaded label code mapping
+_LABEL_CODE_MAP: Optional[Dict[str, str]] = None
 
 
 def _get_pos_code_map() -> Dict[str, str]:
@@ -79,6 +119,14 @@ def _get_pos_code_map() -> Dict[str, str]:
     if _POS_CODE_MAP is None:
         _POS_CODE_MAP = _load_pos_code_map()
     return _POS_CODE_MAP
+
+
+def _get_label_code_map() -> Dict[str, str]:
+    """Get the label code mapping, loading it lazily."""
+    global _LABEL_CODE_MAP
+    if _LABEL_CODE_MAP is None:
+        _LABEL_CODE_MAP = _load_label_code_map()
+    return _LABEL_CODE_MAP
 
 
 def normalize_pos_to_code(pos: str) -> Optional[str]:
@@ -92,6 +140,19 @@ def normalize_pos_to_code(pos: str) -> Optional[str]:
     """
     pos_map = _get_pos_code_map()
     return pos_map.get(pos.lower())
+
+
+def normalize_label_to_code(label: str) -> Optional[str]:
+    """Convert a label name to its canonical 4-letter code.
+
+    Args:
+        label: Human-readable name (vulgar, archaic) or code (RVLG, TARC)
+
+    Returns:
+        The 4-letter code, or None if not recognized
+    """
+    label_map = _get_label_code_map()
+    return label_map.get(label.lower())
 
 
 # Setup logging
@@ -877,7 +938,12 @@ class OwlexFilter:
         - include/exclude: check against ANY sense (current behavior)
         - include-if-primary/exclude-if-primary: check against PRIMARY sense only
         """
-        pos_tags = set(entry.get('pos', []))
+        # Handle both string (single POS) and list (multiple POS) formats
+        pos_value = entry.get('pos', [])
+        if isinstance(pos_value, str):
+            pos_tags = {pos_value} if pos_value else set()
+        else:
+            pos_tags = set(pos_value)
         primary_sense = entry.get('primary_sense', {})
         primary_pos = primary_sense.get('pos')
 
@@ -938,8 +1004,18 @@ class OwlexFilter:
         Filter variants:
         - include/exclude: check against ANY sense (current behavior)
         - include-if-primary/exclude-if-primary: check against PRIMARY sense only
+
+        Supports both:
+        - 'labels' dict format: {'register': ['vulgar'], 'temporal': ['archaic']}
+        - 'codes' array format: ['RVLG', 'TARC'] (v2 codes, auto-categorized)
+
+        Label names are normalized to codes using the schema from core/tag_sets.yaml.
         """
+        # Get labels from 'labels' dict or categorize from 'codes' array
         labels = entry.get('labels', {})
+        if not labels and 'codes' in entry:
+            labels = self._categorize_codes(entry['codes'])
+
         primary_sense = entry.get('primary_sense', {})
         primary_labels = primary_sense.get('labels', {})
 
@@ -950,25 +1026,39 @@ class OwlexFilter:
 
             # include: Entry must have at least one of the included labels (any sense)
             if 'include' in category_filters:
-                include_set = set(category_filters['include'])
+                # Normalize filter values to codes
+                include_set = {
+                    normalize_label_to_code(label) or label
+                    for label in category_filters['include']
+                }
                 if not (entry_labels & include_set):
                     return False
 
             # exclude: Entry must not have any of the excluded labels (any sense)
             if 'exclude' in category_filters:
-                exclude_set = set(category_filters['exclude'])
+                # Normalize filter values to codes
+                exclude_set = {
+                    normalize_label_to_code(label) or label
+                    for label in category_filters['exclude']
+                }
                 if entry_labels & exclude_set:
                     return False
 
             # include-if-primary: Primary sense must have one of these labels
             if 'include-if-primary' in category_filters:
-                include_set = set(category_filters['include-if-primary'])
+                include_set = {
+                    normalize_label_to_code(label) or label
+                    for label in category_filters['include-if-primary']
+                }
                 if not (primary_category_labels & include_set):
                     return False
 
             # exclude-if-primary: Primary sense must NOT have any of these labels
             if 'exclude-if-primary' in category_filters:
-                exclude_set = set(category_filters['exclude-if-primary'])
+                exclude_set = {
+                    normalize_label_to_code(label) or label
+                    for label in category_filters['exclude-if-primary']
+                }
                 if primary_category_labels & exclude_set:
                     return False
 

@@ -60,17 +60,17 @@ def mini_lexemes():
         {"id": "ice cream", "pos": ["NOU"], "frequency_tier": "D", "sources": ["wikt"],
          "labels": {}, "concreteness": "concrete", "nsyll": 2, "wc": 2},
 
-        # Words with labels
+        # Words with labels (using 4-letter codes from schema/core/tag_sets.yaml)
         {"id": "damn", "pos": ["ITJ", "VRB"], "frequency_tier": "D", "sources": ["wikt"],
-         "labels": {"register": ["vulgar"]}, "nsyll": 1},
+         "labels": {"register": ["RVLG"]}, "nsyll": 1},
         {"id": "bloody", "pos": ["ADJ"], "frequency_tier": "E", "sources": ["wikt"],
-         "labels": {"register": ["offensive"], "region": ["en-GB"]}, "nsyll": 2},
+         "labels": {"register": ["ROFF"], "region": ["ENGB"]}, "nsyll": 2},
         {"id": "thee", "pos": ["PRN"], "frequency_tier": "G", "sources": ["wikt"],
-         "labels": {"temporal": ["archaic"]}, "nsyll": 1},
+         "labels": {"temporal": ["TARC"]}, "nsyll": 1},
         {"id": "hither", "pos": ["ADV"], "frequency_tier": "H", "sources": ["wikt"],
-         "labels": {"temporal": ["archaic", "obsolete"]}, "nsyll": 2},
+         "labels": {"temporal": ["TARC", "TOBS"]}, "nsyll": 2},
         {"id": "whilst", "pos": ["CNJ"], "frequency_tier": "F", "sources": ["wikt"],
-         "labels": {"temporal": ["dated"], "region": ["en-GB"]}, "nsyll": 1},
+         "labels": {"temporal": ["TDAT"], "region": ["ENGB"]}, "nsyll": 1},
 
         # Rare/uncommon words
         {"id": "pulchritudinous", "pos": ["ADJ"], "frequency_tier": "Z", "sources": ["wikt"],
@@ -112,11 +112,11 @@ def mini_lexemes():
         {"id": "diagnosis", "pos": ["NOU"], "frequency_tier": "F", "sources": ["wikt"],
          "labels": {"domain": ["medical"]}, "nsyll": 4},
 
-        # Slang
+        # Slang (RSLG = slang, RINF = informal)
         {"id": "cool", "pos": ["ADJ", "VRB"], "frequency_tier": "B", "sources": ["wikt"],
-         "labels": {"register": ["slang"]}, "concreteness": "abstract", "nsyll": 1},
+         "labels": {"register": ["RSLG"]}, "concreteness": "abstract", "nsyll": 1},
         {"id": "dude", "pos": ["NOU"], "frequency_tier": "E", "sources": ["wikt"],
-         "labels": {"register": ["informal", "slang"]}, "nsyll": 1},
+         "labels": {"register": ["RINF", "RSLG"]}, "nsyll": 1},
     ]
 
 
@@ -393,7 +393,7 @@ class TestLabelFilters:
 
     def test_exclude_vulgar(self, mini_lexemes):
         """Test excluding vulgar words."""
-        spec = {"filters": {"labels": {"register": {"exclude": ["vulgar"]}}}}
+        spec = {"filters": {"labels": {"register": {"exclude": ["RVLG"]}}}}
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
@@ -404,7 +404,7 @@ class TestLabelFilters:
 
     def test_exclude_offensive(self, mini_lexemes):
         """Test excluding offensive words."""
-        spec = {"filters": {"labels": {"register": {"exclude": ["vulgar", "offensive"]}}}}
+        spec = {"filters": {"labels": {"register": {"exclude": ["RVLG", "ROFF"]}}}}
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
@@ -416,7 +416,7 @@ class TestLabelFilters:
 
     def test_include_slang(self, mini_lexemes):
         """Test including only slang words."""
-        spec = {"filters": {"labels": {"register": {"include": ["slang"]}}}}
+        spec = {"filters": {"labels": {"register": {"include": ["RSLG"]}}}}
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
@@ -436,7 +436,7 @@ class TestTemporalFilters:
 
     def test_exclude_archaic(self, mini_lexemes):
         """Test excluding archaic words."""
-        spec = {"filters": {"temporal": {"exclude": ["archaic"]}}}
+        spec = {"filters": {"temporal": {"exclude": ["TARC"]}}}
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
@@ -448,7 +448,7 @@ class TestTemporalFilters:
 
     def test_exclude_all_old_words(self, mini_lexemes):
         """Test excluding archaic, obsolete, and dated words."""
-        spec = {"filters": {"temporal": {"exclude": ["archaic", "obsolete", "dated"]}}}
+        spec = {"filters": {"temporal": {"exclude": ["TARC", "TOBS", "TDAT"]}}}
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
@@ -612,7 +612,7 @@ class TestCombinedFilters:
                 "phrase": {"max_words": 1},
                 "pos": {"include": ["noun"]},
                 "concreteness": {"values": ["concrete"]},
-                "labels": {"register": {"exclude": ["vulgar", "offensive", "slang"]}}
+                "labels": {"register": {"exclude": ["RVLG", "ROFF", "RSLG"]}}
             }
         }
         filter_obj = MockOwlexFilter(spec)
@@ -981,7 +981,7 @@ class TestEdgeCases:
     def test_missing_labels_field(self, mini_lexemes):
         """Test handling of entries with missing labels field."""
         entry = {"id": "test", "pos": ["NOU"], "frequency_tier": "C", "sources": ["wikt"]}
-        spec = {"filters": {"labels": {"register": {"exclude": ["vulgar"]}}}}
+        spec = {"filters": {"labels": {"register": {"exclude": ["RVLG"]}}}}
         filter_obj = MockOwlexFilter(spec)
 
         # Entry with missing labels should pass exclude filter
@@ -1109,7 +1109,7 @@ class TestKnownBugs:
         entry_with_label = {
             "id": "damn",
             "pos": ["interjection"],
-            "labels": {"register": ["vulgar"]},
+            "labels": {"register": ["RVLG"]},
             "sources": ["wikt"]
         }
 
@@ -1122,7 +1122,7 @@ class TestKnownBugs:
             # NO labels field!
         }
 
-        spec = {"filters": {"labels": {"register": {"include": ["vulgar"]}}}}
+        spec = {"filters": {"labels": {"register": {"include": ["RVLG"]}}}}
         filter_obj = MockOwlexFilter(spec)
 
         # Entry WITH labels (test fixture format) should pass

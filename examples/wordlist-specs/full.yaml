@@ -1,0 +1,6 @@
+# Full English Wiktionary dataset
+# All entries - no filtering applied
+# Used as a baseline for benchmarking
+
+# Explicit passthrough (no filtering)
+passthrough: true

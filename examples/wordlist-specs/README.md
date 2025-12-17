@@ -25,13 +25,39 @@ owlex examples/wordlist-specs/wordle.yaml --verbose
 
 ## Available Examples
 
-### `wordle.yaml`
-5-letter common words for Wordle-style games.
-- Exactly 5 letters, lowercase alphabetic
-- Single words only
-- Top ~30k frequency (tiers A-I)
+### Wordle Word Lists
 
-**Expected**: ~3,000 words
+Three variants for Wordle-style games:
+
+**`wordle-accepted.yaml`** — Broad dictionary for validating guesses
+- All valid 5-letter words (includes slang, swears)
+- Only excludes obsolete/archaic terms
+- **Expected**: ~5,000+ words
+
+**`wordle-solutions.yaml`** — Curated list for puzzle solutions
+- Family-friendly (no vulgar, offensive, slang)
+- US English or international (excludes UK-only terms)
+- Common vocabulary only (top frequency tiers)
+- **Expected**: ~2,000-3,000 words
+
+**`wordle.yaml`** — Balanced middle-ground
+- Excludes vulgar/offensive but allows slang
+- Broader than solutions, narrower than accepted
+- **Expected**: ~3,000 words
+
+---
+
+### Base Datasets
+
+**`word-only.yaml`** — All words (no phrases)
+- Excludes proper nouns (NAM), phrases (PHR), idioms (IDM)
+- Includes multi-word entries like "petri dish" if they're regular nouns
+- Base dataset for game word lists
+
+**`full.yaml`** — Complete Wiktionary
+- All entries, no filtering
+- Includes phrases, proper nouns, everything
+- Used for benchmarking and full-text search
 
 ---
 
@@ -121,12 +147,9 @@ frequency:
   min_tier: A
   max_tier: I
 
-labels:
-  register:
-    exclude: [vulgar, offensive, derogatory]
-
-temporal:
-  exclude: [archaic, obsolete]
+exclude:
+  register: [RVLG, ROFF]      # vulgar, offensive
+  temporal: [TARC, TOBS]      # archaic, obsolete
 ```
 
 No `version`, `distribution`, or `output` sections needed. Output format is controlled via CLI flags.
@@ -188,21 +211,37 @@ concreteness:
 ```
 
 ### Label Filters
+
+Labels use 4-letter codes from `schema/core/tag_sets.yaml`:
+
 ```yaml
-labels:
-  register:
-    include: [slang]     # Must have these labels
-    exclude: [vulgar, offensive, derogatory]
-  domain:
-    exclude: [medical, legal, technical]
-  region:
-    include: [en-US]     # Only US regional words
+# Exclude vulgar/offensive content
+exclude:
+  register: [RVLG, ROFF]     # vulgar, offensive
+
+# Or include specific registers
+include:
+  register: [RSLG]           # slang only
 ```
+
+**Register codes (REGS):**
+- `RINF` informal, `RSLG` slang, `RVLG` vulgar
+- `ROFF` offensive, `RFRM` formal, `RLIT` literary
+- `RHUM` humorous, `RCHD` childish, `RNST` nonstandard
+
+**Temporal codes (TEMP):**
+- `TARC` archaic, `TOBS` obsolete, `TDAT` dated
+- `THIS` historical, `TRAR` rare
+
+**Region codes (REGN):**
+- `ENUS` US, `ENGB` UK, `ENCA` Canada
+- `ENAU` Australia, `ENNZ` New Zealand
+- `ENIE` Ireland, `ENZA` South Africa, `ENIN` India
 
 ### Temporal Filters
 ```yaml
-temporal:
-  exclude: [archaic, obsolete, dated]
+exclude:
+  temporal: [TARC, TOBS, TDAT]  # archaic, obsolete, dated
 ```
 
 ### Source Filters (for licensing)

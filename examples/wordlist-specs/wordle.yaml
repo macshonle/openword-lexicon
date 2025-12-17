@@ -1,4 +1,11 @@
-# Wordle-style 5-letter words
+# Wordle-style 5-letter words (balanced)
+#
+# A middle-ground word list: filtered for family-friendliness
+# but broader than wordle-solutions.yaml.
+#
+# See also:
+# - wordle-accepted.yaml: broad dictionary for validating guesses
+# - wordle-solutions.yaml: curated list for puzzle solutions
 
 character:
   exact_length: 5
@@ -12,4 +19,4 @@ frequency:
   max_tier: N   # top ~30k words
 
 exclude:
-  register: [vulgar, offensive, derogatory]
+  register: [RVLG, ROFF]  # vulgar, offensive

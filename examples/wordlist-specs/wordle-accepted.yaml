@@ -1,0 +1,21 @@
+# Wordle Accepted Words (broad dictionary)
+#
+# All valid 5-letter words that Wordle should accept as guesses.
+# This is intentionally broad - includes swears, slang, and regional terms.
+# Only excludes truly obscure or archaic words.
+#
+# Use case: validating player guesses in word games
+
+character:
+  exact_length: 5
+  pattern: "^[a-z]+$"
+
+phrase:
+  max_words: 1
+
+frequency:
+  min_tier: A
+  max_tier: Q   # includes less common but valid words
+
+exclude:
+  temporal: [TOBS, TARC]  # obsolete, archaic

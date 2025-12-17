@@ -1,0 +1,12 @@
+# Word-only English dictionary (no phrases, no proper nouns)
+# Base dataset for game wordlists
+#
+# Excludes:
+#   - NAM (proper nouns/names)
+#   - PHR (phrases)
+#   - IDM (idioms)
+#
+# Includes multi-word entries like "petri dish" that are regular nouns
+
+exclude:
+  pos: [NAM, PHR, IDM]

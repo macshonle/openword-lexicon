@@ -90,7 +90,7 @@ METADATA := $(BUILD_DIR)/$(OW_LANG).meta.json
 # =============================================================================
 
 .PHONY: all test test-python test-typescript test-browser-headless nightly weekly fetch scan enrich build clean scrub \
-        deps lint fmt validate help \
+        deps lint fmt validate help wordlists \
         web-spec-editor web-viewer web-viewer-trie web-viewer-trie-v63 browser-test kill-servers
 
 .DEFAULT_GOAL := help
@@ -103,18 +103,19 @@ help:
 	@echo "OpenWord Lexicon Build System"
 	@echo ""
 	@echo "Primary targets:"
-	@echo "  make test      Run all tests"
-	@echo "  make nightly   Full nightly build"
-	@echo "  make fetch     Fetch data sources"
-	@echo "  make scan      Run Wiktionary scanner"
-	@echo "  make enrich    Run enrichment pipeline"
-	@echo "  make build     Build tries and metadata"
-	@echo "  make clean     Clean build artifacts"
+	@echo "  make test       Run all tests"
+	@echo "  make nightly    Full nightly build"
+	@echo "  make fetch      Fetch data sources"
+	@echo "  make scan       Run Wiktionary scanner"
+	@echo "  make enrich     Run enrichment pipeline"
+	@echo "  make build      Build tries and metadata"
+	@echo "  make wordlists  Generate word lists from specs"
+	@echo "  make clean      Clean build artifacts"
 	@echo ""
 	@echo "Development:"
-	@echo "  make deps      Install dependencies"
-	@echo "  make lint      Run linters"
-	@echo "  make fmt       Format code"
+	@echo "  make deps       Install dependencies"
+	@echo "  make lint       Run linters"
+	@echo "  make fmt        Format code"
 	@echo ""
 	@echo "Web tools:"
 	@echo "  make web-spec-editor   Start spec editor dev server"
@@ -218,6 +219,27 @@ $(METADATA): $(ENRICHED_OUTPUT) | $(BUILD_DIR)
 		--gzip
 
 build: $(UNIFIED_TRIE) $(METADATA)
+
+# =============================================================================
+# Wordlists
+# =============================================================================
+# Generate word lists from YAML specs in examples/wordlist-specs/
+# Each .yaml file produces a corresponding .txt file in BUILD_DIR/wordlists/
+
+WORDLIST_SPECS := $(wildcard examples/wordlist-specs/*.yaml)
+WORDLIST_OUTPUTS := $(patsubst examples/wordlist-specs/%.yaml,$(BUILD_DIR)/wordlists/%.txt,$(WORDLIST_SPECS))
+
+$(BUILD_DIR)/wordlists:
+	mkdir -p $@
+
+$(BUILD_DIR)/wordlists/%.txt: examples/wordlist-specs/%.yaml $(ENRICHED_OUTPUT) | $(BUILD_DIR)/wordlists
+	@echo "Generating wordlist: $@"
+	$(OWLEX) $< > $@
+	@wc -l < $@ | xargs printf "  → %s words\n"
+
+wordlists: $(WORDLIST_OUTPUTS)
+	@echo ""
+	@echo "Generated $(words $(WORDLIST_OUTPUTS)) word lists in $(BUILD_DIR)/wordlists/"
 
 # =============================================================================
 # Validation

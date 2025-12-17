@@ -1,0 +1,29 @@
+# Wordle Solution Words (curated puzzle answers)
+#
+# High-quality 5-letter words suitable for puzzle solutions.
+# Family-friendly, commonly known, and accessible to general audiences.
+#
+# Filtering criteria:
+# - Common vocabulary (top frequency tiers)
+# - No vulgar, offensive, or slang words
+# - No archaic or obsolete terms
+#
+# Use case: generating daily puzzle solutions
+
+character:
+  exact_length: 5
+  pattern: "^[a-z]+$"
+
+phrase:
+  max_words: 1
+
+frequency:
+  min_tier: A
+  max_tier: L   # common vocabulary (~10k most frequent)
+
+exclude:
+  register: [RVLG, ROFF, RSLG]   # vulgar, offensive, slang
+  temporal: [TOBS, TARC, TDAT]   # obsolete, archaic, dated
+
+# Note: Regional terms are NOT excluded - most common words don't have
+# regional tags anyway, and excluding them would remove too many words.
