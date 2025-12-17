@@ -40,26 +40,26 @@ from openword.progress_display import ProgressDisplay
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
 
 # Register labels that mark profanity/offensive content (v1 format)
-PROFANITY_REGISTERS = {'vulgar', 'offensive', 'derogatory'}
+PROFANITY_REGISTERS = {"vulgar", "offensive", "derogatory"}
 
 # Register codes that mark profanity/offensive content (v2 format)
-PROFANITY_CODES = {'RVLG', 'ROFF', 'RDEG'}
+PROFANITY_CODES = {"RVLG", "ROFF", "RDEG"}
 
 # Core sources that are curated for word games (pre-vetted)
-GAME_CURATED_SOURCES = {'enable', 'eowl'}
+GAME_CURATED_SOURCES = {"enable", "eowl"}
 
 # Temporal labels marking outdated words (v1 format)
-OUTDATED_TEMPORAL = {'archaic', 'obsolete', 'dated', 'historical'}
+OUTDATED_TEMPORAL = {"archaic", "obsolete", "dated", "historical"}
 
 # Temporal codes marking outdated words (v2 format)
-OUTDATED_CODES = {'TARC', 'TOBS', 'TDAT', 'THIS'}
+OUTDATED_CODES = {"TARC", "TOBS", "TDAT", "THIS"}
 
 
 # =============================================================================
@@ -84,10 +84,10 @@ class SensesIndex:
         self._file = None
 
     @classmethod
-    def from_file(cls, senses_path: Path) -> 'SensesIndex':
+    def from_file(cls, senses_path: Path) -> "SensesIndex":
         """Build line offset index from senses file."""
         offsets = []
-        with open(senses_path, 'rb') as f:
+        with open(senses_path, "rb") as f:
             offset = 0
             for line in f:
                 offsets.append(offset)
@@ -109,7 +109,7 @@ class SensesIndex:
             return []
 
         senses = []
-        with open(self.senses_path, 'r', encoding='utf-8') as f:
+        with open(self.senses_path, "r", encoding="utf-8") as f:
             # Seek to first sense
             f.seek(self.line_offsets[offset])
 
@@ -139,7 +139,7 @@ def load_senses_simple(senses_path: Path, offset: int, length: int) -> List[dict
         List of sense dictionaries
     """
     senses = []
-    with open(senses_path, 'r', encoding='utf-8') as f:
+    with open(senses_path, "r", encoding="utf-8") as f:
         for i, line in enumerate(f):
             if i < offset:
                 continue
@@ -168,12 +168,12 @@ def sense_is_profane(sense: dict) -> bool:
         True if sense has vulgar/offensive/derogatory tags
     """
     # V2 format: check codes set for RVLG, ROFF, RDEG
-    codes = set(sense.get('codes', []))
+    codes = set(sense.get("codes", []))
     if codes:
         return bool(codes & PROFANITY_CODES)
 
     # V1 format fallback: check register_tags array
-    register_tags = set(sense.get('register_tags', []))
+    register_tags = set(sense.get("register_tags", []))
     return bool(register_tags & PROFANITY_REGISTERS)
 
 
@@ -190,12 +190,12 @@ def sense_is_modern(sense: dict) -> bool:
         True if sense is not marked as archaic/obsolete/dated/historical
     """
     # V2 format: check codes set for TARC, TOBS, TDAT, THIS
-    codes = set(sense.get('codes', []))
+    codes = set(sense.get("codes", []))
     if codes:
         return not bool(codes & OUTDATED_CODES)
 
     # V1 format fallback: check temporal_tags array
-    temporal_tags = set(sense.get('temporal_tags', []))
+    temporal_tags = set(sense.get("temporal_tags", []))
     return not bool(temporal_tags & OUTDATED_TEMPORAL)
 
 
@@ -210,7 +210,7 @@ def sense_matches_pos(sense: dict, required_pos: Set[str]) -> bool:
     Returns:
         True if sense's POS is in required set
     """
-    return sense.get('pos', '') in required_pos
+    return sense.get("pos", "") in required_pos
 
 
 def sense_matches_region(sense: dict, preferred_regions: Optional[Set[str]] = None) -> bool:
@@ -234,15 +234,15 @@ def sense_matches_region(sense: dict, preferred_regions: Optional[Set[str]] = No
         return True
 
     # V2 format: extract region codes (ENXX pattern) from codes set
-    codes = set(sense.get('codes', []))
+    codes = set(sense.get("codes", []))
     if codes:
-        region_codes = {c for c in codes if c.startswith('EN') and len(c) == 4}
+        region_codes = {c for c in codes if c.startswith("EN") and len(c) == 4}
         if not region_codes:
             return True  # No region codes = universal
         return bool(region_codes & preferred_regions)
 
     # V1 format fallback: check region_tags array
-    region_tags = set(sense.get('region_tags', []))
+    region_tags = set(sense.get("region_tags", []))
 
     # No region tags = universal → include
     if not region_tags:
@@ -258,12 +258,12 @@ def sense_is_inflected(sense: dict) -> bool:
     Supports both v1 format (is_inflected bool) and v2 format (INFL in codes).
     """
     # V2 format: check codes set for INFL
-    codes = set(sense.get('codes', []))
+    codes = set(sense.get("codes", []))
     if codes:
-        return 'INFL' in codes
+        return "INFL" in codes
 
     # V1 format fallback
-    return sense.get('is_inflected', False)
+    return sense.get("is_inflected", False)
 
 
 def sense_is_base_form(sense: dict) -> bool:
@@ -285,7 +285,7 @@ def sense_is_base_form(sense: dict) -> bool:
         return False
 
     # If it has a lemma pointing to another word, it's an inflection
-    lemma = sense.get('lemma')
+    lemma = sense.get("lemma")
     if lemma:
         # Has lemma = inflected form (lemma points to base word)
         return False
@@ -304,7 +304,7 @@ def sense_has_lemma(sense: dict, target_lemma: str) -> bool:
     Returns:
         True if this sense's lemma matches the target
     """
-    return sense.get('lemma') == target_lemma
+    return sense.get("lemma") == target_lemma
 
 
 def sense_get_lemma(sense: dict) -> str | None:
@@ -317,7 +317,7 @@ def sense_get_lemma(sense: dict) -> str | None:
     Returns:
         The lemma string if inflected, None if base form
     """
-    return sense.get('lemma')
+    return sense.get("lemma")
 
 
 def sense_is_abbreviation(sense: dict) -> bool:
@@ -327,12 +327,12 @@ def sense_is_abbreviation(sense: dict) -> bool:
     Supports both v1 format (is_abbreviation bool) and v2 format (ABRV in codes).
     """
     # V2 format: check codes set for ABRV
-    codes = set(sense.get('codes', []))
+    codes = set(sense.get("codes", []))
     if codes:
-        return 'ABRV' in codes
+        return "ABRV" in codes
 
     # V1 format fallback
-    return sense.get('is_abbreviation', False)
+    return sense.get("is_abbreviation", False)
 
 
 def sense_is_proper_noun(sense: dict) -> bool:
@@ -341,10 +341,10 @@ def sense_is_proper_noun(sense: dict) -> bool:
 
     Supports both v1 format (pos='proper') and v2 format (pos='NAM').
     """
-    pos = sense.get('pos', '')
+    pos = sense.get("pos", "")
     # V2 format uses NAM for proper nouns
     # V1 format uses 'proper'
-    return pos in ('NAM', 'proper')
+    return pos in ("NAM", "proper")
 
 
 # =============================================================================
@@ -442,7 +442,7 @@ def filter_two_file(
     # Build senses index for efficient random access
     senses_index = SensesIndex.from_file(senses_path)
 
-    with open(lexeme_path, 'r', encoding='utf-8') as f:
+    with open(lexeme_path, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line:
@@ -455,8 +455,8 @@ def filter_two_file(
                 continue
 
             # Load senses for this lexeme
-            offset = lexeme.get('sense_offset', 0)
-            length = lexeme.get('sense_length', 0)
+            offset = lexeme.get("sense_offset", 0)
+            length = lexeme.get("sense_length", 0)
             senses = senses_index.get_senses(offset, length)
 
             # If no senses, handle based on require_all_senses
@@ -513,7 +513,7 @@ def filter_two_file_words_only(
         lexeme_path, senses_path,
         lexeme_predicate, sense_predicate, require_all_senses
     ):
-        yield lexeme['id']
+        yield lexeme["id"]
 
 
 def apply_two_file_filters(
@@ -545,14 +545,14 @@ def apply_two_file_filters(
     included = 0
     excluded = 0
 
-    with open(output_path, 'wb') as f_out:
+    with open(output_path, "wb") as f_out:
         if verbose:
             with ProgressDisplay("Filtering", update_interval=10000) as progress:
                 for lexeme, senses in filter_two_file(
                     lexeme_path, senses_path,
                     lexeme_predicate, sense_predicate, require_all_senses
                 ):
-                    f_out.write(orjson.dumps(lexeme, option=orjson.OPT_SORT_KEYS) + b'\n')
+                    f_out.write(orjson.dumps(lexeme, option=orjson.OPT_SORT_KEYS) + b"\n")
                     included += 1
                     progress.update(Included=included)
         else:
@@ -560,12 +560,12 @@ def apply_two_file_filters(
                 lexeme_path, senses_path,
                 lexeme_predicate, sense_predicate, require_all_senses
             ):
-                f_out.write(orjson.dumps(lexeme, option=orjson.OPT_SORT_KEYS) + b'\n')
+                f_out.write(orjson.dumps(lexeme, option=orjson.OPT_SORT_KEYS) + b"\n")
                 included += 1
 
     # Count total to get excluded
     total = 0
-    with open(lexeme_path, 'r') as f:
+    with open(lexeme_path, "r") as f:
         for line in f:
             if line.strip():
                 total += 1
@@ -606,7 +606,7 @@ def make_pos_predicate(required_pos: Set[str]) -> Callable[[dict], bool]:
         Function that returns True for senses with matching POS
     """
     def predicate(sense: dict) -> bool:
-        return sense.get('pos', '') in required_pos
+        return sense.get("pos", "") in required_pos
     return predicate
 
 
@@ -643,7 +643,7 @@ def make_frequency_predicate(
         make_frequency_predicate(rarest_allowed='L', most_common_allowed='D')
     """
     def predicate(lexeme: dict) -> bool:
-        tier = lexeme.get('frequency_tier', 'Z')
+        tier = lexeme.get("frequency_tier", "Z")
         if rarest_allowed and tier > rarest_allowed:
             return False
         if most_common_allowed and tier < most_common_allowed:
@@ -667,7 +667,7 @@ def make_word_form_predicate(
         Function that returns True for lexemes with valid word forms
     """
     def predicate(lexeme: dict) -> bool:
-        word = lexeme.get('id', '')
+        word = lexeme.get("id", "")
 
         if exclude_fragments and is_contraction_fragment(word):
             return False
@@ -697,11 +697,11 @@ def make_concreteness_predicate(
     """
     def predicate(lexeme: dict) -> bool:
         if categories:
-            cat = lexeme.get('concreteness')
+            cat = lexeme.get("concreteness")
             if cat not in categories:
                 return False
 
-        rating = lexeme.get('concreteness_rating')
+        rating = lexeme.get("concreteness_rating")
         if rating is not None:
             if min_rating is not None and rating < min_rating:
                 return False
@@ -758,7 +758,7 @@ def matches_syllables(entry: dict, min_syllables: Optional[int] = None,
         # Words with syllable data (any count)
         matches_syllables(entry, require_syllables=True)
     """
-    syllable_count = entry.get('nsyll')
+    syllable_count = entry.get("nsyll")
 
     # If requiring syllable data and it's missing, exclude
     if require_syllables and syllable_count is None:

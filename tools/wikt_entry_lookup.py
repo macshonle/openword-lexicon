@@ -46,13 +46,13 @@ class EntryMapper:
 
         # Load offsets (binary)
         offsets_file = data_dir / "entry_offsets.bin"
-        with open(offsets_file, 'rb') as f:
+        with open(offsets_file, "rb") as f:
             offset_data = f.read()
-            self.entry_offsets = struct.unpack(f'<{len(offset_data) // 4}I', offset_data)
+            self.entry_offsets = struct.unpack(f"<{len(offset_data) // 4}I", offset_data)
 
         # Load sparse line lists (JSON)
         lists_file = data_dir / "entry_line_lists.json"
-        with open(lists_file, 'r', encoding='utf-8') as f:
+        with open(lists_file, "r", encoding="utf-8") as f:
             raw_lists = json.load(f)
             # Convert string keys back to integers
             self.entry_line_lists = {int(k): v for k, v in raw_lists.items()}
@@ -70,10 +70,10 @@ class EntryMapper:
         if self._line_offsets is not None:
             return
 
-        print("Building line index...", end='', flush=True)
+        print("Building line index...", end="", flush=True)
         self._line_offsets = [0]  # Line 0 starts at byte 0
 
-        with open(self.entries_file, 'rb') as f:
+        with open(self.entries_file, "rb") as f:
             while f.readline():
                 self._line_offsets.append(f.tell())
 
@@ -124,7 +124,7 @@ class EntryMapper:
 
         # Read entries
         entries = []
-        with open(self.entries_file, 'r', encoding='utf-8') as f:
+        with open(self.entries_file, "r", encoding="utf-8") as f:
             for line_num in line_numbers:
                 # Seek to line
                 f.seek(self._line_offsets[line_num])
@@ -152,11 +152,11 @@ class EntryMapper:
             Ordinal if found, None otherwise
         """
         # Build reverse index if needed
-        if not hasattr(self, '_word_to_ordinal'):
-            print("Building word-to-ordinal index...", end='', flush=True)
+        if not hasattr(self, "_word_to_ordinal"):
+            print("Building word-to-ordinal index...", end="", flush=True)
             self._word_to_ordinal = {}
 
-            with open(self.entries_file, 'r', encoding='utf-8') as f:
+            with open(self.entries_file, "r", encoding="utf-8") as f:
                 seen_words = set()
                 ordinal = 0
 
@@ -166,7 +166,7 @@ class EntryMapper:
 
                     try:
                         entry = json.loads(line)
-                        w = entry.get('id')
+                        w = entry.get("id")
 
                         if w and w not in seen_words:
                             self._word_to_ordinal[w] = ordinal
@@ -188,9 +188,9 @@ def format_entry(entry: Dict[str, Any], index: int = 0) -> str:
     if index > 0:
         lines.append(f"\n--- Entry {index + 1} ---")
 
-    word = entry.get('id', '?')
-    pos = entry.get('pos', [])
-    labels = entry.get('labels', {})
+    word = entry.get("id", "?")
+    pos = entry.get("pos", [])
+    labels = entry.get("labels", {})
 
     lines.append(f"Word: {word}")
 
@@ -198,39 +198,39 @@ def format_entry(entry: Dict[str, Any], index: int = 0) -> str:
         lines.append(f"POS:  {', '.join(pos)}")
 
     # Labels
-    for label_type in ['register', 'temporal', 'domain', 'region']:
+    for label_type in ["register", "temporal", "domain", "region"]:
         if label_type in labels and labels[label_type]:
             vals = labels[label_type]
             lines.append(f"{label_type.capitalize()}: {', '.join(vals)}")
 
     # Boolean flags
     flags = []
-    for flag in ['is_vulgar', 'is_archaic', 'is_rare', 'is_informal', 'is_technical', 'is_regional']:
+    for flag in ["is_vulgar", "is_archaic", "is_rare", "is_informal", "is_technical", "is_regional"]:
         if entry.get(flag):
-            flags.append(flag.replace('is_', ''))
+            flags.append(flag.replace("is_", ""))
 
     if flags:
         lines.append(f"Flags: {', '.join(flags)}")
 
     # Syllables
-    syllables = entry.get('nsyll')
+    syllables = entry.get("nsyll")
     if syllables:
         lines.append(f"Syllables: {syllables}")
 
     # Morphology
-    morphology = entry.get('morphology', {})
+    morphology = entry.get("morphology", {})
     if morphology:
         morph_parts = []
-        if morphology.get('is_compound'):
+        if morphology.get("is_compound"):
             morph_parts.append("compound")
-        morph_type = morphology.get('type')
+        morph_type = morphology.get("type")
         if morph_type:
             morph_parts.append(f"type={morph_type}")
 
         if morph_parts:
             lines.append(f"Morphology: {', '.join(morph_parts)}")
 
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
 def main():
@@ -238,17 +238,17 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Lookup Wiktionary entries using sparse offset mapping'
+        description="Lookup Wiktionary entries using sparse offset mapping"
     )
-    parser.add_argument('--ordinal', type=int, help='Word ordinal to lookup')
-    parser.add_argument('--word', type=str, help='Word string to lookup')
-    parser.add_argument('--interactive', action='store_true', help='Interactive mode')
-    parser.add_argument('--data-dir', type=Path,
-                        default=Path('data/intermediate'),
-                        help='Directory with mapping files')
-    parser.add_argument('--entries', type=Path,
-                        default=Path('data/intermediate/en-wikt.jsonl'),
-                        help='Path to wikt.jsonl')
+    parser.add_argument("--ordinal", type=int, help="Word ordinal to lookup")
+    parser.add_argument("--word", type=str, help="Word string to lookup")
+    parser.add_argument("--interactive", action="store_true", help="Interactive mode")
+    parser.add_argument("--data-dir", type=Path,
+                        default=Path("data/intermediate"),
+                        help="Directory with mapping files")
+    parser.add_argument("--entries", type=Path,
+                        default=Path("data/intermediate/en-wikt.jsonl"),
+                        help="Path to wikt.jsonl")
 
     args = parser.parse_args()
 
@@ -282,7 +282,7 @@ def main():
             try:
                 cmd = input("> ").strip()
 
-                if cmd == 'quit':
+                if cmd == "quit":
                     break
 
                 parts = cmd.split(maxsplit=1)
@@ -292,7 +292,7 @@ def main():
 
                 cmd_type, arg = parts
 
-                if cmd_type == 'ordinal':
+                if cmd_type == "ordinal":
                     ordinal = int(arg)
                     entries = mapper.get_entries(ordinal)
 
@@ -301,7 +301,7 @@ def main():
                         print(format_entry(entry, i))
                     print()
 
-                elif cmd_type == 'word':
+                elif cmd_type == "word":
                     word = arg
                     ordinal = mapper.get_word_ordinal(word)
 
@@ -359,5 +359,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

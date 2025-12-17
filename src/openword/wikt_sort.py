@@ -31,7 +31,7 @@ def load_entries(input_file: Path) -> List[Dict]:
     print(f"Loading {input_file.name}...")
 
     with ProgressDisplay("Loading entries", update_interval=1000) as progress:
-        with open(input_file, 'r', encoding='utf-8') as f:
+        with open(input_file, "r", encoding="utf-8") as f:
             for line_num, line in enumerate(f, start=1):
                 line = line.strip()
                 if not line:
@@ -61,10 +61,10 @@ def sort_entries(entries: List[Dict]) -> List[Dict]:
     print("Sorting entries by id...")
 
     # Same sorting as trie_build.py line 84
-    sorted_entries = sorted(entries, key=lambda e: e['id'])
+    sorted_entries = sorted(entries, key=lambda e: e["id"])
 
     # Report statistics about duplicates
-    unique_words = len(set(e['id'] for e in entries))
+    unique_words = len(set(e["id"] for e in entries))
     total_entries = len(entries)
     duplicate_entries = total_entries - unique_words
 
@@ -82,10 +82,10 @@ def write_entries(entries: List[Dict], output_file: Path):
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     with ProgressDisplay("Writing entries", update_interval=1000) as progress:
-        with open(output_file, 'w', encoding='utf-8') as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             for i, entry in enumerate(entries, start=1):
-                json.dump(entry, f, ensure_ascii=False, separators=(',', ':'))
-                f.write('\n')
+                json.dump(entry, f, ensure_ascii=False, separators=(",", ":"))
+                f.write("\n")
                 progress.update(Written=i)
 
     print(f"Wrote {len(entries):,} entries to {output_file}")
@@ -98,12 +98,12 @@ def write_entries(entries: List[Dict], output_file: Path):
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description='Sort Wiktionary entries lexicographically by word'
+        description="Sort Wiktionary entries lexicographically by word"
     )
-    parser.add_argument('--input', type=Path, required=True,
-                        help='Input JSONL file (unsorted Wiktionary entries)')
-    parser.add_argument('--output', type=Path, required=True,
-                        help='Output JSONL file (sorted by word)')
+    parser.add_argument("--input", type=Path, required=True,
+                        help="Input JSONL file (unsorted Wiktionary entries)")
+    parser.add_argument("--output", type=Path, required=True,
+                        help="Output JSONL file (sorted by word)")
     args = parser.parse_args()
 
     input_file = args.input
@@ -140,5 +140,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

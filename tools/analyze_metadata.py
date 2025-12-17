@@ -36,7 +36,7 @@ def load_pos_codes() -> Set[str]:
         if schema_path.exists():
             with open(schema_path) as f:
                 schema = yaml.safe_load(f)
-            return {pos['code'] for pos in schema.get('pos_classes', [])}
+            return {pos["code"] for pos in schema.get("pos_classes", [])}
 
     # Schema not found - exit with error
     import sys
@@ -53,18 +53,18 @@ def load_metadata(meta_path: Path) -> Dict[str, Any]:
     metadata = {}
 
     # JSONL format (current pipeline)
-    if meta_path.suffix == '.jsonl':
-        with open(meta_path, 'r', encoding='utf-8') as f:
+    if meta_path.suffix == ".jsonl":
+        with open(meta_path, "r", encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
                 if line:
                     entry = json.loads(line)
-                    metadata[entry['id']] = entry
+                    metadata[entry["id"]] = entry
     else:
         # Legacy JSON array format
-        with open(meta_path, 'r', encoding='utf-8') as f:
+        with open(meta_path, "r", encoding="utf-8") as f:
             metadata_list = json.load(f)
-        metadata = {entry['id']: entry for entry in metadata_list}
+        metadata = {entry["id"]: entry for entry in metadata_list}
 
     return metadata
 
@@ -95,46 +95,46 @@ def load_senses(senses_path: Path) -> Dict[str, Dict[str, Any]]:
 
     word_senses: Dict[str, Dict[str, Any]] = {}
 
-    with open(senses_path, 'r', encoding='utf-8') as f:
+    with open(senses_path, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line:
                 continue
 
             entry = json.loads(line)
-            word = entry.get('id', '')
+            word = entry.get("id", "")
 
             if word not in word_senses:
                 word_senses[word] = {
-                    'pos': set(),
-                    'labels': {
-                        'register': set(),
-                        'domain': set(),
-                        'region': set(),
-                        'temporal': set(),
+                    "pos": set(),
+                    "labels": {
+                        "register": set(),
+                        "domain": set(),
+                        "region": set(),
+                        "temporal": set(),
                     }
                 }
 
             # Collect POS
-            pos = entry.get('pos')
+            pos = entry.get("pos")
             if pos:
-                word_senses[word]['pos'].add(pos)
+                word_senses[word]["pos"].add(pos)
 
             # Collect tags
             for tag_field, label_key in [
-                ('register_tags', 'register'),
-                ('domain_tags', 'domain'),
-                ('region_tags', 'region'),
-                ('temporal_tags', 'temporal'),
+                ("register_tags", "register"),
+                ("domain_tags", "domain"),
+                ("region_tags", "region"),
+                ("temporal_tags", "temporal"),
             ]:
                 tags = entry.get(tag_field, [])
-                word_senses[word]['labels'][label_key].update(tags)
+                word_senses[word]["labels"][label_key].update(tags)
 
     # Convert sets to sorted lists
     for word, data in word_senses.items():
-        data['pos'] = sorted(data['pos'])
-        for label_key in data['labels']:
-            data['labels'][label_key] = sorted(data['labels'][label_key])
+        data["pos"] = sorted(data["pos"])
+        for label_key in data["labels"]:
+            data["labels"][label_key] = sorted(data["labels"][label_key])
 
     return word_senses
 
@@ -147,12 +147,12 @@ def merge_lexemes_and_senses(
     for word, lexeme in lexemes.items():
         if word in senses:
             sense_data = senses[word]
-            lexeme['pos'] = sense_data['pos']
-            lexeme['labels'] = sense_data['labels']
+            lexeme["pos"] = sense_data["pos"]
+            lexeme["labels"] = sense_data["labels"]
         else:
             # Word has no senses (secondary source only)
-            lexeme['pos'] = []
-            lexeme['labels'] = {}
+            lexeme["pos"] = []
+            lexeme["labels"] = {}
 
     return lexemes
 
@@ -162,7 +162,7 @@ def analyze_frequency_tiers(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     tier_counts = Counter()
 
     for word, meta in metadata.items():
-        tier = meta.get('frequency_tier')
+        tier = meta.get("frequency_tier")
         tier_counts[tier] += 1
 
     report = "## Frequency Tier Distribution\n\n"
@@ -171,7 +171,7 @@ def analyze_frequency_tiers(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
 
     total = sum(tier_counts.values())
     # Calculate total of ranked entries (excluding Z tier)
-    ranked_total = sum(count for tier, count in tier_counts.items() if tier != 'Z' and tier is not None)
+    ranked_total = sum(count for tier, count in tier_counts.items() if tier != "Z" and tier is not None)
 
     # Sort by tier number (None at end)
     sorted_tiers = sorted([t for t in tier_counts.keys() if t is not None])
@@ -181,12 +181,12 @@ def analyze_frequency_tiers(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     for tier in sorted_tiers:
         count = tier_counts[tier]
         # For Z tier, show N/A for percentage; for others, calculate % of ranked entries
-        if tier == 'Z':
+        if tier == "Z":
             pct_display = "N/A"
         else:
             pct = (count / ranked_total * 100) if ranked_total > 0 else 0
             pct_display = f"{pct:.1f}%"
-        tier_display = tier if tier is not None else 'N/A'
+        tier_display = tier if tier is not None else "N/A"
         report += f"| {tier_display} | {count:,} | {pct_display} |\n"
 
     report += f"\n*Ranked entries: {ranked_total:,} | Unranked (Z): {tier_counts.get('Z', 0):,}*\n\n"
@@ -195,8 +195,8 @@ def analyze_frequency_tiers(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     report += "### Sample Words by Tier\n\n"
 
     for tier in sorted_tiers:  # Show ALL tiers
-        tier_words = [w for w, m in metadata.items() if m.get('frequency_tier') == tier]
-        tier_display = tier if tier is not None else 'N/A'
+        tier_words = [w for w, m in metadata.items() if m.get("frequency_tier") == tier]
+        tier_display = tier if tier is not None else "N/A"
 
         if not tier_words:
             # Explicitly report null cases
@@ -213,8 +213,8 @@ def analyze_frequency_tiers(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     report += "\n"
 
     stats = {
-        'tier_counts': tier_counts,
-        'total': total
+        "tier_counts": tier_counts,
+        "total": total
     }
 
     return report, stats
@@ -226,7 +226,7 @@ def analyze_sources(metadata: Dict[str, Any]) -> str:
     source_combos = Counter()
 
     for word, meta in metadata.items():
-        sources = meta.get('sources', [])
+        sources = meta.get("sources", [])
         for source in sources:
             source_counts[source] += 1
 
@@ -247,7 +247,7 @@ def analyze_sources(metadata: Dict[str, Any]) -> str:
     report += "|---------|------:|\n"
 
     for combo, count in source_combos.most_common(10):
-        combo_str = ', '.join(combo) if combo else 'None'
+        combo_str = ", ".join(combo) if combo else "None"
         report += f"| {combo_str} | {count:,} |\n"
 
     report += "\n"
@@ -270,41 +270,41 @@ def analyze_labels(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     entries_with_temporal = 0
 
     for word, meta in metadata.items():
-        labels = meta.get('labels', {})
+        labels = meta.get("labels", {})
 
         if labels:
             entries_with_labels += 1
 
         # POS is stored in the top-level 'pos' field, not in 'labels'
-        pos_list = meta.get('pos', [])
+        pos_list = meta.get("pos", [])
         if pos_list:
             entries_with_pos += 1
             for pos in pos_list:
                 pos_counts[pos] += 1
 
         # Register labels
-        register_list = labels.get('register', [])
+        register_list = labels.get("register", [])
         if register_list:
             entries_with_register += 1
             for reg in register_list:
                 register_counts[reg] += 1
 
         # Domain labels
-        domain_list = labels.get('domain', [])
+        domain_list = labels.get("domain", [])
         if domain_list:
             entries_with_domain += 1
             for dom in domain_list:
                 domain_counts[dom] += 1
 
         # Region labels
-        region_list = labels.get('region', [])
+        region_list = labels.get("region", [])
         if region_list:
             entries_with_region += 1
             for reg in region_list:
                 region_counts[reg] += 1
 
         # Temporal labels
-        temporal_list = labels.get('temporal', [])
+        temporal_list = labels.get("temporal", [])
         if temporal_list:
             entries_with_temporal += 1
             for tmp in temporal_list:
@@ -375,12 +375,12 @@ def analyze_labels(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
         report += "\n"
 
     stats = {
-        'entries_with_labels': entries_with_labels,
-        'pos_counts': pos_counts,
-        'register_counts': register_counts,
-        'domain_counts': domain_counts,
-        'region_counts': region_counts,
-        'temporal_counts': temporal_counts,
+        "entries_with_labels": entries_with_labels,
+        "pos_counts": pos_counts,
+        "register_counts": register_counts,
+        "domain_counts": domain_counts,
+        "region_counts": region_counts,
+        "temporal_counts": temporal_counts,
     }
 
     return report, stats
@@ -391,31 +391,31 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     total = len(metadata)
 
     # Count field coverage
-    has_pos = sum(1 for e in metadata.values() if e.get('pos'))
-    has_concreteness = sum(1 for e in metadata.values() if e.get('concreteness'))
-    has_frequency = sum(1 for e in metadata.values() if e.get('frequency_tier'))
-    has_labels = sum(1 for e in metadata.values() if e.get('labels'))
-    has_gloss = sum(1 for e in metadata.values() if e.get('gloss'))
-    has_syllables = sum(1 for e in metadata.values() if e.get('nsyll'))
+    has_pos = sum(1 for e in metadata.values() if e.get("pos"))
+    has_concreteness = sum(1 for e in metadata.values() if e.get("concreteness"))
+    has_frequency = sum(1 for e in metadata.values() if e.get("frequency_tier"))
+    has_labels = sum(1 for e in metadata.values() if e.get("labels"))
+    has_gloss = sum(1 for e in metadata.values() if e.get("gloss"))
+    has_syllables = sum(1 for e in metadata.values() if e.get("nsyll"))
 
     # Count nouns (using 3-letter POS code)
-    nouns = [e for e in metadata.values() if 'NOU' in e.get('pos', [])]
-    concrete_nouns = [e for e in nouns if e.get('concreteness') == 'concrete']
-    abstract_nouns = [e for e in nouns if e.get('concreteness') == 'abstract']
-    mixed_nouns = [e for e in nouns if e.get('concreteness') == 'mixed']
-    nouns_no_concrete = [e for e in nouns if not e.get('concreteness')]
+    nouns = [e for e in metadata.values() if "NOU" in e.get("pos", [])]
+    concrete_nouns = [e for e in nouns if e.get("concreteness") == "concrete"]
+    abstract_nouns = [e for e in nouns if e.get("concreteness") == "abstract"]
+    mixed_nouns = [e for e in nouns if e.get("concreteness") == "mixed"]
+    nouns_no_concrete = [e for e in nouns if not e.get("concreteness")]
 
     # Frequency distribution of nouns
     noun_freq = Counter()
     for noun in nouns:
-        tier = noun.get('frequency_tier', 'rare')
+        tier = noun.get("frequency_tier", "rare")
         noun_freq[tier] += 1
 
     # Concreteness distribution
     concrete_dist = Counter()
     for entry in metadata.values():
-        if 'NOU' in entry.get('pos', []):
-            concrete_dist[entry.get('concreteness', 'unknown')] += 1
+        if "NOU" in entry.get("pos", []):
+            concrete_dist[entry.get("concreteness", "unknown")] += 1
 
     report = "## Game-Specific Metadata Analysis\n\n"
     report += "This section analyzes metadata coverage for word game filtering needs.\n\n"
@@ -426,12 +426,12 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     report += "|-------|------:|----------:|\n"
 
     fields = [
-        ('POS tags', has_pos),
-        ('Concreteness', has_concreteness),
-        ('Frequency tier', has_frequency),
-        ('Labels', has_labels),
-        ('Syllables', has_syllables),
-        ('Gloss', has_gloss),
+        ("POS tags", has_pos),
+        ("Concreteness", has_concreteness),
+        ("Frequency tier", has_frequency),
+        ("Labels", has_labels),
+        ("Syllables", has_syllables),
+        ("Gloss", has_gloss),
     ]
 
     for field_name, count in fields:
@@ -453,7 +453,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     if has_syllables > 0:
         syllable_dist = Counter()
         for entry in metadata.values():
-            syll_count = entry.get('nsyll')
+            syll_count = entry.get("nsyll")
             if syll_count is not None:
                 syllable_dist[syll_count] += 1
 
@@ -486,9 +486,9 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
                     # Filter out proverbs and long phrases from samples
                     words_with_syll = [
                         w for w, e in metadata.items()
-                        if e.get('nsyll') == syll_count
-                        and e.get('phrase_type') != 'proverb'
-                        and e.get('wc', 1) <= 5
+                        if e.get("nsyll") == syll_count
+                        and e.get("phrase_type") != "proverb"
+                        and e.get("wc", 1) <= 5
                     ]
                     count = len(words_with_syll)
 
@@ -498,8 +498,8 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
                         words_with_meta.sort(key=lambda x: x[0])
                         formatted = []
                         for w, meta in words_with_meta:
-                            phrase_type = meta.get('phrase_type')
-                            word_count = meta.get('wc', 1)
+                            phrase_type = meta.get("phrase_type")
+                            word_count = meta.get("wc", 1)
                             if phrase_type or word_count > 1:
                                 annotations = []
                                 if phrase_type:
@@ -516,8 +516,8 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
                         formatted = []
                         for w in sample:
                             meta = metadata[w]
-                            phrase_type = meta.get('phrase_type')
-                            word_count = meta.get('wc', 1)
+                            phrase_type = meta.get("phrase_type")
+                            word_count = meta.get("wc", 1)
                             if phrase_type or word_count > 1:
                                 annotations = []
                                 if phrase_type:
@@ -535,7 +535,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
                 report += "\n#### Complete Enumeration for Rare Syllable Counts\n\n"
                 for syll_count in sorted(rare_syllable_counts):
                     words_with_syll_data = [(w, metadata[w]) for w in metadata.keys()
-                                           if metadata[w].get('nsyll') == syll_count]
+                                           if metadata[w].get("nsyll") == syll_count]
                     words_with_syll_data.sort(key=lambda x: x[0])  # Sort by word
 
                     count = len(words_with_syll_data)
@@ -543,8 +543,8 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
                     # Format each word with metadata annotations
                     formatted_words = []
                     for word, meta in words_with_syll_data:
-                        phrase_type = meta.get('phrase_type')
-                        word_count = meta.get('wc')
+                        phrase_type = meta.get("phrase_type")
+                        word_count = meta.get("wc")
 
                         if phrase_type or (word_count and word_count > 3):
                             # Annotate special cases
@@ -581,7 +581,7 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     for tier in all_tiers:
         count = noun_freq[tier]
         pct = (count / total_nouns_with_tier * 100) if total_nouns_with_tier > 0 else 0
-        tier_display = tier if tier is not None else 'N/A'
+        tier_display = tier if tier is not None else "N/A"
         report += f"| {tier_display} | {count:,} | {pct:.1f}% |\n"
 
     # Show total
@@ -592,12 +592,12 @@ def analyze_game_metadata(metadata: Dict[str, Any]) -> Tuple[str, Dict]:
     report += "\n"
 
     stats = {
-        'total_nouns': len(nouns),
-        'concrete_nouns': len(concrete_nouns),
-        'abstract_nouns': len(abstract_nouns),
-        'mixed_nouns': len(mixed_nouns),
-        'nouns_no_concrete': len(nouns_no_concrete),
-        'has_labels': has_labels,
+        "total_nouns": len(nouns),
+        "concrete_nouns": len(concrete_nouns),
+        "abstract_nouns": len(abstract_nouns),
+        "mixed_nouns": len(mixed_nouns),
+        "nouns_no_concrete": len(nouns_no_concrete),
+        "has_labels": has_labels,
     }
 
     return report, stats
@@ -609,15 +609,15 @@ def analyze_sense_based_format(metadata: Dict[str, Any]) -> str:
     # Find words with multiple POS tags as candidates for sense splitting
     multi_pos_words = []
     for word, meta in metadata.items():
-        pos_list = meta.get('pos', [])
+        pos_list = meta.get("pos", [])
         if len(pos_list) > 1:
             multi_pos_words.append((word, pos_list, meta))
 
     # Find examples with regional variants
     regional_variants = defaultdict(list)
     for word, meta in metadata.items():
-        labels = meta.get('labels', {})
-        regions = labels.get('region', [])
+        labels = meta.get("labels", {})
+        regions = labels.get("region", [])
         if regions:
             regional_variants[word].append((regions, meta))
 
@@ -698,7 +698,7 @@ def analyze_sense_based_format(metadata: Dict[str, Any]) -> str:
 
     # Show 10 interesting examples
     for word, pos_list, meta in multi_pos_words[:10]:
-        pos_str = ', '.join(pos_list)
+        pos_str = ", ".join(pos_list)
         report += f"- **{word}**: {pos_str}\n"
 
     report += "\n"
@@ -712,7 +712,7 @@ def generate_filtering_recommendations(label_stats: Dict, game_stats: Dict) -> s
     report = "## Filtering Recommendations\n\n"
 
     # Check label coverage
-    label_coverage = label_stats['entries_with_labels']
+    label_coverage = label_stats["entries_with_labels"]
     has_labels = label_coverage > 100  # Arbitrary threshold
 
     if not has_labels:
@@ -725,7 +725,7 @@ def generate_filtering_recommendations(label_stats: Dict, game_stats: Dict) -> s
         report += "3. Fix label extraction and/or merging logic\n\n"
 
     # Concreteness filtering
-    nouns_no_concrete = game_stats['nouns_no_concrete']
+    nouns_no_concrete = game_stats["nouns_no_concrete"]
     if nouns_no_concrete > 1000:
         report += "### 1. Improve Concreteness Detection\n\n"
         report += f"{nouns_no_concrete:,} nouns lack concreteness data. Options:\n\n"
@@ -777,7 +777,7 @@ def sample_entries_by_source(metadata: Dict[str, Any]) -> str:
     source_combinations = defaultdict(list)
 
     for word, meta in metadata.items():
-        sources = tuple(sorted(meta.get('sources', [])))
+        sources = tuple(sorted(meta.get("sources", [])))
         source_combinations[sources].append((word, meta))
 
     report = "## Sample Entries by Source\n\n"
@@ -788,7 +788,7 @@ def sample_entries_by_source(metadata: Dict[str, Any]) -> str:
 
     # Show samples from top source combinations
     for sources, entries in sorted_combos[:8]:  # Top 8 combinations
-        sources_str = ', '.join(sources) if sources else 'None'
+        sources_str = ", ".join(sources) if sources else "None"
         count = len(entries)
 
         report += f"### {sources_str} ({count:,} entries)\n\n"
@@ -814,11 +814,11 @@ def sample_rich_entries(metadata: Dict[str, Any]) -> str:
 
     for word, meta in metadata.items():
         score = 0
-        score += len(meta.get('sources', []))
-        score += len(meta.get('labels', {}).get('pos', []))
-        score += len(meta.get('labels', {}).get('domain', []))
-        score += 1 if meta.get('frequency_tier') else 0
-        score += 1 if meta.get('gloss') else 0
+        score += len(meta.get("sources", []))
+        score += len(meta.get("labels", {}).get("pos", []))
+        score += len(meta.get("labels", {}).get("domain", []))
+        score += 1 if meta.get("frequency_tier") else 0
+        score += 1 if meta.get("gloss") else 0
 
         if score >= 5:  # Threshold for "rich"
             rich_entries.append((word, meta, score))
@@ -846,7 +846,7 @@ def _is_contraction_fragment(word: str) -> bool:
     return word.startswith("'") or word.endswith("'")
 
 
-def analyze_unmatched_frequency_entries(metadata: Dict[str, Any], language: str = 'en') -> str:
+def analyze_unmatched_frequency_entries(metadata: Dict[str, Any], language: str = "en") -> str:
     """Analyze frequency entries that don't result in tier assignments.
 
     This helps explain discrepancies like tier A having 18 words instead of 20,
@@ -860,20 +860,20 @@ def analyze_unmatched_frequency_entries(metadata: Dict[str, Any], language: str 
     import unicodedata
 
     # Load frequency data
-    freq_file = Path(f'data/raw/{language}/{language}_50k.txt')
+    freq_file = Path(f"data/raw/{language}/{language}_50k.txt")
     if not freq_file.exists():
         return ""
 
     # Build set of normalized lexeme words
     lexeme_words = set()
     for word in metadata.keys():
-        normalized = unicodedata.normalize('NFKC', word.lower())
+        normalized = unicodedata.normalize("NFKC", word.lower())
         lexeme_words.add(normalized)
 
     # Find unmatched frequency entries
     unmatched = []
 
-    with open(freq_file, 'r', encoding='utf-8') as f:
+    with open(freq_file, "r", encoding="utf-8") as f:
         for rank, line in enumerate(f, start=1):
             line = line.strip()
             if not line:
@@ -885,7 +885,7 @@ def analyze_unmatched_frequency_entries(metadata: Dict[str, Any], language: str 
 
             word = parts[0]
             freq = int(parts[1]) if len(parts) > 1 else 0
-            normalized = unicodedata.normalize('NFKC', word.lower())
+            normalized = unicodedata.normalize("NFKC", word.lower())
 
             # Check if this entry is skipped during tier assignment
             is_contraction = _is_contraction_fragment(normalized)
@@ -915,7 +915,7 @@ def analyze_unmatched_frequency_entries(metadata: Dict[str, Any], language: str 
 
     for rank, word, freq, reason in unmatched:
         # Escape pipe characters in words for markdown table
-        word_escaped = word.replace('|', '\\|')
+        word_escaped = word.replace("|", "\\|")
         report += f"| {rank} | `{word_escaped}` | {freq:,} | {reason} |\n"
 
     report += "\n"
@@ -923,15 +923,15 @@ def analyze_unmatched_frequency_entries(metadata: Dict[str, Any], language: str 
     return report
 
 
-def generate_report(language: str = 'en'):
+def generate_report(language: str = "en"):
     """Generate comprehensive metadata analysis report for a language."""
     # Try new lexemes-enriched format first (flat structure with language-prefixed files)
-    meta_path = Path(f'data/intermediate/{language}-lexemes-enriched.jsonl')
+    meta_path = Path(f"data/intermediate/{language}-lexemes-enriched.jsonl")
     if not meta_path.exists():
-        meta_path = Path(f'data/build/{language}.meta.json')
+        meta_path = Path(f"data/build/{language}.meta.json")
 
     # Load senses file for POS and label data (two-file format)
-    senses_path = Path(f'data/intermediate/{language}-senses.jsonl')
+    senses_path = Path(f"data/intermediate/{language}-senses.jsonl")
 
     # Load metadata first to set reproducible seed based on data
     metadata = load_metadata(meta_path)
@@ -1006,20 +1006,20 @@ def generate_report(language: str = 'en'):
         report += sample_rich_entries(metadata)
 
     # Write report
-    output_path = Path(f'reports/metadata_analysis_{language}.md')
+    output_path = Path(f"reports/metadata_analysis_{language}.md")
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(output_path, 'w', encoding='utf-8') as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         f.write(report)
 
     print(f"Comprehensive metadata analysis report ({language}) written to {output_path}")
     return output_path
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
-    language = sys.argv[1] if len(sys.argv) > 1 else 'en'
+    language = sys.argv[1] if len(sys.argv) > 1 else "en"
 
     print(f"Generating report for language: {language}")
     generate_report(language)

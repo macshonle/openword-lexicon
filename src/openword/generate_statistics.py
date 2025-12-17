@@ -25,8 +25,8 @@ from openword import build_stats
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
@@ -36,14 +36,14 @@ def load_entries_from_jsonl(input_path: Path) -> Dict[str, dict]:
     logger.info(f"Loading entries from {input_path}")
     entries = {}
 
-    with open(input_path, 'r', encoding='utf-8') as f:
+    with open(input_path, "r", encoding="utf-8") as f:
         for line_num, line in enumerate(f, 1):
             if not line.strip():
                 continue
 
             try:
                 entry = json.loads(line)
-                word = entry.get('id')
+                word = entry.get("id")
                 if word:
                     entries[word] = entry
             except json.JSONDecodeError as e:
@@ -56,10 +56,10 @@ def load_entries_from_jsonl(input_path: Path) -> Dict[str, dict]:
 
 def main():
     """Generate build statistics from final enriched entries."""
-    parser = argparse.ArgumentParser(description='Generate build statistics for word list builder')
-    parser.add_argument('--lang', default='en', help='Language code (default: en)')
-    parser.add_argument('--input', type=Path, help='Input lexemes JSONL file (overrides default path)')
-    parser.add_argument('--senses', type=Path, help='Input senses JSONL file (for POS/labels stats)')
+    parser = argparse.ArgumentParser(description="Generate build statistics for word list builder")
+    parser.add_argument("--lang", default="en", help="Language code (default: en)")
+    parser.add_argument("--input", type=Path, help="Input lexemes JSONL file (overrides default path)")
+    parser.add_argument("--senses", type=Path, help="Input senses JSONL file (for POS/labels stats)")
     args = parser.parse_args()
 
     # Determine paths (flat structure with language-prefixed files)
@@ -131,7 +131,7 @@ def main():
     logger.info("=" * 80)
     logger.info(f"  Total words: {stats['total_words']:,}")
 
-    meta = stats.get('metadata_coverage', {})
+    meta = stats.get("metadata_coverage", {})
     if meta:
         logger.info("")
         logger.info("Metadata coverage:")
@@ -147,5 +147,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main())

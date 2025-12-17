@@ -32,14 +32,14 @@ from openword.progress_display import ProgressDisplay
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
 
 # Profile filters - each returns True if word should be included
-GAME_PATTERN = re.compile(r'^[a-z]+$')
+GAME_PATTERN = re.compile(r"^[a-z]+$")
 
 
 def filter_game(word: str) -> bool:
@@ -48,8 +48,8 @@ def filter_game(word: str) -> bool:
 
 
 PROFILES = {
-    'full': None,  # No filter - include all words
-    'game': filter_game,
+    "full": None,  # No filter - include all words
+    "game": filter_game,
 }
 
 
@@ -77,7 +77,7 @@ def build_trie_simple(
     words = []
     filtered_count = 0
     with ProgressDisplay(f"Loading words ({profile_name})", update_interval=1000) as progress:
-        with open(input_path, 'r', encoding='utf-8') as f:
+        with open(input_path, "r", encoding="utf-8") as f:
             for line_num, line in enumerate(f, 1):
                 line = line.strip()
                 if not line:
@@ -85,7 +85,7 @@ def build_trie_simple(
 
                 try:
                     entry = json.loads(line)
-                    word = entry['id']
+                    word = entry["id"]
 
                     # Apply filter if provided
                     if word_filter is None or word_filter(word):
@@ -119,13 +119,13 @@ def main():
     """Main trie build pipeline."""
     import argparse
 
-    parser = argparse.ArgumentParser(description='Build MARISA trie from lexeme entries')
-    parser.add_argument('--input', type=Path, required=True,
-                        help='Input JSONL file (lexeme entries)')
-    parser.add_argument('--language', default='en',
-                        help='Language code for output path (default: en)')
-    parser.add_argument('--profile', choices=list(PROFILES.keys()), default='full',
-                        help='Word filter profile (default: full)')
+    parser = argparse.ArgumentParser(description="Build MARISA trie from lexeme entries")
+    parser.add_argument("--input", type=Path, required=True,
+                        help="Input JSONL file (lexeme entries)")
+    parser.add_argument("--language", default="en",
+                        help="Language code for output path (default: en)")
+    parser.add_argument("--profile", choices=list(PROFILES.keys()), default="full",
+                        help="Word filter profile (default: full)")
     args = parser.parse_args()
 
     data_root = Path(__file__).parent.parent.parent / "data"
@@ -140,7 +140,7 @@ def main():
         sys.exit(1)
 
     # Output path depends on profile
-    if args.profile == 'full':
+    if args.profile == "full":
         trie_path = build_dir / f"{args.language}.trie"
     else:
         trie_path = build_dir / f"{args.language}-{args.profile}.trie"
@@ -152,5 +152,5 @@ def main():
     logger.info("Trie build complete")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

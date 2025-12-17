@@ -156,7 +156,7 @@ def normalize_label_to_code(label: str) -> Optional[str]:
 
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -168,33 +168,33 @@ logger = logging.getLogger(__name__)
 
 LEXEME_SCHEMA = {
     # Required fields
-    'id': {'type': str, 'required': True},
+    "id": {"type": str, "required": True},
 
     # Core metadata (always present after enrichment)
-    'frequency_tier': {'type': str, 'default': 'Z'},
-    'sources': {'type': list, 'default': []},
-    'license_sources': {'type': dict, 'default': {}},
-    'sense_count': {'type': int, 'default': 0},
-    'sense_offset': {'type': int, 'default': 0},
-    'sense_length': {'type': int, 'default': 0},
-    'wc': {'type': int, 'default': 1},
+    "frequency_tier": {"type": str, "default": "Z"},
+    "sources": {"type": list, "default": []},
+    "license_sources": {"type": dict, "default": {}},
+    "sense_count": {"type": int, "default": 0},
+    "sense_offset": {"type": int, "default": 0},
+    "sense_length": {"type": int, "default": 0},
+    "wc": {"type": int, "default": 1},
 
     # Optional enrichment fields
-    'nsyll': {'type': int, 'default': None},
-    'concreteness': {'type': str, 'default': None},  # 'concrete', 'mixed', 'abstract'
-    'concreteness_rating': {'type': float, 'default': None},
-    'concreteness_sd': {'type': float, 'default': None},
-    'spelling_region': {'type': str, 'default': None},  # 'us', 'gb', etc.
-    'lexnames': {'type': list, 'default': None},  # WordNet semantic categories
-    'morphology': {'type': dict, 'default': None},
-    'phrase_type': {'type': str, 'default': None},
-    'is_phrase': {'type': bool, 'default': False},
-    'labels': {'type': dict, 'default': {}},
-    'pos': {'type': list, 'default': []},
+    "nsyll": {"type": int, "default": None},
+    "concreteness": {"type": str, "default": None},  # 'concrete', 'mixed', 'abstract'
+    "concreteness_rating": {"type": float, "default": None},
+    "concreteness_sd": {"type": float, "default": None},
+    "spelling_region": {"type": str, "default": None},  # 'us', 'gb', etc.
+    "lexnames": {"type": list, "default": None},  # WordNet semantic categories
+    "morphology": {"type": dict, "default": None},
+    "phrase_type": {"type": str, "default": None},
+    "is_phrase": {"type": bool, "default": False},
+    "labels": {"type": dict, "default": {}},
+    "pos": {"type": list, "default": []},
 
     # Lemma/inflection fields (from sense-level aggregation)
-    'is_inflected': {'type': bool, 'default': False},
-    'is_inflected_any': {'type': bool, 'default': False},
+    "is_inflected": {"type": bool, "default": False},
+    "is_inflected_any": {"type": bool, "default": False},
 
     # Proper noun fields - NOT YET IMPLEMENTED in data pipeline
     # These are defined here for documentation but will fail validation
@@ -206,79 +206,79 @@ LEXEME_SCHEMA = {
 # Map filter options to the entry fields they require
 # Format: {filter_category: {filter_option: [required_fields]}}
 FILTER_FIELD_REQUIREMENTS = {
-    'proper_noun': {
-        'require_common_usage': ['has_common_usage'],
-        'exclude_pure_proper_nouns': ['has_common_usage'],
-        'allow_proper_usage': ['has_proper_usage'],
+    "proper_noun": {
+        "require_common_usage": ["has_common_usage"],
+        "exclude_pure_proper_nouns": ["has_common_usage"],
+        "allow_proper_usage": ["has_proper_usage"],
     },
-    'frequency': {
-        'min_tier': ['frequency_tier'],
-        'max_tier': ['frequency_tier'],
-        'tiers': ['frequency_tier'],
-        'min_score': ['frequency_tier'],
-        'max_score': ['frequency_tier'],
+    "frequency": {
+        "min_tier": ["frequency_tier"],
+        "max_tier": ["frequency_tier"],
+        "tiers": ["frequency_tier"],
+        "min_score": ["frequency_tier"],
+        "max_score": ["frequency_tier"],
     },
-    'syllables': {
-        'min': ['nsyll'],
-        'max': ['nsyll'],
-        'exact': ['nsyll'],
-        'require_syllables': ['nsyll'],
+    "syllables": {
+        "min": ["nsyll"],
+        "max": ["nsyll"],
+        "exact": ["nsyll"],
+        "require_syllables": ["nsyll"],
     },
-    'concreteness': {
-        'categories': ['concreteness'],
-        'min_rating': ['concreteness_rating'],
-        'max_rating': ['concreteness_rating'],
+    "concreteness": {
+        "categories": ["concreteness"],
+        "min_rating": ["concreteness_rating"],
+        "max_rating": ["concreteness_rating"],
     },
-    'character': {
-        'min_length': ['id'],
-        'max_length': ['id'],
-        'exact_length': ['id'],
-        'char_preset': ['id'],
-        'allowed_chars': ['id'],
-        'must_contain': ['id'],
-        'must_not_contain': ['id'],
-        'pattern': ['id'],
+    "character": {
+        "min_length": ["id"],
+        "max_length": ["id"],
+        "exact_length": ["id"],
+        "char_preset": ["id"],
+        "allowed_chars": ["id"],
+        "must_contain": ["id"],
+        "must_not_contain": ["id"],
+        "pattern": ["id"],
     },
-    'phrase': {
-        'min_words': ['wc'],
-        'max_words': ['wc'],
-        'is_phrase': ['wc'],
-        'phrase_type': ['phrase_type'],
+    "phrase": {
+        "min_words": ["wc"],
+        "max_words": ["wc"],
+        "is_phrase": ["wc"],
+        "phrase_type": ["phrase_type"],
     },
-    'sources': {
-        'include': ['sources'],
-        'exclude': ['sources'],
-        'enrichment': ['sources'],
+    "sources": {
+        "include": ["sources"],
+        "exclude": ["sources"],
+        "enrichment": ["sources"],
     },
-    'region': {
-        'include': ['spelling_region'],
-        'exclude': ['spelling_region'],
-        'allow_universal': ['spelling_region'],
+    "region": {
+        "include": ["spelling_region"],
+        "exclude": ["spelling_region"],
+        "allow_universal": ["spelling_region"],
     },
-    'spelling_region': {
-        'include': ['spelling_region'],
-        'exclude': ['spelling_region'],
-        'allow_universal': ['spelling_region'],
+    "spelling_region": {
+        "include": ["spelling_region"],
+        "exclude": ["spelling_region"],
+        "allow_universal": ["spelling_region"],
     },
-    'labels': {
-        'exclude_archaic': ['labels'],
-        'exclude_obsolete': ['labels'],
-        'exclude_slang': ['labels'],
-        'exclude_offensive': ['labels'],
-        'exclude_vulgar': ['labels'],
-        'require_standard': ['labels'],
+    "labels": {
+        "exclude_archaic": ["labels"],
+        "exclude_obsolete": ["labels"],
+        "exclude_slang": ["labels"],
+        "exclude_offensive": ["labels"],
+        "exclude_vulgar": ["labels"],
+        "require_standard": ["labels"],
     },
-    'temporal': {
-        'exclude_archaic': ['labels'],
-        'exclude_obsolete': ['labels'],
+    "temporal": {
+        "exclude_archaic": ["labels"],
+        "exclude_obsolete": ["labels"],
     },
-    'lemma': {
-        'base_forms_only': ['is_inflected', 'is_inflected_any'],
-        'exclude_inflections': ['is_inflected', 'is_inflected_any'],
+    "lemma": {
+        "base_forms_only": ["is_inflected", "is_inflected_any"],
+        "exclude_inflections": ["is_inflected", "is_inflected_any"],
     },
-    'pos': {
-        'include': ['pos'],
-        'exclude': ['pos'],
+    "pos": {
+        "include": ["pos"],
+        "exclude": ["pos"],
     },
 }
 
@@ -331,11 +331,11 @@ class OwlexFilter:
         # Tier scores: A (most frequent) = 100, Z (rarest/unknown) = 0
         # Full tier progression: A-Z with scores from 100 down to 0
         self.tier_scores = {
-            'A': 100, 'B': 96, 'C': 92, 'D': 88, 'E': 84, 'F': 80,
-            'G': 76, 'H': 72, 'I': 68, 'J': 64, 'K': 60, 'L': 56,
-            'M': 52, 'N': 48, 'O': 44, 'P': 40, 'Q': 36, 'R': 32,
-            'S': 28, 'T': 24, 'U': 20, 'V': 16, 'W': 12, 'X': 8,
-            'Y': 4, 'Z': 0
+            "A": 100, "B": 96, "C": 92, "D": 88, "E": 84, "F": 80,
+            "G": 76, "H": 72, "I": 68, "J": 64, "K": 60, "L": 56,
+            "M": 52, "N": 48, "O": 44, "P": 40, "Q": 36, "R": 32,
+            "S": 28, "T": 24, "U": 20, "V": 16, "W": 12, "X": 8,
+            "Y": 4, "Z": 0
         }
 
     def _load_spec(self) -> Dict:
@@ -350,7 +350,7 @@ class OwlexFilter:
 
         try:
             with open(self.spec_path) as f:
-                if suffix in ('.yaml', '.yml'):
+                if suffix in (".yaml", ".yml"):
                     if not HAS_YAML:
                         logger.error("YAML support requires PyYAML. Install with: pip install pyyaml")
                         sys.exit(1)
@@ -372,7 +372,7 @@ class OwlexFilter:
         spec = self._normalize_spec_format(spec)
 
         # Validate that filters don't reference unavailable fields
-        filters = spec.get('filters', {})
+        filters = spec.get("filters", {})
         validation_errors = validate_filter_fields(filters, self.spec_path)
         if validation_errors:
             for error in validation_errors:
@@ -401,24 +401,24 @@ class OwlexFilter:
         """
         # Word-level filter keys (properties of the word itself)
         word_filter_keys = {
-            'character', 'phrase', 'frequency', 'syllables',
-            'concreteness', 'proper_noun', 'lemma'
+            "character", "phrase", "frequency", "syllables",
+            "concreteness", "proper_noun", "lemma"
         }
 
         # Sense-level operation keys (operation-first format)
-        operation_keys = {'include', 'exclude', 'include-if-primary', 'exclude-if-primary'}
+        operation_keys = {"include", "exclude", "include-if-primary", "exclude-if-primary"}
 
         # Sense property keys (what operations apply to)
-        sense_property_keys = {'pos', 'register', 'temporal', 'domain', 'region'}
+        sense_property_keys = {"pos", "register", "temporal", "domain", "region"}
 
         # Legacy category-first keys
-        legacy_sense_keys = {'pos', 'labels', 'temporal', 'policy'}
+        legacy_sense_keys = {"pos", "labels", "temporal", "policy"}
 
         # Check for operation-first format
         is_operation_first = (
-            'version' not in spec and
-            'distribution' not in spec and
-            'filters' not in spec and
+            "version" not in spec and
+            "distribution" not in spec and
+            "filters" not in spec and
             any(key in operation_keys for key in spec.keys())
         )
 
@@ -426,12 +426,12 @@ class OwlexFilter:
             return self._normalize_operation_first_format(spec, word_filter_keys, operation_keys, sense_property_keys)
 
         # Check if this is a simplified "filters-only" format (legacy category-first)
-        all_filter_keys = word_filter_keys | legacy_sense_keys | {'sources', 'region'}
+        all_filter_keys = word_filter_keys | legacy_sense_keys | {"sources", "region"}
 
         is_simplified = (
-            'version' not in spec and
-            'distribution' not in spec and
-            'filters' not in spec and
+            "version" not in spec and
+            "distribution" not in spec and
+            "filters" not in spec and
             any(key in all_filter_keys for key in spec.keys())
         )
 
@@ -439,29 +439,29 @@ class OwlexFilter:
             # Simplified format: the spec body IS the filters
             # Extract sources filter if present, use rest as filters
             normalized = {
-                'version': '2.0',
-                'distribution': 'en',
-                'filters': {}
+                "version": "2.0",
+                "distribution": "en",
+                "filters": {}
             }
 
             for key, value in spec.items():
-                if key == 'sources':
+                if key == "sources":
                     # Handle sources filter for licensing compliance
-                    normalized['_sources_filter'] = value
+                    normalized["_sources_filter"] = value
                 else:
-                    normalized['filters'][key] = value
+                    normalized["filters"][key] = value
 
             return normalized
 
         # Legacy format with version
-        if 'version' in spec:
+        if "version" in spec:
             # Support both old format (distribution) and new format (sources array at root)
-            if 'distribution' not in spec and 'sources' not in spec:
+            if "distribution" not in spec and "sources" not in spec:
                 # Default to 'en' distribution
-                spec['distribution'] = 'en'
+                spec["distribution"] = "en"
 
             # Normalize web builder format to internal format
-            if 'sources' in spec and isinstance(spec['sources'], list) and 'distribution' not in spec:
+            if "sources" in spec and isinstance(spec["sources"], list) and "distribution" not in spec:
                 spec = self._normalize_new_format(spec)
 
             return spec
@@ -469,9 +469,9 @@ class OwlexFilter:
         # Unknown format - try to use as-is with defaults
         logger.warning("Unknown spec format, using defaults")
         return {
-            'version': '1.0',
-            'distribution': 'en',
-            'filters': spec.get('filters', {})
+            "version": "1.0",
+            "distribution": "en",
+            "filters": spec.get("filters", {})
         }
 
     def _normalize_operation_first_format(
@@ -511,12 +511,12 @@ class OwlexFilter:
                 max_words: 1
         """
         normalized = {
-            'version': '2.0',
-            'distribution': 'en',
-            'filters': {}
+            "version": "2.0",
+            "distribution": "en",
+            "filters": {}
         }
 
-        filters = normalized['filters']
+        filters = normalized["filters"]
 
         # Process operation keys (include, exclude, etc.)
         for op_key in operation_keys:
@@ -530,18 +530,18 @@ class OwlexFilter:
             for prop_key, prop_values in op_content.items():
                 # Handle sense-level properties
                 if prop_key in sense_property_keys:
-                    if prop_key == 'pos':
+                    if prop_key == "pos":
                         # POS goes directly under filters.pos
-                        if 'pos' not in filters:
-                            filters['pos'] = {}
-                        filters['pos'][op_key] = prop_values
-                    elif prop_key in {'register', 'temporal', 'domain', 'region'}:
+                        if "pos" not in filters:
+                            filters["pos"] = {}
+                        filters["pos"][op_key] = prop_values
+                    elif prop_key in {"register", "temporal", "domain", "region"}:
                         # These go under filters.labels.{category}
-                        if 'labels' not in filters:
-                            filters['labels'] = {}
-                        if prop_key not in filters['labels']:
-                            filters['labels'][prop_key] = {}
-                        filters['labels'][prop_key][op_key] = prop_values
+                        if "labels" not in filters:
+                            filters["labels"] = {}
+                        if prop_key not in filters["labels"]:
+                            filters["labels"][prop_key] = {}
+                        filters["labels"][prop_key][op_key] = prop_values
 
         # Process word-level filter keys (character, phrase, frequency, etc.)
         for key in word_filter_keys:
@@ -549,25 +549,25 @@ class OwlexFilter:
                 filters[key] = spec[key]
 
         # Handle sources filter specially (for licensing)
-        if 'sources' in spec:
-            if isinstance(spec['sources'], dict):
-                normalized['_sources_filter'] = spec['sources']
+        if "sources" in spec:
+            if isinstance(spec["sources"], dict):
+                normalized["_sources_filter"] = spec["sources"]
             else:
-                filters['sources'] = spec['sources']
+                filters["sources"] = spec["sources"]
 
         # Handle temporal at top level (shorthand for labels.temporal)
-        if 'temporal' in spec and 'temporal' not in filters.get('labels', {}):
+        if "temporal" in spec and "temporal" not in filters.get("labels", {}):
             # Check if it's an operation-style or direct style
-            temporal_spec = spec['temporal']
+            temporal_spec = spec["temporal"]
             if isinstance(temporal_spec, dict):
                 # Check if it has operation keys directly
                 if any(k in operation_keys for k in temporal_spec.keys()):
-                    if 'labels' not in filters:
-                        filters['labels'] = {}
-                    filters['labels']['temporal'] = temporal_spec
+                    if "labels" not in filters:
+                        filters["labels"] = {}
+                    filters["labels"]["temporal"] = temporal_spec
                 else:
                     # It's a word-level filter config
-                    filters['temporal'] = temporal_spec
+                    filters["temporal"] = temporal_spec
 
         return normalized
 
@@ -598,16 +598,16 @@ class OwlexFilter:
         normalized = spec.copy()
 
         # Set distribution to 'en' (English build)
-        normalized['distribution'] = 'en'
+        normalized["distribution"] = "en"
 
         # Convert filter array to filter object
-        if isinstance(spec.get('filters'), list):
+        if isinstance(spec.get("filters"), list):
             old_filters = {}
 
-            for filter_item in spec['filters']:
-                filter_type = filter_item['type']
-                filter_mode = filter_item.get('mode', 'include')
-                filter_config = filter_item.get('config', {})
+            for filter_item in spec["filters"]:
+                filter_type = filter_item["type"]
+                filter_mode = filter_item.get("mode", "include")
+                filter_config = filter_item.get("config", {})
 
                 # Convert camelCase config keys to snake_case
                 converted_config = self._convert_filter_config(filter_type, filter_config, filter_mode)
@@ -618,7 +618,7 @@ class OwlexFilter:
                 else:
                     old_filters[filter_type] = converted_config
 
-            normalized['filters'] = old_filters
+            normalized["filters"] = old_filters
 
         return normalized
 
@@ -628,41 +628,41 @@ class OwlexFilter:
 
         # Map of camelCase to snake_case
         key_mappings = {
-            'minLength': 'min_length',
-            'maxLength': 'max_length',
-            'minSyllables': 'min',
-            'maxSyllables': 'max',
-            'minTier': 'min_tier',
-            'maxTier': 'max_tier',
-            'singleWord': 'max_words',  # singleWord=true means max_words=1
-            'multiWord': 'min_words',   # multiWord=true means min_words=2
-            'requireSyllables': 'require_syllables',
-            'preferBrysbaert': 'prefer_brysbaert',
-            'charPreset': 'char_preset',
-            'startsWith': 'starts_with',
-            'excludeStartsWith': 'exclude_starts_with',
-            'endsWith': 'ends_with',
-            'excludeEndsWith': 'exclude_ends_with',
-            'excludeContains': 'exclude_contains',
+            "minLength": "min_length",
+            "maxLength": "max_length",
+            "minSyllables": "min",
+            "maxSyllables": "max",
+            "minTier": "min_tier",
+            "maxTier": "max_tier",
+            "singleWord": "max_words",  # singleWord=true means max_words=1
+            "multiWord": "min_words",   # multiWord=true means min_words=2
+            "requireSyllables": "require_syllables",
+            "preferBrysbaert": "prefer_brysbaert",
+            "charPreset": "char_preset",
+            "startsWith": "starts_with",
+            "excludeStartsWith": "exclude_starts_with",
+            "endsWith": "ends_with",
+            "excludeEndsWith": "exclude_ends_with",
+            "excludeContains": "exclude_contains",
         }
 
         for old_key, value in config.items():
             new_key = key_mappings.get(old_key, old_key)
 
             # Handle special cases
-            if old_key == 'singleWord' and value:
-                converted['max_words'] = 1
-            elif old_key == 'multiWord' and value:
-                converted['min_words'] = 2
-            elif old_key == 'exact' and filter_type == 'syllable':
+            if old_key == "singleWord" and value:
+                converted["max_words"] = 1
+            elif old_key == "multiWord" and value:
+                converted["min_words"] = 2
+            elif old_key == "exact" and filter_type == "syllable":
                 # exact syllables
-                converted['exact'] = value
+                converted["exact"] = value
             else:
                 converted[new_key] = value
 
         # Handle mode for filters that support include/exclude
-        if filter_type in ['labels', 'pos', 'concreteness']:
-            if mode == 'exclude' and config:
+        if filter_type in ["labels", "pos", "concreteness"]:
+            if mode == "exclude" and config:
                 # For exclude mode, wrap in exclude logic
                 # This is a simplification - in practice we'd need to handle this more carefully
                 pass
@@ -671,13 +671,13 @@ class OwlexFilter:
 
     def get_input_file(self) -> Path:
         """Determine input JSONL file based on distribution."""
-        dist = self.spec['distribution']
+        dist = self.spec["distribution"]
 
         # Try new lexemes-enriched file first (flat structure with language-prefixed files)
         candidates = [
-            Path(f'data/intermediate/{dist}-lexemes-enriched.jsonl'),
-            Path(f'data/intermediate/{dist}/entries_tiered.jsonl'),  # Legacy
-            Path(f'data/intermediate/{dist}/{dist}_entries_enriched.jsonl'),  # Legacy
+            Path(f"data/intermediate/{dist}-lexemes-enriched.jsonl"),
+            Path(f"data/intermediate/{dist}/entries_tiered.jsonl"),  # Legacy
+            Path(f"data/intermediate/{dist}/{dist}_entries_enriched.jsonl"),  # Legacy
         ]
 
         for path in candidates:
@@ -692,185 +692,185 @@ class OwlexFilter:
 
     def filter_entry(self, entry: Dict) -> bool:
         """Check if an entry passes all filters."""
-        filters = self.spec.get('filters', {})
+        filters = self.spec.get("filters", {})
 
         # Character filters
-        if not self._check_character_filters(entry, filters.get('character', {})):
+        if not self._check_character_filters(entry, filters.get("character", {})):
             return False
 
         # Phrase filters
-        if not self._check_phrase_filters(entry, filters.get('phrase', {})):
+        if not self._check_phrase_filters(entry, filters.get("phrase", {})):
             return False
 
         # Frequency filters
-        if not self._check_frequency_filters(entry, filters.get('frequency', {})):
+        if not self._check_frequency_filters(entry, filters.get("frequency", {})):
             return False
 
         # POS filters
-        if not self._check_pos_filters(entry, filters.get('pos', {})):
+        if not self._check_pos_filters(entry, filters.get("pos", {})):
             return False
 
         # Concreteness filters
-        if not self._check_concreteness_filters(entry, filters.get('concreteness', {})):
+        if not self._check_concreteness_filters(entry, filters.get("concreteness", {})):
             return False
 
         # Label filters
-        if not self._check_label_filters(entry, filters.get('labels', {})):
+        if not self._check_label_filters(entry, filters.get("labels", {})):
             return False
 
         # Temporal filters (explicit, not via policy)
-        if not self._check_temporal_filters(entry, filters.get('temporal', {})):
+        if not self._check_temporal_filters(entry, filters.get("temporal", {})):
             return False
 
         # Policy filters (legacy - expanded to label filters)
-        if not self._check_policy_filters(entry, filters.get('policy', {})):
+        if not self._check_policy_filters(entry, filters.get("policy", {})):
             return False
 
         # Source filters (from filters section)
-        if not self._check_source_filters(entry, filters.get('sources', {})):
+        if not self._check_source_filters(entry, filters.get("sources", {})):
             return False
 
         # Source filters (from simplified format's _sources_filter)
-        sources_filter = self.spec.get('_sources_filter', {})
+        sources_filter = self.spec.get("_sources_filter", {})
         if sources_filter:
             if not self._check_sources_licensing_filter(entry, sources_filter):
                 return False
 
         # Spelling region filters
-        if not self._check_spelling_region_filters(entry, filters.get('spelling_region', {})):
+        if not self._check_spelling_region_filters(entry, filters.get("spelling_region", {})):
             return False
 
         # Region filters (simplified format - same as spelling_region)
-        if not self._check_spelling_region_filters(entry, filters.get('region', {})):
+        if not self._check_spelling_region_filters(entry, filters.get("region", {})):
             return False
 
         # Proper noun filters
-        if not self._check_proper_noun_filters(entry, filters.get('proper_noun', {})):
+        if not self._check_proper_noun_filters(entry, filters.get("proper_noun", {})):
             return False
 
         # Syllable filters
-        if not self._check_syllable_filters(entry, filters.get('syllables', {})):
+        if not self._check_syllable_filters(entry, filters.get("syllables", {})):
             return False
 
         # Lemma/inflection filters
-        if not self._check_lemma_filters(entry, filters.get('lemma', {})):
+        if not self._check_lemma_filters(entry, filters.get("lemma", {})):
             return False
 
         return True
 
     def _check_character_filters(self, entry: Dict, filters: Dict) -> bool:
         """Apply character-level filters."""
-        word = entry['id']
+        word = entry["id"]
         length = len(word)
 
         # Length constraints
-        if 'exact_length' in filters:
-            if length != filters['exact_length']:
+        if "exact_length" in filters:
+            if length != filters["exact_length"]:
                 return False
 
-        if 'min_length' in filters:
-            if length < filters['min_length']:
+        if "min_length" in filters:
+            if length < filters["min_length"]:
                 return False
 
-        if 'max_length' in filters:
-            if length > filters['max_length']:
+        if "max_length" in filters:
+            if length > filters["max_length"]:
                 return False
 
         # Character preset validation
-        if 'char_preset' in filters and filters['char_preset'] != 'any':
-            preset = filters['char_preset']
-            if preset == 'standard':
+        if "char_preset" in filters and filters["char_preset"] != "any":
+            preset = filters["char_preset"]
+            if preset == "standard":
                 # Only lowercase letters (a-z)
                 if not all(c.islower() and c.isalpha() for c in word):
                     return False
-            elif preset == 'contractions':
+            elif preset == "contractions":
                 # Lowercase letters and apostrophes
-                if not all((c.islower() and c.isalpha()) or c == '\'' for c in word):
+                if not all((c.islower() and c.isalpha()) or c == "'" for c in word):
                     return False
-            elif preset == 'alphanumeric':
+            elif preset == "alphanumeric":
                 # Lowercase letters and digits
                 if not all((c.islower() and c.isalpha()) or c.isdigit() for c in word):
                     return False
-            elif preset == 'hyphenated':
+            elif preset == "hyphenated":
                 # Lowercase letters and hyphens
-                if not all((c.islower() and c.isalpha()) or c == '-' for c in word):
+                if not all((c.islower() and c.isalpha()) or c == "-" for c in word):
                     return False
-            elif preset == 'common-punct':
+            elif preset == "common-punct":
                 # Lowercase letters, apostrophes, and hyphens
-                if not all((c.islower() and c.isalpha()) or c in '\'-' for c in word):
+                if not all((c.islower() and c.isalpha()) or c in "'-" for c in word):
                     return False
 
         # Regex pattern support
-        if 'pattern' in filters:
-            if not re.match(filters['pattern'], word):
+        if "pattern" in filters:
+            if not re.match(filters["pattern"], word):
                 return False
 
         # Starts with (OR logic - match ANY)
-        if 'starts_with' in filters:
-            prefixes = filters['starts_with'] if isinstance(filters['starts_with'], list) else [filters['starts_with']]
+        if "starts_with" in filters:
+            prefixes = filters["starts_with"] if isinstance(filters["starts_with"], list) else [filters["starts_with"]]
             if not any(word.startswith(prefix) for prefix in prefixes):
                 return False
 
         # Doesn't start with (exclude ALL)
-        if 'exclude_starts_with' in filters:
-            prefixes = filters['exclude_starts_with'] if isinstance(filters['exclude_starts_with'], list) else [filters['exclude_starts_with']]
+        if "exclude_starts_with" in filters:
+            prefixes = filters["exclude_starts_with"] if isinstance(filters["exclude_starts_with"], list) else [filters["exclude_starts_with"]]
             if any(word.startswith(prefix) for prefix in prefixes):
                 return False
 
         # Ends with (OR logic - match ANY)
-        if 'ends_with' in filters:
-            suffixes = filters['ends_with'] if isinstance(filters['ends_with'], list) else [filters['ends_with']]
+        if "ends_with" in filters:
+            suffixes = filters["ends_with"] if isinstance(filters["ends_with"], list) else [filters["ends_with"]]
             if not any(word.endswith(suffix) for suffix in suffixes):
                 return False
 
         # Doesn't end with (exclude ALL)
-        if 'exclude_ends_with' in filters:
-            suffixes = filters['exclude_ends_with'] if isinstance(filters['exclude_ends_with'], list) else [filters['exclude_ends_with']]
+        if "exclude_ends_with" in filters:
+            suffixes = filters["exclude_ends_with"] if isinstance(filters["exclude_ends_with"], list) else [filters["exclude_ends_with"]]
             if any(word.endswith(suffix) for suffix in suffixes):
                 return False
 
         # Contains (AND logic - must have ALL)
-        if 'contains' in filters:
-            sequences = filters['contains'] if isinstance(filters['contains'], list) else [filters['contains']]
+        if "contains" in filters:
+            sequences = filters["contains"] if isinstance(filters["contains"], list) else [filters["contains"]]
             if not all(seq in word for seq in sequences):
                 return False
 
         # Doesn't contain (exclude any of these individual characters)
-        if 'exclude_contains' in filters:
-            excluded_chars = filters['exclude_contains']
+        if "exclude_contains" in filters:
+            excluded_chars = filters["exclude_contains"]
             if any(char in word for char in excluded_chars):
                 return False
 
         # Exclude pattern support
-        if 'exclude_pattern' in filters:
-            if re.match(filters['exclude_pattern'], word):
+        if "exclude_pattern" in filters:
+            if re.match(filters["exclude_pattern"], word):
                 return False
 
         return True
 
     def _check_phrase_filters(self, entry: Dict, filters: Dict) -> bool:
         """Apply phrase/word count filters."""
-        word_count = entry.get('wc', len(entry['id'].split()))
-        phrase_type = entry.get('phrase_type')
+        word_count = entry.get("wc", len(entry["id"].split()))
+        phrase_type = entry.get("phrase_type")
 
-        if 'min_words' in filters:
-            if word_count < filters['min_words']:
+        if "min_words" in filters:
+            if word_count < filters["min_words"]:
                 return False
 
-        if 'max_words' in filters:
-            if word_count > filters['max_words']:
+        if "max_words" in filters:
+            if word_count > filters["max_words"]:
                 return False
 
         # is_phrase filter: true means word_count > 1, false means word_count == 1
-        if 'is_phrase' in filters:
-            if filters['is_phrase'] and word_count == 1:
+        if "is_phrase" in filters:
+            if filters["is_phrase"] and word_count == 1:
                 return False
-            if not filters['is_phrase'] and word_count > 1:
+            if not filters["is_phrase"] and word_count > 1:
                 return False
 
         # New phrase_type filter: filter by specific phrase type
-        if 'phrase_type' in filters:
-            if filters['phrase_type'] != phrase_type:
+        if "phrase_type" in filters:
+            if filters["phrase_type"] != phrase_type:
                 return False
 
         return True
@@ -888,29 +888,29 @@ class OwlexFilter:
 
         Example: min_tier=A, max_tier=I means "include tiers A through I"
         """
-        tier = entry.get('frequency_tier', 'Z')  # Z = extremely rare/unranked
+        tier = entry.get("frequency_tier", "Z")  # Z = extremely rare/unranked
         tier_score = self.tier_scores.get(tier, 0)
 
-        if 'tiers' in filters:
-            if tier not in filters['tiers']:
+        if "tiers" in filters:
+            if tier not in filters["tiers"]:
                 return False
 
         # min_tier: the MOST common tier to include
         # Words must be this tier OR less common (lower score is OK)
-        if 'min_tier' in filters:
-            min_tier_score = self.tier_scores.get(filters['min_tier'], 100)
+        if "min_tier" in filters:
+            min_tier_score = self.tier_scores.get(filters["min_tier"], 100)
             if tier_score > min_tier_score:
                 return False
 
         # max_tier: the LEAST common tier to include
         # Words must be this tier OR more common (higher score is OK)
-        if 'max_tier' in filters:
-            max_tier_score = self.tier_scores.get(filters['max_tier'], 0)
+        if "max_tier" in filters:
+            max_tier_score = self.tier_scores.get(filters["max_tier"], 0)
             if tier_score < max_tier_score:
                 return False
 
-        if 'min_score' in filters:
-            if tier_score < filters['min_score']:
+        if "min_score" in filters:
+            if tier_score < filters["min_score"]:
                 return False
 
         return True
@@ -939,44 +939,44 @@ class OwlexFilter:
         - include-if-primary/exclude-if-primary: check against PRIMARY sense only
         """
         # Handle both string (single POS) and list (multiple POS) formats
-        pos_value = entry.get('pos', [])
+        pos_value = entry.get("pos", [])
         if isinstance(pos_value, str):
             pos_tags = {pos_value} if pos_value else set()
         else:
             pos_tags = set(pos_value)
-        primary_sense = entry.get('primary_sense', {})
-        primary_pos = primary_sense.get('pos')
+        primary_sense = entry.get("primary_sense", {})
+        primary_pos = primary_sense.get("pos")
 
-        if 'require_pos' in filters and filters['require_pos']:
+        if "require_pos" in filters and filters["require_pos"]:
             if not pos_tags:
                 return False
 
         # include: Entry must have at least one matching POS (any sense)
-        if 'include' in filters:
+        if "include" in filters:
             if not pos_tags:
                 return False
-            include_codes = self._normalize_pos_list(filters['include'])
+            include_codes = self._normalize_pos_list(filters["include"])
             if not any(pos in include_codes for pos in pos_tags):
                 return False
 
         # exclude: Entry must not have any matching POS (any sense)
-        if 'exclude' in filters:
-            exclude_codes = self._normalize_pos_list(filters['exclude'])
+        if "exclude" in filters:
+            exclude_codes = self._normalize_pos_list(filters["exclude"])
             if any(pos in exclude_codes for pos in pos_tags):
                 return False
 
         # include-if-primary: Primary sense must have one of these POS
-        if 'include-if-primary' in filters:
+        if "include-if-primary" in filters:
             if not primary_pos:
                 return False
-            include_codes = self._normalize_pos_list(filters['include-if-primary'])
+            include_codes = self._normalize_pos_list(filters["include-if-primary"])
             if primary_pos not in include_codes:
                 return False
 
         # exclude-if-primary: Primary sense must NOT have any of these POS
-        if 'exclude-if-primary' in filters:
+        if "exclude-if-primary" in filters:
             if primary_pos:
-                exclude_codes = self._normalize_pos_list(filters['exclude-if-primary'])
+                exclude_codes = self._normalize_pos_list(filters["exclude-if-primary"])
                 if primary_pos in exclude_codes:
                     return False
 
@@ -984,16 +984,16 @@ class OwlexFilter:
 
     def _check_concreteness_filters(self, entry: Dict, filters: Dict) -> bool:
         """Apply concreteness filters."""
-        concreteness = entry.get('concreteness')
+        concreteness = entry.get("concreteness")
 
-        if 'require_concreteness' in filters and filters['require_concreteness']:
+        if "require_concreteness" in filters and filters["require_concreteness"]:
             if not concreteness:
                 return False
 
-        if 'values' in filters:
+        if "values" in filters:
             if not concreteness:
                 return False
-            if concreteness not in filters['values']:
+            if concreteness not in filters["values"]:
                 return False
 
         return True
@@ -1012,52 +1012,52 @@ class OwlexFilter:
         Label names are normalized to codes using the schema from core/tag_sets.yaml.
         """
         # Get labels from 'labels' dict or categorize from 'codes' array
-        labels = entry.get('labels', {})
-        if not labels and 'codes' in entry:
-            labels = self._categorize_codes(entry['codes'])
+        labels = entry.get("labels", {})
+        if not labels and "codes" in entry:
+            labels = self._categorize_codes(entry["codes"])
 
-        primary_sense = entry.get('primary_sense', {})
-        primary_labels = primary_sense.get('labels', {})
+        primary_sense = entry.get("primary_sense", {})
+        primary_labels = primary_sense.get("labels", {})
 
-        for label_category in ['register', 'temporal', 'domain', 'region']:
+        for label_category in ["register", "temporal", "domain", "region"]:
             category_filters = filters.get(label_category, {})
             entry_labels = set(labels.get(label_category, []))
             primary_category_labels = set(primary_labels.get(label_category, []))
 
             # include: Entry must have at least one of the included labels (any sense)
-            if 'include' in category_filters:
+            if "include" in category_filters:
                 # Normalize filter values to codes
                 include_set = {
                     normalize_label_to_code(label) or label
-                    for label in category_filters['include']
+                    for label in category_filters["include"]
                 }
                 if not (entry_labels & include_set):
                     return False
 
             # exclude: Entry must not have any of the excluded labels (any sense)
-            if 'exclude' in category_filters:
+            if "exclude" in category_filters:
                 # Normalize filter values to codes
                 exclude_set = {
                     normalize_label_to_code(label) or label
-                    for label in category_filters['exclude']
+                    for label in category_filters["exclude"]
                 }
                 if entry_labels & exclude_set:
                     return False
 
             # include-if-primary: Primary sense must have one of these labels
-            if 'include-if-primary' in category_filters:
+            if "include-if-primary" in category_filters:
                 include_set = {
                     normalize_label_to_code(label) or label
-                    for label in category_filters['include-if-primary']
+                    for label in category_filters["include-if-primary"]
                 }
                 if not (primary_category_labels & include_set):
                     return False
 
             # exclude-if-primary: Primary sense must NOT have any of these labels
-            if 'exclude-if-primary' in category_filters:
+            if "exclude-if-primary" in category_filters:
                 exclude_set = {
                     normalize_label_to_code(label) or label
-                    for label in category_filters['exclude-if-primary']
+                    for label in category_filters["exclude-if-primary"]
                 }
                 if primary_category_labels & exclude_set:
                     return False
@@ -1069,35 +1069,35 @@ class OwlexFilter:
 
         Supports both v1 format (label names) and v2 format (codes).
         """
-        labels = entry.get('labels', {})
-        register_labels = set(labels.get('register', []))
-        temporal_labels = set(labels.get('temporal', []))
-        domain_labels = set(labels.get('domain', []))
+        labels = entry.get("labels", {})
+        register_labels = set(labels.get("register", []))
+        temporal_labels = set(labels.get("temporal", []))
+        domain_labels = set(labels.get("domain", []))
 
-        if filters.get('family_friendly', False):
+        if filters.get("family_friendly", False):
             # Exclude vulgar, offensive, derogatory
             # V1 labels: vulgar, offensive, derogatory
             # V2 codes: RVLG, ROFF, RDEG
-            v1_profane = {'vulgar', 'offensive', 'derogatory'}
-            v2_profane = {'RVLG', 'ROFF', 'RDEG'}
+            v1_profane = {"vulgar", "offensive", "derogatory"}
+            v2_profane = {"RVLG", "ROFF", "RDEG"}
             if register_labels & (v1_profane | v2_profane):
                 return False
 
-        if filters.get('modern_only', False):
+        if filters.get("modern_only", False):
             # Exclude archaic, obsolete, dated
             # V1 labels: archaic, obsolete, dated
             # V2 codes: TARC, TOBS, TDAT
-            v1_outdated = {'archaic', 'obsolete', 'dated'}
-            v2_outdated = {'TARC', 'TOBS', 'TDAT'}
+            v1_outdated = {"archaic", "obsolete", "dated"}
+            v2_outdated = {"TARC", "TOBS", "TDAT"}
             if temporal_labels & (v1_outdated | v2_outdated):
                 return False
 
-        if filters.get('no_jargon', False):
+        if filters.get("no_jargon", False):
             # Exclude technical domains
             # V1 labels: medical, legal, technical, scientific
             # V2 codes: DMEDI, DLEGA, DTECH, DSCIE (if they exist)
-            v1_jargon = {'medical', 'legal', 'technical', 'scientific'}
-            v2_jargon = {'DMEDI', 'DLEGA', 'DTECH', 'DSCIE'}
+            v1_jargon = {"medical", "legal", "technical", "scientific"}
+            v2_jargon = {"DMEDI", "DLEGA", "DTECH", "DSCIE"}
             if domain_labels & (v1_jargon | v2_jargon):
                 return False
 
@@ -1124,35 +1124,35 @@ class OwlexFilter:
             return True
 
         # Get temporal labels from entry (all senses)
-        labels = entry.get('labels', {})
-        temporal_labels = set(labels.get('temporal', []))
+        labels = entry.get("labels", {})
+        temporal_labels = set(labels.get("temporal", []))
 
         # Get temporal labels from primary sense
-        primary_sense = entry.get('primary_sense', {})
-        primary_labels = primary_sense.get('labels', {})
-        primary_temporal = set(primary_labels.get('temporal', []))
+        primary_sense = entry.get("primary_sense", {})
+        primary_labels = primary_sense.get("labels", {})
+        primary_temporal = set(primary_labels.get("temporal", []))
 
         # Include filter - must have at least one of these labels (any sense)
-        if 'include' in filters:
-            include_set = set(filters['include'])
+        if "include" in filters:
+            include_set = set(filters["include"])
             if not (temporal_labels & include_set):
                 return False
 
         # Exclude filter - must NOT have any of these labels (any sense)
-        if 'exclude' in filters:
-            exclude_set = set(filters['exclude'])
+        if "exclude" in filters:
+            exclude_set = set(filters["exclude"])
             if temporal_labels & exclude_set:
                 return False
 
         # include-if-primary: Primary sense must have one of these labels
-        if 'include-if-primary' in filters:
-            include_set = set(filters['include-if-primary'])
+        if "include-if-primary" in filters:
+            include_set = set(filters["include-if-primary"])
             if not (primary_temporal & include_set):
                 return False
 
         # exclude-if-primary: Primary sense must NOT have any of these labels
-        if 'exclude-if-primary' in filters:
-            exclude_set = set(filters['exclude-if-primary'])
+        if "exclude-if-primary" in filters:
+            exclude_set = set(filters["exclude-if-primary"])
             if primary_temporal & exclude_set:
                 return False
 
@@ -1171,11 +1171,11 @@ class OwlexFilter:
         if not sources_filter:
             return True
 
-        entry_sources = set(entry.get('sources', []))
+        entry_sources = set(entry.get("sources", []))
 
         # Include filter - word must exist in at least one of these sources
-        if 'include' in sources_filter:
-            include_set = set(sources_filter['include'])
+        if "include" in sources_filter:
+            include_set = set(sources_filter["include"])
             if not (entry_sources & include_set):
                 return False
 
@@ -1188,17 +1188,17 @@ class OwlexFilter:
 
     def _check_source_filters(self, entry: Dict, filters: Dict) -> bool:
         """Apply source filters."""
-        sources = set(entry.get('sources', []))
+        sources = set(entry.get("sources", []))
 
-        if 'include' in filters:
+        if "include" in filters:
             # Entry must have at least one of the included sources
-            include_set = set(filters['include'])
+            include_set = set(filters["include"])
             if not (sources & include_set):
                 return False
 
-        if 'exclude' in filters:
+        if "exclude" in filters:
             # Entry must not have any of the excluded sources
-            exclude_set = set(filters['exclude'])
+            exclude_set = set(filters["exclude"])
             if sources & exclude_set:
                 return False
 
@@ -1225,12 +1225,12 @@ class OwlexFilter:
         - {"region": "en-US", "include_universal": false} - Only US spellings, no universal
         - {"exclude": ["en-US"]} - Exclude US spellings, keep everything else
         """
-        spelling_region = entry.get('spelling_region')  # None = universal/unspecified
-        include_universal = filters.get('include_universal', True)
+        spelling_region = entry.get("spelling_region")  # None = universal/unspecified
+        include_universal = filters.get("include_universal", True)
 
         # If specific region required
-        if 'region' in filters:
-            target_region = filters['region']
+        if "region" in filters:
+            target_region = filters["region"]
             if spelling_region is None:
                 # Universal word - include if include_universal is true
                 return include_universal
@@ -1239,8 +1239,8 @@ class OwlexFilter:
                 return spelling_region == target_region
 
         # Exclude specific regions
-        if 'exclude' in filters:
-            exclude_regions = set(filters['exclude'])
+        if "exclude" in filters:
+            exclude_regions = set(filters["exclude"])
             if spelling_region and spelling_region in exclude_regions:
                 return False
 
@@ -1266,15 +1266,15 @@ class OwlexFilter:
             return True
 
         # Check for common usage requirement (Scrabble-style filtering)
-        if filters.get('exclude_pure_proper_nouns') or filters.get('require_common_usage'):
+        if filters.get("exclude_pure_proper_nouns") or filters.get("require_common_usage"):
             # Must have common usage to pass
-            if not entry.get('has_common_usage', False):
+            if not entry.get("has_common_usage", False):
                 return False
 
         # Check for strict no-proper-usage filtering
-        if 'allow_proper_usage' in filters and not filters['allow_proper_usage']:
+        if "allow_proper_usage" in filters and not filters["allow_proper_usage"]:
             # Must NOT have any proper usage
-            if entry.get('has_proper_usage', False):
+            if entry.get("has_proper_usage", False):
                 return False
 
         return True
@@ -1309,10 +1309,10 @@ class OwlexFilter:
         from openword.filters import matches_syllables
         return matches_syllables(
             entry,
-            min_syllables=filters.get('min'),
-            max_syllables=filters.get('max'),
-            exact_syllables=filters.get('exact'),
-            require_syllables=filters.get('require_syllables', False)
+            min_syllables=filters.get("min"),
+            max_syllables=filters.get("max"),
+            exact_syllables=filters.get("exact"),
+            require_syllables=filters.get("require_syllables", False)
         )
 
     def _check_lemma_filters(self, entry: Dict, filters: Dict) -> bool:
@@ -1338,26 +1338,26 @@ class OwlexFilter:
         # Check for base forms only filter
         # Note: This is an approximation since lemma data is at sense level
         # For accurate filtering, use the two-file pipeline in filters.py
-        if filters.get('base_forms_only') or filters.get('exclude_inflected'):
+        if filters.get("base_forms_only") or filters.get("exclude_inflected"):
             # Check if any sense is marked as inflected
             # This field would need to be aggregated from senses during enrichment
-            if entry.get('is_inflected_any', False):
+            if entry.get("is_inflected_any", False):
                 return False
 
             # Also check legacy single-value field
-            if entry.get('is_inflected', False):
+            if entry.get("is_inflected", False):
                 return False
 
         return True
 
     def get_senses_file(self) -> Optional[Path]:
         """Determine senses JSONL file based on distribution."""
-        dist = self.spec['distribution']
+        dist = self.spec["distribution"]
 
         # Try senses file in flat structure
         candidates = [
-            Path(f'data/intermediate/{dist}-senses.jsonl'),
-            Path(f'data/intermediate/{dist}/senses.jsonl'),  # Legacy
+            Path(f"data/intermediate/{dist}-senses.jsonl"),
+            Path(f"data/intermediate/{dist}/senses.jsonl"),  # Legacy
         ]
 
         for path in candidates:
@@ -1372,23 +1372,23 @@ class OwlexFilter:
         Senses file contains POS, labels (register_tags, temporal_tags, etc.)
         which are NOT in the lexemes file.
         """
-        filters = self.spec.get('filters', {})
+        filters = self.spec.get("filters", {})
 
         # POS filters need senses
-        if filters.get('pos'):
+        if filters.get("pos"):
             return True
 
         # Label filters need senses
-        if filters.get('labels'):
+        if filters.get("labels"):
             return True
 
         # Temporal filters need senses
-        if filters.get('temporal'):
+        if filters.get("temporal"):
             return True
 
         # Policy filters expand to label checks
-        policy = filters.get('policy', {})
-        if policy.get('family_friendly') or policy.get('modern_only') or policy.get('no_jargon'):
+        policy = filters.get("policy", {})
+        if policy.get("family_friendly") or policy.get("modern_only") or policy.get("no_jargon"):
             return True
 
         return False
@@ -1405,22 +1405,22 @@ class OwlexFilter:
         Returns dict with keys: register, temporal, domain, region
         """
         result: Dict[str, List[str]] = {
-            'register': [],
-            'temporal': [],
-            'domain': [],
-            'region': [],
+            "register": [],
+            "temporal": [],
+            "domain": [],
+            "region": [],
         }
 
         for code in codes:
             if len(code) == 4:
-                if code.startswith('R'):
-                    result['register'].append(code)
-                elif code.startswith('T'):
-                    result['temporal'].append(code)
-                elif code.startswith('EN'):
-                    result['region'].append(code)
-            elif len(code) == 5 and code.startswith('D'):
-                result['domain'].append(code)
+                if code.startswith("R"):
+                    result["register"].append(code)
+                elif code.startswith("T"):
+                    result["temporal"].append(code)
+                elif code.startswith("EN"):
+                    result["region"].append(code)
+            elif len(code) == 5 and code.startswith("D"):
+                result["domain"].append(code)
 
         return result
 
@@ -1451,84 +1451,84 @@ class OwlexFilter:
         region_tags = set()
 
         for sense in senses:
-            if sense.get('pos'):
-                pos_set.add(sense['pos'])
+            if sense.get("pos"):
+                pos_set.add(sense["pos"])
 
             # Check for v2 format (codes set)
-            codes = sense.get('codes', [])
+            codes = sense.get("codes", [])
             if codes:
                 # V2 format: categorize codes into label categories
                 categorized = self._categorize_codes(codes)
-                register_tags.update(categorized['register'])
-                temporal_tags.update(categorized['temporal'])
-                domain_tags.update(categorized['domain'])
-                region_tags.update(categorized['region'])
+                register_tags.update(categorized["register"])
+                temporal_tags.update(categorized["temporal"])
+                domain_tags.update(categorized["domain"])
+                region_tags.update(categorized["region"])
             else:
                 # V1 format fallback: use separate tag arrays
-                if sense.get('register_tags'):
-                    register_tags.update(sense['register_tags'])
-                if sense.get('temporal_tags'):
-                    temporal_tags.update(sense['temporal_tags'])
-                if sense.get('domain_tags'):
-                    domain_tags.update(sense['domain_tags'])
-                if sense.get('region_tags'):
-                    region_tags.update(sense['region_tags'])
+                if sense.get("register_tags"):
+                    register_tags.update(sense["register_tags"])
+                if sense.get("temporal_tags"):
+                    temporal_tags.update(sense["temporal_tags"])
+                if sense.get("domain_tags"):
+                    domain_tags.update(sense["domain_tags"])
+                if sense.get("region_tags"):
+                    region_tags.update(sense["region_tags"])
 
         # Add aggregated POS (from all senses)
         if pos_set:
-            augmented['pos'] = sorted(pos_set)
+            augmented["pos"] = sorted(pos_set)
 
         # Build labels structure matching filter expectations (from all senses)
         labels = {}
         if register_tags:
-            labels['register'] = sorted(register_tags)
+            labels["register"] = sorted(register_tags)
         if temporal_tags:
-            labels['temporal'] = sorted(temporal_tags)
+            labels["temporal"] = sorted(temporal_tags)
         if domain_tags:
-            labels['domain'] = sorted(domain_tags)
+            labels["domain"] = sorted(domain_tags)
         if region_tags:
-            labels['region'] = sorted(region_tags)
+            labels["region"] = sorted(region_tags)
 
         if labels:
-            augmented['labels'] = labels
+            augmented["labels"] = labels
 
         # Extract primary sense data (first sense in document order)
         primary = senses[0]
         primary_sense = {}
 
-        if primary.get('pos'):
-            primary_sense['pos'] = primary['pos']
+        if primary.get("pos"):
+            primary_sense["pos"] = primary["pos"]
 
         # Build primary sense labels
         primary_labels = {}
-        primary_codes = primary.get('codes', [])
+        primary_codes = primary.get("codes", [])
         if primary_codes:
             # V2 format
             categorized = self._categorize_codes(primary_codes)
-            if categorized['register']:
-                primary_labels['register'] = categorized['register']
-            if categorized['temporal']:
-                primary_labels['temporal'] = categorized['temporal']
-            if categorized['domain']:
-                primary_labels['domain'] = categorized['domain']
-            if categorized['region']:
-                primary_labels['region'] = categorized['region']
+            if categorized["register"]:
+                primary_labels["register"] = categorized["register"]
+            if categorized["temporal"]:
+                primary_labels["temporal"] = categorized["temporal"]
+            if categorized["domain"]:
+                primary_labels["domain"] = categorized["domain"]
+            if categorized["region"]:
+                primary_labels["region"] = categorized["region"]
         else:
             # V1 format fallback
-            if primary.get('register_tags'):
-                primary_labels['register'] = primary['register_tags']
-            if primary.get('temporal_tags'):
-                primary_labels['temporal'] = primary['temporal_tags']
-            if primary.get('domain_tags'):
-                primary_labels['domain'] = primary['domain_tags']
-            if primary.get('region_tags'):
-                primary_labels['region'] = primary['region_tags']
+            if primary.get("register_tags"):
+                primary_labels["register"] = primary["register_tags"]
+            if primary.get("temporal_tags"):
+                primary_labels["temporal"] = primary["temporal_tags"]
+            if primary.get("domain_tags"):
+                primary_labels["domain"] = primary["domain_tags"]
+            if primary.get("region_tags"):
+                primary_labels["region"] = primary["region_tags"]
 
         if primary_labels:
-            primary_sense['labels'] = primary_labels
+            primary_sense["labels"] = primary_labels
 
         if primary_sense:
-            augmented['primary_sense'] = primary_sense
+            augmented["primary_sense"] = primary_sense
 
         return augmented
 
@@ -1536,13 +1536,13 @@ class OwlexFilter:
         """Load senses from JSONL file and group by word."""
         senses_by_word: Dict[str, List[Dict]] = defaultdict(list)
 
-        with open(senses_path, 'r', encoding='utf-8') as f:
+        with open(senses_path, "r", encoding="utf-8") as f:
             for line in f:
                 if not line.strip():
                     continue
                 try:
                     sense = json.loads(line)
-                    word = sense.get('id')
+                    word = sense.get("id")
                     if word:
                         senses_by_word[word].append(sense)
                 except json.JSONDecodeError:
@@ -1561,16 +1561,16 @@ class OwlexFilter:
         """
         # Start with word-level data
         result = {
-            'id': entry['id'],
-            'frequency_tier': entry.get('frequency_tier', 'Z'),
-            'sources': entry.get('sources', []),
+            "id": entry["id"],
+            "frequency_tier": entry.get("frequency_tier", "Z"),
+            "sources": entry.get("sources", []),
         }
 
         # Add optional word-level fields if present
-        if 'nsyll' in entry:
-            result['nsyll'] = entry['nsyll']
-        if 'concreteness' in entry:
-            result['concreteness'] = entry['concreteness']
+        if "nsyll" in entry:
+            result["nsyll"] = entry["nsyll"]
+        if "concreteness" in entry:
+            result["concreteness"] = entry["concreteness"]
 
         # Aggregate POS from senses
         pos_set = set()
@@ -1578,32 +1578,32 @@ class OwlexFilter:
         sense_data = []
 
         for sense in senses:
-            if sense.get('pos'):
-                pos_set.add(sense['pos'])
+            if sense.get("pos"):
+                pos_set.add(sense["pos"])
 
-            lemma = sense.get('lemma', entry['id'])
+            lemma = sense.get("lemma", entry["id"])
             lemmas_set.add(lemma)
 
             # Build sense detail object
-            sense_detail = {'pos': sense.get('pos')}
-            if sense.get('lemma') and sense['lemma'] != entry['id']:
-                sense_detail['lemma'] = sense['lemma']
-            if sense.get('is_inflected'):
-                sense_detail['is_inflected'] = True
-            if sense.get('definition'):
-                sense_detail['definition'] = sense['definition']
+            sense_detail = {"pos": sense.get("pos")}
+            if sense.get("lemma") and sense["lemma"] != entry["id"]:
+                sense_detail["lemma"] = sense["lemma"]
+            if sense.get("is_inflected"):
+                sense_detail["is_inflected"] = True
+            if sense.get("definition"):
+                sense_detail["definition"] = sense["definition"]
 
             sense_data.append(sense_detail)
 
         # Add aggregated arrays
         if pos_set:
-            result['pos'] = sorted(pos_set)
-        if lemmas_set and lemmas_set != {entry['id']}:
-            result['lemmas'] = sorted(lemmas_set)
+            result["pos"] = sorted(pos_set)
+        if lemmas_set and lemmas_set != {entry["id"]}:
+            result["lemmas"] = sorted(lemmas_set)
 
         # Include senses array if there's meaningful data
         if sense_data:
-            result['senses'] = sense_data
+            result["senses"] = sense_data
 
         return result
 
@@ -1612,109 +1612,109 @@ class OwlexFilter:
         score = 0.0
 
         # Frequency score (base)
-        tier = entry.get('frequency_tier', 'rare')
+        tier = entry.get("frequency_tier", "rare")
         score += self.tier_scores.get(tier, 0)
 
         # Concreteness bonus
-        if entry.get('concreteness') == 'concrete':
+        if entry.get("concreteness") == "concrete":
             score += 20
 
         # Length penalty
-        word_len = len(entry['id'])
+        word_len = len(entry["id"])
         if word_len > 12:
             score -= 10
         if word_len > 15:
             score -= 10
 
         # Jargon penalty
-        labels = entry.get('labels', {})
-        domain_labels = set(labels.get('domain', []))
-        if domain_labels & {'medical', 'legal', 'technical', 'scientific'}:
+        labels = entry.get("labels", {})
+        domain_labels = set(labels.get("domain", []))
+        if domain_labels & {"medical", "legal", "technical", "scientific"}:
             score -= 30
 
         return score
 
     def format_output(self, entries: List[Dict], verbose: bool = False) -> str:
         """Format filtered entries according to output spec."""
-        output_config = self.spec.get('output', {})
-        output_format = output_config.get('format', 'text')
-        include_metadata = output_config.get('include_metadata', False)
-        metadata_fields = output_config.get('metadata_fields', [])
-        limit = output_config.get('limit')
-        sort_by = output_config.get('sort_by', 'alphabetical')
+        output_config = self.spec.get("output", {})
+        output_format = output_config.get("format", "text")
+        include_metadata = output_config.get("include_metadata", False)
+        metadata_fields = output_config.get("metadata_fields", [])
+        limit = output_config.get("limit")
+        sort_by = output_config.get("sort_by", "alphabetical")
 
         if verbose and sort_by:
             logger.info(f"Sorting by: {sort_by}")
 
         # Sort entries
-        if sort_by == 'alphabetical':
-            entries = sorted(entries, key=lambda e: e['id'])
-        elif sort_by == 'score':
+        if sort_by == "alphabetical":
+            entries = sorted(entries, key=lambda e: e["id"])
+        elif sort_by == "score":
             entries = sorted(entries, key=lambda e: self.calculate_score(e), reverse=True)
-        elif sort_by == 'frequency':
+        elif sort_by == "frequency":
             # Sort by frequency tier score (highest score = most frequent first)
-            entries = sorted(entries, key=lambda e: self.tier_scores.get(e.get('frequency_tier', 'rare'), 0), reverse=True)
+            entries = sorted(entries, key=lambda e: self.tier_scores.get(e.get("frequency_tier", "rare"), 0), reverse=True)
             if verbose and len(entries) > 0:
                 # Show first few entries with their frequency tiers
                 logger.info("First 5 entries after frequency sort:")
                 for entry in entries[:5]:
-                    tier = entry.get('frequency_tier', 'rare')
+                    tier = entry.get("frequency_tier", "rare")
                     score = self.tier_scores.get(tier, 0)
                     logger.info(f"  {entry['id']:15} tier={tier:10} score={score}")
-        elif sort_by == 'length':
-            entries = sorted(entries, key=lambda e: len(e['id']))
+        elif sort_by == "length":
+            entries = sorted(entries, key=lambda e: len(e["id"]))
 
         # Apply limit
         if limit:
             entries = entries[:limit]
 
         # Format output
-        if output_format == 'text':
+        if output_format == "text":
             if include_metadata and metadata_fields:
                 lines = []
                 for entry in entries:
-                    fields = [str(entry.get(field, '')) for field in metadata_fields]
-                    lines.append('\t'.join(fields))
-                return '\n'.join(lines)
+                    fields = [str(entry.get(field, "")) for field in metadata_fields]
+                    lines.append("\t".join(fields))
+                return "\n".join(lines)
             else:
-                return '\n'.join(entry['id'] for entry in entries)
+                return "\n".join(entry["id"] for entry in entries)
 
-        elif output_format == 'json':
+        elif output_format == "json":
             if include_metadata:
                 return json.dumps(entries, indent=2, sort_keys=True)
             else:
-                return json.dumps([entry['id'] for entry in entries], indent=2, sort_keys=True)
+                return json.dumps([entry["id"] for entry in entries], indent=2, sort_keys=True)
 
-        elif output_format == 'jsonl':
+        elif output_format == "jsonl":
             lines = []
             for entry in entries:
                 if include_metadata:
                     lines.append(json.dumps(entry, sort_keys=True))
                 else:
-                    lines.append(json.dumps({'id': entry['id']}, sort_keys=True))
-            return '\n'.join(lines)
+                    lines.append(json.dumps({"id": entry["id"]}, sort_keys=True))
+            return "\n".join(lines)
 
-        elif output_format == 'csv':
+        elif output_format == "csv":
             if include_metadata and metadata_fields:
-                lines = [','.join(metadata_fields)]
+                lines = [",".join(metadata_fields)]
                 for entry in entries:
-                    fields = [str(entry.get(field, '')) for field in metadata_fields]
-                    lines.append(','.join(f'"{f}"' for f in fields))
-                return '\n'.join(lines)
+                    fields = [str(entry.get(field, "")) for field in metadata_fields]
+                    lines.append(",".join(f'"{f}"' for f in fields))
+                return "\n".join(lines)
             else:
-                return '\n'.join(entry['id'] for entry in entries)
+                return "\n".join(entry["id"] for entry in entries)
 
-        elif output_format == 'tsv':
+        elif output_format == "tsv":
             if include_metadata and metadata_fields:
-                lines = ['\t'.join(metadata_fields)]
+                lines = ["\t".join(metadata_fields)]
                 for entry in entries:
-                    fields = [str(entry.get(field, '')) for field in metadata_fields]
-                    lines.append('\t'.join(fields))
-                return '\n'.join(lines)
+                    fields = [str(entry.get(field, "")) for field in metadata_fields]
+                    lines.append("\t".join(fields))
+                return "\n".join(lines)
             else:
-                return '\n'.join(entry['id'] for entry in entries)
+                return "\n".join(entry["id"] for entry in entries)
 
-        return '\n'.join(entry['id'] for entry in entries)
+        return "\n".join(entry["id"] for entry in entries)
 
     def run(
         self,
@@ -1771,7 +1771,7 @@ class OwlexFilter:
 
                     # Augment entry with senses data if needed for filtering
                     if needs_senses_for_filtering:
-                        word = entry.get('id', '')
+                        word = entry.get("id", "")
                         senses = senses_by_word.get(word, [])
                         entry_for_filter = self._augment_entry_for_filtering(entry, senses)
                     else:
@@ -1789,19 +1789,19 @@ class OwlexFilter:
             logger.info(f"Matched {len(filtered):,} entries ({len(filtered) / total * 100:.1f}%)")
 
             # Show warning if description doesn't match filters
-            if self.spec.get('description'):
-                desc = self.spec['description'].lower()
-                filters = self.spec.get('filters', {})
+            if self.spec.get("description"):
+                desc = self.spec["description"].lower()
+                filters = self.spec.get("filters", {})
 
                 # Check for common mismatches
-                if 'us' in desc or 'american' in desc:
-                    if not filters.get('labels', {}).get('region', {}).get('exclude'):
+                if "us" in desc or "american" in desc:
+                    if not filters.get("labels", {}).get("region", {}).get("exclude"):
                         logger.warning("Warning: Description mentions US/American but no region filter is set")
                         logger.warning("  -> Consider adding: filters.labels.region.exclude = ['en-GB']")
 
-                if any(word in desc for word in ['vulgar', 'profan', 'family', 'clean']):
-                    if not filters.get('policy', {}).get('family_friendly'):
-                        if not filters.get('labels', {}).get('register', {}).get('exclude'):
+                if any(word in desc for word in ["vulgar", "profan", "family", "clean"]):
+                    if not filters.get("policy", {}).get("family_friendly"):
+                        if not filters.get("labels", {}).get("register", {}).get("exclude"):
                             logger.warning("Warning: Description mentions profanity/family-friendly but no filter is set")
                             logger.warning("  -> Consider adding: filters.policy.family_friendly = true")
 
@@ -1814,7 +1814,7 @@ class OwlexFilter:
         if output_path:
             output = self.format_output(filtered, verbose)
             output_path.parent.mkdir(parents=True, exist_ok=True)
-            output_path.write_text(output + '\n')
+            output_path.write_text(output + "\n")
             if verbose:
                 logger.info(f"Output written to: {output_path}")
 
@@ -1837,7 +1837,7 @@ class OwlexFilter:
         # Aggregate entries with senses
         enriched_entries = []
         for entry in filtered:
-            word = entry['id']
+            word = entry["id"]
             senses = senses_by_word.get(word, [])
             enriched = self.aggregate_entry_with_senses(entry, senses)
             enriched_entries.append(enriched)
@@ -1847,9 +1847,9 @@ class OwlexFilter:
             self._write_with_jq(enriched_entries, enriched_path, jq_expr, verbose)
         else:
             # Write directly
-            with open(enriched_path, 'w', encoding='utf-8') as f:
+            with open(enriched_path, "w", encoding="utf-8") as f:
                 for entry in enriched_entries:
-                    f.write(json.dumps(entry, sort_keys=True) + '\n')
+                    f.write(json.dumps(entry, sort_keys=True) + "\n")
 
         if verbose:
             logger.info(f"Enriched output written to: {enriched_path}")
@@ -1863,7 +1863,7 @@ class OwlexFilter:
     ) -> None:
         """Write entries through jq filter."""
         # Check if jq is available
-        if not shutil.which('jq'):
+        if not shutil.which("jq"):
             logger.error("jq not found. Install jq or remove --jq flag.")
             logger.error("  macOS: brew install jq")
             logger.error("  Ubuntu: apt install jq")
@@ -1873,12 +1873,12 @@ class OwlexFilter:
             logger.info(f"Applying jq filter: {jq_expr}")
 
         # Build JSONL input
-        jsonl_input = '\n'.join(json.dumps(e) for e in entries)
+        jsonl_input = "\n".join(json.dumps(e) for e in entries)
 
         # Run jq with compact output (-c) for JSONL
         try:
             result = subprocess.run(
-                ['jq', '-c', jq_expr],
+                ["jq", "-c", jq_expr],
                 input=jsonl_input,
                 capture_output=True,
                 text=True,
@@ -1893,7 +1893,7 @@ class OwlexFilter:
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description='Filter word lists using YAML/JSON specifications',
+        description="Filter word lists using YAML/JSON specifications",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -1918,34 +1918,34 @@ Examples:
     )
 
     parser.add_argument(
-        'spec',
+        "spec",
         type=Path,
-        help='Path to YAML or JSON specification file'
+        help="Path to YAML or JSON specification file"
     )
 
     parser.add_argument(
-        '-o', '--output',
+        "-o", "--output",
         type=Path,
-        help='Plain text word list output file (one word per line)'
+        help="Plain text word list output file (one word per line)"
     )
 
     parser.add_argument(
-        '-e', '--enriched',
+        "-e", "--enriched",
         type=Path,
-        help='Enriched JSONL output file with aggregated sense data'
+        help="Enriched JSONL output file with aggregated sense data"
     )
 
     parser.add_argument(
-        '--jq',
+        "--jq",
         type=str,
-        metavar='EXPR',
-        help='jq expression to apply to each enriched entry (requires jq installed)'
+        metavar="EXPR",
+        help="jq expression to apply to each enriched entry (requires jq installed)"
     )
 
     parser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        help='Enable verbose output'
+        "-v", "--verbose",
+        action="store_true",
+        help="Enable verbose output"
     )
 
     args = parser.parse_args()
@@ -1964,5 +1964,5 @@ Examples:
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

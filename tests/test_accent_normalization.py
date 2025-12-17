@@ -11,19 +11,19 @@ import unicodedata
 # Duplicate the functions here for testing (to avoid nltk dependency in tests)
 def normalize_for_lookup(word: str) -> str:
     """Normalize word for dictionary lookup."""
-    normalized = unicodedata.normalize('NFKC', word)
+    normalized = unicodedata.normalize("NFKC", word)
     normalized = normalized.lower()
     return normalized
 
 
 def strip_accents(word: str) -> str:
     """Strip accents from word for fallback lookups."""
-    nfd = unicodedata.normalize('NFD', word)
-    without_accents = ''.join(
+    nfd = unicodedata.normalize("NFD", word)
+    without_accents = "".join(
         char for char in nfd
         if not unicodedata.combining(char)
     )
-    return unicodedata.normalize('NFC', without_accents)
+    return unicodedata.normalize("NFC", without_accents)
 
 
 class TestAccentNormalization:

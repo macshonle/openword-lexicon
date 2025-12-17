@@ -36,8 +36,8 @@ from openword.progress_display import ProgressDisplay
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
@@ -55,7 +55,7 @@ def extract_lemmas_from_senses(senses_path: Path) -> Dict[str, Set[str]]:
     word_lemmas: Dict[str, Set[str]] = defaultdict(set)
 
     with ProgressDisplay("Reading senses", update_interval=50000) as progress:
-        with open(senses_path, 'r', encoding='utf-8') as f:
+        with open(senses_path, "r", encoding="utf-8") as f:
             for line_num, line in enumerate(f, 1):
                 line = line.strip()
                 if not line:
@@ -63,8 +63,8 @@ def extract_lemmas_from_senses(senses_path: Path) -> Dict[str, Set[str]]:
 
                 try:
                     entry = json.loads(line)
-                    word = entry.get('id')
-                    lemma = entry.get('lemma')
+                    word = entry.get("id")
+                    lemma = entry.get("lemma")
 
                     # Only record if lemma exists and differs from word
                     if word and lemma and lemma != word:
@@ -144,14 +144,14 @@ def write_json_output(data: dict, output_path: Path, use_gzip: bool = False) -> 
     Returns file size in bytes.
     """
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    json_bytes = json.dumps(data, separators=(',', ':'), ensure_ascii=False).encode('utf-8')
+    json_bytes = json.dumps(data, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
 
     if use_gzip:
-        output_path = output_path.with_suffix('.json.gz')
-        with gzip.open(output_path, 'wb', compresslevel=9) as f:
+        output_path = output_path.with_suffix(".json.gz")
+        with gzip.open(output_path, "wb", compresslevel=9) as f:
             f.write(json_bytes)
     else:
-        with open(output_path, 'wb') as f:
+        with open(output_path, "wb") as f:
             f.write(json_bytes)
 
     return output_path.stat().st_size
@@ -160,7 +160,7 @@ def write_json_output(data: dict, output_path: Path, use_gzip: bool = False) -> 
 def export_lemma_metadata(
     senses_path: Path,
     output_dir: Path,
-    language: str = 'en',
+    language: str = "en",
     use_gzip: bool = False
 ) -> tuple:
     """
@@ -188,7 +188,7 @@ def export_lemma_metadata(
     lemmas_path = output_dir / f"{language}-lemmas.json"
     lemmas_size = write_json_output(lemmas_map, lemmas_path, use_gzip)
     if use_gzip:
-        lemmas_path = lemmas_path.with_suffix('.json.gz')
+        lemmas_path = lemmas_path.with_suffix(".json.gz")
 
     logger.info(f"Exported {lemmas_path.name}: {len(lemmas_map):,} entries ({lemmas_size / 1024:.1f} KB)")
 
@@ -196,7 +196,7 @@ def export_lemma_metadata(
     groups_path = output_dir / f"{language}-lemma-groups.json"
     groups_size = write_json_output(lemma_groups, groups_path, use_gzip)
     if use_gzip:
-        groups_path = groups_path.with_suffix('.json.gz')
+        groups_path = groups_path.with_suffix(".json.gz")
 
     logger.info(f"Exported {groups_path.name}: {len(lemma_groups):,} groups ({groups_size / 1024:.1f} KB)")
 
@@ -208,16 +208,16 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Export lemma metadata from sense-level data'
+        description="Export lemma metadata from sense-level data"
     )
-    parser.add_argument('--senses', type=Path, required=True,
-                        help='Input senses JSONL file')
-    parser.add_argument('--output-dir', type=Path,
-                        help='Output directory (default: data/build)')
-    parser.add_argument('--language', default='en',
-                        help='Language code for output filenames (default: en)')
-    parser.add_argument('--gzip', action='store_true',
-                        help='Compress output with gzip')
+    parser.add_argument("--senses", type=Path, required=True,
+                        help="Input senses JSONL file")
+    parser.add_argument("--output-dir", type=Path,
+                        help="Output directory (default: data/build)")
+    parser.add_argument("--language", default="en",
+                        help="Language code for output filenames (default: en)")
+    parser.add_argument("--gzip", action="store_true",
+                        help="Compress output with gzip")
     args = parser.parse_args()
 
     # Verify input exists
@@ -256,5 +256,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

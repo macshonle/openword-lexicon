@@ -20,4 +20,4 @@ Or:
 
 from openword.scanner.v2.scanner import main
 
-__all__ = ['main']
+__all__ = ["main"]

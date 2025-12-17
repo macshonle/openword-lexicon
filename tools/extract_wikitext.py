@@ -68,26 +68,26 @@ def word_to_filename(word: str) -> str:
         Tiếng       -> xn--ting-hv5a_4
     """
     # Build binary string left-to-right (1=upper, 0=lower)
-    case_binary = ''.join('1' if c.isupper() else '0' for c in word)
-    has_upper = '1' in case_binary
+    case_binary = "".join("1" if c.isupper() else "0" for c in word)
+    has_upper = "1" in case_binary
 
     # Convert to lowercase and encode as punycode
     lower_word = word.lower()
     try:
         # Punycode encode (handles Unicode)
-        encoded = lower_word.encode('idna').decode('ascii')
+        encoded = lower_word.encode("idna").decode("ascii")
     except (UnicodeError, UnicodeDecodeError):
         # Fallback for edge cases that IDNA can't handle
-        encoded = lower_word.encode('punycode').decode('ascii')
+        encoded = lower_word.encode("punycode").decode("ascii")
         if encoded != lower_word:
-            encoded = 'xn--' + encoded
+            encoded = "xn--" + encoded
 
     # Add case suffix if needed (underscore delimiter, strip trailing zeros)
     if has_upper:
         # Pad on RIGHT to multiple of 3 for clean octal conversion
         while len(case_binary) % 3 != 0:
-            case_binary += '0'
-        case_octal = oct(int(case_binary, 2))[2:].rstrip('0') or '0'
+            case_binary += "0"
+        case_octal = oct(int(case_binary, 2))[2:].rstrip("0") or "0"
         return f"{encoded}_{case_octal}"
     return encoded
 
@@ -104,12 +104,12 @@ def filename_to_word(filename: str) -> str:
         - Apply: 1=upper, 0=lower
     """
     # Remove .xml extension if present
-    if filename.endswith('.xml'):
+    if filename.endswith(".xml"):
         filename = filename[:-4]
 
     # Check for case suffix (underscore followed by octal digits)
-    parts = filename.rsplit('_', 1)
-    if len(parts) == 2 and all(c in '01234567' for c in parts[1]):
+    parts = filename.rsplit("_", 1)
+    if len(parts) == 2 and all(c in "01234567" for c in parts[1]):
         encoded = parts[0]
         case_octal = parts[1]
     else:
@@ -118,11 +118,11 @@ def filename_to_word(filename: str) -> str:
 
     # Decode punycode
     try:
-        word = encoded.encode('ascii').decode('idna')
+        word = encoded.encode("ascii").decode("idna")
     except (UnicodeError, UnicodeDecodeError):
         # Fallback for edge cases
-        if encoded.startswith('xn--'):
-            word = encoded[4:].encode('ascii').decode('punycode')
+        if encoded.startswith("xn--"):
+            word = encoded[4:].encode("ascii").decode("punycode")
         else:
             word = encoded
 
@@ -133,17 +133,17 @@ def filename_to_word(filename: str) -> str:
         case_binary = bin(case_bits)[2:]
         # Pad left to multiple of 3 (proper octal grouping)
         while len(case_binary) % 3 != 0:
-            case_binary = '0' + case_binary
+            case_binary = "0" + case_binary
         # Pad right with zeros to match word length
         while len(case_binary) < len(word):
-            case_binary += '0'
+            case_binary += "0"
 
         # Apply case pattern
         chars = list(word)
         for i in range(len(chars)):
-            if i < len(case_binary) and case_binary[i] == '1':
+            if i < len(case_binary) and case_binary[i] == "1":
                 chars[i] = chars[i].upper()
-        word = ''.join(chars)
+        word = "".join(chars)
 
     return word
 
@@ -155,7 +155,7 @@ def load_words_from_file(filepath):
         for line in f:
             line = line.strip()
             # Skip empty lines and comments
-            if line and not line.startswith('#'):
+            if line and not line.startswith("#"):
                 words.append(line)
     return words
 
@@ -213,17 +213,17 @@ def scan_and_extract(xml_path, output_dir, target_words, update_mode=False):
     print()
 
     # Patterns for extraction
-    title_pattern = re.compile(r'<title>([^<]+)</title>')
-    page_start = '<page>'
-    page_end = '</page>'
+    title_pattern = re.compile(r"<title>([^<]+)</title>")
+    page_start = "<page>"
+    page_end = "</page>"
 
     buffer = ""
     pages_scanned = 0
     pages_extracted = 0
 
     # Open bz2 file
-    with bz2.open(xml_path, 'rt', encoding='utf-8') as f:
-        for chunk in iter(lambda: f.read(1024 * 1024), ''):
+    with bz2.open(xml_path, "rt", encoding="utf-8") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), ""):
             buffer += chunk
 
             # Extract complete pages
@@ -258,7 +258,7 @@ def scan_and_extract(xml_path, output_dir, target_words, update_mode=False):
                         # Extract and save with encoded filename
                         encoded_name = word_to_filename(title)
                         output_file = output_dir / f"{encoded_name}.xml"
-                        with open(output_file, 'w', encoding='utf-8') as out:
+                        with open(output_file, "w", encoding="utf-8") as out:
                             out.write(page_xml)
 
                         found_words.add(title)
@@ -304,12 +304,12 @@ def main():
     target_words = []
 
     # Check for --update flag
-    if '--update' in args:
+    if "--update" in args:
         update_mode = True
-        args = [a for a in args if a != '--update']
+        args = [a for a in args if a != "--update"]
 
     # Parse words from arguments or file
-    if len(args) > 0 and args[0] == '--words-file':
+    if len(args) > 0 and args[0] == "--words-file":
         if len(args) < 2:
             print("Error: --words-file requires a filename argument")
             sys.exit(1)
@@ -329,5 +329,5 @@ def main():
     scan_and_extract(xml_path, output_dir, target_words, update_mode=update_mode)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

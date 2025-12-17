@@ -904,7 +904,7 @@ def main() -> int:
     try:
         for i, (source_id, source_config) in enumerate(sources_to_fetch, 1):
             title = source_config.get("title", "")
-            title_display = title[:50] + '...' if len(title) > 50 else title
+            title_display = title[:50] + "..." if len(title) > 50 else title
 
             print(f"[{i}/{total}] {BOLD(source_id)} {DIM(title_display)}")
 

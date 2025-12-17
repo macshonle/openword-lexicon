@@ -21,8 +21,8 @@ from openword.progress_display import ProgressDisplay
 # Setup logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
@@ -46,16 +46,16 @@ def load_brysbaert_ratings(filepath: Path) -> Dict[str, Tuple[float, float]]:
     logger.info(f"Loading Brysbaert ratings from {filepath}")
 
     with ProgressDisplay(f"Loading {filepath.name}", update_interval=1000) as progress:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, "r", encoding="utf-8") as f:
             # Skip header line
-            header = f.readline().strip().split('\t')
+            header = f.readline().strip().split("\t")
 
             # Verify expected columns
-            if header[0] != 'Word' or header[2] != 'Conc.M':
+            if header[0] != "Word" or header[2] != "Conc.M":
                 logger.warning(f"Unexpected header format in Brysbaert file: {header}")
 
             for line_num, line in enumerate(f, 2):  # Start at 2 since we skipped header
-                parts = line.strip().split('\t')
+                parts = line.strip().split("\t")
                 if len(parts) < 3:
                     continue
 
@@ -85,28 +85,28 @@ def rating_to_category(rating: float) -> str:
     These thresholds are based on the distribution analysis in the original paper.
     """
     if rating >= 3.5:
-        return 'concrete'
+        return "concrete"
     elif rating >= 2.5:
-        return 'mixed'
+        return "mixed"
     else:
-        return 'abstract'
+        return "abstract"
 
 
 def add_brysbaert_source(entry: dict) -> dict:
     """Add 'brysbaert' to sources and update license_sources."""
-    sources = entry.get('sources', [])
-    if 'brysbaert' not in sources:
-        entry['sources'] = sorted(sources + ['brysbaert'])
+    sources = entry.get("sources", [])
+    if "brysbaert" not in sources:
+        entry["sources"] = sorted(sources + ["brysbaert"])
 
         # Update license_sources
-        license_sources = entry.get('license_sources', {})
+        license_sources = entry.get("license_sources", {})
         if BRYSBAERT_LICENSE not in license_sources:
-            license_sources[BRYSBAERT_LICENSE] = ['brysbaert']
-        elif 'brysbaert' not in license_sources[BRYSBAERT_LICENSE]:
+            license_sources[BRYSBAERT_LICENSE] = ["brysbaert"]
+        elif "brysbaert" not in license_sources[BRYSBAERT_LICENSE]:
             license_sources[BRYSBAERT_LICENSE] = sorted(
-                license_sources[BRYSBAERT_LICENSE] + ['brysbaert']
+                license_sources[BRYSBAERT_LICENSE] + ["brysbaert"]
             )
-        entry['license_sources'] = license_sources
+        entry["license_sources"] = license_sources
 
     return entry
 
@@ -128,7 +128,7 @@ def enrich_entry(
     Returns:
         Enriched entry dictionary
     """
-    word = entry.get('id', '').lower()
+    word = entry.get("id", "").lower()
 
     if word not in ratings:
         return entry
@@ -136,7 +136,7 @@ def enrich_entry(
     mean_rating, std_dev = ratings[word]
 
     # Check if we should update concreteness
-    existing_concreteness = entry.get('concreteness')
+    existing_concreteness = entry.get("concreteness")
 
     should_update = (
         existing_concreteness is None or  # No existing data
@@ -145,11 +145,11 @@ def enrich_entry(
 
     if should_update:
         # Add concreteness category
-        entry['concreteness'] = rating_to_category(mean_rating)
+        entry["concreteness"] = rating_to_category(mean_rating)
 
         # Add raw rating and std dev for advanced filtering
-        entry['concreteness_rating'] = round(mean_rating, 2)
-        entry['concreteness_sd'] = round(std_dev, 2)
+        entry["concreteness_rating"] = round(mean_rating, 2)
+        entry["concreteness_sd"] = round(std_dev, 2)
 
         # Add brysbaert to sources
         entry = add_brysbaert_source(entry)
@@ -177,8 +177,8 @@ def process_file(
     entries_enriched = 0
 
     with ProgressDisplay(f"Enriching {input_path.name}", update_interval=1000) as progress:
-        with open(input_path, 'r', encoding='utf-8') as f_in, \
-             open(output_path, 'w', encoding='utf-8') as f_out:
+        with open(input_path, "r", encoding="utf-8") as f_in, \
+             open(output_path, "w", encoding="utf-8") as f_out:
 
             for line_num, line in enumerate(f_in, 1):
                 line = line.strip()
@@ -189,18 +189,18 @@ def process_file(
                     entry = json.loads(line)
 
                     # Check if entry will be enriched
-                    had_concreteness = entry.get('concreteness') is not None
+                    had_concreteness = entry.get("concreteness") is not None
 
                     # Enrich entry
                     enriched_entry = enrich_entry(entry, ratings, prefer_brysbaert)
 
                     # Count if we added new data
-                    has_concreteness = enriched_entry.get('concreteness') is not None
+                    has_concreteness = enriched_entry.get("concreteness") is not None
                     if has_concreteness and (not had_concreteness or prefer_brysbaert):
                         entries_enriched += 1
 
                     # Write enriched entry
-                    f_out.write(json.dumps(enriched_entry, ensure_ascii=False, sort_keys=True) + '\n')
+                    f_out.write(json.dumps(enriched_entry, ensure_ascii=False, sort_keys=True) + "\n")
                     entries_processed += 1
 
                     progress.update(Lines=line_num, Processed=entries_processed, Enriched=entries_enriched)
@@ -218,15 +218,15 @@ def main():
     """Main enrichment pipeline."""
     import argparse
 
-    parser = argparse.ArgumentParser(description='Enrich entries with Brysbaert concreteness data')
-    parser.add_argument('--input', type=Path, required=True,
-                        help='Input JSONL file (lexeme entries)')
-    parser.add_argument('--output', type=Path, required=True,
-                        help='Output JSONL file')
-    parser.add_argument('--language', default='en',
-                        help='Language code for ratings file (default: en)')
-    parser.add_argument('--no-prefer', action='store_true',
-                        help='Do not override existing concreteness data')
+    parser = argparse.ArgumentParser(description="Enrich entries with Brysbaert concreteness data")
+    parser.add_argument("--input", type=Path, required=True,
+                        help="Input JSONL file (lexeme entries)")
+    parser.add_argument("--output", type=Path, required=True,
+                        help="Output JSONL file")
+    parser.add_argument("--language", default="en",
+                        help="Language code for ratings file (default: en)")
+    parser.add_argument("--no-prefer", action="store_true",
+                        help="Do not override existing concreteness data")
     args = parser.parse_args()
 
     data_root = Path(__file__).parent.parent.parent / "data"
@@ -262,5 +262,5 @@ def main():
     logger.info("Brysbaert enrichment complete")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

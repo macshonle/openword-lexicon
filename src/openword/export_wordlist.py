@@ -19,8 +19,8 @@ import marisa_trie
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ def export_trie_to_wordlist(trie_path: Path, output_path: Path):
 
     logger.info(f"Exporting {len(trie):,} words to {output_path}")
 
-    with open(output_path, 'w', encoding='utf-8') as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         for word in trie:
             f.write(f"{word}\n")
 
@@ -42,9 +42,9 @@ def export_trie_to_wordlist(trie_path: Path, output_path: Path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Export trie to plain text wordlist')
-    parser.add_argument('--lang', default=os.environ.get('LEXICON_LANG', 'en'),
-                        help='Language code (default: en or $LEXICON_LANG)')
+    parser = argparse.ArgumentParser(description="Export trie to plain text wordlist")
+    parser.add_argument("--lang", default=os.environ.get("LEXICON_LANG", "en"),
+                        help="Language code (default: en or $LEXICON_LANG)")
     args = parser.parse_args()
 
     project_root = Path(__file__).parent.parent.parent
@@ -62,5 +62,5 @@ def main():
         logger.info("Run 'make build-en' first to generate the trie.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

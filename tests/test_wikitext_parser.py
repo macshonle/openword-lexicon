@@ -51,7 +51,7 @@ class TestWikitextParserBasics:
         """Empty string should return list with empty string."""
         result = parse_template_params("")
         # v2 returns [''] because it wraps in a template for parsing
-        assert result == [''] or result == []
+        assert result == [""] or result == []
 
     def test_single_param(self):
         """Single parameter without pipes."""

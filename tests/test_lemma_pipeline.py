@@ -22,9 +22,9 @@ class TestLemmaNormalizationIntegration:
             {"id": "ran", "pos": "verb", "is_inflected": True, "lemma": "run"},
         ]
 
-        with open(input_path, 'w') as f:
+        with open(input_path, "w") as f:
             for entry in test_entries:
-                f.write(json.dumps(entry) + '\n')
+                f.write(json.dumps(entry) + "\n")
 
         # Run normalization
         normalize_wiktionary(input_path, lexemes_path, senses_path)
@@ -36,15 +36,15 @@ class TestLemmaNormalizationIntegration:
                 senses.append(json.loads(line))
 
         # Find inflected senses
-        inflected_senses = [s for s in senses if s.get('lemma')]
+        inflected_senses = [s for s in senses if s.get("lemma")]
         assert len(inflected_senses) == 3  # cats, running, ran
 
         # Verify specific lemmas
-        cats_sense = next(s for s in senses if s.get('id') == 'cats')
-        assert cats_sense.get('lemma') == 'cat'
+        cats_sense = next(s for s in senses if s.get("id") == "cats")
+        assert cats_sense.get("lemma") == "cat"
 
-        running_sense = next(s for s in senses if s.get('id') == 'running')
-        assert running_sense.get('lemma') == 'run'
+        running_sense = next(s for s in senses if s.get("id") == "running")
+        assert running_sense.get("lemma") == "run"
 
     def test_multiple_senses_same_word_different_lemmas(self, tmp_path):
         """Test word with senses having different lemmas (like 'left')."""
@@ -60,9 +60,9 @@ class TestLemmaNormalizationIntegration:
             {"id": "left", "pos": "adjective", "is_inflected": False},
         ]
 
-        with open(input_path, 'w') as f:
+        with open(input_path, "w") as f:
             for entry in test_entries:
-                f.write(json.dumps(entry) + '\n')
+                f.write(json.dumps(entry) + "\n")
 
         normalize_wiktionary(input_path, lexemes_path, senses_path)
 
@@ -74,11 +74,11 @@ class TestLemmaNormalizationIntegration:
 
         assert len(senses) == 2  # Should not be deduplicated
 
-        verb_sense = next(s for s in senses if s.get('pos') == 'verb')
-        adj_sense = next(s for s in senses if s.get('pos') == 'adjective')
+        verb_sense = next(s for s in senses if s.get("pos") == "verb")
+        adj_sense = next(s for s in senses if s.get("pos") == "adjective")
 
-        assert verb_sense.get('lemma') == 'leave'
-        assert adj_sense.get('lemma') is None  # Base form has no lemma
+        assert verb_sense.get("lemma") == "leave"
+        assert adj_sense.get("lemma") is None  # Base form has no lemma
 
 
 class TestLemmaExportIntegration:
@@ -105,13 +105,13 @@ class TestLemmaExportIntegration:
             {"id": "gone", "pos": "verb", "is_inflected": True, "lemma": "go"},
         ]
 
-        with open(senses_path, 'w') as f:
+        with open(senses_path, "w") as f:
             for sense in test_senses:
-                f.write(json.dumps(sense) + '\n')
+                f.write(json.dumps(sense) + "\n")
 
         # Run export
         lemmas_count, groups_count = export_lemma_metadata(
-            senses_path, output_dir, 'en', use_gzip=False
+            senses_path, output_dir, "en", use_gzip=False
         )
 
         # Check counts
@@ -176,13 +176,13 @@ class TestLemmaFilteringIntegration:
             {"id": "running", "pos": "verb", "is_inflected": True, "lemma": "run"},
         ]
 
-        with open(lexemes_path, 'w') as f:
+        with open(lexemes_path, "w") as f:
             for entry in lexemes:
-                f.write(json.dumps(entry) + '\n')
+                f.write(json.dumps(entry) + "\n")
 
-        with open(senses_path, 'w') as f:
+        with open(senses_path, "w") as f:
             for entry in senses:
-                f.write(json.dumps(entry) + '\n')
+                f.write(json.dumps(entry) + "\n")
 
         # Filter for base forms only
         results = list(filter_two_file(
@@ -193,7 +193,7 @@ class TestLemmaFilteringIntegration:
         ))
 
         # Should only return base forms
-        words = [r[0]['id'] for r in results]
+        words = [r[0]["id"] for r in results]
         assert set(words) == {"cat", "run"}
         assert "cats" not in words
         assert "running" not in words
@@ -211,8 +211,8 @@ class TestLemmaValidation:
         ]
 
         for sense in test_senses:
-            if sense.get('lemma'):
-                assert sense['id'] != sense['lemma'], \
+            if sense.get("lemma"):
+                assert sense["id"] != sense["lemma"], \
                     f"Circular lemma: {sense['id']} -> {sense['lemma']}"
 
     def test_lemma_lowercase_normalized(self):

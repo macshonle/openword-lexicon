@@ -37,8 +37,8 @@ import requests
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
@@ -65,17 +65,17 @@ def extract_qids_from_jsonl(input_path: Path) -> Set[str]:
     Returns:
         Set of Q identifiers (e.g., {"Q12345", "Q67890"})
     """
-    qid_pattern = re.compile(r'^Q\d+$')
+    qid_pattern = re.compile(r"^Q\d+$")
     qids: Set[str] = set()
 
-    with open(input_path, 'r', encoding='utf-8') as f:
+    with open(input_path, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line:
                 continue
             try:
                 entry = json.loads(line)
-                senseid = entry.get('senseid')
+                senseid = entry.get("senseid")
                 if senseid and qid_pattern.match(senseid):
                     qids.add(senseid)
             except json.JSONDecodeError:
@@ -90,10 +90,10 @@ def load_qid_list(path: Path) -> Set[str]:
     if not path.exists():
         return qids
 
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, "r", encoding="utf-8") as f:
         for line in f:
             qid = line.strip()
-            if qid and qid.startswith('Q'):
+            if qid and qid.startswith("Q"):
                 qids.add(qid)
 
     return qids
@@ -102,7 +102,7 @@ def load_qid_list(path: Path) -> Set[str]:
 def save_qid_list(qids: Set[str], path: Path) -> None:
     """Save Q identifiers to a text file (sorted, one per line)."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, 'w', encoding='utf-8') as f:
+    with open(path, "w", encoding="utf-8") as f:
         for qid in sorted(qids, key=lambda x: int(x[1:])):
             f.write(f"{qid}\n")
 
@@ -126,7 +126,7 @@ def load_wikidata_cache(path: Path) -> Dict[str, WikidataEntry]:
     if not path.exists():
         return {}
 
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     return {qid: WikidataEntry.from_dict(entry) for qid, entry in data.items()}
@@ -140,9 +140,9 @@ def save_wikidata_cache(entries: Dict[str, WikidataEntry], path: Path) -> None:
     sorted_items = sorted(entries.items(), key=lambda x: int(x[0][1:]))
     sorted_dict = {qid: entry.to_dict() for qid, entry in sorted_items}
 
-    with open(path, 'w', encoding='utf-8') as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(sorted_dict, f, indent=2, ensure_ascii=False)
-        f.write('\n')
+        f.write("\n")
 
 
 # Legacy wrappers for backward compatibility

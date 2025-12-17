@@ -44,14 +44,14 @@ def analyze_duplicates(input_file: Path) -> Tuple[Dict[str, List[int]], List[str
 
     print(f"Scanning {input_file}...")
 
-    with open(input_file, 'r', encoding='utf-8') as f:
+    with open(input_file, "r", encoding="utf-8") as f:
         for line_num, line in enumerate(f, start=0):  # 0-indexed
             if not line.strip():
                 continue
 
             try:
                 entry = json.loads(line)
-                word = entry.get('id')
+                word = entry.get("id")
 
                 if word:
                     word_to_lines[word].append(line_num)
@@ -108,16 +108,16 @@ def write_mapping_files(
 
     # Write binary offset array (4 bytes per entry)
     offsets_file = output_dir / "entry_offsets.bin"
-    with open(offsets_file, 'wb') as f:
+    with open(offsets_file, "wb") as f:
         for offset in entry_offsets:
-            f.write(struct.pack('<I', offset))  # Little-endian unsigned int
+            f.write(struct.pack("<I", offset))  # Little-endian unsigned int
 
     print(f"✓ Wrote {len(entry_offsets):,} offsets to {offsets_file}")
     print(f"  File size: {offsets_file.stat().st_size / (1024*1024):.2f} MB")
 
     # Write sparse line lists as JSON
     lists_file = output_dir / "entry_line_lists.json"
-    with open(lists_file, 'w', encoding='utf-8') as f:
+    with open(lists_file, "w", encoding="utf-8") as f:
         json.dump(entry_line_lists, f, indent=2)
 
     print(f"✓ Wrote {len(entry_line_lists):,} multi-entry line lists to {lists_file}")
@@ -144,7 +144,7 @@ def write_duplicate_analysis(
     # Top duplicates
     top_duplicates = sorted(duplicate_words.items(), key=lambda x: len(x[1]), reverse=True)[:50]
 
-    with open(output_file, 'w', encoding='utf-8') as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write("WIKTIONARY DUPLICATE WORD ANALYSIS\n")
         f.write("=" * 80 + "\n\n")
 
@@ -240,5 +240,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

@@ -32,7 +32,7 @@ class DetailedTestReporter:
             if report.outcome == "failed":
                 result["error"] = {
                     "message": str(report.longrepr),
-                    "traceback": str(report.longrepr) if hasattr(report.longrepr, '__str__') else None
+                    "traceback": str(report.longrepr) if hasattr(report.longrepr, "__str__") else None
                 }
 
             if hasattr(report, "sections"):
@@ -69,7 +69,7 @@ class DetailedTestReporter:
 
         # Save to file
         output_path = Path("tests/wordnet_test_detailed_results.json")
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             json.dump(summary, f, indent=2, ensure_ascii=False)
 
         print(f"\n\n{'='*60}")

@@ -197,7 +197,7 @@ if __name__ == "__main__":
     # Run all tests
     test_functions = [
         obj for name, obj in globals().items()
-        if name.startswith('test_') and callable(obj)
+        if name.startswith("test_") and callable(obj)
     ]
 
     passed = 0

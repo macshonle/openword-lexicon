@@ -26,8 +26,8 @@ from openword.progress_display import ProgressDisplay
 # Setup logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
@@ -55,32 +55,32 @@ def load_aoa_ratings(filepath: Path) -> Dict[str, Tuple[float, float, float]]:
     logger.info(f"Loading AoA ratings from {filepath}")
 
     with ProgressDisplay(f"Loading {filepath.name}", update_interval=1000) as progress:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, "r", encoding="utf-8") as f:
             # Skip header line
-            header = f.readline().strip().split('\t')
+            header = f.readline().strip().split("\t")
 
             # Verify expected columns
-            expected = ['Word', 'Rating.Mean', 'Rating.SD', 'Dunno']
+            expected = ["Word", "Rating.Mean", "Rating.SD", "Dunno"]
             if header[:4] != expected:
                 logger.warning(f"Unexpected header format in AoA file: {header}")
 
             for line_num, line in enumerate(f, 2):  # Start at 2 since we skipped header
-                parts = line.strip().split('\t')
+                parts = line.strip().split("\t")
                 if len(parts) < 4:
                     continue
 
                 word = parts[0].lower()  # Normalize to lowercase
 
                 # Skip entries with NA values (words too obscure to rate reliably)
-                if parts[1] == 'NA' or parts[1] == '#N/A':
+                if parts[1] == "NA" or parts[1] == "#N/A":
                     continue
 
                 try:
                     mean_aoa = float(parts[1])  # Rating.Mean
-                    std_dev = float(parts[2]) if parts[2] and parts[2] != 'NA' else 0.0  # Rating.SD
+                    std_dev = float(parts[2]) if parts[2] and parts[2] != "NA" else 0.0  # Rating.SD
                     # Note: Despite the column name "Dunno", this value actually represents
                     # the proportion of raters who KNEW the word (not who didn't know)
-                    known_proportion = float(parts[3]) if parts[3] and parts[3] != 'NA' else 0.0
+                    known_proportion = float(parts[3]) if parts[3] and parts[3] != "NA" else 0.0
 
                     ratings[word] = (mean_aoa, std_dev, known_proportion)
                     progress.update(Lines=line_num-1, Ratings=len(ratings))
@@ -111,34 +111,34 @@ def aoa_to_grade_level(aoa: float) -> str:
         Grade level category string
     """
     if aoa < 5:
-        return 'pre-k'
+        return "pre-k"
     elif aoa < 8:
-        return 'k-2'
+        return "k-2"
     elif aoa < 11:
-        return '3-5'
+        return "3-5"
     elif aoa < 14:
-        return '6-8'
+        return "6-8"
     elif aoa < 18:
-        return '9-12'
+        return "9-12"
     else:
-        return 'adult'
+        return "adult"
 
 
 def add_kuperman_source(entry: dict) -> dict:
     """Add 'kuperman_aoa' to sources and update license_sources."""
-    sources = entry.get('sources', [])
-    if 'kuperman_aoa' not in sources:
-        entry['sources'] = sorted(sources + ['kuperman_aoa'])
+    sources = entry.get("sources", [])
+    if "kuperman_aoa" not in sources:
+        entry["sources"] = sorted(sources + ["kuperman_aoa"])
 
         # Update license_sources
-        license_sources = entry.get('license_sources', {})
+        license_sources = entry.get("license_sources", {})
         if KUPERMAN_LICENSE not in license_sources:
-            license_sources[KUPERMAN_LICENSE] = ['kuperman_aoa']
-        elif 'kuperman_aoa' not in license_sources[KUPERMAN_LICENSE]:
+            license_sources[KUPERMAN_LICENSE] = ["kuperman_aoa"]
+        elif "kuperman_aoa" not in license_sources[KUPERMAN_LICENSE]:
             license_sources[KUPERMAN_LICENSE] = sorted(
-                license_sources[KUPERMAN_LICENSE] + ['kuperman_aoa']
+                license_sources[KUPERMAN_LICENSE] + ["kuperman_aoa"]
             )
-        entry['license_sources'] = license_sources
+        entry["license_sources"] = license_sources
 
     return entry
 
@@ -160,7 +160,7 @@ def enrich_entry(
     Returns:
         Enriched entry dictionary
     """
-    word = entry.get('id', '').lower()
+    word = entry.get("id", "").lower()
 
     if word not in ratings:
         return entry
@@ -172,13 +172,13 @@ def enrich_entry(
         return entry
 
     # Add AoA rating (in years)
-    entry['aoa_rating'] = round(mean_aoa, 2)
+    entry["aoa_rating"] = round(mean_aoa, 2)
 
     # Add standard deviation for filtering precision
-    entry['aoa_sd'] = round(std_dev, 2)
+    entry["aoa_sd"] = round(std_dev, 2)
 
     # Add grade level category for easy filtering
-    entry['aoa_grade'] = aoa_to_grade_level(mean_aoa)
+    entry["aoa_grade"] = aoa_to_grade_level(mean_aoa)
 
     # Add kuperman_aoa to sources
     entry = add_kuperman_source(entry)
@@ -206,8 +206,8 @@ def process_file(
     entries_enriched = 0
 
     with ProgressDisplay(f"Enriching {input_path.name}", update_interval=1000) as progress:
-        with open(input_path, 'r', encoding='utf-8') as f_in, \
-             open(output_path, 'w', encoding='utf-8') as f_out:
+        with open(input_path, "r", encoding="utf-8") as f_in, \
+             open(output_path, "w", encoding="utf-8") as f_out:
 
             for line_num, line in enumerate(f_in, 1):
                 line = line.strip()
@@ -218,18 +218,18 @@ def process_file(
                     entry = json.loads(line)
 
                     # Check if entry will be enriched
-                    had_aoa = entry.get('aoa_rating') is not None
+                    had_aoa = entry.get("aoa_rating") is not None
 
                     # Enrich entry
                     enriched_entry = enrich_entry(entry, ratings, min_known_proportion)
 
                     # Count if we added new data
-                    has_aoa = enriched_entry.get('aoa_rating') is not None
+                    has_aoa = enriched_entry.get("aoa_rating") is not None
                     if has_aoa and not had_aoa:
                         entries_enriched += 1
 
                     # Write enriched entry
-                    f_out.write(json.dumps(enriched_entry, ensure_ascii=False, sort_keys=True) + '\n')
+                    f_out.write(json.dumps(enriched_entry, ensure_ascii=False, sort_keys=True) + "\n")
                     entries_processed += 1
 
                     progress.update(Lines=line_num, Processed=entries_processed, Enriched=entries_enriched)
@@ -247,15 +247,15 @@ def main():
     """Main enrichment pipeline."""
     import argparse
 
-    parser = argparse.ArgumentParser(description='Enrich entries with Kuperman AoA data')
-    parser.add_argument('--input', type=Path, required=True,
-                        help='Input JSONL file (lexeme entries)')
-    parser.add_argument('--output', type=Path, required=True,
-                        help='Output JSONL file')
-    parser.add_argument('--language', default='en',
-                        help='Language code for ratings file (default: en)')
-    parser.add_argument('--min-known', type=float, default=0.5,
-                        help='Minimum proportion of raters who knew the word (default: 0.5)')
+    parser = argparse.ArgumentParser(description="Enrich entries with Kuperman AoA data")
+    parser.add_argument("--input", type=Path, required=True,
+                        help="Input JSONL file (lexeme entries)")
+    parser.add_argument("--output", type=Path, required=True,
+                        help="Output JSONL file")
+    parser.add_argument("--language", default="en",
+                        help="Language code for ratings file (default: en)")
+    parser.add_argument("--min-known", type=float, default=0.5,
+                        help="Minimum proportion of raters who knew the word (default: 0.5)")
     args = parser.parse_args()
 
     data_root = Path(__file__).parent.parent.parent / "data"
@@ -286,5 +286,5 @@ def main():
     logger.info("AoA enrichment complete")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

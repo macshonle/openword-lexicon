@@ -71,14 +71,14 @@ def load_pipeline_config() -> Dict[str, Any]:
     if not config_path.exists():
         # Fall back to hardcoded defaults if no config
         return {
-            'settings': {
-                'priority_fields': ['id', 'pos', 'wc', 'nsyll'],
-                'defaults_policy': {'omit_defaults': True},
+            "settings": {
+                "priority_fields": ["id", "pos", "wc", "nsyll"],
+                "defaults_policy": {"omit_defaults": True},
             },
-            'output_fields': [],
+            "output_fields": [],
         }
 
-    with open(config_path, 'r', encoding='utf-8') as f:
+    with open(config_path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -93,21 +93,21 @@ def load_field_schemas() -> Dict[str, Dict[str, Any]]:
     field_schemas: Dict[str, Dict[str, Any]] = {}
 
     # Load each enrichment schema
-    for schema_file in ['frequency.yaml', 'concreteness.yaml', 'aoa.yaml']:
+    for schema_file in ["frequency.yaml", "concreteness.yaml", "aoa.yaml"]:
         schema_path = schema_dir / schema_file
         if not schema_path.exists():
             continue
 
-        with open(schema_path, 'r', encoding='utf-8') as f:
+        with open(schema_path, "r", encoding="utf-8") as f:
             schema = yaml.safe_load(f)
 
         # Extract field definitions
-        for field_name, field_def in schema.get('fields', {}).items():
+        for field_name, field_def in schema.get("fields", {}).items():
             field_schemas[field_name] = {
-                'default': field_def.get('default'),
-                'omit_default': field_def.get('omit_default', False),
-                'type': field_def.get('type'),
-                'source': schema.get('name'),
+                "default": field_def.get("default"),
+                "omit_default": field_def.get("omit_default", False),
+                "type": field_def.get("type"),
+                "source": schema.get("name"),
             }
 
     return field_schemas
@@ -137,13 +137,13 @@ def get_field_schemas() -> Dict[str, Dict[str, Any]]:
 def get_priority_fields() -> List[str]:
     """Get priority fields from config or use defaults."""
     config = get_pipeline_config()
-    return config.get('settings', {}).get('priority_fields', ['id', 'pos', 'wc', 'nsyll'])
+    return config.get("settings", {}).get("priority_fields", ["id", "pos", "wc", "nsyll"])
 
 
 def should_omit_defaults() -> bool:
     """Check if defaults should be omitted from output."""
     config = get_pipeline_config()
-    return config.get('settings', {}).get('defaults_policy', {}).get('omit_defaults', True)
+    return config.get("settings", {}).get("defaults_policy", {}).get("omit_defaults", True)
 
 
 def apply_default_omission(entry: dict) -> dict:
@@ -166,10 +166,10 @@ def apply_default_omission(entry: dict) -> dict:
     result = entry.copy()
 
     for field_name, schema in field_schemas.items():
-        if not schema.get('omit_default', False):
+        if not schema.get("omit_default", False):
             continue
 
-        default_value = schema.get('default')
+        default_value = schema.get("default")
 
         # Check if field exists and matches default
         if field_name in result:
@@ -212,13 +212,13 @@ def order_entry_fields(entry: dict) -> dict:
 # Setup logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
 
-def load_all_data_sources(language: str = 'en') -> Tuple[
+def load_all_data_sources(language: str = "en") -> Tuple[
     Dict[str, int],  # frequency ranks
     Dict[str, Tuple[float, float]],  # brysbaert ratings
     Dict[str, Tuple[float, float, float]],  # aoa ratings
@@ -267,7 +267,7 @@ def enrich_entry(
     Returns:
         Enriched entry dictionary
     """
-    word = entry['id']
+    word = entry["id"]
     word_lower = word.lower()
 
     # 1. Frequency tier
@@ -276,7 +276,7 @@ def enrich_entry(
     # 2. Brysbaert concreteness
     if word_lower in brysbaert_ratings:
         mean_rating, std_dev = brysbaert_ratings[word_lower]
-        existing_concreteness = entry.get('concreteness')
+        existing_concreteness = entry.get("concreteness")
 
         should_update = (
             existing_concreteness is None or
@@ -284,9 +284,9 @@ def enrich_entry(
         )
 
         if should_update:
-            entry['concreteness'] = rating_to_category(mean_rating)
-            entry['concreteness_rating'] = round(mean_rating, 2)
-            entry['concreteness_sd'] = round(std_dev, 2)
+            entry["concreteness"] = rating_to_category(mean_rating)
+            entry["concreteness_rating"] = round(mean_rating, 2)
+            entry["concreteness_sd"] = round(std_dev, 2)
             entry = add_brysbaert_source(entry)
 
     # 3. Kuperman AoA
@@ -294,9 +294,9 @@ def enrich_entry(
         mean_aoa, std_dev, known_proportion = aoa_ratings[word_lower]
 
         if known_proportion >= min_aoa_known:
-            entry['aoa_rating'] = round(mean_aoa, 2)
-            entry['aoa_sd'] = round(std_dev, 2)
-            entry['aoa_grade'] = aoa_to_grade_level(mean_aoa)
+            entry["aoa_rating"] = round(mean_aoa, 2)
+            entry["aoa_sd"] = round(std_dev, 2)
+            entry["aoa_grade"] = aoa_to_grade_level(mean_aoa)
             entry = add_kuperman_source(entry)
 
     return entry
@@ -305,7 +305,7 @@ def enrich_entry(
 def process_file(
     input_path: Path,
     output_path: Path,
-    language: str = 'en',
+    language: str = "en",
     prefer_brysbaert: bool = True,
     min_aoa_known: float = 0.5,
     sort_output: bool = True,
@@ -357,7 +357,7 @@ def process_file(
     lowercase_words: Set[str] = set()
 
     with ProgressDisplay("Loading entries", update_interval=10000) as progress:
-        with open(input_path, 'r', encoding='utf-8') as f:
+        with open(input_path, "r", encoding="utf-8") as f:
             for line_num, line in enumerate(f, 1):
                 line = line.strip()
                 if not line:
@@ -366,7 +366,7 @@ def process_file(
                 try:
                     entry = json.loads(line)
                     entries.append(entry)
-                    word = entry['id']
+                    word = entry["id"]
                     if word.islower():
                         lowercase_words.add(word)
                     progress.update(Lines=line_num, Entries=len(entries))
@@ -382,17 +382,17 @@ def process_file(
     logger.info("Pass 2: Enriching entries...")
 
     stats = {
-        'frequency_assigned': 0,
-        'concreteness_added': 0,
-        'aoa_added': 0,
+        "frequency_assigned": 0,
+        "concreteness_added": 0,
+        "aoa_added": 0,
     }
 
     with ProgressDisplay("Enriching", update_interval=10000) as progress:
         for i, entry in enumerate(entries, 1):
             # Track what we're adding
-            had_freq = entry.get('frequency_tier') is not None
-            had_conc = entry.get('concreteness') is not None
-            had_aoa = entry.get('aoa_rating') is not None
+            had_freq = entry.get("frequency_tier") is not None
+            had_conc = entry.get("concreteness") is not None
+            had_aoa = entry.get("aoa_rating") is not None
 
             # Enrich
             entry = enrich_entry(
@@ -406,12 +406,12 @@ def process_file(
             )
 
             # Update stats
-            if not had_freq and entry.get('frequency_tier') is not None:
-                stats['frequency_assigned'] += 1
-            if not had_conc and entry.get('concreteness') is not None:
-                stats['concreteness_added'] += 1
-            if not had_aoa and entry.get('aoa_rating') is not None:
-                stats['aoa_added'] += 1
+            if not had_freq and entry.get("frequency_tier") is not None:
+                stats["frequency_assigned"] += 1
+            if not had_conc and entry.get("concreteness") is not None:
+                stats["concreteness_added"] += 1
+            if not had_aoa and entry.get("aoa_rating") is not None:
+                stats["aoa_added"] += 1
 
             progress.update(Entries=i)
 
@@ -423,7 +423,7 @@ def process_file(
     if sort_output:
         logger.info("")
         logger.info("Sorting entries lexicographically...")
-        entries.sort(key=lambda e: e['id'].lower())
+        entries.sort(key=lambda e: e["id"].lower())
 
     # Write output
     logger.info("")
@@ -431,13 +431,13 @@ def process_file(
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(output_path, 'wb') as f:
+    with open(output_path, "wb") as f:
         for entry in entries:
             # Apply default omission (removes fields matching schema defaults)
             cleaned_entry = apply_default_omission(entry)
             # Reorder fields (priority fields first, then alphabetical)
             ordered_entry = order_entry_fields(cleaned_entry)
-            line = orjson.dumps(ordered_entry) + b'\n'
+            line = orjson.dumps(ordered_entry) + b"\n"
             f.write(line)
 
     logger.info(f"  -> {output_path}")
@@ -447,7 +447,7 @@ def process_file(
     logger.info("Enrichment summary:")
     tier_counts = {}
     for entry in entries:
-        tier = entry.get('frequency_tier', 'Z')
+        tier = entry.get("frequency_tier", "Z")
         tier_counts[tier] = tier_counts.get(tier, 0) + 1
 
     for tier in sorted(tier_counts.keys()):
@@ -457,7 +457,7 @@ def process_file(
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description='V2 enrichment pipeline',
+        description="V2 enrichment pipeline",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Example:
@@ -466,18 +466,18 @@ Example:
         --output data/wikt/en-wikt-v2-enriched.jsonl
         """
     )
-    parser.add_argument('--input', type=Path, required=True,
-                        help='Input JSONL file (v2 scanner output)')
-    parser.add_argument('--output', type=Path, required=True,
-                        help='Output JSONL file (enriched)')
-    parser.add_argument('--language', default='en',
-                        help='Language code for data sources (default: en)')
-    parser.add_argument('--no-prefer-brysbaert', action='store_true',
-                        help='Do not override existing concreteness data')
-    parser.add_argument('--min-aoa-known', type=float, default=0.5,
-                        help='Minimum known proportion for AoA (default: 0.5)')
-    parser.add_argument('--no-sort', action='store_true',
-                        help='Do not sort output lexicographically')
+    parser.add_argument("--input", type=Path, required=True,
+                        help="Input JSONL file (v2 scanner output)")
+    parser.add_argument("--output", type=Path, required=True,
+                        help="Output JSONL file (enriched)")
+    parser.add_argument("--language", default="en",
+                        help="Language code for data sources (default: en)")
+    parser.add_argument("--no-prefer-brysbaert", action="store_true",
+                        help="Do not override existing concreteness data")
+    parser.add_argument("--min-aoa-known", type=float, default=0.5,
+                        help="Minimum known proportion for AoA (default: 0.5)")
+    parser.add_argument("--no-sort", action="store_true",
+                        help="Do not sort output lexicographically")
 
     args = parser.parse_args()
 
@@ -494,5 +494,5 @@ Example:
     logger.info("V2 enrichment pipeline complete")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

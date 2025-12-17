@@ -25,5 +25,5 @@ def main() -> int:
     return scanner_main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

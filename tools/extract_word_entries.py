@@ -21,7 +21,7 @@ def load_entries_for_words(jsonl_path, words):
     with open(jsonl_path) as f:
         for line in f:
             entry = json.loads(line)
-            word = entry.get('id', '')
+            word = entry.get("id", "")
             if word in word_set:
                 entries[word] = entry
 
@@ -102,5 +102,5 @@ def main():
         print()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

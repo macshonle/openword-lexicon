@@ -35,8 +35,8 @@ import orjson
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
@@ -52,10 +52,10 @@ def load_lexicon(lexicon_path: Path) -> Dict[str, dict]:
 
     logger.info(f"Loading lexicon from {lexicon_path}")
 
-    with open(lexicon_path, 'rb') as f:
+    with open(lexicon_path, "rb") as f:
         for line in f:
             entry = orjson.loads(line)
-            word = entry['id']
+            word = entry["id"]
             lexicon[word] = entry
 
     logger.info(f"  Loaded {len(lexicon):,} entries")
@@ -72,10 +72,10 @@ def load_censor_text_list(file_path: Path) -> Set[str]:
     logger.info(f"Loading censor-text list from {file_path}")
 
     profanity_words = set()
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
             word = line.strip().lower()
-            if word and not word.startswith('#'):
+            if word and not word.startswith("#"):
                 profanity_words.add(word)
 
     logger.info(f"  Loaded {len(profanity_words):,} profanity terms")
@@ -98,7 +98,7 @@ def load_dsojevic_list(file_path: Path) -> Dict[str, dict]:
 
     logger.info(f"Loading dsojevic list from {file_path}")
 
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     # Convert to dict keyed by word
@@ -108,30 +108,30 @@ def load_dsojevic_list(file_path: Path) -> Dict[str, dict]:
     if isinstance(data, list):
         for entry in data:
             # Use 'id' as the primary word identifier
-            word_id = entry.get('id', '').lower()
+            word_id = entry.get("id", "").lower()
             if not word_id:
                 continue
 
             # Map severity numbers to labels
-            severity_map = {1: 'mild', 2: 'medium', 3: 'strong', 4: 'severe'}
-            severity_num = entry.get('severity', 0)
-            severity = severity_map.get(severity_num, 'unknown')
+            severity_map = {1: "mild", 2: "medium", 3: "strong", 4: "severe"}
+            severity_num = entry.get("severity", 0)
+            severity = severity_map.get(severity_num, "unknown")
 
             profanity_dict[word_id] = {
-                'severity': severity,
-                'categories': entry.get('tags', []),
+                "severity": severity,
+                "categories": entry.get("tags", []),
             }
 
             # Also add any alternatives from 'match' field
-            match = entry.get('match', '')
-            if match and '|' in match:
+            match = entry.get("match", "")
+            if match and "|" in match:
                 # Split on pipe to get alternatives
-                alternatives = [alt.strip().lower() for alt in match.split('|')]
+                alternatives = [alt.strip().lower() for alt in match.split("|")]
                 for alt in alternatives:
                     if alt and alt not in profanity_dict:
                         profanity_dict[alt] = {
-                            'severity': severity,
-                            'categories': entry.get('tags', []),
+                            "severity": severity,
+                            "categories": entry.get("tags", []),
                         }
 
     logger.info(f"  Loaded {len(profanity_dict):,} profanity terms with metadata")
@@ -143,12 +143,12 @@ def get_labeled_words(lexicon: Dict[str, dict], labels: List[str]) -> Dict[str, 
     labeled = {}
 
     for word, entry in lexicon.items():
-        register_labels = entry.get('labels', {}).get('register', [])
+        register_labels = entry.get("labels", {}).get("register", [])
         if any(label in register_labels for label in labels):
             labeled[word] = {
-                'labels': register_labels,
-                'pos': entry.get('pos', []),
-                'sources': entry.get('sources', []),
+                "labels": register_labels,
+                "pos": entry.get("pos", []),
+                "sources": entry.get("sources", []),
             }
 
     return labeled
@@ -162,7 +162,7 @@ def analyze_coverage(
     """Analyze profanity labeling coverage."""
 
     # Get words labeled as vulgar/offensive/derogatory in our lexicon
-    our_labeled = get_labeled_words(lexicon, ['vulgar', 'offensive', 'derogatory'])
+    our_labeled = get_labeled_words(lexicon, ["vulgar", "offensive", "derogatory"])
 
     # Combine external profanity lists
     external_profanity = censor_text | set(dsojevic.keys())
@@ -172,37 +172,37 @@ def analyze_coverage(
     for word in external_profanity:
         if word in lexicon:
             entry = lexicon[word]
-            register_labels = entry.get('labels', {}).get('register', [])
+            register_labels = entry.get("labels", {}).get("register", [])
 
             # Check if it has any offensive labels
             has_offensive_label = any(
                 label in register_labels
-                for label in ['vulgar', 'offensive', 'derogatory']
+                for label in ["vulgar", "offensive", "derogatory"]
             )
 
             if not has_offensive_label:
-                severity = dsojevic.get(word, {}).get('severity', 'unknown')
+                severity = dsojevic.get(word, {}).get("severity", "unknown")
                 gaps.append({
-                    'word': word,
-                    'severity': severity,
-                    'current_labels': register_labels,
-                    'pos': entry.get('pos', []),
-                    'sources': entry.get('sources', []),
+                    "word": word,
+                    "severity": severity,
+                    "current_labels": register_labels,
+                    "pos": entry.get("pos", []),
+                    "sources": entry.get("sources", []),
                 })
         else:
             # Word not in lexicon at all
-            severity = dsojevic.get(word, {}).get('severity', 'unknown')
+            severity = dsojevic.get(word, {}).get("severity", "unknown")
             gaps.append({
-                'word': word,
-                'severity': severity,
-                'current_labels': [],
-                'pos': [],
-                'sources': [],
-                'in_lexicon': False,
+                "word": word,
+                "severity": severity,
+                "current_labels": [],
+                "pos": [],
+                "sources": [],
+                "in_lexicon": False,
             })
 
     # Severity breakdown for gaps
-    severity_counts = Counter(gap['severity'] for gap in gaps)
+    severity_counts = Counter(gap["severity"] for gap in gaps)
 
     # Words we label but aren't in external lists (potential false positives or regional differences)
     our_only = {
@@ -211,14 +211,14 @@ def analyze_coverage(
     }
 
     return {
-        'our_labeled_count': len(our_labeled),
-        'external_count': len(external_profanity),
-        'gaps': gaps,
-        'gaps_count': len(gaps),
-        'severity_counts': severity_counts,
-        'our_only': our_only,
-        'our_only_count': len(our_only),
-        'coverage_pct': 100 * (1 - len([g for g in gaps if g.get('in_lexicon', True)]) / max(len(external_profanity), 1)),
+        "our_labeled_count": len(our_labeled),
+        "external_count": len(external_profanity),
+        "gaps": gaps,
+        "gaps_count": len(gaps),
+        "severity_counts": severity_counts,
+        "our_only": our_only,
+        "our_only_count": len(our_only),
+        "coverage_pct": 100 * (1 - len([g for g in gaps if g.get("in_lexicon", True)]) / max(len(external_profanity), 1)),
     }
 
 
@@ -243,27 +243,27 @@ def print_report(analysis: dict):
     print(f"  Total gaps: {analysis['gaps_count']:,}")
     print()
 
-    if analysis['severity_counts']:
+    if analysis["severity_counts"]:
         print("  By severity:")
-        for severity, count in analysis['severity_counts'].most_common():
+        for severity, count in analysis["severity_counts"].most_common():
             print(f"    {severity:15} {count:6,}")
         print()
 
     # Show sample gaps
-    if analysis['gaps']:
+    if analysis["gaps"]:
         print("  Sample gaps (first 20):")
-        for gap in analysis['gaps'][:20]:
-            word = gap['word']
-            severity = gap['severity']
-            in_lex = gap.get('in_lexicon', True)
+        for gap in analysis["gaps"][:20]:
+            word = gap["word"]
+            severity = gap["severity"]
+            in_lex = gap.get("in_lexicon", True)
 
             if in_lex:
-                labels = gap['current_labels'] or ['(no labels)']
+                labels = gap["current_labels"] or ["(no labels)"]
                 print(f"    {word:20} severity={severity:8} current_labels={labels}")
             else:
                 print(f"    {word:20} severity={severity:8} (NOT IN LEXICON)")
 
-        if len(analysis['gaps']) > 20:
+        if len(analysis["gaps"]) > 20:
             print(f"    ... and {len(analysis['gaps']) - 20:,} more")
         print()
 
@@ -278,13 +278,13 @@ def print_report(analysis: dict):
     print("    - False positives (over-labeling)")
     print()
 
-    if analysis['our_only']:
+    if analysis["our_only"]:
         print("  Sample (first 15):")
-        for word, info in list(analysis['our_only'].items())[:15]:
-            labels = info['labels']
+        for word, info in list(analysis["our_only"].items())[:15]:
+            labels = info["labels"]
             print(f"    {word:20} labels={labels}")
 
-        if len(analysis['our_only']) > 15:
+        if len(analysis["our_only"]) > 15:
             print(f"    ... and {len(analysis['our_only']) - 15:,} more")
         print()
 
@@ -293,7 +293,7 @@ def print_report(analysis: dict):
     print("=" * 80)
     print()
 
-    if analysis['gaps_count'] > 0:
+    if analysis["gaps_count"] > 0:
         print("  1. Review gaps to determine if Wiktionary should add labels")
         print("  2. Focus on high-severity terms first")
         print("  3. Consider that some terms may be context-dependent")
@@ -302,7 +302,7 @@ def print_report(analysis: dict):
         print("  ✓ No significant gaps found!")
     print()
 
-    if analysis['our_only_count'] > 100:
+    if analysis["our_only_count"] > 100:
         print("  5. Review 'our only' list for potential over-labeling")
         print("  6. Consider regional/cultural differences in offensiveness")
     print()
@@ -346,5 +346,5 @@ def main():
     logger.info("Validation complete")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

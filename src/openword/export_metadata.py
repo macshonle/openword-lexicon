@@ -30,39 +30,39 @@ from openword.progress_display import ProgressDisplay
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
 
 def extract_frequency(entry: Dict[str, Any]) -> Optional[str]:
     """Extract frequency tier code (A-Z)."""
-    return entry.get('frequency_tier')
+    return entry.get("frequency_tier")
 
 
 def extract_concreteness(entry: Dict[str, Any]) -> Optional[float]:
     """Extract concreteness rating (1.0-5.0)."""
-    return entry.get('concreteness')
+    return entry.get("concreteness")
 
 
 def extract_syllables(entry: Dict[str, Any]) -> Optional[int]:
     """Extract syllable count."""
-    return entry.get('nsyll')
+    return entry.get("nsyll")
 
 
 def extract_sources(entry: Dict[str, Any]) -> Optional[List[str]]:
     """Extract source attributions."""
-    sources = entry.get('sources')
+    sources = entry.get("sources")
     return sources if sources else None
 
 
 # Module definitions: name -> (extractor function, description)
 MODULES = {
-    'frequency': (extract_frequency, 'Frequency tier codes (A-Z)'),
-    'concreteness': (extract_concreteness, 'Brysbaert concreteness ratings'),
-    'syllables': (extract_syllables, 'Syllable counts'),
-    'sources': (extract_sources, 'Source attributions'),
+    "frequency": (extract_frequency, "Frequency tier codes (A-Z)"),
+    "concreteness": (extract_concreteness, "Brysbaert concreteness ratings"),
+    "syllables": (extract_syllables, "Syllable counts"),
+    "sources": (extract_sources, "Source attributions"),
 }
 
 
@@ -92,7 +92,7 @@ def export_module(
     null_count = 0
 
     with ProgressDisplay(f"Processing {module_name}", update_interval=10000) as progress:
-        with open(input_path, 'r', encoding='utf-8') as f:
+        with open(input_path, "r", encoding="utf-8") as f:
             for line_num, line in enumerate(f, 1):
                 line = line.strip()
                 if not line:
@@ -100,7 +100,7 @@ def export_module(
 
                 try:
                     entry = json.loads(line)
-                    word = entry['id']
+                    word = entry["id"]
                     value = extractor(entry)
 
                     if value is not None:
@@ -115,14 +115,14 @@ def export_module(
 
     # Write compact JSON (optionally gzipped)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    json_bytes = json.dumps(data, separators=(',', ':'), ensure_ascii=False).encode('utf-8')
+    json_bytes = json.dumps(data, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
 
     if use_gzip:
-        output_path = output_path.with_suffix('.json.gz')
-        with gzip.open(output_path, 'wb', compresslevel=9) as f:
+        output_path = output_path.with_suffix(".json.gz")
+        with gzip.open(output_path, "wb", compresslevel=9) as f:
             f.write(json_bytes)
     else:
-        with open(output_path, 'wb') as f:
+        with open(output_path, "wb") as f:
             f.write(json_bytes)
 
     size_kb = output_path.stat().st_size / 1024
@@ -136,18 +136,18 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Export modular metadata layers from enriched lexemes'
+        description="Export modular metadata layers from enriched lexemes"
     )
-    parser.add_argument('--input', type=Path, required=True,
-                        help='Input enriched lexemes JSONL file')
-    parser.add_argument('--language', default='en',
-                        help='Language code for output filenames (default: en)')
-    parser.add_argument('--modules', default='all',
-                        help='Comma-separated list of modules to export (default: all)')
-    parser.add_argument('--gzip', action='store_true',
-                        help='Compress output with gzip (creates .json.gz files)')
-    parser.add_argument('--list-modules', action='store_true',
-                        help='List available modules and exit')
+    parser.add_argument("--input", type=Path, required=True,
+                        help="Input enriched lexemes JSONL file")
+    parser.add_argument("--language", default="en",
+                        help="Language code for output filenames (default: en)")
+    parser.add_argument("--modules", default="all",
+                        help="Comma-separated list of modules to export (default: all)")
+    parser.add_argument("--gzip", action="store_true",
+                        help="Compress output with gzip (creates .json.gz files)")
+    parser.add_argument("--list-modules", action="store_true",
+                        help="List available modules and exit")
     args = parser.parse_args()
 
     # List modules if requested
@@ -158,10 +158,10 @@ def main():
         return 0
 
     # Determine which modules to export
-    if args.modules == 'all':
+    if args.modules == "all":
         modules_to_export = list(MODULES.keys())
     else:
-        modules_to_export = [m.strip() for m in args.modules.split(',')]
+        modules_to_export = [m.strip() for m in args.modules.split(",")]
         for m in modules_to_export:
             if m not in MODULES:
                 logger.error(f"Unknown module: {m}")
@@ -193,7 +193,7 @@ def main():
         results[module_name] = count
         # Track actual output path (may have .gz suffix)
         if args.gzip:
-            output_paths[module_name] = output_path.with_suffix('.json.gz')
+            output_paths[module_name] = output_path.with_suffix(".json.gz")
         else:
             output_paths[module_name] = output_path
 
@@ -211,5 +211,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

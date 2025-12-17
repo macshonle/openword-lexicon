@@ -22,13 +22,13 @@ def extract_wikitext_samples(jsonl_path, words, output_dir):
     with open(jsonl_path) as f:
         for line in f:
             entry = json.loads(line)
-            word = entry['id']
+            word = entry["id"]
 
             if word in target_words:
                 found[word] = entry
 
                 # Save entry to individual file for inspection
-                with open(output_dir / f"{word.replace('/', '_')}.json", 'w') as out:
+                with open(output_dir / f"{word.replace('/', '_')}.json", "w") as out:
                     json.dump(entry, out, indent=2, ensure_ascii=False)
 
     # Report
@@ -43,18 +43,18 @@ def extract_wikitext_samples(jsonl_path, words, output_dir):
             print(f"{'='*60}")
 
             # Show what Python extracted
-            if entry.get('morphology'):
+            if entry.get("morphology"):
                 print(f"✓ Morphology: {entry['morphology']['type']}")
                 print(f"  Template: {entry['morphology'].get('etymology_template', 'N/A')}")
             else:
                 print("✗ Morphology: None")
 
-            if entry.get('labels', {}).get('region'):
+            if entry.get("labels", {}).get("region"):
                 print(f"✓ Regional: {entry['labels']['region']}")
             else:
                 print("✗ Regional: None")
 
-            if entry.get('nsyll'):
+            if entry.get("nsyll"):
                 print(f"✓ Syllables: {entry['nsyll']}")
             else:
                 print("✗ Syllables: None")
@@ -65,7 +65,7 @@ def extract_wikitext_samples(jsonl_path, words, output_dir):
             print()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) < 3:
         print("Usage: python extract_diagnostic_samples.py <output.jsonl> <output_dir> [word1] [word2] ...")
         sys.exit(1)
@@ -74,11 +74,11 @@ if __name__ == '__main__':
     output_dir = sys.argv[2]
     words = sys.argv[3:] if len(sys.argv) > 3 else [
         # Morphology failures
-        'dimorphemic', 'footfucker', 'immunochromatographical', 'inspectional', 'inviscid',
+        "dimorphemic", "footfucker", "immunochromatographical", "inspectional", "inviscid",
         # Regional failures
-        'indaba', 'piss-easy', 'sectionman', 'throw-in', 'tulean',
+        "indaba", "piss-easy", "sectionman", "throw-in", "tulean",
         # Syllable failures
-        'apical', 'dimorphemic', 'indaba'
+        "apical", "dimorphemic", "indaba"
     ]
 
     extract_wikitext_samples(jsonl_path, words, output_dir)

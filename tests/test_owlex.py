@@ -123,9 +123,9 @@ def mini_lexemes():
 def mini_lexemes_file(mini_lexemes, tmp_path):
     """Create a temporary JSONL file with mini lexemes."""
     lexemes_file = tmp_path / "test-lexemes.jsonl"
-    with open(lexemes_file, 'w') as f:
+    with open(lexemes_file, "w") as f:
         for entry in mini_lexemes:
-            f.write(json.dumps(entry) + '\n')
+            f.write(json.dumps(entry) + "\n")
     return lexemes_file
 
 
@@ -148,7 +148,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "apple" in words
         assert "bread" in words
@@ -164,7 +164,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "cat" in words  # 3 letters
         assert "apple" in words  # 5 letters
@@ -176,7 +176,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "apple" in words
         assert "don't" not in words  # has apostrophe
@@ -189,7 +189,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "unhappy" in words
         assert "re-enter" in words
@@ -203,7 +203,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "running" in words
         assert "run" not in words
@@ -214,7 +214,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "bread" in words
         assert "dream" in words
@@ -228,7 +228,7 @@ class TestCharacterFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "apple" in words
         assert "don't" not in words  # has apostrophe
@@ -248,7 +248,7 @@ class TestPhraseFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "apple" in words
         assert "hot dog" not in words
@@ -260,7 +260,7 @@ class TestPhraseFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "hot dog" in words
         assert "ice cream" in words
@@ -280,7 +280,7 @@ class TestFrequencyFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "cat" in words  # A
         assert "dog" in words  # A
@@ -296,7 +296,7 @@ class TestFrequencyFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "aardvark" in words  # I
         assert "syzygy" not in words  # Y
@@ -308,7 +308,7 @@ class TestFrequencyFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        tiers = [e['frequency_tier'] for e in results]
+        tiers = [e["frequency_tier"] for e in results]
 
         assert all(t in ["A", "B"] for t in tiers)
 
@@ -331,7 +331,7 @@ class TestPOSFilters:
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
 
         for entry in results:
-            assert "NOU" in entry.get('pos', [])
+            assert "NOU" in entry.get("pos", [])
 
     def test_exclude_verbs(self, mini_lexemes):
         """Test exclude=[verb] filter.
@@ -344,7 +344,7 @@ class TestPOSFilters:
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
 
         for entry in results:
-            assert "VRB" not in entry.get('pos', [])
+            assert "VRB" not in entry.get("pos", [])
 
     def test_include_multiple_pos(self, mini_lexemes):
         """Test include with multiple POS (OR logic).
@@ -357,7 +357,7 @@ class TestPOSFilters:
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
 
         for entry in results:
-            pos = entry.get('pos', [])
+            pos = entry.get("pos", [])
             assert "NOU" in pos or "ADJ" in pos
 
 
@@ -374,7 +374,7 @@ class TestConcretenessFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "apple" in words
         assert "cat" in words
@@ -395,7 +395,7 @@ class TestLabelFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "damn" not in words
         assert "apple" in words
@@ -406,7 +406,7 @@ class TestLabelFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "damn" not in words
         assert "bloody" not in words
@@ -418,7 +418,7 @@ class TestLabelFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "cool" in words
         assert "dude" in words
@@ -438,7 +438,7 @@ class TestTemporalFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "thee" not in words
         assert "hither" not in words
@@ -450,7 +450,7 @@ class TestTemporalFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "thee" not in words
         assert "hither" not in words
@@ -473,7 +473,7 @@ class TestSourceFilters:
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
 
         for entry in results:
-            assert "wordnet" in entry.get('sources', [])
+            assert "wordnet" in entry.get("sources", [])
 
     def test_include_eowl_only(self, mini_lexemes):
         """Test filtering for EOWL-only words."""
@@ -483,7 +483,7 @@ class TestSourceFilters:
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
 
         for entry in results:
-            assert "eowl" in entry.get('sources', [])
+            assert "eowl" in entry.get("sources", [])
 
 
 # =============================================================================
@@ -499,7 +499,7 @@ class TestSpellingRegionFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "color" in words
         assert "colour" not in words
@@ -512,7 +512,7 @@ class TestSpellingRegionFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "colour" in words
         assert "color" not in words
@@ -534,7 +534,7 @@ class TestSyllableFilters:
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
 
         for entry in results:
-            assert entry.get('nsyll') == 2
+            assert entry.get("nsyll") == 2
 
     def test_syllable_range(self, mini_lexemes):
         """Test syllable range filter."""
@@ -544,7 +544,7 @@ class TestSyllableFilters:
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
 
         for entry in results:
-            syllables = entry.get('nsyll')
+            syllables = entry.get("nsyll")
             if syllables:
                 assert 1 <= syllables <= 2
 
@@ -562,7 +562,7 @@ class TestProperNounFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         assert "bill" in words  # has common usage
         assert "aaron" not in words  # only proper usage
@@ -587,7 +587,7 @@ class TestCombinedFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         # Should include common 5-letter single words
         assert "apple" in words
@@ -616,7 +616,7 @@ class TestCombinedFilters:
         filter_obj = MockOwlexFilter(spec)
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
-        words = [e['id'] for e in results]
+        words = [e["id"] for e in results]
 
         # Should include concrete nouns
         assert "apple" in words
@@ -660,9 +660,9 @@ frequency:
 
         filter_obj = OwlexFilter(spec_file)
 
-        assert filter_obj.spec['filters']['character']['exact_length'] == 5
-        assert filter_obj.spec['filters']['phrase']['max_words'] == 1
-        assert filter_obj.spec['filters']['frequency']['min_tier'] == 'A'
+        assert filter_obj.spec["filters"]["character"]["exact_length"] == 5
+        assert filter_obj.spec["filters"]["phrase"]["max_words"] == 1
+        assert filter_obj.spec["filters"]["frequency"]["min_tier"] == "A"
 
     def test_load_yaml_with_sources_filter(self, tmp_path):
         """Test loading YAML spec with sources filter."""
@@ -679,8 +679,8 @@ character:
 
         filter_obj = OwlexFilter(spec_file)
 
-        assert filter_obj.spec['_sources_filter']['include'] == ['wordnet']
-        assert filter_obj.spec['filters']['character']['min_length'] == 3
+        assert filter_obj.spec["_sources_filter"]["include"] == ["wordnet"]
+        assert filter_obj.spec["filters"]["character"]["min_length"] == 3
 
 
 # =============================================================================
@@ -700,11 +700,11 @@ exclude:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
-        assert 'labels' in filters
-        assert 'register' in filters['labels']
-        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive']
+        assert "labels" in filters
+        assert "register" in filters["labels"]
+        assert filters["labels"]["register"]["exclude"] == ["vulgar", "offensive"]
 
     def test_include_pos(self, tmp_path):
         """Test include with POS tags."""
@@ -716,10 +716,10 @@ include:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
-        assert 'pos' in filters
-        assert filters['pos']['include'] == ['noun', 'verb']
+        assert "pos" in filters
+        assert filters["pos"]["include"] == ["noun", "verb"]
 
     def test_exclude_pos(self, tmp_path):
         """Test exclude with POS tags."""
@@ -731,10 +731,10 @@ exclude:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
-        assert 'pos' in filters
-        assert filters['pos']['exclude'] == ['phrase', 'idiom', 'proper noun']
+        assert "pos" in filters
+        assert filters["pos"]["exclude"] == ["phrase", "idiom", "proper noun"]
 
     def test_exclude_if_primary(self, tmp_path):
         """Test exclude-if-primary with POS tags."""
@@ -746,10 +746,10 @@ exclude-if-primary:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
-        assert 'pos' in filters
-        assert filters['pos']['exclude-if-primary'] == ['proper noun']
+        assert "pos" in filters
+        assert filters["pos"]["exclude-if-primary"] == ["proper noun"]
 
     def test_combined_include_exclude(self, tmp_path):
         """Test combining include and exclude in same spec."""
@@ -765,14 +765,14 @@ exclude:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
         # POS include
-        assert filters['pos']['include'] == ['noun']
+        assert filters["pos"]["include"] == ["noun"]
 
         # Labels exclude
-        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive']
-        assert filters['labels']['temporal']['exclude'] == ['archaic', 'obsolete']
+        assert filters["labels"]["register"]["exclude"] == ["vulgar", "offensive"]
+        assert filters["labels"]["temporal"]["exclude"] == ["archaic", "obsolete"]
 
     def test_mixed_word_and_sense_filters(self, tmp_path):
         """Test mixing word-level and sense-level filters."""
@@ -798,16 +798,16 @@ exclude:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
         # Word-level filters
-        assert filters['character']['exact_length'] == 5
-        assert filters['phrase']['max_words'] == 1
-        assert filters['frequency']['min_tier'] == 'A'
+        assert filters["character"]["exact_length"] == 5
+        assert filters["phrase"]["max_words"] == 1
+        assert filters["frequency"]["min_tier"] == "A"
 
         # Sense-level filters
-        assert filters['pos']['include'] == ['noun']
-        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive']
+        assert filters["pos"]["include"] == ["noun"]
+        assert filters["labels"]["register"]["exclude"] == ["vulgar", "offensive"]
 
     def test_domain_filter(self, tmp_path):
         """Test domain filter in operation-first format."""
@@ -819,9 +819,9 @@ exclude:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
-        assert filters['labels']['domain']['exclude'] == ['medical', 'legal', 'technical']
+        assert filters["labels"]["domain"]["exclude"] == ["medical", "legal", "technical"]
 
     def test_region_filter(self, tmp_path):
         """Test region filter in operation-first format."""
@@ -833,9 +833,9 @@ include:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
-        assert filters['labels']['region']['include'] == ['en-US']
+        assert filters["labels"]["region"]["include"] == ["en-US"]
 
     def test_full_wordle_spec(self, tmp_path):
         """Test a complete Wordle-style spec in operation-first format."""
@@ -860,14 +860,14 @@ exclude:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
-        assert filters['character']['exact_length'] == 5
-        assert filters['character']['pattern'] == "^[a-z]+$"
-        assert filters['phrase']['max_words'] == 1
-        assert filters['frequency']['min_tier'] == 'A'
-        assert filters['frequency']['max_tier'] == 'N'
-        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive', 'derogatory']
+        assert filters["character"]["exact_length"] == 5
+        assert filters["character"]["pattern"] == "^[a-z]+$"
+        assert filters["phrase"]["max_words"] == 1
+        assert filters["frequency"]["min_tier"] == "A"
+        assert filters["frequency"]["max_tier"] == "N"
+        assert filters["labels"]["register"]["exclude"] == ["vulgar", "offensive", "derogatory"]
 
     def test_full_kids_nouns_spec(self, tmp_path):
         """Test a complete kids-nouns spec in operation-first format."""
@@ -897,16 +897,16 @@ exclude:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
         # Word-level
-        assert filters['character']['min_length'] == 3
-        assert filters['concreteness']['values'] == ['concrete']
+        assert filters["character"]["min_length"] == 3
+        assert filters["concreteness"]["values"] == ["concrete"]
 
         # Sense-level
-        assert filters['pos']['include'] == ['noun']
-        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive', 'derogatory', 'slang']
-        assert filters['labels']['temporal']['exclude'] == ['archaic', 'obsolete', 'dated']
+        assert filters["pos"]["include"] == ["noun"]
+        assert filters["labels"]["register"]["exclude"] == ["vulgar", "offensive", "derogatory", "slang"]
+        assert filters["labels"]["temporal"]["exclude"] == ["archaic", "obsolete", "dated"]
 
 
 # =============================================================================
@@ -941,7 +941,7 @@ frequency:
             for line in f:
                 entry = json.loads(line)
                 if filter_obj.filter_entry(entry):
-                    results.append(entry['id'])
+                    results.append(entry["id"])
 
         # Verify results
         assert len(results) >= 5
@@ -1064,19 +1064,19 @@ class MockOwlexFilter(OwlexFilter):
 
     def __init__(self, spec: dict):
         self.spec = {
-            'version': '2.0',
-            'distribution': 'en',
-            'filters': spec.get('filters', {}),
-            '_sources_filter': spec.get('_sources_filter', {})
+            "version": "2.0",
+            "distribution": "en",
+            "filters": spec.get("filters", {}),
+            "_sources_filter": spec.get("_sources_filter", {})
         }
         # Tier scores - A (most common) to Z (least common)
         # A=100, B=96, C=92... decreasing by 4 each tier
         self.tier_scores = {
-            'A': 100, 'B': 96, 'C': 92, 'D': 88, 'E': 84, 'F': 80,
-            'G': 76, 'H': 72, 'I': 68, 'J': 64, 'K': 60, 'L': 56,
-            'M': 52, 'N': 48, 'O': 44, 'P': 40, 'Q': 36, 'R': 32,
-            'S': 28, 'T': 24, 'U': 20, 'V': 16, 'W': 12, 'X': 8,
-            'Y': 4, 'Z': 0
+            "A": 100, "B": 96, "C": 92, "D": 88, "E": 84, "F": 80,
+            "G": 76, "H": 72, "I": 68, "J": 64, "K": 60, "L": 56,
+            "M": 52, "N": 48, "O": 44, "P": 40, "Q": 36, "R": 32,
+            "S": 28, "T": 24, "U": 20, "V": 16, "W": 12, "X": 8,
+            "Y": 4, "Z": 0
         }
 
 
@@ -1260,7 +1260,7 @@ exclude:
             for line in f:
                 entry = json.loads(line)
                 if filter_obj.filter_entry(entry):
-                    results.append(entry['id'])
+                    results.append(entry["id"])
 
         # "damn" has vulgar label - should be excluded
         assert "damn" not in results
@@ -1285,7 +1285,7 @@ exclude:
             for line in f:
                 entry = json.loads(line)
                 if filter_obj.filter_entry(entry):
-                    results.append(entry['id'])
+                    results.append(entry["id"])
 
         # Both vulgar and offensive should be excluded
         assert "damn" not in results
@@ -1309,7 +1309,7 @@ include:
             for line in f:
                 entry = json.loads(line)
                 if filter_obj.filter_entry(entry):
-                    results.append(entry['id'])
+                    results.append(entry["id"])
 
         # Nouns should be included
         assert "apple" in results
@@ -1347,7 +1347,7 @@ exclude:
             for line in f:
                 entry = json.loads(line)
                 if filter_obj.filter_entry(entry):
-                    results.append(entry['id'])
+                    results.append(entry["id"])
 
         # Verify all constraints are applied
         for word in results:
@@ -1374,7 +1374,7 @@ exclude:
             for line in f:
                 entry = json.loads(line)
                 if filter_obj.filter_entry(entry):
-                    results.append(entry['id'])
+                    results.append(entry["id"])
 
         # Words with archaic/obsolete labels should be excluded
         assert "thee" not in results
@@ -1437,12 +1437,12 @@ exclude-if-primary:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
         # Verify the spec was parsed correctly
-        assert 'pos' in filters
-        assert 'exclude-if-primary' in filters['pos']
-        assert filters['pos']['exclude-if-primary'] == ['proper noun']
+        assert "pos" in filters
+        assert "exclude-if-primary" in filters["pos"]
+        assert filters["pos"]["exclude-if-primary"] == ["proper noun"]
 
     def test_include_if_primary_region(self, tmp_path):
         """Test include-if-primary with region labels."""
@@ -1454,12 +1454,12 @@ include-if-primary:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
         # Verify spec parsing
-        assert 'labels' in filters
-        assert 'region' in filters['labels']
-        assert 'include-if-primary' in filters['labels']['region']
+        assert "labels" in filters
+        assert "region" in filters["labels"]
+        assert "include-if-primary" in filters["labels"]["region"]
 
     def test_combine_primary_and_regular_operations(self, tmp_path):
         """Test mixing -if-primary with regular operations."""
@@ -1477,12 +1477,12 @@ exclude:
         spec_file.write_text(spec_content)
 
         filter_obj = OwlexFilter(spec_file)
-        filters = filter_obj.spec['filters']
+        filters = filter_obj.spec["filters"]
 
         # Verify all operations are captured
-        assert filters['pos']['include'] == ['noun', 'verb']
-        assert filters['pos']['exclude-if-primary'] == ['proper noun']
-        assert filters['labels']['register']['exclude'] == ['vulgar', 'offensive']
+        assert filters["pos"]["include"] == ["noun", "verb"]
+        assert filters["pos"]["exclude-if-primary"] == ["proper noun"]
+        assert filters["labels"]["register"]["exclude"] == ["vulgar", "offensive"]
 
 
 # =============================================================================

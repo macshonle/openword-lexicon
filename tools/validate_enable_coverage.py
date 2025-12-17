@@ -25,8 +25,8 @@ from typing import List, Set
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 def normalize_word(word: str) -> str:
     """Apply Unicode NFKC normalization and lowercase."""
     word = word.strip()
-    word = unicodedata.normalize('NFKC', word)
+    word = unicodedata.normalize("NFKC", word)
     word = word.lower()
     return word
 
@@ -49,7 +49,7 @@ def load_enable_words(enable_path: Path) -> Set[str]:
 
     logger.info(f"Loading ENABLE from {enable_path}")
 
-    with open(enable_path, 'r', encoding='utf-8') as f:
+    with open(enable_path, "r", encoding="utf-8") as f:
         for line in f:
             word = normalize_word(line)
             if word:
@@ -70,18 +70,18 @@ def load_lexicon_words(build_path: Path) -> Set[str]:
 
     logger.info(f"Loading lexicon from {build_path}")
 
-    with open(build_path, 'r', encoding='utf-8') as f:
+    with open(build_path, "r", encoding="utf-8") as f:
         for line_num, line in enumerate(f, 1):
             if not line.strip():
                 continue
 
             try:
                 entry = json.loads(line)
-                word = entry.get('id', '').strip()
+                word = entry.get("id", "").strip()
 
                 # Skip multi-word phrases for ENABLE comparison
                 # (ENABLE only contains single words)
-                if entry.get('wc', 1) > 1:
+                if entry.get("wc", 1) > 1:
                     continue
 
                 if word:
@@ -109,16 +109,16 @@ def try_depluralize(word: str) -> List[str]:
     candidates = []
 
     # Try removing 's'
-    if word.endswith('s') and len(word) > 2:
+    if word.endswith("s") and len(word) > 2:
         candidates.append(word[:-1])
 
     # Try removing 'es'
-    if word.endswith('es') and len(word) > 3:
+    if word.endswith("es") and len(word) > 3:
         candidates.append(word[:-2])
 
     # Try removing 'ies' and adding 'y' (e.g., "accidies" → "accidy")
-    if word.endswith('ies') and len(word) > 4:
-        candidates.append(word[:-3] + 'y')
+    if word.endswith("ies") and len(word) > 4:
+        candidates.append(word[:-3] + "y")
 
     return candidates
 
@@ -143,8 +143,8 @@ def analyze_missing_words(missing: Set[str], lexicon_words: Set[str]) -> dict:
         for base in base_forms:
             if base in lexicon_words:
                 likely_plurals.append({
-                    'word': word,
-                    'base': base,
+                    "word": word,
+                    "base": base,
                 })
                 found_base = True
                 break
@@ -153,8 +153,8 @@ def analyze_missing_words(missing: Set[str], lexicon_words: Set[str]) -> dict:
             true_missing.append(word)
 
     return {
-        'likely_plurals': likely_plurals,
-        'true_missing': true_missing,
+        "likely_plurals": likely_plurals,
+        "true_missing": true_missing,
     }
 
 
@@ -207,8 +207,8 @@ def main():
 
         analysis = analyze_missing_words(missing, lexicon_words)
 
-        likely_plurals = analysis['likely_plurals']
-        true_missing = analysis['true_missing']
+        likely_plurals = analysis["likely_plurals"]
+        true_missing = analysis["true_missing"]
 
         logger.info(f"Likely plurals (base form exists):  {len(likely_plurals):,}")
         logger.info(f"True missing (no base form found):  {len(true_missing):,}")
@@ -275,5 +275,5 @@ def main():
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

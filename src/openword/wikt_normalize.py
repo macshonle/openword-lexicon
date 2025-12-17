@@ -25,7 +25,7 @@ from typing import Iterator, Dict, List, Any, Tuple
 
 def read_jsonl(path: Path) -> Iterator[Dict[str, Any]]:
     """Read JSONL file line by line."""
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if line:
@@ -35,9 +35,9 @@ def read_jsonl(path: Path) -> Iterator[Dict[str, Any]]:
 def write_jsonl(path: Path, entries: Iterator[Dict[str, Any]]) -> int:
     """Write entries to JSONL file, return count."""
     count = 0
-    with open(path, 'w', encoding='utf-8') as f:
+    with open(path, "w", encoding="utf-8") as f:
         for entry in entries:
-            f.write(json.dumps(entry, ensure_ascii=False, separators=(',', ':')) + '\n')
+            f.write(json.dumps(entry, ensure_ascii=False, separators=(",", ":")) + "\n")
             count += 1
     return count
 
@@ -51,14 +51,14 @@ def sense_projection(sense: Dict[str, Any]) -> Tuple:
     depending on the sense (e.g., "left" → "leave" as verb vs "left" as adjective)
     """
     return (
-        sense.get('pos', 'unknown'),
-        tuple(sorted(sense.get('register_tags', []))),
-        tuple(sorted(sense.get('region_tags', []))),
-        tuple(sorted(sense.get('domain_tags', []))),
-        tuple(sorted(sense.get('temporal_tags', []))),
-        sense.get('is_abbreviation', False),
-        sense.get('is_inflected', False),
-        sense.get('lemma'),  # Include lemma - different lemmas = different senses
+        sense.get("pos", "unknown"),
+        tuple(sorted(sense.get("register_tags", []))),
+        tuple(sorted(sense.get("region_tags", []))),
+        tuple(sorted(sense.get("domain_tags", []))),
+        tuple(sorted(sense.get("temporal_tags", []))),
+        sense.get("is_abbreviation", False),
+        sense.get("is_inflected", False),
+        sense.get("lemma"),  # Include lemma - different lemmas = different senses
     )
 
 
@@ -75,12 +75,12 @@ def aggregate_word_senses(
     Returns (lexeme_entry, sense_entries)
     """
     # Extract word-level properties (take first non-null)
-    syllables = next((s.get('nsyll') for s in senses if s.get('nsyll') is not None), None)
-    morphology = next((s.get('morphology') for s in senses if s.get('morphology')), None)
-    word_count = senses[0].get('wc', 1)
-    phrase_type = next((s.get('phrase_type') for s in senses if s.get('phrase_type')), None)
-    is_phrase = senses[0].get('is_phrase', False)
-    spelling_region = next((s.get('spelling_region') for s in senses if s.get('spelling_region')), None)
+    syllables = next((s.get("nsyll") for s in senses if s.get("nsyll") is not None), None)
+    morphology = next((s.get("morphology") for s in senses if s.get("morphology")), None)
+    word_count = senses[0].get("wc", 1)
+    phrase_type = next((s.get("phrase_type") for s in senses if s.get("phrase_type")), None)
+    is_phrase = senses[0].get("is_phrase", False)
+    spelling_region = next((s.get("spelling_region") for s in senses if s.get("spelling_region")), None)
 
     # Deduplicate senses by projection
     seen_projections = set()
@@ -94,49 +94,49 @@ def aggregate_word_senses(
 
             # Create sense entry with only sense-level fields
             sense_entry = {
-                'id': word,
-                'pos': sense.get('pos', 'unknown'),
+                "id": word,
+                "pos": sense.get("pos", "unknown"),
             }
 
             # Add tag arrays only if non-empty
-            for tag_field in ['register_tags', 'region_tags', 'domain_tags', 'temporal_tags']:
+            for tag_field in ["register_tags", "region_tags", "domain_tags", "temporal_tags"]:
                 tags = sense.get(tag_field, [])
                 if tags:
                     sense_entry[tag_field] = sorted(tags)
 
             # Add boolean flags only if True
-            if sense.get('is_abbreviation', False):
-                sense_entry['is_abbreviation'] = True
-            if sense.get('is_inflected', False):
-                sense_entry['is_inflected'] = True
+            if sense.get("is_abbreviation", False):
+                sense_entry["is_abbreviation"] = True
+            if sense.get("is_inflected", False):
+                sense_entry["is_inflected"] = True
 
             # Add lemma (base form) for inflected words
-            lemma = sense.get('lemma')
+            lemma = sense.get("lemma")
             if lemma:
-                sense_entry['lemma'] = lemma
+                sense_entry["lemma"] = lemma
 
             unique_senses.append(sense_entry)
 
     # Create lexeme entry
     lexeme = {
-        'id': word,
-        'wc': word_count,
-        'sense_count': len(senses),  # Original sense count before deduplication
-        'sense_offset': current_sense_offset,
-        'sense_length': len(unique_senses),
+        "id": word,
+        "wc": word_count,
+        "sense_count": len(senses),  # Original sense count before deduplication
+        "sense_offset": current_sense_offset,
+        "sense_length": len(unique_senses),
     }
 
     # Add optional fields only if present
     if syllables is not None:
-        lexeme['nsyll'] = syllables
+        lexeme["nsyll"] = syllables
     if is_phrase:
-        lexeme['is_phrase'] = True
+        lexeme["is_phrase"] = True
     if phrase_type:
-        lexeme['phrase_type'] = phrase_type
+        lexeme["phrase_type"] = phrase_type
     if morphology:
-        lexeme['morphology'] = morphology
+        lexeme["morphology"] = morphology
     if spelling_region:
-        lexeme['spelling_region'] = spelling_region
+        lexeme["spelling_region"] = spelling_region
 
     return lexeme, unique_senses
 
@@ -167,7 +167,7 @@ def normalize_wiktionary(
     original_sense_count = 0
 
     for entry in read_jsonl(input_path):
-        word = entry.get('id', '')
+        word = entry.get("id", "")
         original_sense_count += 1
 
         if word != current_word:
@@ -213,30 +213,30 @@ def normalize_wiktionary(
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Normalize Wiktionary scanner output into lexemes + senses tables'
+        description="Normalize Wiktionary scanner output into lexemes + senses tables"
     )
     parser.add_argument(
-        '--input',
+        "--input",
         type=Path,
         required=True,
-        help='Input sorted JSONL file (from wikt_sort.py)'
+        help="Input sorted JSONL file (from wikt_sort.py)"
     )
     parser.add_argument(
-        '--lexemes-output',
+        "--lexemes-output",
         type=Path,
         required=True,
-        help='Output lexemes JSONL file (word-level properties)'
+        help="Output lexemes JSONL file (word-level properties)"
     )
     parser.add_argument(
-        '--senses-output',
+        "--senses-output",
         type=Path,
         required=True,
-        help='Output senses JSONL file (sense-level properties)'
+        help="Output senses JSONL file (sense-level properties)"
     )
     parser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        help='Print statistics'
+        "-v", "--verbose",
+        action="store_true",
+        help="Print statistics"
     )
 
     args = parser.parse_args()
@@ -272,5 +272,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main())

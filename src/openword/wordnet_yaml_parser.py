@@ -28,8 +28,8 @@ import unicodedata
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
@@ -39,79 +39,79 @@ class OEWNParser:
 
     # POS mappings (WordNet single-letter → 3-letter codes)
     POS_MAP = {
-        'n': 'NOU',
-        'v': 'VRB',
-        'a': 'ADJ',
-        's': 'ADJ',  # Adjective satellite
-        'r': 'ADV',
+        "n": "NOU",
+        "v": "VRB",
+        "a": "ADJ",
+        "s": "ADJ",  # Adjective satellite
+        "r": "ADV",
     }
 
     # All synset files organized by POS with their lexnames
     # Each file contains synsets for a specific semantic domain
     SYNSET_FILES = {
         # Nouns (26 categories)
-        'noun.Tops.yaml': 'noun.Tops',
-        'noun.act.yaml': 'noun.act',
-        'noun.animal.yaml': 'noun.animal',
-        'noun.artifact.yaml': 'noun.artifact',
-        'noun.attribute.yaml': 'noun.attribute',
-        'noun.body.yaml': 'noun.body',
-        'noun.cognition.yaml': 'noun.cognition',
-        'noun.communication.yaml': 'noun.communication',
-        'noun.event.yaml': 'noun.event',
-        'noun.feeling.yaml': 'noun.feeling',
-        'noun.food.yaml': 'noun.food',
-        'noun.group.yaml': 'noun.group',
-        'noun.location.yaml': 'noun.location',
-        'noun.motive.yaml': 'noun.motive',
-        'noun.object.yaml': 'noun.object',
-        'noun.person.yaml': 'noun.person',
-        'noun.phenomenon.yaml': 'noun.phenomenon',
-        'noun.plant.yaml': 'noun.plant',
-        'noun.possession.yaml': 'noun.possession',
-        'noun.process.yaml': 'noun.process',
-        'noun.quantity.yaml': 'noun.quantity',
-        'noun.relation.yaml': 'noun.relation',
-        'noun.shape.yaml': 'noun.shape',
-        'noun.state.yaml': 'noun.state',
-        'noun.substance.yaml': 'noun.substance',
-        'noun.time.yaml': 'noun.time',
+        "noun.Tops.yaml": "noun.Tops",
+        "noun.act.yaml": "noun.act",
+        "noun.animal.yaml": "noun.animal",
+        "noun.artifact.yaml": "noun.artifact",
+        "noun.attribute.yaml": "noun.attribute",
+        "noun.body.yaml": "noun.body",
+        "noun.cognition.yaml": "noun.cognition",
+        "noun.communication.yaml": "noun.communication",
+        "noun.event.yaml": "noun.event",
+        "noun.feeling.yaml": "noun.feeling",
+        "noun.food.yaml": "noun.food",
+        "noun.group.yaml": "noun.group",
+        "noun.location.yaml": "noun.location",
+        "noun.motive.yaml": "noun.motive",
+        "noun.object.yaml": "noun.object",
+        "noun.person.yaml": "noun.person",
+        "noun.phenomenon.yaml": "noun.phenomenon",
+        "noun.plant.yaml": "noun.plant",
+        "noun.possession.yaml": "noun.possession",
+        "noun.process.yaml": "noun.process",
+        "noun.quantity.yaml": "noun.quantity",
+        "noun.relation.yaml": "noun.relation",
+        "noun.shape.yaml": "noun.shape",
+        "noun.state.yaml": "noun.state",
+        "noun.substance.yaml": "noun.substance",
+        "noun.time.yaml": "noun.time",
         # Verbs (15 categories)
-        'verb.body.yaml': 'verb.body',
-        'verb.change.yaml': 'verb.change',
-        'verb.cognition.yaml': 'verb.cognition',
-        'verb.communication.yaml': 'verb.communication',
-        'verb.competition.yaml': 'verb.competition',
-        'verb.consumption.yaml': 'verb.consumption',
-        'verb.contact.yaml': 'verb.contact',
-        'verb.creation.yaml': 'verb.creation',
-        'verb.emotion.yaml': 'verb.emotion',
-        'verb.motion.yaml': 'verb.motion',
-        'verb.perception.yaml': 'verb.perception',
-        'verb.possession.yaml': 'verb.possession',
-        'verb.social.yaml': 'verb.social',
-        'verb.stative.yaml': 'verb.stative',
-        'verb.weather.yaml': 'verb.weather',
+        "verb.body.yaml": "verb.body",
+        "verb.change.yaml": "verb.change",
+        "verb.cognition.yaml": "verb.cognition",
+        "verb.communication.yaml": "verb.communication",
+        "verb.competition.yaml": "verb.competition",
+        "verb.consumption.yaml": "verb.consumption",
+        "verb.contact.yaml": "verb.contact",
+        "verb.creation.yaml": "verb.creation",
+        "verb.emotion.yaml": "verb.emotion",
+        "verb.motion.yaml": "verb.motion",
+        "verb.perception.yaml": "verb.perception",
+        "verb.possession.yaml": "verb.possession",
+        "verb.social.yaml": "verb.social",
+        "verb.stative.yaml": "verb.stative",
+        "verb.weather.yaml": "verb.weather",
         # Adjectives (3 categories)
-        'adj.all.yaml': 'adj.all',
-        'adj.pert.yaml': 'adj.pert',
-        'adj.ppl.yaml': 'adj.ppl',
+        "adj.all.yaml": "adj.all",
+        "adj.pert.yaml": "adj.pert",
+        "adj.ppl.yaml": "adj.ppl",
         # Adverbs (1 category)
-        'adv.all.yaml': 'adv.all',
+        "adv.all.yaml": "adv.all",
     }
 
     # Lexical domains that indicate concreteness (for children's games, etc.)
     CONCRETE_LEXNAMES = {
-        'noun.animal', 'noun.artifact', 'noun.body', 'noun.food',
-        'noun.location', 'noun.object', 'noun.person', 'noun.plant',
-        'noun.shape', 'noun.substance',
+        "noun.animal", "noun.artifact", "noun.body", "noun.food",
+        "noun.location", "noun.object", "noun.person", "noun.plant",
+        "noun.shape", "noun.substance",
     }
 
     ABSTRACT_LEXNAMES = {
-        'noun.Tops', 'noun.act', 'noun.attribute', 'noun.cognition',
-        'noun.communication', 'noun.event', 'noun.feeling', 'noun.group',
-        'noun.motive', 'noun.phenomenon', 'noun.possession', 'noun.process',
-        'noun.quantity', 'noun.relation', 'noun.state', 'noun.time',
+        "noun.Tops", "noun.act", "noun.attribute", "noun.cognition",
+        "noun.communication", "noun.event", "noun.feeling", "noun.group",
+        "noun.motive", "noun.phenomenon", "noun.possession", "noun.process",
+        "noun.quantity", "noun.relation", "noun.state", "noun.time",
     }
 
     def __init__(self, archive_path: str):
@@ -132,7 +132,7 @@ class OEWNParser:
 
     def _load_yaml_from_tar(self, filename: str) -> Dict:
         """Load a YAML file from the tarball."""
-        with tarfile.open(self.archive_path, 'r:gz') as tar:
+        with tarfile.open(self.archive_path, "r:gz") as tar:
             # Try to find the file in the archive
             member_name = None
             for member in tar.getmembers():
@@ -151,7 +151,7 @@ class OEWNParser:
 
     def _normalize_word(self, word: str) -> str:
         """Normalize word to NFKC Unicode and lowercase."""
-        normalized = unicodedata.normalize('NFKC', word)
+        normalized = unicodedata.normalize("NFKC", word)
         return normalized.lower()
 
     def load_synsets(self) -> Dict[str, Dict]:
@@ -170,7 +170,7 @@ class OEWNParser:
 
         for synset_file, lexname in self.SYNSET_FILES.items():
             try:
-                data = self._load_yaml_from_tar(f'src/yaml/{synset_file}')
+                data = self._load_yaml_from_tar(f"src/yaml/{synset_file}")
                 synsets.update(data)
                 # Track lexname for each synset
                 for synset_id in data.keys():
@@ -202,11 +202,11 @@ class OEWNParser:
         words = {}
 
         # Entry files (a-z + 0)
-        entry_files = [f'entries-{letter}.yaml' for letter in '0abcdefghijklmnopqrstuvwxyz']
+        entry_files = [f"entries-{letter}.yaml" for letter in "0abcdefghijklmnopqrstuvwxyz"]
 
         for entry_file in entry_files:
             try:
-                data = self._load_yaml_from_tar(f'src/yaml/{entry_file}')
+                data = self._load_yaml_from_tar(f"src/yaml/{entry_file}")
                 words.update(data)
                 logger.debug(f"  Loaded {len(data)} entries from {entry_file}")
             except FileNotFoundError:
@@ -275,9 +275,9 @@ class OEWNParser:
                     continue
 
                 # Get synsets for this POS
-                senses = pos_data.get('sense', [])
+                senses = pos_data.get("sense", [])
                 for sense in senses:
-                    synset_id = sense.get('synset')
+                    synset_id = sense.get("synset")
                     if synset_id and synset_id in self._synset_lexnames:
                         lexnames.add(self._synset_lexnames[synset_id])
 
@@ -313,9 +313,9 @@ class OEWNParser:
                     continue
 
                 # Get synsets for this POS
-                senses = pos_data.get('sense', [])
+                senses = pos_data.get("sense", [])
                 for sense in senses:
-                    synset_id = sense.get('synset')
+                    synset_id = sense.get("synset")
                     if synset_id and synset_id in self._synset_lexnames:
                         if normalized not in word_lexnames:
                             word_lexnames[normalized] = set()
@@ -341,16 +341,16 @@ class OEWNParser:
                     continue
 
                 pos_full = self.POS_MAP[pos_tag]
-                senses = pos_data.get('sense', [])
-                synset_ids = [sense['synset'] for sense in senses if 'synset' in sense]
+                senses = pos_data.get("sense", [])
+                synset_ids = [sense["synset"] for sense in senses if "synset" in sense]
 
                 yield {
-                    'lemma': lemma,
-                    'pos': pos_full,
-                    'pos_tag': pos_tag,
-                    'senses': senses,
-                    'synset_ids': synset_ids,
-                    'pronunciation': pos_data.get('pronunciation', []),
+                    "lemma": lemma,
+                    "pos": pos_full,
+                    "pos_tag": pos_tag,
+                    "senses": senses,
+                    "synset_ids": synset_ids,
+                    "pronunciation": pos_data.get("pronunciation", []),
                 }
 
     def get_word_synsets(self, word: str, pos: Optional[str] = None) -> List[Dict]:
@@ -385,13 +385,13 @@ class OEWNParser:
                     continue
 
                 # Get synsets for this POS
-                senses = pos_data.get('sense', [])
+                senses = pos_data.get("sense", [])
                 for sense in senses:
-                    synset_id = sense.get('synset')
+                    synset_id = sense.get("synset")
                     if synset_id and synset_id in synsets:
                         synset_data = synsets[synset_id].copy()
-                        synset_data['id'] = synset_id
-                        synset_data['pos'] = pos_full
+                        synset_data["id"] = synset_id
+                        synset_data["pos"] = pos_full
                         result.append(synset_data)
 
         return result
@@ -410,14 +410,14 @@ class OEWNParser:
                 if pos_tag in self.POS_MAP:
                     pos_full = self.POS_MAP[pos_tag]
                     pos_counts[pos_full] = pos_counts.get(pos_full, 0) + 1
-                    senses = entry_data[pos_tag].get('sense', [])
+                    senses = entry_data[pos_tag].get("sense", [])
                     total_senses += len(senses)
 
         return {
-            'total_words': len(words),
-            'total_synsets': len(synsets),
-            'total_senses': total_senses,
-            'words_by_pos': pos_counts,
+            "total_words": len(words),
+            "total_synsets": len(synsets),
+            "total_senses": total_senses,
+            "words_by_pos": pos_counts,
         }
 
 
@@ -437,7 +437,7 @@ def main():
     print(f"Total synsets: {stats['total_synsets']:,}")
     print(f"Total senses: {stats['total_senses']:,}")
     print("\nWords by POS:")
-    for pos, count in sorted(stats['words_by_pos'].items()):
+    for pos, count in sorted(stats["words_by_pos"].items()):
         print(f"  {pos}: {count:,}")
 
     print("\n=== Sample Words ===")
@@ -449,11 +449,11 @@ def main():
             break
 
     print("\n=== Test: castle ===")
-    castle_synsets = parser.get_word_synsets('castle')
+    castle_synsets = parser.get_word_synsets("castle")
     for synset in castle_synsets:
         print(f"  {synset['id']}: {synset.get('definition', ['(no definition)'])[0]}")
         print(f"    Members: {', '.join(synset.get('members', []))}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

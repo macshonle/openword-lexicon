@@ -210,8 +210,8 @@ def print_progress(aggregate: Dict[str, Set[Any]], entry_count: int, last_line_c
     if last_line_count > 0:
         # Move cursor up and clear lines
         for _ in range(last_line_count):
-            sys.stdout.write('\033[A')  # Move up
-            sys.stdout.write('\033[K')  # Clear line
+            sys.stdout.write("\033[A")  # Move up
+            sys.stdout.write("\033[K")  # Clear line
 
     lines = []
     lines.append(f"{'='*80}")
@@ -339,7 +339,7 @@ def print_array_combination_stats(combinations: Dict[str, Counter], entry_count:
         print("\n  Individual value frequencies:")
         for value, count in value_freq.most_common(10):
             pct = count / total_occurrences * 100
-            print(f"    \"{value}\": {count:,} ({pct:.1f}%)")
+            print(f'    "{value}": {count:,} ({pct:.1f}%)')
 
         # Coverage analysis
         cumulative = 0
@@ -380,7 +380,7 @@ def main():
     entry_count = 0
     last_line_count = 0
 
-    with open(input_file, 'r', encoding='utf-8') as f:
+    with open(input_file, "r", encoding="utf-8") as f:
         for line_num, line in enumerate(f, 1):
             if not line.strip():
                 continue
@@ -414,8 +414,8 @@ def main():
     # Clear the progress display before showing final output
     if last_line_count > 0:
         for _ in range(last_line_count):
-            sys.stdout.write('\033[A')  # Move up
-            sys.stdout.write('\033[K')  # Clear line
+            sys.stdout.write("\033[A")  # Move up
+            sys.stdout.write("\033[K")  # Clear line
 
     # Final output
     total_bits = print_final_aggregate(aggregate, entry_count)
@@ -436,5 +436,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

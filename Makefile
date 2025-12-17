@@ -90,7 +90,7 @@ METADATA := $(BUILD_DIR)/$(OW_LANG).meta.json
 # =============================================================================
 
 .PHONY: all test test-python test-typescript test-browser-headless nightly weekly fetch scan enrich build clean scrub \
-        deps lint fmt validate help wordlists \
+        deps lint validate help wordlists \
         web-spec-editor web-viewer web-viewer-trie web-viewer-trie-v63 browser-test kill-servers
 
 .DEFAULT_GOAL := help
@@ -115,7 +115,6 @@ help:
 	@echo "Development:"
 	@echo "  make deps       Install dependencies"
 	@echo "  make lint       Run linters"
-	@echo "  make fmt        Format code"
 	@echo ""
 	@echo "Web tools:"
 	@echo "  make web-spec-editor   Start spec editor dev server"
@@ -255,10 +254,6 @@ validate: $(ENRICHED_OUTPUT)
 
 lint:
 	$(UV) run ruff check src/ tests/ tools/
-
-fmt:
-	$(UV) run ruff format src/ tests/ tools/
-	$(UV) run black src/ tests/ tools/
 
 # =============================================================================
 # Nightly/Weekly Builds

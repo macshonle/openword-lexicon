@@ -31,8 +31,8 @@ import tomllib
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
@@ -50,12 +50,12 @@ VERSION = load_version()
 
 # Expected metadata modules
 METADATA_MODULES = [
-    'frequency',
-    'sources',
-    'lemmas',
-    'syllables',
-    'concreteness',
-    'lemma-groups',
+    "frequency",
+    "sources",
+    "lemmas",
+    "syllables",
+    "concreteness",
+    "lemma-groups",
 ]
 
 
@@ -125,7 +125,7 @@ def compute_sha256(filepath: Path) -> str:
     """Compute SHA256 hash of a file."""
     sha256 = hashlib.sha256()
 
-    with open(filepath, 'rb') as f:
+    with open(filepath, "rb") as f:
         while chunk := f.read(8192):
             sha256.update(chunk)
 
@@ -184,7 +184,7 @@ def package_language(lang: str, version: str,
     # Create README
     readme_content = create_readme(lang, staged_files)
     readme_path = stage_dir / "README.txt"
-    with open(readme_path, 'w') as f:
+    with open(readme_path, "w") as f:
         f.write(readme_content)
     staged_files.append("README.txt")
 
@@ -197,10 +197,10 @@ def package_language(lang: str, version: str,
     # Use tar with zstd compression, fall back to gzip if zstd not available
     try:
         subprocess.run([
-            'tar',
-            '-C', str(output_dir),
-            '-cf', str(tarball_path),
-            '--use-compress-program=zstd',
+            "tar",
+            "-C", str(output_dir),
+            "-cf", str(tarball_path),
+            "--use-compress-program=zstd",
             stage_dir.name
         ], check=True, capture_output=True)
         logger.info(f"  Created: {tarball_path}")
@@ -210,16 +210,16 @@ def package_language(lang: str, version: str,
         tarball_name = f"openword-lexicon-{lang}-{version}.tar.gz"
         tarball_path = output_dir / tarball_name
 
-        with tarfile.open(tarball_path, 'w:gz') as tar:
+        with tarfile.open(tarball_path, "w:gz") as tar:
             tar.add(stage_dir, arcname=stage_dir.name)
 
         logger.info(f"  Created: {tarball_path}")
 
     # Compute checksum
     sha256 = compute_sha256(tarball_path)
-    checksum_path = tarball_path.with_suffix(tarball_path.suffix + '.sha256')
+    checksum_path = tarball_path.with_suffix(tarball_path.suffix + ".sha256")
 
-    with open(checksum_path, 'w') as f:
+    with open(checksum_path, "w") as f:
         f.write(f"{sha256}  {tarball_path.name}\n")
 
     logger.info(f"  Checksum: {checksum_path}")
@@ -244,15 +244,15 @@ def verify_package(tarball_path: Path, lang: str) -> bool:
 
     try:
         # Extract using zstd pipe for compatibility
-        if tarball_path.name.endswith('.tar.zst'):
+        if tarball_path.name.endswith(".tar.zst"):
             # Use zstd -d -c | tar x for better cross-platform compatibility
             zstd_proc = subprocess.Popen(
-                ['zstd', '-d', '-c', str(tarball_path)],
+                ["zstd", "-d", "-c", str(tarball_path)],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )
             tar_proc = subprocess.Popen(
-                ['tar', '-xf', '-', '-C', str(temp_dir)],
+                ["tar", "-xf", "-", "-C", str(temp_dir)],
                 stdin=zstd_proc.stdout,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
@@ -260,9 +260,9 @@ def verify_package(tarball_path: Path, lang: str) -> bool:
             zstd_proc.stdout.close()
             tar_proc.communicate()
             if tar_proc.returncode != 0:
-                raise subprocess.CalledProcessError(tar_proc.returncode, 'tar')
+                raise subprocess.CalledProcessError(tar_proc.returncode, "tar")
         else:
-            with tarfile.open(tarball_path, 'r:*') as tar:
+            with tarfile.open(tarball_path, "r:*") as tar:
                 tar.extractall(temp_dir)
 
         # Find extracted directory
@@ -275,9 +275,9 @@ def verify_package(tarball_path: Path, lang: str) -> bool:
 
         # Check required files
         required_files = [
-            'README.txt',
-            f'{lang}.trie',
-            f'{lang}-game.trie',
+            "README.txt",
+            f"{lang}.trie",
+            f"{lang}-game.trie",
         ]
 
         for filename in required_files:
@@ -292,7 +292,7 @@ def verify_package(tarball_path: Path, lang: str) -> bool:
         try:
             import marisa_trie
             trie = marisa_trie.Trie()
-            trie.load(str(extracted_dir / f'{lang}.trie'))
+            trie.load(str(extracted_dir / f"{lang}.trie"))
 
             # Test lookup
             if len(trie) > 0:
@@ -305,7 +305,7 @@ def verify_package(tarball_path: Path, lang: str) -> bool:
 
             # Also check game trie
             game_trie = marisa_trie.Trie()
-            game_trie.load(str(extracted_dir / f'{lang}-game.trie'))
+            game_trie.load(str(extracted_dir / f"{lang}-game.trie"))
             logger.info(f"  Game trie contains {len(game_trie):,} words")
 
         except Exception as e:
@@ -335,7 +335,7 @@ def main():
     logger.info("")
 
     # Package English lexicon
-    lang = 'en'
+    lang = "en"
     tarball = package_language(lang, VERSION, project_root, output_dir)
 
     if tarball:
@@ -354,5 +354,5 @@ def main():
         logger.info(f"  {artifact.name} ({size_mb:.1f} MB)")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

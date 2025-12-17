@@ -16,7 +16,7 @@ from openword.enrich.pipeline import (
 )
 
 __all__ = [
-    'process_file',
-    'get_pipeline_config',
-    'get_field_schemas',
+    "process_file",
+    "get_pipeline_config",
+    "get_field_schemas",
 ]

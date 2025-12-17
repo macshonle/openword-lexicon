@@ -44,24 +44,24 @@ from openword.progress_display import ProgressDisplay
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger(__name__)
 
 
 # License mappings for each source
 SOURCE_LICENSES = {
-    'wikt': 'CC-BY-SA-4.0',
-    'eowl': 'UKACD',
-    'wordnet': 'CC-BY-4.0',
-    'brysbaert': 'Brysbaert-Research',
+    "wikt": "CC-BY-SA-4.0",
+    "eowl": "UKACD",
+    "wordnet": "CC-BY-4.0",
+    "brysbaert": "Brysbaert-Research",
 }
 
 
 def normalize_word(word: str) -> str:
     """Normalize word for comparison (NFKC, lowercase)."""
-    return unicodedata.normalize('NFKC', word.lower().strip())
+    return unicodedata.normalize("NFKC", word.lower().strip())
 
 
 def load_eowl(eowl_path: Path) -> Set[str]:
@@ -74,7 +74,7 @@ def load_eowl(eowl_path: Path) -> Set[str]:
 
     logger.info(f"Loading EOWL from {eowl_path}")
 
-    with open(eowl_path, 'r', encoding='utf-8') as f:
+    with open(eowl_path, "r", encoding="utf-8") as f:
         for line in f:
             word = line.strip()
             if word:
@@ -106,7 +106,7 @@ def load_wordnet(wordnet_path: Path) -> Tuple[Set[str], Dict[str, List[str]]]:
 
         # Iterate all words from WordNet
         for word_entry in parser.iter_words():
-            lemma = word_entry.get('lemma', '')
+            lemma = word_entry.get("lemma", "")
             if lemma:
                 words.add(normalize_word(lemma))
 
@@ -147,7 +147,7 @@ def load_wikt_lexemes(lexeme_path: Path) -> Tuple[Dict[str, dict], Dict[str, Lis
     logger.info(f"Loading Wiktionary lexemes from {lexeme_path}")
 
     with ProgressDisplay("Loading lexemes", update_interval=10000) as progress:
-        with open(lexeme_path, 'r', encoding='utf-8') as f:
+        with open(lexeme_path, "r", encoding="utf-8") as f:
             for line_num, line in enumerate(f, 1):
                 line = line.strip()
                 if not line:
@@ -155,14 +155,14 @@ def load_wikt_lexemes(lexeme_path: Path) -> Tuple[Dict[str, dict], Dict[str, Lis
 
                 try:
                     entry = json.loads(line)
-                    word = entry['id']  # Preserve original case
+                    word = entry["id"]  # Preserve original case
                     norm = normalize_word(word)
 
                     # Initialize sources if not present
-                    if 'sources' not in entry:
-                        entry['sources'] = ['wikt']
-                    if 'license_sources' not in entry:
-                        entry['license_sources'] = {'CC-BY-SA-4.0': ['wikt']}
+                    if "sources" not in entry:
+                        entry["sources"] = ["wikt"]
+                    if "license_sources" not in entry:
+                        entry["license_sources"] = {"CC-BY-SA-4.0": ["wikt"]}
 
                     entries[word] = entry
 
@@ -184,19 +184,19 @@ def load_wikt_lexemes(lexeme_path: Path) -> Tuple[Dict[str, dict], Dict[str, Lis
 def add_source_to_entry(entry: dict, source: str) -> dict:
     """Add a source to an entry's source tracking."""
     # Add to sources list
-    sources = entry.get('sources', [])
+    sources = entry.get("sources", [])
     if source not in sources:
-        entry['sources'] = sorted(sources + [source])
+        entry["sources"] = sorted(sources + [source])
 
     # Add to license_sources
     license_key = SOURCE_LICENSES.get(source)
     if license_key:
-        license_sources = entry.get('license_sources', {})
+        license_sources = entry.get("license_sources", {})
         if license_key not in license_sources:
             license_sources[license_key] = [source]
         elif source not in license_sources[license_key]:
             license_sources[license_key] = sorted(license_sources[license_key] + [source])
-        entry['license_sources'] = license_sources
+        entry["license_sources"] = license_sources
 
     return entry
 
@@ -225,18 +225,18 @@ def create_secondary_entry(word: str, sources: list, lexnames: Optional[List[str
         license_sources[license_key] = sorted(license_sources[license_key])
 
     entry = {
-        'id': word,
-        'sources': sorted(sources),
-        'license_sources': license_sources,
-        'sense_offset': 0,
-        'sense_length': 0,
-        'sense_count': 0,
-        'wc': len(word.split()),
+        "id": word,
+        "sources": sorted(sources),
+        "license_sources": license_sources,
+        "sense_offset": 0,
+        "sense_length": 0,
+        "sense_count": 0,
+        "wc": len(word.split()),
     }
 
     # Add lexnames if available
     if lexnames:
-        entry['lexnames'] = lexnames
+        entry["lexnames"] = lexnames
 
     return entry
 
@@ -265,14 +265,14 @@ def merge_sources(
 
     # Track statistics per source
     stats = {
-        'wikt_only': 0,
-        'eowl_only': 0,
-        'wordnet_only': 0,
-        'wikt_eowl': 0,
-        'wikt_wordnet': 0,
-        'eowl_wordnet': 0,
-        'all_three': 0,
-        'with_lexnames': 0,
+        "wikt_only": 0,
+        "eowl_only": 0,
+        "wordnet_only": 0,
+        "wikt_eowl": 0,
+        "wikt_wordnet": 0,
+        "eowl_wordnet": 0,
+        "all_three": 0,
+        "with_lexnames": 0,
     }
 
     # Track words not in Wiktionary that are in secondary sources
@@ -287,11 +287,11 @@ def merge_sources(
             if eowl_word in norm_to_words:
                 # Add 'eowl' source to ALL case variants in Wiktionary
                 for orig_word in norm_to_words[eowl_word]:
-                    wikt_entries[orig_word] = add_source_to_entry(wikt_entries[orig_word], 'eowl')
+                    wikt_entries[orig_word] = add_source_to_entry(wikt_entries[orig_word], "eowl")
             else:
                 if eowl_word not in secondary_only:
                     secondary_only[eowl_word] = []
-                secondary_only[eowl_word].append('eowl')
+                secondary_only[eowl_word].append("eowl")
 
     # Process WordNet words (and add lexnames) - case-insensitive matching
     if wordnet_words:
@@ -301,14 +301,14 @@ def merge_sources(
             if wn_word in norm_to_words:
                 # Add 'wordnet' source and lexnames to ALL case variants
                 for orig_word in norm_to_words[wn_word]:
-                    wikt_entries[orig_word] = add_source_to_entry(wikt_entries[orig_word], 'wordnet')
+                    wikt_entries[orig_word] = add_source_to_entry(wikt_entries[orig_word], "wordnet")
                     # Add lexnames to existing entry
                     if wn_word in word_lexnames:
-                        wikt_entries[orig_word]['lexnames'] = word_lexnames[wn_word]
+                        wikt_entries[orig_word]["lexnames"] = word_lexnames[wn_word]
             else:
                 if wn_word not in secondary_only:
                     secondary_only[wn_word] = []
-                secondary_only[wn_word].append('wordnet')
+                secondary_only[wn_word].append("wordnet")
 
     # Create entries for words only in secondary sources
     if secondary_only:
@@ -319,29 +319,29 @@ def merge_sources(
 
     # Calculate statistics by examining source combinations
     for entry in wikt_entries.values():
-        sources = set(entry.get('sources', []))
-        has_wikt = 'wikt' in sources
-        has_eowl = 'eowl' in sources
-        has_wordnet = 'wordnet' in sources
+        sources = set(entry.get("sources", []))
+        has_wikt = "wikt" in sources
+        has_eowl = "eowl" in sources
+        has_wordnet = "wordnet" in sources
 
         if has_wikt and has_eowl and has_wordnet:
-            stats['all_three'] += 1
+            stats["all_three"] += 1
         elif has_wikt and has_eowl:
-            stats['wikt_eowl'] += 1
+            stats["wikt_eowl"] += 1
         elif has_wikt and has_wordnet:
-            stats['wikt_wordnet'] += 1
+            stats["wikt_wordnet"] += 1
         elif has_eowl and has_wordnet:
-            stats['eowl_wordnet'] += 1
+            stats["eowl_wordnet"] += 1
         elif has_wikt:
-            stats['wikt_only'] += 1
+            stats["wikt_only"] += 1
         elif has_eowl:
-            stats['eowl_only'] += 1
+            stats["eowl_only"] += 1
         elif has_wordnet:
-            stats['wordnet_only'] += 1
+            stats["wordnet_only"] += 1
 
         # Count entries with lexnames
-        if entry.get('lexnames'):
-            stats['with_lexnames'] += 1
+        if entry.get("lexnames"):
+            stats["with_lexnames"] += 1
 
     # Log statistics
     logger.info("Source statistics:")
@@ -365,15 +365,15 @@ def merge_sources(
 
     sorted_words = sorted(wikt_entries.keys())
 
-    with open(output_path, 'wb') as f:
+    with open(output_path, "wb") as f:
         for word in sorted_words:
             entry = wikt_entries[word]
-            line = orjson.dumps(entry, option=orjson.OPT_SORT_KEYS) + b'\n'
+            line = orjson.dumps(entry, option=orjson.OPT_SORT_KEYS) + b"\n"
             f.write(line)
 
     logger.info(f"  -> {output_path}")
 
-    stats['total'] = len(wikt_entries)
+    stats["total"] = len(wikt_entries)
     return stats
 
 
@@ -382,16 +382,16 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Merge multiple word sources into unified lexemes file'
+        description="Merge multiple word sources into unified lexemes file"
     )
-    parser.add_argument('--wikt-lexemes', type=Path, required=True,
-                        help='Wiktionary lexemes JSONL file (base)')
-    parser.add_argument('--eowl', type=Path,
-                        help='EOWL word list file (optional)')
-    parser.add_argument('--wordnet', type=Path,
-                        help='WordNet tarball archive (optional)')
-    parser.add_argument('--output', type=Path, required=True,
-                        help='Output merged JSONL file')
+    parser.add_argument("--wikt-lexemes", type=Path, required=True,
+                        help="Wiktionary lexemes JSONL file (base)")
+    parser.add_argument("--eowl", type=Path,
+                        help="EOWL word list file (optional)")
+    parser.add_argument("--wordnet", type=Path,
+                        help="WordNet tarball archive (optional)")
+    parser.add_argument("--output", type=Path, required=True,
+                        help="Output merged JSONL file")
     args = parser.parse_args()
 
     logger.info("Source merge")
@@ -429,5 +429,5 @@ def main():
     logger.info(f"  Total entries: {stats['total']:,}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
