@@ -89,9 +89,9 @@ METADATA := $(BUILD_DIR)/$(OW_LANG).meta.json
 # Phony Targets
 # =============================================================================
 
-.PHONY: all test test-python test-typescript nightly weekly fetch scan enrich build clean scrub \
+.PHONY: all test test-python test-typescript test-browser-headless nightly weekly fetch scan enrich build clean scrub \
         deps lint fmt validate help \
-        web-spec-editor web-viewer web-viewer-trie
+        web-spec-editor web-viewer web-viewer-trie web-viewer-trie-v63 browser-test kill-servers
 
 .DEFAULT_GOAL := help
 
@@ -119,7 +119,10 @@ help:
 	@echo "Web tools:"
 	@echo "  make web-spec-editor   Start spec editor dev server"
 	@echo "  make web-viewer        Start viewer dev server"
-	@echo "  make web-viewer-trie   Build OWTRIE binary for viewer"
+	@echo "  make web-viewer-trie   Build OWTRIE binary for viewer (v6.1)"
+	@echo "  make web-viewer-trie-v63  Build v6.3 recursive trie"
+	@echo "  make browser-test      Run browser-based tests (opens in browser)"
+	@echo "  make test-browser-headless  Run headless browser tests (CI)"
 
 # =============================================================================
 # Dependencies
@@ -143,6 +146,10 @@ test-typescript:
 
 test-quick: deps
 	$(PYTEST) tests/ -v -x --ignore=tests/test_wiktionary_data_quality.py
+
+# Headless browser tests (requires trie files to be built)
+test-browser-headless: web-viewer-trie web-viewer-trie-v63
+	cd web/viewer && pnpm install && pnpm test:browser:all
 
 # =============================================================================
 # Fetching
@@ -258,10 +265,21 @@ web-viewer:
 
 # Build OWTRIE binary for web viewer (requires enriched data)
 web-viewer-trie: $(ENRICHED_OUTPUT) | web/viewer/data
-	cd web/viewer && pnpm install && pnpm build-trie --format=v4
+	cd web/viewer && pnpm install && pnpm build-trie --format=v6 --links
+
+# Build v6.3 recursive trie for web viewer (outputs to separate file)
+web-viewer-trie-v63: $(ENRICHED_OUTPUT) | web/viewer/data
+	cd web/viewer && pnpm install && pnpm build-trie ../../$(ENRICHED_OUTPUT) data/en.trie.v63.bin --format=v6 --links --recursive
 
 web/viewer/data:
 	mkdir -p $@
+
+# Run browser-based trie tests (server runs in foreground, Ctrl+C to stop)
+browser-test: web-viewer-trie web-viewer-trie-v63
+	@echo ""
+	@echo "Press Ctrl+C to stop the server."
+	@echo ""
+	@cd web/viewer && npx http-server ../.. -p 8080 --cors -c-1 -o /web/viewer/test.html
 
 # =============================================================================
 # Cleaning
@@ -276,6 +294,16 @@ clean:
 scrub: clean
 	rm -rf $(RAW_DIR)
 	rm -rf web/spec-editor/node_modules web/viewer/node_modules web/viewer/data
+
+# Kill any running web servers (port 8080)
+kill-servers:
+	@pids=$$(lsof -ti:8080 2>/dev/null); \
+	if [ -n "$$pids" ]; then \
+		echo "$$pids" | xargs kill -9; \
+		echo "Killed server(s) on port 8080"; \
+	else \
+		echo "No servers running on port 8080"; \
+	fi
 
 # =============================================================================
 # Rust Scanner (optional, for benchmarking)

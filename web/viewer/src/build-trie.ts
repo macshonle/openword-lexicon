@@ -88,12 +88,14 @@ function parseArgs(args: string[]): {
   outputPath: string;
   format: FormatVersion;
   enableLinks: boolean;
+  enableRecursive: boolean;
 } {
   let inputPath = DEFAULT_INPUT;
   let outputPath = DEFAULT_OUTPUT;
   let format: FormatVersion = 'auto';
   let inputSet = false;
   let enableLinks = false;
+  let enableRecursive = false;
 
   for (const arg of args) {
     if (arg.startsWith('--format=')) {
@@ -106,6 +108,8 @@ function parseArgs(args: string[]): {
       }
     } else if (arg === '--links') {
       enableLinks = true;
+    } else if (arg === '--recursive') {
+      enableRecursive = true;
     } else if (arg === '--help' || arg === '-h') {
       printHelp();
       process.exit(0);
@@ -119,7 +123,7 @@ function parseArgs(args: string[]): {
     }
   }
 
-  return { inputPath, outputPath, format, enableLinks };
+  return { inputPath, outputPath, format, enableLinks, enableRecursive };
 }
 
 function printHelp(): void {
@@ -127,7 +131,7 @@ function printHelp(): void {
 build-trie - Build compact binary trie from wordlist or JSONL
 
 Usage:
-  pnpm build-trie [input] [output] [--format=v2|v4|v5|v6|auto] [--links]
+  pnpm build-trie [input] [output] [--format=v2|v4|v5|v6|auto] [--links] [--recursive]
 
 Arguments:
   input     Input file (.txt wordlist or .jsonl pipeline output)
@@ -142,7 +146,8 @@ Options:
                   v5: LOUDS trie with word ID mapping
                   v6: MARISA trie with path compression (most compact)
                   auto: Select based on content and size (default)
-  --links         Enable path compression for v6 (tail buffer)
+  --links         Enable path compression for v6 (tail buffer, v6.1)
+  --recursive     Enable recursive tail trie for v6 (v6.3, smaller but slower)
 
 Examples:
   # Build from pipeline output (default)
@@ -154,8 +159,11 @@ Examples:
   # Force v4 format for Unicode support
   pnpm build-trie wordlist.txt output.trie.bin --format=v4
 
-  # Build v6 MARISA trie with path compression
+  # Build v6.1 MARISA trie with path compression
   pnpm build-trie input.jsonl output.trie.bin --format=v6 --links
+
+  # Build v6.3 MARISA trie with recursive tails (most compact)
+  pnpm build-trie input.jsonl output.trie.bin --format=v6 --links --recursive
 `);
 }
 
@@ -163,7 +171,7 @@ Examples:
  * Main entry point.
  */
 async function main() {
-  const { inputPath, outputPath, format, enableLinks } = parseArgs(process.argv.slice(2));
+  const { inputPath, outputPath, format, enableLinks, enableRecursive } = parseArgs(process.argv.slice(2));
 
   console.log('Building compact binary trie...');
   console.log(`Input: ${inputPath}`);
@@ -171,6 +179,9 @@ async function main() {
   console.log(`Format: ${format}`);
   if (format === 'v6' && enableLinks) {
     console.log(`Path compression: enabled`);
+    if (enableRecursive) {
+      console.log(`Recursive tails: enabled (v6.3)`);
+    }
   }
   console.log();
 
@@ -219,7 +230,7 @@ async function main() {
     if (format === 'v6') {
       // Build MARISA trie (v6 format)
       console.log('Building MARISA trie...');
-      const { trie, stats } = MarisaTrie.build(words, { enableLinks });
+      const { trie, stats } = MarisaTrie.build(words, { enableLinks, enableRecursive });
 
       console.log(`MARISA trie has ${trie.nodeCount.toLocaleString()} nodes`);
 
@@ -248,7 +259,8 @@ async function main() {
         extra.push(['Link flags', `${stats.linkFlagsSize.toLocaleString()} bytes`]);
       }
       if (stats.tailBufferSize > 0) {
-        extra.push(['Tail buffer', `${stats.tailBufferSize.toLocaleString()} bytes`]);
+        const tailLabel = enableRecursive ? 'Recursive trie' : 'Tail buffer';
+        extra.push([tailLabel, `${stats.tailBufferSize.toLocaleString()} bytes`]);
       }
 
       printStats({

@@ -294,12 +294,29 @@ async function main() {
     };
   }));
 
-  // v6.1 MARISA (with links) - currently has bugs, skip for now
-  // console.log('  v6.1 MARISA (links)...');
-  // results.push(benchmark('v6.1 MARISA', 6, words, () => {
-  //   const { trie } = MarisaTrie.build(words, { enableLinks: true });
-  //   return { ... };
-  // }));
+  // v6.1 MARISA (with path compression)
+  console.log('  v6.1 MARISA (path compression)...');
+  results.push(benchmark('v6.1 MARISA', 6, words, () => {
+    const { trie } = MarisaTrie.build(words, { enableLinks: true });
+    return {
+      nodeCount: trie.nodeCount,
+      serialize: () => trie.serialize(),
+      has: (w) => trie.has(w),
+      keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
+    };
+  }));
+
+  // v6.3 MARISA (recursive tail trie)
+  console.log('  v6.3 MARISA (recursive tails)...');
+  results.push(benchmark('v6.3 MARISA', 6, words, () => {
+    const { trie } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true });
+    return {
+      nodeCount: trie.nodeCount,
+      serialize: () => trie.serialize(),
+      has: (w) => trie.has(w),
+      keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
+    };
+  }));
 
   printResults(results, inputSize);
 
@@ -308,7 +325,8 @@ async function main() {
   console.log('  - v4 DAWG: No runtime lookup support (build-only format)');
   console.log('  - v5 LOUDS: Baseline format with word ID mapping');
   console.log('  - v6.0 MARISA: Same as v5 with v6 header (baseline for MARISA features)');
-  console.log('  - v6.1+ MARISA: Path compression (not yet implemented)');
+  console.log('  - v6.1 MARISA: Path compression (single-child chains collapsed into tails)');
+  console.log('  - v6.3 MARISA: Recursive trie over tails (prefix sharing within tails)');
 }
 
 main().catch(err => {

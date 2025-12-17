@@ -26,6 +26,7 @@ import {
   V6_FLAG_HAS_LINKS,
   V6_FLAG_HAS_TAILS,
   V6_FLAG_BINARY_TAILS,
+  V6_FLAG_RECURSIVE,
 } from './formats.js';
 
 /**
@@ -38,6 +39,8 @@ export interface MarisaConfig {
   binaryTails?: boolean;
   /** Minimum tail length to compress (default: 2) */
   minTailLength?: number;
+  /** Enable recursive trie over tails for additional compression (v6.3+) */
+  enableRecursive?: boolean;
 }
 
 /**
@@ -97,14 +100,17 @@ export class MarisaTrie {
   /** Link flags bitvector marking edges with tail references (null for v6.0) */
   readonly linkFlags: BitVector | null;
 
-  /** Labels for each edge (code points or tail offsets) */
+  /** Labels for each edge (code points or tail offsets/IDs) */
   readonly labels: Uint32Array;
 
-  /** Tail buffer for path-compressed edges (null for v6.0) */
+  /** Tail buffer for path-compressed edges (null for v6.0 or v6.3 recursive) */
   readonly tailBuffer: Uint8Array | null;
 
   /** Tail end markers for null-terminated tails */
   readonly tailEnds: BitVector | null;
+
+  /** Recursive trie over tails for v6.3 (null otherwise) */
+  readonly tailTrie: MarisaTrie | null;
 
   /** Number of nodes (including super-root) */
   readonly nodeCount: number;
@@ -124,7 +130,8 @@ export class MarisaTrie {
     tailEnds: BitVector | null,
     nodeCount: number,
     wordCount: number,
-    flags: number = 0
+    flags: number = 0,
+    tailTrie: MarisaTrie | null = null
   ) {
     this.bits = bits;
     this.terminal = terminal;
@@ -135,6 +142,7 @@ export class MarisaTrie {
     this.nodeCount = nodeCount;
     this.wordCount = wordCount;
     this.flags = flags;
+    this.tailTrie = tailTrie;
   }
 
   /**
@@ -147,6 +155,7 @@ export class MarisaTrie {
    */
   static build(words: string[], config: MarisaConfig = {}): MarisaBuildResult {
     const enableLinks = config.enableLinks ?? false;
+    const enableRecursive = config.enableRecursive ?? false;
     const minTailLength = config.minTailLength ?? 2;
 
     // Phase 1: Build standard trie
@@ -165,12 +174,15 @@ export class MarisaTrie {
 
     // Phase 2: Path compression (if enabled)
     let tailBuffer: number[] = [];
-    const tailOffsets = new Map<TrieNode, number>(); // node -> tail buffer offset
+    const tailOffsets = new Map<TrieNode, number>(); // node -> tail buffer offset or tail ID
+    const tailStrings = new Map<TrieNode, string>(); // node -> tail string (for recursive mode)
+    let recursiveTailTrie: MarisaTrie | null = null;
 
     if (enableLinks) {
-      // Compress single-child chains into tail labels
-      const compressNode = (node: TrieNode): void => {
-        // Sort children for deterministic order
+      // First pass: collect all compressible chains
+      const pendingTails: Array<{ chain: number[]; endNode: TrieNode; parentNode: TrieNode; firstCode: number }> = [];
+
+      const collectChains = (node: TrieNode): void => {
         const sortedCodes = Array.from(node.children.keys()).sort((a, b) => a - b);
 
         for (const code of sortedCodes) {
@@ -185,34 +197,125 @@ export class MarisaTrie {
             !current.isTerminal &&
             chain.length < 255 // Limit chain length
           ) {
-            const [nextCode, nextChild] = current.children.entries().next().value;
+            const [nextCode, nextChild] = current.children.entries().next().value!;
             chain.push(nextCode);
             current = nextChild;
           }
 
           if (chain.length >= minTailLength) {
-            // Store tail in buffer
-            const tailOffset = tailBuffer.length;
-            tailOffsets.set(child, tailOffset);
-
-            // Store tail as UTF-8 encoded bytes with null terminator
-            const tailString = chain.map(c => String.fromCodePoint(c)).join('');
-            const encoded = new TextEncoder().encode(tailString);
-            tailBuffer.push(...encoded, 0); // null-terminated
-
-            // Mark the edge with the tail
-            child.edgeLabel = chain;
-
-            // Replace child's children with the end of the chain
-            node.children.set(code, current);
+            pendingTails.push({ chain, endNode: current, parentNode: node, firstCode: code });
+            // CRITICAL: Recurse from end of chain, not from child
+            // This skips intermediate nodes that are part of this chain
+            collectChains(current);
+          } else {
+            // Chain too short - recurse from original child
+            collectChains(child);
           }
-
-          // Recursively process children
-          compressNode(node.children.get(code)!);
         }
       };
 
-      compressNode(root);
+      collectChains(root);
+
+      // Sort tails by length descending for better suffix sharing (v6.1)
+      // or lexicographically for consistent word IDs (v6.3)
+      if (enableRecursive) {
+        // For v6.3, sort lexicographically so tail trie word IDs are predictable
+        pendingTails.sort((a, b) => {
+          const aStr = a.chain.map(c => String.fromCodePoint(c)).join('');
+          const bStr = b.chain.map(c => String.fromCodePoint(c)).join('');
+          return aStr.localeCompare(bStr);
+        });
+      } else {
+        // For v6.1, sort by length descending for better suffix sharing
+        pendingTails.sort((a, b) => {
+          if (b.chain.length !== a.chain.length) return b.chain.length - a.chain.length;
+          for (let i = 0; i < a.chain.length; i++) {
+            if (a.chain[i] !== b.chain[i]) return a.chain[i] - b.chain[i];
+          }
+          return 0;
+        });
+      }
+
+      if (enableRecursive) {
+        // v6.3: Collect unique tail strings, build recursive trie
+        const uniqueTails = new Set<string>();
+        for (const { chain, endNode, parentNode, firstCode } of pendingTails) {
+          const tailString = chain.map(c => String.fromCodePoint(c)).join('');
+          uniqueTails.add(tailString);
+          tailStrings.set(endNode, tailString);
+          // Update trie structure
+          parentNode.children.set(firstCode, endNode);
+        }
+
+        // Build recursive trie over unique tails (v6.0, no links)
+        const sortedTails = Array.from(uniqueTails).sort();
+        const { trie: innerTrie } = MarisaTrie.build(sortedTails, { enableLinks: false });
+        recursiveTailTrie = innerTrie;
+
+        // Now assign tail IDs based on word IDs in the recursive trie
+        for (const { endNode } of pendingTails) {
+          const tailString = tailStrings.get(endNode)!;
+          const tailId = recursiveTailTrie.wordId(tailString);
+          if (tailId === -1) {
+            throw new Error(`Internal error: tail "${tailString}" not found in recursive trie`);
+          }
+          tailOffsets.set(endNode, tailId);
+        }
+      } else {
+        // v6.1: Use suffix sharing with flat buffer
+        interface ReversedTrieNode {
+          children: Map<number, ReversedTrieNode>;
+          suffixOffset?: number;
+        }
+        const reverseTrieRoot: ReversedTrieNode = { children: new Map() };
+
+        const findSuffixInReverseTrie = (encoded: Uint8Array): number => {
+          let node = reverseTrieRoot;
+          const byteLen = encoded.length;
+          for (let depth = 1; depth <= byteLen; depth++) {
+            const i = byteLen - depth;
+            const byte = encoded[i];
+            const child = node.children.get(byte);
+            if (!child) return -1;
+            node = child;
+          }
+          return node.suffixOffset ?? -1;
+        };
+
+        const insertIntoReverseTrie = (encoded: Uint8Array, offset: number): void => {
+          let node = reverseTrieRoot;
+          const byteLen = encoded.length;
+          for (let depth = 1; depth <= byteLen; depth++) {
+            const i = byteLen - depth;
+            const byte = encoded[i];
+            let child = node.children.get(byte);
+            if (!child) {
+              child = { children: new Map() };
+              node.children.set(byte, child);
+            }
+            node = child;
+            if (node.suffixOffset === undefined) {
+              node.suffixOffset = offset + byteLen - depth;
+            }
+          }
+        };
+
+        for (const { chain, endNode, parentNode, firstCode } of pendingTails) {
+          const tailString = chain.map(c => String.fromCodePoint(c)).join('');
+          const encoded = new TextEncoder().encode(tailString);
+
+          let offset = findSuffixInReverseTrie(encoded);
+
+          if (offset === -1) {
+            offset = tailBuffer.length;
+            tailBuffer.push(...encoded, 0);
+            insertIntoReverseTrie(encoded, offset);
+          }
+
+          parentNode.children.set(firstCode, endNode);
+          tailOffsets.set(endNode, offset);
+        }
+      }
     }
 
     // Phase 3: Count nodes via BFS
@@ -285,8 +388,8 @@ export class MarisaTrie {
     terminal.build();
     if (linkFlags) linkFlags.build();
 
-    // Build tail buffer as Uint8Array
-    const tailBufferArray = enableLinks && tailBuffer.length > 0
+    // Build tail buffer as Uint8Array (only for v6.1, not v6.3 recursive)
+    const tailBufferArray = enableLinks && !enableRecursive && tailBuffer.length > 0
       ? new Uint8Array(tailBuffer)
       : null;
 
@@ -294,8 +397,16 @@ export class MarisaTrie {
     let flags = 0;
     if (enableLinks) {
       flags |= V6_FLAG_HAS_LINKS;
-      if (tailBufferArray) flags |= V6_FLAG_HAS_TAILS;
+      if (enableRecursive && recursiveTailTrie) {
+        flags |= V6_FLAG_RECURSIVE;
+      } else if (tailBufferArray) {
+        flags |= V6_FLAG_HAS_TAILS;
+      }
     }
+
+    // Word count is the actual number of unique words (terminal nodes),
+    // not input words.length which may contain duplicates
+    const actualWordCount = terminal.popcount;
 
     const trie = new MarisaTrie(
       bits,
@@ -305,8 +416,9 @@ export class MarisaTrie {
       tailBufferArray,
       null, // tailEnds not implemented yet
       nodeCount + 1,
-      words.length,
-      flags
+      actualWordCount,
+      flags,
+      recursiveTailTrie
     );
 
     const stats = trie.stats();
@@ -333,14 +445,25 @@ export class MarisaTrie {
   }
 
   /**
-   * Read a tail from the tail buffer at the given offset.
-   * Returns an array of code points.
+   * Read a tail from the tail buffer at the given offset,
+   * or from the recursive tail trie by word ID.
+   *
+   * @param offsetOrId Byte offset for v6.1 buffer, or word ID for v6.3 recursive trie
+   * @returns Array of code points
    */
-  private readTail(offset: number): number[] {
+  private readTail(offsetOrId: number): number[] {
+    // v6.3: Recursive tail trie - offsetOrId is a word ID
+    if (this.tailTrie) {
+      const tailString = this.tailTrie.getWord(offsetOrId);
+      if (!tailString) return [];
+      return [...tailString].map(c => c.codePointAt(0)!);
+    }
+
+    // v6.1: Flat tail buffer - offsetOrId is a byte offset
     if (!this.tailBuffer) return [];
 
     const codes: number[] = [];
-    let pos = offset;
+    let pos = offsetOrId;
 
     // Read UTF-8 bytes until null terminator
     while (pos < this.tailBuffer.length && this.tailBuffer[pos] !== 0) {
@@ -542,6 +665,7 @@ export class MarisaTrie {
     let nodeId = 1;
     let consumedChars = 0;
     const codes = [...prefix].map(c => c.codePointAt(0)!);
+    let remainingTail = ''; // Characters from tail after prefix ends
 
     while (consumedChars < codes.length) {
       const [childId, labelIdx] = this.findChildByCode(nodeId, codes[consumedChars]);
@@ -551,7 +675,8 @@ export class MarisaTrie {
         const tail = this.readTail(this.labels[labelIdx]);
 
         // Check partial match within tail
-        for (let j = 0; j < tail.length && consumedChars < codes.length; j++) {
+        let j = 0;
+        for (; j < tail.length && consumedChars < codes.length; j++) {
           if (codes[consumedChars] !== tail[j]) {
             return []; // Prefix doesn't match
           }
@@ -559,9 +684,9 @@ export class MarisaTrie {
         }
 
         // If we've consumed all prefix chars but there's more tail,
-        // we need to include the remaining tail in results
-        if (consumedChars >= codes.length && consumedChars - (codes.length - 1) < tail.length) {
-          // Prefix ends mid-tail - still valid, continue from this child
+        // remember the remaining tail characters
+        if (consumedChars >= codes.length && j < tail.length) {
+          remainingTail = tail.slice(j).map(c => String.fromCodePoint(c)).join('');
         }
       } else {
         consumedChars++;
@@ -571,8 +696,10 @@ export class MarisaTrie {
     }
 
     // DFS to collect words
+    // Start with prefix + any remaining tail characters from the last edge
     const results: string[] = [];
-    const stack: Array<[number, string]> = [[nodeId, prefix]];
+    const startWord = prefix + remainingTail;
+    const stack: Array<[number, string]> = [[nodeId, startWord]];
 
     while (stack.length > 0 && results.length < limit) {
       const [node, word] = stack.pop()!;
@@ -638,6 +765,53 @@ export class MarisaTrie {
   }
 
   /**
+   * Get the parent node of a given node in the LOUDS tree.
+   * @param nodeId Node to find parent of (must be > 1)
+   * @returns Parent node ID
+   */
+  private getParent(nodeId: number): number {
+    if (nodeId <= 1) return 0;
+    const bitPos = this.bits.select1(nodeId);
+    return this.bits.rank0(bitPos);
+  }
+
+  /**
+   * Get the word at a given ID (reverse lookup from terminal rank).
+   * This allows retrieving words by their BFS terminal order ID.
+   *
+   * @param id Word ID (0-indexed)
+   * @returns The word at that ID, or null if ID is out of range
+   */
+  getWord(id: number): string | null {
+    if (id < 0 || id >= this.wordCount) return null;
+
+    // Find the terminal node with this ID
+    const nodeId = this.terminal.select1(id + 1);
+    if (nodeId === -1) return null;
+
+    // Walk from node to root, collecting labels
+    const codes: number[] = [];
+    let current = nodeId;
+
+    while (current > 1) {
+      // Label index for edge leading to current node
+      const labelIdx = current - 2; // Nodes 2+ have labels 0, 1, 2, ...
+
+      if (this.linkFlags && this.linkFlags.get(labelIdx)) {
+        // This edge has a tail - prepend all tail codes
+        const tail = this.readTail(this.labels[labelIdx]);
+        codes.unshift(...tail);
+      } else {
+        codes.unshift(this.labels[labelIdx]);
+      }
+
+      current = this.getParent(current);
+    }
+
+    return codes.map(c => String.fromCodePoint(c)).join('');
+  }
+
+  /**
    * Serialize the trie to binary format (v6).
    */
   serialize(): Uint8Array {
@@ -651,14 +825,24 @@ export class MarisaTrie {
       labelsSize += varintSize(this.labels[i]);
     }
 
-    const tailBufferSize = this.tailBuffer ? this.tailBuffer.length : 0;
+    // Determine tail storage size (buffer or recursive trie)
+    let tailBytes: Uint8Array | null = null;
+    if (this.flags & V6_FLAG_RECURSIVE && this.tailTrie) {
+      // v6.3: Serialize the recursive tail trie
+      tailBytes = this.tailTrie.serialize();
+    } else if (this.flags & V6_FLAG_HAS_TAILS && this.tailBuffer) {
+      // v6.1: Use flat tail buffer
+      tailBytes = this.tailBuffer;
+    }
+
+    const tailStorageSize = tailBytes ? tailBytes.length : 0;
 
     const totalSize = HEADER_SIZE_V6 +
       4 + bitsBytes.length +
       4 + terminalBytes.length +
       (this.linkFlags ? 4 + linkFlagsBytes.length : 0) +
       labelsSize +
-      (tailBufferSize > 0 ? 4 + tailBufferSize : 0);
+      (tailStorageSize > 0 ? 4 + tailStorageSize : 0);
 
     const buffer = new Uint8Array(totalSize);
     const view = new DataView(buffer.buffer);
@@ -675,7 +859,7 @@ export class MarisaTrie {
     offset += 4;
     view.setUint32(offset, this.flags, true);
     offset += 4;
-    view.setUint32(offset, tailBufferSize, true);
+    view.setUint32(offset, tailStorageSize, true);
     offset += 4;
 
     // LOUDS bitvector
@@ -705,12 +889,12 @@ export class MarisaTrie {
       offset = writeVarint(buffer, offset, this.labels[i]);
     }
 
-    // Tail buffer (if present)
-    if (this.flags & V6_FLAG_HAS_TAILS && this.tailBuffer) {
-      view.setUint32(offset, tailBufferSize, true);
+    // Tail storage (buffer or recursive trie)
+    if (tailBytes && tailStorageSize > 0) {
+      view.setUint32(offset, tailStorageSize, true);
       offset += 4;
-      buffer.set(this.tailBuffer, offset);
-      offset += tailBufferSize;
+      buffer.set(tailBytes, offset);
+      offset += tailStorageSize;
     }
 
     return buffer.slice(0, offset);
@@ -776,9 +960,19 @@ export class MarisaTrie {
       offset += bytesRead;
     }
 
-    // Tail buffer (if present)
+    // Tail storage (buffer or recursive trie)
     let tailBuffer: Uint8Array | null = null;
-    if (flags & V6_FLAG_HAS_TAILS && tailBufferSize > 0) {
+    let tailTrie: MarisaTrie | null = null;
+
+    if (flags & V6_FLAG_RECURSIVE && tailBufferSize > 0) {
+      // v6.3: Deserialize recursive tail trie
+      const storedTailSize = view.getUint32(offset, true);
+      offset += 4;
+      const tailTrieBytes = buffer.slice(offset, offset + storedTailSize);
+      tailTrie = MarisaTrie.deserialize(tailTrieBytes);
+      offset += storedTailSize;
+    } else if (flags & V6_FLAG_HAS_TAILS && tailBufferSize > 0) {
+      // v6.1: Read flat tail buffer
       const storedTailSize = view.getUint32(offset, true);
       offset += 4;
       tailBuffer = buffer.slice(offset, offset + storedTailSize);
@@ -794,7 +988,8 @@ export class MarisaTrie {
       null,
       nodeCount,
       wordCount,
-      flags
+      flags,
+      tailTrie
     );
   }
 
@@ -811,7 +1006,15 @@ export class MarisaTrie {
       labelsSize += varintSize(this.labels[i]);
     }
 
-    const tailBufferSize = this.tailBuffer ? this.tailBuffer.length : 0;
+    // Tail storage size: either flat buffer or serialized recursive trie
+    let tailBufferSize = 0;
+    if (this.tailTrie) {
+      // v6.3: recursive trie
+      tailBufferSize = this.tailTrie.serialize().length;
+    } else if (this.tailBuffer) {
+      // v6.1: flat buffer
+      tailBufferSize = this.tailBuffer.length;
+    }
 
     const totalSize = HEADER_SIZE_V6 +
       4 + bitsBytes.length +

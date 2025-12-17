@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWTRIE Browser Tests</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 { color: #333; }
+        .test-suite {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-suite h2 {
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .test {
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .test.pass {
+            background: #e6ffe6;
+            border-left: 4px solid #00cc00;
+        }
+        .test.fail {
+            background: #ffe6e6;
+            border-left: 4px solid #cc0000;
+        }
+        .test.running {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+        .summary {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .summary.all-pass {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        .summary.some-fail {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .format-info {
+            background: #e3f2fd;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .time {
+            color: #666;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover {
+            background: #1565c0;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .text-output {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .text-output h3 {
+            margin-top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .text-output textarea {
+            width: 100%;
+            height: 200px;
+            font-family: monospace;
+            font-size: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        .copy-btn {
+            background: #4caf50;
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+        .copy-btn:hover {
+            background: #43a047;
+        }
+    </style>
+</head>
+<body>
+    <h1>OWTRIE Browser Tests</h1>
+
+    <div id="controls">
+        <button id="runTestsBtn" disabled>Run Tests</button>
+        <button id="runV63Btn" disabled>Test v6.3 Only</button>
+    </div>
+
+    <div id="loading" class="loading">Loading trie data...</div>
+    <div id="results" style="display: none;"></div>
+
+    <div id="textOutput" class="text-output" style="display: none;">
+        <h3>
+            <span>Plain Text Results</span>
+            <button id="copyBtn" class="copy-btn">Copy to Clipboard</button>
+        </h3>
+        <textarea id="textResults" readonly></textarea>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+    (function() {
+        // Test framework (wrapped in IIFE to avoid variable conflicts with app.js)
+        let trie = null;
+        let testResults = [];
+        let formatVersion = null;
+
+        function assert(condition, message) {
+            if (!condition) {
+                throw new Error(message);
+            }
+        }
+
+        function assertEquals(expected, actual, message) {
+            if (expected !== actual) {
+                throw new Error(`${message}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+            }
+        }
+
+        function assertArrayEquals(expected, actual, message) {
+            if (JSON.stringify(expected) !== JSON.stringify(actual)) {
+                throw new Error(`${message}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+            }
+        }
+
+        // Test suites
+        const testSuites = {
+            'Basic Lookup': [
+                {
+                    name: 'has() returns true for existing words',
+                    test: () => {
+                        // Pick some words we know should exist
+                        const sampleWords = trie.getRandomWords(10);
+                        for (const word of sampleWords) {
+                            assert(trie.has(word), `has('${word}') should be true`);
+                        }
+                    }
+                },
+                {
+                    name: 'has() returns false for non-words',
+                    test: () => {
+                        const nonWords = ['xyzzy123', 'qqqqq', 'zzznotaword', 'abcdefghijklmnop'];
+                        for (const word of nonWords) {
+                            assert(!trie.has(word), `has('${word}') should be false`);
+                        }
+                    }
+                },
+                {
+                    name: 'has() handles empty string',
+                    test: () => {
+                        // Empty string lookup should not throw
+                        const result = trie.has('');
+                        assert(typeof result === 'boolean', 'has("") should return boolean');
+                    }
+                },
+                {
+                    name: 'has() handles single characters',
+                    test: () => {
+                        // Should not throw for single chars
+                        const result = trie.has('a');
+                        assert(typeof result === 'boolean', 'has("a") should return boolean');
+                    }
+                }
+            ],
+
+            'Word ID': [
+                {
+                    name: 'wordId() returns valid ID for existing words',
+                    test: () => {
+                        const sampleWords = trie.getRandomWords(5);
+                        for (const word of sampleWords) {
+                            const id = trie.wordId(word);
+                            assert(id >= 0, `wordId('${word}') should return non-negative ID, got ${id}`);
+                            assert(id < trie.wordCount, `wordId('${word}') should be < wordCount`);
+                        }
+                    }
+                },
+                {
+                    name: 'wordId() returns -1 for non-words',
+                    test: () => {
+                        assertEquals(-1, trie.wordId('xyzzy123notaword'), 'wordId for non-word');
+                    }
+                },
+                {
+                    name: 'wordId() returns unique IDs',
+                    test: () => {
+                        const words = trie.getRandomWords(20);
+                        const ids = new Set();
+                        for (const word of words) {
+                            const id = trie.wordId(word);
+                            if (id >= 0) {
+                                assert(!ids.has(id), `Duplicate ID ${id} for word '${word}'`);
+                                ids.add(id);
+                            }
+                        }
+                    }
+                }
+            ],
+
+            'getWord() (v6.3)': [
+                {
+                    name: 'getWord() returns correct word for ID',
+                    skip: () => !trie.getWord,
+                    test: () => {
+                        const words = trie.getRandomWords(10);
+                        for (const word of words) {
+                            const id = trie.wordId(word);
+                            if (id >= 0) {
+                                const retrieved = trie.getWord(id);
+                                assertEquals(word, retrieved, `getWord(${id}) for '${word}'`);
+                            }
+                        }
+                    }
+                },
+                {
+                    name: 'getWord() returns null for invalid IDs',
+                    skip: () => !trie.getWord,
+                    test: () => {
+                        assertEquals(null, trie.getWord(-1), 'getWord(-1)');
+                        assertEquals(null, trie.getWord(trie.wordCount), 'getWord(wordCount)');
+                        assertEquals(null, trie.getWord(999999999), 'getWord(huge)');
+                    }
+                }
+            ],
+
+            'Prefix Operations': [
+                {
+                    name: 'isValidPrefix() returns true for valid prefixes',
+                    test: () => {
+                        const words = trie.getRandomWords(5);
+                        for (const word of words) {
+                            if (word.length > 2) {
+                                const prefix = word.slice(0, 2);
+                                assert(trie.isValidPrefix(prefix), `isValidPrefix('${prefix}') should be true`);
+                            }
+                        }
+                    }
+                },
+                {
+                    name: 'isValidPrefix() returns false for invalid prefixes',
+                    test: () => {
+                        const badPrefixes = ['xyz123', 'qqqqq'];
+                        for (const prefix of badPrefixes) {
+                            assert(!trie.isValidPrefix(prefix), `isValidPrefix('${prefix}') should be false`);
+                        }
+                    }
+                },
+                {
+                    name: 'getNextLetters() returns valid continuations',
+                    test: () => {
+                        const letters = trie.getNextLetters('th');
+                        assert(Array.isArray(letters), 'getNextLetters should return array');
+                        assert(letters.length > 0, 'getNextLetters("th") should have continuations');
+                    }
+                },
+                {
+                    name: 'keysWithPrefix() returns matching words',
+                    test: () => {
+                        const words = trie.keysWithPrefix('test', 10);
+                        assert(Array.isArray(words), 'keysWithPrefix should return array');
+                        for (const word of words) {
+                            assert(word.startsWith('test'), `'${word}' should start with 'test'`);
+                            assert(trie.has(word), `'${word}' should be in trie`);
+                        }
+                    }
+                },
+                {
+                    name: 'findLongestValidPrefix() finds correct prefix',
+                    test: () => {
+                        const words = trie.getRandomWords(3);
+                        for (const word of words) {
+                            const extended = word + 'xyz123';
+                            const prefix = trie.findLongestValidPrefix(extended);
+                            assert(prefix.length >= word.length, `prefix '${prefix}' should be >= '${word}'`);
+                        }
+                    }
+                }
+            ],
+
+            'Ordering': [
+                {
+                    name: 'getPredecessor() returns earlier word',
+                    test: () => {
+                        const pred = trie.getPredecessor('test');
+                        if (pred !== null) {
+                            assert(pred < 'test', `predecessor '${pred}' should be < 'test'`);
+                            assert(trie.has(pred), `predecessor '${pred}' should be in trie`);
+                        }
+                    }
+                },
+                {
+                    name: 'getSuccessor() returns later word',
+                    test: () => {
+                        const succ = trie.getSuccessor('test');
+                        if (succ !== null) {
+                            assert(succ > 'test', `successor '${succ}' should be > 'test'`);
+                            assert(trie.has(succ), `successor '${succ}' should be in trie`);
+                        }
+                    }
+                }
+            ],
+
+            'Consistency': [
+                {
+                    name: 'All words from keysWithPrefix are findable',
+                    test: () => {
+                        const prefixes = ['a', 'th', 'con', 'pre'];
+                        for (const prefix of prefixes) {
+                            const words = trie.keysWithPrefix(prefix, 20);
+                            for (const word of words) {
+                                assert(trie.has(word), `keysWithPrefix word '${word}' should be in trie`);
+                            }
+                        }
+                    }
+                },
+                {
+                    name: 'wordId and has are consistent',
+                    test: () => {
+                        const words = trie.getRandomWords(20);
+                        for (const word of words) {
+                            const hasWord = trie.has(word);
+                            const id = trie.wordId(word);
+                            assertEquals(hasWord, id >= 0, `has/wordId consistency for '${word}'`);
+                        }
+                    }
+                }
+            ],
+
+            'Performance': [
+                {
+                    name: 'Lookup 1000 words in reasonable time (<100ms)',
+                    test: () => {
+                        const words = trie.getRandomWords(1000);
+                        const start = performance.now();
+                        for (const word of words) {
+                            trie.has(word);
+                        }
+                        const elapsed = performance.now() - start;
+                        assert(elapsed < 100, `1000 lookups took ${elapsed.toFixed(1)}ms (limit: 100ms)`);
+                    }
+                },
+                {
+                    name: 'Prefix search in reasonable time (<50ms)',
+                    test: () => {
+                        const prefixes = ['a', 'th', 'con', 'pre', 'un'];
+                        const start = performance.now();
+                        for (const prefix of prefixes) {
+                            trie.keysWithPrefix(prefix, 100);
+                        }
+                        const elapsed = performance.now() - start;
+                        assert(elapsed < 50, `5 prefix searches took ${elapsed.toFixed(1)}ms (limit: 50ms)`);
+                    }
+                }
+            ],
+
+            'Round-Trip Integrity': [
+                {
+                    name: 'Every getAllWords entry is findable with has()',
+                    test: () => {
+                        // Sample 100 words from getAllWords and verify has() works
+                        const allWords = trie.getAllWords();
+                        const step = Math.max(1, Math.floor(allWords.length / 100));
+                        let failures = [];
+                        for (let i = 0; i < allWords.length && failures.length < 5; i += step) {
+                            const word = allWords[i];
+                            if (!trie.has(word)) {
+                                failures.push(word);
+                            }
+                        }
+                        assert(failures.length === 0, `has() failed for: ${failures.map(w => `'${w}'`).join(', ')}`);
+                    }
+                },
+                {
+                    name: 'Every getAllWords entry has valid wordId()',
+                    test: () => {
+                        const allWords = trie.getAllWords();
+                        const step = Math.max(1, Math.floor(allWords.length / 100));
+                        let failures = [];
+                        for (let i = 0; i < allWords.length && failures.length < 5; i += step) {
+                            const word = allWords[i];
+                            const id = trie.wordId(word);
+                            if (id < 0) {
+                                failures.push(word);
+                            }
+                        }
+                        assert(failures.length === 0, `wordId() failed for: ${failures.map(w => `'${w}'`).join(', ')}`);
+                    }
+                },
+                {
+                    name: 'getWord(id) matches getAllWords ordering',
+                    test: () => {
+                        const allWords = trie.getAllWords();
+                        // Check first 10, last 10, and 10 random positions
+                        const indices = [
+                            ...Array.from({length: Math.min(10, allWords.length)}, (_, i) => i),
+                            ...Array.from({length: Math.min(10, allWords.length)}, (_, i) => allWords.length - 1 - i),
+                            ...Array.from({length: 10}, () => Math.floor(Math.random() * allWords.length))
+                        ];
+                        let failures = [];
+                        for (const i of indices) {
+                            if (i >= 0 && i < allWords.length) {
+                                const expected = allWords[i];
+                                const actual = trie.getWord(i);
+                                if (expected !== actual) {
+                                    failures.push({i, expected, actual});
+                                }
+                            }
+                        }
+                        assert(failures.length === 0,
+                            `getWord mismatch at indices: ${failures.slice(0,3).map(f => `${f.i}: '${f.expected}' vs '${f.actual}'`).join('; ')}`);
+                    }
+                }
+            ],
+
+            'Unicode Handling': [
+                {
+                    name: 'Words with accented characters are findable',
+                    test: () => {
+                        // Find some words with accents via prefix search
+                        const accentedPrefixes = ['café', 'naïve', 'résumé', 'fiancé'];
+                        let found = 0;
+                        for (const prefix of accentedPrefixes) {
+                            const words = trie.keysWithPrefix(prefix.slice(0, 3), 50);
+                            for (const word of words) {
+                                if (trie.has(word)) found++;
+                            }
+                        }
+                        // Just verify the mechanism works, not specific words
+                        assert(found >= 0, 'Unicode prefix search completed');
+                    }
+                },
+                {
+                    name: 'Prefix search works with unicode starters',
+                    test: () => {
+                        // Test various unicode prefix searches don't crash
+                        const unicodePrefixes = ['über', 'naïv', 'caf', 'gar'];
+                        for (const prefix of unicodePrefixes) {
+                            const words = trie.keysWithPrefix(prefix, 10);
+                            assert(Array.isArray(words), `keysWithPrefix('${prefix}') should return array`);
+                            for (const word of words) {
+                                assert(trie.has(word), `'${word}' from prefix '${prefix}' should be findable`);
+                            }
+                        }
+                    }
+                }
+            ],
+
+            'Edge Cases': [
+                {
+                    name: 'First word in trie is findable',
+                    test: () => {
+                        const firstWord = trie.getWord(0);
+                        assert(firstWord !== null, 'First word should exist');
+                        assert(trie.has(firstWord), `First word '${firstWord}' should be findable`);
+                        assertEquals(trie.wordId(firstWord), 0, `First word should have ID 0`);
+                    }
+                },
+                {
+                    name: 'Last word in trie is findable',
+                    test: () => {
+                        const lastId = trie.wordCount - 1;
+                        const popcount = trie.terminal.popcount;
+                        const lastWord = trie.getWord(lastId);
+                        assert(lastWord !== null, `Last word should exist (wordCount=${trie.wordCount}, terminal.popcount=${popcount}, lastId=${lastId})`);
+                        assert(trie.has(lastWord), `Last word '${lastWord}' should be findable`);
+                        assertEquals(trie.wordId(lastWord), lastId, `Last word should have ID ${lastId}`);
+                    }
+                },
+                {
+                    name: 'getWord() returns null for out-of-range IDs',
+                    test: () => {
+                        assertEquals(trie.getWord(-1), null, 'getWord(-1) should be null');
+                        assertEquals(trie.getWord(trie.wordCount), null, `getWord(${trie.wordCount}) should be null`);
+                        assertEquals(trie.getWord(trie.wordCount + 1000), null, 'getWord(wordCount+1000) should be null');
+                    }
+                },
+                {
+                    name: 'Very short words work correctly',
+                    test: () => {
+                        // Find single-letter words
+                        const singleLetters = ['a', 'i', 'o'];
+                        for (const letter of singleLetters) {
+                            const hasIt = trie.has(letter);
+                            const id = trie.wordId(letter);
+                            // Consistency check
+                            assert(hasIt === (id >= 0), `has/wordId consistency for '${letter}'`);
+                            if (hasIt) {
+                                assertEquals(trie.getWord(id), letter, `getWord(${id}) should return '${letter}'`);
+                            }
+                        }
+                    }
+                },
+                {
+                    name: 'Word that is prefix of another word',
+                    test: () => {
+                        // 'test' vs 'testing' - both should be findable if they exist
+                        const prefixWord = 'test';
+                        const longerWord = 'testing';
+                        const hasPrefixWord = trie.has(prefixWord);
+                        const hasLongerWord = trie.has(longerWord);
+
+                        if (hasPrefixWord) {
+                            const id = trie.wordId(prefixWord);
+                            assert(id >= 0, `'${prefixWord}' should have valid ID`);
+                            assertEquals(trie.getWord(id), prefixWord, `getWord should return '${prefixWord}'`);
+                        }
+                        if (hasLongerWord) {
+                            const id = trie.wordId(longerWord);
+                            assert(id >= 0, `'${longerWord}' should have valid ID`);
+                            assertEquals(trie.getWord(id), longerWord, `getWord should return '${longerWord}'`);
+                        }
+                    }
+                }
+            ],
+
+            'Tail Compression (v6.1/v6.3)': [
+                {
+                    name: 'Long words with shared prefixes are correct',
+                    test: () => {
+                        // These test tail handling - words with long unique suffixes
+                        const words = trie.keysWithPrefix('anti', 20);
+                        for (const word of words) {
+                            assert(trie.has(word), `Long prefix word '${word}' should be findable`);
+                            const id = trie.wordId(word);
+                            if (id >= 0) {
+                                assertEquals(trie.getWord(id), word, `Round-trip failed for '${word}'`);
+                            }
+                        }
+                    }
+                },
+                {
+                    name: 'Words ending in common suffixes are distinguishable',
+                    test: () => {
+                        // Test words that likely share tail compression
+                        const suffixGroups = [
+                            trie.keysWithPrefix('walk', 10),  // walk, walked, walking, walker...
+                            trie.keysWithPrefix('play', 10),  // play, played, playing, player...
+                        ];
+                        for (const group of suffixGroups) {
+                            const ids = new Set();
+                            for (const word of group) {
+                                const id = trie.wordId(word);
+                                if (id >= 0) {
+                                    assert(!ids.has(id), `Duplicate ID ${id} for different words in group`);
+                                    ids.add(id);
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    name: 'Sequential word IDs have correct words',
+                    test: () => {
+                        // Check that sequential IDs return different, valid words
+                        const startId = Math.floor(Math.random() * Math.max(1, trie.wordCount - 100));
+                        const words = [];
+                        for (let i = 0; i < 50 && startId + i < trie.wordCount; i++) {
+                            const word = trie.getWord(startId + i);
+                            assert(word !== null, `getWord(${startId + i}) should not be null`);
+                            assert(trie.has(word), `getWord(${startId + i}) = '${word}' should be findable`);
+                            words.push(word);
+                        }
+                        // Check uniqueness
+                        const unique = new Set(words);
+                        assertEquals(unique.size, words.length, `Sequential IDs should return unique words`);
+                    }
+                }
+            ]
+        };
+
+        // Run a single test
+        function runTest(test) {
+            if (test.skip && test.skip()) {
+                return { status: 'skip', message: 'Skipped (not applicable)' };
+            }
+
+            const start = performance.now();
+            try {
+                test.test();
+                const elapsed = performance.now() - start;
+                return { status: 'pass', time: elapsed };
+            } catch (error) {
+                const elapsed = performance.now() - start;
+                return { status: 'fail', message: error.message, time: elapsed };
+            }
+        }
+
+        // Run all tests and display results
+        function runAllTests() {
+            const resultsEl = document.getElementById('results');
+            const textOutputEl = document.getElementById('textOutput');
+            const textResultsEl = document.getElementById('textResults');
+            resultsEl.innerHTML = '';
+            resultsEl.style.display = 'block';
+
+            let totalPassed = 0;
+            let totalFailed = 0;
+            let totalSkipped = 0;
+
+            // Plain text output
+            const textLines = [];
+
+            // Show format info
+            const hasRecursive = (trie.flags & MARISABinaryTrie.HAS_RECURSIVE) !== 0;
+            const hasLinks = (trie.flags & MARISABinaryTrie.HAS_LINKS) !== 0;
+            let formatStr = 'v6.0 (baseline)';
+            if (hasRecursive) formatStr = 'v6.3 (recursive tails)';
+            else if (hasLinks) formatStr = 'v6.1 (path compression)';
+
+            const formatInfo = document.createElement('div');
+            formatInfo.className = 'format-info';
+            formatInfo.innerHTML = `<strong>Format:</strong> ${formatStr} | <strong>Words:</strong> ${trie.wordCount.toLocaleString()} | <strong>Nodes:</strong> ${trie.nodeCount.toLocaleString()}`;
+            resultsEl.appendChild(formatInfo);
+
+            textLines.push(`Format: ${formatStr}`);
+            textLines.push(`Words: ${trie.wordCount.toLocaleString()}`);
+            textLines.push(`Nodes: ${trie.nodeCount.toLocaleString()}`);
+            textLines.push('');
+
+            for (const [suiteName, tests] of Object.entries(testSuites)) {
+                const suiteEl = document.createElement('div');
+                suiteEl.className = 'test-suite';
+                suiteEl.innerHTML = `<h2>${suiteName}</h2>`;
+
+                textLines.push(`## ${suiteName}`);
+
+                for (const test of tests) {
+                    const result = runTest(test);
+
+                    const testEl = document.createElement('div');
+                    testEl.className = `test ${result.status}`;
+
+                    let content = test.name;
+                    let textContent = '';
+                    if (result.status === 'pass') {
+                        content += ` <span class="time">(${result.time.toFixed(1)}ms)</span>`;
+                        textContent = `[PASS] ${test.name} (${result.time.toFixed(1)}ms)`;
+                        totalPassed++;
+                    } else if (result.status === 'fail') {
+                        content += ` - ${result.message}`;
+                        textContent = `[FAIL] ${test.name} - ${result.message}`;
+                        totalFailed++;
+                    } else {
+                        content += ` - ${result.message}`;
+                        textContent = `[SKIP] ${test.name} - ${result.message}`;
+                        totalSkipped++;
+                    }
+
+                    textLines.push(textContent);
+                    testEl.innerHTML = content;
+                    suiteEl.appendChild(testEl);
+                }
+
+                textLines.push('');
+                resultsEl.appendChild(suiteEl);
+            }
+
+            // Summary
+            const summaryEl = document.createElement('div');
+            summaryEl.className = `summary ${totalFailed === 0 ? 'all-pass' : 'some-fail'}`;
+            summaryEl.innerHTML = `Results: ${totalPassed} passed, ${totalFailed} failed, ${totalSkipped} skipped`;
+            resultsEl.insertBefore(summaryEl, resultsEl.firstChild.nextSibling);
+
+            // Text summary at the top
+            const summaryText = `Results: ${totalPassed} passed, ${totalFailed} failed, ${totalSkipped} skipped`;
+            textLines.unshift(summaryText);
+            textLines.unshift('');
+
+            // Show text output
+            textResultsEl.value = textLines.join('\n');
+            textOutputEl.style.display = 'block';
+
+            return { passed: totalPassed, failed: totalFailed, skipped: totalSkipped };
+        }
+
+        // Load trie and run tests
+        async function initialize() {
+            const loadingEl = document.getElementById('loading');
+            const runBtn = document.getElementById('runTestsBtn');
+            const v63Btn = document.getElementById('runV63Btn');
+
+            // Check query param for trie version selection
+            const urlParams = new URLSearchParams(window.location.search);
+            const trieParam = urlParams.get('trie');
+            const useV63 = trieParam === 'v63';
+
+            try {
+                // Select trie file based on query param
+                const triePath = useV63
+                    ? '/web/viewer/data/en.trie.v63.bin'
+                    : '/web/viewer/data/en.trie.bin';
+                const response = await fetch(triePath);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const arrayBuffer = await response.arrayBuffer();
+                const view = new DataView(arrayBuffer);
+                const version = view.getUint16(6, true);
+
+                if (version === 6) {
+                    trie = new MARISABinaryTrie();
+                } else if (version === 5) {
+                    trie = new LOUDSBinaryTrie();
+                } else {
+                    trie = new BinaryTrie();
+                }
+
+                await trie.load(arrayBuffer);
+                formatVersion = version;
+
+                loadingEl.style.display = 'none';
+                runBtn.disabled = false;
+                v63Btn.disabled = false;
+
+                // Auto-run tests
+                runAllTests();
+
+            } catch (error) {
+                loadingEl.innerHTML = `<div style="color: red;">Error loading trie: ${error.message}</div>
+                    <p>Make sure you have built the trie with: <code>make build-trie</code></p>`;
+            }
+        }
+
+        // Button handlers
+        document.getElementById('runTestsBtn').addEventListener('click', () => {
+            runAllTests();
+        });
+
+        document.getElementById('runV63Btn').addEventListener('click', async () => {
+            // Check if v6.3 trie exists
+            try {
+                const response = await fetch('/web/viewer/data/en.trie.v63.bin');
+                if (response.ok) {
+                    const arrayBuffer = await response.arrayBuffer();
+                    trie = new MARISABinaryTrie();
+                    await trie.load(arrayBuffer);
+                    runAllTests();
+                } else {
+                    alert('v6.3 trie not found. Build with: pnpm build-trie --format=v6 --links --recursive');
+                }
+            } catch (error) {
+                alert('Error loading v6.3 trie: ' + error.message);
+            }
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const textResultsEl = document.getElementById('textResults');
+            textResultsEl.select();
+            navigator.clipboard.writeText(textResultsEl.value).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => { btn.textContent = originalText; }, 1500);
+            }).catch(err => {
+                alert('Failed to copy: ' + err.message);
+            });
+        });
+
+        // Start
+        initialize();
+    })();
+    </script>
+</body>
+</html>

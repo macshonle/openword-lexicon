@@ -2,9 +2,10 @@
  * Wordlist Viewer - Interactive Trie Explorer
  *
  * Unified viewer that loads either:
- * 1. Pre-built binary DAWG v2/v4 (fast, recommended)
+ * 1. Pre-built MARISA trie v6 (fast, most compact, with path compression)
  * 2. Pre-built LOUDS trie v5 (fast, with word IDs)
- * 3. Plain text wordlist (slower, builds trie in browser)
+ * 3. Pre-built binary DAWG v2/v4 (fast)
+ * 4. Plain text wordlist (slower, builds trie in browser)
  */
 
 // ============================================================================
@@ -348,6 +349,493 @@ class LOUDSBinaryTrie {
         }
         const results = [];
         this._collectWords(nodeId, prefix, results, limit);
+        return results;
+    }
+
+    getStats() {
+        return {
+            wordCount: this.wordCount,
+            nodeCount: this.nodeCount,
+            sizeBytes: null,
+            bytesPerWord: null
+        };
+    }
+}
+
+// ============================================================================
+// MARISA Binary Trie - Loads MARISA format (v6) with path compression
+// ============================================================================
+
+class MARISABinaryTrie {
+    // Flag constants
+    static HAS_LINKS = 0x01;
+    static HAS_TAILS = 0x02;
+    static HAS_RECURSIVE = 0x08;
+
+    constructor() {
+        this.bits = null;
+        this.terminal = null;
+        this.linkFlags = null;
+        this.labels = null;
+        this.tailBuffer = null;
+        this.tailTrie = null;  // v6.3: Recursive tail trie
+        this.wordCount = 0;
+        this.nodeCount = 0;
+        this.flags = 0;
+        this.words = [];
+    }
+
+    _readVarint(buffer, offset) {
+        let value = 0, shift = 0, bytesRead = 0;
+        while (true) {
+            const byte = buffer[offset + bytesRead];
+            bytesRead++;
+            value |= (byte & 0x7f) << shift;
+            if ((byte & 0x80) === 0) break;
+            shift += 7;
+        }
+        return { value, bytesRead };
+    }
+
+    async load(arrayBuffer) {
+        const buffer = new Uint8Array(arrayBuffer);
+        const view = new DataView(arrayBuffer);
+        let offset = 0;
+
+        // Header (24 bytes)
+        const magic = new TextDecoder().decode(buffer.slice(0, 6));
+        if (magic !== 'OWTRIE') throw new Error('Invalid trie file: bad magic number');
+        offset += 6;
+
+        const version = view.getUint16(offset, true); offset += 2;
+        if (version !== 6) throw new Error(`Expected v6, got v${version}`);
+
+        this.wordCount = view.getUint32(offset, true); offset += 4;
+        this.nodeCount = view.getUint32(offset, true); offset += 4;
+        this.flags = view.getUint32(offset, true); offset += 4;
+        const tailBufferSize = view.getUint32(offset, true); offset += 4;
+
+        // LOUDS bitvector
+        const bitsLength = view.getUint32(offset, true); offset += 4;
+        const { bv: bits, bytesRead: bitsRead } = BitVector.deserialize(buffer.slice(offset), 0);
+        this.bits = bits;
+        offset += bitsLength;
+
+        // Terminal bitvector
+        const terminalLength = view.getUint32(offset, true); offset += 4;
+        const { bv: terminal } = BitVector.deserialize(buffer.slice(offset), 0);
+        this.terminal = terminal;
+        offset += terminalLength;
+
+        // Link flags bitvector (if present)
+        if (this.flags & MARISABinaryTrie.HAS_LINKS) {
+            const linkFlagsLength = view.getUint32(offset, true); offset += 4;
+            const { bv: linkFlags } = BitVector.deserialize(buffer.slice(offset), 0);
+            this.linkFlags = linkFlags;
+            offset += linkFlagsLength;
+        }
+
+        // Labels
+        const labelsCount = view.getUint32(offset, true); offset += 4;
+        this.labels = new Uint32Array(labelsCount);
+        for (let i = 0; i < labelsCount; i++) {
+            const { value, bytesRead } = this._readVarint(buffer, offset);
+            this.labels[i] = value;
+            offset += bytesRead;
+        }
+
+        // Tail buffer or recursive tail trie (if present)
+        if ((this.flags & MARISABinaryTrie.HAS_RECURSIVE) && tailBufferSize > 0) {
+            // v6.3: Recursive tail trie
+            const storedTailSize = view.getUint32(offset, true); offset += 4;
+            this.tailTrie = new MARISABinaryTrie();
+            await this.tailTrie.load(arrayBuffer.slice(offset, offset + storedTailSize));
+        } else if ((this.flags & MARISABinaryTrie.HAS_TAILS) && tailBufferSize > 0) {
+            // v6.1: Flat tail buffer
+            const storedTailSize = view.getUint32(offset, true); offset += 4;
+            this.tailBuffer = buffer.slice(offset, offset + storedTailSize);
+            offset += storedTailSize;
+        }
+
+        const hasLinks = (this.flags & MARISABinaryTrie.HAS_LINKS) !== 0;
+        const hasRecursive = (this.flags & MARISABinaryTrie.HAS_RECURSIVE) !== 0;
+        const formatNote = hasRecursive ? ' (v6.3 recursive tails)' : (hasLinks ? ' (v6.1 path compression)' : '');
+        console.log(`Loaded MARISA trie v6: ${this.wordCount.toLocaleString()} words, ${this.nodeCount} nodes${formatNote}`);
+    }
+
+    // Get parent node ID using LOUDS navigation
+    _getParent(nodeId) {
+        if (nodeId <= 1) return 0;
+        const bitPos = this.bits.select1(nodeId);
+        return this.bits.rank0(bitPos);
+    }
+
+    // Get word by terminal rank (word ID)
+    getWord(id) {
+        if (id < 0 || id >= this.wordCount) return null;
+        // Find the node ID for the (id+1)th terminal
+        const nodeId = this.terminal.select1(id + 1);
+        if (nodeId === -1) return null;
+
+        // Walk up from nodeId to root, collecting labels
+        const codes = [];
+        let current = nodeId;
+        while (current > 1) {
+            const labelIdx = current - 2;
+            if (labelIdx >= 0 && labelIdx < this.labels.length) {
+                if (this.linkFlags && this.linkFlags.get(labelIdx)) {
+                    // Edge has a tail - prepend all tail chars
+                    const tail = this._readTail(this.labels[labelIdx]);
+                    codes.unshift(...tail);
+                } else {
+                    codes.unshift(this.labels[labelIdx]);
+                }
+            }
+            current = this._getParent(current);
+        }
+        return codes.map(c => String.fromCodePoint(c)).join('');
+    }
+
+    // Read tail - either from flat buffer (v6.1) or recursive trie (v6.3)
+    _readTail(tailOffsetOrId) {
+        // v6.3: Recursive tail trie - tailOffsetOrId is a word ID
+        if (this.tailTrie) {
+            const tailString = this.tailTrie.getWord(tailOffsetOrId);
+            if (!tailString) return [];
+            return [...tailString].map(c => c.codePointAt(0));
+        }
+
+        // v6.1: Flat tail buffer - tailOffsetOrId is a byte offset
+        if (!this.tailBuffer) return [];
+        const codes = [];
+        let pos = tailOffsetOrId;
+        while (pos < this.tailBuffer.length && this.tailBuffer[pos] !== 0) {
+            const byte = this.tailBuffer[pos];
+            if (byte < 0x80) {
+                codes.push(byte);
+                pos++;
+            } else if ((byte & 0xe0) === 0xc0) {
+                const cp = ((byte & 0x1f) << 6) | (this.tailBuffer[pos + 1] & 0x3f);
+                codes.push(cp);
+                pos += 2;
+            } else if ((byte & 0xf0) === 0xe0) {
+                const cp = ((byte & 0x0f) << 12) |
+                           ((this.tailBuffer[pos + 1] & 0x3f) << 6) |
+                           (this.tailBuffer[pos + 2] & 0x3f);
+                codes.push(cp);
+                pos += 3;
+            } else if ((byte & 0xf8) === 0xf0) {
+                const cp = ((byte & 0x07) << 18) |
+                           ((this.tailBuffer[pos + 1] & 0x3f) << 12) |
+                           ((this.tailBuffer[pos + 2] & 0x3f) << 6) |
+                           (this.tailBuffer[pos + 3] & 0x3f);
+                codes.push(cp);
+                pos += 4;
+            } else {
+                pos++;
+            }
+        }
+        return codes;
+    }
+
+    _childCount(nodeId) {
+        const start = nodeId === 0 ? 0 : this.bits.select0(nodeId) + 1;
+        const end = this.bits.select0(nodeId + 1);
+        return end - start;
+    }
+
+    _firstLabelIndex(nodeId) {
+        if (nodeId === 0) return -1;
+        const start = this.bits.select0(nodeId) + 1;
+        return this.bits.rank1(start - 1) - 1;
+    }
+
+    // Find child by code point, returns [childId, labelIdx] or [-1, -1]
+    _findChildByCode(nodeId, code) {
+        const count = this._childCount(nodeId);
+        if (count === 0) return [-1, -1];
+
+        const labelStart = this._firstLabelIndex(nodeId);
+        const firstChildId = this.bits.rank1(this.bits.select0(nodeId) + 1);
+
+        // Without link flags, binary search by code point
+        if (!this.linkFlags) {
+            let lo = 0, hi = count - 1;
+            while (lo <= hi) {
+                const mid = Math.floor((lo + hi) / 2);
+                const midLabel = this.labels[labelStart + mid];
+                if (midLabel === code) {
+                    return [firstChildId + mid, labelStart + mid];
+                } else if (midLabel < code) {
+                    lo = mid + 1;
+                } else {
+                    hi = mid - 1;
+                }
+            }
+            return [-1, -1];
+        }
+
+        // With link flags, check each edge
+        for (let i = 0; i < count; i++) {
+            const labelIdx = labelStart + i;
+            if (this.linkFlags.get(labelIdx)) {
+                // Linked edge - read tail and check first code point
+                const tail = this._readTail(this.labels[labelIdx]);
+                if (tail.length > 0 && tail[0] === code) {
+                    return [firstChildId + i, labelIdx];
+                }
+            } else {
+                // Normal edge - direct code point comparison
+                if (this.labels[labelIdx] === code) {
+                    return [firstChildId + i, labelIdx];
+                }
+            }
+        }
+        return [-1, -1];
+    }
+
+    _getChildren(nodeId) {
+        const count = this._childCount(nodeId);
+        if (count === 0) return [];
+        const labelStart = this._firstLabelIndex(nodeId);
+        const firstChildId = this.bits.rank1(this.bits.select0(nodeId) + 1);
+        const result = [];
+        for (let i = 0; i < count; i++) {
+            const labelIdx = labelStart + i;
+            let label;
+            if (this.linkFlags && this.linkFlags.get(labelIdx)) {
+                const tail = this._readTail(this.labels[labelIdx]);
+                label = tail.map(c => String.fromCodePoint(c)).join('');
+            } else {
+                label = String.fromCodePoint(this.labels[labelIdx]);
+            }
+            result.push([label, firstChildId + i, labelIdx]);
+        }
+        return result;
+    }
+
+    has(word) {
+        let nodeId = 1;
+        const codes = [...word].map(c => c.codePointAt(0));
+        let i = 0;
+
+        while (i < codes.length) {
+            const [childId, labelIdx] = this._findChildByCode(nodeId, codes[i]);
+            if (childId === -1) return false;
+
+            if (this.linkFlags && this.linkFlags.get(labelIdx)) {
+                const tail = this._readTail(this.labels[labelIdx]);
+                for (let j = 0; j < tail.length; j++) {
+                    if (i + j >= codes.length || codes[i + j] !== tail[j]) {
+                        return false;
+                    }
+                }
+                i += tail.length;
+            } else {
+                i++;
+            }
+            nodeId = childId;
+        }
+        return this.terminal.get(nodeId);
+    }
+
+    wordId(word) {
+        let nodeId = 1;
+        const codes = [...word].map(c => c.codePointAt(0));
+        let i = 0;
+
+        while (i < codes.length) {
+            const [childId, labelIdx] = this._findChildByCode(nodeId, codes[i]);
+            if (childId === -1) return -1;
+
+            if (this.linkFlags && this.linkFlags.get(labelIdx)) {
+                const tail = this._readTail(this.labels[labelIdx]);
+                for (let j = 0; j < tail.length; j++) {
+                    if (i + j >= codes.length || codes[i + j] !== tail[j]) {
+                        return -1;
+                    }
+                }
+                i += tail.length;
+            } else {
+                i++;
+            }
+            nodeId = childId;
+        }
+        if (!this.terminal.get(nodeId)) return -1;
+        return this.terminal.rank1(nodeId) - 1;
+    }
+
+    isValidPrefix(prefix) {
+        let nodeId = 1;
+        const codes = [...prefix].map(c => c.codePointAt(0));
+        let i = 0;
+
+        while (i < codes.length) {
+            const [childId, labelIdx] = this._findChildByCode(nodeId, codes[i]);
+            if (childId === -1) return false;
+
+            if (this.linkFlags && this.linkFlags.get(labelIdx)) {
+                const tail = this._readTail(this.labels[labelIdx]);
+                for (let j = 0; j < tail.length && i < codes.length; j++) {
+                    if (codes[i] !== tail[j]) {
+                        return false;
+                    }
+                    i++;
+                }
+            } else {
+                i++;
+            }
+            nodeId = childId;
+        }
+        return true;
+    }
+
+    findLongestValidPrefix(text) {
+        let nodeId = 1;
+        let validPrefix = '';
+        const codes = [...text].map(c => c.codePointAt(0));
+        let i = 0;
+
+        while (i < codes.length) {
+            const [childId, labelIdx] = this._findChildByCode(nodeId, codes[i]);
+            if (childId === -1) break;
+
+            if (this.linkFlags && this.linkFlags.get(labelIdx)) {
+                const tail = this._readTail(this.labels[labelIdx]);
+                let matched = true;
+                for (let j = 0; j < tail.length; j++) {
+                    if (i + j >= codes.length || codes[i + j] !== tail[j]) {
+                        matched = false;
+                        break;
+                    }
+                }
+                if (!matched) break;
+                validPrefix += tail.map(c => String.fromCodePoint(c)).join('');
+                i += tail.length;
+            } else {
+                validPrefix += String.fromCodePoint(codes[i]);
+                i++;
+            }
+            nodeId = childId;
+        }
+        return validPrefix;
+    }
+
+    getNextLetters(prefix) {
+        let nodeId = 1;
+        const codes = [...prefix].map(c => c.codePointAt(0));
+        let i = 0;
+
+        while (i < codes.length) {
+            const [childId, labelIdx] = this._findChildByCode(nodeId, codes[i]);
+            if (childId === -1) return [];
+
+            if (this.linkFlags && this.linkFlags.get(labelIdx)) {
+                const tail = this._readTail(this.labels[labelIdx]);
+                for (let j = 0; j < tail.length && i < codes.length; j++) {
+                    if (codes[i] !== tail[j]) {
+                        return [];
+                    }
+                    i++;
+                }
+                // If we're mid-tail, next letter is the next tail char
+                if (i < codes.length) continue;
+                const consumed = codes.length - (i - tail.length);
+                if (consumed < tail.length) {
+                    return [String.fromCodePoint(tail[consumed])];
+                }
+            } else {
+                i++;
+            }
+            nodeId = childId;
+        }
+        return this._getChildren(nodeId).map(([label]) => label[0]).sort();
+    }
+
+    _collectWords(nodeId, prefix, results, limit) {
+        if (results.length >= limit) return;
+        if (this.terminal.get(nodeId)) results.push(prefix);
+        for (const [label, childId] of this._getChildren(nodeId)) {
+            this._collectWords(childId, prefix + label, results, limit);
+        }
+    }
+
+    getAllWords() {
+        if (this.words.length === 0) {
+            // Use getWord() to ensure consistent ordering with word IDs
+            for (let id = 0; id < this.wordCount; id++) {
+                const word = this.getWord(id);
+                if (word !== null) {
+                    this.words.push(word);
+                }
+            }
+        }
+        return this.words;
+    }
+
+    getRandomWords(count) {
+        const allWords = this.getAllWords();
+        const selected = [];
+        for (let i = 0; i < count && i < allWords.length; i++) {
+            const randomIdx = Math.floor(Math.random() * allWords.length);
+            selected.push(allWords[randomIdx]);
+        }
+        return selected;
+    }
+
+    getPredecessor(text) {
+        const allWords = this.getAllWords();
+        let left = 0, right = allWords.length - 1;
+        while (left <= right) {
+            const mid = Math.floor((left + right) / 2);
+            if (allWords[mid] < text) left = mid + 1;
+            else right = mid - 1;
+        }
+        return right >= 0 ? allWords[right] : null;
+    }
+
+    getSuccessor(text) {
+        const allWords = this.getAllWords();
+        let left = 0, right = allWords.length - 1;
+        while (left <= right) {
+            const mid = Math.floor((left + right) / 2);
+            if (allWords[mid] <= text) left = mid + 1;
+            else right = mid - 1;
+        }
+        return left < allWords.length ? allWords[left] : null;
+    }
+
+    keysWithPrefix(prefix, limit = 100) {
+        let nodeId = 1;
+        const codes = [...prefix].map(c => c.codePointAt(0));
+        let i = 0;
+        let remainingTail = '';
+
+        while (i < codes.length) {
+            const [childId, labelIdx] = this._findChildByCode(nodeId, codes[i]);
+            if (childId === -1) return [];
+
+            if (this.linkFlags && this.linkFlags.get(labelIdx)) {
+                const tail = this._readTail(this.labels[labelIdx]);
+                let j = 0;
+                for (; j < tail.length && i < codes.length; j++) {
+                    if (codes[i] !== tail[j]) {
+                        return [];
+                    }
+                    i++;
+                }
+                if (i >= codes.length && j < tail.length) {
+                    remainingTail = tail.slice(j).map(c => String.fromCodePoint(c)).join('');
+                }
+            } else {
+                i++;
+            }
+            nodeId = childId;
+        }
+
+        const results = [];
+        const startWord = prefix + remainingTail;
+        this._collectWords(nodeId, startWord, results, limit);
         return results;
     }
 
@@ -731,8 +1219,13 @@ class DynamicTrie {
 }
 
 // ============================================================================
-// Application State and UI
+// Application State and UI (only runs on index.html, not test.html)
 // ============================================================================
+
+// Only initialize UI if we're on the viewer page (not test page)
+const isViewerPage = document.getElementById('userInput') !== null;
+
+if (isViewerPage) {
 
 let trie = null;
 let loadMode = null;
@@ -774,7 +1267,10 @@ async function loadBinaryTrie() {
     setStatus('Parsing binary trie...', 'loading');
 
     let trie;
-    if (version === 5) {
+    if (version === 6) {
+        // MARISA trie (v6)
+        trie = new MARISABinaryTrie();
+    } else if (version === 5) {
         // LOUDS trie (v5)
         trie = new LOUDSBinaryTrie();
     } else {
@@ -990,3 +1486,5 @@ randomWordsEl.addEventListener('click', (e) => {
 
 // Start loading
 initialize();
+
+} // End of isViewerPage block
