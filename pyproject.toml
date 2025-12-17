@@ -22,18 +22,12 @@ dependencies = [
   "requests>=2.31",
 ]
 
-[project.optional-dependencies]
-dev = [
-  "pytest>=8",
-  "ruff>=0.6",
-  "black>=24.0"
-]
-
 [dependency-groups]
 dev = [
   "pytest>=8",
   "ruff>=0.6",
-  "black>=24.0"
+  "black>=24.0",
+  "ty>=0.0.2",
 ]
 
 [project.scripts]
