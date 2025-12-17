@@ -38,6 +38,9 @@ OWSCAN := $(UV) run owscan
 # Rust scanner
 RUST_SCANNER := crates/wiktionary-scanner/target/release/wiktionary-scanner
 
+# Python source directories for linting
+PYTHON_DIRS := src/ tests/ tools/
+
 # =============================================================================
 # Directory Structure
 # =============================================================================
@@ -253,7 +256,8 @@ validate: $(ENRICHED_OUTPUT)
 # =============================================================================
 
 lint:
-	$(UV) run ruff check src/ tests/ tools/
+	$(UV) run ruff check $(PYTHON_DIRS)
+	$(UV) run ty check $(PYTHON_DIRS)
 
 # =============================================================================
 # Nightly/Weekly Builds

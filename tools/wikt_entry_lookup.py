@@ -113,6 +113,7 @@ class EntryMapper:
 
         # Build line index if needed
         self._build_line_index()
+        assert self._line_offsets is not None
 
         # Get line numbers to read
         if word_ordinal in self.entry_line_lists:

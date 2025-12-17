@@ -257,7 +257,8 @@ def verify_package(tarball_path: Path, lang: str) -> bool:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )
-            zstd_proc.stdout.close()
+            if zstd_proc.stdout:
+                zstd_proc.stdout.close()
             tar_proc.communicate()
             if tar_proc.returncode != 0:
                 raise subprocess.CalledProcessError(tar_proc.returncode, "tar")

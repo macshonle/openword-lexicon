@@ -19,7 +19,7 @@ import re
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterator, Optional
+from typing import Any, Callable, Iterator, Optional
 
 from .wikitext_parser import (
     Template,
@@ -693,7 +693,7 @@ def extract_evidence_from_section(
     page_cache: PageLevelCache,
     etym_cache: EtymologyBlockCache,
     definition_marker_pattern: Optional[re.Pattern] = None,
-    parse_definition_marker: Optional[callable] = None,
+    parse_definition_marker: Optional[Callable[..., Any]] = None,
 ) -> Iterator[Evidence]:
     """
     Extract Evidence objects for each definition in a POS section.
@@ -794,10 +794,10 @@ class ExtractionResult:
 def extract_evidence(
     title: str,
     text: str,
-    is_ignored_header: callable,
+    is_ignored_header: Callable[..., Any],
     pos_headers: set[str] | None = None,
     definition_marker_pattern: Optional[re.Pattern] = None,
-    parse_definition_marker: Optional[callable] = None,
+    parse_definition_marker: Optional[Callable[..., Any]] = None,
 ) -> Iterator[Evidence]:
     """
     Extract Evidence objects from a Wiktionary page.
@@ -824,10 +824,10 @@ def extract_evidence(
 def extract_evidence_with_unknowns(
     title: str,
     text: str,
-    is_ignored_header: callable,
+    is_ignored_header: Callable[..., Any],
     pos_headers: set[str] | None = None,
     definition_marker_pattern: Optional[re.Pattern] = None,
-    parse_definition_marker: Optional[callable] = None,
+    parse_definition_marker: Optional[Callable[..., Any]] = None,
 ) -> ExtractionResult:
     """
     Extract Evidence objects from a Wiktionary page, tracking unknown headers.

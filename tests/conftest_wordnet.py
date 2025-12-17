@@ -7,7 +7,7 @@ Provides detailed logging and result collection for version control.
 import pytest
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -44,11 +44,11 @@ class DetailedTestReporter:
 
     def pytest_sessionstart(self, session):
         """Record session start time."""
-        self.start_time = datetime.utcnow()
+        self.start_time = datetime.now(timezone.utc)
 
     def pytest_sessionfinish(self, session, exitstatus):
         """Save results to file after session."""
-        self.end_time = datetime.utcnow()
+        self.end_time = datetime.now(timezone.utc)
 
         # Prepare summary
         summary = {

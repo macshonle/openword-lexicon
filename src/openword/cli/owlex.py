@@ -438,7 +438,7 @@ class OwlexFilter:
         if is_simplified:
             # Simplified format: the spec body IS the filters
             # Extract sources filter if present, use rest as filters
-            normalized = {
+            normalized: Dict[str, Any] = {
                 "version": "2.0",
                 "distribution": "en",
                 "filters": {}
@@ -510,13 +510,13 @@ class OwlexFilter:
               phrase:
                 max_words: 1
         """
-        normalized = {
+        normalized: Dict[str, Any] = {
             "version": "2.0",
             "distribution": "en",
             "filters": {}
         }
 
-        filters = normalized["filters"]
+        filters: Dict[str, Any] = normalized["filters"]
 
         # Process operation keys (include, exclude, etc.)
         for op_key in operation_keys:

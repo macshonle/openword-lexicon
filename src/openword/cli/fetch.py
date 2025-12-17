@@ -106,11 +106,12 @@ def get_file_size(path: Path) -> int:
 
 def format_size(size_bytes: int) -> str:
     """Format bytes as human-readable size."""
+    size = float(size_bytes)
     for unit in ["B", "KB", "MB", "GB"]:
-        if size_bytes < 1024:
-            return f"{size_bytes:.1f} {unit}" if unit != "B" else f"{size_bytes} {unit}"
-        size_bytes /= 1024
-    return f"{size_bytes:.1f} TB"
+        if size < 1024:
+            return f"{size:.1f} {unit}" if unit != "B" else f"{int(size)} {unit}"
+        size /= 1024
+    return f"{size:.1f} TB"
 
 
 def get_file_age_days(path: Path) -> int:

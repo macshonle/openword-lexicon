@@ -13,10 +13,15 @@ Supports both:
 import json
 import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set, TypedDict
 from collections import defaultdict
 
 import yaml
+
+
+class _SourceComboData(TypedDict):
+    count: int
+    licenses: Set[str]
 
 
 def _find_schema_file(filename: str) -> Path:
@@ -208,14 +213,14 @@ def aggregate_sense_stats(senses: List[dict]) -> dict:
     }
 
 
-def compute_statistics_lexeme(entries: Dict[str, dict], senses_by_word: Optional[Dict[str, List[dict]]] = None) -> dict:
+def compute_statistics_lexeme(entries: Dict[str, dict], senses_by_word: Optional[Dict[str, List[dict]]] = None) -> Dict[str, Any]:
     """Compute statistics from two-file lexeme format with multi-source support.
 
     Args:
         entries: Dictionary of lexeme entries (word -> entry dict)
         senses_by_word: Optional dictionary of senses grouped by word (from senses file)
     """
-    stats = {
+    stats: Dict[str, Any] = {
         "total_words": len(entries),
         "generated_at": None,
         "sources": {},  # Per-source word counts
@@ -232,7 +237,7 @@ def compute_statistics_lexeme(entries: Dict[str, dict], senses_by_word: Optional
     freq_counts = defaultdict(int)
     concrete_counts = defaultdict(int)
     source_counts = defaultdict(int)
-    source_combo_counts = defaultdict(lambda: {"count": 0, "licenses": set()})
+    source_combo_counts: Dict[str, _SourceComboData] = defaultdict(lambda: {"count": 0, "licenses": set()})
     pos_counts = defaultdict(int)
 
     # Per-source metadata tracking
@@ -469,7 +474,7 @@ def compute_statistics_lexeme(entries: Dict[str, dict], senses_by_word: Optional
     return stats
 
 
-def compute_statistics(entries: Dict[str, dict], senses_by_word: Optional[Dict[str, List[dict]]] = None) -> dict:
+def compute_statistics(entries: Dict[str, dict], senses_by_word: Optional[Dict[str, List[dict]]] = None) -> Dict[str, Any]:
     """Compute comprehensive statistics from entries (auto-detects format).
 
     Args:
@@ -482,7 +487,7 @@ def compute_statistics(entries: Dict[str, dict], senses_by_word: Optional[Dict[s
         return compute_statistics_lexeme(entries, senses_by_word)
 
     # Single-file format processing below
-    stats = {
+    stats: Dict[str, Any] = {
         "total_words": len(entries),
         "generated_at": None,  # Will be set when writing
         "sources": {},
@@ -822,7 +827,7 @@ def generate_and_write_statistics(
     entries: Dict[str, dict],
     output_path: Path,
     senses_by_word: Optional[Dict[str, List[dict]]] = None
-) -> dict:
+) -> Dict[str, Any]:
     """
     Generate statistics from entries and write to JSON file.
 

@@ -22,6 +22,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from typing import Any, Dict
 
 # Add src to path for imports
 src_path = Path(__file__).parent.parent / "src"
@@ -94,7 +95,7 @@ def export_codes_schema(core_path: Path, output_path: Path) -> dict:
 
     # Tag codes (grouped by tag set)
     for tag_set in core.tag_sets:
-        tag_set_entry = {
+        tag_set_entry: Dict[str, Any] = {
             "name": tag_set.name,
             "description": tag_set.description,
             "tags": {},

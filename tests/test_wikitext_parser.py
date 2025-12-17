@@ -197,6 +197,7 @@ class TestParserInternals:
         """Direct wikilink parsing."""
         parser = WikitextParser("[[word]]")
         wl = parser.parse_wikilink()
+        assert wl is not None
         assert wl.target == "word"
         assert wl.anchor is None
         assert wl.display is None
@@ -205,6 +206,7 @@ class TestParserInternals:
         """Wikilink with target, anchor, and display."""
         parser = WikitextParser("[[Man#Etymology 2|Man]]")
         wl = parser.parse_wikilink()
+        assert wl is not None
         assert wl.target == "Man"
         assert wl.anchor == "Etymology 2"
         assert wl.display == "Man"
@@ -213,6 +215,7 @@ class TestParserInternals:
         """Direct template parsing."""
         parser = WikitextParser("{{m|en|word}}")
         tmpl = parser.parse_template()
+        assert tmpl is not None
         assert tmpl.name == "m"
         assert tmpl.params == ["en", "word"]
 
@@ -220,6 +223,7 @@ class TestParserInternals:
         """Nested template parsing."""
         parser = WikitextParser("{{outer|{{inner|a|b}}}}")
         tmpl = parser.parse_template()
+        assert tmpl is not None
         assert tmpl.name == "outer"
         # v2 extracts nested template text based on template type
 
