@@ -24,6 +24,11 @@ class _SourceComboData(TypedDict):
     licenses: Set[str]
 
 
+class _SourceComboDataSimple(TypedDict):
+    count: int
+    licenses: str | None
+
+
 def _find_schema_file(filename: str) -> Path:
     """Find a schema file in the schema/ directory."""
     # Try relative to this file (src/openword/ -> schema/)
@@ -503,7 +508,7 @@ def compute_statistics(entries: Dict[str, dict], senses_by_word: Optional[Dict[s
 
     # Initialize counters
     # Store both count and licenses for each source combination
-    source_combo_data = defaultdict(lambda: {"count": 0, "licenses": None})
+    source_combo_data: Dict[str, _SourceComboDataSimple] = defaultdict(lambda: {"count": 0, "licenses": None})
     pos_counts = defaultdict(int)
     freq_counts = defaultdict(int)
     concrete_counts = defaultdict(int)
