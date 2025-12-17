@@ -13,6 +13,8 @@
  *   --wordle       Run only Wordle 5-letter words (~3K words)
  *   --word-only    Run only word-only entries (~1.2M words)
  *   --full         Run only full Wiktionary (~1.3M words, default)
+ *   --json         Output results as JSON (for comparison with Python benchmark)
+ *   --breakdown    Show detailed size breakdown for v6.x formats
  *
  * Examples:
  *   # Benchmark all three datasets
@@ -29,6 +31,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 import { buildDAWG, LOUDSTrie, MarisaTrie } from './trie/index.js';
+import type { MarisaDetailedStats } from './trie/index.js';
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '..', '..', '..');
 
@@ -67,6 +70,7 @@ interface BenchResult {
   buildTimeMs: number;
   lookupAvgUs: number;
   prefixAvgUs: number;
+  detailedStats?: MarisaDetailedStats;
 }
 
 interface DatasetResults {
@@ -79,13 +83,13 @@ interface DatasetResults {
  * Load words using owlex with a spec file.
  * Returns unique, sorted words.
  */
-function loadWordsFromSpec(specFile: string): string[] {
+function loadWordsFromSpec(specFile: string, quiet: boolean = false): string[] {
   const specPath = path.join(PROJECT_ROOT, specFile);
   if (!fs.existsSync(specPath)) {
     throw new Error(`Spec file not found: ${specPath}`);
   }
 
-  console.log(`  Running owlex ${specFile}...`);
+  if (!quiet) console.log(`  Running owlex ${specFile}...`);
   const output = execSync(`uv run owlex "${specPath}"`, {
     cwd: PROJECT_ROOT,
     encoding: 'utf-8',
@@ -169,7 +173,13 @@ function benchmark(
   name: string,
   version: number,
   words: string[],
-  buildFn: () => { nodeCount: number; serialize: () => Uint8Array; has: (w: string) => boolean; keysWithPrefix: (p: string, l: number) => string[] }
+  buildFn: () => {
+    nodeCount: number;
+    serialize: () => Uint8Array;
+    has: (w: string) => boolean;
+    keysWithPrefix: (p: string, l: number) => string[];
+    detailedStats?: () => MarisaDetailedStats;
+  }
 ): BenchResult {
   // Build
   const buildStart = performance.now();
@@ -187,6 +197,9 @@ function benchmark(
   // Prefix search
   const prefixAvgUs = benchmarkPrefixSearch((p, l) => trie.keysWithPrefix(p, l), words);
 
+  // Detailed stats (for MARISA tries)
+  const detailedStats = trie.detailedStats?.();
+
   return {
     format: name,
     version,
@@ -197,18 +210,21 @@ function benchmark(
     buildTimeMs,
     lookupAvgUs,
     prefixAvgUs,
+    detailedStats,
   };
 }
 
 /**
  * Run all format benchmarks for a word list.
  */
-function runBenchmarks(words: string[]): BenchResult[] {
+function runBenchmarks(words: string[], quiet: boolean = false): BenchResult[] {
   const results: BenchResult[] = [];
+  const log = (msg: string) => { if (!quiet) process.stdout.write(msg); };
+  const logln = (msg: string) => { if (!quiet) console.log(msg); };
 
   // v4 DAWG
   try {
-    process.stdout.write('    v4 DAWG...');
+    log('    v4 DAWG...');
     const r = benchmark('v4 DAWG', 4, words, () => {
       const result = buildDAWG(words, 'v4');
       return {
@@ -222,13 +238,13 @@ function runBenchmarks(words: string[]): BenchResult[] {
     r.lookupAvgUs = NaN;
     r.prefixAvgUs = NaN;
     results.push(r);
-    console.log(' done');
+    logln(' done');
   } catch {
-    console.log(' skipped (too many nodes)');
+    logln(' skipped (too many nodes)');
   }
 
   // v5 LOUDS
-  process.stdout.write('    v5 LOUDS...');
+  log('    v5 LOUDS...');
   results.push(benchmark('v5 LOUDS', 5, words, () => {
     const trie = LOUDSTrie.build(words);
     return {
@@ -238,10 +254,10 @@ function runBenchmarks(words: string[]): BenchResult[] {
       keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
     };
   }));
-  console.log(' done');
+  logln(' done');
 
   // v6.0 MARISA (no links)
-  process.stdout.write('    v6.0 MARISA (baseline)...');
+  log('    v6.0 MARISA (baseline)...');
   results.push(benchmark('v6.0', 6, words, () => {
     const { trie } = MarisaTrie.build(words);
     return {
@@ -249,12 +265,13 @@ function runBenchmarks(words: string[]): BenchResult[] {
       serialize: () => trie.serialize(),
       has: (w) => trie.has(w),
       keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
+      detailedStats: () => trie.detailedStats(),
     };
   }));
-  console.log(' done');
+  logln(' done');
 
   // v6.1 MARISA (with path compression)
-  process.stdout.write('    v6.1 MARISA (path compression)...');
+  log('    v6.1 MARISA (path compression)...');
   results.push(benchmark('v6.1', 6, words, () => {
     const { trie } = MarisaTrie.build(words, { enableLinks: true });
     return {
@@ -262,12 +279,13 @@ function runBenchmarks(words: string[]): BenchResult[] {
       serialize: () => trie.serialize(),
       has: (w) => trie.has(w),
       keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
+      detailedStats: () => trie.detailedStats(),
     };
   }));
-  console.log(' done');
+  logln(' done');
 
   // v6.3 MARISA (recursive tail trie)
-  process.stdout.write('    v6.3 MARISA (recursive tails)...');
+  log('    v6.3 MARISA (recursive tails)...');
   results.push(benchmark('v6.3', 6, words, () => {
     const { trie } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true });
     return {
@@ -275,9 +293,24 @@ function runBenchmarks(words: string[]): BenchResult[] {
       serialize: () => trie.serialize(),
       has: (w) => trie.has(w),
       keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
+      detailedStats: () => trie.detailedStats(),
     };
   }));
-  console.log(' done');
+  logln(' done');
+
+  // v6.4 MARISA (Huffman labels)
+  log('    v6.4 MARISA (Huffman labels)...');
+  results.push(benchmark('v6.4', 6, words, () => {
+    const { trie } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true, enableHuffman: true });
+    return {
+      nodeCount: trie.nodeCount,
+      serialize: () => trie.serialize(),
+      has: (w) => trie.has(w),
+      keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
+      detailedStats: () => trie.detailedStats(),
+    };
+  }));
+  logln(' done');
 
   return results;
 }
@@ -364,7 +397,7 @@ function printSummary(allResults: DatasetResults[]): void {
   console.log();
 
   // Header
-  const formats = ['v5 LOUDS', 'v6.0', 'v6.1', 'v6.3'];
+  const formats = ['v5 LOUDS', 'v6.0', 'v6.1', 'v6.3', 'v6.4'];
   console.log('Dataset'.padEnd(20) + 'Words'.padEnd(12) + formats.map(f => f.padEnd(14)).join(''));
   console.log('-'.repeat(100));
 
@@ -406,6 +439,88 @@ function printSummary(allResults: DatasetResults[]): void {
   console.log('='.repeat(100));
 }
 
+/**
+ * Output results as JSON for comparison with Python benchmark.
+ */
+function outputJson(allResults: DatasetResults[]): void {
+  const output = allResults.map(dr => ({
+    dataset: {
+      name: dr.dataset.name,
+      description: dr.dataset.description,
+      spec_file: dr.dataset.specFile,
+    },
+    results: dr.results.map(r => ({
+      format: r.format,
+      implementation: 'typescript',
+      word_count: r.wordCount,
+      node_count: r.nodeCount,
+      binary_size: r.binarySize,
+      bytes_per_word: r.bytesPerWord,
+      build_time_ms: r.buildTimeMs,
+      lookup_avg_us: isNaN(r.lookupAvgUs) ? null : r.lookupAvgUs,
+      prefix_avg_us: isNaN(r.prefixAvgUs) ? null : r.prefixAvgUs,
+    })),
+  }));
+  console.log(JSON.stringify(output, null, 2));
+}
+
+/**
+ * Print detailed size breakdown for v6.x formats.
+ */
+function printBreakdown(dataset: DatasetConfig, results: BenchResult[]): void {
+  console.log('\n' + '='.repeat(100));
+  console.log(`SIZE BREAKDOWN: ${dataset.name}`);
+  console.log('='.repeat(100));
+
+  for (const r of results) {
+    if (!r.detailedStats) continue;
+    const s = r.detailedStats;
+
+    console.log(`\n${r.format} (${fmtBytes(r.binarySize)} total, ${r.bytesPerWord.toFixed(2)} B/word)`);
+    console.log('-'.repeat(80));
+
+    const row = (label: string, bytes: number, pct: number, extra?: string) => {
+      const pctStr = `${pct.toFixed(1)}%`.padStart(6);
+      const bytesStr = fmtBytes(bytes).padStart(10);
+      const extraStr = extra ? `  ${extra}` : '';
+      console.log(`  ${label.padEnd(20)} ${bytesStr} ${pctStr}${extraStr}`);
+    };
+
+    row('Header', s.headerBytes, s.breakdown.header);
+    row('LOUDS bitvector', s.louds.totalBytes, s.breakdown.louds,
+      `[raw: ${fmtBytes(s.louds.rawBitsBytes)}, dir: ${fmtBytes(s.louds.directoryBytes)} (${s.louds.directoryOverhead.toFixed(0)}% overhead)]`);
+    row('Terminal bits', s.terminal.totalBytes, s.breakdown.terminal,
+      `[raw: ${fmtBytes(s.terminal.rawBitsBytes)}, dir: ${fmtBytes(s.terminal.directoryBytes)} (${s.terminal.directoryOverhead.toFixed(0)}% overhead)]`);
+
+    if (s.linkFlags) {
+      row('Link flags', s.linkFlags.totalBytes, s.breakdown.linkFlags,
+        `[raw: ${fmtBytes(s.linkFlags.rawBitsBytes)}, dir: ${fmtBytes(s.linkFlags.directoryBytes)} (${s.linkFlags.directoryOverhead.toFixed(0)}% overhead)]`);
+    }
+
+    row('Labels', s.labels.totalBytes, s.breakdown.labels,
+      `[${s.edgeCount.toLocaleString()} edges, ${s.labels.avgBitsPerLabel.toFixed(1)} bits/label avg]`);
+
+    if (s.tails) {
+      const tailType = s.tails.isRecursive ? 'recursive trie' : 'flat buffer';
+      row('Tails', s.tails.totalBytes, s.breakdown.tails, `[${tailType}]`);
+    }
+
+    console.log('-'.repeat(80));
+
+    // Show directory overhead summary
+    const totalDirBytes = s.louds.directoryBytes + s.terminal.directoryBytes +
+      (s.linkFlags?.directoryBytes ?? 0);
+    const totalRawBitsBytes = s.louds.rawBitsBytes + s.terminal.rawBitsBytes +
+      (s.linkFlags?.rawBitsBytes ?? 0);
+    const dirOverheadPct = totalRawBitsBytes > 0
+      ? (totalDirBytes / (totalRawBitsBytes + totalDirBytes)) * 100
+      : 0;
+    console.log(`  Total bitvector directory overhead: ${fmtBytes(totalDirBytes)} (${dirOverheadPct.toFixed(1)}% of bitvectors)`);
+  }
+
+  console.log('\n' + '='.repeat(100));
+}
+
 async function main() {
   const args = process.argv.slice(2);
 
@@ -414,12 +529,16 @@ async function main() {
   const runWordle = args.includes('--wordle');
   const runWordOnly = args.includes('--word-only');
   const runFull = args.includes('--full');
+  const jsonOutput = args.includes('--json');
+  const showBreakdown = args.includes('--breakdown');
 
   // Find custom input path (non-flag argument)
   const customInput = args.find(a => !a.startsWith('--'));
 
-  console.log('OWTRIE Format Benchmark');
-  console.log('=======================\n');
+  if (!jsonOutput) {
+    console.log('OWTRIE Format Benchmark');
+    console.log('=======================\n');
+  }
 
   const allResults: DatasetResults[] = [];
 
@@ -430,9 +549,9 @@ async function main() {
       process.exit(1);
     }
 
-    console.log(`Loading custom wordlist: ${customInput}...`);
+    if (!jsonOutput) console.log(`Loading custom wordlist: ${customInput}...`);
     const words = loadWordsFromFile(customInput);
-    console.log(`  Loaded ${fmt(words.length)} unique words`);
+    if (!jsonOutput) console.log(`  Loaded ${fmt(words.length)} unique words`);
 
     const dataset: DatasetConfig = {
       name: path.basename(customInput),
@@ -440,9 +559,10 @@ async function main() {
       specFile: customInput,
     };
 
-    console.log('  Running benchmarks:');
-    const results = runBenchmarks(words);
-    printResults(dataset, results);
+    if (!jsonOutput) console.log('  Running benchmarks:');
+    const results = runBenchmarks(words, jsonOutput);
+    if (!jsonOutput) printResults(dataset, results);
+    if (showBreakdown && !jsonOutput) printBreakdown(dataset, results);
     allResults.push({ dataset, words, results });
 
   } else {
@@ -462,20 +582,21 @@ async function main() {
 
     for (const datasetKey of datasetsToRun) {
       const dataset = DATASETS[datasetKey];
-      console.log(`\nLoading ${dataset.name} dataset...`);
+      if (!jsonOutput) console.log(`\nLoading ${dataset.name} dataset...`);
 
       try {
-        const words = loadWordsFromSpec(dataset.specFile);
-        console.log(`  Loaded ${fmt(words.length)} unique words`);
+        const words = loadWordsFromSpec(dataset.specFile, jsonOutput);
+        if (!jsonOutput) console.log(`  Loaded ${fmt(words.length)} unique words`);
 
         if (words.length === 0) {
           console.error(`  Error: No words found for ${dataset.name}`);
           continue;
         }
 
-        console.log('  Running benchmarks:');
-        const results = runBenchmarks(words);
-        printResults(dataset, results);
+        if (!jsonOutput) console.log('  Running benchmarks:');
+        const results = runBenchmarks(words, jsonOutput);
+        if (!jsonOutput) printResults(dataset, results);
+        if (showBreakdown && !jsonOutput) printBreakdown(dataset, results);
 
         allResults.push({ dataset, words, results });
       } catch (err) {
@@ -485,18 +606,24 @@ async function main() {
     }
   }
 
-  // Print summary if multiple datasets
-  if (allResults.length > 1) {
-    printSummary(allResults);
-  }
+  // Output results
+  if (jsonOutput) {
+    outputJson(allResults);
+  } else {
+    // Print summary if multiple datasets
+    if (allResults.length > 1) {
+      printSummary(allResults);
+    }
 
-  // Notes
-  console.log('\nNotes:');
-  console.log('  - v4 DAWG: No runtime lookup support (build-only format)');
-  console.log('  - v5 LOUDS: Baseline format with word ID mapping');
-  console.log('  - v6.0: Same as v5 with v6 header (baseline for MARISA features)');
-  console.log('  - v6.1: Path compression (single-child chains collapsed into tails)');
-  console.log('  - v6.3: Recursive trie over tails (prefix sharing within tails)');
+    // Notes
+    console.log('\nNotes:');
+    console.log('  - v4 DAWG: No runtime lookup support (build-only format)');
+    console.log('  - v5 LOUDS: Baseline format with word ID mapping');
+    console.log('  - v6.0: Same as v5 with v6 header (baseline for MARISA features)');
+    console.log('  - v6.1: Path compression (single-child chains collapsed into tails)');
+    console.log('  - v6.3: Recursive trie over tails (prefix sharing within tails)');
+    console.log('  - v6.4: Huffman-encoded labels (frequency-based compression)');
+  }
 }
 
 main().catch(err => {

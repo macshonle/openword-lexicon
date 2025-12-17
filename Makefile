@@ -94,7 +94,8 @@ METADATA := $(BUILD_DIR)/$(OW_LANG).meta.json
 
 .PHONY: all test test-python test-typescript test-browser-headless nightly weekly fetch scan enrich build clean scrub \
         deps lint validate help wordlists \
-        web-spec-editor web-viewer web-viewer-trie web-viewer-trie-v63 browser-test kill-servers
+        web-spec-editor web-viewer web-viewer-trie web-viewer-trie-v63 browser-test kill-servers \
+        benchmark-trie benchmark-trie-python benchmark-trie-typescript
 
 .DEFAULT_GOAL := help
 
@@ -126,6 +127,11 @@ help:
 	@echo "  make web-viewer-trie-v63  Build v6.3 recursive trie"
 	@echo "  make browser-test      Run browser-based tests (opens in browser)"
 	@echo "  make test-browser-headless  Run headless browser tests (CI)"
+	@echo ""
+	@echo "Benchmarks:"
+	@echo "  make benchmark-trie    Run trie benchmarks (Python + TypeScript)"
+	@echo "  make benchmark-trie-python     Python marisa_trie benchmark"
+	@echo "  make benchmark-trie-typescript TypeScript OWTRIE benchmark"
 
 # =============================================================================
 # Dependencies
@@ -336,3 +342,22 @@ rust-scanner: crates/wiktionary-scanner/Cargo.toml
 benchmark-rust: rust-scanner $(WIKT_DUMP)
 	@echo "Benchmarking Rust scanner..."
 	time $(RUST_SCANNER) "$(WIKT_DUMP)" /dev/null
+
+# =============================================================================
+# Trie Benchmarks
+# =============================================================================
+# Compare Python marisa_trie with TypeScript OWTRIE implementations.
+# Both use the same word lists via owlex spec files.
+
+# Run Python marisa_trie benchmark
+benchmark-trie-python: deps $(ENRICHED_OUTPUT)
+	$(PYTHON) scripts/benchmark_trie.py --all
+
+# Run TypeScript OWTRIE benchmark
+benchmark-trie-typescript: $(ENRICHED_OUTPUT)
+	cd web/viewer && pnpm install && pnpm benchmark --all
+
+# Run both benchmarks for comparison
+benchmark-trie: benchmark-trie-python benchmark-trie-typescript
+	@echo ""
+	@echo "Benchmark complete. Compare Python marisa_trie with TypeScript OWTRIE implementations above."

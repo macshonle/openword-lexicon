@@ -27,7 +27,9 @@ import {
   V6_FLAG_HAS_TAILS,
   V6_FLAG_BINARY_TAILS,
   V6_FLAG_RECURSIVE,
+  V6_FLAG_HUFFMAN_LABELS,
 } from './formats.js';
+import { HuffmanCodec, BitWriter, BitReader } from './huffman.js';
 
 /**
  * Configuration for MARISA trie building.
@@ -41,6 +43,8 @@ export interface MarisaConfig {
   minTailLength?: number;
   /** Enable recursive trie over tails for additional compression (v6.3+) */
   enableRecursive?: boolean;
+  /** Enable Huffman encoding for labels (v6.4+) */
+  enableHuffman?: boolean;
 }
 
 /**
@@ -57,6 +61,55 @@ export interface MarisaStats {
   tailBufferSize: number;
   totalSize: number;
   compressionRatio?: number;
+}
+
+/**
+ * Detailed size breakdown for analysis.
+ */
+export interface MarisaDetailedStats extends MarisaStats {
+  headerBytes: number;
+  louds: {
+    totalBytes: number;
+    rawBitsBytes: number;
+    directoryBytes: number;
+    directoryOverhead: number; // percentage
+    lengthPrefixBytes: number;
+  };
+  terminal: {
+    totalBytes: number;
+    rawBitsBytes: number;
+    directoryBytes: number;
+    directoryOverhead: number;
+    lengthPrefixBytes: number;
+  };
+  linkFlags: {
+    totalBytes: number;
+    rawBitsBytes: number;
+    directoryBytes: number;
+    directoryOverhead: number;
+    lengthPrefixBytes: number;
+  } | null;
+  labels: {
+    totalBytes: number;
+    countPrefixBytes: number;
+    dataBytes: number;
+    avgBitsPerLabel: number;
+  };
+  tails: {
+    totalBytes: number;
+    sizePrefixBytes: number;
+    dataBytes: number;
+    isRecursive: boolean;
+  } | null;
+  // Summary percentages
+  breakdown: {
+    header: number;
+    louds: number;
+    terminal: number;
+    linkFlags: number;
+    labels: number;
+    tails: number;
+  };
 }
 
 /**
@@ -112,6 +165,9 @@ export class MarisaTrie {
   /** Recursive trie over tails for v6.3 (null otherwise) */
   readonly tailTrie: MarisaTrie | null;
 
+  /** Huffman codec for label encoding (v6.4+, null otherwise) */
+  readonly huffmanCodec: HuffmanCodec | null;
+
   /** Number of nodes (including super-root) */
   readonly nodeCount: number;
 
@@ -131,7 +187,8 @@ export class MarisaTrie {
     nodeCount: number,
     wordCount: number,
     flags: number = 0,
-    tailTrie: MarisaTrie | null = null
+    tailTrie: MarisaTrie | null = null,
+    huffmanCodec: HuffmanCodec | null = null
   ) {
     this.bits = bits;
     this.terminal = terminal;
@@ -143,6 +200,7 @@ export class MarisaTrie {
     this.wordCount = wordCount;
     this.flags = flags;
     this.tailTrie = tailTrie;
+    this.huffmanCodec = huffmanCodec;
   }
 
   /**
@@ -157,6 +215,7 @@ export class MarisaTrie {
     const enableLinks = config.enableLinks ?? false;
     const enableRecursive = config.enableRecursive ?? false;
     const minTailLength = config.minTailLength ?? 2;
+    const enableHuffman = config.enableHuffman ?? false;
 
     // Phase 1: Build standard trie
     const root = new TrieNode();
@@ -404,6 +463,19 @@ export class MarisaTrie {
       }
     }
 
+    // Build Huffman codec if enabled
+    let huffmanCodec: HuffmanCodec | null = null;
+    if (enableHuffman && labels.length > 0) {
+      // Collect label frequencies
+      const frequencies = new Map<number, number>();
+      for (let i = 0; i < labels.length; i++) {
+        const label = labels[i];
+        frequencies.set(label, (frequencies.get(label) ?? 0) + 1);
+      }
+      huffmanCodec = HuffmanCodec.build(frequencies);
+      flags |= V6_FLAG_HUFFMAN_LABELS;
+    }
+
     // Word count is the actual number of unique words (terminal nodes),
     // not input words.length which may contain duplicates
     const actualWordCount = terminal.popcount;
@@ -418,7 +490,8 @@ export class MarisaTrie {
       nodeCount + 1,
       actualWordCount,
       flags,
-      recursiveTailTrie
+      recursiveTailTrie,
+      huffmanCodec
     );
 
     const stats = trie.stats();
@@ -819,10 +892,25 @@ export class MarisaTrie {
     const terminalBytes = this.terminal.serialize();
     const linkFlagsBytes = this.linkFlags ? this.linkFlags.serialize() : new Uint8Array(0);
 
-    // Calculate labels size (varint encoded)
+    // Calculate labels size
     let labelsSize = 4; // length prefix
-    for (let i = 0; i < this.labels.length; i++) {
-      labelsSize += varintSize(this.labels[i]);
+    let huffmanTableBytes: Uint8Array | null = null;
+    let huffmanEncodedLabels: Uint8Array | null = null;
+
+    if (this.flags & V6_FLAG_HUFFMAN_LABELS && this.huffmanCodec) {
+      // Huffman encoded: table + bit-packed labels
+      huffmanTableBytes = this.huffmanCodec.serialize();
+      const writer = new BitWriter();
+      for (let i = 0; i < this.labels.length; i++) {
+        this.huffmanCodec.encode(this.labels[i], writer);
+      }
+      huffmanEncodedLabels = writer.toBytes();
+      labelsSize += 4 + huffmanTableBytes.length + 4 + huffmanEncodedLabels.length;
+    } else {
+      // Varint encoded (default)
+      for (let i = 0; i < this.labels.length; i++) {
+        labelsSize += varintSize(this.labels[i]);
+      }
     }
 
     // Determine tail storage size (buffer or recursive trie)
@@ -885,8 +973,24 @@ export class MarisaTrie {
     // Labels
     view.setUint32(offset, this.labels.length, true);
     offset += 4;
-    for (let i = 0; i < this.labels.length; i++) {
-      offset = writeVarint(buffer, offset, this.labels[i]);
+
+    if (this.flags & V6_FLAG_HUFFMAN_LABELS && huffmanTableBytes && huffmanEncodedLabels) {
+      // Write Huffman table
+      view.setUint32(offset, huffmanTableBytes.length, true);
+      offset += 4;
+      buffer.set(huffmanTableBytes, offset);
+      offset += huffmanTableBytes.length;
+
+      // Write Huffman-encoded labels
+      view.setUint32(offset, huffmanEncodedLabels.length, true);
+      offset += 4;
+      buffer.set(huffmanEncodedLabels, offset);
+      offset += huffmanEncodedLabels.length;
+    } else {
+      // Write varint-encoded labels
+      for (let i = 0; i < this.labels.length; i++) {
+        offset = writeVarint(buffer, offset, this.labels[i]);
+      }
     }
 
     // Tail storage (buffer or recursive trie)
@@ -954,10 +1058,33 @@ export class MarisaTrie {
     const labelsCount = view.getUint32(offset, true);
     offset += 4;
     const labels = new Uint32Array(labelsCount);
-    for (let i = 0; i < labelsCount; i++) {
-      const { value, bytesRead } = readVarint(buffer, offset);
-      labels[i] = value;
-      offset += bytesRead;
+    let huffmanCodec: HuffmanCodec | null = null;
+
+    if (flags & V6_FLAG_HUFFMAN_LABELS) {
+      // Huffman encoded: read table, then decode labels
+      const tableLength = view.getUint32(offset, true);
+      offset += 4;
+      const tableBytes = buffer.slice(offset, offset + tableLength);
+      const { codec } = HuffmanCodec.deserialize(tableBytes);
+      huffmanCodec = codec;
+      offset += tableLength;
+
+      // Read Huffman-encoded labels
+      const encodedLength = view.getUint32(offset, true);
+      offset += 4;
+      const encodedBytes = buffer.slice(offset, offset + encodedLength);
+      const reader = new BitReader(encodedBytes);
+      for (let i = 0; i < labelsCount; i++) {
+        labels[i] = huffmanCodec.decode(reader);
+      }
+      offset += encodedLength;
+    } else {
+      // Varint encoded (default)
+      for (let i = 0; i < labelsCount; i++) {
+        const { value, bytesRead } = readVarint(buffer, offset);
+        labels[i] = value;
+        offset += bytesRead;
+      }
     }
 
     // Tail storage (buffer or recursive trie)
@@ -989,7 +1116,8 @@ export class MarisaTrie {
       nodeCount,
       wordCount,
       flags,
-      tailTrie
+      tailTrie,
+      huffmanCodec
     );
   }
 
@@ -1051,6 +1179,97 @@ export class MarisaTrie {
       nodeCount: s.nodeCount,
       sizeBytes: s.totalSize,
       bytesPerWord: (s.totalSize / s.wordCount).toFixed(2),
+    };
+  }
+
+  /**
+   * Get detailed size breakdown for analysis.
+   */
+  detailedStats(): MarisaDetailedStats {
+    const baseStats = this.stats();
+
+    // Bitvector breakdowns
+    const loudsBreakdown = this.bits.sizeBreakdown();
+    const terminalBreakdown = this.terminal.sizeBreakdown();
+    const linkFlagsBreakdown = this.linkFlags ? this.linkFlags.sizeBreakdown() : null;
+
+    // Calculate labels data size (without count prefix)
+    let labelsDataSize = 0;
+    for (let i = 0; i < this.labels.length; i++) {
+      labelsDataSize += varintSize(this.labels[i]);
+    }
+    const avgBitsPerLabel = this.labels.length > 0
+      ? (labelsDataSize * 8) / this.labels.length
+      : 0;
+
+    // Tail storage
+    let tailDataSize = 0;
+    const isRecursive = !!(this.flags & V6_FLAG_RECURSIVE);
+    if (this.tailTrie) {
+      tailDataSize = this.tailTrie.serialize().length;
+    } else if (this.tailBuffer) {
+      tailDataSize = this.tailBuffer.length;
+    }
+
+    // Calculate component totals (including length prefixes)
+    const headerBytes = HEADER_SIZE_V6;
+    const loudsTotalBytes = 4 + loudsBreakdown.totalBytes;
+    const terminalTotalBytes = 4 + terminalBreakdown.totalBytes;
+    const linkFlagsTotalBytes = linkFlagsBreakdown ? 4 + linkFlagsBreakdown.totalBytes : 0;
+    const labelsTotalBytes = 4 + labelsDataSize;
+    const tailsTotalBytes = tailDataSize > 0 ? 4 + tailDataSize : 0;
+
+    const totalSize = headerBytes + loudsTotalBytes + terminalTotalBytes +
+      linkFlagsTotalBytes + labelsTotalBytes + tailsTotalBytes;
+
+    // Calculate percentages
+    const pct = (n: number) => totalSize > 0 ? (n / totalSize) * 100 : 0;
+
+    return {
+      ...baseStats,
+      totalSize,
+      headerBytes,
+      louds: {
+        totalBytes: loudsTotalBytes,
+        rawBitsBytes: loudsBreakdown.rawBitsBytes,
+        directoryBytes: loudsBreakdown.superblockBytes + loudsBreakdown.blockBytes,
+        directoryOverhead: loudsBreakdown.directoryOverhead,
+        lengthPrefixBytes: 4,
+      },
+      terminal: {
+        totalBytes: terminalTotalBytes,
+        rawBitsBytes: terminalBreakdown.rawBitsBytes,
+        directoryBytes: terminalBreakdown.superblockBytes + terminalBreakdown.blockBytes,
+        directoryOverhead: terminalBreakdown.directoryOverhead,
+        lengthPrefixBytes: 4,
+      },
+      linkFlags: linkFlagsBreakdown ? {
+        totalBytes: linkFlagsTotalBytes,
+        rawBitsBytes: linkFlagsBreakdown.rawBitsBytes,
+        directoryBytes: linkFlagsBreakdown.superblockBytes + linkFlagsBreakdown.blockBytes,
+        directoryOverhead: linkFlagsBreakdown.directoryOverhead,
+        lengthPrefixBytes: 4,
+      } : null,
+      labels: {
+        totalBytes: labelsTotalBytes,
+        countPrefixBytes: 4,
+        dataBytes: labelsDataSize,
+        avgBitsPerLabel,
+      },
+      tails: tailDataSize > 0 ? {
+        totalBytes: tailsTotalBytes,
+        sizePrefixBytes: 4,
+        dataBytes: tailDataSize,
+        isRecursive,
+      } : null,
+      breakdown: {
+        header: pct(headerBytes),
+        louds: pct(loudsTotalBytes),
+        terminal: pct(terminalTotalBytes),
+        linkFlags: pct(linkFlagsTotalBytes),
+        labels: pct(labelsTotalBytes),
+        tails: pct(tailsTotalBytes),
+      },
     };
   }
 }

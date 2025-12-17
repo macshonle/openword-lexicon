@@ -379,6 +379,35 @@ export class BitVector {
   }
 
   /**
+   * Get detailed size breakdown of serialized bitvector.
+   */
+  sizeBreakdown(): {
+    headerBytes: number;
+    rawBitsBytes: number;
+    superblockBytes: number;
+    blockBytes: number;
+    totalBytes: number;
+    directoryOverhead: number; // percentage
+  } {
+    const headerBytes = 4;
+    const rawBitsBytes = this.words.length * 4;
+    const superblockBytes = this.superblocks.length * 4;
+    const blockBytes = this.blocks.length;
+    const totalBytes = headerBytes + rawBitsBytes + superblockBytes + blockBytes;
+    const directoryBytes = superblockBytes + blockBytes;
+    const directoryOverhead = totalBytes > 0 ? (directoryBytes / totalBytes) * 100 : 0;
+
+    return {
+      headerBytes,
+      rawBitsBytes,
+      superblockBytes,
+      blockBytes,
+      totalBytes,
+      directoryOverhead,
+    };
+  }
+
+  /**
    * Deserialize a bitvector from a Uint8Array.
    */
   static deserialize(buffer: Uint8Array): BitVector {

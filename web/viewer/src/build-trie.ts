@@ -9,16 +9,19 @@
  *   v2: DAWG with 16-bit absolute node IDs (ASCII only, max 65K nodes, 3 bytes/child)
  *   v4: DAWG with varint delta node IDs (full Unicode, unlimited nodes, ~2 bytes/child avg)
  *   v5: LOUDS trie with bitvectors + labels (full Unicode, word ID support, ~1.5 bytes/char)
+ *   v6: MARISA trie with path compression (full Unicode, most compact, ~1 byte/char)
+ *       v6.1: --links enables tail buffer for path compression
+ *       v6.3: --links --recursive enables recursive tail trie (smaller but slower)
  *
  * The builder auto-selects the best format based on node count and content,
- * or you can force a specific version with --format=v2|v4|v5
+ * or you can force a specific version with --format=v2|v4|v5|v6
  *
  * Input formats:
  *   .txt     - Plain text wordlist (one word per line)
  *   .jsonl   - JSON Lines with "lemma" field (pipeline output format)
  *
  * Usage:
- *   pnpm build-trie [input] [output] [--format=v2|v4|v5|auto]
+ *   pnpm build-trie [input] [output] [--format=v2|v4|v5|v6|auto]
  *
  * Examples:
  *   # Build from pipeline JSONL output
@@ -29,6 +32,9 @@
  *
  *   # Force LOUDS format for word ID support
  *   pnpm build-trie input.jsonl output.trie.bin --format=v5
+ *
+ *   # Build MARISA trie with path compression (most compact)
+ *   pnpm build-trie input.jsonl output.trie.bin --format=v6 --links
  */
 
 import * as fs from 'fs';

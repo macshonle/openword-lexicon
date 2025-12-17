@@ -52,6 +52,7 @@ export const V6_FLAG_HAS_LINKS = 0x01;      // Link flags bitvector present
 export const V6_FLAG_HAS_TAILS = 0x02;      // Tail buffer present
 export const V6_FLAG_BINARY_TAILS = 0x04;   // Length-prefixed tails (vs null-terminated)
 export const V6_FLAG_RECURSIVE = 0x08;      // Tails stored in recursive trie
+export const V6_FLAG_HUFFMAN_LABELS = 0x10; // Labels use Huffman encoding (v6.4)
 
 /** Maximum code point supported by v2 format (single byte) */
 export const V2_MAX_CODE_POINT = 255;
