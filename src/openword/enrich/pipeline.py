@@ -37,7 +37,6 @@ from openword.progress_display import ProgressDisplay
 from openword.enrich.frequency import (
     load_frequency_ranks,
     assign_tier,
-    TIER_CODES,
 )
 from openword.enrich.concreteness import (
     load_brysbaert_ratings,

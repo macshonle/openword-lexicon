@@ -27,7 +27,7 @@ from pathlib import Path
 src_path = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
-from openword.scanner.v2.schema import load_core_schema
+from openword.scanner.v2.schema import load_core_schema  # noqa: E402
 
 
 def export_codes_schema(core_path: Path, output_path: Path) -> dict:

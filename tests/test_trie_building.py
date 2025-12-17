@@ -1,7 +1,5 @@
 """Tests for trie building and querying functionality."""
-import pytest
 import marisa_trie
-from pathlib import Path
 
 
 def test_trie_creation_and_basic_operations(sample_words, temp_dir):

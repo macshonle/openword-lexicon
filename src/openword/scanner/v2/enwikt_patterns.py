@@ -213,7 +213,7 @@ def _build_morphology_patterns(template_names: list[str]) -> dict[str, re.Patter
     for name in template_names:
         # Handle "af" as short form of "affix"
         if name == "af":
-            patterns[name] = re.compile(rf"\{{\{{af(?:fix)?\|en\|([^}}]+)\}}\}}", re.IGNORECASE)
+            patterns[name] = re.compile(r"\{\{af(?:fix)?\|en\|([^}]+)\}\}", re.IGNORECASE)
         else:
             patterns[name] = re.compile(rf"\{{\{{{re.escape(name)}\|en\|([^}}]+)\}}\}}", re.IGNORECASE)
     return patterns

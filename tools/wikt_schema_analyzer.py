@@ -217,7 +217,7 @@ def print_progress(aggregate: Dict[str, Set[Any]], entry_count: int, last_line_c
     lines.append(f"{'='*80}")
     lines.append(f"Progress: {entry_count:,} entries processed")
     lines.append(f"{'='*80}")
-    lines.append(f"")
+    lines.append("")
     lines.append(f"Paths found: {len(aggregate)}")
     lines.append("-" * 80)
 
@@ -324,7 +324,7 @@ def print_array_combination_stats(combinations: Dict[str, Counter], entry_count:
         print(f"  Coverage: {total_occurrences / entry_count * 100:.1f}% of entries")
 
         # Show top 10 combinations
-        print(f"\n  Top 10 combinations:")
+        print("\n  Top 10 combinations:")
         for i, (combo, count) in enumerate(combo_counts.most_common(10), 1):
             pct = count / total_occurrences * 100
             combo_str = ", ".join(f'"{v}"' for v in combo)
@@ -336,7 +336,7 @@ def print_array_combination_stats(combinations: Dict[str, Counter], entry_count:
             for value in combo:
                 value_freq[value] += count
 
-        print(f"\n  Individual value frequencies:")
+        print("\n  Individual value frequencies:")
         for value, count in value_freq.most_common(10):
             pct = count / total_occurrences * 100
             print(f"    \"{value}\": {count:,} ({pct:.1f}%)")

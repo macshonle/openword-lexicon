@@ -161,7 +161,6 @@ def test_edge_cases():
 
 
 if __name__ == "__main__":
-    import inspect
 
     test_functions = [
         obj for name, obj in globals().items()

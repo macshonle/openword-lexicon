@@ -1,8 +1,5 @@
 """Integration tests for lemma extraction pipeline."""
 import json
-import pytest
-from pathlib import Path
-from tempfile import TemporaryDirectory
 
 
 class TestLemmaNormalizationIntegration:

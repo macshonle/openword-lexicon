@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from .cdaload import BindingConfig
-from .evidence import Evidence, Template
+from .evidence import Evidence
 
 
 # =============================================================================
@@ -480,7 +480,6 @@ def compute_morphology(evidence: Evidence, config: BindingConfig) -> Optional[Mo
         # No matching binding found - config must define the template
         return None
 
-    template_name = template.name.lower()
     params = template.params
     canonical_name, roles, _ = binding
 

@@ -686,7 +686,7 @@ class OwlexFilter:
 
         logger.error(f"No input file found for distribution '{dist}'")
         logger.error(f"Tried: {[str(p) for p in candidates]}")
-        logger.error(f"\nPlease build the distribution first:")
+        logger.error("\nPlease build the distribution first:")
         logger.error(f"  make build-{dist}")
         sys.exit(1)
 

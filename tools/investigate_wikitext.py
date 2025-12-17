@@ -13,7 +13,7 @@ Usage:
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Set
+from typing import Dict, List
 
 
 def extract_text(xml_path: Path) -> str:
@@ -52,7 +52,7 @@ def analyze_labels(text: str) -> Dict[str, List[str]]:
     # Find {{lb|en|...}} templates
     for match in re.finditer(r'\{\{(?:lb|label|context)\|en\|([^}]+)\}\}', text, re.IGNORECASE):
         content = match.group(1)
-        labels['context_labels'].extend([l.strip() for l in content.split('|')])
+        labels['context_labels'].extend([label.strip() for label in content.split('|')])
 
     # Find categories
     for match in re.finditer(r'\[\[Category:English\s+([^\]]+)\]\]', text, re.IGNORECASE):

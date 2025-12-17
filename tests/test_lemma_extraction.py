@@ -1,5 +1,4 @@
 """Unit tests for lemma extraction from Wiktionary templates."""
-import pytest
 from openword.filters import (
     sense_is_base_form,
     sense_is_inflected,

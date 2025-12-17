@@ -18,8 +18,6 @@ from pathlib import Path
 from typing import Pattern
 
 from .schema import (
-    CoreSchema,
-    Bindings,
     PosClass,
     Flag,
     Tag,
@@ -27,7 +25,6 @@ from .schema import (
     MorphologyType,
     MorphologyTemplate,
     DomainType,
-    DomainTypeBinding,
     load_core_schema,
     load_bindings,
 )

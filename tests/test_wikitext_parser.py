@@ -8,7 +8,6 @@ Tests the bracket-aware template parameter parsing that correctly handles:
 
 This tests the v2 CDA-based parser in openword.scanner.v2.wikitext_parser.
 """
-import pytest
 
 from openword.scanner.v2.wikitext_parser import (
     WikitextParser,

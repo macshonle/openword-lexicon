@@ -23,10 +23,33 @@ from typing import Iterator, Optional
 
 from .wikitext_parser import (
     Template,
-    WikitextParser,
     extract_labels as parser_extract_labels,
-    extract_head_pos,
     find_templates,
+)
+
+from .enwikt_patterns import (
+    # Section structure
+    ENGLISH_SECTION,
+    LANGUAGE_SECTION,
+    POS_HEADER,
+    DEFINITION_LINE,
+    ETYMOLOGY_SECTION,
+    ETYMOLOGY_HEADER,
+    # Categories and labels
+    CATEGORY,
+    TLB_TEMPLATE,
+    # Syllable extraction
+    HYPHENATION_TEMPLATE,
+    RHYMES_SYLLABLE,
+    SYLLABLE_CATEGORY,
+    IPA_TEMPLATE,
+    # Special page handling
+    SPECIAL_PAGE_PREFIXES,
+    DICT_ONLY,
+    # Template name lists (loaded from YAML config)
+    MORPHOLOGY_TEMPLATE_NAMES,
+    INFLECTION_TEMPLATE_NAMES,
+    ALTFORM_TEMPLATE_NAMES,
 )
 
 
@@ -202,38 +225,6 @@ def scan_pages(file_obj, chunk_size: int = 1024 * 1024) -> Iterator[str]:
 
             yield page_xml
 
-
-# =============================================================================
-# Wikitext extraction patterns (imported from enwikt_patterns)
-#
-# English Wiktionary-specific patterns are isolated in enwikt_patterns.py.
-# Some patterns are generated from schema/bindings/en-wikt.*.yaml config files.
-# =============================================================================
-
-from .enwikt_patterns import (
-    # Section structure
-    ENGLISH_SECTION,
-    LANGUAGE_SECTION,
-    POS_HEADER,
-    DEFINITION_LINE,
-    ETYMOLOGY_SECTION,
-    ETYMOLOGY_HEADER,
-    # Categories and labels
-    CATEGORY,
-    TLB_TEMPLATE,
-    # Syllable extraction
-    HYPHENATION_TEMPLATE,
-    RHYMES_SYLLABLE,
-    SYLLABLE_CATEGORY,
-    IPA_TEMPLATE,
-    # Special page handling
-    SPECIAL_PAGE_PREFIXES,
-    DICT_ONLY,
-    # Template name lists (loaded from YAML config)
-    MORPHOLOGY_TEMPLATE_NAMES,
-    INFLECTION_TEMPLATE_NAMES,
-    ALTFORM_TEMPLATE_NAMES,
-)
 
 # Note: Additional patterns available in enwikt_patterns for other modules:
 # - CONTEXT_LABEL, HEAD_TEMPLATE, EN_POS_TEMPLATE (head/label parsing)

@@ -59,7 +59,7 @@ def main():
         export_trie_to_wordlist(lang_trie, lang_output)
     else:
         logger.error(f"Trie not found: {lang_trie}")
-        logger.info(f"Run 'make build-en' first to generate the trie.")
+        logger.info("Run 'make build-en' first to generate the trie.")
 
 
 if __name__ == '__main__':

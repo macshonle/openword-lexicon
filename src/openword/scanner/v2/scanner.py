@@ -100,7 +100,7 @@ def main() -> int:
 
     # Load CDA configuration (schema + bindings)
     try:
-        print(f"Loading CDA configuration...")
+        print("Loading CDA configuration...")
         print(f"  Core schema: {args.schema_core}")
         print(f"  Bindings:    {args.schema_bindings}")
         config = load_binding_config(args.schema_core, args.schema_bindings)
@@ -113,7 +113,7 @@ def main() -> int:
         return 1
 
     # Show processing configuration
-    print(f"\nProcessing:")
+    print("\nProcessing:")
     print(f"  Input:  {args.input}")
     print(f"  Output: {args.output}")
     if args.stats:
@@ -342,7 +342,7 @@ def main() -> int:
 
         # Print some highlights from the stats
         stats_dict = detailed_stats.to_dict()
-        print(f"\nStatistics highlights:")
+        print("\nStatistics highlights:")
         print(f"  Unique labels:     {stats_dict['label_frequencies']['total_unique']:,}")
         print(f"  Unmapped labels:   {stats_dict['unmapped_labels']['total_unique']:,}")
         print(f"  Domain labels:     {stats_dict['domain_labels']['total_unique']:,}")

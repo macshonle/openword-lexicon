@@ -13,8 +13,6 @@ Test Categories:
 """
 
 import json
-import subprocess
-import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -424,7 +422,7 @@ class TestSmokeTest:
         """Verify hotspot JSONL file exists."""
         if not HOTSPOT_JSONL.exists():
             pytest.skip(
-                f"Hotspot JSONL not found. Run `make quick-build-wikt-json-v2`."
+                "Hotspot JSONL not found. Run `make quick-build-wikt-json-v2`."
             )
         assert HOTSPOT_JSONL.stat().st_size > 0, "Hotspot JSONL is empty"
 

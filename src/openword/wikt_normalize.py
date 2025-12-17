@@ -21,7 +21,6 @@ import json
 import argparse
 from pathlib import Path
 from typing import Iterator, Dict, List, Any, Tuple
-from collections import defaultdict
 
 
 def read_jsonl(path: Path) -> Iterator[Dict[str, Any]]:

@@ -14,7 +14,7 @@ The statistics are written to a separate JSON file from the main output,
 providing insight into the actual content of the Wiktionary dump.
 """
 
-from collections import Counter, defaultdict
+from collections import Counter
 from dataclasses import dataclass, field
 from typing import Optional
 import json

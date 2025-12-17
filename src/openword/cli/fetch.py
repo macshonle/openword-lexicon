@@ -61,12 +61,28 @@ def color(code: str, text: str) -> str:
     return text
 
 
-RED = lambda t: color("0;31", t)
-GREEN = lambda t: color("0;32", t)
-YELLOW = lambda t: color("1;33", t)
-BLUE = lambda t: color("0;34", t)
-BOLD = lambda t: color("1", t)
-DIM = lambda t: color("2", t)
+def RED(t: str) -> str:
+    return color("0;31", t)
+
+
+def GREEN(t: str) -> str:
+    return color("0;32", t)
+
+
+def YELLOW(t: str) -> str:
+    return color("1;33", t)
+
+
+def BLUE(t: str) -> str:
+    return color("0;34", t)
+
+
+def BOLD(t: str) -> str:
+    return color("1", t)
+
+
+def DIM(t: str) -> str:
+    return color("2", t)
 
 
 # ==============================================================================
@@ -542,7 +558,7 @@ def fetch_source(
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir) / "repo"
 
-            print(f"      Cloning repository...")
+            print("      Cloning repository...")
             success, git_commit = clone_repo(repo, temp_path, tag=git_tag)
             if not success:
                 return "failed", "Clone failed"
@@ -577,7 +593,7 @@ def fetch_source(
         return "failed", "Output file is empty or missing"
 
     # Compute metadata
-    print(f"      Computing checksum...")
+    print("      Computing checksum...")
     checksum = compute_sha256(output_path)
     file_size = get_file_size(output_path)
 
@@ -756,7 +772,6 @@ def load_sources() -> dict[str, Any]:
 
 def list_sources(config: dict[str, Any]) -> None:
     """Print available sources."""
-    settings = config.get("settings", {})
     sources = config.get("sources", {})
 
     print(f"\n{BOLD('Available sources:')}\n")
@@ -888,7 +903,6 @@ def main() -> int:
 
     try:
         for i, (source_id, source_config) in enumerate(sources_to_fetch, 1):
-            name = source_config.get("name", source_id)
             title = source_config.get("title", "")
             title_display = title[:50] + '...' if len(title) > 50 else title
 

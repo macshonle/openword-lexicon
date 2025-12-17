@@ -5,7 +5,6 @@ Unit tests for filter functions and integration tests for the CLI.
 
 import json
 import pytest
-import tempfile
 from pathlib import Path
 
 from openword.cli.owlex import OwlexFilter
@@ -282,7 +281,6 @@ class TestFrequencyFilters:
 
         results = [e for e in mini_lexemes if filter_obj.filter_entry(e)]
         words = [e['id'] for e in results]
-        tiers = {e['id']: e['frequency_tier'] for e in results}
 
         assert "cat" in words  # A
         assert "dog" in words  # A
@@ -1009,8 +1007,7 @@ class TestEdgeCases:
 
         # Unknown tier should be handled gracefully
         # Default behavior: unknown tier gets score 0, same as Z
-        result = filter_obj.filter_entry(entry)
-        # This should pass since max_tier=Z
+        filter_obj.filter_entry(entry)  # Should not raise
 
     def test_syllable_filter_without_syllable_data(self, mini_lexemes):
         """Test syllable filter on entry without syllable data."""
@@ -1021,7 +1018,7 @@ class TestEdgeCases:
 
         # Entry without syllable data - behavior depends on implementation
         # It should either fail (no data) or pass (no data means no constraint)
-        result = filter_obj.filter_entry(entry)
+        filter_obj.filter_entry(entry)  # Should not raise
 
     def test_spelling_region_none_vs_missing(self, mini_lexemes):
         """Test spelling region handling for None vs missing field."""
@@ -1045,8 +1042,8 @@ class TestEdgeCases:
         filter_obj = MockOwlexFilter(spec)
 
         # Empty prefix should match everything or be ignored
-        result = filter_obj.filter_entry(entry)
-        # This is a potential bug - empty string matches all
+        filter_obj.filter_entry(entry)  # Should not raise
+        # Note: empty string matches all
 
     def test_pattern_special_characters(self, mini_lexemes):
         """Test pattern filter with special regex characters."""
@@ -1055,7 +1052,7 @@ class TestEdgeCases:
         filter_obj = MockOwlexFilter(spec)
 
         # Should handle regex special chars correctly
-        result = filter_obj.filter_entry(entry)
+        filter_obj.filter_entry(entry)  # Should not raise
 
 
 # =============================================================================
@@ -1126,11 +1123,11 @@ class TestKnownBugs:
         filter_obj = MockOwlexFilter(spec)
 
         # Entry WITH labels (test fixture format) should pass
-        assert filter_obj.filter_entry(entry_with_label) == True
+        assert filter_obj.filter_entry(entry_with_label)
 
         # Entry WITHOUT labels (real data format) should fail - this is the bug
         # Currently it fails because there's no labels.register to match
-        assert filter_obj.filter_entry(entry_real_format) == False
+        assert not filter_obj.filter_entry(entry_real_format)
 
     def test_pos_filter_requires_senses_data(self):
         """BUG: POS filter may fail on real data because POS isn't in lexemes file.
@@ -1150,7 +1147,7 @@ class TestKnownBugs:
         filter_obj = MockOwlexFilter(spec)
 
         # Should fail because no POS data
-        assert filter_obj.filter_entry(entry_real_format) == False
+        assert not filter_obj.filter_entry(entry_real_format)
 
     def test_concreteness_filter_requires_enrichment(self):
         """Verify concreteness filter behavior on data without concreteness.
@@ -1167,7 +1164,7 @@ class TestKnownBugs:
         filter_obj = MockOwlexFilter(spec)
 
         # Should fail - no concreteness data means can't match
-        assert filter_obj.filter_entry(entry_without_concreteness) == False
+        assert not filter_obj.filter_entry(entry_without_concreteness)
 
 
 # =============================================================================

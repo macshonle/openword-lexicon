@@ -31,7 +31,7 @@ import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Set
 
 import requests
 
@@ -350,7 +350,7 @@ def cmd_fetch(args):
     with_label = sum(1 for e in all_entries.values() if e.label)
     with_desc = sum(1 for e in all_entries.values() if e.description)
     empty = sum(1 for e in all_entries.values() if not e.label and not e.description)
-    logger.info(f"Summary:")
+    logger.info("Summary:")
     logger.info(f"  With label: {with_label:,}")
     logger.info(f"  With description: {with_desc:,}")
     logger.info(f"  Empty (no data): {empty:,}")
@@ -383,12 +383,12 @@ def cmd_stats(args):
     covered = qids & cached_qids
     missing = qids - cached_qids
 
-    print(f"Coverage:")
+    print("Coverage:")
     print(f"  Covered: {len(covered):,} ({100*len(covered)/len(qids):.1f}%)" if qids else "  No Q codes")
     print(f"  Missing: {len(missing):,}")
 
     if missing and args.verbose:
-        print(f"\nMissing Q codes (first 20):")
+        print("\nMissing Q codes (first 20):")
         for qid in sorted(missing, key=lambda x: int(x[1:]))[:20]:
             print(f"  {qid}")
 

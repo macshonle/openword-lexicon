@@ -360,7 +360,7 @@ def merge_sources(
         logger.info(f"  With lexnames:          {stats['with_lexnames']:,}")
 
     # Sort entries by word and write output
-    logger.info(f"Writing merged lexeme file...")
+    logger.info("Writing merged lexeme file...")
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     sorted_words = sorted(wikt_entries.keys())

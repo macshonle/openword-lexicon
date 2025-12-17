@@ -1,7 +1,5 @@
 """Smoke tests for pipeline components."""
-import pytest
 import json
-from pathlib import Path
 
 
 def test_sample_metadata_format(sample_metadata):

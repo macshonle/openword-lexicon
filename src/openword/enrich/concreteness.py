@@ -14,7 +14,7 @@ import json
 import logging
 import sys
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Dict, Tuple
 
 from openword.progress_display import ProgressDisplay
 
@@ -189,7 +189,6 @@ def process_file(
                     entry = json.loads(line)
 
                     # Check if entry will be enriched
-                    word = entry.get('id', '').lower()
                     had_concreteness = entry.get('concreteness') is not None
 
                     # Enrich entry

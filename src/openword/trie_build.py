@@ -22,11 +22,10 @@ import json
 import logging
 import re
 from pathlib import Path
-from typing import List, Dict, Optional, Callable
+from typing import Optional, Callable
 import sys
 
 import marisa_trie
-import orjson
 
 from openword.progress_display import ProgressDisplay
 

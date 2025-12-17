@@ -30,7 +30,7 @@ def load_entries(input_file: Path) -> List[Dict]:
 
     print(f"Loading {input_file.name}...")
 
-    with ProgressDisplay(f"Loading entries", update_interval=1000) as progress:
+    with ProgressDisplay("Loading entries", update_interval=1000) as progress:
         with open(input_file, 'r', encoding='utf-8') as f:
             for line_num, line in enumerate(f, start=1):
                 line = line.strip()
@@ -81,7 +81,7 @@ def write_entries(entries: List[Dict], output_file: Path):
 
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
-    with ProgressDisplay(f"Writing entries", update_interval=1000) as progress:
+    with ProgressDisplay("Writing entries", update_interval=1000) as progress:
         with open(output_file, 'w', encoding='utf-8') as f:
             for i, entry in enumerate(entries, start=1):
                 json.dump(entry, f, ensure_ascii=False, separators=(',', ':'))
@@ -111,7 +111,7 @@ def main():
 
     if not input_file.exists():
         print(f"Error: Input file not found: {input_file}")
-        print(f"Run 'make build-wiktionary-json' first to extract Wiktionary data.")
+        print("Run 'make build-wiktionary-json' first to extract Wiktionary data.")
         return 1
 
     print(f"Input:  {input_file}")
@@ -134,7 +134,7 @@ def main():
     print("=" * 80)
     print(f"Sorted {len(sorted_entries):,} entries")
     print(f"Duplicate words now consecutive in {output_file.name}")
-    print(f"Trie ordinals will map directly to line numbers")
+    print("Trie ordinals will map directly to line numbers")
     print()
 
     return 0
