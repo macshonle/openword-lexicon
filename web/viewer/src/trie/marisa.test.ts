@@ -1,22 +1,22 @@
 /**
- * marisa.test.ts - Tests for MARISA trie (OWTRIE v6)
+ * marisa.test.ts - Tests for MARISA trie (OWTRIE v7/v8)
  *
  * Tests verify:
- * 1. Building trie from word list (v6.0 baseline)
+ * 1. Building trie from word list
  * 2. Word membership (has)
  * 3. Word ID mapping (sequential IDs in BFS order)
  * 4. Prefix search (keysWithPrefix)
  * 5. Common prefix search (commonPrefixes)
  * 6. Unicode handling
  * 7. Serialization round-trip
- * 8. Path compression with links (v6.1+)
+ * 8. Path compression with recursive tails
  */
 
 import { describe, test } from 'node:test';
 import * as assert from 'node:assert';
 import { MarisaTrie } from './marisa.js';
 
-describe('MarisaTrie Construction (v6.0)', () => {
+describe('MarisaTrie Construction', () => {
   test('empty word list', () => {
     const { trie } = MarisaTrie.build([]);
     assert.strictEqual(trie.wordCount, 0);
@@ -303,7 +303,7 @@ describe('MarisaTrie Serialization', () => {
 
     const view = new DataView(buffer.buffer);
     const version = view.getUint16(6, true);
-    assert.strictEqual(version, 6);
+    assert.strictEqual(version, 7);
   });
 
   test('deserialize rejects invalid magic', () => {
@@ -317,7 +317,7 @@ describe('MarisaTrie Serialization', () => {
     const buffer = new Uint8Array(30);
     buffer.set(new TextEncoder().encode('OWTRIE'), 0);
     const view = new DataView(buffer.buffer);
-    view.setUint16(6, 5, true); // version 5
+    view.setUint16(6, 6, true); // version 6 (unsupported)
 
     assert.throws(() => MarisaTrie.deserialize(buffer), /Unsupported trie version/);
   });
@@ -360,10 +360,10 @@ describe('MarisaTrie Statistics', () => {
   });
 });
 
-describe('MarisaTrie Path Compression (v6.1)', () => {
-  test('builds with path compression enabled', () => {
+describe('MarisaTrie Path Compression', () => {
+  test('builds with path compression', () => {
     const words = ['a', 'apple', 'banana'];
-    const { trie } = MarisaTrie.build(words, { enableLinks: true });
+    const { trie } = MarisaTrie.build(words);
 
     assert.strictEqual(trie.wordCount, 3);
     for (const word of words) {
@@ -374,21 +374,21 @@ describe('MarisaTrie Path Compression (v6.1)', () => {
   test('compresses single-child chains', () => {
     // "abc" should compress the "bc" part since "a" is a terminal
     const words = ['a', 'abc'];
-    const { trie, stats } = MarisaTrie.build(words, { enableLinks: true });
+    const { trie, stats } = MarisaTrie.build(words);
 
     assert.strictEqual(trie.wordCount, 2);
     assert.strictEqual(trie.has('a'), true);
     assert.strictEqual(trie.has('abc'), true);
     assert.strictEqual(trie.has('ab'), false);
 
-    // With links, should have tail buffer
-    assert.ok(stats.tailBufferSize > 0, 'should have tail buffer');
+    // With path compression, should have tail trie
+    assert.ok(stats.tailBufferSize > 0, 'should have tail buffer (recursive trie)');
   });
 
   test('preserves terminals during compression', () => {
     // Important: don't compress through terminals
     const words = ['a', 'ab', 'abc'];
-    const { trie } = MarisaTrie.build(words, { enableLinks: true });
+    const { trie } = MarisaTrie.build(words);
 
     assert.strictEqual(trie.wordCount, 3);
     for (const word of words) {
@@ -398,7 +398,7 @@ describe('MarisaTrie Path Compression (v6.1)', () => {
 
   test('round-trip with path compression', () => {
     const words = ['apple', 'application', 'banana', 'bandana'];
-    const { trie: original } = MarisaTrie.build(words, { enableLinks: true });
+    const { trie: original } = MarisaTrie.build(words);
 
     const serialized = original.serialize();
     const restored = MarisaTrie.deserialize(serialized);
@@ -411,7 +411,7 @@ describe('MarisaTrie Path Compression (v6.1)', () => {
 
   test('prefix search with compressed edges', () => {
     const words = ['apple', 'application', 'apply'];
-    const { trie } = MarisaTrie.build(words, { enableLinks: true });
+    const { trie } = MarisaTrie.build(words);
 
     const results = trie.keysWithPrefix('app');
     assert.strictEqual(results.length, 3);
@@ -422,7 +422,7 @@ describe('MarisaTrie Path Compression (v6.1)', () => {
 
   test('common prefixes with compressed edges', () => {
     const words = ['a', 'app', 'apple', 'application'];
-    const { trie } = MarisaTrie.build(words, { enableLinks: true });
+    const { trie } = MarisaTrie.build(words);
 
     const prefixes = trie.commonPrefixes('application');
     const found = prefixes.map(([w]) => w);
@@ -472,7 +472,7 @@ describe('MarisaTrie Large Scale', () => {
     const words = Array.from({ length: 1000 }, (_, i) =>
       `word${i.toString().padStart(4, '0')}`
     );
-    const { trie } = MarisaTrie.build(words, { enableLinks: true });
+    const { trie } = MarisaTrie.build(words);
 
     assert.strictEqual(trie.wordCount, 1000);
 
@@ -484,38 +484,18 @@ describe('MarisaTrie Large Scale', () => {
   });
 });
 
-describe('MarisaTrie Comparison with v5', () => {
-  test('v6.0 produces same results as v5 baseline', async () => {
-    // Import LOUDSTrie dynamically to compare
-    const { LOUDSTrie } = await import('../louds-trie.js');
-
-    const words = ['apple', 'apply', 'banana', 'band', 'bandana'];
-
-    const v5 = LOUDSTrie.build(words);
-    const { trie: v6 } = MarisaTrie.build(words);
-
-    assert.strictEqual(v6.wordCount, v5.wordCount);
-
-    for (const word of words) {
-      assert.strictEqual(v6.has(word), v5.has(word), `has(${word}) should match`);
-      assert.strictEqual(v6.wordId(word), v5.wordId(word), `wordId(${word}) should match`);
-    }
-  });
-});
-
-describe('MarisaTrie Recursive Tails (v6.3)', () => {
-  test('builds with recursive tails enabled', () => {
+describe('MarisaTrie Recursive Tails', () => {
+  test('builds with recursive tails', () => {
     const words = ['application', 'approbation', 'station', 'nation'];
-    const { trie, stats } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true });
+    const { trie } = MarisaTrie.build(words);
 
     assert.strictEqual(trie.wordCount, 4);
     assert.ok(trie.tailTrie, 'should have tail trie');
-    assert.strictEqual(trie.tailBuffer, null, 'should not have flat tail buffer');
   });
 
   test('recursive tails has() works correctly', () => {
     const words = ['apple', 'application', 'approbation', 'banana', 'bandana'];
-    const { trie } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true });
+    const { trie } = MarisaTrie.build(words);
 
     for (const word of words) {
       assert.strictEqual(trie.has(word), true, `should have ${word}`);
@@ -527,7 +507,7 @@ describe('MarisaTrie Recursive Tails (v6.3)', () => {
 
   test('recursive tails wordId works correctly', () => {
     const words = ['apple', 'application', 'approbation'];
-    const { trie } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true });
+    const { trie } = MarisaTrie.build(words);
 
     for (let i = 0; i < words.length; i++) {
       const id = trie.wordId(words[i]);
@@ -539,7 +519,7 @@ describe('MarisaTrie Recursive Tails (v6.3)', () => {
 
   test('recursive tails round-trip serialization', () => {
     const words = ['application', 'approbation', 'station', 'nation', 'relation'];
-    const { trie: original } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true });
+    const { trie: original } = MarisaTrie.build(words);
 
     const serialized = original.serialize();
     const restored = MarisaTrie.deserialize(serialized);
@@ -555,7 +535,7 @@ describe('MarisaTrie Recursive Tails (v6.3)', () => {
 
   test('recursive tails prefix search', () => {
     const words = ['apple', 'application', 'approbation', 'apply'];
-    const { trie } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true });
+    const { trie } = MarisaTrie.build(words);
 
     const results = trie.keysWithPrefix('app');
     assert.strictEqual(results.length, 4);
@@ -566,7 +546,7 @@ describe('MarisaTrie Recursive Tails (v6.3)', () => {
 
   test('recursive tails common prefixes', () => {
     const words = ['a', 'app', 'apple', 'application'];
-    const { trie } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true });
+    const { trie } = MarisaTrie.build(words);
 
     const prefixes = trie.commonPrefixes('application');
     const found = prefixes.map(([w]) => w);
@@ -578,7 +558,7 @@ describe('MarisaTrie Recursive Tails (v6.3)', () => {
 
   test('recursive tails getWord method', () => {
     const words = ['apple', 'apply', 'banana'];
-    const { trie } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true });
+    const { trie } = MarisaTrie.build(words);
 
     // getWord should return words by their ID
     const foundWords = new Set<string>();
@@ -596,16 +576,5 @@ describe('MarisaTrie Recursive Tails (v6.3)', () => {
     // Out of range should return null
     assert.strictEqual(trie.getWord(-1), null);
     assert.strictEqual(trie.getWord(words.length), null);
-  });
-
-  test('v6.1 vs v6.3 produce same lookups', () => {
-    const words = ['application', 'approbation', 'station', 'nation', 'relation'];
-
-    const { trie: v61 } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: false });
-    const { trie: v63 } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true });
-
-    for (const word of words) {
-      assert.strictEqual(v63.has(word), v61.has(word), `has(${word}) should match`);
-    }
   });
 });

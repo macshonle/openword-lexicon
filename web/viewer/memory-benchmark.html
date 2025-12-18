@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OWTRIE Memory Benchmark</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #1a1a2e; color: #eee; }
+    #status { margin: 20px 0; }
+    #log { background: #0d1117; padding: 15px; max-height: 400px; overflow-y: auto; }
+    .log-info { color: #8b949e; }
+    .log-success { color: #4ade80; }
+    .log-error { color: #f87171; }
+    .log-time { color: #fbbf24; }
+  </style>
+</head>
+<body>
+  <h1>OWTRIE Memory Benchmark</h1>
+  <div id="status">Initializing...</div>
+  <div id="log"></div>
+
+  <script type="module">
+    // Parse URL parameters
+    const params = new URLSearchParams(window.location.search);
+    const dataset = params.get('dataset') || 'wordle';
+    const format = params.get('format') || 'v63';
+    const queryCount = parseInt(params.get('queries') || '1000', 10);
+
+    // Globals
+    window.benchmarkComplete = false;
+    window.benchmarkResult = {};
+    let brotliWasm = null;
+
+    function log(msg, type = 'info') {
+      const el = document.getElementById('log');
+      const line = document.createElement('div');
+      line.className = `log-${type}`;
+      line.textContent = `[${new Date().toISOString().substr(11, 12)}] ${msg}`;
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+      console.log(msg);
+    }
+
+    function setStatus(msg) {
+      document.getElementById('status').textContent = msg;
+    }
+
+    function getMemory() {
+      if (performance.memory) {
+        return performance.memory.usedJSHeapSize;
+      }
+      return null;
+    }
+
+    function forceGC() {
+      if (window.gc) {
+        window.gc();
+        return true;
+      }
+      return false;
+    }
+
+    async function initBrotli() {
+      log('Initializing brotli-wasm...');
+
+      const wasmUrl = '/web/viewer/node_modules/brotli-wasm/pkg.web/brotli_wasm_bg.wasm';
+      const jsUrl = '/web/viewer/node_modules/brotli-wasm/pkg.web/brotli_wasm.js';
+
+      // Fetch JS module as text
+      const jsResponse = await fetch(jsUrl);
+      const jsText = await jsResponse.text();
+
+      // Create blob URL for import
+      const jsBlob = new Blob([jsText], { type: 'application/javascript' });
+      const jsBlobUrl = URL.createObjectURL(jsBlob);
+
+      try {
+        // Import the module
+        const brotliModule = await import(jsBlobUrl);
+        log(`Module loaded, keys: ${Object.keys(brotliModule).slice(0, 5).join(', ')}...`);
+
+        // Fetch WASM binary
+        const wasmResponse = await fetch(wasmUrl);
+        const wasmBuffer = await wasmResponse.arrayBuffer();
+        log(`WASM binary fetched: ${(wasmBuffer.byteLength / 1024).toFixed(1)} KB`);
+
+        // Initialize WASM module
+        if (typeof brotliModule.initSync === 'function') {
+          brotliModule.initSync(wasmBuffer);
+          log('WASM initialized with initSync');
+        } else if (typeof brotliModule.default === 'function') {
+          await brotliModule.default(wasmBuffer);
+          log('WASM initialized with default');
+        } else {
+          throw new Error('No init function found in brotli module');
+        }
+
+        // Verify decompress is available
+        if (typeof brotliModule.decompress !== 'function') {
+          throw new Error('decompress function not found after init');
+        }
+
+        brotliWasm = brotliModule;
+        log('brotli-wasm initialized successfully', 'success');
+      } catch (e) {
+        log(`Init error: ${e.message}`, 'error');
+        throw e;
+      } finally {
+        URL.revokeObjectURL(jsBlobUrl);
+      }
+    }
+
+    async function loadTrie(filename) {
+      log(`Fetching ${filename}...`);
+      const fetchStart = performance.now();
+      const response = await fetch(`/web/viewer/test-data/${filename}`);
+      const buffer = await response.arrayBuffer();
+      const fetchTime = performance.now() - fetchStart;
+      log(`Fetched ${(buffer.byteLength / 1024).toFixed(1)} KB in ${fetchTime.toFixed(1)}ms`);
+
+      const deserializeStart = performance.now();
+
+      // Check if brotli compressed
+      const view = new DataView(buffer);
+      const flags = view.getUint32(16, true);
+      const isBrotli = (flags & 0x20) !== 0;
+
+      let trieBuffer;
+      const HEADER_SIZE = 24;
+
+      if (isBrotli) {
+        log('Decompressing brotli payload...');
+        const compressedLength = view.getUint32(HEADER_SIZE, true);
+        const compressedPayload = new Uint8Array(buffer, HEADER_SIZE + 4, compressedLength);
+        const payloadCopy = new Uint8Array(compressedPayload);
+
+        const decompressStart = performance.now();
+        const decompressed = brotliWasm.decompress(payloadCopy);
+        log(`Decompressed in ${(performance.now() - decompressStart).toFixed(1)}ms`, 'time');
+
+        const header = new Uint8Array(buffer, 0, HEADER_SIZE);
+        trieBuffer = new Uint8Array(HEADER_SIZE + decompressed.length);
+        trieBuffer.set(header, 0);
+        trieBuffer.set(decompressed, HEADER_SIZE);
+      } else {
+        trieBuffer = new Uint8Array(buffer);
+      }
+
+      const deserializeTime = performance.now() - deserializeStart;
+
+      // Extract stats from header
+      const trieView = new DataView(trieBuffer.buffer, trieBuffer.byteOffset, trieBuffer.byteLength);
+      const wordCount = trieView.getUint32(8, true);
+      const nodeCount = trieView.getUint32(12, true);
+
+      log(`Trie loaded: ${wordCount.toLocaleString()} words, ${nodeCount.toLocaleString()} nodes`);
+
+      return {
+        buffer: trieBuffer,
+        downloadSize: buffer.byteLength,
+        fetchTime,
+        deserializeTime,
+        wordCount,
+        nodeCount,
+      };
+    }
+
+    // Simple prefix search simulation
+    // Since we don't have the full MarisaTrie in browser, we simulate query overhead
+    function runPrefixQueries(trieBuffer, count) {
+      log(`Running ${count.toLocaleString()} prefix query simulations...`);
+      const start = performance.now();
+
+      // Generate random prefixes based on trie structure
+      const prefixes = ['a', 'ab', 'the', 'un', 'pre', 're', 'in', 'de', 'con', 'dis',
+                        'pro', 'com', 'ex', 'sub', 'inter', 'super', 'anti', 'auto', 'semi'];
+
+      // Simulate prefix search by doing buffer operations
+      // This approximates the memory access patterns of actual queries
+      const view = new DataView(trieBuffer.buffer, trieBuffer.byteOffset, trieBuffer.byteLength);
+      let dummy = 0;
+
+      for (let i = 0; i < count; i++) {
+        const prefix = prefixes[i % prefixes.length];
+        // Simulate traversing trie structure
+        for (let j = 0; j < prefix.length * 10; j++) {
+          const offset = (i * 17 + j * 31) % (trieBuffer.length - 4);
+          dummy += view.getUint32(offset, true);
+        }
+      }
+
+      const elapsed = performance.now() - start;
+      log(`Completed ${count} queries in ${elapsed.toFixed(1)}ms (${(elapsed / count).toFixed(3)}ms avg)`, 'success');
+
+      // Prevent optimization
+      if (dummy === -1) console.log(dummy);
+
+      return { queryTime: elapsed, avgQueryTime: elapsed / count };
+    }
+
+    async function runBenchmark() {
+      try {
+        setStatus(`Benchmarking ${dataset}/${format}...`);
+
+        // Force GC before starting
+        forceGC();
+        await new Promise(r => setTimeout(r, 100));
+
+        // Measure baseline memory
+        const memoryBefore = getMemory();
+        log(`Memory before: ${memoryBefore ? (memoryBefore / 1024 / 1024).toFixed(2) + ' MB' : 'N/A'}`);
+
+        // Initialize brotli if needed
+        if (format !== 'v63') {
+          await initBrotli();
+        }
+
+        // Load trie
+        const filename = `${dataset}-${format}.trie.bin`;
+        const trieResult = await loadTrie(filename);
+
+        // Force GC and measure memory after load
+        forceGC();
+        await new Promise(r => setTimeout(r, 100));
+        const memoryAfterLoad = getMemory();
+        log(`Memory after load: ${memoryAfterLoad ? (memoryAfterLoad / 1024 / 1024).toFixed(2) + ' MB' : 'N/A'}`);
+
+        // Run queries
+        const queryResult = runPrefixQueries(trieResult.buffer, queryCount);
+
+        // Force GC and measure memory after queries
+        forceGC();
+        await new Promise(r => setTimeout(r, 100));
+        const memoryAfterQueries = getMemory();
+        log(`Memory after queries: ${memoryAfterQueries ? (memoryAfterQueries / 1024 / 1024).toFixed(2) + ' MB' : 'N/A'}`);
+
+        // Store results
+        window.benchmarkResult = {
+          downloadSize: trieResult.downloadSize,
+          fetchTime: trieResult.fetchTime,
+          deserializeTime: trieResult.deserializeTime,
+          wordCount: trieResult.wordCount,
+          nodeCount: trieResult.nodeCount,
+          memoryBefore,
+          memoryAfterLoad,
+          memoryAfterQueries,
+          queryCount,
+          queryTime: queryResult.queryTime,
+          avgQueryTime: queryResult.avgQueryTime,
+        };
+
+        setStatus('Benchmark complete!');
+        log('Benchmark complete!', 'success');
+
+      } catch (error) {
+        log(`Error: ${error.message}`, 'error');
+        window.benchmarkResult = { error: error.message };
+        setStatus('Benchmark failed: ' + error.message);
+      } finally {
+        window.benchmarkComplete = true;
+      }
+    }
+
+    // Start benchmark
+    log(`Starting benchmark: dataset=${dataset}, format=${format}, queries=${queryCount}`);
+    runBenchmark();
+  </script>
+</body>
+</html>

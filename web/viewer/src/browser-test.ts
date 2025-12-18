@@ -6,9 +6,9 @@
  * This allows automated testing without opening a browser window.
  *
  * Usage:
- *   pnpm browser-test           # Test default v6.1 trie
- *   pnpm browser-test --v63     # Test v6.3 recursive trie
- *   pnpm browser-test --all     # Test both v6.1 and v6.3
+ *   pnpm browser-test           # Test default v7 trie
+ *   pnpm browser-test --v8      # Test v8 brotli trie
+ *   pnpm browser-test --all     # Test both v7 and v8
  */
 
 import { chromium, Browser, Page } from 'playwright';
@@ -77,9 +77,9 @@ function createStaticServer(port: number): Promise<Server> {
 /**
  * Run tests in headless browser and extract results.
  */
-async function runTests(page: Page, testV63: boolean): Promise<TestResult> {
-  const url = testV63
-    ? 'http://localhost:8081/web/viewer/test.html?trie=v63'
+async function runTests(page: Page, testV8: boolean): Promise<TestResult> {
+  const url = testV8
+    ? 'http://localhost:8081/web/viewer/test.html?trie=v8'
     : 'http://localhost:8081/web/viewer/test.html';
 
   // Navigate to test page
@@ -125,22 +125,22 @@ function printResults(result: TestResult, label: string): void {
     const lines = result.details.split('\n');
     for (const line of lines) {
       if (line.includes('[FAIL]')) {
-        console.log(`  ❌ ${line.replace('[FAIL] ', '')}`);
+        console.log(`  ${line.replace('[FAIL] ', '')}`);
       }
     }
     console.log();
   }
 
-  const status = result.failed === 0 ? '✅ PASS' : '❌ FAIL';
+  const status = result.failed === 0 ? 'PASS' : 'FAIL';
   console.log(`${status}: ${result.passed} passed, ${result.failed} failed, ${result.skipped} skipped`);
 }
 
 async function main() {
   const args = process.argv.slice(2);
-  const testV63Only = args.includes('--v63');
+  const testV8Only = args.includes('--v8');
   const testAll = args.includes('--all');
-  const testV61 = !testV63Only || testAll;
-  const testV63 = testV63Only || testAll;
+  const testV7 = !testV8Only || testAll;
+  const testV8 = testV8Only || testAll;
 
   console.log('Starting headless browser tests...');
 
@@ -167,22 +167,22 @@ async function main() {
     let totalPassed = 0;
     let totalFailed = 0;
 
-    // Test v6.1
-    if (testV61) {
-      console.log('\nRunning v6.1 tests...');
-      const v61Result = await runTests(page, false);
-      printResults(v61Result, 'v6.1 (path compression)');
-      totalPassed += v61Result.passed;
-      totalFailed += v61Result.failed;
+    // Test v7
+    if (testV7) {
+      console.log('\nRunning v7 tests...');
+      const v7Result = await runTests(page, false);
+      printResults(v7Result, 'v7 (uncompressed)');
+      totalPassed += v7Result.passed;
+      totalFailed += v7Result.failed;
     }
 
-    // Test v6.3
-    if (testV63) {
-      console.log('\nRunning v6.3 tests...');
-      const v63Result = await runTests(page, true);
-      printResults(v63Result, 'v6.3 (recursive tails)');
-      totalPassed += v63Result.passed;
-      totalFailed += v63Result.failed;
+    // Test v8
+    if (testV8) {
+      console.log('\nRunning v8 tests...');
+      const v8Result = await runTests(page, true);
+      printResults(v8Result, 'v8 (brotli)');
+      totalPassed += v8Result.passed;
+      totalFailed += v8Result.failed;
     }
 
     // Overall summary

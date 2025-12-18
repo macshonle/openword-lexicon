@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * benchmark-v6.ts - Benchmark OWTRIE format comparisons
+ * benchmark.ts - Benchmark OWTRIE format comparisons
  *
- * Compares build time, binary size, and lookup performance across formats.
+ * Compares build time, binary size, and lookup performance for v7/v8 formats.
  * Uses owlex (OpenWord Lexicon Extended) to generate word lists from YAML specs.
  *
  * Usage:
@@ -14,7 +14,8 @@
  *   --word-only    Run only word-only entries (~1.2M words)
  *   --full         Run only full Wiktionary (~1.3M words, default)
  *   --json         Output results as JSON (for comparison with Python benchmark)
- *   --breakdown    Show detailed size breakdown for v6.x formats
+ *   --breakdown    Show detailed size breakdown
+ *   --validate     Perform round-trip validation (build → serialize → deserialize → enumerate)
  *
  * Examples:
  *   # Benchmark all three datasets
@@ -30,8 +31,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
-import { buildDAWG, LOUDSTrie, MarisaTrie } from './trie/index.js';
-import type { MarisaDetailedStats } from './trie/index.js';
+import { MarisaTrie, initBrotliNode } from './trie/index.js';
+import type { MarisaDetailedStats, MarisaMemoryStats } from './trie/index.js';
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '..', '..', '..');
 
@@ -60,6 +61,14 @@ const DATASETS: Record<string, DatasetConfig> = {
   },
 };
 
+interface RoundTripResult {
+  passed: boolean;
+  originalCount: number;
+  roundTripCount: number;
+  missingWords: string[];
+  extraWords: string[];
+}
+
 interface BenchResult {
   format: string;
   version: number;
@@ -71,6 +80,8 @@ interface BenchResult {
   lookupAvgUs: number;
   prefixAvgUs: number;
   detailedStats?: MarisaDetailedStats;
+  memoryStats?: MarisaMemoryStats;
+  roundTrip?: RoundTripResult;
 }
 
 interface DatasetResults {
@@ -167,6 +178,50 @@ function benchmarkPrefixSearch(
 }
 
 /**
+ * Perform round-trip validation: build → serialize → deserialize → enumerate → compare.
+ */
+function validateRoundTrip(
+  originalWords: string[],
+  serialize: () => Uint8Array,
+  deserialize: (buffer: Uint8Array) => { getWord: (id: number) => string | null; wordCount: number },
+): RoundTripResult {
+  // Serialize and deserialize
+  const buffer = serialize();
+  const trie = deserialize(buffer);
+
+  // Enumerate all words from the deserialized trie
+  const roundTripWords: string[] = [];
+  for (let i = 0; i < trie.wordCount; i++) {
+    const word = trie.getWord(i);
+    if (word !== null) {
+      roundTripWords.push(word);
+    }
+  }
+
+  // Sort for comparison
+  const sortedOriginal = [...originalWords].sort();
+  const sortedRoundTrip = [...roundTripWords].sort();
+
+  // Find differences
+  const originalSet = new Set(sortedOriginal);
+  const roundTripSet = new Set(sortedRoundTrip);
+
+  const missingWords = sortedOriginal.filter(w => !roundTripSet.has(w)).slice(0, 10);
+  const extraWords = sortedRoundTrip.filter(w => !originalSet.has(w)).slice(0, 10);
+
+  const passed = sortedOriginal.length === sortedRoundTrip.length &&
+    missingWords.length === 0 && extraWords.length === 0;
+
+  return {
+    passed,
+    originalCount: sortedOriginal.length,
+    roundTripCount: sortedRoundTrip.length,
+    missingWords,
+    extraWords,
+  };
+}
+
+/**
  * Run benchmarks for a format.
  */
 function benchmark(
@@ -179,6 +234,13 @@ function benchmark(
     has: (w: string) => boolean;
     keysWithPrefix: (p: string, l: number) => string[];
     detailedStats?: () => MarisaDetailedStats;
+    memoryStats?: (serializedSize?: number) => MarisaMemoryStats;
+    getWord?: (id: number) => string | null;
+    wordCount?: number;
+  },
+  options?: {
+    validateRoundTrip?: boolean;
+    deserialize?: (buffer: Uint8Array) => { getWord: (id: number) => string | null; wordCount: number };
   }
 ): BenchResult {
   // Build
@@ -200,6 +262,15 @@ function benchmark(
   // Detailed stats (for MARISA tries)
   const detailedStats = trie.detailedStats?.();
 
+  // Memory stats (for MARISA tries)
+  const memoryStats = trie.memoryStats?.(binarySize);
+
+  // Round-trip validation
+  let roundTrip: RoundTripResult | undefined;
+  if (options?.validateRoundTrip && options.deserialize) {
+    roundTrip = validateRoundTrip(words, trie.serialize, options.deserialize);
+  }
+
   return {
     format: name,
     version,
@@ -211,104 +282,62 @@ function benchmark(
     lookupAvgUs,
     prefixAvgUs,
     detailedStats,
+    memoryStats,
+    roundTrip,
   };
+}
+
+interface BenchmarkOptions {
+  quiet?: boolean;
+  validateRoundTrip?: boolean;
 }
 
 /**
  * Run all format benchmarks for a word list.
  */
-function runBenchmarks(words: string[], quiet: boolean = false): BenchResult[] {
+function runBenchmarks(words: string[], options: BenchmarkOptions = {}): BenchResult[] {
+  const { quiet = false, validateRoundTrip: doValidation = false } = options;
   const results: BenchResult[] = [];
   const log = (msg: string) => { if (!quiet) process.stdout.write(msg); };
   const logln = (msg: string) => { if (!quiet) console.log(msg); };
 
-  // v4 DAWG
-  try {
-    log('    v4 DAWG...');
-    const r = benchmark('v4 DAWG', 4, words, () => {
-      const result = buildDAWG(words, 'v4');
-      return {
-        nodeCount: result.nodeCount,
-        serialize: () => result.buffer,
-        has: () => { throw new Error('v4 has() requires loading'); },
-        keysWithPrefix: () => { throw new Error('v4 prefix search not implemented'); },
-      };
-    });
-    // v4 doesn't support runtime lookups from buffer, so skip lookup benchmarks
-    r.lookupAvgUs = NaN;
-    r.prefixAvgUs = NaN;
-    results.push(r);
-    logln(' done');
-  } catch {
-    logln(' skipped (too many nodes)');
-  }
-
-  // v5 LOUDS
-  log('    v5 LOUDS...');
-  results.push(benchmark('v5 LOUDS', 5, words, () => {
-    const trie = LOUDSTrie.build(words);
-    return {
-      nodeCount: trie.nodeCount,
-      serialize: () => trie.serialize(),
-      has: (w) => trie.has(w),
-      keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
-    };
-  }));
-  logln(' done');
-
-  // v6.0 MARISA (no links)
-  log('    v6.0 MARISA (baseline)...');
-  results.push(benchmark('v6.0', 6, words, () => {
-    const { trie } = MarisaTrie.build(words);
+  // v7 MARISA (recursive tail trie, uncompressed)
+  log('    v7 MARISA (uncompressed)...');
+  results.push(benchmark('v7', 7, words, () => {
+    const { trie } = MarisaTrie.build(words, {});
     return {
       nodeCount: trie.nodeCount,
       serialize: () => trie.serialize(),
       has: (w) => trie.has(w),
       keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
       detailedStats: () => trie.detailedStats(),
+      memoryStats: (sz) => trie.memoryStats(sz),
+      getWord: (id) => trie.getWord(id),
+      wordCount: trie.wordCount,
     };
+  }, {
+    validateRoundTrip: doValidation,
+    deserialize: (buf) => MarisaTrie.deserialize(buf),
   }));
   logln(' done');
 
-  // v6.1 MARISA (with path compression)
-  log('    v6.1 MARISA (path compression)...');
-  results.push(benchmark('v6.1', 6, words, () => {
-    const { trie } = MarisaTrie.build(words, { enableLinks: true });
+  // v8 MARISA (brotli compression)
+  log('    v8 MARISA (brotli)...');
+  results.push(benchmark('v8', 8, words, () => {
+    const { trie } = MarisaTrie.build(words, { enableBrotli: true });
     return {
       nodeCount: trie.nodeCount,
       serialize: () => trie.serialize(),
       has: (w) => trie.has(w),
       keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
       detailedStats: () => trie.detailedStats(),
+      memoryStats: (sz) => trie.memoryStats(sz),
+      getWord: (id) => trie.getWord(id),
+      wordCount: trie.wordCount,
     };
-  }));
-  logln(' done');
-
-  // v6.3 MARISA (recursive tail trie)
-  log('    v6.3 MARISA (recursive tails)...');
-  results.push(benchmark('v6.3', 6, words, () => {
-    const { trie } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true });
-    return {
-      nodeCount: trie.nodeCount,
-      serialize: () => trie.serialize(),
-      has: (w) => trie.has(w),
-      keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
-      detailedStats: () => trie.detailedStats(),
-    };
-  }));
-  logln(' done');
-
-  // v6.4 MARISA (Huffman labels)
-  log('    v6.4 MARISA (Huffman labels)...');
-  results.push(benchmark('v6.4', 6, words, () => {
-    const { trie } = MarisaTrie.build(words, { enableLinks: true, enableRecursive: true, enableHuffman: true });
-    return {
-      nodeCount: trie.nodeCount,
-      serialize: () => trie.serialize(),
-      has: (w) => trie.has(w),
-      keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
-      detailedStats: () => trie.detailedStats(),
-    };
+  }, {
+    validateRoundTrip: doValidation,
+    deserialize: (buf) => MarisaTrie.deserialize(buf),
   }));
   logln(' done');
 
@@ -371,17 +400,44 @@ function printResults(dataset: DatasetConfig, results: BenchResult[]): void {
 
   console.log('-'.repeat(100));
 
-  // Size comparison vs v5
-  const baseline = results.find(r => r.format === 'v5 LOUDS');
+  // Size comparison vs v7
+  const baseline = results.find(r => r.format === 'v7');
   if (baseline) {
-    console.log('Size vs v5 LOUDS:');
+    console.log('Size vs v7 (uncompressed):');
     for (const r of results) {
-      if (r.format === 'v5 LOUDS') continue;
+      if (r.format === 'v7') continue;
       const ratio = r.binarySize / baseline.binarySize;
       const pctChange = ((ratio - 1) * 100);
       const sign = pctChange >= 0 ? '+' : '';
       const arrow = pctChange < 0 ? '↓' : (pctChange > 0 ? '↑' : '=');
       console.log(`  ${r.format.padEnd(12)} ${sign}${pctChange.toFixed(1)}% ${arrow}`);
+    }
+  }
+
+  // Memory stats for brotli format (v8)
+  const brotliFormats = results.filter(r => r.memoryStats && r.format === 'v8');
+  if (brotliFormats.length > 0) {
+    console.log('\nMemory Usage (v8 brotli format):');
+    console.log(
+      'Format'.padEnd(14) +
+      'Download'.padEnd(12) +
+      'Decompressed'.padEnd(14) +
+      'Runtime'.padEnd(12) +
+      'bits/word (dl)'.padEnd(16) +
+      'bits/word (rt)'
+    );
+    console.log('-'.repeat(80));
+    for (const r of brotliFormats) {
+      if (!r.memoryStats) continue;
+      const m = r.memoryStats;
+      console.log(
+        r.format.padEnd(14) +
+        fmtBytes(m.downloadSize).padEnd(12) +
+        fmtBytes(m.decompressedSize).padEnd(14) +
+        fmtBytes(m.runtimeMemory).padEnd(12) +
+        m.bitsPerWord.download.toFixed(2).padEnd(16) +
+        m.bitsPerWord.runtime.toFixed(2)
+      );
     }
   }
 }
@@ -397,7 +453,7 @@ function printSummary(allResults: DatasetResults[]): void {
   console.log();
 
   // Header
-  const formats = ['v5 LOUDS', 'v6.0', 'v6.1', 'v6.3', 'v6.4'];
+  const formats = ['v7', 'v8'];
   console.log('Dataset'.padEnd(20) + 'Words'.padEnd(12) + formats.map(f => f.padEnd(14)).join(''));
   console.log('-'.repeat(100));
 
@@ -465,7 +521,40 @@ function outputJson(allResults: DatasetResults[]): void {
 }
 
 /**
- * Print detailed size breakdown for v6.x formats.
+ * Print round-trip validation results.
+ */
+function printValidation(dataset: DatasetConfig, results: BenchResult[]): void {
+  console.log('\n' + '='.repeat(100));
+  console.log(`ROUND-TRIP VALIDATION: ${dataset.name}`);
+  console.log('='.repeat(100));
+
+  let allPassed = true;
+  for (const r of results) {
+    if (!r.roundTrip) continue;
+
+    const status = r.roundTrip.passed ? '✓ PASS' : '✗ FAIL';
+    console.log(`\n${r.format}: ${status}`);
+
+    if (!r.roundTrip.passed) {
+      allPassed = false;
+      console.log(`  Original:   ${r.roundTrip.originalCount.toLocaleString()} words`);
+      console.log(`  Round-trip: ${r.roundTrip.roundTripCount.toLocaleString()} words`);
+      if (r.roundTrip.missingWords.length > 0) {
+        console.log(`  Missing (first ${r.roundTrip.missingWords.length}): ${r.roundTrip.missingWords.join(', ')}`);
+      }
+      if (r.roundTrip.extraWords.length > 0) {
+        console.log(`  Extra (first ${r.roundTrip.extraWords.length}): ${r.roundTrip.extraWords.join(', ')}`);
+      }
+    }
+  }
+
+  console.log('\n' + '-'.repeat(100));
+  console.log(allPassed ? 'All formats passed round-trip validation ✓' : 'Some formats FAILED validation ✗');
+  console.log('='.repeat(100));
+}
+
+/**
+ * Print detailed size breakdown.
  */
 function printBreakdown(dataset: DatasetConfig, results: BenchResult[]): void {
   console.log('\n' + '='.repeat(100));
@@ -522,6 +611,9 @@ function printBreakdown(dataset: DatasetConfig, results: BenchResult[]): void {
 }
 
 async function main() {
+  // Initialize brotli support (needed for v8 compression)
+  await initBrotliNode();
+
   const args = process.argv.slice(2);
 
   // Parse flags
@@ -531,6 +623,7 @@ async function main() {
   const runFull = args.includes('--full');
   const jsonOutput = args.includes('--json');
   const showBreakdown = args.includes('--breakdown');
+  const doValidation = args.includes('--validate');
 
   // Find custom input path (non-flag argument)
   const customInput = args.find(a => !a.startsWith('--'));
@@ -560,9 +653,13 @@ async function main() {
     };
 
     if (!jsonOutput) console.log('  Running benchmarks:');
-    const results = runBenchmarks(words, jsonOutput);
+    const results = runBenchmarks(words, {
+      quiet: jsonOutput,
+      validateRoundTrip: doValidation,
+    });
     if (!jsonOutput) printResults(dataset, results);
     if (showBreakdown && !jsonOutput) printBreakdown(dataset, results);
+    if (doValidation && !jsonOutput) printValidation(dataset, results);
     allResults.push({ dataset, words, results });
 
   } else {
@@ -594,9 +691,13 @@ async function main() {
         }
 
         if (!jsonOutput) console.log('  Running benchmarks:');
-        const results = runBenchmarks(words, jsonOutput);
+        const results = runBenchmarks(words, {
+          quiet: jsonOutput,
+          validateRoundTrip: doValidation,
+        });
         if (!jsonOutput) printResults(dataset, results);
         if (showBreakdown && !jsonOutput) printBreakdown(dataset, results);
+        if (doValidation && !jsonOutput) printValidation(dataset, results);
 
         allResults.push({ dataset, words, results });
       } catch (err) {
@@ -617,12 +718,8 @@ async function main() {
 
     // Notes
     console.log('\nNotes:');
-    console.log('  - v4 DAWG: No runtime lookup support (build-only format)');
-    console.log('  - v5 LOUDS: Baseline format with word ID mapping');
-    console.log('  - v6.0: Same as v5 with v6 header (baseline for MARISA features)');
-    console.log('  - v6.1: Path compression (single-child chains collapsed into tails)');
-    console.log('  - v6.3: Recursive trie over tails (prefix sharing within tails)');
-    console.log('  - v6.4: Huffman-encoded labels (frequency-based compression)');
+    console.log('  - v7: Uncompressed (best runtime efficiency, no decompression needed)');
+    console.log('  - v8: Brotli-compressed payload (best compression, slower load)');
   }
 }
 

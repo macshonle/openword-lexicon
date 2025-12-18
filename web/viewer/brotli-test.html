@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OWTRIE Brotli/WASM Browser Test</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #1a1a2e;
+      color: #eee;
+    }
+    h1 { color: #00d4ff; }
+    h2 { color: #a8e6cf; margin-top: 30px; }
+    .card {
+      background: #16213e;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      border-left: 4px solid #00d4ff;
+    }
+    .success { border-left-color: #4ade80; }
+    .error { border-left-color: #f87171; }
+    .warning { border-left-color: #fbbf24; }
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #2a2a4a;
+    }
+    .metric:last-child { border-bottom: none; }
+    .metric-label { color: #8b8b8b; }
+    .metric-value { font-weight: bold; color: #00d4ff; }
+    .metric-value.good { color: #4ade80; }
+    .metric-value.warn { color: #fbbf24; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #2a2a4a;
+    }
+    th { color: #a8e6cf; }
+    td.number { text-align: right; font-family: monospace; }
+    button {
+      background: #00d4ff;
+      color: #1a1a2e;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 5px;
+    }
+    button:hover { background: #00b8d4; }
+    button:disabled { background: #555; cursor: not-allowed; }
+    #log {
+      background: #0d1117;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: monospace;
+      font-size: 13px;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    .log-info { color: #8b949e; }
+    .log-success { color: #4ade80; }
+    .log-error { color: #f87171; }
+    .log-time { color: #fbbf24; }
+    #search-input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #2a2a4a;
+      background: #0d1117;
+      color: #eee;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    #search-results {
+      background: #0d1117;
+      padding: 10px;
+      border-radius: 5px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>OWTRIE Brotli/WASM Browser Test</h1>
+  <p>Tests browser-compatible brotli decompression using brotli-wasm and measures memory usage.</p>
+
+  <div class="card">
+    <h3>Controls</h3>
+    <button id="btn-init" onclick="initializeBrotli()">1. Initialize brotli-wasm</button>
+    <button id="btn-load-v63" onclick="loadTrie('v63')" disabled>2. Load v6.3 (no brotli)</button>
+    <button id="btn-load-v65" onclick="loadTrie('v65')" disabled>3. Load v6.5 (brotli)</button>
+    <button id="btn-gc" onclick="forceGC()">Force GC</button>
+  </div>
+
+  <h2>Initialization Status</h2>
+  <div id="init-status" class="card">
+    <div class="metric">
+      <span class="metric-label">brotli-wasm loaded</span>
+      <span class="metric-value" id="brotli-status">Not initialized</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">WASM init time</span>
+      <span class="metric-value" id="wasm-init-time">-</span>
+    </div>
+  </div>
+
+  <h2>Memory Usage</h2>
+  <div id="memory-card" class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Before</th>
+          <th>After Load</th>
+          <th>Delta</th>
+        </tr>
+      </thead>
+      <tbody id="memory-table">
+        <tr>
+          <td>JS Heap Used</td>
+          <td class="number" id="mem-before">-</td>
+          <td class="number" id="mem-after">-</td>
+          <td class="number" id="mem-delta">-</td>
+        </tr>
+        <tr>
+          <td>JS Heap Total</td>
+          <td class="number" id="heap-before">-</td>
+          <td class="number" id="heap-after">-</td>
+          <td class="number" id="heap-delta">-</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="color: #8b8b8b; font-size: 12px;">
+      Note: Memory API only available in Chrome with --enable-precise-memory-info flag.
+      Use DevTools Memory panel for accurate measurements in other browsers.
+    </p>
+  </div>
+
+  <h2>Trie Statistics</h2>
+  <div id="trie-stats" class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>v6.3 (baseline)</th>
+          <th>v6.5 (brotli)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Download size</td>
+          <td class="number" id="v63-download">-</td>
+          <td class="number" id="v65-download">-</td>
+        </tr>
+        <tr>
+          <td>Fetch time</td>
+          <td class="number" id="v63-fetch">-</td>
+          <td class="number" id="v65-fetch">-</td>
+        </tr>
+        <tr>
+          <td>Deserialize time</td>
+          <td class="number" id="v63-deserialize">-</td>
+          <td class="number" id="v65-deserialize">-</td>
+        </tr>
+        <tr>
+          <td>Word count</td>
+          <td class="number" id="v63-words">-</td>
+          <td class="number" id="v65-words">-</td>
+        </tr>
+        <tr>
+          <td>Node count</td>
+          <td class="number" id="v63-nodes">-</td>
+          <td class="number" id="v65-nodes">-</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Search Test</h2>
+  <div class="card">
+    <input type="text" id="search-input" placeholder="Type to search (requires loaded trie)..." oninput="handleSearch(this.value)">
+    <div id="search-results">Load a trie first...</div>
+    <div class="metric">
+      <span class="metric-label">Search time</span>
+      <span class="metric-value" id="search-time">-</span>
+    </div>
+  </div>
+
+  <h2>Log</h2>
+  <div id="log"></div>
+
+  <script type="module">
+    // Import from bundled module (need to bundle marisa.ts for browser)
+    // For now, we'll use a simple inline approach with dynamic import
+
+    let brotliWasm = null;
+    let currentTrie = null;
+    let memoryBefore = null;
+
+    // Expose functions to window for onclick handlers
+    window.initializeBrotli = initializeBrotli;
+    window.loadTrie = loadTrie;
+    window.forceGC = forceGC;
+    window.handleSearch = handleSearch;
+
+    function log(msg, type = 'info') {
+      const el = document.getElementById('log');
+      const line = document.createElement('div');
+      line.className = `log-${type}`;
+      line.textContent = `[${new Date().toISOString().substr(11, 12)}] ${msg}`;
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function formatBytes(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+      return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+    }
+
+    function getMemory() {
+      if (performance.memory) {
+        return {
+          usedJSHeapSize: performance.memory.usedJSHeapSize,
+          totalJSHeapSize: performance.memory.totalJSHeapSize,
+        };
+      }
+      return null;
+    }
+
+    function updateMemoryDisplay(before, after) {
+      if (!before || !after) {
+        document.getElementById('mem-before').textContent = 'N/A (not Chrome)';
+        return;
+      }
+
+      document.getElementById('mem-before').textContent = formatBytes(before.usedJSHeapSize);
+      document.getElementById('mem-after').textContent = formatBytes(after.usedJSHeapSize);
+      const delta = after.usedJSHeapSize - before.usedJSHeapSize;
+      document.getElementById('mem-delta').textContent = (delta >= 0 ? '+' : '') + formatBytes(delta);
+
+      document.getElementById('heap-before').textContent = formatBytes(before.totalJSHeapSize);
+      document.getElementById('heap-after').textContent = formatBytes(after.totalJSHeapSize);
+      const heapDelta = after.totalJSHeapSize - before.totalJSHeapSize;
+      document.getElementById('heap-delta').textContent = (heapDelta >= 0 ? '+' : '') + formatBytes(heapDelta);
+    }
+
+    async function initializeBrotli() {
+      log('Initializing brotli-wasm...');
+      const btn = document.getElementById('btn-init');
+      btn.disabled = true;
+
+      try {
+        const startTime = performance.now();
+
+        // Load brotli-wasm using the web variant (designed for browsers without bundlers)
+        log('Fetching brotli-wasm (web variant)...');
+
+        // The web variant requires manual WASM initialization
+        const wasmUrl = '/web/viewer/node_modules/brotli-wasm/pkg.web/brotli_wasm_bg.wasm';
+        const jsUrl = '/web/viewer/node_modules/brotli-wasm/pkg.web/brotli_wasm.js';
+
+        // First, fetch the JS module
+        const jsResponse = await fetch(jsUrl);
+        const jsText = await jsResponse.text();
+
+        // Create a blob URL to import the JS
+        const jsBlob = new Blob([jsText], { type: 'application/javascript' });
+        const jsBlobUrl = URL.createObjectURL(jsBlob);
+
+        try {
+          const brotliModule = await import(jsBlobUrl);
+          log(`brotli-wasm module keys: ${Object.keys(brotliModule).join(', ')}`);
+
+          // Initialize with WASM
+          const wasmResponse = await fetch(wasmUrl);
+          const wasmBuffer = await wasmResponse.arrayBuffer();
+
+          // Initialize the WASM module
+          if (brotliModule.initSync) {
+            brotliModule.initSync(wasmBuffer);
+            log('WASM initialized with initSync');
+          } else if (brotliModule.default) {
+            await brotliModule.default(wasmBuffer);
+            log('WASM initialized with default');
+          }
+
+          brotliWasm = brotliModule;
+          log(`brotliWasm.decompress type: ${typeof brotliWasm?.decompress}`);
+        } finally {
+          URL.revokeObjectURL(jsBlobUrl);
+        }
+
+        const elapsed = performance.now() - startTime;
+
+        document.getElementById('brotli-status').textContent = 'Ready';
+        document.getElementById('brotli-status').classList.add('good');
+        document.getElementById('wasm-init-time').textContent = elapsed.toFixed(1) + ' ms';
+        document.getElementById('init-status').classList.add('success');
+
+        log(`brotli-wasm initialized in ${elapsed.toFixed(1)} ms`, 'success');
+
+        // Enable load buttons
+        document.getElementById('btn-load-v63').disabled = false;
+        document.getElementById('btn-load-v65').disabled = false;
+
+      } catch (error) {
+        log(`Error: ${error.message}`, 'error');
+        document.getElementById('brotli-status').textContent = 'Failed: ' + error.message;
+        document.getElementById('init-status').classList.add('error');
+        btn.disabled = false;
+      }
+    }
+
+    async function loadTrie(version) {
+      const isV65 = version === 'v65';
+      const filename = isV65 ? 'wordle-v65.trie.bin' : 'wordle-v63.trie.bin';
+      const prefix = isV65 ? 'v65' : 'v63';
+
+      log(`Loading ${filename}...`);
+
+      // Capture memory before
+      memoryBefore = getMemory();
+
+      try {
+        // Fetch
+        const fetchStart = performance.now();
+        const response = await fetch(`test-data/${filename}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const buffer = await response.arrayBuffer();
+        const fetchTime = performance.now() - fetchStart;
+
+        document.getElementById(`${prefix}-download`).textContent = formatBytes(buffer.byteLength);
+        document.getElementById(`${prefix}-fetch`).textContent = fetchTime.toFixed(1) + ' ms';
+
+        log(`Fetched ${formatBytes(buffer.byteLength)} in ${fetchTime.toFixed(1)} ms`);
+
+        // Deserialize (need to decompress if v6.5)
+        const deserializeStart = performance.now();
+
+        let trieBuffer = new Uint8Array(buffer);
+
+        // Check if brotli compressed (peek at flags at offset 16)
+        const view = new DataView(buffer);
+        const flags = view.getUint32(16, true);
+        const isBrotli = (flags & 0x20) !== 0; // V6_FLAG_BROTLI
+
+        if (isBrotli) {
+          log('Decompressing brotli payload...');
+          // Header is first 24 bytes, then 4-byte compressed length, then compressed data
+          const HEADER_SIZE = 24;
+          const compressedLength = view.getUint32(HEADER_SIZE, true);
+          log(`Compressed length: ${compressedLength} bytes`);
+          const compressedPayload = new Uint8Array(buffer, HEADER_SIZE + 4, compressedLength);
+          log(`Payload slice: offset=${HEADER_SIZE + 4}, length=${compressedPayload.length}`);
+
+          // Make a copy of the payload (some WASM implementations need owned buffers)
+          const payloadCopy = new Uint8Array(compressedPayload);
+          log(`Payload copy created: ${payloadCopy.length} bytes`);
+
+          const decompressStart = performance.now();
+          const decompressed = brotliWasm.decompress(payloadCopy);
+          const decompressTime = performance.now() - decompressStart;
+
+          log(`Decompressed ${formatBytes(compressedPayload.length)} -> ${formatBytes(decompressed.length)} in ${decompressTime.toFixed(1)} ms`, 'time');
+
+          // Reconstruct full buffer: header + decompressed payload
+          const header = new Uint8Array(buffer, 0, HEADER_SIZE);
+          trieBuffer = new Uint8Array(HEADER_SIZE + decompressed.length);
+          trieBuffer.set(header, 0);
+          trieBuffer.set(decompressed, HEADER_SIZE);
+        }
+
+        // Parse trie structure (simplified - just extract stats from header)
+        const trieView = new DataView(trieBuffer.buffer, trieBuffer.byteOffset, trieBuffer.byteLength);
+        const wordCount = trieView.getUint32(8, true);  // offset 8 in header
+        const nodeCount = trieView.getUint32(12, true); // offset 12 in header
+
+        const deserializeTime = performance.now() - deserializeStart;
+
+        document.getElementById(`${prefix}-deserialize`).textContent = deserializeTime.toFixed(1) + ' ms';
+        document.getElementById(`${prefix}-words`).textContent = wordCount.toLocaleString();
+        document.getElementById(`${prefix}-nodes`).textContent = nodeCount.toLocaleString();
+
+        // Capture memory after
+        const memoryAfter = getMemory();
+        updateMemoryDisplay(memoryBefore, memoryAfter);
+
+        // Store for search (simplified - just store the buffer for now)
+        currentTrie = { buffer: trieBuffer, wordCount, nodeCount, version };
+
+        log(`Trie loaded: ${wordCount} words, ${nodeCount} nodes`, 'success');
+        document.getElementById('search-results').textContent = 'Trie loaded! Try searching...';
+
+      } catch (error) {
+        log(`Error: ${error.message}`, 'error');
+        document.getElementById(`${prefix}-download`).textContent = 'Error';
+      }
+    }
+
+    function forceGC() {
+      if (window.gc) {
+        window.gc();
+        log('Forced garbage collection', 'info');
+        const mem = getMemory();
+        if (mem) {
+          log(`Current heap: ${formatBytes(mem.usedJSHeapSize)}`, 'info');
+        }
+      } else {
+        log('GC not available (run Chrome with --js-flags="--expose-gc")', 'warn');
+      }
+    }
+
+    function handleSearch(query) {
+      if (!currentTrie) {
+        document.getElementById('search-results').textContent = 'Load a trie first...';
+        return;
+      }
+
+      if (query.length < 2) {
+        document.getElementById('search-results').textContent = 'Type at least 2 characters...';
+        document.getElementById('search-time').textContent = '-';
+        return;
+      }
+
+      // Note: Full search requires the complete MarisaTrie implementation
+      // For this test, we just demonstrate that the trie loaded successfully
+      document.getElementById('search-results').textContent =
+        `Trie loaded (${currentTrie.wordCount} words). Full search requires bundled MarisaTrie module.`;
+      document.getElementById('search-time').textContent = 'N/A (demo mode)';
+    }
+
+    // Auto-start on load
+    log('Browser test page loaded');
+    log(`User Agent: ${navigator.userAgent.substring(0, 80)}...`);
+
+    if (performance.memory) {
+      log('Chrome memory API available', 'success');
+    } else {
+      log('Chrome memory API not available - use DevTools for memory measurement', 'warn');
+    }
+  </script>
+</body>
+</html>

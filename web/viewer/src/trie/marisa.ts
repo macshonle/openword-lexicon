@@ -1,50 +1,154 @@
 /**
- * marisa.ts - MARISA trie implementation (OWTRIE v6)
+ * marisa.ts - MARISA trie implementation (OWTRIE v7/v8)
  *
  * A TypeScript implementation of the MARISA trie data structure.
  * This module provides a compact, static trie with:
  * - LOUDS bitvector encoding for tree structure
  * - Terminal bitvector for end-of-word markers
- * - Link flags bitvector for path-compressed edges (v6.1+)
- * - Tail buffer for compressed suffixes (v6.1+)
- * - Optional recursive trie over tails (v6.3+)
+ * - Link flags bitvector for path-compressed edges
+ * - Recursive trie over tail strings for compression
+ * - Optional brotli compression for best download size (v8)
  *
- * Implementation versions:
- * - v6.0: LOUDS baseline (equivalent to v5, establishes comparison point)
- * - v6.1: Link flags + tail buffer for path compression
- * - v6.2: Tail suffix sharing for deduplication
- * - v6.3: Recursive tail trie for large tail sets
+ * Format versions:
+ * - v7: Recursive tail trie (best runtime efficiency, no decompression needed)
+ * - v8: Brotli-compressed payload (best compression, works in browser and Node.js)
  *
  * Works in both Node.js and browser environments.
  */
 
 import { BitVector } from '../bitvector.js';
 import { varintSize, writeVarint, readVarint } from './varint.js';
+import type { BrotliWasmType } from 'brotli-wasm';
 import {
   OWTRIE_MAGIC,
-  HEADER_SIZE_V6,
-  V6_FLAG_HAS_LINKS,
-  V6_FLAG_HAS_TAILS,
-  V6_FLAG_BINARY_TAILS,
-  V6_FLAG_RECURSIVE,
-  V6_FLAG_HUFFMAN_LABELS,
+  HEADER_SIZE,
+  FLAG_RECURSIVE,
+  FLAG_BROTLI,
 } from './formats.js';
-import { HuffmanCodec, BitWriter, BitReader } from './huffman.js';
+
+// ============================================================================
+// Brotli Provider - handles compression/decompression in Node.js and browser
+// ============================================================================
+
+/**
+ * Detect if we're running in Node.js (has process.versions.node)
+ */
+const isNode = typeof process !== 'undefined' && process.versions?.node != null;
+
+/**
+ * Cached brotli-wasm module (loaded lazily)
+ */
+let brotliWasm: BrotliWasmType | null = null;
+let brotliWasmPromise: Promise<BrotliWasmType> | null = null;
+
+/**
+ * Node.js zlib module (loaded lazily in Node.js only)
+ */
+let nodeZlib: typeof import('zlib') | null = null;
+
+/**
+ * Initialize brotli-wasm module. Must be called before using brotli decompression
+ * in browsers. Works in Node.js too (uses WASM instead of native zlib).
+ *
+ * @returns Promise that resolves when brotli-wasm is ready
+ */
+export async function initBrotli(): Promise<void> {
+  if (brotliWasm) return;
+  if (!brotliWasmPromise) {
+    brotliWasmPromise = import('brotli-wasm').then(mod => mod.default);
+  }
+  brotliWasm = await brotliWasmPromise;
+}
+
+/**
+ * Initialize Node.js native zlib for brotli compression/decompression.
+ * This is required before using brotli compression (build-time) in Node.js.
+ * For decompression, either this or initBrotli() can be used.
+ *
+ * @returns Promise that resolves when zlib is ready
+ * @throws Error if not running in Node.js
+ */
+export async function initBrotliNode(): Promise<void> {
+  await loadNodeZlib();
+}
+
+/**
+ * Check if brotli is initialized and ready for use.
+ */
+export function isBrotliReady(): boolean {
+  return brotliWasm !== null || (isNode && nodeZlib !== null);
+}
+
+/**
+ * Load Node.js zlib module (async, ESM-compatible).
+ */
+async function loadNodeZlib(): Promise<typeof import('zlib')> {
+  if (nodeZlib) return nodeZlib;
+  if (!isNode) {
+    throw new Error('zlib is only available in Node.js');
+  }
+  // Dynamic import works in ESM
+  nodeZlib = await import('zlib');
+  return nodeZlib;
+}
+
+/**
+ * Compress data with brotli (Node.js only - used for building tries).
+ * This is synchronous but requires initBrotliNode() to be called first.
+ * @throws Error if called in browser environment or zlib not loaded
+ */
+function brotliCompress(data: Uint8Array, quality: number): Uint8Array {
+  if (!isNode) {
+    throw new Error('Brotli compression is only available in Node.js (build-time operation)');
+  }
+
+  if (!nodeZlib) {
+    throw new Error('Node.js zlib not loaded. Call initBrotliNode() first.');
+  }
+
+  const compressed = nodeZlib.brotliCompressSync(data, {
+    params: { [nodeZlib.constants.BROTLI_PARAM_QUALITY]: quality }
+  });
+  return new Uint8Array(compressed);
+}
+
+/**
+ * Decompress brotli data (works in both Node.js and browser).
+ * In browser, initBrotli() must be called first.
+ * In Node.js, initBrotliNode() or initBrotli() must be called first.
+ * @throws Error if brotli is not initialized
+ */
+function brotliDecompress(data: Uint8Array): Uint8Array {
+  // Try brotli-wasm first (works in both environments)
+  if (brotliWasm) {
+    return brotliWasm.decompress(data);
+  }
+
+  // Fall back to Node.js zlib if available
+  if (isNode && nodeZlib) {
+    const decompressed = nodeZlib.brotliDecompressSync(data);
+    return new Uint8Array(decompressed);
+  }
+
+  throw new Error('Brotli not initialized. Call initBrotli() or initBrotliNode() first.');
+}
+
+// ============================================================================
+// MARISA Trie Configuration and Types
+// ============================================================================
 
 /**
  * Configuration for MARISA trie building.
  */
 export interface MarisaConfig {
-  /** Enable path compression with tail buffer (v6.1+) */
-  enableLinks?: boolean;
-  /** Use length-prefixed tails instead of null-terminated */
-  binaryTails?: boolean;
   /** Minimum tail length to compress (default: 2) */
   minTailLength?: number;
-  /** Enable recursive trie over tails for additional compression (v6.3+) */
-  enableRecursive?: boolean;
-  /** Enable Huffman encoding for labels (v6.4+) */
-  enableHuffman?: boolean;
+  /** Enable brotli compression of payload (v8 format) */
+  enableBrotli?: boolean;
+  /** Brotli quality level (0-11, default: 11). Lower = faster but larger. */
+  brotliQuality?: number;
+  /** Internal flag to disable recursive tail processing for inner tries */
+  _isInnerTrie?: boolean;
 }
 
 /**
@@ -113,6 +217,33 @@ export interface MarisaDetailedStats extends MarisaStats {
 }
 
 /**
+ * Memory usage statistics for a MARISA trie.
+ */
+export interface MarisaMemoryStats {
+  /** Size of the compressed/serialized trie (download size) */
+  downloadSize: number;
+  /** Size of the decompressed trie data in memory */
+  decompressedSize: number;
+  /** Estimated total runtime memory including JS object overhead */
+  runtimeMemory: number;
+  /** Breakdown of runtime memory by component */
+  components: {
+    bits: number;        // LOUDS bitvector
+    terminal: number;    // Terminal bitvector
+    linkFlags: number;   // Link flags bitvector
+    labels: number;      // Labels array
+    tailTrie: number;    // Recursive tail trie
+    jsOverhead: number;  // Estimated JS object/class overhead
+  };
+  /** Bits per word for different metrics */
+  bitsPerWord: {
+    download: number;
+    decompressed: number;
+    runtime: number;
+  };
+}
+
+/**
  * Internal trie node for building phase.
  */
 class TrieNode {
@@ -131,14 +262,14 @@ export interface MarisaBuildResult {
 }
 
 /**
- * MARISA trie with LOUDS encoding and optional path compression.
+ * MARISA trie with LOUDS encoding and path compression.
  *
  * The trie stores:
  * - LOUDS bitvector for tree structure
  * - Terminal bitvector marking end-of-word nodes
- * - Link flags bitvector marking edges with tail references (v6.1+)
- * - Labels array with Unicode code points (or tail offsets for linked edges)
- * - Tail buffer with compressed suffixes (v6.1+)
+ * - Link flags bitvector marking edges with tail references
+ * - Labels array with Unicode code points (or tail IDs for linked edges)
+ * - Recursive trie over tail strings
  *
  * Word IDs are assigned in BFS traversal order of terminal nodes.
  * ID = rank1(terminal, nodeId) - 1 (0-indexed)
@@ -150,23 +281,14 @@ export class MarisaTrie {
   /** Terminal bitvector marking end-of-word nodes */
   readonly terminal: BitVector;
 
-  /** Link flags bitvector marking edges with tail references (null for v6.0) */
-  readonly linkFlags: BitVector | null;
+  /** Link flags bitvector marking edges with tail references */
+  readonly linkFlags: BitVector;
 
-  /** Labels for each edge (code points or tail offsets/IDs) */
+  /** Labels for each edge (code points or tail IDs for linked edges) */
   readonly labels: Uint32Array;
 
-  /** Tail buffer for path-compressed edges (null for v6.0 or v6.3 recursive) */
-  readonly tailBuffer: Uint8Array | null;
-
-  /** Tail end markers for null-terminated tails */
-  readonly tailEnds: BitVector | null;
-
-  /** Recursive trie over tails for v6.3 (null otherwise) */
+  /** Recursive trie over tail strings */
   readonly tailTrie: MarisaTrie | null;
-
-  /** Huffman codec for label encoding (v6.4+, null otherwise) */
-  readonly huffmanCodec: HuffmanCodec | null;
 
   /** Number of nodes (including super-root) */
   readonly nodeCount: number;
@@ -177,30 +299,29 @@ export class MarisaTrie {
   /** Format flags */
   readonly flags: number;
 
+  /** Brotli quality level (0-11, default: 11) */
+  readonly brotliQuality: number;
+
   constructor(
     bits: BitVector,
     terminal: BitVector,
-    linkFlags: BitVector | null,
+    linkFlags: BitVector,
     labels: Uint32Array,
-    tailBuffer: Uint8Array | null,
-    tailEnds: BitVector | null,
     nodeCount: number,
     wordCount: number,
     flags: number = 0,
     tailTrie: MarisaTrie | null = null,
-    huffmanCodec: HuffmanCodec | null = null
+    brotliQuality: number = 11
   ) {
     this.bits = bits;
     this.terminal = terminal;
     this.linkFlags = linkFlags;
     this.labels = labels;
-    this.tailBuffer = tailBuffer;
-    this.tailEnds = tailEnds;
     this.nodeCount = nodeCount;
     this.wordCount = wordCount;
     this.flags = flags;
     this.tailTrie = tailTrie;
-    this.huffmanCodec = huffmanCodec;
+    this.brotliQuality = brotliQuality;
   }
 
   /**
@@ -212,10 +333,10 @@ export class MarisaTrie {
    * @returns A new MarisaTrie with build statistics
    */
   static build(words: string[], config: MarisaConfig = {}): MarisaBuildResult {
-    const enableLinks = config.enableLinks ?? false;
-    const enableRecursive = config.enableRecursive ?? false;
     const minTailLength = config.minTailLength ?? 2;
-    const enableHuffman = config.enableHuffman ?? false;
+    const enableBrotli = config.enableBrotli ?? false;
+    const brotliQuality = config.brotliQuality ?? 11;
+    const isInnerTrie = config._isInnerTrie ?? false;
 
     // Phase 1: Build standard trie
     const root = new TrieNode();
@@ -231,13 +352,12 @@ export class MarisaTrie {
       node.isTerminal = true;
     }
 
-    // Phase 2: Path compression (if enabled)
-    let tailBuffer: number[] = [];
-    const tailOffsets = new Map<TrieNode, number>(); // node -> tail buffer offset or tail ID
-    const tailStrings = new Map<TrieNode, string>(); // node -> tail string (for recursive mode)
+    // Phase 2: Path compression with recursive tail trie (skip for inner trie)
+    const tailOffsets = new Map<TrieNode, number>(); // node -> tail ID in recursive trie
+    const tailStrings = new Map<TrieNode, string>(); // node -> tail string
     let recursiveTailTrie: MarisaTrie | null = null;
 
-    if (enableLinks) {
+    if (!isInnerTrie) {
       // First pass: collect all compressible chains
       const pendingTails: Array<{ chain: number[]; endNode: TrieNode; parentNode: TrieNode; firstCode: number }> = [];
 
@@ -275,43 +395,30 @@ export class MarisaTrie {
 
       collectChains(root);
 
-      // Sort tails by length descending for better suffix sharing (v6.1)
-      // or lexicographically for consistent word IDs (v6.3)
-      if (enableRecursive) {
-        // For v6.3, sort lexicographically so tail trie word IDs are predictable
-        pendingTails.sort((a, b) => {
-          const aStr = a.chain.map(c => String.fromCodePoint(c)).join('');
-          const bStr = b.chain.map(c => String.fromCodePoint(c)).join('');
-          return aStr.localeCompare(bStr);
-        });
-      } else {
-        // For v6.1, sort by length descending for better suffix sharing
-        pendingTails.sort((a, b) => {
-          if (b.chain.length !== a.chain.length) return b.chain.length - a.chain.length;
-          for (let i = 0; i < a.chain.length; i++) {
-            if (a.chain[i] !== b.chain[i]) return a.chain[i] - b.chain[i];
-          }
-          return 0;
-        });
+      // Sort tails lexicographically so tail trie word IDs are predictable
+      pendingTails.sort((a, b) => {
+        const aStr = a.chain.map(c => String.fromCodePoint(c)).join('');
+        const bStr = b.chain.map(c => String.fromCodePoint(c)).join('');
+        return aStr.localeCompare(bStr);
+      });
+
+      // Collect unique tail strings, build recursive trie
+      const uniqueTails = new Set<string>();
+      for (const { chain, endNode, parentNode, firstCode } of pendingTails) {
+        const tailString = chain.map(c => String.fromCodePoint(c)).join('');
+        uniqueTails.add(tailString);
+        tailStrings.set(endNode, tailString);
+        // Update trie structure
+        parentNode.children.set(firstCode, endNode);
       }
 
-      if (enableRecursive) {
-        // v6.3: Collect unique tail strings, build recursive trie
-        const uniqueTails = new Set<string>();
-        for (const { chain, endNode, parentNode, firstCode } of pendingTails) {
-          const tailString = chain.map(c => String.fromCodePoint(c)).join('');
-          uniqueTails.add(tailString);
-          tailStrings.set(endNode, tailString);
-          // Update trie structure
-          parentNode.children.set(firstCode, endNode);
-        }
-
-        // Build recursive trie over unique tails (v6.0, no links)
+      // Build recursive trie over unique tails (no brotli, no recursion for inner trie)
+      if (uniqueTails.size > 0) {
         const sortedTails = Array.from(uniqueTails).sort();
-        const { trie: innerTrie } = MarisaTrie.build(sortedTails, { enableLinks: false });
+        const { trie: innerTrie } = MarisaTrie.build(sortedTails, { enableBrotli: false, _isInnerTrie: true });
         recursiveTailTrie = innerTrie;
 
-        // Now assign tail IDs based on word IDs in the recursive trie
+        // Assign tail IDs based on word IDs in the recursive trie
         for (const { endNode } of pendingTails) {
           const tailString = tailStrings.get(endNode)!;
           const tailId = recursiveTailTrie.wordId(tailString);
@@ -319,60 +426,6 @@ export class MarisaTrie {
             throw new Error(`Internal error: tail "${tailString}" not found in recursive trie`);
           }
           tailOffsets.set(endNode, tailId);
-        }
-      } else {
-        // v6.1: Use suffix sharing with flat buffer
-        interface ReversedTrieNode {
-          children: Map<number, ReversedTrieNode>;
-          suffixOffset?: number;
-        }
-        const reverseTrieRoot: ReversedTrieNode = { children: new Map() };
-
-        const findSuffixInReverseTrie = (encoded: Uint8Array): number => {
-          let node = reverseTrieRoot;
-          const byteLen = encoded.length;
-          for (let depth = 1; depth <= byteLen; depth++) {
-            const i = byteLen - depth;
-            const byte = encoded[i];
-            const child = node.children.get(byte);
-            if (!child) return -1;
-            node = child;
-          }
-          return node.suffixOffset ?? -1;
-        };
-
-        const insertIntoReverseTrie = (encoded: Uint8Array, offset: number): void => {
-          let node = reverseTrieRoot;
-          const byteLen = encoded.length;
-          for (let depth = 1; depth <= byteLen; depth++) {
-            const i = byteLen - depth;
-            const byte = encoded[i];
-            let child = node.children.get(byte);
-            if (!child) {
-              child = { children: new Map() };
-              node.children.set(byte, child);
-            }
-            node = child;
-            if (node.suffixOffset === undefined) {
-              node.suffixOffset = offset + byteLen - depth;
-            }
-          }
-        };
-
-        for (const { chain, endNode, parentNode, firstCode } of pendingTails) {
-          const tailString = chain.map(c => String.fromCodePoint(c)).join('');
-          const encoded = new TextEncoder().encode(tailString);
-
-          let offset = findSuffixInReverseTrie(encoded);
-
-          if (offset === -1) {
-            offset = tailBuffer.length;
-            tailBuffer.push(...encoded, 0);
-            insertIntoReverseTrie(encoded, offset);
-          }
-
-          parentNode.children.set(firstCode, endNode);
-          tailOffsets.set(endNode, offset);
         }
       }
     }
@@ -395,7 +448,7 @@ export class MarisaTrie {
     const bitCount = 2 * nodeCount + 1;
     const bits = new BitVector(bitCount);
     const terminal = new BitVector(nodeCount + 1);
-    const linkFlags = enableLinks ? new BitVector(edgeCount) : null;
+    const linkFlags = new BitVector(edgeCount);
     const labels = new Uint32Array(edgeCount);
 
     // Phase 5: BFS traversal to build LOUDS
@@ -427,9 +480,9 @@ export class MarisaTrie {
 
         const child = node.children.get(code)!;
 
-        if (enableLinks && tailOffsets.has(child)) {
-          // This edge has a tail - store offset in labels
-          linkFlags!.set(labelPos);
+        if (tailOffsets.has(child)) {
+          // This edge has a tail - store tail ID in labels
+          linkFlags.set(labelPos);
           labels[labelPos] = tailOffsets.get(child)!;
         } else {
           // Normal edge - store code point
@@ -445,35 +498,12 @@ export class MarisaTrie {
 
     bits.build();
     terminal.build();
-    if (linkFlags) linkFlags.build();
+    linkFlags.build();
 
-    // Build tail buffer as Uint8Array (only for v6.1, not v6.3 recursive)
-    const tailBufferArray = enableLinks && !enableRecursive && tailBuffer.length > 0
-      ? new Uint8Array(tailBuffer)
-      : null;
-
-    // Compute flags
-    let flags = 0;
-    if (enableLinks) {
-      flags |= V6_FLAG_HAS_LINKS;
-      if (enableRecursive && recursiveTailTrie) {
-        flags |= V6_FLAG_RECURSIVE;
-      } else if (tailBufferArray) {
-        flags |= V6_FLAG_HAS_TAILS;
-      }
-    }
-
-    // Build Huffman codec if enabled
-    let huffmanCodec: HuffmanCodec | null = null;
-    if (enableHuffman && labels.length > 0) {
-      // Collect label frequencies
-      const frequencies = new Map<number, number>();
-      for (let i = 0; i < labels.length; i++) {
-        const label = labels[i];
-        frequencies.set(label, (frequencies.get(label) ?? 0) + 1);
-      }
-      huffmanCodec = HuffmanCodec.build(frequencies);
-      flags |= V6_FLAG_HUFFMAN_LABELS;
+    // Compute flags: always recursive, optionally brotli
+    let flags = FLAG_RECURSIVE;
+    if (enableBrotli) {
+      flags |= FLAG_BROTLI;
     }
 
     // Word count is the actual number of unique words (terminal nodes),
@@ -485,13 +515,11 @@ export class MarisaTrie {
       terminal,
       linkFlags,
       labels,
-      tailBufferArray,
-      null, // tailEnds not implemented yet
       nodeCount + 1,
       actualWordCount,
       flags,
       recursiveTailTrie,
-      huffmanCodec
+      brotliQuality
     );
 
     const stats = trie.stats();
@@ -518,61 +546,16 @@ export class MarisaTrie {
   }
 
   /**
-   * Read a tail from the tail buffer at the given offset,
-   * or from the recursive tail trie by word ID.
+   * Read a tail from the recursive tail trie by word ID.
    *
-   * @param offsetOrId Byte offset for v6.1 buffer, or word ID for v6.3 recursive trie
+   * @param tailId Word ID in the recursive tail trie
    * @returns Array of code points
    */
-  private readTail(offsetOrId: number): number[] {
-    // v6.3: Recursive tail trie - offsetOrId is a word ID
-    if (this.tailTrie) {
-      const tailString = this.tailTrie.getWord(offsetOrId);
-      if (!tailString) return [];
-      return [...tailString].map(c => c.codePointAt(0)!);
-    }
-
-    // v6.1: Flat tail buffer - offsetOrId is a byte offset
-    if (!this.tailBuffer) return [];
-
-    const codes: number[] = [];
-    let pos = offsetOrId;
-
-    // Read UTF-8 bytes until null terminator
-    while (pos < this.tailBuffer.length && this.tailBuffer[pos] !== 0) {
-      const byte = this.tailBuffer[pos];
-
-      if (byte < 0x80) {
-        // ASCII
-        codes.push(byte);
-        pos++;
-      } else if ((byte & 0xe0) === 0xc0) {
-        // 2-byte sequence
-        const cp = ((byte & 0x1f) << 6) | (this.tailBuffer[pos + 1] & 0x3f);
-        codes.push(cp);
-        pos += 2;
-      } else if ((byte & 0xf0) === 0xe0) {
-        // 3-byte sequence
-        const cp = ((byte & 0x0f) << 12) |
-                   ((this.tailBuffer[pos + 1] & 0x3f) << 6) |
-                   (this.tailBuffer[pos + 2] & 0x3f);
-        codes.push(cp);
-        pos += 3;
-      } else if ((byte & 0xf8) === 0xf0) {
-        // 4-byte sequence
-        const cp = ((byte & 0x07) << 18) |
-                   ((this.tailBuffer[pos + 1] & 0x3f) << 12) |
-                   ((this.tailBuffer[pos + 2] & 0x3f) << 6) |
-                   (this.tailBuffer[pos + 3] & 0x3f);
-        codes.push(cp);
-        pos += 4;
-      } else {
-        // Invalid UTF-8, skip byte
-        pos++;
-      }
-    }
-
-    return codes;
+  private readTail(tailId: number): number[] {
+    if (!this.tailTrie) return [];
+    const tailString = this.tailTrie.getWord(tailId);
+    if (!tailString) return [];
+    return [...tailString].map(c => c.codePointAt(0)!);
   }
 
   /**
@@ -589,26 +572,7 @@ export class MarisaTrie {
     const labelStart = this.firstLabelIndex(nodeId);
     const firstChildId = this.bits.rank1(this.bits.select0(nodeId) + 1);
 
-    // For v6.0 without links, or edges without links, binary search by code point
-    if (!this.linkFlags) {
-      let lo = 0;
-      let hi = count - 1;
-      while (lo <= hi) {
-        const mid = Math.floor((lo + hi) / 2);
-        const midLabel = this.labels[labelStart + mid];
-        if (midLabel === code) {
-          return [firstChildId + mid, labelStart + mid];
-        } else if (midLabel < code) {
-          lo = mid + 1;
-        } else {
-          hi = mid - 1;
-        }
-      }
-      return [-1, -1];
-    }
-
-    // With link flags, we need to check each edge
-    // Labels are either code points (non-linked) or tail offsets (linked)
+    // Check each edge - labels are either code points (non-linked) or tail IDs (linked)
     for (let i = 0; i < count; i++) {
       const labelIdx = labelStart + i;
 
@@ -885,50 +849,27 @@ export class MarisaTrie {
   }
 
   /**
-   * Serialize the trie to binary format (v6).
+   * Serialize the trie to binary format (v7 or v8).
    */
   serialize(): Uint8Array {
     const bitsBytes = this.bits.serialize();
     const terminalBytes = this.terminal.serialize();
-    const linkFlagsBytes = this.linkFlags ? this.linkFlags.serialize() : new Uint8Array(0);
+    const linkFlagsBytes = this.linkFlags.serialize();
 
-    // Calculate labels size
+    // Calculate labels size (varint encoded)
     let labelsSize = 4; // length prefix
-    let huffmanTableBytes: Uint8Array | null = null;
-    let huffmanEncodedLabels: Uint8Array | null = null;
-
-    if (this.flags & V6_FLAG_HUFFMAN_LABELS && this.huffmanCodec) {
-      // Huffman encoded: table + bit-packed labels
-      huffmanTableBytes = this.huffmanCodec.serialize();
-      const writer = new BitWriter();
-      for (let i = 0; i < this.labels.length; i++) {
-        this.huffmanCodec.encode(this.labels[i], writer);
-      }
-      huffmanEncodedLabels = writer.toBytes();
-      labelsSize += 4 + huffmanTableBytes.length + 4 + huffmanEncodedLabels.length;
-    } else {
-      // Varint encoded (default)
-      for (let i = 0; i < this.labels.length; i++) {
-        labelsSize += varintSize(this.labels[i]);
-      }
+    for (let i = 0; i < this.labels.length; i++) {
+      labelsSize += varintSize(this.labels[i]);
     }
 
-    // Determine tail storage size (buffer or recursive trie)
-    let tailBytes: Uint8Array | null = null;
-    if (this.flags & V6_FLAG_RECURSIVE && this.tailTrie) {
-      // v6.3: Serialize the recursive tail trie
-      tailBytes = this.tailTrie.serialize();
-    } else if (this.flags & V6_FLAG_HAS_TAILS && this.tailBuffer) {
-      // v6.1: Use flat tail buffer
-      tailBytes = this.tailBuffer;
-    }
-
+    // Serialize recursive tail trie
+    const tailBytes = this.tailTrie ? this.tailTrie.serialize() : null;
     const tailStorageSize = tailBytes ? tailBytes.length : 0;
 
-    const totalSize = HEADER_SIZE_V6 +
+    const totalSize = HEADER_SIZE +
       4 + bitsBytes.length +
       4 + terminalBytes.length +
-      (this.linkFlags ? 4 + linkFlagsBytes.length : 0) +
+      4 + linkFlagsBytes.length +
       labelsSize +
       (tailStorageSize > 0 ? 4 + tailStorageSize : 0);
 
@@ -937,9 +878,11 @@ export class MarisaTrie {
     let offset = 0;
 
     // Header (24 bytes)
+    // Version: 7 = uncompressed, 8 = brotli compressed
+    const version = (this.flags & FLAG_BROTLI) ? 8 : 7;
     buffer.set(new TextEncoder().encode(OWTRIE_MAGIC), offset);
     offset += 6;
-    view.setUint16(offset, 6, true); // version 6
+    view.setUint16(offset, version, true);
     offset += 2;
     view.setUint32(offset, this.wordCount, true);
     offset += 4;
@@ -962,38 +905,20 @@ export class MarisaTrie {
     buffer.set(terminalBytes, offset);
     offset += terminalBytes.length;
 
-    // Link flags bitvector (if present)
-    if (this.flags & V6_FLAG_HAS_LINKS) {
-      view.setUint32(offset, linkFlagsBytes.length, true);
-      offset += 4;
-      buffer.set(linkFlagsBytes, offset);
-      offset += linkFlagsBytes.length;
-    }
+    // Link flags bitvector
+    view.setUint32(offset, linkFlagsBytes.length, true);
+    offset += 4;
+    buffer.set(linkFlagsBytes, offset);
+    offset += linkFlagsBytes.length;
 
-    // Labels
+    // Labels (varint encoded)
     view.setUint32(offset, this.labels.length, true);
     offset += 4;
-
-    if (this.flags & V6_FLAG_HUFFMAN_LABELS && huffmanTableBytes && huffmanEncodedLabels) {
-      // Write Huffman table
-      view.setUint32(offset, huffmanTableBytes.length, true);
-      offset += 4;
-      buffer.set(huffmanTableBytes, offset);
-      offset += huffmanTableBytes.length;
-
-      // Write Huffman-encoded labels
-      view.setUint32(offset, huffmanEncodedLabels.length, true);
-      offset += 4;
-      buffer.set(huffmanEncodedLabels, offset);
-      offset += huffmanEncodedLabels.length;
-    } else {
-      // Write varint-encoded labels
-      for (let i = 0; i < this.labels.length; i++) {
-        offset = writeVarint(buffer, offset, this.labels[i]);
-      }
+    for (let i = 0; i < this.labels.length; i++) {
+      offset = writeVarint(buffer, offset, this.labels[i]);
     }
 
-    // Tail storage (buffer or recursive trie)
+    // Tail trie
     if (tailBytes && tailStorageSize > 0) {
       view.setUint32(offset, tailStorageSize, true);
       offset += 4;
@@ -1001,26 +926,82 @@ export class MarisaTrie {
       offset += tailStorageSize;
     }
 
-    return buffer.slice(0, offset);
+    const uncompressed = buffer.slice(0, offset);
+
+    // Apply brotli compression if enabled (v8)
+    if (this.flags & FLAG_BROTLI) {
+      return this.compressWithBrotli(uncompressed);
+    }
+
+    return uncompressed;
   }
 
   /**
-   * Deserialize a trie from binary format (v6).
+   * Compress the serialized buffer with brotli (Node.js only - build time).
+   * Header is preserved uncompressed, payload is compressed.
+   */
+  private compressWithBrotli(uncompressed: Uint8Array): Uint8Array {
+    const header = uncompressed.slice(0, HEADER_SIZE);
+    const payload = uncompressed.slice(HEADER_SIZE);
+
+    const compressed = brotliCompress(payload, this.brotliQuality);
+
+    // Result: header + 4-byte compressed length + compressed payload
+    const result = new Uint8Array(HEADER_SIZE + 4 + compressed.length);
+    result.set(header, 0);
+    const view = new DataView(result.buffer);
+    view.setUint32(HEADER_SIZE, compressed.length, true);
+    result.set(compressed, HEADER_SIZE + 4);
+
+    return result;
+  }
+
+  /**
+   * Decompress brotli-compressed payload (works in Node.js and browser).
+   * In browser, initBrotli() must have been called first.
+   */
+  private static decompressBrotli(buffer: Uint8Array): Uint8Array {
+    const header = buffer.slice(0, HEADER_SIZE);
+    const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+    const compressedLength = view.getUint32(HEADER_SIZE, true);
+    const compressedPayload = buffer.slice(HEADER_SIZE + 4, HEADER_SIZE + 4 + compressedLength);
+
+    const decompressed = brotliDecompress(compressedPayload);
+
+    // Reconstruct: header + decompressed payload
+    const result = new Uint8Array(HEADER_SIZE + decompressed.length);
+    result.set(header, 0);
+    result.set(decompressed, HEADER_SIZE);
+
+    return result;
+  }
+
+  /**
+   * Deserialize a trie from binary format (v7 or v8).
    */
   static deserialize(buffer: Uint8Array): MarisaTrie {
+    // First, check version to see if brotli decompression is needed
+    const peekView = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+    const peekVersion = peekView.getUint16(6, true); // version at offset 6
+
+    // Decompress if v8 (brotli compressed)
+    if (peekVersion === 8) {
+      buffer = this.decompressBrotli(buffer);
+    }
+
     const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     let offset = 0;
 
     // Header
     const magic = new TextDecoder().decode(buffer.slice(offset, offset + 6));
     if (magic !== OWTRIE_MAGIC) {
-      throw new Error('Invalid trie file: bad magic number');
+      throw new Error("Invalid trie file: bad magic number");
     }
     offset += 6;
 
     const version = view.getUint16(offset, true);
-    if (version !== 6) {
-      throw new Error(`Unsupported trie version: ${version}. Expected v6.`);
+    if (version !== 7 && version !== 8) {
+      throw new Error(`Unsupported trie version: ${version}. Expected v7 or v8.`);
     }
     offset += 2;
 
@@ -1045,64 +1026,29 @@ export class MarisaTrie {
     const terminal = BitVector.deserialize(buffer.slice(offset, offset + terminalLength));
     offset += terminalLength;
 
-    // Link flags bitvector (if present)
-    let linkFlags: BitVector | null = null;
-    if (flags & V6_FLAG_HAS_LINKS) {
-      const linkFlagsLength = view.getUint32(offset, true);
-      offset += 4;
-      linkFlags = BitVector.deserialize(buffer.slice(offset, offset + linkFlagsLength));
-      offset += linkFlagsLength;
-    }
+    // Link flags bitvector
+    const linkFlagsLength = view.getUint32(offset, true);
+    offset += 4;
+    const linkFlags = BitVector.deserialize(buffer.slice(offset, offset + linkFlagsLength));
+    offset += linkFlagsLength;
 
-    // Labels
+    // Labels (varint encoded)
     const labelsCount = view.getUint32(offset, true);
     offset += 4;
     const labels = new Uint32Array(labelsCount);
-    let huffmanCodec: HuffmanCodec | null = null;
-
-    if (flags & V6_FLAG_HUFFMAN_LABELS) {
-      // Huffman encoded: read table, then decode labels
-      const tableLength = view.getUint32(offset, true);
-      offset += 4;
-      const tableBytes = buffer.slice(offset, offset + tableLength);
-      const { codec } = HuffmanCodec.deserialize(tableBytes);
-      huffmanCodec = codec;
-      offset += tableLength;
-
-      // Read Huffman-encoded labels
-      const encodedLength = view.getUint32(offset, true);
-      offset += 4;
-      const encodedBytes = buffer.slice(offset, offset + encodedLength);
-      const reader = new BitReader(encodedBytes);
-      for (let i = 0; i < labelsCount; i++) {
-        labels[i] = huffmanCodec.decode(reader);
-      }
-      offset += encodedLength;
-    } else {
-      // Varint encoded (default)
-      for (let i = 0; i < labelsCount; i++) {
-        const { value, bytesRead } = readVarint(buffer, offset);
-        labels[i] = value;
-        offset += bytesRead;
-      }
+    for (let i = 0; i < labelsCount; i++) {
+      const { value, bytesRead } = readVarint(buffer, offset);
+      labels[i] = value;
+      offset += bytesRead;
     }
 
-    // Tail storage (buffer or recursive trie)
-    let tailBuffer: Uint8Array | null = null;
+    // Recursive tail trie
     let tailTrie: MarisaTrie | null = null;
-
-    if (flags & V6_FLAG_RECURSIVE && tailBufferSize > 0) {
-      // v6.3: Deserialize recursive tail trie
+    if (tailBufferSize > 0) {
       const storedTailSize = view.getUint32(offset, true);
       offset += 4;
       const tailTrieBytes = buffer.slice(offset, offset + storedTailSize);
       tailTrie = MarisaTrie.deserialize(tailTrieBytes);
-      offset += storedTailSize;
-    } else if (flags & V6_FLAG_HAS_TAILS && tailBufferSize > 0) {
-      // v6.1: Read flat tail buffer
-      const storedTailSize = view.getUint32(offset, true);
-      offset += 4;
-      tailBuffer = buffer.slice(offset, offset + storedTailSize);
       offset += storedTailSize;
     }
 
@@ -1111,13 +1057,10 @@ export class MarisaTrie {
       terminal,
       linkFlags,
       labels,
-      tailBuffer,
-      null,
       nodeCount,
       wordCount,
       flags,
-      tailTrie,
-      huffmanCodec
+      tailTrie
     );
   }
 
@@ -1127,27 +1070,20 @@ export class MarisaTrie {
   stats(): MarisaStats {
     const bitsBytes = this.bits.serialize();
     const terminalBytes = this.terminal.serialize();
-    const linkFlagsBytes = this.linkFlags ? this.linkFlags.serialize() : new Uint8Array(0);
+    const linkFlagsBytes = this.linkFlags.serialize();
 
     let labelsSize = 4;
     for (let i = 0; i < this.labels.length; i++) {
       labelsSize += varintSize(this.labels[i]);
     }
 
-    // Tail storage size: either flat buffer or serialized recursive trie
-    let tailBufferSize = 0;
-    if (this.tailTrie) {
-      // v6.3: recursive trie
-      tailBufferSize = this.tailTrie.serialize().length;
-    } else if (this.tailBuffer) {
-      // v6.1: flat buffer
-      tailBufferSize = this.tailBuffer.length;
-    }
+    // Tail storage size: serialized recursive trie
+    const tailBufferSize = this.tailTrie ? this.tailTrie.serialize().length : 0;
 
-    const totalSize = HEADER_SIZE_V6 +
+    const totalSize = HEADER_SIZE +
       4 + bitsBytes.length +
       4 + terminalBytes.length +
-      (this.linkFlags ? 4 + linkFlagsBytes.length : 0) +
+      4 + linkFlagsBytes.length +
       labelsSize +
       (tailBufferSize > 0 ? 4 + tailBufferSize : 0);
 
@@ -1191,9 +1127,9 @@ export class MarisaTrie {
     // Bitvector breakdowns
     const loudsBreakdown = this.bits.sizeBreakdown();
     const terminalBreakdown = this.terminal.sizeBreakdown();
-    const linkFlagsBreakdown = this.linkFlags ? this.linkFlags.sizeBreakdown() : null;
+    const linkFlagsBreakdown = this.linkFlags.sizeBreakdown();
 
-    // Calculate labels data size (without count prefix)
+    // Calculate labels data size (varint encoded, without count prefix)
     let labelsDataSize = 0;
     for (let i = 0; i < this.labels.length; i++) {
       labelsDataSize += varintSize(this.labels[i]);
@@ -1202,17 +1138,15 @@ export class MarisaTrie {
       ? (labelsDataSize * 8) / this.labels.length
       : 0;
 
-    // Tail storage
+    // Tail storage (always recursive in v7/v8)
     let tailDataSize = 0;
-    const isRecursive = !!(this.flags & V6_FLAG_RECURSIVE);
+    const isRecursive = !!(this.flags & FLAG_RECURSIVE);
     if (this.tailTrie) {
       tailDataSize = this.tailTrie.serialize().length;
-    } else if (this.tailBuffer) {
-      tailDataSize = this.tailBuffer.length;
     }
 
     // Calculate component totals (including length prefixes)
-    const headerBytes = HEADER_SIZE_V6;
+    const headerBytes = HEADER_SIZE;
     const loudsTotalBytes = 4 + loudsBreakdown.totalBytes;
     const terminalTotalBytes = 4 + terminalBreakdown.totalBytes;
     const linkFlagsTotalBytes = linkFlagsBreakdown ? 4 + linkFlagsBreakdown.totalBytes : 0;
@@ -1271,5 +1205,69 @@ export class MarisaTrie {
         tails: pct(tailsTotalBytes),
       },
     };
+  }
+
+  /**
+   * Get memory usage statistics including download, decompressed, and runtime sizes.
+   * @param serializedSize Optional pre-computed serialized size (avoids re-serialization)
+   */
+  memoryStats(serializedSize?: number): MarisaMemoryStats {
+    // Calculate serialized (download) size
+    const downloadSize = serializedSize ?? this.serialize().length;
+
+    // Calculate decompressed size (size without brotli compression)
+    const detailed = this.detailedStats();
+    const decompressedSize = detailed.totalSize;
+
+    // Calculate runtime memory for each component
+    // TypedArray memory = length * bytes_per_element + ~64 bytes overhead per array
+
+    // BitVector stores: bits (Uint32Array) + directory arrays
+    const bitsMemory = this.estimateBitVectorMemory(this.bits);
+    const terminalMemory = this.estimateBitVectorMemory(this.terminal);
+    const linkFlagsMemory = this.linkFlags ? this.estimateBitVectorMemory(this.linkFlags) : 0;
+
+    // Labels array: Uint32Array
+    const labelsMemory = this.labels.length * 4 + 64;
+
+    // Recursive tail trie: recurse
+    const tailTrieMemory = this.tailTrie ? this.tailTrie.memoryStats().runtimeMemory : 0;
+
+    // JS object overhead: class instance, properties, Map/Set structures
+    // Estimate ~500 bytes for the class instance and its scalar properties
+    const jsOverhead = 500;
+
+    const runtimeMemory = bitsMemory + terminalMemory + linkFlagsMemory +
+      labelsMemory + tailTrieMemory + jsOverhead;
+
+    const wordCount = this.wordCount;
+
+    return {
+      downloadSize,
+      decompressedSize,
+      runtimeMemory,
+      components: {
+        bits: bitsMemory,
+        terminal: terminalMemory,
+        linkFlags: linkFlagsMemory,
+        labels: labelsMemory,
+        tailTrie: tailTrieMemory,
+        jsOverhead,
+      },
+      bitsPerWord: {
+        download: wordCount > 0 ? (downloadSize * 8) / wordCount : 0,
+        decompressed: wordCount > 0 ? (decompressedSize * 8) / wordCount : 0,
+        runtime: wordCount > 0 ? (runtimeMemory * 8) / wordCount : 0,
+      },
+    };
+  }
+
+  /**
+   * Estimate memory usage of a BitVector including its directory structures.
+   */
+  private estimateBitVectorMemory(bv: BitVector): number {
+    const breakdown = bv.sizeBreakdown();
+    // Uint32Array for bits, plus directory arrays, plus object overhead
+    return breakdown.totalBytes + 64 * 3; // 3 arrays typically
   }
 }

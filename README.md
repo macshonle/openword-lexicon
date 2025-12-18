@@ -5,7 +5,7 @@ A comprehensive English wordlist with metadata for word games, educational apps,
 ## What You Get
 
 - **1.35M words** with part-of-speech, frequency tiers, concreteness ratings
-- **Game-ready wordlist** (`en-game.trie`) — pure a-z words, no hyphens or apostrophes
+- **OWTRIE binary format** — compact trie optimized for browser use (~2.5 MB for 1.3M words)
 - **Modular metadata** — load only what you need (frequency, concreteness, syllables, sources)
 - **Per-word licensing** — filter by source to meet your license requirements
 
@@ -15,28 +15,30 @@ A comprehensive English wordlist with metadata for word games, educational apps,
 # Clone and build
 git clone https://github.com/macshonle/openword-lexicon.git
 cd openword-lexicon
-make bootstrap
-make build-en
+make deps
+make enrich
+make build
+```
 
-# Check a word exists
-uv run python -c "
-import marisa_trie
-trie = marisa_trie.Trie().mmap('data/build/en.trie')
-print('castle' in trie)  # True
-"
+```typescript
+// Load and query the trie (TypeScript/JavaScript)
+import { MarisaTrie } from './trie/index.js';
+
+const response = await fetch('en.trie.bin');
+const trie = MarisaTrie.deserialize(new Uint8Array(await response.arrayBuffer()));
+console.log(trie.has('castle'));  // true
 ```
 
 See [docs/QUICKSTART.md](docs/QUICKSTART.md) for more usage examples.
 
 ## Output Files
 
-After `make build-en`, you'll find:
+After `make build`, you'll find:
 
 | File | Description | Size |
 |------|-------------|------|
-| `data/build/en.trie` | Full lexicon (MARISA trie) | ~4 MB |
-| `data/build/en-game.trie` | Game profile (a-z only) | ~2.5 MB |
-| `data/build/en-wordlist.txt` | Plain text word list | ~16 MB |
+| `web/viewer/data/en.trie.bin` | Full lexicon (OWTRIE v7) | ~2.5 MB |
+| `web/viewer/data/en.trie.v8.bin` | Brotli-compressed (OWTRIE v8) | ~1.5 MB |
 | `data/build/en-frequency.json.gz` | Frequency tiers (A-Z) | ~5 MB |
 | `data/build/en-concreteness.json.gz` | Concreteness ratings | ~150 KB |
 | `data/build/en-syllables.json.gz` | Syllable counts | ~200 KB |
@@ -46,11 +48,11 @@ After `make build-en`, you'll find:
 
 | Use Case | Recommended Files | Filter Strategy |
 |----------|-------------------|-----------------|
-| Wordle clone | `en-game.trie` + frequency | 5 letters, tiers A-F |
+| Wordle clone | `en.trie.bin` + frequency | 5 letters, tiers A-F |
 | Kids vocabulary | lexemes + concreteness | Concrete nouns, tiers A-G |
-| Spell checker | `en.trie` | Full lexicon |
+| Spell checker | `en.trie.bin` | Full lexicon |
 | Profanity filter | lexemes file | Check `labels.register` for vulgar/offensive |
-| Scrabble | `en-game.trie` | Pure a-z, check proper noun flags |
+| Scrabble | `en.trie.bin` | Pure a-z, check proper noun flags |
 
 ## Creating Custom Word Lists
 

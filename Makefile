@@ -84,8 +84,9 @@ ENRICHED_OUTPUT := $(INTERMEDIATE_DIR)/$(OW_LANG)-wikt-v2-enriched.jsonl
 # Build Outputs
 # =============================================================================
 
-UNIFIED_TRIE := $(BUILD_DIR)/$(OW_LANG).trie
-GAME_TRIE := $(BUILD_DIR)/$(OW_LANG)-game.trie
+# OWTRIE binary format (built by TypeScript in web/viewer)
+OWTRIE_V7 := web/viewer/data/$(OW_LANG).trie.bin
+OWTRIE_V8 := web/viewer/data/$(OW_LANG).trie.v8.bin
 METADATA := $(BUILD_DIR)/$(OW_LANG).meta.json
 
 # =============================================================================
@@ -94,8 +95,8 @@ METADATA := $(BUILD_DIR)/$(OW_LANG).meta.json
 
 .PHONY: all test test-python test-typescript test-browser-headless nightly weekly fetch scan enrich build clean scrub \
         deps lint validate help wordlists \
-        web-spec-editor web-viewer web-viewer-trie web-viewer-trie-v63 browser-test kill-servers \
-        benchmark-trie benchmark-trie-python benchmark-trie-typescript
+        web-spec-editor web-viewer web-viewer-trie web-viewer-trie-v8 browser-test kill-servers \
+        benchmark-trie
 
 .DEFAULT_GOAL := help
 
@@ -112,7 +113,7 @@ help:
 	@echo "  make fetch      Fetch data sources"
 	@echo "  make scan       Run Wiktionary scanner"
 	@echo "  make enrich     Run enrichment pipeline"
-	@echo "  make build      Build tries and metadata"
+	@echo "  make build      Build OWTRIE trie and metadata"
 	@echo "  make wordlists  Generate word lists from specs"
 	@echo "  make clean      Clean build artifacts"
 	@echo ""
@@ -123,15 +124,13 @@ help:
 	@echo "Web tools:"
 	@echo "  make web-spec-editor   Start spec editor dev server"
 	@echo "  make web-viewer        Start viewer dev server"
-	@echo "  make web-viewer-trie   Build OWTRIE binary for viewer (v6.1)"
-	@echo "  make web-viewer-trie-v63  Build v6.3 recursive trie"
+	@echo "  make web-viewer-trie   Build OWTRIE v7 binary for viewer"
+	@echo "  make web-viewer-trie-v8   Build OWTRIE v8 (brotli) binary"
 	@echo "  make browser-test      Run browser-based tests (opens in browser)"
 	@echo "  make test-browser-headless  Run headless browser tests (CI)"
 	@echo ""
 	@echo "Benchmarks:"
-	@echo "  make benchmark-trie    Run trie benchmarks (Python + TypeScript)"
-	@echo "  make benchmark-trie-python     Python marisa_trie benchmark"
-	@echo "  make benchmark-trie-typescript TypeScript OWTRIE benchmark"
+	@echo "  make benchmark-trie    Run TypeScript OWTRIE benchmarks"
 
 # =============================================================================
 # Dependencies
@@ -157,7 +156,7 @@ test-quick: deps
 	$(PYTEST) tests/ -v -x --ignore=tests/test_wiktionary_data_quality.py
 
 # Headless browser tests (requires trie files to be built)
-test-browser-headless: web-viewer-trie web-viewer-trie-v63
+test-browser-headless: web-viewer-trie web-viewer-trie-v8
 	cd web/viewer && pnpm install && pnpm test:browser:all
 
 # =============================================================================
@@ -210,14 +209,14 @@ $(ENRICHED_OUTPUT): $(SCANNER_OUTPUT) $(FETCH_STAMP) schema/enrichment/pipeline.
 enrich: $(ENRICHED_OUTPUT)
 
 # =============================================================================
-# Building (tries, metadata)
+# Building (OWTRIE trie, metadata)
 # =============================================================================
+# Trie is built using TypeScript in web/viewer (OWTRIE v7/v8 format).
+# See docs/FORMAT-HISTORY.md for format details.
 
-$(UNIFIED_TRIE): $(ENRICHED_OUTPUT) | $(BUILD_DIR)
-	@echo "Building unified trie..."
-	$(PYTHON) -m openword.trie_build \
-		--input "$(ENRICHED_OUTPUT)" \
-		--language "$(OW_LANG)"
+$(OWTRIE_V7): $(ENRICHED_OUTPUT) | web/viewer/data
+	@echo "Building OWTRIE v7 trie..."
+	cd web/viewer && pnpm install && pnpm build-trie ../../$(ENRICHED_OUTPUT) data/$(OW_LANG).trie.bin
 
 $(METADATA): $(ENRICHED_OUTPUT) | $(BUILD_DIR)
 	@echo "Building metadata..."
@@ -226,7 +225,7 @@ $(METADATA): $(ENRICHED_OUTPUT) | $(BUILD_DIR)
 		--language "$(OW_LANG)" \
 		--gzip
 
-build: $(UNIFIED_TRIE) $(METADATA)
+build: $(OWTRIE_V7) $(METADATA)
 
 # =============================================================================
 # Wordlists
@@ -274,7 +273,7 @@ nightly: deps fetch scan enrich build validate test
 	@echo "Nightly build complete!"
 	@echo "  Scanner output: $(SCANNER_OUTPUT)"
 	@echo "  Enriched output: $(ENRICHED_OUTPUT)"
-	@echo "  Trie: $(UNIFIED_TRIE)"
+	@echo "  Trie: $(OWTRIE_V7)"
 	@wc -l "$(ENRICHED_OUTPUT)"
 
 weekly: nightly
@@ -290,19 +289,19 @@ web-spec-editor:
 web-viewer:
 	cd web/viewer && pnpm install && pnpm dev
 
-# Build OWTRIE binary for web viewer (requires enriched data)
+# Build OWTRIE binary for web viewer (v7 format, requires enriched data)
 web-viewer-trie: $(ENRICHED_OUTPUT) | web/viewer/data
-	cd web/viewer && pnpm install && pnpm build-trie --format=v6 --links
+	cd web/viewer && pnpm install && pnpm build-trie
 
-# Build v6.3 recursive trie for web viewer (outputs to separate file)
-web-viewer-trie-v63: $(ENRICHED_OUTPUT) | web/viewer/data
-	cd web/viewer && pnpm install && pnpm build-trie ../../$(ENRICHED_OUTPUT) data/en.trie.v63.bin --format=v6 --links --recursive
+# Build v8 brotli-compressed trie for web viewer
+web-viewer-trie-v8: $(ENRICHED_OUTPUT) | web/viewer/data
+	cd web/viewer && pnpm install && pnpm build-trie ../../$(ENRICHED_OUTPUT) data/en.trie.v8.bin --brotli
 
 web/viewer/data:
 	mkdir -p $@
 
 # Run browser-based trie tests (server runs in foreground, Ctrl+C to stop)
-browser-test: web-viewer-trie web-viewer-trie-v63
+browser-test: web-viewer-trie web-viewer-trie-v8
 	@echo ""
 	@echo "Press Ctrl+C to stop the server."
 	@echo ""
@@ -346,18 +345,7 @@ benchmark-rust: rust-scanner $(WIKT_DUMP)
 # =============================================================================
 # Trie Benchmarks
 # =============================================================================
-# Compare Python marisa_trie with TypeScript OWTRIE implementations.
-# Both use the same word lists via owlex spec files.
+# Run TypeScript OWTRIE benchmarks using word lists from owlex spec files.
 
-# Run Python marisa_trie benchmark
-benchmark-trie-python: deps $(ENRICHED_OUTPUT)
-	$(PYTHON) scripts/benchmark_trie.py --all
-
-# Run TypeScript OWTRIE benchmark
-benchmark-trie-typescript: $(ENRICHED_OUTPUT)
+benchmark-trie: $(ENRICHED_OUTPUT)
 	cd web/viewer && pnpm install && pnpm benchmark --all
-
-# Run both benchmarks for comparison
-benchmark-trie: benchmark-trie-python benchmark-trie-typescript
-	@echo ""
-	@echo "Benchmark complete. Compare Python marisa_trie with TypeScript OWTRIE implementations above."

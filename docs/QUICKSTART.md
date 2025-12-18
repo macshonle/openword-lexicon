@@ -6,34 +6,47 @@ Get words into your application in 5 minutes.
 
 Download a release or build locally, then use the output files directly.
 
-### Check if a Word Exists (Python)
+### Check if a Word Exists (JavaScript/TypeScript)
 
-```python
-import marisa_trie
+The trie is built in OWTRIE format, a compact binary trie optimized for browser use.
+See [web/viewer/](../web/viewer/) for the full implementation.
 
-# Load trie (memory-mapped for efficiency)
-trie = marisa_trie.Trie().mmap('data/build/en.trie')
+```typescript
+import { MarisaTrie, type FormatVersion } from './trie/index.js';
 
-# Check membership
-print('castle' in trie)      # True
-print('xyzzy' in trie)       # False
-print(len(trie))             # ~1,350,000
+// Load trie from binary file
+const response = await fetch('en.trie.bin');
+const buffer = await response.arrayBuffer();
+const trie = MarisaTrie.deserialize(new Uint8Array(buffer));
 
-# Prefix search
-print(list(trie.keys('cast'))[:5])  # ['cast', 'caste', 'casted', 'caster', ...]
+// Check membership
+console.log(trie.has('castle'));  // true
+console.log(trie.has('xyzzy'));   // false
+console.log(trie.wordCount);       // ~1,350,000
+
+// Prefix search
+console.log(trie.keysWithPrefix('cast'));  // ['cast', 'castle', 'caster', ...]
 ```
 
-### Check if a Word Exists (JavaScript)
+### Check if a Word Exists (Python)
 
-For browser use, see the [web/viewer/](../web/viewer/) directory which includes a binary trie loader.
+For Python, load the JSONL lexemes file directly:
 
-```javascript
-// Using the binary trie loader (see web/viewer/app.js for full implementation)
-import { BinaryTrie } from './app.js';
+```python
+import json
 
-const trie = await BinaryTrie.load('en.trie.bin');
-console.log(trie.has('castle'));  // true
-console.log(trie.keysWithPrefix('cast'));  // ['cast', 'castle', ...]
+def load_words(path='data/intermediate/en-wikt-v2-enriched.jsonl'):
+    words = set()
+    with open(path) as f:
+        for line in f:
+            entry = json.loads(line)
+            words.add(entry['id'])
+    return words
+
+words = load_words()
+print('castle' in words)  # True
+print('xyzzy' in words)   # False
+print(len(words))         # ~1,350,000
 ```
 
 ### Load Word Metadata
