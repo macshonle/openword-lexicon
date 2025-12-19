@@ -109,6 +109,61 @@ The MARISA algorithm supports configurable recursion depth for tail tries. Bench
 - Small datasets (e.g., 5-letter Wordle words) are *hurt* by deeper recursion due to overhead
 - Default depth of 1 is optimal for most use cases
 
+### Morpheme Encoding Experiment (Negative Result)
+
+An experiment was conducted to test whether morpheme-aware encoding could improve compression. The hypothesis was that replacing common affixes (e.g., "un-", "-ness", "-ly") with single Unicode Private Use Area (PUA) code points might:
+- Reduce file size by encoding multi-character affixes as single bytes
+- Speed up build time by reducing redundant trie traversal
+
+**Results:** Morpheme encoding makes everything worse:
+
+| Dataset | Metric | Baseline | Morpheme | Change |
+|---------|--------|----------|----------|--------|
+| Full (v7) | Size | 4.52 MB | 5.96 MB | +32% |
+| Full (v7) | Build | 10.0s | 24.1s | +141% |
+| Full (v8) | Size | 2.95 MB | 3.26 MB | +10% |
+| Full (v8) | Build | 9.9s | 23.8s | +141% |
+| Word-only (v7) | Size | 3.87 MB | 5.15 MB | +33% |
+| Word-only (v8) | Size | 2.52 MB | 2.77 MB | +10% |
+
+**Why morpheme encoding fails:**
+
+1. **PUA code points are expensive**: Unicode PUA code points (U+E000+) require 3 bytes in varint encoding, while common prefixes like "un" or "re" are only 2 ASCII bytes.
+
+2. **MARISA already optimizes sharing**: The trie algorithm already shares common prefixes efficiently through path compression. Morpheme substitution doesn't improve on this.
+
+3. **Brotli captures patterns**: For v8, brotli compression already identifies and compresses repeated byte patterns, making pre-encoding redundant.
+
+4. **Preprocessing overhead**: The time spent encoding/decoding words adds substantial overhead (2-3x slower builds).
+
+**Conclusion:** The current MARISA implementation is already near-optimal. Morpheme-aware encoding provides no benefit for this use case.
+
+### Reverse Suffix Trie Experiment (Negative Result)
+
+A second experiment tested whether storing words in **reverse order** could improve compression by sharing common suffixes (-ing, -tion, -ness) as prefixes.
+
+**Hypothesis**: English has many common suffixes. Reversing words transforms suffix sharing into prefix sharing, which the trie handles efficiently.
+
+**Results:**
+
+| Dataset | v7-forward | v7-reverse | v8-forward | v8-reverse |
+|---------|------------|------------|------------|------------|
+| Wordle (3K) | 9.9 KB | 9.6 KB (-3%) | 6.7 KB | 6.3 KB (-6%) |
+| Word-only (1.2M) | 3.87 MB | 4.28 MB (+11%) | 2.52 MB | 2.68 MB (+6%) |
+| Full (1.3M) | 4.52 MB | 4.98 MB (+10%) | 2.95 MB | 3.20 MB (+8%) |
+
+**Key findings:**
+
+1. **Small datasets benefit slightly from reverse**: Wordle (5-letter words) shows 3-6% improvement with reverse ordering.
+
+2. **Large datasets are worse with reverse**: Word-only and Full Wiktionary are 6-11% larger when reversed.
+
+3. **English has more prefix sharing than suffix sharing**: Common prefixes (un-, re-, pre-, dis-, over-, under-) provide more compression benefit than common suffixes (-ing, -ed, -ly, -ness, -tion).
+
+4. **Build time is worse**: Reverse ordering takes 1.5-1.7x longer to build due to different branching patterns.
+
+**Conclusion:** Forward (standard) ordering is optimal for English word lists. The trie's natural prefix sharing outperforms suffix sharing via reversal.
+
 ### Recommendations
 
 1. **Use v7** when:
