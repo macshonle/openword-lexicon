@@ -16,6 +16,7 @@
  *   --json         Output results as JSON (for comparison with Python benchmark)
  *   --breakdown    Show detailed size breakdown
  *   --validate     Perform round-trip validation (build → serialize → deserialize → enumerate)
+ *   --recursion-depth=N,M,...  Test specific recursion depths (e.g., 0,1,2,3)
  *
  * Examples:
  *   # Benchmark all three datasets
@@ -26,6 +27,9 @@
  *
  *   # Benchmark with custom wordlist
  *   pnpm benchmark wordlist.txt
+ *
+ *   # Test recursion depths 0-4 on all datasets
+ *   pnpm benchmark --all --recursion-depth=0,1,2,3,4
  */
 
 import * as fs from 'fs';
@@ -290,16 +294,64 @@ function benchmark(
 interface BenchmarkOptions {
   quiet?: boolean;
   validateRoundTrip?: boolean;
+  /** Test different recursion depths (0, 1, 2, ...) */
+  testRecursionDepths?: number[];
 }
 
 /**
  * Run all format benchmarks for a word list.
  */
 function runBenchmarks(words: string[], options: BenchmarkOptions = {}): BenchResult[] {
-  const { quiet = false, validateRoundTrip: doValidation = false } = options;
+  const { quiet = false, validateRoundTrip: doValidation = false, testRecursionDepths } = options;
   const results: BenchResult[] = [];
   const log = (msg: string) => { if (!quiet) process.stdout.write(msg); };
   const logln = (msg: string) => { if (!quiet) console.log(msg); };
+
+  // If testing recursion depths, run those instead of standard v7/v8
+  if (testRecursionDepths && testRecursionDepths.length > 0) {
+    for (const depth of testRecursionDepths) {
+      // v7 (uncompressed) at this depth
+      log(`    v7 depth=${depth}...`);
+      results.push(benchmark(`v7-d${depth}`, 7, words, () => {
+        const { trie } = MarisaTrie.build(words, { maxRecursionDepth: depth });
+        return {
+          nodeCount: trie.nodeCount,
+          serialize: () => trie.serialize(),
+          has: (w) => trie.has(w),
+          keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
+          detailedStats: () => trie.detailedStats(),
+          memoryStats: (sz) => trie.memoryStats(sz),
+          getWord: (id) => trie.getWord(id),
+          wordCount: trie.wordCount,
+        };
+      }, {
+        validateRoundTrip: doValidation,
+        deserialize: (buf) => MarisaTrie.deserialize(buf),
+      }));
+      logln(' done');
+
+      // v8 (brotli) at this depth
+      log(`    v8 depth=${depth}...`);
+      results.push(benchmark(`v8-d${depth}`, 8, words, () => {
+        const { trie } = MarisaTrie.build(words, { maxRecursionDepth: depth, enableBrotli: true });
+        return {
+          nodeCount: trie.nodeCount,
+          serialize: () => trie.serialize(),
+          has: (w) => trie.has(w),
+          keysWithPrefix: (p, l) => trie.keysWithPrefix(p, l),
+          detailedStats: () => trie.detailedStats(),
+          memoryStats: (sz) => trie.memoryStats(sz),
+          getWord: (id) => trie.getWord(id),
+          wordCount: trie.wordCount,
+        };
+      }, {
+        validateRoundTrip: doValidation,
+        deserialize: (buf) => MarisaTrie.deserialize(buf),
+      }));
+      logln(' done');
+    }
+    return results;
+  }
 
   // v7 MARISA (recursive tail trie, uncompressed)
   log('    v7 MARISA (uncompressed)...');
@@ -625,6 +677,19 @@ async function main() {
   const showBreakdown = args.includes('--breakdown');
   const doValidation = args.includes('--validate');
 
+  // Parse --recursion-depth flag (e.g., --recursion-depth=0,1,2,3)
+  const recursionDepthArg = args.find(a => a.startsWith('--recursion-depth'));
+  let testRecursionDepths: number[] | undefined;
+  if (recursionDepthArg) {
+    const match = recursionDepthArg.match(/--recursion-depth[=:]?([\d,]+)/);
+    if (match) {
+      testRecursionDepths = match[1].split(',').map(s => parseInt(s, 10));
+    } else {
+      // Default: test depths 0, 1, 2, 3
+      testRecursionDepths = [0, 1, 2, 3];
+    }
+  }
+
   // Find custom input path (non-flag argument)
   const customInput = args.find(a => !a.startsWith('--'));
 
@@ -656,6 +721,7 @@ async function main() {
     const results = runBenchmarks(words, {
       quiet: jsonOutput,
       validateRoundTrip: doValidation,
+      testRecursionDepths,
     });
     if (!jsonOutput) printResults(dataset, results);
     if (showBreakdown && !jsonOutput) printBreakdown(dataset, results);
@@ -694,6 +760,7 @@ async function main() {
         const results = runBenchmarks(words, {
           quiet: jsonOutput,
           validateRoundTrip: doValidation,
+          testRecursionDepths,
         });
         if (!jsonOutput) printResults(dataset, results);
         if (showBreakdown && !jsonOutput) printBreakdown(dataset, results);
@@ -718,8 +785,13 @@ async function main() {
 
     // Notes
     console.log('\nNotes:');
-    console.log('  - v7: Uncompressed (best runtime efficiency, no decompression needed)');
-    console.log('  - v8: Brotli-compressed payload (best compression, slower load)');
+    if (testRecursionDepths) {
+      console.log('  - v7-dN: Recursion depth N (0=no tail compression, 1=default, 2+=deeper)');
+      console.log('  - Higher depth may improve compression but increases build time');
+    } else {
+      console.log('  - v7: Uncompressed (best runtime efficiency, no decompression needed)');
+      console.log('  - v8: Brotli-compressed payload (best compression, slower load)');
+    }
   }
 }
 

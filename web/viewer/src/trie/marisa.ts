@@ -147,8 +147,17 @@ export interface MarisaConfig {
   enableBrotli?: boolean;
   /** Brotli quality level (0-11, default: 11). Lower = faster but larger. */
   brotliQuality?: number;
-  /** Internal flag to disable recursive tail processing for inner tries */
-  _isInnerTrie?: boolean;
+  /**
+   * Maximum recursion depth for tail tries (default: 1).
+   * - 0: No tail compression (flat labels only)
+   * - 1: Primary trie has recursive tail trie (current default)
+   * - 2+: Tail trie also has its own recursive tail trie, and so on
+   * Higher values may improve compression for datasets with long keys,
+   * but increase build time and slightly slow lookups.
+   */
+  maxRecursionDepth?: number;
+  /** Internal: current recursion depth (0 = primary trie) */
+  _recursionDepth?: number;
 }
 
 /**
@@ -336,7 +345,8 @@ export class MarisaTrie {
     const minTailLength = config.minTailLength ?? 2;
     const enableBrotli = config.enableBrotli ?? false;
     const brotliQuality = config.brotliQuality ?? 11;
-    const isInnerTrie = config._isInnerTrie ?? false;
+    const maxRecursionDepth = config.maxRecursionDepth ?? 1;
+    const currentDepth = config._recursionDepth ?? 0;
 
     // Phase 1: Build standard trie
     const root = new TrieNode();
@@ -352,12 +362,12 @@ export class MarisaTrie {
       node.isTerminal = true;
     }
 
-    // Phase 2: Path compression with recursive tail trie (skip for inner trie)
+    // Phase 2: Path compression with recursive tail trie (skip if at max depth)
     const tailOffsets = new Map<TrieNode, number>(); // node -> tail ID in recursive trie
     const tailStrings = new Map<TrieNode, string>(); // node -> tail string
     let recursiveTailTrie: MarisaTrie | null = null;
 
-    if (!isInnerTrie) {
+    if (currentDepth < maxRecursionDepth) {
       // First pass: collect all compressible chains
       const pendingTails: Array<{ chain: number[]; endNode: TrieNode; parentNode: TrieNode; firstCode: number }> = [];
 
@@ -412,10 +422,14 @@ export class MarisaTrie {
         parentNode.children.set(firstCode, endNode);
       }
 
-      // Build recursive trie over unique tails (no brotli, no recursion for inner trie)
+      // Build recursive trie over unique tails (pass depth to allow further recursion)
       if (uniqueTails.size > 0) {
         const sortedTails = Array.from(uniqueTails).sort();
-        const { trie: innerTrie } = MarisaTrie.build(sortedTails, { enableBrotli: false, _isInnerTrie: true });
+        const { trie: innerTrie } = MarisaTrie.build(sortedTails, {
+          enableBrotli: false,
+          maxRecursionDepth,
+          _recursionDepth: currentDepth + 1,
+        });
         recursiveTailTrie = innerTrie;
 
         // Assign tail IDs based on word IDs in the recursive trie

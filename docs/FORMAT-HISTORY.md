@@ -72,10 +72,42 @@ The following formats were removed in the v7/v8 consolidation. They remain in gi
 
 | Metric | v7 (uncompressed) | v8 (brotli) |
 |--------|-------------------|-------------|
-| Download size | 4.66 MB | 3.09 MB |
+| Download size | 4.52 MB | 2.95 MB |
 | Runtime memory | ~4 MB | ~40 MB |
 | Load time | ~50 ms | ~200 ms |
 | Query time | <1 ms | <1 ms |
+
+### Compression Comparison
+
+v8 (brotli-compressed trie) outperforms all general-purpose compression on raw word lists:
+
+| Method | Full Wiktionary | Notes |
+|--------|-----------------|-------|
+| **v8 (OWTRIE + brotli)** | **2.95 MB** | Queryable, best overall |
+| xz -9 | 3.48 MB | Text only |
+| brotli -11 | 3.49 MB | Text only |
+| zstd -19 | 3.63 MB | Text only |
+| gzip -9 | 4.27 MB | Text only |
+| **v7 (OWTRIE)** | **4.52 MB** | Queryable, no WASM |
+
+### Recursion Depth Analysis
+
+The MARISA algorithm supports configurable recursion depth for tail tries. Benchmarks show:
+
+| Depth | v7 (Full) | v8 (Full) | Build Time |
+|-------|-----------|-----------|------------|
+| 1 (default) | 4.52 MB | 2.95 MB | ~10s |
+| 5 | 4.29 MB | 2.94 MB | ~17s |
+| 8 | 4.29 MB | 2.94 MB | ~17s |
+| 16 | 4.29 MB | 2.94 MB | ~19s |
+| 32 | 4.30 MB | 2.94 MB | ~22s |
+
+**Key findings:**
+- Depth 5 captures all meaningful compression gains (~5% for v7)
+- Depths beyond 5 show no improvement (tail strings become too short)
+- Brotli (v8) makes recursion depth irrelevant—it compresses to the same size regardless
+- Small datasets (e.g., 5-letter Wordle words) are *hurt* by deeper recursion due to overhead
+- Default depth of 1 is optimal for most use cases
 
 ### Recommendations
 
@@ -88,6 +120,11 @@ The following formats were removed in the v7/v8 consolidation. They remain in gi
    - Download size is the primary concern
    - Runtime memory is not constrained
    - WASM is already in use
+
+3. **Use depth > 1** only when:
+   - Building v7 format (not v8)
+   - Dataset has very long keys (URLs, file paths)
+   - Willing to accept 2x build time for ~5% size reduction
 
 ## Binary Format Specification
 
